@@ -1,0 +1,58 @@
+site_name: justlend-dao
+
+
+nav:
+  - Home: index.md
+  - GETTING STARTED:
+      - Overview: getting_started/overview.md
+      - Concept: getting_started/concept.md
+      - Whitepaper: getting_started/whitepaper.md
+      - FAQs: getting_started/faqs.md
+  - GOVERNANCE:
+      - JIPs: governance/jips.md
+      - Tokenomics: governance/tokenomics.md
+      - Community Forum: overnance/community_forum.md
+  - DEVELOPERS:
+      - Contracts Overview: developers/contracts_overview.md
+      - Supply and Borrow Market: developers/sbm_market.md
+      - Staked TRX: developers/staked_trx.md
+      - Energy Rental: developers/energy_rental.md
+      - Deployed Contracts: developers/deployed_contracts.md
+      - APIs: developers/apis.md
+  - Resources:
+      - Community: resources/community.md
+      - Risk Warning: resources/risk_warning.md
+      - Audits: resources/audits.md
+      - Terms of Service: resources/terms_of_service.md
+
+
+theme:
+  name: material
+  custom_dir: docs/overrides
+  features:
+    - navigation.sections  # 启用左侧导航栏的分组
+    - navigation.footer
+    - toc.integrate
+    - search.highlight  # 搜索时高亮匹配内容
+    - search.suggest  # 搜索时显示建议
+    - content.code.annotate  # 代码块注释
+    - content.tooltips  # 内容中的工具提示
+  palette:
+    primary: custom  # 主色调
+    accent: custom  # 强调色
+  font:
+    text: Roboto  # 正文字体
+    code: Roboto Mono  # 代码字体
+
+
+markdown_extensions:
+  - admonition
+  - footnotes
+  - codehilite
+  - toc:
+      permalink: true
+      toc_depth: 3
+  - pymdownx.arithmatex
+  - pymdownx.tilde
+  - pymdownx.tasklist
+  - pymdownx.superfences
