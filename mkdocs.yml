@@ -1,17 +1,15 @@
 site_name: justlend-dao
 
-
 nav:
-  - Home: index.md
-  - GETTING STARTED:
-      - Overview: getting_started/overview.md
-  - GOVERNANCE:
-      - JIPs: governance/jips.md
-  - DEVELOPERS:
-      - Contracts Overview: developers/contracts_overview.md
-  - Resources:
-      - Community: resources/community.md
-
+    - Home: index.md
+    - GETTING STARTED:
+        - Overview: getting_started/overview.md
+    - GOVERNANCE:
+        - JIPs: governance/jips.md
+    - DEVELOPERS:
+        - Contracts Overview: developers/contracts_overview.md
+    - Resources:
+        - Community: resources/community.md
 
 theme:
   name: material
@@ -32,13 +30,13 @@ theme:
 
 
 markdown_extensions:
-  - admonition
-  - footnotes
-  - codehilite
-  - toc:
-      permalink: true
-      toc_depth: 3
-  - pymdownx.arithmatex
-  - pymdownx.tilde
-  - pymdownx.tasklist
-  - pymdownx.superfences
+    - admonition
+    - footnotes
+    - codehilite
+    - toc:
+        permalink: true
+        toc_depth: 3
+    - pymdownx.arithmatex
+    - pymdownx.tilde
+    - pymdownx.tasklist
+    - pymdownx.superfences
