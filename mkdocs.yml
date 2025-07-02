@@ -5,25 +5,12 @@ nav:
   - Home: index.md
   - GETTING STARTED:
       - Overview: getting_started/overview.md
-      - Concept: getting_started/concept.md
-      - Whitepaper: getting_started/whitepaper.md
-      - FAQs: getting_started/faqs.md
   - GOVERNANCE:
       - JIPs: governance/jips.md
-      - Tokenomics: governance/tokenomics.md
-      - Community Forum: overnance/community_forum.md
   - DEVELOPERS:
       - Contracts Overview: developers/contracts_overview.md
-      - Supply and Borrow Market: developers/sbm_market.md
-      - Staked TRX: developers/staked_trx.md
-      - Energy Rental: developers/energy_rental.md
-      - Deployed Contracts: developers/deployed_contracts.md
-      - APIs: developers/apis.md
   - Resources:
       - Community: resources/community.md
-      - Risk Warning: resources/risk_warning.md
-      - Audits: resources/audits.md
-      - Terms of Service: resources/terms_of_service.md
 
 
 theme:
