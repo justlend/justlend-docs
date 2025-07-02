@@ -1,7 +1,6 @@
 site_name: justlend-dao
 
 nav:
-    - Home: index.md
     - GETTING STARTED:
         - Overview: getting_started/overview.md
     - GOVERNANCE:
