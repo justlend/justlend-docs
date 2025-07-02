@@ -15,7 +15,6 @@ nav:
 
 theme:
   name: material
-  custom_dir: docs/overrides
   features:
     - navigation.sections  # 启用左侧导航栏的分组
     - navigation.footer
