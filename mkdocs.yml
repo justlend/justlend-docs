@@ -1,13 +1,14 @@
 site_name: justlend-dao
 
 nav:
+    - Home: index.md
     - GETTING STARTED:
         - Overview: getting_started/overview.md
     - GOVERNANCE:
         - JIPs: governance/jips.md
     - DEVELOPERS:
         - Contracts Overview: developers/contracts_overview.md
-    - Resources:
+    - RESOURCES:
         - Community: resources/community.md
 
 theme:
