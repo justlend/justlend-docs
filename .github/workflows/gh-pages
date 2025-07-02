@@ -1,0 +1,38 @@
+name: Publish Document
+on:
+  push:
+    branches:
+      - master  #监控master分支，一旦master分支有改动，则触发该工作流
+    workflow_dispatch:    # 允许手动触发该工作流，即在GitHub UI上actions里有一个Run workflow按钮，否则没有该按钮。
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4  #拉取仓库代码的库
+      with:
+        persist-credentials: false   #禁止默认的 GITHUB_TOKEN 自动注入，在后续步骤中，可以提供更高级别的权限token
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.x   # 安装python
+
+    - name: Install dependencies  
+      run: |
+        python -m pip install --upgrade pip
+        pip install pygments==2.17.2 pymdown-extensions
+        pip install mkdocs-exclude
+        pip install mkdocs-material==9.6.8
+        pip install jieba==0.42.1   # 安装依赖
+
+    - name: Build the document
+      run: mkdocs build  # 构建mkdocs站点
+
+    - name: Deploy
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        token: ${{ secrets.ACCESS_TOKEN }}  # 必须提前在仓库 Settings → Secrets → Actions 中添加具有 repo 权限的 Personal Access Token
+        branch: gh-pages # 将站点的build结果放到gh-pages分支上
+        folder: site # MkDocs 默认的构建输出目录
+
