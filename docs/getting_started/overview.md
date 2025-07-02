@@ -6,7 +6,9 @@ Each money market on JustLend DAO represents a specific TRON asset, including TR
 <br><br>
 
 ## Core Architecture of JustLend DAO
+
 ![architecture](https://raw.githubusercontent.com/hyf1888/JustLend-DAO-Doc/main/images/architecture.png)
+
 * **Suppliers:** supply assets to the money markets of JustLend DAO smart contracts, and the assets supplied are the underlying assets.
     * Smart contracts distribute jToken that corresponds to underlying assets to users' accounts at the exchange rate.
     * Supplied assets to JustLend DAO money markets can enjoy interest earnings on their loans.Redeem: Suppliers can redeem the underlying assets they have supplied at any time.
