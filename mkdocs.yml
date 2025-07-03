@@ -9,7 +9,7 @@ nav:
     - GOVERNANCE:
         - JIPs: governance/jips.md
         - Tokenomics: governance/tokenomics.md
-        - Community Forum: governance/community_forum.md
+        - Community Forum: https://forum.justlend.org
     - DEVELOPERS:
         - Contracts Overview: developers/contracts_overview.md
         - Supply and Borrow Market: developers/supply_and_borrow_market.md
