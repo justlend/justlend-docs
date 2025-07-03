@@ -1,4 +1,4 @@
-## Wallet Connection Questions
+## **Wallet Connection Questions**
 
 ### What should I do if JustLend DAO doesn't recognize my newly installed wallet extension?
 Refresh the JustLend DAO page after downloading a new wallet extension, as this would help the platform detect your new extension.
@@ -22,4 +22,4 @@ You can refresh the page and try to initiate the transaction again.
 If the platform still fails to respond, toggle off Wallet A, refresh the page, and then try to make the transaction again.
 
 
-## [More Questions](https://support.justlend.org/hc/en-us/sections/360011389611-Questions)
+## [**More Questions**](https://support.justlend.org/hc/en-us/sections/360011389611-Questions)
