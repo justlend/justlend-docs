@@ -3,12 +3,25 @@ site_name: JustLend DAO
 nav:
     - GETTING STARTED:
         - Overview: getting_started/overview.md
+        - Concepts: getting_started/concepts.md
+        - Whitepaper: getting_started/whitepaper.md
+        - FAQs: getting_started/faqs.md
     - GOVERNANCE:
         - JIPs: governance/jips.md
+        - Tokenomics: governance/tokenomics.md
+        - Community Forum: governance/community_forum.md
     - DEVELOPERS:
         - Contracts Overview: developers/contracts_overview.md
+        - Supply and Borrow Market: developers/supply_and_borrow_market.md
+        - Staked TRX: developers/staked_trx.md
+        - Energy Rental: developers/energy_rental.md
+        - Deployed Contracts: developers/deployed_contracts.md
+        - APIs: developers/apis.md
     - RESOURCES:
         - Community: resources/community.md
+        - Risk Warning: resources/risk_warning.md
+        - Audits: resources/audits.md
+        - Terms of Service: resources/terms_of_service.md
 
 theme:
     name: material

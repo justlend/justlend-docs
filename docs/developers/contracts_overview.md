@@ -1,23 +1,24 @@
 # Contracts Overview
 
 JustLend DAO Protocol contracts are divided in these repositories:
-- **Supply and Borrow Market:** contains core contracts for JustLend DAO, including logic for supply and borrow market (SBM), interest rate model, governance, price oracle and comptroller.
-  - **SBM:** enables supplying of crypto assets as collateral in order to borrow the base asset. Accounts can also earn interest by supplying the base asset to the protocol.
-  - **Interest Rate Model:** users with a positive balance of the base asset earn interest, denominated in the base asset, based on a supply rate model.
-  - **Price-Oracle:** contains the price oracle contracts we support, along with the logic validation for prices returned by these oracles.
-  - **Governance:** contracts used for proposing, voting and executing proposals.
-  - **Comptroller:** the risk management layer of the protocol. It determines how much collateral a user is required to maintain, and whether user can be liquidated.
-- **Staked TRX:** the contracts utilized for staking TRX to earn high rewards.
-- **Energy Rental:** contracts enable users to rent energy anytime with a low price.
+
+* **Supply and Borrow Market:** contains core contracts for JustLend DAO, including logic for supply and borrow market (SBM), interest rate model, governance, price oracle and comptroller.
+  * **SBM:** enables supplying of crypto assets as collateral in order to borrow the base asset. Accounts can also earn interest by supplying the base asset to the protocol.
+  * **Interest Rate Model:** users with a positive balance of the base asset earn interest, denominated in the base asset, based on a supply rate model.
+  * **Price-Oracle:** contains the price oracle contracts we support, along with the logic validation for prices returned by these oracles.
+  * **Governance:** contracts used for proposing, voting and executing proposals.
+  * **Comptroller:** the risk management layer of the protocol. It determines how much collateral a user is required to maintain, and whether user can be liquidated.
+* **Staked TRX:** the contracts utilized for staking TRX to earn high rewards.
+* **Energy Rental:** contracts enable users to rent energy anytime with a low price.
 
 
 ## Core Contracts
 There are 5 categories of core repository contracts:
-- JTokens Contract
-- Interest Rate Model Contract
-- Price Oracle Contract
-- Governance Contract
-- Comptroller Contract
+* JTokens Contract
+* Interest Rate Model Contract
+* Price Oracle Contract
+* Governance Contract
+* Comptroller Contract
 
 ### JTokens Contract
 `JToken:` the contract used to support all assets by JustLend DAO, such as the jTRX, jUSDT, jSUN and jBTC you receive after supplying the corresponding assets.
