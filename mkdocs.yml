@@ -35,7 +35,7 @@ theme:
         - content.tooltips  # 内容中的工具提示
 
 extra_css:
-    - stylesheets/extra.css # 确保这个路径存在
+        - stylesheets/extra.css # 确保这个路径存在
 
 markdown_extensions:
         - admonition
