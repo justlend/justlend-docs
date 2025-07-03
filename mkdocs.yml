@@ -4,7 +4,7 @@ nav:
     - GETTING STARTED:
         - Overview: getting_started/overview.md
         - Concepts: getting_started/concepts.md
-        - Whitepaper: getting_started/whitepaper.md
+        - Whitepaper: https://justlend.org/docs/justlend_whitepaper_en.pdf
         - FAQs: getting_started/faqs.md
     - GOVERNANCE:
         - JIPs: governance/jips.md
