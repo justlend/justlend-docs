@@ -28,7 +28,6 @@ theme:
     custom_dir: docs/overrides
     features:
         - navigation.sections  # 启用左侧导航栏的分组
-        - navigation.footer
         - toc.integrate
         - search.highlight  # 搜索时高亮匹配内容
         - search.suggest  # 搜索时显示建议
