@@ -1,4 +1,4 @@
-site_name: JustLend DAO
+site_name: JustLend DAO Documentation
 
 nav:
     - GETTING STARTED:
@@ -34,6 +34,8 @@ theme:
         - content.code.annotate  # 代码块注释
         - content.tooltips  # 内容中的工具提示
 
+extra_css:
+    - stylesheets/extra.css # 确保这个路径存在
 
 markdown_extensions:
         - admonition
