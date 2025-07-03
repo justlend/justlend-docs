@@ -12,8 +12,9 @@ JustLend DAO Protocol contracts are divided in these repositories:
 * **Energy Rental:** contracts enable users to rent energy anytime with a low price.
 
 
-## Core Contracts
+## **Core Contracts**
 There are 5 categories of core repository contracts:
+
 * JTokens Contract
 * Interest Rate Model Contract
 * Price Oracle Contract
@@ -44,9 +45,9 @@ There are 5 categories of core repository contracts:
 `Comptroller:` the Comptroller contract is the central contract for each lending pool. It contains functionality central to borrowing activity in the pool like supplying and borrowing assets and liquidations.
 
 
-## Staked TRX Contracts
+## **Staked TRX Contracts**
 `Staked TRX(sTRX):` the contract utilized for staking TRX to earn high rewards.
 
-## Staked TRX Contracts
+## **Energy Rental**
 `Energy Rental:` contracts enable users to rent energy anytime with a low price.
 

@@ -1,6 +1,6 @@
 # JustLend Improvement Proposals
 
-## Introduction
+## **Introduction**
 The JustLend DAO introduces a structured approach to decentralizing the JustLend protocol and empowering community autonomy. JustLend DAO fosters consensus among all participants in the JustLend ecosystem through governance mechanisms and economic incentives. The protocol's functions and the JST token serve as core security elements of the JustLend protocol.
 
 Governance mechanisms in decentralized protocols are driven by participation, incentives, self-regulation, and policy management within the community, adapting to and coexisting with the market dynamics. JustLend DAO manages on-chain operations through proposals, enabling the protocol to achieve self-operation, self-governance, and self-evolution based on predefined rules through intelligent management and token economic incentives, without third-party intervention, ultimately maximizing efficiency and value transfer.
@@ -9,11 +9,13 @@ An essential incentive method in the governance process of JustLend DAO, JST tok
 
 The JustLend DAO was established to facilitate the development and long-term governance of the JustLend DAO protocol. The goal is to create a future-proof governance framework leveraging system incentives and multi-level governance to maintain an effective balance that drives long-term growth and continuous protocol optimization.
 
-## Governance Process
+## **Governance Process**
 
 JustLend Protocol's governance relies on participants locking JST tokens to acquire voting power for JustLend Improvement Proposals (JIPs).  The governance is first discussed in the [JustLend DAO forum](https://forum.justlend.org/). If there is no contentious, then it is conducted through voting. Any users who hold more than 200 million JST can initiate a proposal on the platform, and other users can participate in the vote. If and only if the number of votes in favor of the proposal exceeds the number of negative votes and meanwhile exceeds 600 million, the proposal can be passed and implemented two days later.
 
 JST tokens enable holders to collectively act as managers of the protocol, enabling them to vote and propose. The process of submitting a proposal and voting is as shown below (before entering the lock phase, you can cancel the created proposal at any time by proposal)
+
+![proposal process](https://raw.githubusercontent.com/hyf1888/JustLend-DAO-Doc/main/images/proposal.png)
 
 1. JST holders call governance contracts to create proposals. Once a proposal is successfully created, it will undergo a 2-day review period. Voting rights are then recorded, and the voting process begins after the review period ends.
 2. JST holders receive votes and can choose to either support or oppose a proposal based on its content. Each JST holder is entitled to one vote. The voting period lasts for 3 days.
