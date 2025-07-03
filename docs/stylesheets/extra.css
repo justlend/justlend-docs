@@ -1,0 +1,18 @@
+.md-nav__item.has-children > .md-nav__link {
+  position: relative;
+  padding-right: 20px; /* 为图标留出空间 */
+}
+
+/* stylesheets/extra.css */
+.md-header__button.md-logo > .md-nav__title {
+    display: none;
+}
+
+.md-nav--primary .md-nav__item--section > .md-nav__link {
+    color: #000;
+    font-size: 1.1em;
+}
+
+.md-sidebar {
+    padding-top: 0;
+}
