@@ -22,6 +22,10 @@ nav:
         - Risk Warning: resources/risk_warning.md
         - Audits: resources/audits.md
         - Terms of Service: resources/terms_of_service.md
+    - External Resources:
+        - JustLend DAO: https://justlend.org/#/home
+        - Audits: https://justlend.org/docs/justlend_audit_en.pdf
+        - What's New: https://support.justlend.org/hc/en-us/categories/900001436023-Announcements
 
 theme:
     name: material
