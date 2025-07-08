@@ -28,15 +28,15 @@ theme:
     name: material
     custom_dir: docs/overrides
     features:
-        - navigation.sections  # 启用左侧导航栏的分组
+        - navigation.sections  
         - toc.integrate
-        - search.highlight  # 搜索时高亮匹配内容
-        - search.suggest  # 搜索时显示建议
-        - content.code.annotate  # 代码块注释
-        - content.tooltips  # 内容中的工具提示
+        - search.highlight  
+        - search.suggest  
+        - content.code.annotate  
+        - content.tooltips  
 
 extra_css:
-        - stylesheets/extra.css # 确保这个路径存在
+        - stylesheets/extra.css
 
 markdown_extensions:
         - admonition
