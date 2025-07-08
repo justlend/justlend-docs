@@ -1,6 +1,6 @@
 .md-nav__item.has-children > .md-nav__link {
   position: relative;
-  padding-right: 20px; /* 为图标留出空间 */
+  padding-right: 20px; 
 }
 
 .md-header__button.md-logo > .md-nav__title {
