@@ -179,13 +179,16 @@ The SRs receiving your TRON Power obtained from staking TRX will be decided via 
 ![strx architecture](https://raw.githubusercontent.com/hyf1888/JustLend-DAO-Doc/main/images/strx_architecture.png)
 
 * **TRX Holders:** deposit TRX into the TRC484 contract to receive sTRX at the current exchange rate.
+
 * **sTRX Holders:**
   * Convert sTRX back to TRX at the exchange rate to exit the system;
   * Participate in the governance of TRC484, including Super Representative (SR) voting, resource market interest rate adjustments, and other decisions;
   * Use sTRX as a standard TRC20 token to engage with various applications within the TRON ecosystem.
+
 * **Resource Consumers:**
   * Rent resources within TRC484 by staking TRX (TRX deposited in sTRX system cannot be used for this purpose);
   * Return rented resources, pay the rental fees, and reclaim the remaining staked TRX in TRC484.
+
 * **Liquidators:** liquidate overdue resource rental transactions and earn liquidation rewards.
 
 ### Staked TRX Yield
@@ -198,10 +201,12 @@ The staking APY fluctuates with the changes in voting rewards and the Energy ren
 
 ### Stake and Unstake TRX
 * Connect your Web3 wallet on TronLink or other supported wallet app to the JustLend DAO (https://justlend.org).
+
 * **Stake TRX:**
   * Navigate to the "Staked TRX" page, you will see the latest Staked APY;
   * Specify the amount you want to stake, click 「Stake Now」;
   * Cofirm the transaction, then you will receive a proportionate amount of sTRX as the receipt.
+
 * **Unstake TRX:**
   * Unstake on JustLend DAO: Click the 「unstake」 tab, enter the amount of sTRX you want to unstake, and then confirm the transaction;
   * Unstake via a third-party platform: You can initiate transactions on other platforms, such as HTX and SunSwap, to swap your sTRX.
@@ -211,3 +216,57 @@ If you unstake your sTRX on JustLend DAO, you need to wait for 14 days before wi
 <br>
 
 ## **Energy Rental**
+JustLend DAO integrates the energy rental protocol, which aims to provide users with a more convenient and cheaper way to obtain energy. The energy rental protocol is open to all TRON network users and supports one-to-many renting, enabling users to rent energy not only for themselves but also for others. The user-friendly interface is designed to accommodate users managing multiple orders seamlessly.
+
+When renting energy, you need to specify three key parameters based on your requirements, which are **Rental Amount**, **Rental Duration** and **Receiving Address**.
+
+* **Rental Amount:** the amount of energy you need.
+  * The actual energy rented is calculated based on the corresponding proxy TRX amount. Due to market fluctuations, the rented energy amount may experience slight changes during the transaction;
+  * **Note:** the energy used will be fully restored after 24 hours and can be used again;
+  * If you are not sure about the amount of energy you need, please refer to: One USDT transfer transaction ≈ 120,000 energy. (may fluctuate according to market trading conditions).
+
+* **Rental Duration:** this is the time you need to use the energy.
+  * Supports renting by the hour or by the day, with a maximum single rental period of **30** days；
+  * Rental duration is calculated at the time of placing the order. Market price fluctuations may result in slight increases or decreases in actual usage time;
+  * **Note:** Shorter rental durations are more affected by market price volatility. If the rental duration is less than 3 hours, please be sure to cancel the rent immediately after completing the transaction. This will prevent early liquidation due to price fluctuations and avoid unnecessary losses.
+
+* **Receiving Address:** the address where the rented energy will be allocated.
+  * If you rent for yourself, this field is not required. If renting for another address, this field is required.
+  * **Note:** Renting for contract addresses is not supported.
+
+### Placing An Order
+Once the parameters are set, you can place an order to proceed with the transaction. The rental protocol will require a prepayment, which includes a **deposit** and **rental fee**:
+
+* **Deposit Fee:** calculated as **0.05%** of the TRX required for the rental energy, with a minimum deposit of **40** TRX.
+  * If the rent order is returned on time, the deposit is fully refunded. If not returned before expiry, the order may be liquidated, and the deposit will be forfeited to community liquidators as a reward.
+
+* **Rental Fee:** includes **Occupation Fee** (charges based on the rental duration) and **Usage Fee** (charges based on the rental amount):
+  * **Occupation Fee:** the energy you use is charged based on the time you use. The longer you use, the more you will be charged.
+    * The prepayment includes the occupancy fee for your entire rental time. If you terminate the rent early, the occupancy fee will be refunded in proportion to the occupancy time.
+
+* **Usage Fee:** the cost of your energy usage fee is charged as one day's rental fee based on the amount of energy you rent.
+  * Since it takes **24** hours for energy to recover after use, the usage fee is charged based on 1 day.
+  * when you return to the energy:
+    * If the energy has been fully restored, the usage fee will be fully refunded;
+    * If the energy has been used up, **0.5** days of usage fee will be deducted from your account;
+    * If part of the energy has been used, your usage fee will be deducted proportionally.
+
+After completing the rental transaction, you can manage your orders via the energy rental interface. Options include returning the rent, extending the rent order, viewing the actual energy received, and checking the remaining rental duration.
+
+We recommend users customize their leasing plans based on their specific needs:
+* **For single transactions**, we recommend returning the energy immediately after use. This avoids liquidation and helps save on occupation fees.
+* **For users with regular daily transactions**, we suggest opting for a long-term hassle-free rental plan by renting energy for 30 days based on daily energy consumption. With the 24-hour full restoration rule, there is no need to rent excessive amounts of energy.
+
+### Cost Estimation
+To provide a clearer understanding of the costs involved in transferring USDT by renting energy versus directly burning TRX, we present the following cost estimates through two examples:
+
+**Scenario 1: Renting 200k Energy for One Day to Transfer USDT**
+
+After renting 200k energy for one day, the USDT transfer is completed, and the rental is terminated immediately. The costs associated with this scenario are based on the prepayment and potential refund formulas previously outlined.
+
+**Scenario 2: Directly Burning TRX to Transfer USDT Without Energy**
+
+In this scenario, TRX is burned directly to facilitate the USDT transfer without renting any energy. The cost incurred here is solely dependent on the amount of TRX burned for the transaction.
+
+**Comparison Insight**
+By comparing these two scenarios, it becomes evident that the cost of using rented energy for transaction cost is significantly lower than the cost of directly burning TRX. Additionally, the presence of USDT in the receiving address affects the computational load of the contract, which in turn impacts the overall transaction cost.
