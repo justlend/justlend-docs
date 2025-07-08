@@ -123,16 +123,91 @@ Liquidation will be triggered when the risk value of your positions hits 100. Th
 
 As a borrower, please keep a close eye on your risk value to prevent liquidation. Once liquidation occurs, you will find a record of your jTokens being transferred out of your wallet.
 
-**Note:** Before you proceed to use the liquidation tool, please be advised that you must first agree to the terms outlined in the [<Liquidation Tool Disclaimer>](https://docs.justlend.org/resources/risk-warning). This disclaimer is designed to inform you of the risks, responsibilities, and conditions associated with the use of liquidation tool.
+**Note:** Before you proceed to use the liquidation tool, please be advised that you must first agree to the terms outlined in the [Liquidation Tool Disclaimer](https://docs.justlend.org/resources/risk-warning). This disclaimer is designed to inform you of the risks, responsibilities, and conditions associated with the use of liquidation tool.
 By proceeding to use the liquidation tool, you confirm that you have read, understood, and accept the terms of the disclaimer. If you do not agree with any part of the disclaimer, you are not permitted to utilize liquidation tool and discontinue use immediately.
 
-
+<br>
 
 ## **Risks**
+The JustLend  DAO Protocol provides decentralized and efficient access to liquidity, empowering users across the TRON ecosystem. However, as with any decentralized finance (DeFi) protocol, there are inherent risks involved. To address these, JustLend has implemented robust risk management measures, ensuring user confidence and protocol resilience. Below, we outline the key risks and the steps taken to mitigate them.
 
+### Smart Contract Risk
+Smart contracts are critical to the functioning of the JustLend DAO Protocol, but they can sometimes contain bugs or vulnerabilities in their code, which may compromise the protocol’s security or its reserve tokens. These vulnerabilities could potentially be exploited by malicious actors, affecting the integrity of transactions and liquidity.
 
+#### Mitigation Measures:
+* **Public Code Audits:** JustLend DAO's smart contract code is publicly available for external audits. It has undergone multiple professional third-party audits by recognized experts to identify and address any vulnerabilities;
+* **Community Review:** Any proposed changes to the protocol are thoroughly reviewed and approved by the JustLend DAO community before implementation, ensuring collective oversight;
+* **Bug Bounty Program:** To further reduce the risk of undiscovered vulnerabilities, JustLend DAO runs an ongoing bug bounty program. This incentivizes external developers to identify and report potential issues, allowing them to be fixed before they can cause harm.
+
+### Oracle Risk
+JustLend DAO relies on third-party oracles to provide essential data, such as price feeds and redemption ratios for liquid staking tokens. While oracles are vital to the protocol, their reliance introduces the risk of incorrect data being provided if an oracle fails or is compromised. This could lead to inaccurate valuations and potentially harmful actions within the protocol, such as incorrect collateral liquidation or improper lending terms.
+
+#### Mitigation Measures:
+* **Decentralized Oracles:** To minimize the risks associated with centralization, JustLend DAO utilizes decentralized oracles like WinkLink, which provide tamper-resistant data feeds. This ensures greater reliability and security, as the data is less susceptible to manipulation or errors from a single source;
+* **Community Review:** These decentralized oracles are also equipped with additional security measures that further protect the integrity of the data, reducing the likelihood of inaccurate or malicious inputs.
+
+### Collateral Risk
+The assets used as collateral within the JustLend DAO Protocol are subject to market fluctuations. A sharp decline in the value or liquidity of collateral could lead to under-collateralization or even bad debt, which poses a risk to both lenders and the platform as a whole. Without proper safeguards, this could lead to liquidations that do not cover the full value of outstanding loans, resulting in losses for stakeholders.
+
+#### Mitigation Measures:
+* **Risk Service Providers:** JustLend DAO partners with reputable risk service providers that continuously monitor the performance of collateral and assess the stability of the market. These services help detect potential risks early and ensure that the collateral remains adequate to cover outstanding loans;
+* **Risk Parameters:** JustLend DAO has set key risk parameters, such as, which are borrow limit, designed to protect the protocol from sudden market changes. These parameters help ensure that collateral remains sufficient to secure the borrows, reducing the likelihood of under-collateralization;
+* **Governance Oversight:** The JustLend DAO community and governance framework play a crucial role in adjusting these risk parameters based on market conditions. This allows the protocol to remain adaptable and respond to fluctuations in the market, ensuring a balanced and secure lending environment.
+
+### Risk Alert
+
+#### Why can't I receive email notifications?
+If you have enabled “Risk Alert” yet still fail to receive email notifications even when the trigger conditions are met, check the following settings:
+
+1. **Mailbox Settings**
+   * Junk folder: Check the junk folder in your mailbox. Sometimes, email notifications can be mistakenly classified as junk emails. If you find the target notification in the junk folder, move it to your inbox or add the sender to your “Contacts”.
+   * Email filters: Verify if your email service provider has set filters that have blocked or filtered out the email notifications. It is important to make sure the sender’s address is added to your whitelist or allowlist.
+2. **Email Sending Issues**
+   * Sending delays: Sometimes, email notifications may not come through quickly due to the delay issues. Please be patient and check your inbox again later.
+   * Sending failures: If your emails cannot be sent or are rejected, you may also experience difficulty in receiving email notifications. In this case, you can check your outbox about this kind of issue and try again in the JustLend platform.
+3. **User Information**
+   * Incorrect email address: Make sure you have provided a correct email address in the “Risk Alert” service on JustLend DAO and have verified that your address functions well.
+
+<br>
 
 ## **Staked TRX**
+Staked TRX is a feature launched by JustLend DAO that enables one-click TRX staking in accordance with Stake 2.0 rules. Once you have staked your TRX, JustLend DAO will take care of the cumbersome procedures, such as Super Representative (SR) voting and reward claiming, and rent out the Energy obtained from TRX staking automatically to generate more yields for you.
 
+The SRs receiving your TRON Power obtained from staking TRX will be decided via voting by sTRX Governance. The whole process will be open, transparent, and fully decentralized.
+
+### Architecture of the sTRX system
+![strx architecture](https://raw.githubusercontent.com/hyf1888/JustLend-DAO-Doc/main/images/strx_architecture.png)
+
+* **TRX Holders:** deposit TRX into the TRC484 contract to receive sTRX at the current exchange rate.
+* **sTRX Holders:**
+  * Convert sTRX back to TRX at the exchange rate to exit the system;
+  * Participate in the governance of TRC484, including Super Representative (SR) voting, resource market interest rate adjustments, and other decisions;
+  * Use sTRX as a standard TRC20 token to engage with various applications within the TRON ecosystem.
+* **Resource Consumers:**
+  * Rent resources within TRC484 by staking TRX (TRX deposited in sTRX system cannot be used for this purpose);
+  * Return rented resources, pay the rental fees, and reclaim the remaining staked TRX in TRC484.
+* **Liquidators:** liquidate overdue resource rental transactions and earn liquidation rewards.
+
+### Staked TRX Yield
+The sources of yields form staking TRX is mainly composed of two parts:
+
+* **Voting rewards:** the rewards for voting TRON Power obtained from TRX staking to SRs;
+* **Energy rental rewards:** the revenue from Energy Rental on JustLend DAO, distributed to stakers according to the amount and percentage of TRX they have staked.
+
+The staking APY fluctuates with the changes in voting rewards and the Energy rental market. You can check the latest APY anytime in [Staked TRX](https://app.justlend.org/strx?lang=en-US) page.
+
+### Stake and Unstake TRX
+* Connect your Web3 wallet on TronLink or other supported wallet app to the JustLend DAO (https://justlend.org).
+* **Stake TRX:**
+  * Navigate to the "Staked TRX" page, you will see the latest Staked APY;
+  * Specify the amount you want to stake, click 「Stake Now」;
+  * Cofirm the transaction, then you will receive a proportionate amount of sTRX as the receipt.
+* **Unstake TRX:**
+  * Unstake on JustLend DAO: Click the 「unstake」 tab, enter the amount of sTRX you want to unstake, and then confirm the transaction;
+  * Unstake via a third-party platform: You can initiate transactions on other platforms, such as HTX and SunSwap, to swap your sTRX.
+
+If you unstake your sTRX on JustLend DAO, you need to wait for 14 days before withdrawing the unstaked TRX by clicking 「Withdraw」 on the same page.
+
+<br>
 
 ## **Energy Rental**
