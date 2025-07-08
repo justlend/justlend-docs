@@ -1,10 +1,10 @@
-.md-nav__title {
-    display: none;
-}
-
 .md-nav__item.has-children > .md-nav__link {
   position: relative;
   padding-right: 20px; 
+}
+
+.md-nav__title {
+    display: none;
 }
 
 .md-header {
