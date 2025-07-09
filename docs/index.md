@@ -12,6 +12,7 @@ overview of JustLend DAO, guiding you through how to use the platform and coveri
 
 For more information about JustLend DAO and related topics, please visit the official website
 at [justlend.org](https://justlend.org/) or explore the additional resources linked below:
+
 * [JustLend DAO Whitepaper](https://justlend.org/docs/justlend_whitepaper_en.pdf)
 * [JustLend DAO Developer Hub](https://github.com/justlend)
 
