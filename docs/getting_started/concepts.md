@@ -264,10 +264,34 @@ To provide a clearer understanding of the costs involved in transferring USDT by
 
 After renting 200k energy for one day, the USDT transfer is completed, and the rental is terminated immediately. The costs associated with this scenario are based on the prepayment and potential refund formulas previously outlined.
 
+|                        | Receiver holding USDT | Receiver without USDT | Calculation details                                   | Txn example                                                                                                                                                                                                                                   |
+|------------------------|-----------------------|-----------------------|-------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| rent energy cost       | - 65.363749           | - 65.363749           | 65.363749 for rent 200k energy                        | [rentTxn](https://tronscan.org/#/transaction/b8a791fe0ef2025f04a9d47c060b1f731b63b466799b7e6360d1cb070463b962)                                                                                                                                |
+| rent energy gas        | - 2.153090            | - 2.153090            | 1.77009 burn for energy; 0.383 burn for bandwidth     | [rentTxn](https://tronscan.org/#/transaction/b8a791fe0ef2025f04a9d47c060b1f731b63b466799b7e6360d1cb070463b962)                                                                                                                                |
+| transfer USDT gas      | - 0.345000            | - 0.345000            | 0.345 for USDT bandwidth whatever holding USDT or not | [noUsdtTxn](https://tronscan.org/#/transaction/2b620fd06b3b9128b111fbc1f699de87bf9473b13ef29a6104aa882efd66007c); [holdingUsdtTxn](https://tronscan.org/#/transaction/c0ceca04635d6505554916b6f47c2513c1673364daf283d8e36e17d677ef1173)       |
+| return energy gas      | - 0.378000            | - 0.378000            | return txn just burn bandwidth for gas                | [holdingUsdtReturnTxn](https://tronscan.org/#/transaction/d5fe0d5a05cfcc9ceef70d47b85f4acf7109e8e1ff027503fa092cf13124b8d6); [noUsdtTxn](https://tronscan.org/#/transaction/534739159370a9966f5dee98b0045774c9079f8c9c0df583883f7abe5fe0fcf1) |
+| refund                 | 60.413664             | 59.262775             | return TRX when end rent                              |                                                                                                                                                                                                                                               |
+| total energy rent cost | - 7.826175            | - 8.977064            |                                                       |                                                                                                                                                                                                                                               |
+| total cost (in USD)    | - $1.57               | - $1.80               | 0.20USDpreTRX                                         |                                                                                                                                                                                                                                               |
+
 **Scenario 2: Directly Burning TRX to Transfer USDT Without Energy**
 
 In this scenario, TRX is burned directly to facilitate the USDT transfer without renting any energy. The cost incurred here is solely dependent on the amount of TRX burned for the transaction.
 
+|                     | Receiver holding USDT | Receiver without USDT  | Calculation details                                                                              | Txn example                                                                                                                                                                                                                                                                          |
+|---------------------|-----------------------|------------------------|--------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| burn TRX cost       | - 27.344700           | - 55.064700            | 130,285 energy for notholding USDT; 64,285 energy for holding USDT; 345 bandwidth cost 0.345 TRX | [transfer to a without USDT address](https://tronscan.org/#/transaction/774e9f5601306ff6ff0b70f76944f37da52528cd7cd64d22b9b0903b447a28e8); [transfer to a holding USDT address](https://tronscan.org/#/transaction/c0ceca04635d6505554916b6f47c2513c1673364daf283d8e36e17d677ef1173) |
+| total cost (in USD) | - $5.4689             | - $11.0129             | 0.20USDpreTRX                                                                                    |                                                                                                                                                                                                                                                                                      |
+
+
 **Comparison Insight**
 
 By comparing these two scenarios, it becomes evident that the cost of using rented energy for transaction cost is significantly lower than the cost of directly burning TRX. Additionally, the presence of USDT in the receiving address affects the computational load of the contract, which in turn impacts the overall transaction cost.
+
+|                  | Receiver holding USDT | Receiver without USDT |
+|------------------|-----------------------|-----------------------|
+| rent energy cost | $1.57                 | $1.80                 |
+| burn TRX cost    | $5.4689               | $ 11.0129             |
+| save             | - $3.8989             | - $9.2129             |
+
+
