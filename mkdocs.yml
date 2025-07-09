@@ -3,22 +3,42 @@ site_name: JustLend DAO Documentation
 nav:
     - GETTING STARTED:
         - Overview: getting_started/overview.md
-        - Concepts: getting_started/concepts.md
+        - Concepts: 
+            - Supply: 
+            - Borrow:
+            - Withdraw:
+            - Repay:
+            - Liquidations:
+            - Risks:
+            - Staked TRX:
+            - Energy Rental:
         - Whitepaper: https://justlend.org/docs/justlend_whitepaper_en.pdf
-        - FAQs: getting_started/faqs.md
+        - FAQs: 
+            - Wallet Connection Questions:
+            - Spending Cap Issue During Transactions: 
+            - More Questions: https://support.justlend.org/hc/en-us/sections/360011389611-Questions
     - GOVERNANCE:
         - JIPs: governance/jips.md
         - Tokenomics: governance/tokenomics.md
         - Community Forum: https://forum.justlend.org
     - DEVELOPERS:
         - Contracts Overview: developers/contracts_overview.md
-        - Supply and Borrow Market: developers/supply_and_borrow_market.md
+        - Supply and Borrow Market: 
+            - SBM:
+            - Interest Rate Model:
+            - Governance:
+            - Price Oracle:
+            - Comptroller:
         - Staked TRX: developers/staked_trx.md
         - Energy Rental: developers/energy_rental.md
         - Deployed Contracts: developers/deployed_contracts.md
-        - APIs: developers/apis.md
+        - APIs: 
+            - Supply and Borrow Market:
+            - Staked TRX and Energy Rental Market:
     - RESOURCES:
-        - Community: resources/community.md
+        - Community: 
+            - Links: resources/community.md
+            - Wallet Integration Cooperation:
         - Risk Warning: resources/risk_warning.md
         - Audits: 
             - Supply & Borrow: https://justlend.org/docs/justlend_audit_en.pdf
