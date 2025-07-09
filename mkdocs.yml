@@ -20,8 +20,12 @@ nav:
     - RESOURCES:
         - Community: resources/community.md
         - Risk Warning: resources/risk_warning.md
-        - Audits: resources/audits.md
-        - Terms of Service: resources/terms_of_service.md
+        - Audits: 
+            - Supply & Borrow: https://justlend.org/docs/justlend_audit_en.pdf
+            - Staked TRX: https://justlend.org/docs/justlend_strx_audit_en.pdf
+        - Terms of Service: 
+            - Terms of Service: https://justlend.org/docs/JustLend_Terms_of_Use_en.pdf
+            - Privacy Policy: https://justlend.org/docs/JustLend_Privacy_Policy_en.pdf
      
 
 theme:
