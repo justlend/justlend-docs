@@ -1,4 +1,4 @@
-## **Liquidation Tool Disclaimer**
+### **Liquidation Tool Disclaimer**
 
 **Important Disclaimer: Version 1.0 (Last update: 19 February 2025)**
 
