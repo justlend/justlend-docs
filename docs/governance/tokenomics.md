@@ -1,9 +1,8 @@
-#### Introduction
 The term tokenomics encompasses a wide range of concepts that defines the science and behavior of blockchain economies. In simple terms, tokenomics are the financial foundation of blockchains. Each protocol has its unique economic model, and for the protocol's healthy and enduring development, the economic model should include design, distribution, and management of tokens, as well as the incentives and mechanisms that drive their value and utilization.
 
 The JustLend tokenomics  is designed to promote a healthy, long term self-sustaining economy with participant incentives aligned to the security and decentralization of the network. The main participants in this economy are suppliers, borrowers and clients who stakes TRX or USDT. The protocol revenue from users will be used to optimize income distribution and cater to the protocol's present and future needs.
 
-#### The JustLend Economy
+### **The JustLend DAO Economy**
 JustLend DAO is a decentralized governance protocol, where users can participate in governance using the platform token JUST (Symbol: JST) to make decisions about the development of JustLend DAO.  The platform has integrated multiple independent DeFi protocols and plans to incorporate more to form the JustLend economy. There are four integrated protocols characterize the JustLend economy:
 
 * **SBM (Supply and Borrow Market):**  A supply and borrow market protocol launched in December 2020.
@@ -31,13 +30,13 @@ The latest round of JustLend DAO deposit supply mining started on February 16, 2
 #### Buyback & Burning
 The JST ecosystem burn plan implemented by GrantsDAO aims to use protocol base income and donations from partner projects to provide liquidity to SunSwap V2 for JST trading pairs and burn the resulting liquidity tokens (e.g., [SUNSWAP-JST-TRX V2 Token](https://tronscan.org/#/token20/TUDo1PuMG6j4aDSg6rsCNiz5gR5cnQaNTT)), thus accumulating JST liquidity in DEX. Compared to directly burning tokens, the ecosystem burn plan's approach reduces supply while maintaining liquidity in DEX, stabilizing the price of JST.
 
-#### Revenue Distribution from Protocol Reserves
+### **Revenue Distribution from Protocol Reserves**
 The protocol reserves mainly consist of accumulated borrow fees. The revenue allocation model divides income from these reserves into four key segments:
 
-* Risk Fund(40%): This fund is set up to mitigate potential deficiencies in the protocol, especially during instances of ineffective or delayed liquidations. The allocation to the risk fund remains constant to uphold a robust financial buffer;
-* DAO Reserve(30%): The reserve strengthens the protocol's resilience and serves as a robust safety net for its continuous operations;
-* Incentives(20%): This part is emmitted as incentives for suppliers and borrowers;
-* Supply Mining Rewards(10%): This rewards utilized a portion of the reserve revenue to incentivize  developers, contributors, participants, and any projects that contribute to the ecosystem.
+* **Risk Fund(40%):** This fund is set up to mitigate potential deficiencies in the protocol, especially during instances of ineffective or delayed liquidations. The allocation to the risk fund remains constant to uphold a robust financial buffer;
+* **DAO Reserve(30%):** The reserve strengthens the protocol's resilience and serves as a robust safety net for its continuous operations;
+* **Incentives(20%):** This part is emmitted as incentives for suppliers and borrowers;
+* **Supply Mining Rewards(10%):** This rewards utilized a portion of the reserve revenue to incentivize  developers, contributors, participants, and any projects that contribute to the ecosystem.
 
 ![revenue distribution](https://raw.githubusercontent.com/hyf1888/JustLend-DAO-Doc/main/images/revenue_distribution.png)
 

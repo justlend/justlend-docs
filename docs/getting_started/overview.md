@@ -3,7 +3,7 @@ JustLend DAO is a cutting-edge money market protocol powered by TRON, designed t
 Each money market on JustLend DAO represents a specific TRON asset, including TRX, TRC20 stablecoins like USDT, and other TRC20-based tokens. The platform features an open and transparent ledger that records all transactions and historical interest rates, ensuring transparency and trust among users.
 <br>
 
-#### Core Architecture of JustLend DAO
+### **Core Architecture of JustLend DAO**
 
 ![architecture](https://raw.githubusercontent.com/hyf1888/JustLend-DAO-Doc/main/images/architecture.png)
 
