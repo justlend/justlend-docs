@@ -1,5 +1,3 @@
-## **Liquidations**
-
 Liquidation is determined by **Risk Value**, which is a critical metric within the JustLend DAO Protocol that measures the safety of a borrow position. It is calculated as:
 
 <div style="text-align: center; font-size: 20px;">

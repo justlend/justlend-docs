@@ -1,4 +1,3 @@
-## **Risks**
 The JustLend  DAO Protocol provides decentralized and efficient access to liquidity, empowering users across the TRON ecosystem. However, as with any decentralized finance (DeFi) protocol, there are inherent risks involved. To address these, JustLend has implemented robust risk management measures, ensuring user confidence and protocol resilience. Below, we outline the key risks and the steps taken to mitigate them.
 
 ### Smart Contract Risk
