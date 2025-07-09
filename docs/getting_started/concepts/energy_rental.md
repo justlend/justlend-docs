@@ -16,7 +16,7 @@ When renting energy, you need to specify three key parameters based on your requ
     * If you rent for yourself, this field is not required. If renting for another address, this field is required.
     * **Note:** Renting for contract addresses is not supported.
 
-### Placing An Order
+### **Placing An Order**
 Once the parameters are set, you can place an order to proceed with the transaction. The rental protocol will require a prepayment, which includes a **deposit** and **rental fee**:
 
 * **Deposit Fee:** calculated as **0.05%** of the TRX required for the rental energy, with a minimum deposit of **40** TRX.
@@ -39,7 +39,7 @@ We recommend users customize their leasing plans based on their specific needs:
 * **For single transactions**, we recommend returning the energy immediately after use. This avoids liquidation and helps save on occupation fees.
 * **For users with regular daily transactions**, we suggest opting for a long-term hassle-free rental plan by renting energy for 30 days based on daily energy consumption. With the 24-hour full restoration rule, there is no need to rent excessive amounts of energy.
 
-### Cost Estimation
+### **Cost Estimation**
 To provide a clearer understanding of the costs involved in transferring USDT by renting energy versus directly burning TRX, we present the following cost estimates through two examples:
 
 **Scenario 1: Renting 200k Energy for One Day to Transfer USDT**

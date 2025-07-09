@@ -1,6 +1,6 @@
 The JustLend DAO offers user an efficient way to access liquidity by using their supplied assets as collateral. This approach unlocks capital without requiring users to sell their holdings, making it a powerful tool for managing financial needs. However, borrowers must remain vigilant about potential risks, especially liquidation.
 
-### How It Works
+### **How It Works**
 
 Borrowing on JustLend DAO is simple and dynamic. Users can leverage their deposited assets to borrow tokens, with interest rates determined by the protocol’s utilization rate—the percentage of supplied liquidity currently borrowed. As borrowing demand increases, utilization rates rise, leading to higher interest rates. This dynamic adjustment ensures a balanced ecosystem that benefits both borrowers and suppliers.
 
@@ -10,7 +10,7 @@ Borrowing on JustLend DAO is simple and dynamic. Users can leverage their deposi
 
 **Liquidation Risk:** Borrowers face liquidation if their risk value over the required threshold. To mitigate this, it’s essential to monitor collateralisation levels and maintain a healthy health factor.
 
-### How Do I Supply Assets
+### **How Do I Supply Assets**
 Borrowing can be done with a user interface [JustLend SBM](https://app.justlend.org/homeNew?lang=en-US). Before we walk through the steps of a borrowing sequence, let’s cover some key parameters:
 
 * `Borrow APY:` the cost of borrowing assets in the JustLend DAO Protocol, which can vary based on the overall utilization of the liquidity pool；

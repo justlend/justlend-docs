@@ -7,7 +7,7 @@ When withdrawing with an active borrow position, it’s essential to carefully m
 * **Stay Below the Liquidation Threshold:** Check that your account maintains sufficient collateral to avoid crossing the liquidation parameters;
 * **Plan Withdrawals Carefully:** Assess the impact of each withdrawal on your overall borrow position to prevent unintentional liquidation risks.
 
-#### Withdraw Assets:
+### **How Do I Withdraw Assets**
 1. Connect your Web3 wallet on TronLink or other supported wallet app to the JustLend DAO ([https://justlend.org](https://justlend.org)).
 2. Navigate to the "SBM" and choose the supplied asset you want to withdraw, click 「Withdraw」.
 3. Specify the amount you want to withdraw and confirm the transaction.

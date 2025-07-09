@@ -2,7 +2,7 @@ Staked TRX is a feature launched by JustLend DAO that enables one-click TRX stak
 
 The SRs receiving your TRON Power obtained from staking TRX will be decided via voting by sTRX Governance. The whole process will be open, transparent, and fully decentralized.
 
-### Architecture of the sTRX system
+### **Architecture of the sTRX system**
 ![strx architecture](https://raw.githubusercontent.com/hyf1888/JustLend-DAO-Doc/main/images/strx_architecture.png)
 
 * **TRX Holders:** deposit TRX into the TRC484 contract to receive sTRX at the current exchange rate.
@@ -18,7 +18,7 @@ The SRs receiving your TRON Power obtained from staking TRX will be decided via 
 
 * **Liquidators:** liquidate overdue resource rental transactions and earn liquidation rewards.
 
-### Staked TRX Yield
+### **Staked TRX Yield**
 The sources of yields form staking TRX is mainly composed of two parts:
 
 * **Voting rewards:** the rewards for voting TRON Power obtained from TRX staking to SRs;
@@ -26,7 +26,7 @@ The sources of yields form staking TRX is mainly composed of two parts:
 
 The staking APY fluctuates with the changes in voting rewards and the Energy rental market. You can check the latest APY anytime in [Staked TRX](https://app.justlend.org/strx?lang=en-US) page.
 
-### Stake and Unstake TRX
+### **Stake and Unstake TRX**
 * Connect your Web3 wallet on TronLink or other supported wallet app to the JustLend DAO (https://justlend.org).
 
 * **Stake TRX:**

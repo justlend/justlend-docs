@@ -6,7 +6,7 @@ Borrowers can repay their loans using the same tokens they borrowed or through j
 * A higher collateralisation ratio minimizes the risk of liquidation by maintaining a safe margin between the collateral value and the borrowed amount;
 * Repayment allows borrowers to safely withdraw a portion of their collateral, offering greater flexibility in managing their assets.
 
-#### Repay Assets:
+### **How Do I Repay Assets**
 1. Connect your Web3 wallet on TronLink or other supported wallet app to the JustLend DAO ([https://justlend.org](https://justlend.org)).
 2. Navigate to the "SBM" and choose the borrowed asset you want to withdraw, click 「Repay」.
 3. Specify the amount you want to repay and confirm the transaction.
