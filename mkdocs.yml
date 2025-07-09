@@ -3,19 +3,19 @@ site_name: JustLend DAO Documentation
 nav:
     - GETTING STARTED:
         - Overview: getting_started/overview.md
-        - Concepts: 
-            - Supply: 
-            - Borrow:
-            - Withdraw:
-            - Repay:
-            - Liquidations:
-            - Risks:
-            - Staked TRX:
-            - Energy Rental:
+        - Concepts:
+            - Supply: getting_started/concepts/supply.md
+            - Borrow: getting_started/concepts/borrow.md
+            - Withdraw: getting_started/concepts/withdraw.md
+            - Repay: getting_started/concepts/repay.md
+            - Liquidations: getting_started/concepts/liquidations.md
+            - Risks: getting_started/concepts/risks.md
+            - Staked TRX: getting_started/concepts/staked_trx.md
+            - Energy Rental: getting_started/concepts/energy_rental.md
         - Whitepaper: https://justlend.org/docs/justlend_whitepaper_en.pdf
-        - FAQs: 
-            - Wallet Connection Questions:
-            - Spending Cap Issue During Transactions: 
+        - FAQs:
+            - Wallet Connection Questions: getting_started/faqs/wallet_connection_questions.md
+            - Spending Cap Issue During Transactions: spending_cap_issue.md
             - More Questions: https://support.justlend.org/hc/en-us/sections/360011389611-Questions
     - GOVERNANCE:
         - JIPs: governance/jips.md
@@ -23,41 +23,41 @@ nav:
         - Community Forum: https://forum.justlend.org
     - DEVELOPERS:
         - Contracts Overview: developers/contracts_overview.md
-        - Supply and Borrow Market: 
-            - SBM:
-            - Interest Rate Model:
-            - Governance:
-            - Price Oracle:
-            - Comptroller:
+        - Supply and Borrow Market:
+            - SBM: developers/supply_and_borrow_market/sbm.md
+            - Interest Rate Model: developers/supply_and_borrow_market/interest_rate_model.md
+            - Governance: developers/supply_and_borrow_market/governance.md
+            - Price Oracle: developers/supply_and_borrow_market/price_oracle.md
+            - Comptroller: developers/supply_and_borrow_market/comptroller.md
         - Staked TRX: developers/staked_trx.md
         - Energy Rental: developers/energy_rental.md
         - Deployed Contracts: developers/deployed_contracts.md
-        - APIs: 
-            - Supply and Borrow Market:
-            - Staked TRX and Energy Rental Market:
+        - APIs:
+            - Supply and Borrow Market: developers/apis/supply_and_borrow_market.md
+            - Staked TRX and Energy Rental Market: developers/apis/staked_trx_and_energy_rental_market.md
     - RESOURCES:
-        - Community: 
-            - Links: resources/community.md
-            - Wallet Integration Cooperation:
+        - Community:
+            - Links: resources/community/links.md
+            - Wallet Integration Cooperation: resources/community/wallet_integration_cooperation.md
         - Risk Warning: resources/risk_warning.md
-        - Audits: 
+        - Audits:
             - Supply & Borrow: https://justlend.org/docs/justlend_audit_en.pdf
             - Staked TRX: https://justlend.org/docs/justlend_strx_audit_en.pdf
-        - Terms of Service: 
+        - Terms of Service:
             - Terms of Service: https://justlend.org/docs/JustLend_Terms_of_Use_en.pdf
             - Privacy Policy: https://justlend.org/docs/JustLend_Privacy_Policy_en.pdf
-     
+
 
 theme:
     name: material
     custom_dir: docs/overrides
     features:
-        - navigation.sections  
+        - navigation.sections
         - toc.integrate
-        - search.highlight  
-        - search.suggest  
-        - content.code.annotate  
-        - content.tooltips  
+        - search.highlight
+        - search.suggest
+        - content.code.annotate
+        - content.tooltips
 
 extra_css:
         - stylesheets/extra.css
