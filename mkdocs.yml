@@ -15,7 +15,7 @@ nav:
         - Whitepaper: https://justlend.org/docs/justlend_whitepaper_en.pdf
         - FAQs:
             - Wallet Connection Questions: getting_started/faqs/wallet_connection_questions.md
-            - Spending Cap Issue During Transactions: spending_cap_issue.md
+            - Spending Cap Issue During Transactions: getting_started/faqs/spending_cap_issue.md
             - More Questions: https://support.justlend.org/hc/en-us/sections/360011389611-Questions
     - GOVERNANCE:
         - JIPs: governance/jips.md
