@@ -1,27 +1,9 @@
-openapi: 3.1.1
 info:
-    title: JustLend
-    description: JustLend Doc API
-    version: 1.0.0
-
-
-servers:
-    - url: https://openapi.just.network
-    - url: '{protocol}://openapi.just.network/{path}'
-      description: Responds with your request data.
-      variables:
-          protocol:
-              enum:
-                  - https
-              default: https
-          path:
-              default: ''
+    title: JustLend DAO API
 
 tags:
     - name: Supply and Borrow Market
-      description: Everything about supply and borrow market
     - name: Staked TRX Market and Energy Rental
-      description: Everything about staked TRX market information
 
 paths:
     '/lend/jtoken':
