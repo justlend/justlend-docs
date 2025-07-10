@@ -456,7 +456,7 @@ components:
                     schema:
                         '$ref': '#/components/schemas/Error'
 
-    /*schemas:
+    schemas:
         tokenList:
             type: object
             properties:
@@ -914,4 +914,4 @@ components:
                 detail:
                     type: string
                     examples:
-                        - Unfortunately, we can’t provide further information. */
+                        - Unfortunately, we can’t provide further information.
