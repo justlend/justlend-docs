@@ -62,6 +62,10 @@ theme:
 extra_css:
         - stylesheets/extra.css
 
+plugins:
+      - search
+      - swagger-ui-tag # 添加这个插件
+
 markdown_extensions:
         - admonition
         - codehilite
