@@ -1,0 +1,21 @@
+.swagger-ui .topbar .download-url-wrapper {
+    display: none;
+}
+
+
+.swagger-ui .topbar .download-url {
+    display: none;
+}
+
+
+.swagger-ui .opblock-tag-section.is-open > .opblock-tag[data-tag="Schemas"] {
+    display: none;
+}
+
+
+.swagger-ui .opblock-tag-section[data-tag="schemas"] {
+    display: none;
+}
+.swagger-ui .opblock-tag-section[id="operations-tag-Schemas"] {
+    display: none;
+}
