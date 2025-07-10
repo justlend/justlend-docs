@@ -32,7 +32,7 @@ nav:
         - Staked TRX: developers/staked_trx.md
         - Energy Rental: developers/energy_rental.md
         - Deployed Contracts: developers/deployed_contracts.md
-        - APIs: developers/justlend_apis.yaml
+        - APIs:
             - Supply and Borrow Market: developers/apis/supply_and_borrow_market.md
             - Staked TRX and Energy Rental Market: developers/apis/staked_trx_and_energy_rental_market.md
     - RESOURCES:
