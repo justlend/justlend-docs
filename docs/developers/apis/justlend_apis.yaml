@@ -2,6 +2,19 @@ openapi: 3.1.1
 info:
     title: JustLend DAO API
 
+
+servers:
+    - url: https://openapi.just.network
+    - url: '{protocol}://openapi.just.network/{path}'
+      description: Responds with your request data.
+      variables:
+          protocol:
+              enum:
+                  - https
+              default: https
+          path:
+              default: ''
+
 tags:
     - name: Supply and Borrow Market
     - name: Staked TRX Market and Energy Rental
