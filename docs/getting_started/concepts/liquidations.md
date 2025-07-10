@@ -1,7 +1,7 @@
 Liquidation is determined by **Risk Value**, which is a critical metric within the JustLend DAO Protocol that measures the safety of a borrow position. It is calculated as:
 
 <div style="text-align: center; font-size: 20px;">
-    Risk Value = Total Borrow / Borrow Limit * 100
+    _Risk Value = Total Borrow / Borrow Limit * 100_
 </div>
 
 * `Total Borrow:` sum of all assets borrowed by the user;
