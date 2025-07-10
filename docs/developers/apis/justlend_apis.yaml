@@ -1,6 +1,7 @@
 openapi: 3.1.1
 info:
     title: JustLend DAO API
+    version: 1.0.0
 
 
 servers:
