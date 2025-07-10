@@ -1,2 +1,6 @@
-<swagger-ui src="../developers/apis/justlend_apis.yaml" default-models-expand-depth="-1" display-request-duration="true" />
+<swagger-ui
+  src="../developers/apis/justlend_apis.yaml"
+  disable-swagger-ui-config
+  url=""
+/>
 
