@@ -40,7 +40,7 @@ where the borrow utilization rate `u` is defined as:
 * `reserve_factor:` portion of interest income extracted from the protocol.
 
 
-### **Jump Rate Model**
+## **Jump Rate Model**
 The Jump Rate Model is quite different with the Whitepaper Rate Model, where the interest rate jumps to a higher tier when the utilization rate exceeds U_optional
 The interest rate is defined as below.
 
