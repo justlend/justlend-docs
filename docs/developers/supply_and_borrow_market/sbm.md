@@ -22,6 +22,7 @@ Calling this method accrues interest and returns the up-to-date exchange rate.
 ``` solidity
 function exchangeRateCurrent() public nonReentrant returns (uint)
 ```
+
 * **Parameter description:** N/A
 * **Returns:** calculated exchange rate scaled by 1e18.
 
@@ -31,6 +32,7 @@ Calling this method gets the total amount of underlying balance currently availa
 ``` solidity
 function getCash() public view returns (uint)
 ```
+
 * **Parameter description:** N/A
 * **Returns:** The quantity of underlying assets owned by this contract.
 
@@ -40,6 +42,7 @@ Calling this method gets the sum of the currently loaned-outs and the accrued in
 ``` solidity
 function totalBorrowsCurrent() external nonReentrant returns (uint)
 ```
+
 * **Parameter description:** N/A
 * **Returns:** The total borrows with interest.
 
@@ -49,6 +52,7 @@ Calling this method accrues interest to the updated borrowIndex and then calcula
 ``` solidity
 function borrowBalanceCurrent(address account) external nonReentrant returns (uint)
 ```
+
 * **Parameter description:**
     * `account:` the address whose balance should be calculated after updating borrowIndex.
 * **Returns:** The total borrows with interest.
@@ -59,6 +63,7 @@ Calling this method gets the current per-block borrow interest rate for this jTo
 ``` solidity
 function borrowRatePerBlock() external view returns (uint)
 ```
+
 * **Parameter description:** N/A
 * **Returns:** The borrow interest rate per block, scaled by 1e18.
 
@@ -68,6 +73,7 @@ Calling this method gets the total number of tokens in circulation.
 ``` solidity
 function totalSupply() external view returns (uint256)
 ```
+
 * **Parameter description:** N/A
 * **Returns:** The supply of tokens.
 
@@ -77,6 +83,7 @@ Calling this method gets the underlying balance of the owner.
 ``` solidity
 function balanceOfUnderlying(address owner) external returns (uint)
 ```
+
 * **Parameter description:**
     * `owner:` the address of the account.
 * **Returns:** The amount of underlying owned by owner.
@@ -87,6 +94,7 @@ Calling this method gets the current per-block supply interest rate for this jTo
 ``` solidity
 function supplyRatePerBlock() external view returns (uint)
 ```
+
 * **Parameter description:** N/A
 * **Returns:** The supply interest rate per block, scaled by 1e18.
 
@@ -96,6 +104,7 @@ Calling this method gets the reserves. Reserve represents a portion of historica
 ``` solidity
 function totalReserves() returns (uint)
 ```
+
 * **Parameter description:** N/A
 * **Returns:** The total amount of reserves.
 
@@ -105,6 +114,7 @@ Calling this method gets the current reserve factor.
 ``` solidity
 function reserveFactorMantissa() returns (uint)
 ```
+
 * **Parameter description:** N/A
 * **Returns:** The current reserve factor.
 
@@ -114,6 +124,7 @@ By calling the liquidationIncentiveMantissa function of the Unitroller contract,
 ``` solidity
 function liquidationIncentiveMantissa() view returns (uint)
 ```
+
 * **Parameter description:** N/A
 * **Returns:** The liquidationIncentive, scaled by 1e18, is multiplied by the closed borrow amount from the liquidator to determine how much collateral can be seized.
 
@@ -123,6 +134,7 @@ By calling the getAccountLiquidity function of the Unitroller contract, account 
 ``` solidity
 getAccountLiquidity(address account) view returns (uint, uint, uint)
 ```
+
 * **Parameter description:**
     * `account:` user address.
 * **Returns:** The amount of underlying owned by owner.
@@ -141,6 +153,7 @@ Calling this method borrows assets from JustLend DAO protocol to the sender's ow
 ``` solidity
 function borrow(uint borrowAmount) external returns (uint)
 ```
+
 * **Parameter description:**
     * `borrowAmount:` the amount of the underlying asset to borrow.
 * **Returns:** None, reverts on error.
@@ -149,6 +162,7 @@ function borrow(uint borrowAmount) external returns (uint)
 ``` solidity
 Borrow(address borrower, uint borrowAmount, uint accountBorrows, uint totalBorrows, uint borrowIndex)
 ```
+
 * Emits when user successfully borrow.
     * `borrower:` address of borrow assets account;
     * `borrowAmount:` the amount of borrowed assets;
@@ -162,6 +176,7 @@ Calling this method repays their own borrow.
 ``` solidity
 function repayBorrow(uint amount) external payable
 ```
+
 * **Parameter description:**
     * `amount:` the amount of the asset to repay.
 * **Returns:** None, reverts on error.
@@ -170,6 +185,7 @@ function repayBorrow(uint amount) external payable
 ``` solidity
 RepayBorrow(address payer, address borrower, uint repayAmount, uint accountBorrows, uint totalBorrows, uint borrowIndex)
 ```
+
 * Emits when user successfully repay borrow.
     * `payer:` operate repay borrow;
     * `borrower:` address of borrow assets account;
@@ -184,6 +200,7 @@ Calling this method repays their own borrow.
 ``` solidity
 function repayBorrow(uint amount) external payable
 ```
+
 * **Parameter description:**
     * `borrower:` the account with the debt being paid off.
     * `msg.value:` the amount to repay.
@@ -195,6 +212,7 @@ Calling this method supplies assets into the market and receives jTokens in exch
 ``` solidity
 function mint() external payable
 ```
+
 * **Parameter description:**
     * `msg.value:` the amount of TRX to supply.
 * **Returns:** None, reverts on error.
@@ -203,6 +221,7 @@ function mint() external payable
 ``` solidity
 Mint(address minter, uint mintAmount, uint mintTokens)
 ```
+
 * Emits when user successfully mint.
     * `minter:` operate supply assets into the market;
     * `mintAmount:` the amount of supplied assets;
@@ -214,6 +233,7 @@ Calling this method redeems jTokens in exchange for the underlying asset and acc
 ``` solidity
 function redeem(uint redeemTokens) external returns (uint)
 ```
+
 * **Parameter description:**
     * `redeemTokens:`  the number of jTokens to redeem into underlying.
 * **Returns:** 0 for success, reverts on error.
@@ -222,6 +242,7 @@ function redeem(uint redeemTokens) external returns (uint)
 ``` solidity
 Redeem(address redeemer, uint redeemAmount, uint redeemTokens)
 ```
+
 * Emits when user successfully redeem.
     * `redeemer:` operate redeem jTokens;
     * `redeemAmount:` the amount of redeem assets;
@@ -233,6 +254,7 @@ Calling this method redeems jTokens in exchange for a specified amount of underl
 ``` solidity
 function redeemUnderlying(uint redeemAmount) external returns (uint)
 ```
+
 * **Parameter description:**
     * `redeemAmount:` the amount of underlying to redeem.
 * **Returns:** 0 for success, reverts on error.
@@ -243,6 +265,7 @@ Calling this method transfers a specified amount of jtokens to the destination. 
 ``` solidity
 function transfer(address dst, uint256 amount) external nonReentrant returns (bool)
 ```
+
 * **Parameter description:**
     * `dst:` the receiver's address.
     * `amount:` amount of token to be transferred.
@@ -254,6 +277,7 @@ By calling liquidateBorrow function of the corresponding jTrc20 contract (e.g. j
 ``` solidity
 function liquidateBorrow(address borrower, uint repayAmount, address jTokenCollateral) returns (uint)
 ```
+
 * **Parameter description:**
     * `borrower:` address of a liquidated account.
     * `repayAmount:` amount of token to be repaid in the event of liquidation (measured in the borrowed asset).
@@ -266,6 +290,7 @@ By calling the liquidateBorrow function of the jTRX contract, accounts whose liq
 ``` solidity
 function liquidateBorrow(address borrower, address jTokenCollateral) payable
 ```
+
 * **Parameter description:**
     * `borrower:` address of a liquidated account.
     * `jTokenCollateral:` address of the jTRX contract to set aside the collateralized asset of a borrower.
@@ -276,6 +301,7 @@ function liquidateBorrow(address borrower, address jTokenCollateral) payable
 ``` solidity
 LiquidateBorrow(address liquidator, address borrower, uint repayAmount, address cTokenCollateral, uint seizeTokens)
 ```
+
 * Emits when user successfully liquidate borrow order.
     * `liquidator:` operate liquidation;
     * `borrower:` address of a liquidated account;
