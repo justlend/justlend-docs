@@ -72,11 +72,11 @@ function getAccountLiquidity(address account) public view returns (uint, uint, u
 ```
 
 * **Parameter description:**
-  * `account:` address to be queried.
+    * `account:` address to be queried.
 * **Returns:**
-  * `error:` 0 for success, otherwise an error code;
-  * `liquidity:` current liquidity;
-  * `shortfall:` the shortfall value of the account's collateral requirement.
+    * `error:` 0 for success, otherwise an error code;
+    * `liquidity:` current liquidity;
+    * `shortfall:` the shortfall value of the account's collateral requirement.
 
 
 ### **Close Factor Mantissa**
