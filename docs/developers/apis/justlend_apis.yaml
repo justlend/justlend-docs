@@ -412,21 +412,21 @@ components:
             name: address *
             in: path
             description: Query of the user address.
-            required: false
+            required: ture
             schema:
                 type: string
         addresses:
             name: addresses *
             in: query
             description: Query of the user addresses. (To query multiple addresses at the same time, please use ‘,’ to separate multiple addresses.)
-            required: false
+            required: ture
             schema:
                 type: string
         address1:
             name: address *
             in: query
             description: Query of the user address.
-            required: false
+            required: ture
             schema:
                 type: string
         minStrxBalance:
