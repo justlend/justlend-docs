@@ -33,7 +33,7 @@ jobs:
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@v4
       with:
-        token: ${{ secrets.GITHUB_TOKEN}}  
+        token: ${{ secrets.TOKEN}}  
         branch: gh-pages # 将站点的build结果放到gh-pages分支上
         folder: site # MkDocs 默认的构建输出目录
 
