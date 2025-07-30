@@ -409,21 +409,21 @@ components:
                 type: integer
                 format: int64
         address:
-            name: address
+            name: address *
             in: path
             description: Query of the user address.
             required: false
             schema:
                 type: string
         addresses:
-            name: addresses
+            name: addresses *
             in: query
             description: Query of the user addresses. (To query multiple addresses at the same time, please use ‘,’ to separate multiple addresses.)
             required: false
             schema:
                 type: string
         address1:
-            name: address
+            name: address *
             in: query
             description: Query of the user address.
             required: false
