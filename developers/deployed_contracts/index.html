@@ -1,0 +1,1650 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://justlend.github.io/justlend-docs/developers/deployed_contracts/">
+      
+      
+        <link rel="prev" href="../energy_rental/">
+      
+      
+        <link rel="next" href="../apis/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.8">
+    
+    
+      
+        <title>Deployed Contracts - JustLend DAO Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.8608ea7d.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../../stylesheets/hide_elements.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#deployed-contracts" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="JustLend DAO Documentation" class="md-header__button md-logo" aria-label="JustLend DAO Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            JustLend DAO Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Deployed Contracts
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="JustLend DAO Documentation" class="md-nav__button md-logo" aria-label="JustLend DAO Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    JustLend DAO Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    GETTING STARTED
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            GETTING STARTED
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_2" id="__nav_1_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Concepts
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_2">
+            <span class="md-nav__icon md-icon"></span>
+            Concepts
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/concepts/supply/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Supply
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/concepts/borrow/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Borrow
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/concepts/withdraw/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Withdraw
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/concepts/repay/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Repay
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/concepts/liquidations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Liquidations
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/concepts/risks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Risks
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/concepts/staked_trx/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Staked TRX
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/concepts/energy_rental/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Energy Rental
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://justlend.org/docs/justlend_whitepaper_en.pdf" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Whitepaper
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_4" id="__nav_1_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    FAQs
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_4">
+            <span class="md-nav__icon md-icon"></span>
+            FAQs
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/faqs/wallet_connection_questions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Wallet Connection Questions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/faqs/spending_cap_issue/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Spending Cap Issue During Transactions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://support.justlend.org/hc/en-us/sections/360011389611-Questions" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    More Questions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    GOVERNANCE
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            GOVERNANCE
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../governance/jips/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    JIPs
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../governance/tokenomics/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Tokenomics
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://forum.justlend.org" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Community Forum
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    DEVELOPERS
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            DEVELOPERS
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contracts_overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contracts Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Supply and Borrow Market
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Supply and Borrow Market
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../supply_and_borrow_market/sbm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SBM
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../supply_and_borrow_market/interest_rate_model/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Interest Rate Model
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../supply_and_borrow_market/governance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Governance
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../supply_and_borrow_market/price_oracle/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Price Oracle
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../supply_and_borrow_market/comptroller/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Comptroller
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../staked_trx/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Staked TRX
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../energy_rental/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Energy Rental
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Deployed Contracts
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Deployed Contracts
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item ">
+  <a href="#supply-and-borrow-market" class="md-nav__link" >
+    <span class="md-ellipsis">
+      Supply and Borrow Market
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item ">
+  <a href="#staked-trx" class="md-nav__link" >
+    <span class="md-ellipsis">
+      Staked TRX
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item ">
+  <a href="#energy-rental" class="md-nav__link" >
+    <span class="md-ellipsis">
+      Energy Rental
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apis/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    APIs
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    RESOURCES
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            RESOURCES
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_1" id="__nav_4_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Community
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_1">
+            <span class="md-nav__icon md-icon"></span>
+            Community
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../resources/community/links/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Links
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../resources/community/wallet_integration_cooperation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Wallet Integration Cooperation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../resources/risk_warning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Risk Warning
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Audits
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            Audits
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://justlend.org/docs/justlend_audit_en.pdf" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Supply & Borrow
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://justlend.org/docs/justlend_strx_audit_en.pdf" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Staked TRX
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Terms of Service
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            Terms of Service
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://justlend.org/docs/JustLend_Terms_of_Use_en.pdf" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Terms of Service
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://justlend.org/docs/JustLend_Privacy_Policy_en.pdf" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Privacy Policy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="deployed-contracts">Deployed Contracts<a class="headerlink" href="#deployed-contracts" title="Permanent link">&para;</a></h1>
+<h3 id="supply-and-borrow-market"><strong>Supply and Borrow Market</strong><a class="headerlink" href="#supply-and-borrow-market" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>JToken</strong></p>
+<ul>
+<li><code>Unitroller:</code> <a href="https://tronscan.org/#/contract/TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7">TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7</a></li>
+<li><code>TRX CErc20Delegate:</code> NA</li>
+<li><code>TRX CErc20Delegator:</code> <a href="https://tronscan.org/#/token20/TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP">TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP</a></li>
+<li><code>USDD:</code> <a href="https://tronscan.org/#/token20/TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz">TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz</a></li>
+<li><code>USDD CErc20Delegate:</code> <a href="https://tronscan.org/#/token20/TLrEfG4QCbax8MTYgZzmjj4gE8RPVNvUn4">TLrEfG4QCbax8MTYgZzmjj4gE8RPVNvUn4</a></li>
+<li><code>USDD CErc20Delegator:</code> <a href="https://tronscan.org/#/token20/TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf">TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf</a></li>
+<li><code>USDT:</code> <a href="https://tronscan.org/#/token20/TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t">TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t</a></li>
+<li><code>USDT CErc20Delegate:</code> <a href="https://tronscan.org/#/contract/TLjn59xNM7VEK6VZ3VQ8Y1ipxsdsFka5wZ">TLjn59xNM7VEK6VZ3VQ8Y1ipxsdsFka5wZ</a></li>
+<li><code>USDT CErc20Delegator:</code> <a href="https://tronscan.org/#/contract/TXJgMdjVX5dKiQaUi9QobwNxtSQaFqccvd">TXJgMdjVX5dKiQaUi9QobwNxtSQaFqccvd</a></li>
+<li><code>wstUSDT:</code> <a href="https://tronscan.org/#/token20/TGkxzkDKyMeq2T7edKnyjZoFypyzjkkssq">TGkxzkDKyMeq2T7edKnyjZoFypyzjkkssq</a></li>
+<li><code>wstUSDT CErc20Delegate:</code> <a href="https://tronscan.org/#/token20/TUx4cV8FQNR5W4FhtF7mHZwaJMoco2464o">TUx4cV8FQNR5W4FhtF7mHZwaJMoco2464o</a></li>
+<li><code>wstUSDT CErc20Delegator:</code> <a href="https://tronscan.org/#/token20/TD5SdLw5scR6mXgyMK2xKrFJpauDjpKqrW">TD5SdLw5scR6mXgyMK2xKrFJpauDjpKqrW</a></li>
+<li><code>sTRX:</code> <a href="https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5">TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5</a></li>
+<li><code>sTRX CErc20Delegate:</code> <a href="https://tronscan.org/#/token20/TCyNbCipGbAybb8rG4aatEoEnfuYpVYCPP">TCyNbCipGbAybb8rG4aatEoEnfuYpVYCPP</a></li>
+<li><code>sTRX CErc20Delegator:</code> <a href="https://tronscan.org/#/token20/TJQ9rbVe9ei3nNtyGgBL22Fuu2xYjZaLAQ">TJQ9rbVe9ei3nNtyGgBL22Fuu2xYjZaLAQ</a></li>
+<li><code>SUN:</code> <a href="https://tronscan.org/#/token20/TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S">TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S</a></li>
+<li><code>SUN CErc20Delegate:</code> <a href="https://tronscan.org/#/contract/TM82erAZJSP7NKc17JdTnzVC8WKJHismWB">TM82erAZJSP7NKc17JdTnzVC8WKJHismWB</a></li>
+<li><code>SUN CErc20Delegator:</code> <a href="https://tronscan.org/#/contract/TPXDpkg9e3eZzxqxAUyke9S4z4pGJBJw9e">TPXDpkg9e3eZzxqxAUyke9S4z4pGJBJw9e</a></li>
+<li><code>BTT:</code> <a href="https://tronscan.org/#/token20/TAFjULxiVgT4qWk6UZwjqwZXTSaGaqnVp4">TAFjULxiVgT4qWk6UZwjqwZXTSaGaqnVp4</a></li>
+<li><code>BTT CErc20Delegate:</code> <a href="https://tronscan.org/#/token20/TH3x5EqLnPduHNX41MaCCb2UfnfFMLuYwe">TH3x5EqLnPduHNX41MaCCb2UfnfFMLuYwe</a></li>
+<li><code>BTT CErc20Delegator:</code> <a href="https://tronscan.org/#/token20/TUaUHU9Dy8x5yNi1pKnFYqHWojot61Jfto">TUaUHU9Dy8x5yNi1pKnFYqHWojot61Jfto</a></li>
+<li><code>NFT:</code> <a href="https://tronscan.org/#/token20/TFczxzPhnThNSqr5by8tvxsdCFRRz6cPNq">TFczxzPhnThNSqr5by8tvxsdCFRRz6cPNq</a></li>
+<li><code>NFT CErc20Delegate:</code> <a href="https://tronscan.org/#/contract/TLkUdtDBLMfJdXni2iTa4u2DKM53XmDJHi">TLkUdtDBLMfJdXni2iTa4u2DKM53XmDJHi</a></li>
+<li><code>NFT CErc20Delegator:</code> <a href="https://tronscan.org/#/contract/TFpPyDCKvNFgos3g3WVsAqMrdqhB81JXHE">TFpPyDCKvNFgos3g3WVsAqMrdqhB81JXHE</a></li>
+<li><code>JST:</code> <a href="https://tronscan.org/#/token20/TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9">TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9</a></li>
+<li><code>JST CErc20Delegate:</code> <a href="https://tronscan.org/#/contract/TQ2sbnmxtR7jrNk4nxz2A8f9sneCqmk6SB">TQ2sbnmxtR7jrNk4nxz2A8f9sneCqmk6SB</a></li>
+<li><code>JST CErc20Delegator:</code> <a href="https://tronscan.org/#/contract/TWQhCXaWz4eHK4Kd1ErSDHjMFPoPc9czts">TWQhCXaWz4eHK4Kd1ErSDHjMFPoPc9czts</a></li>
+<li><code>WIN:</code> <a href="https://tronscan.org/#/token20/TLa2f6VPqDgRE67v1736s7bJ8Ray5wYjU7">TLa2f6VPqDgRE67v1736s7bJ8Ray5wYjU7</a></li>
+<li><code>WIN CErc20Delegate:</code> <a href="https://tronscan.org/#/contract/TW3GyD3hYkKwzSGytWwWGXpe2a93zCpRzJ">TW3GyD3hYkKwzSGytWwWGXpe2a93zCpRzJ</a></li>
+<li><code>WIN CErc20Delegator:</code> <a href="https://tronscan.org/#/contract/TRg6MnpsFXc82ymUPgf5qbj59ibxiEDWvv">TRg6MnpsFXc82ymUPgf5qbj59ibxiEDWvv</a></li>
+<li><code>USDJ:</code> <a href="https://tronscan.org/#/token20/TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT">TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT</a></li>
+<li><code>USDJ CErc20Delegate:</code> <a href="https://tronscan.org/#/contract/TYSHTEq9NFSgst94saeRvt6rAYgWkqMFbj">TYSHTEq9NFSgst94saeRvt6rAYgWkqMFbj</a></li>
+<li><code>USDJ CErc20Delegator:</code> <a href="https://tronscan.org/#/contract/TL5x9MtSnDy537FXKx53yAaHRRNdg9TkkA">TL5x9MtSnDy537FXKx53yAaHRRNdg9TkkA</a></li>
+<li><code>USDC:</code> <a href="https://tronscan.org/#/token20/TLZSucJRjnqBKwvQz6n5hd29gbS4P7u7w8">TLZSucJRjnqBKwvQz6n5hd29gbS4P7u7w8</a></li>
+<li><code>USDC CErc20Delegate:</code> <a href="https://tronscan.org/#/contract/THQY8YX19jLFSFg1xhthM5wb7xZvKLCzgq">THQY8YX19jLFSFg1xhthM5wb7xZvKLCzgq</a></li>
+<li><code>USDC CErc20Delegator:</code> <a href="https://tronscan.org/#/contract/TNSBA6KvSvMoTqQcEgpVK7VhHT3z7wifxy">TNSBA6KvSvMoTqQcEgpVK7VhHT3z7wifxy</a></li>
+<li><code>TUSD:</code> <a href="https://tronscan.org/#/token20/TUpMhErZL2fhh4sVNULAbNKLokS4GjC1F4">TUpMhErZL2fhh4sVNULAbNKLokS4GjC1F4</a></li>
+<li><code>TUSD CErc20Delegate:</code> <a href="https://tronscan.org/#/contract/THbrSjDsDA2KJRxx8K73tN7vLgaXSUNQFk">THbrSjDsDA2KJRxx8K73tN7vLgaXSUNQFk</a></li>
+<li><code>TUSD CErc20Delegator:</code> <a href="https://tronscan.org/#/contract/TSXv71Fy5XdL3Rh2QfBoUu3NAaM4sMif8R">TSXv71Fy5XdL3Rh2QfBoUu3NAaM4sMif8R</a></li>
+<li><code>BTC:</code> <a href="https://tronscan.org/#/token20/TN3W4H6rK2ce4vX9YnFQHwKENnHjoxb3m9">TN3W4H6rK2ce4vX9YnFQHwKENnHjoxb3m9</a></li>
+<li><code>BTC CErc20Delegate:</code> <a href="https://tronscan.org/#/contract/TVsKSRgRoMcCp798qqRGesXRfzy2MzRjkR">TVsKSRgRoMcCp798qqRGesXRfzy2MzRjkR</a></li>
+<li><code>BTC CErc20Delegator:</code> <a href="https://tronscan.org/#/contract/TLeEu311Cbw63BcmMHDgDLu7fnk9fqGcqT">TLeEu311Cbw63BcmMHDgDLu7fnk9fqGcqT</a></li>
+<li><code>ETHB:</code> <a href="https://tronscan.org/#/token20/TRFe3hT5oYhjSZ6f3ji5FJ7YCfrkWnHRvh">TRFe3hT5oYhjSZ6f3ji5FJ7YCfrkWnHRvh</a></li>
+<li><code>ETHB CErc20Delegate:</code> <a href="https://tronscan.org/#/token20/TS9fVh58y2RMDnpucGXkbfZhAJxmGafGqe">TS9fVh58y2RMDnpucGXkbfZhAJxmGafGqe</a></li>
+<li><code>ETHB CErc20Delegator:</code> <a href="https://tronscan.org/#/token20/TWBxQMb6RD3qmkXUXpNwVCYbL8SHNreru6">TWBxQMb6RD3qmkXUXpNwVCYbL8SHNreru6</a></li>
+<li><code>ETH:</code> <a href="https://tronscan.org/#/token20/THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF">THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF</a></li>
+<li><code>ETH CErc20Delegate:</code> <a href="https://tronscan.org/#/contract/TQBvTVisiceDvsQVbLbcYyWQGWP7wtaQnc">TQBvTVisiceDvsQVbLbcYyWQGWP7wtaQnc</a></li>
+<li><code>ETH CErc20Delegator:</code> <a href="https://tronscan.org/#/token20/TR7BUFRQeq1w5jAZf1FKx85SHuX6PfMqsV">TR7BUFRQeq1w5jAZf1FKx85SHuX6PfMqsV</a></li>
+<li><code>WBTT:</code> <a href="https://tronscan.org/#/token20/TKfjV9RNKJJCqPvBtK8L7Knykh7DNWvnYt">TKfjV9RNKJJCqPvBtK8L7Knykh7DNWvnYt</a></li>
+<li><code>WBTT CErc20Delegate:</code> <a href="https://tronscan.org/#/contract/TV4WWBqBfn1kd4KmpYeSJpVAfybfrxEN9L">TV4WWBqBfn1kd4KmpYeSJpVAfybfrxEN9L</a></li>
+<li><code>WBTT CErc20Delegator:</code> <a href="https://tronscan.org/#/contract/TUY54PVeH6WCcYCd6ZXXoBDsHytN9V5PXt">TUY54PVeH6WCcYCd6ZXXoBDsHytN9V5PXt</a></li>
+<li><code>BUSDOLD:</code> <a href="https://tronscan.org/#/token20/TMz2SWatiAtZVVcH2ebpsbVtYwUPT9EdjH">TMz2SWatiAtZVVcH2ebpsbVtYwUPT9EdjH</a></li>
+<li><code>BUSDOLD CErc20Delegate:</code> <a href="https://tronscan.org/#/contract/TNRUqbYfYv4iizWa1b2kd6ZBaoh5zrg3yk">TNRUqbYfYv4iizWa1b2kd6ZBaoh5zrg3yk</a></li>
+<li><code>BUSDOLD CErc20Delegator:</code> <a href="https://tronscan.org/#/contract/TLHASseQymmpGQdfAyNjkMXFTJh8nzR2x2">TLHASseQymmpGQdfAyNjkMXFTJh8nzR2x2</a></li>
+<li><code>SUNOLD:</code> <a href="https://tronscan.org/#/token20/TKkeiboTkxXKJpbmVFbv4a8ov5rAfRDMf9">TKkeiboTkxXKJpbmVFbv4a8ov5rAfRDMf9</a></li>
+<li><code>SUNOLD CErc20Delegate:</code> <a href="https://tronscan.org/#/contract/TSCpzKvJfXHj1HW5jKg9dZA8z9aMxxGLd8">TSCpzKvJfXHj1HW5jKg9dZA8z9aMxxGLd8</a></li>
+<li><code>SUNOLD CErc20Delegator:</code> <a href="https://tronscan.org/#/contract/TGBr8uh9jBVHJhhkwSJvQN2ZAKzVkxDmno">TGBr8uh9jBVHJhhkwSJvQN2ZAKzVkxDmno</a></li>
+</ul>
+</li>
+<li>
+<p><strong>InterestRateModel</strong></p>
+<ul>
+<li><code>WhitePaperModelTRX (WhitePaperInterestRateModel):</code> <a href="https://tronscan.org/#/contract/TF8B4iysAGfrssdQhMJGYsdd9SZoxGsH7M">TF8B4iysAGfrssdQhMJGYsdd9SZoxGsH7M</a></li>
+<li><code>WhitePaperModelBTC (WhitePaperInterestRateModel):</code> <a href="https://tronscan.org/#/contract/TYJi9q4qLQWoBiKmMQY3Mn81tmhw7SeCmh">TYJi9q4qLQWoBiKmMQY3Mn81tmhw7SeCmh</a></li>
+<li><code>jumpRateTRX (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TMca13trZmVvVttrGWJyUSm33qZdohDDuh">TMca13trZmVvVttrGWJyUSm33qZdohDDuh</a></li>
+<li><code>jumpRateUSDDOLD (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TDoB7y9HHj6bXTwEe6BhfAkdETjQR2He6u">TDoB7y9HHj6bXTwEe6BhfAkdETjQR2He6u</a></li>
+<li><code>jumpRateUSDT (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TTetZxp98wcPaciyBMHYvQkS735RZ3tyXY">TTetZxp98wcPaciyBMHYvQkS735RZ3tyXY</a></li>
+<li><code>jumpRatewstUSDT (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TPqKsaTnSKEU3aGHanpVFNU3cE8SmJsAYz">TPqKsaTnSKEU3aGHanpVFNU3cE8SmJsAYz</a></li>
+<li><code>jumpRatesTRX (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TW4fpkc98kzVbdiPhutCg2uivwVJ9MDa2P">TW4fpkc98kzVbdiPhutCg2uivwVJ9MDa2P</a></li>
+<li><code>jumpRateSUN (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/THCVC3DHgZ5qmUcJPutw7TrMMfj1h2bvkZ">THCVC3DHgZ5qmUcJPutw7TrMMfj1h2bvkZ</a></li>
+<li><code>jumpRateBTT (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TQ9zMkrqgej7GjLdMrpNuURozg8J2fSXsW">TQ9zMkrqgej7GjLdMrpNuURozg8J2fSXsW</a></li>
+<li><code>jumpRateNFT (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TBE9tkWYdZPEHLNeKC6Xn44YFLpieiM3xq">TBE9tkWYdZPEHLNeKC6Xn44YFLpieiM3xq</a></li>
+<li><code>jumpRateJST (JumpRateModelV2)</code> <a href="https://tronscan.org/#/contract/TMNXjQTa8x4wNHBa3X647KRnkRQpSuXBRT">TMNXjQTa8x4wNHBa3X647KRnkRQpSuXBRT</a></li>
+<li><code>jumpRateWIN (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TBtChPo34CGJkb1QVEwPhxS8HQE2Xp7ir2">TBtChPo34CGJkb1QVEwPhxS8HQE2Xp7ir2</a></li>
+<li><code>jumpRateUSDJ (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TLScd7kpWnKADtH7ZXKzrJHAxJUnjiiExq">TLScd7kpWnKADtH7ZXKzrJHAxJUnjiiExq</a></li>
+<li><code>jumpRateUSDC (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TDECE4PZFEkmTyFk9sJMya9PY99BapHpyP">TDECE4PZFEkmTyFk9sJMya9PY99BapHpyP</a></li>
+<li><code>jumpRateTUSD (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TLY3wRNGrQpJCZrYKu9VjntMj2kNxisAL2">TLY3wRNGrQpJCZrYKu9VjntMj2kNxisAL2</a></li>
+<li><code>jumpRateBTC (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TYJi9q4qLQWoBiKmMQY3Mn81tmhw7SeCmh">TYJi9q4qLQWoBiKmMQY3Mn81tmhw7SeCmh</a></li>
+<li><code>jumpRateETHB (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TD5wmR7NfBM2JdSGSTTq1MgMARX2k5KE2b">TD5wmR7NfBM2JdSGSTTq1MgMARX2k5KE2b</a></li>
+<li><code>jumpRateWBTT (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TJAfCJdJZa44pG5adQGLMLh27hJqPeLxod">TJAfCJdJZa44pG5adQGLMLh27hJqPeLxod</a></li>
+<li><code>jumpRateBUSD (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TUSGt1WAYeJSV94M5muFi2KvtE6EquZPUC">TUSGt1WAYeJSV94M5muFi2KvtE6EquZPUC</a></li>
+<li><code>jumpRateSUNOLD (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TK7WVRz34wUVRCpsgbW1wUCPmh5bSnCqg1">TK7WVRz34wUVRCpsgbW1wUCPmh5bSnCqg1</a></li>
+<li><code>jumpRateETH (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TCiKn6EFBsNrNCFQXWaEuAxr8Su3y4Rx9D">TCiKn6EFBsNrNCFQXWaEuAxr8Su3y4Rx9D</a></li>
+</ul>
+</li>
+<li>
+<p><strong>Price Oracle</strong></p>
+<ul>
+<li><code>Oracle Price (PriceOracle):</code> <a href="https://tronscan.org/#/contract/TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV/code">TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV</a></li>
+<li><code>Oracle Proxy (PriceOracleProxy):</code> <a href="https://tronscan.org/#/contract/TCKp2AzuhzV4B4Ahx1ej4mvQgHZ1kH7F7k">TCKp2AzuhzV4B4Ahx1ej4mvQgHZ1kH7F7k</a></li>
+</ul>
+</li>
+<li>
+<p><strong>Governance</strong></p>
+<ul>
+<li><code>GovernorBravoDelegate:</code> <a href="https://tronscan.io/#/contract/TUeNh9BsYK44XePmFAuKZWg2rJuU7bSt5u">TCiQTkxhzwSeXhRsNdHCvrxHRAvpjQn5Dt</a></li>
+<li><code>GovernorBravoDelegator:</code> <a href="https://tronscan.org/#/contract/TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD">TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD</a></li>
+<li><code>Timelock:</code> <a href="https://tronscan.org/#/contract/TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x">TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x</a></li>
+</ul>
+</li>
+<li>
+<p><strong>Comptroller</strong></p>
+<ul>
+<li><code>Comptroller:</code> <a href="https://tronscan.org/#/contract/TB23wYojvAsSx6gR8ebHiBqwSeABiBMPAr">TB23wYojvAsSx6gR8ebHiBqwSeABiBMPAr</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="staked-trx"><strong>Staked TRX</strong><a class="headerlink" href="#staked-trx" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>StakedTRX (sTRX):</code> <a href="https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5">TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5</a></li>
+</ul>
+<h3 id="energy-rental"><strong>Energy Rental</strong><a class="headerlink" href="#energy-rental" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>EnergyRental:</code> <a href="https://tronscan.io/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd">TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+		  <hr class="content-footer-divider">  <!-- 添加的水平线 -->
+      	    	  <footer class="md-footer">
+  
+  <!--div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div-->
+</footer>
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.sections", "toc.integrate", "search.highlight", "search.suggest", "content.code.annotate", "content.tooltips"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.c8b220af.min.js"></script>
+      
+    
+  </body>
+</html>

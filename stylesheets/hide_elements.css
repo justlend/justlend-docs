@@ -1,0 +1,8 @@
+.swagger-ui .topbar .download-url-wrapper {
+    display: none;
+}
+
+
+.swagger-ui .opblock-tag-section.is-open > .opblock-tag[data-tag="Schemas"] {
+    display: none;
+}
