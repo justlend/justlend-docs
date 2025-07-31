@@ -1,4 +1,5 @@
 site_name: JustLend DAO Documentation
+site_url: https://justlend.github.io/justlend-docs/
 
 nav:
     - GETTING STARTED:

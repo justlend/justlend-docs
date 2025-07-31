@@ -33,7 +33,7 @@ jobs:
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@v4
       with:
-        token: ${{ secrets.ACCESS_TOKEN}}  # 必须提前在仓库 Settings → Secrets → Actions 中添加具有 repo 权限的 Personal Access Token
+        token: ${{ secrets.TOKEN}}  
         branch: gh-pages # 将站点的build结果放到gh-pages分支上
         folder: site # MkDocs 默认的构建输出目录
 
