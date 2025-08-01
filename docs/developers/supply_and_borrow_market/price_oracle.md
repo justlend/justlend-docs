@@ -1,8 +1,9 @@
 # Price Oracle
 
-Blockchain-powered smart contracts, by their inherent design, cannot directly access information from external systems. To bridge this critical gap and ensure the integrity of financial operations, the JustLend DAO protocol relies on robust and decentralized price feeds.
-We use [Chainlink](https://chain.link/) Data Feeds as our primary Oracles to secure various markets. JustLend DAO protocol uses a [PriceOracle](https://tronscan.org/#/contract/TD8bq1aFY8yc9nsD2rfqqJGDtkh7aPpEpr/code) contract to set and display token prices in sun(10^-6 TRX), scaled by 10^(tokenDecimal - 6).
-Prices of the underlying tokens are posted every 30 minutes via `setPrice()` by a specified poster.
+Blockchain-powered smart contracts, by design, cannot access external market data directly. To ensure accurate and tamper-resistant pricing, the JustLend DAO protocol relies on a multi-source data aggregation system that draws from reputable and decentralized sources.
+
+[Chainlink](https://chain.link/) Data Feeds are the key component of this process, helping to strengthen the security and reliability of pricing across markets.
+
 
 `SimplePriceOracle.sol:` allows users to:
 
