@@ -14,7 +14,7 @@ JustLend Protocol's governance relies on participants locking JST tokens to acqu
 
 JST tokens enable holders to collectively act as managers of the protocol, enabling them to vote and propose. The process of submitting a proposal and voting is as shown below (before entering the lock phase, you can cancel the created proposal at any time by proposal)
 
-![proposal process](../../images/proposal.png)
+![proposal process](https://raw.githubusercontent.com/justlend/justlend-docs/main/images/proposal.png)
 
 1. JST holders call governance contracts to create proposals. Once a proposal is successfully created, it will undergo a 2-day review period. Voting rights are then recorded, and the voting process begins after the review period ends.
 2. JST holders receive votes and can choose to either support or oppose a proposal based on its content. Each JST holder is entitled to one vote. The voting period lasts for 3 days.

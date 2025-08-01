@@ -1,7 +1,7 @@
 # JustLend DAO Documentation
 This is the official developer documentation for the JustLend DAO, providing comprehensive development guides and API references.
 
-## Community
+## 🚀 Community
 - [JUST-Defi](https://t.me/just_defi)
 - [JustLend DAO Official](https://t.me/officialjustlend)
 
