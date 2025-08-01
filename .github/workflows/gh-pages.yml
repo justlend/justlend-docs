@@ -30,6 +30,9 @@ jobs:
     - name: Build the document
       run: mkdocs build  # 构建mkdocs站点
 
+    - name: Add CNAME file
+      run: echo 'docs.justlend.org' > site/CNAME
+
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@v4
       with:
