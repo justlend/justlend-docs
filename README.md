@@ -1,4 +1,4 @@
-## JustLend DAO Documentation
+# JustLend DAO Documentation
 This is the official developer documentation for the JustLend DAO, providing comprehensive development guides and API references.
 
 ## 🚀 Community
