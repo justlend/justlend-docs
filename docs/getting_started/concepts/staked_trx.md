@@ -3,7 +3,7 @@ Staked TRX is a feature launched by JustLend DAO that enables one-click TRX stak
 The SRs receiving your TRON Power obtained from staking TRX will be decided via voting by sTRX Governance. The whole process will be open, transparent, and fully decentralized.
 
 ### **Architecture of the sTRX system**
-![strx architecture](https://raw.githubusercontent.com/hyf1888/JustLend-DAO-Doc/main/images/strx_architecture.png)
+![strx architecture](../../../images/strx_architecture.png)
 
 * **TRX Holders:** deposit TRX into the TRC484 contract to receive sTRX at the current exchange rate.
 

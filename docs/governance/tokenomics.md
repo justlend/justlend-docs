@@ -38,7 +38,7 @@ The protocol reserves mainly consist of accumulated borrow fees. The revenue all
 * **Incentives(20%):** This part is emmitted as incentives for suppliers and borrowers;
 * **Supply Mining Rewards(10%):** This rewards utilized a portion of the reserve revenue to incentivize  developers, contributors, participants, and any projects that contribute to the ecosystem.
 
-![revenue distribution](https://raw.githubusercontent.com/hyf1888/JustLend-DAO-Doc/main/images/revenue_distribution.png)
+![revenue distribution](../../images/revenue_distribution.png)
 
 
 
