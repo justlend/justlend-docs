@@ -30,5 +30,5 @@ Liquidation will be triggered when the risk value of your positions hits 100. Th
 
 As a borrower, please keep a close eye on your risk value to prevent liquidation. Once liquidation occurs, you will find a record of your jTokens being transferred out of your wallet.
 
-**Note:** Before you proceed to use the liquidation tool, please be advised that you must first agree to the terms outlined in the [Liquidation Tool Disclaimer](https://docs.justlend.org/resources/risk-warning). This disclaimer is designed to inform you of the risks, responsibilities, and conditions associated with the use of liquidation tool.
+**Note:** Before you proceed to use the liquidation tool, please be advised that you must first agree to the terms outlined in the [Liquidation Tool Disclaimer](https://docs.justlend.org/resources/risk_warning). This disclaimer is designed to inform you of the risks, responsibilities, and conditions associated with the use of liquidation tool.
 By proceeding to use the liquidation tool, you confirm that you have read, understood, and accept the terms of the disclaimer. If you do not agree with any part of the disclaimer, you are not permitted to utilize liquidation tool and discontinue use immediately.
