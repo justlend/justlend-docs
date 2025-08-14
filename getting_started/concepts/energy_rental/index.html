@@ -1493,36 +1493,36 @@
 </li>
 </ul>
 <h3 id="placing-an-order"><strong>Placing An Order</strong><a class="headerlink" href="#placing-an-order" title="Permanent link">&para;</a></h3>
-<p>Once the parameters are set, you can place an order to proceed with the transaction. The rental protocol will require a prepayment, which includes a <strong>deposit</strong> and <strong>rental fee</strong>:</p>
+<p>Once the parameters are set, you can place an order to proceed with the transaction. The rental protocol will require a prepayment, which includes <strong>Energy Fee</strong>, <strong>Security Deposit</strong> and <strong>Liquidation Penalty</strong>:</p>
 <ul>
 <li>
-<p><strong>Deposit Fee:</strong> calculated as <strong>0.05%</strong> of the TRX required for the rental energy, with a minimum deposit of <strong>40</strong> TRX.</p>
+<p><strong>Energy Fee:</strong> the energy you use is charged based on the time you use. The longer you use, the more you will be charged.</p>
 <ul>
-<li>If the rent order is returned on time, the deposit is fully refunded. If not returned before expiry, the order may be liquidated, and the deposit will be forfeited to community liquidators as a reward.</li>
+<li>The prepaid amount includes the full Energy Fee for your entire rental period. If you return the energy early, the unused portion of the Energy Fee will be refunded proportionally based on the actual usage time.</li>
 </ul>
 </li>
 <li>
-<p><strong>Rental Fee:</strong> includes <strong>Occupation Fee</strong> (charges based on the rental duration) and <strong>Usage Fee</strong> (charges based on the rental amount):</p>
+<p><strong>Security Deposit:</strong>  a deposit equivalent to one day’s energy fee will be charged based on the amount of energy you rent.</p>
 <ul>
-<li><strong>Occupation Fee:</strong> the energy you use is charged based on the time you use. The longer you use, the more you will be charged.<ul>
-<li>The prepayment includes the occupancy fee for your entire rental time. If you terminate the rent early, the occupancy fee will be refunded in proportion to the occupancy time.</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<p><strong>Usage Fee:</strong> the cost of your energy usage fee is charged as one day's rental fee based on the amount of energy you rent.</p>
-<ul>
-<li>Since it takes <strong>24</strong> hours for energy to recover after use, the usage fee is charged based on 1 day.</li>
+<li>Since it takes 24 hours, or 1 day, for energy to recover after use, the security deposit is charged based on 1 day.</li>
 <li>when you return to the energy:<ul>
-<li>If the energy has been fully restored, the usage fee will be fully refunded;</li>
-<li>If the energy has been used up, <strong>0.5</strong> days of usage fee will be deducted from your account;</li>
-<li>If part of the energy has been used, your usage fee will be deducted proportionally.</li>
+<li>If the energy has been fully restored, the Security Deposit will be fully refunded;</li>
+<li>If the energy has been used up, 0.75 days of Security Deposit will be deducted from your account;</li>
+<li>If part of the energy has been used, your Security Deposit will be deducted proportionally.</li>
 </ul>
 </li>
 </ul>
 </li>
+<li>
+<p><strong>Liquidation Penalty:</strong> calculated as the amount of TRX delegated * 0.05%, with a minimum deposit of 40 TRX.</p>
+<ul>
+<li>If the rent order is returned on time, the Liquidation Penalty is fully refunded. If not returned before expiry, the order will be liquidated, and the liquidation penalty will be forfeited to community liquidators as a reward.</li>
 </ul>
+</li>
+</ul>
+<p><strong>Energy Fee</strong> = Rental Amount * Unit Price * Rental Duration</p>
+<p><strong>Security Deposit</strong> = Rental Amount * Daily Price</p>
+<p><strong>Liquidation Penalty</strong> = Max (Equivalent TRX Delegated * 0.05%, 40 TRX)</p>
 <p>After completing the rental transaction, you can manage your orders via the energy rental interface. Options include returning the rent, extending the rent order, viewing the actual energy received, and checking the remaining rental duration.</p>
 <p>We recommend users customize their leasing plans based on their specific needs:
 * <strong>For single transactions</strong>, we recommend returning the energy immediately after use. This avoids liquidation and helps save on occupation fees.
