@@ -17,21 +17,26 @@ When renting energy, you need to specify three key parameters based on your requ
     * **Note:** Renting for contract addresses is not supported.
 
 ### **Placing An Order**
-Once the parameters are set, you can place an order to proceed with the transaction. The rental protocol will require a prepayment, which includes a **deposit** and **rental fee**:
+Once the parameters are set, you can place an order to proceed with the transaction. The rental protocol will require a prepayment, which includes **Energy Fee**, **Security Deposit** and **Liquidation Penalty**:
 
-* **Deposit Fee:** calculated as **0.05%** of the TRX required for the rental energy, with a minimum deposit of **40** TRX.
-    * If the rent order is returned on time, the deposit is fully refunded. If not returned before expiry, the order may be liquidated, and the deposit will be forfeited to community liquidators as a reward.
-
-* **Rental Fee:** includes **Occupation Fee** (charges based on the rental duration) and **Usage Fee** (charges based on the rental amount):
-    * **Occupation Fee:** the energy you use is charged based on the time you use. The longer you use, the more you will be charged.
-        * The prepayment includes the occupancy fee for your entire rental time. If you terminate the rent early, the occupancy fee will be refunded in proportion to the occupancy time.
-
-* **Usage Fee:** the cost of your energy usage fee is charged as one day's rental fee based on the amount of energy you rent.
-    * Since it takes **24** hours for energy to recover after use, the usage fee is charged based on 1 day.
+* **Energy Fee:** the energy you use is charged based on the time you use. The longer you use, the more you will be charged.
+    * The prepaid amount includes the full Energy Fee for your entire rental period. If you return the energy early, the unused portion of the Energy Fee will be refunded proportionally based on the actual usage time.
+      
+* **Security Deposit:**  a deposit equivalent to one day’s energy fee will be charged based on the amount of energy you rent.
+    * Since it takes 24 hours, or 1 day, for energy to recover after use, the security deposit is charged based on 1 day.
     * when you return to the energy:
-        * If the energy has been fully restored, the usage fee will be fully refunded;
-        * If the energy has been used up, **0.5** days of usage fee will be deducted from your account;
-        * If part of the energy has been used, your usage fee will be deducted proportionally.
+        * If the energy has been fully restored, the Security Deposit will be fully refunded;
+        * If the energy has been used up, 0.75 days of Security Deposit will be deducted from your account;
+        * If part of the energy has been used, your Security Deposit will be deducted proportionally.
+
+* **Liquidation Penalty:** calculated as the amount of TRX delegated * 0.05%, with a minimum deposit of 40 TRX.
+    * If the rent order is returned on time, the Liquidation Penalty is fully refunded. If not returned before expiry, the order will be liquidated, and the liquidation penalty will be forfeited to community liquidators as a reward.
+
+**Energy Fee** = Rental Amount * Unit Price * Rental Duration
+
+**Security Deposit** = Rental Amount * Daily Price
+
+**Liquidation Penalty** = Max (Equivalent TRX Delegated * 0.05%, 40 TRX)
 
 After completing the rental transaction, you can manage your orders via the energy rental interface. Options include returning the rent, extending the rent order, viewing the actual energy received, and checking the remaining rental duration.
 
