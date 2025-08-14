@@ -1615,7 +1615,7 @@ on the <strong>Rental Amount</strong> and <strong>Rental Duration</strong>. The 
 
 <p>Upon normal termination of the rental, a portion of the deposit will be refunded based on the energy usage. The specific refund calculation formula is as follows:</p>
 <div style="text-align: center; font-size: 20px;">
-    Refund at least = trxAmount ∗ rentalRate ∗ (43200 + liquidateThreshold) + fee
+    Refund at least = trxAmount ∗ rentalRate ∗ (21600 + liquidateThreshold) + fee
 </div>
 
 <h4 id="parameters"><strong>Parameters:</strong><a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h4>
@@ -1634,7 +1634,7 @@ on the <strong>Rental Amount</strong> and <strong>Rental Duration</strong>. The 
 <li><code>durationValueInSeconds:</code> the duration of the energy rental in seconds, calculated by converting the <strong>Rental Duration</strong> into seconds.</li>
 <li><code>rentalRate:</code> the borrowing interest rate, which is the rate paid per second by the borrower to the staker, scaled by 10^18.</li>
 <li><code>liquidateThreshold:</code> the liquidation threshold, which is the remaining rental duration of the user's prepayment, initialized to 0.</li>
-<li><code>fee:</code> the penalty reserve for liquidation. Users who execute liquidation can receive a liquidation reward calculated as <code>Max(40 TRX, 5% * energyAmount / energyRentPerTrx)</code>, which can be retrieved by calling the <a href="https://labc.ablesdxd.link/strx/dashboard">/strx/dashboard</a> API. The minimum fee is 40 TRX.</li>
+<li><code>fee:</code> the penalty reserve for liquidation. Users who execute liquidation can receive a liquidation reward calculated as <code>Max(40 TRX, 0.05% * energyAmount / energyRentPerTrx)</code>, which can be retrieved by calling the <a href="https://labc.ablesdxd.link/strx/dashboard">/strx/dashboard</a> API. The minimum fee is 40 TRX.</li>
 </ul>
 <p><strong>Note:</strong> the parameters of <code>rentalRate</code> and <code>liquidateThreshold</code> can be obtained by calling the <a href="https://tronscan.io/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd">EnergyRental</a> contract.</p>
 <h2 id="query-interface"><strong>Query Interface</strong><a class="headerlink" href="#query-interface" title="Permanent link">&para;</a></h2>
