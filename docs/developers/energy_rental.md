@@ -16,7 +16,7 @@ on the **Rental Amount** and **Rental Duration**. The detailed formula is as fol
 Upon normal termination of the rental, a portion of the deposit will be refunded based on the energy usage. The specific refund calculation formula is as follows:
 
 <div style="text-align: center; font-size: 20px;">
-    Refund at least = trxAmount ∗ rentalRate ∗ (43200 + liquidateThreshold) + fee
+    Refund at least = trxAmount ∗ rentalRate ∗ (21600 + liquidateThreshold) + fee
 </div>
 
 #### **Parameters:**
@@ -32,7 +32,7 @@ Upon normal termination of the rental, a portion of the deposit will be refunded
 * `durationValueInSeconds:` the duration of the energy rental in seconds, calculated by converting the **Rental Duration** into seconds.
 * `rentalRate:` the borrowing interest rate, which is the rate paid per second by the borrower to the staker, scaled by 10^18.
 * `liquidateThreshold:` the liquidation threshold, which is the remaining rental duration of the user's prepayment, initialized to 0.
-* `fee:` the penalty reserve for liquidation. Users who execute liquidation can receive a liquidation reward calculated as `Max(40 TRX, 5% * energyAmount / energyRentPerTrx)`, which can be retrieved by calling the [/strx/dashboard](https://labc.ablesdxd.link/strx/dashboard) API. The minimum fee is 40 TRX.
+* `fee:` the penalty reserve for liquidation. Users who execute liquidation can receive a liquidation reward calculated as `Max(40 TRX, 0.05% * energyAmount / energyRentPerTrx)`, which can be retrieved by calling the [/strx/dashboard](https://labc.ablesdxd.link/strx/dashboard) API. The minimum fee is 40 TRX.
 
 **Note:** the parameters of `rentalRate` and `liquidateThreshold` can be obtained by calling the [EnergyRental](https://tronscan.io/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd) contract.
 
