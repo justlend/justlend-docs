@@ -52,6 +52,9 @@
     * `ETH:` [THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF](https://tronscan.org/#/token20/THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF)
     * `ETH CErc20Delegate:` [TQBvTVisiceDvsQVbLbcYyWQGWP7wtaQnc](https://tronscan.org/#/contract/TQBvTVisiceDvsQVbLbcYyWQGWP7wtaQnc)
     * `ETH CErc20Delegator:` [TR7BUFRQeq1w5jAZf1FKx85SHuX6PfMqsV](https://tronscan.org/#/token20/TR7BUFRQeq1w5jAZf1FKx85SHuX6PfMqsV)
+    * `USD1:` [TPFqcBAaaUMCSVRCqPaQ9QnzKhmuoLR6Rc](https://tronscan.org/#/token20/TPFqcBAaaUMCSVRCqPaQ9QnzKhmuoLR6Rc)
+    * `USD1 CErc20Delegate:` [TRo2exz6ZHn6W3Ey3G93FnzhWvjLPUcR2B](https://tronscan.org/#/contract/TRo2exz6ZHn6W3Ey3G93FnzhWvjLPUcR2B)
+    * `USD1 CErc20Delegator:` [TBEKggwqFkrc4KckQVR9BLucAmQugafEZf](https://tronscan.org/#/token20/TBEKggwqFkrc4KckQVR9BLucAmQugafEZf)
     * `WBTT:` [TKfjV9RNKJJCqPvBtK8L7Knykh7DNWvnYt](https://tronscan.org/#/token20/TKfjV9RNKJJCqPvBtK8L7Knykh7DNWvnYt)
     * `WBTT CErc20Delegate:` [TV4WWBqBfn1kd4KmpYeSJpVAfybfrxEN9L](https://tronscan.org/#/contract/TV4WWBqBfn1kd4KmpYeSJpVAfybfrxEN9L)
     * `WBTT CErc20Delegator:` [TUY54PVeH6WCcYCd6ZXXoBDsHytN9V5PXt](https://tronscan.org/#/contract/TUY54PVeH6WCcYCd6ZXXoBDsHytN9V5PXt)
@@ -84,6 +87,7 @@
     * `jumpRateBUSD (JumpRateModelV2):` [TUSGt1WAYeJSV94M5muFi2KvtE6EquZPUC](https://tronscan.org/#/contract/TUSGt1WAYeJSV94M5muFi2KvtE6EquZPUC)
     * `jumpRateSUNOLD (JumpRateModelV2):` [TK7WVRz34wUVRCpsgbW1wUCPmh5bSnCqg1](https://tronscan.org/#/contract/TK7WVRz34wUVRCpsgbW1wUCPmh5bSnCqg1)
     * `jumpRateETH (JumpRateModelV2):` [TCiKn6EFBsNrNCFQXWaEuAxr8Su3y4Rx9D](https://tronscan.org/#/contract/TCiKn6EFBsNrNCFQXWaEuAxr8Su3y4Rx9D)
+    * `jumpRateUSD1 (JumpRateModelV2):` [TKgX5vEds8UW8bd5fSDGHpTT4UwmVz4yPS](https://tronscan.org/#/contract/TKgX5vEds8UW8bd5fSDGHpTT4UwmVz4yPS)
 
 * **Price Oracle**
     * `Oracle Price (PriceOracle):` [TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV](https://tronscan.org/#/contract/TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV/code)
