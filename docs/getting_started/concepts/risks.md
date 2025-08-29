@@ -12,7 +12,7 @@ Smart contracts are critical to the functioning of the JustLend DAO Protocol, bu
 JustLend DAO relies on third-party oracles to provide essential data, such as price feeds and redemption ratios for liquid staking tokens. While oracles are vital to the protocol, their reliance introduces the risk of incorrect data being provided if an oracle fails or is compromised. This could lead to inaccurate valuations and potentially harmful actions within the protocol, such as incorrect collateral liquidation or improper lending terms.
 
 #### Mitigation Measures:
-* **Decentralized Oracles:** To minimize the risks associated with centralization, JustLend DAO utilizes decentralized oracles like WinkLink, which provide tamper-resistant data feeds. This ensures greater reliability and security, as the data is less susceptible to manipulation or errors from a single source;
+* **Decentralized Oracles:** To minimize the risks associated with centralization, JustLend DAO utilizes decentralized oracles like Chainlink, which provide tamper-resistant data feeds. This ensures greater reliability and security, as the data is less susceptible to manipulation or errors from a single source;
 * **Community Review:** These decentralized oracles are also equipped with additional security measures that further protect the integrity of the data, reducing the likelihood of inaccurate or malicious inputs.
 
 ### **Collateral Risk**
