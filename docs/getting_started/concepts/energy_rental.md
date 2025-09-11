@@ -29,18 +29,19 @@ Once the parameters are set, you can place an order to proceed with the transact
         * If the energy has been used up, 0.75 days of Security Deposit will be deducted from your account;
         * If part of the energy has been used, your Security Deposit will be deducted proportionally.
 
-* **Liquidation Penalty:** calculated as the amount of TRX delegated * 0.05%, with a minimum deposit of 40 TRX.
+* **Liquidation Penalty:** calculated as the amount of TRX delegated * 0.01%, with a minimum deposit of 20 TRX.
     * If the rent order is returned on time, the Liquidation Penalty is fully refunded. If not returned before expiry, the order will be liquidated, and the liquidation penalty will be forfeited to community liquidators as a reward.
 
 **Energy Fee** = Rental Amount * Unit Price * Rental Duration
 
 **Security Deposit** = Rental Amount * Daily Price
 
-**Liquidation Penalty** = Max (Equivalent TRX Delegated * 0.05%, 40 TRX)
+**Liquidation Penalty** = Max (Equivalent TRX Delegated * 0.01%, 20 TRX)
 
 After completing the rental transaction, you can manage your orders via the energy rental interface. Options include returning the rent, extending the rent order, viewing the actual energy received, and checking the remaining rental duration.
 
 We recommend users customize their leasing plans based on their specific needs:
+
 * **For single transactions**, we recommend returning the energy immediately after use. This avoids liquidation and helps save on occupation fees.
 * **For users with regular daily transactions**, we suggest opting for a long-term hassle-free rental plan by renting energy for 30 days based on daily energy consumption. With the 24-hour full restoration rule, there is no need to rent excessive amounts of energy.
 
