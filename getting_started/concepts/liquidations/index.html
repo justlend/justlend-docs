@@ -67,6 +67,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#liquidation-tool" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -396,6 +401,18 @@
       
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Liquidations
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -406,6 +423,74 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item ">
+  <a href="#liquidation-tool" class="md-nav__link" >
+    <span class="md-ellipsis">
+      Liquidation Tool
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item has-children">
+  <a href="#liquidation-manual" class="md-nav__link" onclick="toggleChildren(event)" aria-expanded="false">
+    <span class="md-ellipsis">
+      Liquidation Manual
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Liquidation Manual" hidden>
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item ">
+  <a href="#1-preparation" class="md-nav__link" >
+    <span class="md-ellipsis">
+      1. Preparation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item ">
+  <a href="#2-liquidation-process" class="md-nav__link" >
+    <span class="md-ellipsis">
+      2. Liquidation Process
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item ">
+  <a href="#3-critical-reminders" class="md-nav__link" >
+    <span class="md-ellipsis">
+      3. Critical Reminders
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1458,11 +1543,55 @@
 </tbody>
 </table>
 <p>Liquidation occurs when a borrower’s risk value exceeds 100, indicating that their collateral is insufficient to cover the borrowed amount. This can happen due to a decline in collateral value or an increase in the borrowing amount. During a liquidation, a liquidator can repay up to 50% of a borrower's debt for a single asset in one liquidation transaction, and a liquidation fee is applied to the borrower’s collateral. As a permissionless process, any network participant can initiate the liquidation of an eligible position.</p>
-<h4 id="liquidation-tool"><strong>Liquidation Tool</strong><a class="headerlink" href="#liquidation-tool" title="Permanent link">&para;</a></h4>
+<h2 id="liquidation-tool"><strong>Liquidation Tool</strong><a class="headerlink" href="#liquidation-tool" title="Permanent link">&para;</a></h2>
 <p>Liquidation will be triggered when the risk value of your positions hits 100. The liquidator will settle the debt (in the borrowed token), take away the supplied asset (in the corresponding jToken), and earn a liquidation reward equal to 8% of the repaid debt value. It should be noted that each liquidation can only cover the debt of one token.</p>
 <p>As a borrower, please keep a close eye on your risk value to prevent liquidation. Once liquidation occurs, you will find a record of your jTokens being transferred out of your wallet.</p>
 <p><strong>Note:</strong> Before you proceed to use the liquidation tool, please be advised that you must first agree to the terms outlined in the <a href="https://docs.justlend.org/resources/risk_warning">Liquidation Tool Disclaimer</a>. This disclaimer is designed to inform you of the risks, responsibilities, and conditions associated with the use of liquidation tool.
 By proceeding to use the liquidation tool, you confirm that you have read, understood, and accept the terms of the disclaimer. If you do not agree with any part of the disclaimer, you are not permitted to utilize liquidation tool and discontinue use immediately.</p>
+<h2 id="liquidation-manual"><strong>Liquidation Manual</strong><a class="headerlink" href="#liquidation-manual" title="Permanent link">&para;</a></h2>
+<p>This manual provides a step-by-step guide for participating in the liquidation process on the JustLend DAO platform to maintain market stability and earn liquidation rewards. Liquidation can be triggered when a borrower's <strong>Risk Value</strong> exceeds a critical threshold. As a liquidator, you repay the borrower's debt in exchange for their collateral at a discounted rate, effectively earning a <strong>liquidation reward</strong>.</p>
+<ul>
+<li><strong>Observation Threshold:</strong> Accounts with a <strong>Risk Value &gt; 95</strong> will be listed on the Liquidation page.</li>
+<li><strong>Liquidation Threshold:</strong> Liquidation becomes executable only when the <strong>Risk Value is ≥ 100</strong>.</li>
+</ul>
+<h3 id="1-preparation">1. <strong>Preparation</strong><a class="headerlink" href="#1-preparation" title="Permanent link">&para;</a></h3>
+<p>Before starting, ensure you have met the following requirements:</p>
+<ul>
+<li><strong>Wallet Connection:</strong>  Connect your compatible wallet (e.g., TronLink) to the JustLend DAO <a href="https://app.justlend.org/liquidate?lang=en-US">Liquidation Page</a>.</li>
+<li><strong>Token Reserves:</strong> Identify the specific debt token of the target borrower. You must have <strong>sufficient balances</strong> of that specific token in your wallet to cover the repayment.</li>
+</ul>
+<h3 id="2-liquidation-process">2. <strong>Liquidation Process</strong><a class="headerlink" href="#2-liquidation-process" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Monitor High-Risk Accounts:</strong> Navigate to the <a href="https://app.justlend.org/liquidate?lang=en-US">Liquidation Page</a> on the JustLend DAO official website. Review the list of accounts with a <strong>Risk Value exceeding 95</strong>. These are   potential candidates for liquidation.</p>
+</li>
+<li>
+<p><strong>Select a Target Account:</strong> Identify an account where the <strong>Risk Value is ≥ 100</strong>. At this stage, the <strong>「Liquidate」</strong> button will become active and clickable.</p>
+</li>
+<li>
+<p><strong>Configure Liquidation Parameters:</strong> Click the <strong>「Liquidate」</strong> button. A pop-up window will appear displaying:</p>
+<ul>
+<li>The type and amount of collateral you will get.</li>
+<li>The type and amount of debt to be repaid.</li>
+</ul>
+<p>Select the asset you wish to repay and the collateral you wish to claim, then enter the repayment amount.</p>
+</li>
+<li>
+<p><strong>Execute the Transaction:</strong> Confirm the repayment amount. The system will prompt you to sign the transaction via your wallet.</p>
+<ul>
+<li><strong>Note:</strong> Ensure your wallet has <strong>enough TRX</strong> to cover the energy/bandwidth fees for the smart contract execution.</li>
+</ul>
+</li>
+<li>
+<p><strong>Receive Liquidation Rewards:</strong> Once the transaction is confirmed on-chain, the debt is partially or fully repaid on behalf of the borrower. The corresponding collateral, including the reward, will be automatically transferred to your account.</p>
+</li>
+</ul>
+<h3 id="3-critical-reminders">3. <strong>Critical Reminders</strong><a class="headerlink" href="#3-critical-reminders" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>First-Come, First-Served:</strong> Liquidation is a competitive process. Multiple liquidators may target the same account simultaneously.</li>
+<li><strong>Accuracy:</strong> Always double-check the debt token type before the transaction to avoid execution failure due to insufficient specific token balances.</li>
+<li><strong>Transparency:</strong> All liquidation activities are recorded on the blockchain and can be verified via the JustLend dashboard or TRONSCAN.</li>
+</ul>
 
 
 
