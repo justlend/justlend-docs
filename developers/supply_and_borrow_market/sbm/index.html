@@ -993,24 +993,6 @@
   
 </li>
         
-          <li class="md-nav__item ">
-  <a href="#liquidation-incentive" class="md-nav__link" >
-    <span class="md-ellipsis">
-      Liquidation Incentive
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item ">
-  <a href="#get-account-liquidity" class="md-nav__link" >
-    <span class="md-ellipsis">
-      Get Account Liquidity
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -1084,6 +1066,39 @@
   <a href="#transfer" class="md-nav__link" >
     <span class="md-ellipsis">
       Transfer
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item has-children">
+  <a href="#liquidation-process" class="md-nav__link" onclick="toggleChildren(event)" aria-expanded="false">
+    <span class="md-ellipsis">
+      Liquidation Process
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Liquidation Process" hidden>
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item ">
+  <a href="#liquidation-incentive" class="md-nav__link" >
+    <span class="md-ellipsis">
+      Liquidation Incentive
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item ">
+  <a href="#get-account-liquidity" class="md-nav__link" >
+    <span class="md-ellipsis">
+      Get Account Liquidity
     </span>
   </a>
   
@@ -1713,6 +1728,7 @@
 <li>Liquidation</li>
 </ul>
 <p>The source code is available on <a href="https://github.com/justlend/justlend-protocol/blob/main/contracts/CToken.sol">Github</a>.</p>
+<p>&emsp;</p>
 <h2 id="query-interface"><strong>Query Interface</strong><a class="headerlink" href="#query-interface" title="Permanent link">&para;</a></h2>
 <h3 id="exchangerate"><strong>ExchangeRate</strong><a class="headerlink" href="#exchangerate" title="Permanent link">&para;</a></h3>
 <p>Calling this method accrues interest and returns the up-to-date exchange rate.
@@ -1800,31 +1816,7 @@
 <li><strong>Parameter description:</strong> N/A</li>
 <li><strong>Returns:</strong> The current reserve factor.</li>
 </ul>
-<h3 id="liquidation-incentive"><strong>Liquidation Incentive</strong><a class="headerlink" href="#liquidation-incentive" title="Permanent link">&para;</a></h3>
-<p>By calling the liquidationIncentiveMantissa function of the Unitroller contract, liquidation incentives can be inquired. Liquidators will be given a proportion of the borrower's collateral as an incentive, which is defined as liquidation incentive. This is to encourage liquidators to perform liquidation of underwater accounts.
-<div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">liquidationIncentiveMantissa</span><span class="p">()</span><span class="w"> </span>view<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span>
-</code></pre></div></p>
-<ul>
-<li><strong>Parameter description:</strong> N/A</li>
-<li><strong>Returns:</strong> The liquidationIncentive, scaled by 1e18, is multiplied by the closed borrow amount from the liquidator to determine how much collateral can be seized.</li>
-</ul>
-<h3 id="get-account-liquidity"><strong>Get Account Liquidity</strong><a class="headerlink" href="#get-account-liquidity" title="Permanent link">&para;</a></h3>
-<p>By calling the getAccountLiquidity function of the Unitroller contract, account information can be accessed through an account's address to determine whether the account should be liquidated or not.
-<div class="highlight"><pre><span></span><code>getAccountLiquidity<span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">account</span><span class="p">)</span><span class="w"> </span>view<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="p">)</span>
-</code></pre></div></p>
-<ul>
-<li><strong>Parameter description:</strong><ul>
-<li><code>account:</code> user address.</li>
-</ul>
-</li>
-<li><strong>Returns:</strong> The amount of underlying owned by owner.<ul>
-<li><code>error:</code> error code, 0 means success.</li>
-<li><code>liquidity:</code> liquidity.</li>
-<li><code>shortfall:</code> When the value is bigger than 0, the current account does not meet the market requirement for collateralization and needs to be liquidated.</li>
-</ul>
-</li>
-</ul>
-<p>Note: There should be at most one non-zero value between liquidity and shortfall.</p>
+<p>&emsp;</p>
 <h2 id="write-interface"><strong>Write Interface</strong><a class="headerlink" href="#write-interface" title="Permanent link">&para;</a></h2>
 <h3 id="borrow"><strong>Borrow</strong><a class="headerlink" href="#borrow" title="Permanent link">&para;</a></h3>
 <p>Calling this method borrows assets from JustLend DAO protocol to the sender's owner address.
@@ -1954,6 +1946,64 @@
 </li>
 <li><strong>Returns:</strong> A boolean value indicating whether or not the transfer succeeded.</li>
 </ul>
+<p>&emsp;</p>
+<h2 id="liquidation-process"><strong>Liquidation Process</strong><a class="headerlink" href="#liquidation-process" title="Permanent link">&para;</a></h2>
+<p>To enable developers to determine if a user is eligible for liquidation and to facilitate the liquidation process through contract calls, the following steps outline the specific operations to be executed:</p>
+<ol>
+<li>
+<p><strong>Query Liquidation Incentive:</strong> Before proceeding, check the reward of the liquidation. This represents the "bonus" collateral a liquidator receives.</p>
+<ul>
+<li><strong>Action:</strong> Call <code>liquidationIncentiveMantissa()</code> on the <strong>Unitroller</strong> contract.</li>
+<li><strong>Purpose:</strong> To calculate the potential profit from the liquidation.</li>
+</ul>
+</li>
+<li>
+<p><strong>Assess Account Liquidity:</strong> Identify whether an account's collateral is insufficient to cover its debt.</p>
+<ul>
+<li><strong>Action:</strong> Call <code>getAccountLiquidity(address account)</code> on the <strong>Unitroller</strong> contract.</li>
+<li><strong>Evaluation:</strong> This function returns three values. You are looking for the shortfall.<ul>
+<li>If <strong>shortfall &gt; 0:</strong> The account is underwater and eligible for liquidation.</li>
+<li>If <strong>liquidity &gt; 0:</strong> The account is healthy and cannot be liquidated.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Execute Liquidation:</strong> Once a target is confirmed, call the specific entry point based on the asset type being repaid.</p>
+<ul>
+<li><strong>For jTRC20:</strong> Call <code>liquidateBorrow(address borrower, uint repayAmount, address jTokenCollateral)</code> on the respective jTrc20 contract.</li>
+<li><strong>For jTRX:</strong> Call <code>liquidateBorrow(address borrower, address jTokenCollateral)</code> on the jTRX contract.</li>
+</ul>
+</li>
+</ol>
+<p>In addition, JustLend DAO will continuously monitor relevant data and provide an interface for querying high-risk liquidation users. You can <strong>Identify High-Risk Users</strong> by navigating to the <a href="https://docs.justlend.org/developers/apis/">APIs</a> page and calling the <strong>/justlend/liquidate/highRiskAccountList</strong> endpoint.</p>
+<p><strong>Please note</strong> that there may be a certain delay in the availability of backend data and is for reference only.</p>
+<p>&emsp;</p>
+<h3 id="liquidation-incentive"><strong>Liquidation Incentive</strong><a class="headerlink" href="#liquidation-incentive" title="Permanent link">&para;</a></h3>
+<p>By calling the liquidationIncentiveMantissa function of the Unitroller contract, liquidation incentives can be inquired. Liquidators will be given a proportion of the borrower's collateral as an incentive, which is defined as liquidation incentive. This is to encourage liquidators to perform liquidation of underwater accounts.
+<div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">liquidationIncentiveMantissa</span><span class="p">()</span><span class="w"> </span>view<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span>
+</code></pre></div></p>
+<ul>
+<li><strong>Parameter description:</strong> N/A</li>
+<li><strong>Returns:</strong> The liquidationIncentive, scaled by 1e18, is multiplied by the closed borrow amount from the liquidator to determine how much collateral can be seized.</li>
+</ul>
+<h3 id="get-account-liquidity"><strong>Get Account Liquidity</strong><a class="headerlink" href="#get-account-liquidity" title="Permanent link">&para;</a></h3>
+<p>By calling the getAccountLiquidity function of the Unitroller contract, account information can be accessed through an account's address to determine whether the account should be liquidated or not.
+<div class="highlight"><pre><span></span><code>getAccountLiquidity<span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">account</span><span class="p">)</span><span class="w"> </span>view<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="p">)</span>
+</code></pre></div></p>
+<ul>
+<li><strong>Parameter description:</strong><ul>
+<li><code>account:</code> user address.</li>
+</ul>
+</li>
+<li><strong>Returns:</strong> The amount of underlying owned by owner.<ul>
+<li><code>error:</code> error code, 0 means success.</li>
+<li><code>liquidity:</code> liquidity.</li>
+<li><code>shortfall:</code> When the value is bigger than 0, the current account does not meet the market requirement for collateralization and needs to be liquidated.</li>
+</ul>
+</li>
+</ul>
+<p>Note: There should be at most one non-zero value between liquidity and shortfall.</p>
 <h3 id="liquidate-borrowjtrc20"><strong>Liquidate Borrow（jTrc20）</strong><a class="headerlink" href="#liquidate-borrowjtrc20" title="Permanent link">&para;</a></h3>
 <p>By calling liquidateBorrow function of the corresponding jTrc20 contract (e.g. jUSDT), accounts whose liquidity does not meet the market requirement for collateralization will be liquidated by other users to restore the account liquidity to a normal level (i.e. higher than the market requirement for collateralization). In the event of liquidation, liquidators may repay part or 50% of the loan for the borrower. Liquidators will be given a proportion of the borrower's collateral as an incentive.
 <div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">liquidateBorrow</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">borrower</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">repayAmount</span><span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">jTokenCollateral</span><span class="p">)</span><span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span>
@@ -1993,6 +2043,9 @@
 </ul>
 </li>
 </ul>
+<p>&emsp;
+&emsp;
+&emsp;</p>
 <h2 id="error-code-and-failure-info"><strong>Error Code And Failure info</strong><a class="headerlink" href="#error-code-and-failure-info" title="Permanent link">&para;</a></h2>
 <h3 id="error-code"><strong>Error code</strong><a class="headerlink" href="#error-code" title="Permanent link">&para;</a></h3>
 <table>
