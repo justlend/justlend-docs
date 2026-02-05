@@ -111,6 +111,57 @@ paths:
                         application/json:
                             schema:
                                 '$ref': '#/components/responses/BadRequest'
+    '/justlend/liquidate/highRiskAccountList':
+        get:
+            tags:
+                - Supply and Borrow Market
+            summary: Get Supply and Borrow Market Liquidation Account Information
+            description: Query to get a list of high-risk liquidation accounts in the JustLend DAO lending protocol to identify liquidated accounts.
+            parameters:
+                - '$ref': '#/components/parameters/noParameters'
+            responses:
+                '200':
+                    description: Return a list of high-risk liquidation accounts.
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    code:
+                                        type: integer
+                                        description: Status code of the response, 0 means success.
+                                        examples:
+                                            - 0
+                                    data:
+                                        type: object
+                                        description: Response message data.
+                                        properties:
+                                            jtokens:
+                                                type: array
+                                                description: jToken mapping table to addresses.
+                                                items:
+                                                    '$ref': '#/components/schemas/jTokenToAddress'
+                                            updateTime:
+                                                type: long
+                                                description: Data update timestamp (milliseconds).
+                                                examples:
+                                                    - 1770275708508
+                                            accounts:
+                                                type: array
+                                                description: List of high-risk accounts.
+                                                items:
+                                                    '$ref': '#/components/schemas/highRiskAccounts'
+                                    message:
+                                        type: string
+                                        description: Response message, eg.SUCCESS.
+                                        examples:
+                                            - SUCCESS
+                '400':
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                '$ref': '#/components/responses/BadRequest'
     '/mining/reward':
         get:
             tags:
@@ -907,7 +958,207 @@ components:
                         description: Wallet address of the renter.
                         examples:
                             - TWdWEHRLPBVGsXhwjSUv45XwnsfUHXydJa
-
+        jTokenToAddress:
+            type: object
+            properties:
+                jTUSD:
+                    type: string
+                    examples:
+                        - TSXv71Fy5XdL3Rh2QfBoUu3NAaM4sMif8R
+                jTRX:
+                    type: string
+                    examples:
+                        - TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP
+                jWIN:
+                    type: string
+                    examples:
+                        - TRg6MnpsFXc82ymUPgf5qbj59ibxiEDWvv
+                jNFT:
+                    type: string
+                    examples:
+                        - TFpPyDCKvNFgos3g3WVsAqMrdqhB81JXHE
+                jETHB:
+                    type: string
+                    examples:
+                        - TWBxQMb6RD3qmkXUXpNwVCYbL8SHNreru6
+                jUSDT:
+                    type: string
+                    examples:
+                        - TXJgMdjVX5dKiQaUi9QobwNxtSQaFqccvd
+                jUSD1:
+                    type: string
+                    examples:
+                        - TBEKggwqFkrc4KckQVR9BLucAmQugafEZf
+                jBTT:
+                    type: string
+                    examples:
+                        - TUaUHU9Dy8x5yNi1pKnFYqHWojot61Jfto
+                jWBTT:
+                    type: string
+                    examples:
+                        - TUY54PVeH6WCcYCd6ZXXoBDsHytN9V5PXt
+                jSUNOLD:
+                    type: string
+                    examples:
+                        - TGBr8uh9jBVHJhhkwSJvQN2ZAKzVkxDmno
+                jBUSDOLD:
+                    type: string
+                    examples:
+                        - TLHASseQymmpGQdfAyNjkMXFTJh8nzR2x2
+                jUSDCOLD:
+                    type: string
+                    examples:
+                        - TNSBA6KvSvMoTqQcEgpVK7VhHT3z7wifxy
+                jJST:
+                    type: string
+                    examples:
+                        - TWQhCXaWz4eHK4Kd1ErSDHjMFPoPc9czts
+                jUSDDOLD:
+                    type: string
+                    examples:
+                        - TX7kybeP6UwTBRHLNPYmswFESHfyjm9bAS
+                jUSDJ:
+                    type: string
+                    examples:
+                        - TL5x9MtSnDy537FXKx53yAaHRRNdg9TkkA
+                jSUN:
+                    type: string
+                    examples:
+                        - TPXDpkg9e3eZzxqxAUyke9S4z4pGJBJw9e
+                jwstUSDT:
+                    type: string
+                    examples:
+                        - TD5SdLw5scR6mXgyMK2xKrFJpauDjpKqrW
+                jUSDD:
+                    type: string
+                    examples:
+                        - TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf
+                jBTC:
+                    type: string
+                    examples:
+                        - TLeEu311Cbw63BcmMHDgDLu7fnk9fqGcqT
+                jWBTC:
+                    type: string
+                    examples:
+                        - TVyvpmaVmz25z2GaXBDDjzLZi5iR5dBzGd
+                jsTRX:
+                    type: string
+                    examples:
+                        - TJQ9rbVe9ei3nNtyGgBL22Fuu2xYjZaLAQ
+                jETH:
+                    type: string
+                    examples:
+                        - TR7BUFRQeq1w5jAZf1FKx85SHuX6PfMqsV
+        highRiskAccounts:
+            type: object
+            properties:
+                borrower:
+                    type: string
+                    description: The wallet address of the borrower.
+                    examples:
+                        - TLc34aTvy1vBFzLvM9oz36ihhb7sVpQmgQ
+                collateralTokenList:
+                    '$ref': '#/components/schemas/collateralTokenList'
+                borrowTokenList:
+                    '$ref': '#/components/schemas/borrowTokenList'
+                totalCollateralUsd:
+                    type: string
+                    description: The total value of all collateralized assets in USD.
+                    examples:
+                        - 234.063780
+                totalBorrowUsd:
+                    type: string
+                    description: The total value of all borrowed assets in USD.
+                    examples:
+                        - 193.705172
+                risk:
+                    type: string
+                    description: Risk coefficient，higher values indicate higher risk.
+                    examples:
+                        - 1.105684
+                liquidateStatusStartTime:
+                    type: long
+                    description: The epoch timestamp (ms) when the account entered a liquidatable state.
+                    examples:
+                        - 1770089973150
+        collateralTokenList:
+            type: object
+            description: A list of tokens provided by the user as collateral.
+            properties:
+                jtokenAddress:
+                    type: string
+                    description: The smart contract address of jToken.
+                    examples:
+                        - TR7BUFRQeq1w5jAZf1FKx85SHuX6PfMqsV
+                amount:
+                    type: string
+                    description: The amount of jTokens.
+                    examples:
+                        - 11.03049909
+                price:
+                    type: string
+                    description: The current market price of the jToken in USD.
+                    examples:
+                        - 21.090028146702653201
+                valueUsd:
+                    type: string
+                    description: The collateral value in USD.
+                    examples:
+                        - 232.633536
+                symbol:
+                    type: string
+                    description: The symbol of the jToken.
+                    examples:
+                        - jETH
+                exchangeRate:
+                    type: string
+                    description: The conversion rate between the jToken and its underlying asset.
+                    examples:
+                        - 0.010021847796289808
+                collateralFactor:
+                    type: string
+                    description: The maximum percentage of value that can be borrowed against this asset.
+                    examples:
+                        - 0.750000000000000000
+        borrowTokenList:
+            type: object
+            description: A list of tokens currently borrowed by the user.
+            properties:
+                tokenAddress:
+                    type: string
+                    description: The smart contract address of the underlying asset.
+                    examples:
+                        - TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9
+                amount:
+                    type: string
+                    description: The amount of the underlying asset borrowed.
+                    examples:
+                        - 19.3576678664194442381564147839259092
+                price:
+                    type: string
+                    description: The current market price of the underlying asset in USD.
+                    examples:
+                        - 0.040802750477000000
+                valueUsd:
+                    type: string
+                    description: The total value of the borrowed position expressed in USD.
+                    examples:
+                        - 0.789846
+                symbol:
+                    type: string
+                    description: The symbol of the underlying asset.
+                    examples:
+                        - JST
+                exchangeRate:
+                    type: string
+                    description: The conversion rate between the jToken and its underlying asset.
+                    examples:
+                        - 0.010481635809265784
+                collateralFactor:
+                    type: string
+                    description: The parameter representing the borrowing capacity of the asset.
+                    examples:
+                        - 0.600000000000000000
         Error:
             type: object
             description: RFC 7807
