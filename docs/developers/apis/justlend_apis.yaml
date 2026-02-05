@@ -115,7 +115,7 @@ paths:
         get:
             tags:
                 - Supply and Borrow Market
-            summary: Get Supply and Borrow Market Liquidation Account Information
+            summary: Get High-Risk Liquidation Account Information
             description: Query to get a list of high-risk liquidation accounts in the JustLend DAO lending protocol to identify liquidated accounts.
             parameters:
                 - '$ref': '#/components/parameters/noParameters'
