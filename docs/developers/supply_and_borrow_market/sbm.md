@@ -14,6 +14,7 @@ The SBM contract is the main user-facing contract. Most user interactions with t
 
 The source code is available on [Github](https://github.com/justlend/justlend-protocol/blob/main/contracts/CToken.sol).
 
+&emsp;
 
 ## **Query Interface**
 
@@ -118,33 +119,7 @@ function reserveFactorMantissa() returns (uint)
 * **Parameter description:** N/A
 * **Returns:** The current reserve factor.
 
-
-### **Liquidation Incentive**
-By calling the liquidationIncentiveMantissa function of the Unitroller contract, liquidation incentives can be inquired. Liquidators will be given a proportion of the borrower's collateral as an incentive, which is defined as liquidation incentive. This is to encourage liquidators to perform liquidation of underwater accounts.
-``` solidity
-function liquidationIncentiveMantissa() view returns (uint)
-```
-
-* **Parameter description:** N/A
-* **Returns:** The liquidationIncentive, scaled by 1e18, is multiplied by the closed borrow amount from the liquidator to determine how much collateral can be seized.
-
-
-### **Get Account Liquidity**
-By calling the getAccountLiquidity function of the Unitroller contract, account information can be accessed through an account's address to determine whether the account should be liquidated or not.
-``` solidity
-getAccountLiquidity(address account) view returns (uint, uint, uint)
-```
-
-* **Parameter description:**
-    * `account:` user address.
-* **Returns:** The amount of underlying owned by owner.
-    * `error:` error code, 0 means success.
-    * `liquidity:` liquidity.
-    * `shortfall:` When the value is bigger than 0, the current account does not meet the market requirement for collateralization and needs to be liquidated.
-
-Note: There should be at most one non-zero value between liquidity and shortfall.
-
-
+&emsp;
 
 ## **Write Interface**
 
@@ -271,6 +246,57 @@ function transfer(address dst, uint256 amount) external nonReentrant returns (bo
     * `amount:` amount of token to be transferred.
 * **Returns:** A boolean value indicating whether or not the transfer succeeded.
 
+&emsp;
+
+## **Liquidation Process**
+
+To enable developers to determine if a user is eligible for liquidation and to facilitate the liquidation process through contract calls, the following steps outline the specific operations to be executed:
+
+1. **Query Liquidation Incentive:** Before proceeding, check the reward of the liquidation. This represents the "bonus" collateral a liquidator receives.
+    * **Action:** Call `liquidationIncentiveMantissa()` on the **Unitroller** contract.
+    * **Purpose:** To calculate the potential profit from the liquidation.
+
+2. **Assess Account Liquidity:** Identify whether an account's collateral is insufficient to cover its debt.
+    * **Action:** Call `getAccountLiquidity(address account)` on the **Unitroller** contract.
+    * **Evaluation:** This function returns three values. You are looking for the shortfall.
+        * If **shortfall > 0:** The account is underwater and eligible for liquidation.
+        * If **liquidity > 0:** The account is healthy and cannot be liquidated.
+
+3. **Execute Liquidation:** Once a target is confirmed, call the specific entry point based on the asset type being repaid.
+    * **For jTRC20:** Call `liquidateBorrow(address borrower, uint repayAmount, address jTokenCollateral)` on the respective jTrc20 contract.
+    * **For jTRX:** Call `liquidateBorrow(address borrower, address jTokenCollateral)` on the jTRX contract.
+
+In addition, JustLend DAO will continuously monitor relevant data and provide an interface for querying high-risk liquidation users. You can **Identify High-Risk Users** by navigating to the [APIs](https://docs.justlend.org/developers/apis/) page and calling the **/justlend/liquidate/highRiskAccountList** endpoint.
+
+**Please note** that there may be a certain delay in the availability of backend data and is for reference only.
+
+&emsp;
+
+### **Liquidation Incentive**
+By calling the liquidationIncentiveMantissa function of the Unitroller contract, liquidation incentives can be inquired. Liquidators will be given a proportion of the borrower's collateral as an incentive, which is defined as liquidation incentive. This is to encourage liquidators to perform liquidation of underwater accounts.
+``` solidity
+function liquidationIncentiveMantissa() view returns (uint)
+```
+
+* **Parameter description:** N/A
+* **Returns:** The liquidationIncentive, scaled by 1e18, is multiplied by the closed borrow amount from the liquidator to determine how much collateral can be seized.
+
+
+### **Get Account Liquidity**
+By calling the getAccountLiquidity function of the Unitroller contract, account information can be accessed through an account's address to determine whether the account should be liquidated or not.
+``` solidity
+getAccountLiquidity(address account) view returns (uint, uint, uint)
+```
+
+* **Parameter description:**
+    * `account:` user address.
+* **Returns:** The amount of underlying owned by owner.
+    * `error:` error code, 0 means success.
+    * `liquidity:` liquidity.
+    * `shortfall:` When the value is bigger than 0, the current account does not meet the market requirement for collateralization and needs to be liquidated.
+
+Note: There should be at most one non-zero value between liquidity and shortfall.
+
 
 ### **Liquidate Borrow（jTrc20）**
 By calling liquidateBorrow function of the corresponding jTrc20 contract (e.g. jUSDT), accounts whose liquidity does not meet the market requirement for collateralization will be liquidated by other users to restore the account liquidity to a normal level (i.e. higher than the market requirement for collateralization). In the event of liquidation, liquidators may repay part or 50% of the loan for the borrower. Liquidators will be given a proportion of the borrower's collateral as an incentive.
@@ -308,6 +334,13 @@ LiquidateBorrow(address liquidator, address borrower, uint repayAmount, address 
     * `repayAmount:` the amount of repaid assets;
     * `cTokenCollateral:` address of the jTRX contract to set aside the collateralized asset of a borrower；
     * `seizeTokens:` the tokens need to be liquidated.
+
+&emsp;
+&emsp;
+&emsp;
+
+
+
 
 
 
