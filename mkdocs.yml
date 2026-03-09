@@ -34,7 +34,8 @@ nav:
         - Energy Rental: developers/energy_rental.md
         - Deployed Contracts: developers/deployed_contracts.md
         - APIs: developers/apis.md
-        - MCP Server: developers/mcp_server.md
+    - AI SUPPORT:
+        - MCP Server: ai_support/mcp_server.md
     - RESOURCES:
         - Community:
             - Links: resources/community/links.md
