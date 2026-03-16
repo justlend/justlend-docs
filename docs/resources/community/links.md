@@ -2,7 +2,6 @@
 * [Main JUST Network](https://just.network/)
 * [Main JustLend Network](https://justlend.org/)
 * [JustLend Markets](https://app.justlend.org/marketNew)
-* [JUST Stablecoin (USDJ)](https://just.tronscan.org/#/login)
 
 ### **Telegram groups**
 * [JUST-Defi](https://t.me/just_defi)
