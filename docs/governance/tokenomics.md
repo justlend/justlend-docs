@@ -7,7 +7,6 @@ JustLend DAO is a decentralized governance protocol, where users can participate
 
 * **SBM (Supply and Borrow Market):**  A supply and borrow market protocol launched in December 2020.
 * **sTRX (Staked TRX):**  A high-efficiency and yield TRON network staking pool launched in April 2023.
-* **JustStable Coin (USDJ):** A stablecoin minting protocol launched in April 2020, which was the first application protocol of JST.
 * **Energy Rental:** A platform for flexible and low-cost energy rental on the TRON network launched in April 2023, significantly reducing transaction costs.
 
 #### SBM - Supply and Borrow Market
@@ -17,9 +16,6 @@ Within SBM, each money market corresponds to a unique TRON asset, such as TRX, T
 
 #### Staked TRX
 TRX holders have the opportunity to receive the receipt token sTRX by staking TRX, allowing them to earn double yields from voting and Energy rental. In contrast to participating in Stake 2.0, sTRX offers higher returns and can be utilized in DeFi applications, including decentralized exchanges (DEXs). This token eliminates liquidity constraints associated with the unstaking period in Stake 2.0.
-
-#### JustStable Coin - USDJ
-USDJ is a stablecoin native to the TRON network, generated through decentralized smart contracts. Users can stake TRX as collateral to create USDJ, which then circulates freely like any other cryptocurrency. USDJ is staked to the US dollar using Collateralized Debt Positions (CDPs) and features autonomous feedback mechanisms to maintain its stability.
 
 #### Energy Rental
 An innovative protocol for flexible and cost-effective energy rental on the TRON network. The energy obtained through this protocol is significantly cheaper than that obtained through burning or staking TRX, enabling the cost of most transactions to be reduced to below 1 TRX.
