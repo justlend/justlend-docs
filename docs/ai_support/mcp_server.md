@@ -2,7 +2,7 @@
 
 **GitHub**: [https://github.com/justlend/mcp-server-justlend](https://github.com/justlend/mcp-server-justlend)
 
-The JustLend MCP Server (`@justlend/mcp-server-justlend`) is a [Model Context Protocol](https://modelcontextprotocol.io/) server that enables AI agents to interact with the **JustLend DAO** lending protocol on TRON. Supply assets, borrow against collateral, manage positions, and analyze DeFi portfolios — all through a unified AI interface.
+The JustLend MCP Server (`@justlend/mcp-server-justlend`) is a [Model Context Protocol](https://modelcontextprotocol.io/) server that enables AI agents to interact with the **JustLend DAO** protocol on TRON. Supply assets, borrow against collateral, manage positions, rent energy, stake TRX for sTRX, and analyze DeFi portfolios — all through a unified AI interface.
 
 Beyond JustLend-specific operations, the server also exposes a full set of **general-purpose TRON chain utilities** — balance queries, block/transaction data, token metadata, TRX transfers, smart contract reads/writes, staking (Stake 2.0), multicall, and more.
 
@@ -36,6 +36,8 @@ Beyond JustLend-specific operations, the server also exposes a full set of **gen
 - **Portfolio Analysis**: AI-guided risk assessment, health factor monitoring, optimization
 - **Token Approvals**: Manage TRC20 approvals for jToken contracts
 - **JST Voting / Governance**: View proposals, cast votes, deposit/withdraw JST for voting power, reclaim votes
+- **Energy Rental**: Rent energy from JustLend, calculate rental prices, query rental orders, return/cancel rentals
+- **sTRX Staking**: Stake TRX to receive sTRX, unstake sTRX, claim staking rewards, check withdrawal eligibility
 
 **General TRON Chain**
 
@@ -150,7 +152,7 @@ npm run dev
 
 ## API Reference
 
-### Tools (34 total)
+### Tools (50 total)
 
 #### Wallet & Network
 
@@ -210,6 +212,32 @@ npm run dev
 | `cast_vote` | Cast for/against votes on a proposal | **Yes** |
 | `withdraw_votes_from_proposal` | Reclaim votes from completed proposals | **Yes** |
 
+#### Energy Rental
+
+| Tool | Description | Write? |
+|------|-------------|--------|
+| `get_energy_rental_dashboard` | Market data: TRX price, exchange rate, APY, energy per TRX | No |
+| `get_energy_rental_params` | On-chain params: fees, limits, pause status, usage charge ratio | No |
+| `calculate_energy_rental_price` | Estimate cost for renting energy (prepayment, deposit, daily cost) | No |
+| `get_energy_rental_rate` | Current rental rate for a given TRX amount | No |
+| `get_user_energy_rental_orders` | User's rental orders (as renter, receiver, or all) | No |
+| `get_energy_rent_info` | On-chain rental info for a renter-receiver pair | No |
+| `get_return_rental_info` | Return/cancel estimation (refund, remaining rent, daily cost) | No |
+| `rent_energy` | Rent energy for a receiver (with balance, pause, limit checks) | **Yes** |
+| `return_energy_rental` | Cancel an active rental (with active order check) | **Yes** |
+
+#### sTRX Staking
+
+| Tool | Description | Write? |
+|------|-------------|--------|
+| `get_strx_dashboard` | Staking market data: exchange rate, APY, total supply | No |
+| `get_strx_account` | User staking account: staked amount, income, rewards | No |
+| `get_strx_balance` | sTRX token balance for an address | No |
+| `check_strx_withdrawal_eligibility` | Check unbonding status, pending/completed withdrawal rounds | No |
+| `stake_trx_to_strx` | Stake TRX to receive sTRX (with balance check) | **Yes** |
+| `unstake_strx` | Unstake sTRX to receive TRX back (with balance check) | **Yes** |
+| `claim_strx_rewards` | Claim all staking rewards (with rewards existence check) | **Yes** |
+
 ### Prompts (AI-Guided Workflows)
 
 | Prompt | Description |
@@ -219,6 +247,8 @@ npm run dev
 | `repay_borrow` | Guided repayment with verification |
 | `analyze_portfolio` | Comprehensive portfolio analysis with risk scoring |
 | `compare_markets` | Find best supply/borrow opportunities |
+| `rent_energy` | Guided energy rental with price estimation and balance checks |
+| `stake_trx` | Guided TRX staking to sTRX with APY info and verification |
 
 ## Security Considerations
 
@@ -257,3 +287,21 @@ npm run dev
 
 **"Withdraw my votes from completed proposals"**
 → AI calls `get_user_vote_status` to find withdrawable proposals → calls `withdraw_votes_from_proposal` for each
+
+**"How much does it cost to rent 300,000 energy for 7 days?"**
+→ AI calls `calculate_energy_rental_price` with energyAmount=300000, durationDays=7, returns cost breakdown
+
+**"Rent 500,000 energy to address TXxx... for 14 days"**
+→ AI uses `rent_energy` prompt: checks balance → checks rental status → calculates price → rents energy → verifies
+
+**"Cancel my energy rental to TXxx..."**
+→ AI calls `get_energy_rent_info` to verify active rental → calls `return_energy_rental` → confirms refund
+
+**"Stake 1000 TRX to earn sTRX rewards"**
+→ AI uses `stake_trx` prompt: checks balance → checks exchange rate & APY → stakes TRX → verifies sTRX received
+
+**"Do I have any sTRX rewards to claim?"**
+→ AI calls `get_strx_account` to check claimable rewards → calls `claim_strx_rewards` if available
+
+**"Can I withdraw my unstaked TRX?"**
+→ AI calls `check_strx_withdrawal_eligibility` to check unbonding status and completed withdrawal rounds
