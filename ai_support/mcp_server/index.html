@@ -1249,9 +1249,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item ">
-  <a href="#tools-34-total" class="md-nav__link" >
+  <a href="#tools-50-total" class="md-nav__link" >
     <span class="md-ellipsis">
-      Tools (34 total)
+      Tools (50 total)
     </span>
   </a>
   
@@ -1663,7 +1663,7 @@
 
 <h1 id="mcp-server">MCP Server<a class="headerlink" href="#mcp-server" title="Permanent link">&para;</a></h1>
 <p><strong>GitHub</strong>: <a href="https://github.com/justlend/mcp-server-justlend">https://github.com/justlend/mcp-server-justlend</a></p>
-<p>The JustLend MCP Server (<code>@justlend/mcp-server-justlend</code>) is a <a href="https://modelcontextprotocol.io/">Model Context Protocol</a> server that enables AI agents to interact with the <strong>JustLend DAO</strong> lending protocol on TRON. Supply assets, borrow against collateral, manage positions, and analyze DeFi portfolios — all through a unified AI interface.</p>
+<p>The JustLend MCP Server (<code>@justlend/mcp-server-justlend</code>) is a <a href="https://modelcontextprotocol.io/">Model Context Protocol</a> server that enables AI agents to interact with the <strong>JustLend DAO</strong> protocol on TRON. Supply assets, borrow against collateral, manage positions, rent energy, stake TRX for sTRX, and analyze DeFi portfolios — all through a unified AI interface.</p>
 <p>Beyond JustLend-specific operations, the server also exposes a full set of <strong>general-purpose TRON chain utilities</strong> — balance queries, block/transaction data, token metadata, TRX transfers, smart contract reads/writes, staking (Stake 2.0), multicall, and more.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -1699,6 +1699,8 @@
 <li><strong>Portfolio Analysis</strong>: AI-guided risk assessment, health factor monitoring, optimization</li>
 <li><strong>Token Approvals</strong>: Manage TRC20 approvals for jToken contracts</li>
 <li><strong>JST Voting / Governance</strong>: View proposals, cast votes, deposit/withdraw JST for voting power, reclaim votes</li>
+<li><strong>Energy Rental</strong>: Rent energy from JustLend, calculate rental prices, query rental orders, return/cancel rentals</li>
+<li><strong>sTRX Staking</strong>: Stake TRX to receive sTRX, unstake sTRX, claim staking rewards, check withdrawal eligibility</li>
 </ul>
 <p><strong>General TRON Chain</strong></p>
 <ul>
@@ -1833,7 +1835,7 @@ npm<span class="w"> </span>run<span class="w"> </span>start:http
 npm<span class="w"> </span>run<span class="w"> </span>dev
 </code></pre></div>
 <h2 id="api-reference">API Reference<a class="headerlink" href="#api-reference" title="Permanent link">&para;</a></h2>
-<h3 id="tools-34-total">Tools (34 total)<a class="headerlink" href="#tools-34-total" title="Permanent link">&para;</a></h3>
+<h3 id="tools-50-total">Tools (50 total)<a class="headerlink" href="#tools-50-total" title="Permanent link">&para;</a></h3>
 <h4 id="wallet-network">Wallet &amp; Network<a class="headerlink" href="#wallet-network" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
@@ -2059,6 +2061,110 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 </tr>
 </tbody>
 </table>
+<h4 id="energy-rental">Energy Rental<a class="headerlink" href="#energy-rental" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Description</th>
+<th>Write?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>get_energy_rental_dashboard</code></td>
+<td>Market data: TRX price, exchange rate, APY, energy per TRX</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>get_energy_rental_params</code></td>
+<td>On-chain params: fees, limits, pause status, usage charge ratio</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>calculate_energy_rental_price</code></td>
+<td>Estimate cost for renting energy (prepayment, deposit, daily cost)</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>get_energy_rental_rate</code></td>
+<td>Current rental rate for a given TRX amount</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>get_user_energy_rental_orders</code></td>
+<td>User's rental orders (as renter, receiver, or all)</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>get_energy_rent_info</code></td>
+<td>On-chain rental info for a renter-receiver pair</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>get_return_rental_info</code></td>
+<td>Return/cancel estimation (refund, remaining rent, daily cost)</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>rent_energy</code></td>
+<td>Rent energy for a receiver (with balance, pause, limit checks)</td>
+<td><strong>Yes</strong></td>
+</tr>
+<tr>
+<td><code>return_energy_rental</code></td>
+<td>Cancel an active rental (with active order check)</td>
+<td><strong>Yes</strong></td>
+</tr>
+</tbody>
+</table>
+<h4 id="strx-staking">sTRX Staking<a class="headerlink" href="#strx-staking" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Description</th>
+<th>Write?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>get_strx_dashboard</code></td>
+<td>Staking market data: exchange rate, APY, total supply</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>get_strx_account</code></td>
+<td>User staking account: staked amount, income, rewards</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>get_strx_balance</code></td>
+<td>sTRX token balance for an address</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>check_strx_withdrawal_eligibility</code></td>
+<td>Check unbonding status, pending/completed withdrawal rounds</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>stake_trx_to_strx</code></td>
+<td>Stake TRX to receive sTRX (with balance check)</td>
+<td><strong>Yes</strong></td>
+</tr>
+<tr>
+<td><code>unstake_strx</code></td>
+<td>Unstake sTRX to receive TRX back (with balance check)</td>
+<td><strong>Yes</strong></td>
+</tr>
+<tr>
+<td><code>claim_strx_rewards</code></td>
+<td>Claim all staking rewards (with rewards existence check)</td>
+<td><strong>Yes</strong></td>
+</tr>
+</tbody>
+</table>
 <h3 id="prompts-ai-guided-workflows">Prompts (AI-Guided Workflows)<a class="headerlink" href="#prompts-ai-guided-workflows" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -2087,6 +2193,14 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 <tr>
 <td><code>compare_markets</code></td>
 <td>Find best supply/borrow opportunities</td>
+</tr>
+<tr>
+<td><code>rent_energy</code></td>
+<td>Guided energy rental with price estimation and balance checks</td>
+</tr>
+<tr>
+<td><code>stake_trx</code></td>
+<td>Guided TRX staking to sTRX with APY info and verification</td>
 </tr>
 </tbody>
 </table>
@@ -2118,6 +2232,18 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 → AI checks <code>get_vote_info</code> → if no votes, suggests <code>approve_jst_for_voting</code> + <code>deposit_jst_for_votes</code> → then <code>cast_vote</code></p>
 <p><strong>"Withdraw my votes from completed proposals"</strong>
 → AI calls <code>get_user_vote_status</code> to find withdrawable proposals → calls <code>withdraw_votes_from_proposal</code> for each</p>
+<p><strong>"How much does it cost to rent 300,000 energy for 7 days?"</strong>
+→ AI calls <code>calculate_energy_rental_price</code> with energyAmount=300000, durationDays=7, returns cost breakdown</p>
+<p><strong>"Rent 500,000 energy to address TXxx... for 14 days"</strong>
+→ AI uses <code>rent_energy</code> prompt: checks balance → checks rental status → calculates price → rents energy → verifies</p>
+<p><strong>"Cancel my energy rental to TXxx..."</strong>
+→ AI calls <code>get_energy_rent_info</code> to verify active rental → calls <code>return_energy_rental</code> → confirms refund</p>
+<p><strong>"Stake 1000 TRX to earn sTRX rewards"</strong>
+→ AI uses <code>stake_trx</code> prompt: checks balance → checks exchange rate &amp; APY → stakes TRX → verifies sTRX received</p>
+<p><strong>"Do I have any sTRX rewards to claim?"</strong>
+→ AI calls <code>get_strx_account</code> to check claimable rewards → calls <code>claim_strx_rewards</code> if available</p>
+<p><strong>"Can I withdraw my unstaked TRX?"</strong>
+→ AI calls <code>check_strx_withdrawal_eligibility</code> to check unbonding status and completed withdrawal rounds</p>
 
 
 
