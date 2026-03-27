@@ -1207,6 +1207,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item ">
+  <a href="#wallet-setup-v102" class="md-nav__link" >
+    <span class="md-ellipsis">
+      Wallet Setup (v1.0.2+)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item ">
   <a href="#environment-variables" class="md-nav__link" >
     <span class="md-ellipsis">
       Environment Variables
@@ -1249,9 +1258,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item ">
-  <a href="#tools-50-total" class="md-nav__link" >
+  <a href="#tools-54-total" class="md-nav__link" >
     <span class="md-ellipsis">
-      Tools (50 total)
+      Tools (54 total)
     </span>
   </a>
   
@@ -1667,7 +1676,7 @@
 <p>Beyond JustLend-specific operations, the server also exposes a full set of <strong>general-purpose TRON chain utilities</strong> — balance queries, block/transaction data, token metadata, TRX transfers, smart contract reads/writes, staking (Stake 2.0), multicall, and more.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Current version supports <strong>JustLend V1</strong> protocol. All contract addresses, ABIs, calculation functions, and lending operations are for V1.</p>
+<p>Current version (<strong>v1.0.2</strong>) supports <strong>JustLend V1</strong> protocol. All contract addresses, ABIs, calculation functions, and lending operations are for V1.</p>
 </div>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
 <p><a href="https://justlend.org">JustLend DAO</a> is the largest lending protocol on TRON, based on the Compound V2 architecture. This MCP server wraps the full protocol functionality into tools and guided prompts that AI agents (Claude Desktop, Cursor, etc.) can use.</p>
@@ -1712,7 +1721,7 @@
 <li><strong>Transfers</strong>: Send TRX, transfer TRC20 tokens, approve spenders</li>
 <li><strong>Staking (Stake 2.0)</strong>: Freeze/unfreeze TRX for BANDWIDTH or ENERGY, withdraw expired unfreeze</li>
 <li><strong>Address Utilities</strong>: Hex ↔ Base58 conversion, address validation, resolution</li>
-<li><strong>Wallet</strong>: Sign messages, sign typed data (EIP-712), HD wallet derivation from mnemonic</li>
+<li><strong>Wallet</strong>: Encrypted local wallet management via agent-wallet, multi-wallet support, sign messages, sign typed data (EIP-712)</li>
 </ul>
 <h2 id="supported-markets">Supported Markets<a class="headerlink" href="#supported-markets" title="Permanent link">&para;</a></h2>
 <table>
@@ -1777,19 +1786,37 @@
 npm<span class="w"> </span>install
 </code></pre></div>
 <h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
-<h3 id="environment-variables">Environment Variables<a class="headerlink" href="#environment-variables" title="Permanent link">&para;</a></h3>
-<div class="admonition warning">
-<p class="admonition-title">Security</p>
-<p>Never save private keys in config files. Use environment variables.</p>
-</div>
-<div class="highlight"><pre><span></span><code><span class="c1"># Required for write operations (supply, borrow, transfer, stake, etc.)</span>
-<span class="nb">export</span><span class="w"> </span><span class="nv">TRON_PRIVATE_KEY</span><span class="o">=</span><span class="s2">&quot;your_private_key_hex&quot;</span>
-<span class="c1"># OR use a mnemonic phrase</span>
-<span class="nb">export</span><span class="w"> </span><span class="nv">TRON_MNEMONIC</span><span class="o">=</span><span class="s2">&quot;word1 word2 ... word12&quot;</span>
-<span class="nb">export</span><span class="w"> </span><span class="nv">TRON_ACCOUNT_INDEX</span><span class="o">=</span><span class="s2">&quot;0&quot;</span><span class="w">   </span><span class="c1"># Optional HD wallet account index, default: 0</span>
+<h3 id="wallet-setup-v102">Wallet Setup (v1.0.2+)<a class="headerlink" href="#wallet-setup-v102" title="Permanent link">&para;</a></h3>
+<p>Starting from v1.0.2, private keys are managed by <a href="https://www.npmjs.com/package/@bankofai/agent-wallet"><code>@bankofai/agent-wallet</code></a> — an encrypted local wallet solution. Private keys are <strong>never</strong> stored in environment variables, config files, or passed as function parameters. They are encrypted at rest in <code>~/.agent-wallet/</code> with proper file permissions (<code>0600</code>).</p>
+<h4 id="zero-config-auto-generation">Zero-Config Auto-Generation<a class="headerlink" href="#zero-config-auto-generation" title="Permanent link">&para;</a></h4>
+<p>Simply start the server — if no wallet exists, one is automatically generated:</p>
+<div class="highlight"><pre><span></span><code>npm<span class="w"> </span>start
+<span class="c1"># → Wallet: auto-generated new wallet &quot;default&quot;</span>
+<span class="c1"># → Address: TXxx...xxx</span>
+<span class="c1"># → Encrypted private key stored in ~/.agent-wallet/</span>
+</code></pre></div>
+<p>The wallet persists across restarts (the address does not change).</p>
+<h4 id="import-an-existing-wallet">Import an Existing Wallet<a class="headerlink" href="#import-an-existing-wallet" title="Permanent link">&para;</a></h4>
+<p>To use an existing private key, import it via the <code>agent-wallet</code> CLI (recommended over MCP tool to avoid key exposure in conversation logs):</p>
+<div class="highlight"><pre><span></span><code>npx<span class="w"> </span>agent-wallet<span class="w"> </span>import<span class="w"> </span>&lt;wallet-name&gt;<span class="w"> </span>--private-key<span class="w"> </span>&lt;hex&gt;
+npx<span class="w"> </span>agent-wallet<span class="w"> </span>import<span class="w"> </span>&lt;wallet-name&gt;<span class="w"> </span>--mnemonic<span class="w"> </span><span class="s2">&quot;word1 word2 ... word12&quot;</span>
+</code></pre></div>
+<h4 id="multi-wallet-management">Multi-Wallet Management<a class="headerlink" href="#multi-wallet-management" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="c1"># List all wallets</span>
+npx<span class="w"> </span>agent-wallet<span class="w"> </span>list
 
-<span class="c1"># Strongly recommended — avoids TronGrid 429 rate limiting on mainnet</span>
+<span class="c1"># Set active wallet</span>
+npx<span class="w"> </span>agent-wallet<span class="w"> </span>use<span class="w"> </span>&lt;wallet-name&gt;
+</code></pre></div>
+<p>You can also manage wallets at runtime via the MCP tools <code>list_wallets</code>, <code>set_active_wallet</code>, and <code>import_wallet</code>.</p>
+<h3 id="environment-variables">Environment Variables<a class="headerlink" href="#environment-variables" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># Strongly recommended — avoids TronGrid 429 rate limiting on mainnet</span>
 <span class="nb">export</span><span class="w"> </span><span class="nv">TRONGRID_API_KEY</span><span class="o">=</span><span class="s2">&quot;your_trongrid_api_key&quot;</span>
+
+<span class="c1"># Optional: HTTP/SSE transport mode</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MCP_TRANSPORT</span><span class="o">=</span><span class="s2">&quot;http&quot;</span><span class="w">       </span><span class="c1"># Use HTTP/SSE instead of stdio</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MCP_HTTP_PORT</span><span class="o">=</span><span class="s2">&quot;3000&quot;</span><span class="w">       </span><span class="c1"># HTTP server port (default: 3000)</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MCP_HTTP_HOST</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="w">  </span><span class="c1"># HTTP server host (default: 127.0.0.1)</span>
 </code></pre></div>
 <h3 id="client-configuration">Client Configuration<a class="headerlink" href="#client-configuration" title="Permanent link">&para;</a></h3>
 <h4 id="claude-desktop">Claude Desktop<a class="headerlink" href="#claude-desktop" title="Permanent link">&para;</a></h4>
@@ -1801,13 +1828,16 @@ npm<span class="w"> </span>install
 <span class="w">      </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;npx&quot;</span><span class="p">,</span>
 <span class="w">      </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;tsx&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@justlend/mcp-server-justlend&quot;</span><span class="p">],</span>
 <span class="w">      </span><span class="nt">&quot;env&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;TRONGRID_API_KEY&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SET_VIA_SYSTEM_ENV&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;TRON_PRIVATE_KEY&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SET_VIA_SYSTEM_ENV&quot;</span>
+<span class="w">        </span><span class="nt">&quot;TRONGRID_API_KEY&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SET_VIA_SYSTEM_ENV&quot;</span>
 <span class="w">      </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>No <code>TRON_PRIVATE_KEY</code> needed — the server uses the encrypted agent-wallet automatically.</p>
+</div>
 <h4 id="cursor">Cursor<a class="headerlink" href="#cursor" title="Permanent link">&para;</a></h4>
 <p>Add to <code>.cursor/mcp.json</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
@@ -1817,8 +1847,7 @@ npm<span class="w"> </span>install
 <span class="w">      </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;npx&quot;</span><span class="p">,</span>
 <span class="w">      </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;tsx&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@justlend/mcp-server-justlend&quot;</span><span class="p">],</span>
 <span class="w">      </span><span class="nt">&quot;env&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;TRONGRID_API_KEY&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SET_VIA_SYSTEM_ENV&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;TRON_PRIVATE_KEY&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SET_VIA_SYSTEM_ENV&quot;</span>
+<span class="w">        </span><span class="nt">&quot;TRONGRID_API_KEY&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SET_VIA_SYSTEM_ENV&quot;</span>
 <span class="w">      </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">  </span><span class="p">}</span>
@@ -1835,7 +1864,7 @@ npm<span class="w"> </span>run<span class="w"> </span>start:http
 npm<span class="w"> </span>run<span class="w"> </span>dev
 </code></pre></div>
 <h2 id="api-reference">API Reference<a class="headerlink" href="#api-reference" title="Permanent link">&para;</a></h2>
-<h3 id="tools-50-total">Tools (50 total)<a class="headerlink" href="#tools-50-total" title="Permanent link">&para;</a></h3>
+<h3 id="tools-54-total">Tools (54 total)<a class="headerlink" href="#tools-54-total" title="Permanent link">&para;</a></h3>
 <h4 id="wallet-network">Wallet &amp; Network<a class="headerlink" href="#wallet-network" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
@@ -1848,8 +1877,23 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 <tbody>
 <tr>
 <td><code>get_wallet_address</code></td>
-<td>Show configured wallet address</td>
+<td>Show active wallet address</td>
 <td>No</td>
+</tr>
+<tr>
+<td><code>list_wallets</code></td>
+<td>List all wallets managed by agent-wallet</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>set_active_wallet</code></td>
+<td>Switch the active wallet by name</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>import_wallet</code></td>
+<td>Import a wallet from private key or mnemonic (CLI import recommended for security)</td>
+<td><strong>Yes</strong></td>
 </tr>
 <tr>
 <td><code>get_supported_networks</code></td>
@@ -2206,12 +2250,13 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 </table>
 <h2 id="security-considerations">Security Considerations<a class="headerlink" href="#security-considerations" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Private keys</strong> are read from environment variables only, never exposed via MCP tools</li>
+<li><strong>Encrypted wallet</strong>: Private keys are encrypted at rest in <code>~/.agent-wallet/</code> with file permissions <code>0600</code>/<code>0700</code> — never stored in environment variables or config files</li>
+<li><strong>No key in parameters</strong>: All signing functions use the agent-wallet internally; private keys are never passed as function parameters or exposed via MCP tools</li>
+<li><strong>Import via CLI</strong>: Use <code>npx agent-wallet import</code> from a terminal rather than the <code>import_wallet</code> MCP tool to avoid key exposure in AI conversation logs</li>
 <li><strong>Write operations</strong> are clearly marked with <code>destructiveHint: true</code> in MCP annotations</li>
 <li><strong>Health factor checks</strong> in prompts prevent dangerous borrowing</li>
 <li>Always <strong>test on Nile testnet</strong> before mainnet operations</li>
 <li>Be cautious with <strong>unlimited approvals</strong> (<code>approve_underlying</code> with <code>max</code>)</li>
-<li><strong>Never share</strong> your <code>claude_desktop_config.json</code> if it contains keys</li>
 </ul>
 <h2 id="example-conversations">Example Conversations<a class="headerlink" href="#example-conversations" title="Permanent link">&para;</a></h2>
 <p><strong>"What are the best supply rates on JustLend right now?"</strong>
