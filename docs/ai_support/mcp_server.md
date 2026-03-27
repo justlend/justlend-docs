@@ -7,7 +7,7 @@ The JustLend MCP Server (`@justlend/mcp-server-justlend`) is a [Model Context Pr
 Beyond JustLend-specific operations, the server also exposes a full set of **general-purpose TRON chain utilities** — balance queries, block/transaction data, token metadata, TRX transfers, smart contract reads/writes, staking (Stake 2.0), multicall, and more.
 
 !!! note
-    Current version supports **JustLend V1** protocol. All contract addresses, ABIs, calculation functions, and lending operations are for V1.
+    Current version (**v1.0.2**) supports **JustLend V1** protocol. All contract addresses, ABIs, calculation functions, and lending operations are for V1.
 
 ## Overview
 
@@ -49,7 +49,7 @@ Beyond JustLend-specific operations, the server also exposes a full set of **gen
 - **Transfers**: Send TRX, transfer TRC20 tokens, approve spenders
 - **Staking (Stake 2.0)**: Freeze/unfreeze TRX for BANDWIDTH or ENERGY, withdraw expired unfreeze
 - **Address Utilities**: Hex ↔ Base58 conversion, address validation, resolution
-- **Wallet**: Sign messages, sign typed data (EIP-712), HD wallet derivation from mnemonic
+- **Wallet**: Encrypted local wallet management via agent-wallet, multi-wallet support, sign messages, sign typed data (EIP-712)
 
 ## Supported Markets
 
@@ -79,20 +79,54 @@ npm install
 
 ## Configuration
 
-### Environment Variables
+### Wallet Setup (v1.0.2+)
 
-!!! warning "Security"
-    Never save private keys in config files. Use environment variables.
+Starting from v1.0.2, private keys are managed by [`@bankofai/agent-wallet`](https://www.npmjs.com/package/@bankofai/agent-wallet) — an encrypted local wallet solution. Private keys are **never** stored in environment variables, config files, or passed as function parameters. They are encrypted at rest in `~/.agent-wallet/` with proper file permissions (`0600`).
+
+#### Zero-Config Auto-Generation
+
+Simply start the server — if no wallet exists, one is automatically generated:
 
 ```bash
-# Required for write operations (supply, borrow, transfer, stake, etc.)
-export TRON_PRIVATE_KEY="your_private_key_hex"
-# OR use a mnemonic phrase
-export TRON_MNEMONIC="word1 word2 ... word12"
-export TRON_ACCOUNT_INDEX="0"   # Optional HD wallet account index, default: 0
+npm start
+# → Wallet: auto-generated new wallet "default"
+# → Address: TXxx...xxx
+# → Encrypted private key stored in ~/.agent-wallet/
+```
 
+The wallet persists across restarts (the address does not change).
+
+#### Import an Existing Wallet
+
+To use an existing private key, import it via the `agent-wallet` CLI (recommended over MCP tool to avoid key exposure in conversation logs):
+
+```bash
+npx agent-wallet import <wallet-name> --private-key <hex>
+npx agent-wallet import <wallet-name> --mnemonic "word1 word2 ... word12"
+```
+
+#### Multi-Wallet Management
+
+```bash
+# List all wallets
+npx agent-wallet list
+
+# Set active wallet
+npx agent-wallet use <wallet-name>
+```
+
+You can also manage wallets at runtime via the MCP tools `list_wallets`, `set_active_wallet`, and `import_wallet`.
+
+### Environment Variables
+
+```bash
 # Strongly recommended — avoids TronGrid 429 rate limiting on mainnet
 export TRONGRID_API_KEY="your_trongrid_api_key"
+
+# Optional: HTTP/SSE transport mode
+export MCP_TRANSPORT="http"       # Use HTTP/SSE instead of stdio
+export MCP_HTTP_PORT="3000"       # HTTP server port (default: 3000)
+export MCP_HTTP_HOST="127.0.0.1"  # HTTP server host (default: 127.0.0.1)
 ```
 
 ### Client Configuration
@@ -109,13 +143,15 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
       "command": "npx",
       "args": ["tsx", "@justlend/mcp-server-justlend"],
       "env": {
-        "TRONGRID_API_KEY": "SET_VIA_SYSTEM_ENV",
-        "TRON_PRIVATE_KEY": "SET_VIA_SYSTEM_ENV"
+        "TRONGRID_API_KEY": "SET_VIA_SYSTEM_ENV"
       }
     }
   }
 }
 ```
+
+!!! tip
+    No `TRON_PRIVATE_KEY` needed — the server uses the encrypted agent-wallet automatically.
 
 #### Cursor
 
@@ -129,8 +165,7 @@ Add to `.cursor/mcp.json`:
       "command": "npx",
       "args": ["tsx", "@justlend/mcp-server-justlend"],
       "env": {
-        "TRONGRID_API_KEY": "SET_VIA_SYSTEM_ENV",
-        "TRON_PRIVATE_KEY": "SET_VIA_SYSTEM_ENV"
+        "TRONGRID_API_KEY": "SET_VIA_SYSTEM_ENV"
       }
     }
   }
@@ -152,13 +187,16 @@ npm run dev
 
 ## API Reference
 
-### Tools (50 total)
+### Tools (54 total)
 
 #### Wallet & Network
 
 | Tool | Description | Write? |
 |------|-------------|--------|
-| `get_wallet_address` | Show configured wallet address | No |
+| `get_wallet_address` | Show active wallet address | No |
+| `list_wallets` | List all wallets managed by agent-wallet | No |
+| `set_active_wallet` | Switch the active wallet by name | No |
+| `import_wallet` | Import a wallet from private key or mnemonic (CLI import recommended for security) | **Yes** |
 | `get_supported_networks` | List available networks | No |
 | `get_supported_markets` | List all jToken markets with addresses | No |
 
@@ -252,12 +290,13 @@ npm run dev
 
 ## Security Considerations
 
-- **Private keys** are read from environment variables only, never exposed via MCP tools
+- **Encrypted wallet**: Private keys are encrypted at rest in `~/.agent-wallet/` with file permissions `0600`/`0700` — never stored in environment variables or config files
+- **No key in parameters**: All signing functions use the agent-wallet internally; private keys are never passed as function parameters or exposed via MCP tools
+- **Import via CLI**: Use `npx agent-wallet import` from a terminal rather than the `import_wallet` MCP tool to avoid key exposure in AI conversation logs
 - **Write operations** are clearly marked with `destructiveHint: true` in MCP annotations
 - **Health factor checks** in prompts prevent dangerous borrowing
 - Always **test on Nile testnet** before mainnet operations
 - Be cautious with **unlimited approvals** (`approve_underlying` with `max`)
-- **Never share** your `claude_desktop_config.json` if it contains keys
 
 ## Example Conversations
 
