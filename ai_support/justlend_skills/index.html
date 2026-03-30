@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://docs.justlend.org/ai_support/mcp_server/">
+        <link rel="canonical" href="https://docs.justlend.org/ai_support/justlend_skills/">
       
       
-        <link rel="prev" href="../../developers/apis/">
+        <link rel="prev" href="../mcp_server/">
       
       
-        <link rel="next" href="../justlend_skills/">
+        <link rel="next" href="../../resources/community/links/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -22,7 +22,7 @@
     
     
       
-        <title>MCP Server - JustLend DAO Documentation</title>
+        <title>JustLend Skills - JustLend DAO Documentation</title>
       
     
     
@@ -68,7 +68,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#mcp-server" class="md-skip">
+        <a href="#justlend-skills" class="md-skip">
           Skip to content
         </a>
       
@@ -104,7 +104,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              MCP Server
+              JustLend Skills
             
           </span>
         </div>
@@ -1095,6 +1095,28 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../mcp_server/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MCP Server
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -1111,7 +1133,7 @@
           
   
   <span class="md-ellipsis">
-    MCP Server
+    JustLend Skills
     
   </span>
   
@@ -1123,7 +1145,7 @@
         
   
   <span class="md-ellipsis">
-    MCP Server
+    JustLend Skills
     
   </span>
   
@@ -1159,6 +1181,15 @@
   <a href="#key-capabilities" class="md-nav__link" >
     <span class="md-ellipsis">
       Key Capabilities
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item ">
+  <a href="#skill-modules" class="md-nav__link" >
+    <span class="md-ellipsis">
+      Skill Modules
     </span>
   </a>
   
@@ -1207,24 +1238,6 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item ">
-  <a href="#wallet-setup-v102" class="md-nav__link" >
-    <span class="md-ellipsis">
-      Wallet Setup (v1.0.2+)
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item ">
-  <a href="#environment-variables" class="md-nav__link" >
-    <span class="md-ellipsis">
-      Environment Variables
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item ">
   <a href="#client-configuration" class="md-nav__link" >
     <span class="md-ellipsis">
       Client Configuration
@@ -1238,38 +1251,113 @@
   
 </li>
       
-        <li class="md-nav__item ">
-  <a href="#usage" class="md-nav__link" >
+        <li class="md-nav__item has-children">
+  <a href="#usage" class="md-nav__link" onclick="toggleChildren(event)" aria-expanded="false">
     <span class="md-ellipsis">
       Usage
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item has-children">
-  <a href="#api-reference" class="md-nav__link" onclick="toggleChildren(event)" aria-expanded="false">
-    <span class="md-ellipsis">
-      API Reference
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="API Reference" hidden>
+    <nav class="md-nav" aria-label="Usage" hidden>
       <ul class="md-nav__list">
         
           <li class="md-nav__item ">
-  <a href="#tools-54-total" class="md-nav__link" >
+  <a href="#mcp-server-mode" class="md-nav__link" >
     <span class="md-ellipsis">
-      Tools (54 total)
+      MCP Server Mode
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item ">
-  <a href="#prompts-ai-guided-workflows" class="md-nav__link" >
+  <a href="#cli-tool-mode" class="md-nav__link" >
     <span class="md-ellipsis">
-      Prompts (AI-Guided Workflows)
+      CLI Tool Mode
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item has-children">
+  <a href="#skills-reference" class="md-nav__link" onclick="toggleChildren(event)" aria-expanded="false">
+    <span class="md-ellipsis">
+      Skills Reference
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Skills Reference" hidden>
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item ">
+  <a href="#justlend-lending-justlend-lending-v1" class="md-nav__link" >
+    <span class="md-ellipsis">
+      JustLend Lending (justlend-lending-v1)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item ">
+  <a href="#strx-staking-justlend-trx-staking" class="md-nav__link" >
+    <span class="md-ellipsis">
+      sTRX Staking (justlend-trx-staking)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item ">
+  <a href="#energy-rental-justlend-energy-rental" class="md-nav__link" >
+    <span class="md-ellipsis">
+      Energy Rental (justlend-energy-rental)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item ">
+  <a href="#dao-governance-justlend-governance-v1" class="md-nav__link" >
+    <span class="md-ellipsis">
+      DAO Governance (justlend-governance-v1)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item has-children">
+  <a href="#mcp-tools-reference" class="md-nav__link" onclick="toggleChildren(event)" aria-expanded="false">
+    <span class="md-ellipsis">
+      MCP Tools Reference
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="MCP Tools Reference" hidden>
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item ">
+  <a href="#read-only-tools" class="md-nav__link" >
+    <span class="md-ellipsis">
+      Read-Only Tools
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item ">
+  <a href="#write-operations" class="md-nav__link" >
+    <span class="md-ellipsis">
+      Write Operations
     </span>
   </a>
   
@@ -1298,32 +1386,70 @@
   
 </li>
       
+        <li class="md-nav__item has-children">
+  <a href="#troubleshooting" class="md-nav__link" onclick="toggleChildren(event)" aria-expanded="false">
+    <span class="md-ellipsis">
+      Troubleshooting
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting" hidden>
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item ">
+  <a href="#out_of_energy-or-bandwidth_error" class="md-nav__link" >
+    <span class="md-ellipsis">
+      OUT_OF_ENERGY or BANDWIDTH_ERROR
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item ">
+  <a href="#revert-on-supplyrepay" class="md-nav__link" >
+    <span class="md-ellipsis">
+      REVERT on Supply/Repay
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item ">
+  <a href="#exit_market-failure" class="md-nav__link" >
+    <span class="md-ellipsis">
+      exit_market Failure
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item ">
+  <a href="#private-key-not-configured" class="md-nav__link" >
+    <span class="md-ellipsis">
+      Private Key Not Configured
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item ">
+  <a href="#trongrid-api-errors" class="md-nav__link" >
+    <span class="md-ellipsis">
+      TronGrid API Errors
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../justlend_skills/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    JustLend Skills
-    
-  </span>
-  
-
-      </a>
     </li>
   
 
@@ -1692,59 +1818,57 @@
 
 
 
-<h1 id="mcp-server">MCP Server<a class="headerlink" href="#mcp-server" title="Permanent link">&para;</a></h1>
-<p><strong>GitHub</strong>: <a href="https://github.com/justlend/mcp-server-justlend">https://github.com/justlend/mcp-server-justlend</a></p>
-<p>The JustLend MCP Server (<code>@justlend/mcp-server-justlend</code>) is a <a href="https://modelcontextprotocol.io/">Model Context Protocol</a> server that enables AI agents to interact with the <strong>JustLend DAO</strong> protocol on TRON. Supply assets, borrow against collateral, manage positions, rent energy, stake TRX for sTRX, and analyze DeFi portfolios — all through a unified AI interface.</p>
-<p>Beyond JustLend-specific operations, the server also exposes a full set of <strong>general-purpose TRON chain utilities</strong> — balance queries, block/transaction data, token metadata, TRX transfers, smart contract reads/writes, staking (Stake 2.0), multicall, and more.</p>
+<h1 id="justlend-skills">JustLend Skills<a class="headerlink" href="#justlend-skills" title="Permanent link">&para;</a></h1>
+<p><strong>GitHub</strong>: <a href="https://github.com/justlend/justlend-skills">https://github.com/justlend/justlend-skills</a></p>
+<p>JustLend Skills (<code>@justlend/justlend-skills</code>) is an AI Agent skills package for the <strong>JustLend DAO</strong> protocol on TRON. It provides structured skill instructions and a lightweight <a href="https://modelcontextprotocol.io/">MCP server</a> (15 tools) that enables AI agents (Claude Code, Claude Desktop, Cursor, Codex, etc.) to query market data, manage lending positions, and execute DeFi operations.</p>
+<p>It also works as a standalone <strong>CLI tool</strong> for quick market checks and lending operations directly from the terminal.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Current version (<strong>v1.0.2</strong>) supports <strong>JustLend V1</strong> protocol. All contract addresses, ABIs, calculation functions, and lending operations are for V1.</p>
+<p>For advanced features (sTRX staking, energy rental, governance voting, 54 tools, 24+ markets), use the full MCP server: <a href="../mcp_server/">@justlend/mcp-server-justlend</a>.</p>
 </div>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
-<p><a href="https://justlend.org">JustLend DAO</a> is the largest lending protocol on TRON, based on the Compound V2 architecture. This MCP server wraps the full protocol functionality into tools and guided prompts that AI agents (Claude Desktop, Cursor, etc.) can use.</p>
+<p><a href="https://justlend.org">JustLend DAO</a> is the largest lending protocol on TRON, based on the Compound V2 architecture. JustLend Skills wraps the core lending functionality into MCP tools and structured skill instructions that AI agents can use.</p>
 <h3 id="key-capabilities">Key Capabilities<a class="headerlink" href="#key-capabilities" title="Permanent link">&para;</a></h3>
-<p><strong>JustLend Protocol</strong></p>
 <ul>
-<li><strong>Market Data</strong>: Real-time APYs, TVL, utilization rates, prices for all markets<ul>
-<li>Direct contract queries for on-chain accuracy</li>
-<li>API-based queries for comprehensive market data (more stable, includes historical data and mining rewards)</li>
+<li><strong>Market Data</strong>: Real-time APYs (including mining rewards), TVL, utilization rates for all markets</li>
+<li><strong>Protocol Dashboard</strong>: Total supply, borrow volume, TVL, and user count across the protocol</li>
+<li><strong>Account Analysis</strong>: Health factor monitoring, liquidation risk assessment, balance queries</li>
+<li><strong>Lending Operations</strong>: Supply assets, borrow against collateral, repay loans, withdraw positions</li>
+<li><strong>Token Approvals</strong>: Check and manage TRC20 approvals for JustLend contracts</li>
 </ul>
-</li>
-<li><strong>Account Data</strong>: Full position analysis with API support<ul>
-<li>Contract-based: Health factor, collateral, borrow positions</li>
-<li>API-based: Enhanced data with mining rewards, historical trends, risk metrics</li>
-</ul>
-</li>
-<li><strong>Mining Rewards</strong>: Advanced mining reward calculation<ul>
-<li>Detailed breakdown by market and reward token (USDD, TRX, WBTC, etc.)</li>
-<li>Separates new period vs. last period rewards</li>
-<li>USD value calculation with live token prices</li>
-<li>Mining status tracking (ongoing/paused/ended) and period end times</li>
-</ul>
-</li>
-<li><strong>Supply</strong>: Deposit TRX or TRC20 tokens to earn interest (mint jTokens)</li>
-<li><strong>Borrow</strong>: Borrow assets against your collateral with health factor monitoring</li>
-<li><strong>Repay</strong>: Repay outstanding borrows with full or partial amounts</li>
-<li><strong>Withdraw</strong>: Redeem jTokens back to underlying assets</li>
-<li><strong>Collateral Management</strong>: Enter/exit markets, manage what counts as collateral</li>
-<li><strong>Portfolio Analysis</strong>: AI-guided risk assessment, health factor monitoring, optimization</li>
-<li><strong>Token Approvals</strong>: Manage TRC20 approvals for jToken contracts</li>
-<li><strong>JST Voting / Governance</strong>: View proposals, cast votes, deposit/withdraw JST for voting power, reclaim votes</li>
-<li><strong>Energy Rental</strong>: Rent energy from JustLend, calculate rental prices, query rental orders, return/cancel rentals</li>
-<li><strong>sTRX Staking</strong>: Stake TRX to receive sTRX, unstake sTRX, claim staking rewards, check withdrawal eligibility</li>
-</ul>
-<p><strong>General TRON Chain</strong></p>
-<ul>
-<li><strong>Balances</strong>: TRX balance (with Sun/TRX conversion), TRC20/TRC1155 token balances</li>
-<li><strong>Blocks</strong>: Latest block, block by number/hash, block number, chain ID</li>
-<li><strong>Transactions</strong>: Fetch transaction details, receipts, wait for confirmation</li>
-<li><strong>Contracts</strong>: Read/write any contract, fetch on-chain ABI, multicall (v2 &amp; v3), deploy, estimate energy</li>
-<li><strong>Token Metadata</strong>: TRC20 info (name/symbol/decimals/supply), TRC721 metadata, TRC1155 URI</li>
-<li><strong>Transfers</strong>: Send TRX, transfer TRC20 tokens, approve spenders</li>
-<li><strong>Staking (Stake 2.0)</strong>: Freeze/unfreeze TRX for BANDWIDTH or ENERGY, withdraw expired unfreeze</li>
-<li><strong>Address Utilities</strong>: Hex ↔ Base58 conversion, address validation, resolution</li>
-<li><strong>Wallet</strong>: Encrypted local wallet management via agent-wallet, multi-wallet support, sign messages, sign typed data (EIP-712)</li>
-</ul>
+<h3 id="skill-modules">Skill Modules<a class="headerlink" href="#skill-modules" title="Permanent link">&para;</a></h3>
+<p>The project includes 4 structured skill modules in the <code>/skills</code> directory that provide AI agents with domain-specific instructions and workflows:</p>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>Description</th>
+<th>MCP Server Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>justlend-lending-v1</strong></td>
+<td>Supply, borrow, repay, withdraw workflows with health factor monitoring</td>
+<td>JustLend Skills (built-in)</td>
+</tr>
+<tr>
+<td><strong>justlend-trx-staking</strong></td>
+<td>Stake TRX for sTRX liquid staking tokens</td>
+<td>Full MCP Server</td>
+</tr>
+<tr>
+<td><strong>justlend-energy-rental</strong></td>
+<td>Rent TRON Energy at discounted rates (50-80% cheaper)</td>
+<td>Full MCP Server</td>
+</tr>
+<tr>
+<td><strong>justlend-governance-v1</strong></td>
+<td>View proposals, deposit JST for voting power, cast votes</td>
+<td>Full MCP Server</td>
+</tr>
+</tbody>
+</table>
 <h2 id="supported-markets">Supported Markets<a class="headerlink" href="#supported-markets" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -1766,6 +1890,11 @@
 <td>Tether USD</td>
 </tr>
 <tr>
+<td>jUSDD</td>
+<td>USDD</td>
+<td>Decentralized USD</td>
+</tr>
+<tr>
 <td>jUSDC</td>
 <td>USDC</td>
 <td>USD Coin</td>
@@ -1773,544 +1902,317 @@
 <tr>
 <td>jBTC</td>
 <td>BTC</td>
-<td>Bitcoin (wrapped)</td>
+<td>Bitcoin (TRC20)</td>
 </tr>
 <tr>
 <td>jETH</td>
 <td>ETH</td>
-<td>Ethereum (wrapped)</td>
+<td>Ethereum (TRC20)</td>
 </tr>
 <tr>
 <td>jSUN</td>
 <td>SUN</td>
-<td>SUN token</td>
+<td>SUN Token</td>
 </tr>
 <tr>
 <td>jWIN</td>
 <td>WIN</td>
 <td>WINkLink</td>
 </tr>
-<tr>
-<td>jTUSD</td>
-<td>TUSD</td>
-<td>TrueUSD</td>
-</tr>
 </tbody>
 </table>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The full MCP server supports 24+ markets including jsTRX, jwstUSDT, jWBTC, and more.</p>
+</div>
 <h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://nodejs.org/">Node.js</a> 20.0.0 or higher</li>
-<li>Optional: <a href="https://www.trongrid.io/">TronGrid API key</a> for reliable mainnet access (strongly recommended)</li>
+<li><a href="https://www.trongrid.io/">TronGrid API key</a> (required)</li>
+<li>A <strong>burner wallet</strong> private key for write operations — <strong>never use your main wallet</strong></li>
 </ul>
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/justlend/mcp-server-justlend.git
-<span class="nb">cd</span><span class="w"> </span>mcp-server-justlend
-npm<span class="w"> </span>install
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/justlend/justlend-skills.git
+<span class="nb">cd</span><span class="w"> </span>justlend-skills
+bash<span class="w"> </span>install.sh
+</code></pre></div>
+<p>Or manually:</p>
+<div class="highlight"><pre><span></span><code>npm<span class="w"> </span>install
+cp<span class="w"> </span>.env.example<span class="w"> </span>.env<span class="w">   </span><span class="c1"># Then edit .env with your keys</span>
 </code></pre></div>
 <h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
-<h3 id="wallet-setup-v102">Wallet Setup (v1.0.2+)<a class="headerlink" href="#wallet-setup-v102" title="Permanent link">&para;</a></h3>
-<p>Starting from v1.0.2, private keys are managed by <a href="https://www.npmjs.com/package/@bankofai/agent-wallet"><code>@bankofai/agent-wallet</code></a> — an encrypted local wallet solution. Private keys are <strong>never</strong> stored in environment variables, config files, or passed as function parameters. They are encrypted at rest in <code>~/.agent-wallet/</code> with proper file permissions (<code>0600</code>).</p>
-<h4 id="zero-config-auto-generation">Zero-Config Auto-Generation<a class="headerlink" href="#zero-config-auto-generation" title="Permanent link">&para;</a></h4>
-<p>Simply start the server — if no wallet exists, one is automatically generated:</p>
-<div class="highlight"><pre><span></span><code>npm<span class="w"> </span>start
-<span class="c1"># → Wallet: auto-generated new wallet &quot;default&quot;</span>
-<span class="c1"># → Address: TXxx...xxx</span>
-<span class="c1"># → Encrypted private key stored in ~/.agent-wallet/</span>
-</code></pre></div>
-<p>The wallet persists across restarts (the address does not change).</p>
-<h4 id="import-an-existing-wallet">Import an Existing Wallet<a class="headerlink" href="#import-an-existing-wallet" title="Permanent link">&para;</a></h4>
-<p>To use an existing private key, import it via the <code>agent-wallet</code> CLI (recommended over MCP tool to avoid key exposure in conversation logs):</p>
-<div class="highlight"><pre><span></span><code>npx<span class="w"> </span>agent-wallet<span class="w"> </span>import<span class="w"> </span>&lt;wallet-name&gt;<span class="w"> </span>--private-key<span class="w"> </span>&lt;hex&gt;
-npx<span class="w"> </span>agent-wallet<span class="w"> </span>import<span class="w"> </span>&lt;wallet-name&gt;<span class="w"> </span>--mnemonic<span class="w"> </span><span class="s2">&quot;word1 word2 ... word12&quot;</span>
-</code></pre></div>
-<h4 id="multi-wallet-management">Multi-Wallet Management<a class="headerlink" href="#multi-wallet-management" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="c1"># List all wallets</span>
-npx<span class="w"> </span>agent-wallet<span class="w"> </span>list
+<p>Edit <code>.env</code>:</p>
+<div class="highlight"><pre><span></span><code># Required — get from https://www.trongrid.io/
+TRONGRID_API_KEY=your_trongrid_api_key
 
-<span class="c1"># Set active wallet</span>
-npx<span class="w"> </span>agent-wallet<span class="w"> </span>use<span class="w"> </span>&lt;wallet-name&gt;
-</code></pre></div>
-<p>You can also manage wallets at runtime via the MCP tools <code>list_wallets</code>, <code>set_active_wallet</code>, and <code>import_wallet</code>.</p>
-<h3 id="environment-variables">Environment Variables<a class="headerlink" href="#environment-variables" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="c1"># Strongly recommended — avoids TronGrid 429 rate limiting on mainnet</span>
-<span class="nb">export</span><span class="w"> </span><span class="nv">TRONGRID_API_KEY</span><span class="o">=</span><span class="s2">&quot;your_trongrid_api_key&quot;</span>
+# Required for write operations (supply, borrow, repay, etc.)
+# SECURITY: Use a BURNER WALLET — never your main wallet!
+TRON_PRIVATE_KEY=your_burner_wallet_private_key
 
-<span class="c1"># Optional: HTTP/SSE transport mode</span>
-<span class="nb">export</span><span class="w"> </span><span class="nv">MCP_TRANSPORT</span><span class="o">=</span><span class="s2">&quot;http&quot;</span><span class="w">       </span><span class="c1"># Use HTTP/SSE instead of stdio</span>
-<span class="nb">export</span><span class="w"> </span><span class="nv">MCP_HTTP_PORT</span><span class="o">=</span><span class="s2">&quot;3000&quot;</span><span class="w">       </span><span class="c1"># HTTP server port (default: 3000)</span>
-<span class="nb">export</span><span class="w"> </span><span class="nv">MCP_HTTP_HOST</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="w">  </span><span class="c1"># HTTP server host (default: 127.0.0.1)</span>
+# Network: mainnet (default) or nile (testnet)
+NETWORK=mainnet
 </code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Always use a <strong>dedicated burner wallet</strong> with minimal funds. Never configure your main wallet's private key. Omit <code>TRON_PRIVATE_KEY</code> entirely for read-only mode.</p>
+</div>
 <h3 id="client-configuration">Client Configuration<a class="headerlink" href="#client-configuration" title="Permanent link">&para;</a></h3>
 <h4 id="claude-desktop">Claude Desktop<a class="headerlink" href="#claude-desktop" title="Permanent link">&para;</a></h4>
-<p>Add to <code>~/Library/Application Support/Claude/claude_desktop_config.json</code>:</p>
+<p>Edit <code>~/Library/Application Support/Claude/claude_desktop_config.json</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
 <span class="w">  </span><span class="nt">&quot;mcpServers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;mcp-server-justlend&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;stdio&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;npx&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;tsx&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@justlend/mcp-server-justlend&quot;</span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;justlend&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;node&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;/ABSOLUTE_PATH_TO/justlend-skills/scripts/mcp_server.mjs&quot;</span><span class="p">],</span>
 <span class="w">      </span><span class="nt">&quot;env&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;TRONGRID_API_KEY&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SET_VIA_SYSTEM_ENV&quot;</span>
+<span class="w">        </span><span class="nt">&quot;TRONGRID_API_KEY&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;your_key&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;TRON_PRIVATE_KEY&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;your_burner_key&quot;</span>
 <span class="w">      </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>No <code>TRON_PRIVATE_KEY</code> needed — the server uses the encrypted agent-wallet automatically.</p>
-</div>
 <h4 id="cursor">Cursor<a class="headerlink" href="#cursor" title="Permanent link">&para;</a></h4>
 <p>Add to <code>.cursor/mcp.json</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
 <span class="w">  </span><span class="nt">&quot;mcpServers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;mcp-server-justlend&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;stdio&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;npx&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;tsx&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@justlend/mcp-server-justlend&quot;</span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;justlend&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;node&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;/ABSOLUTE_PATH_TO/justlend-skills/scripts/mcp_server.mjs&quot;</span><span class="p">],</span>
 <span class="w">      </span><span class="nt">&quot;env&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;TRONGRID_API_KEY&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SET_VIA_SYSTEM_ENV&quot;</span>
+<span class="w">        </span><span class="nt">&quot;TRONGRID_API_KEY&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;your_key&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;TRON_PRIVATE_KEY&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;your_burner_key&quot;</span>
 <span class="w">      </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
-<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="c1"># Stdio mode (for MCP clients)</span>
-npm<span class="w"> </span>start
-
-<span class="c1"># HTTP/SSE mode (for remote clients)</span>
-npm<span class="w"> </span>run<span class="w"> </span>start:http
-
-<span class="c1"># Development with auto-reload</span>
-npm<span class="w"> </span>run<span class="w"> </span>dev
+<h4 id="claude-code">Claude Code<a class="headerlink" href="#claude-code" title="Permanent link">&para;</a></h4>
+<p>Add to <code>.claude/settings.local.json</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;mcpServers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;justlend&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;node&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;/ABSOLUTE_PATH_TO/justlend-skills/scripts/mcp_server.mjs&quot;</span><span class="p">],</span>
+<span class="w">      </span><span class="nt">&quot;env&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;TRONGRID_API_KEY&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;your_key&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;TRON_PRIVATE_KEY&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;your_burner_key&quot;</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
-<h2 id="api-reference">API Reference<a class="headerlink" href="#api-reference" title="Permanent link">&para;</a></h2>
-<h3 id="tools-54-total">Tools (54 total)<a class="headerlink" href="#tools-54-total" title="Permanent link">&para;</a></h3>
-<h4 id="wallet-network">Wallet &amp; Network<a class="headerlink" href="#wallet-network" title="Permanent link">&para;</a></h4>
+<h4 id="codex-cli">Codex CLI<a class="headerlink" href="#codex-cli" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/justlend/justlend-skills<span class="w"> </span>~/.codex/justlend-skills
+<span class="nb">cd</span><span class="w"> </span>~/.codex/justlend-skills<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>bash<span class="w"> </span>install.sh
+mkdir<span class="w"> </span>-p<span class="w"> </span>~/.agents/skills
+ln<span class="w"> </span>-s<span class="w"> </span>~/.codex/justlend-skills/skills<span class="w"> </span>~/.agents/skills/justlend-skills
+</code></pre></div>
+<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
+<h3 id="mcp-server-mode">MCP Server Mode<a class="headerlink" href="#mcp-server-mode" title="Permanent link">&para;</a></h3>
+<p>For AI agent integrations (Claude Desktop, Cursor, Claude Code, etc.):</p>
+<div class="highlight"><pre><span></span><code>npm<span class="w"> </span>start
+</code></pre></div>
+<p>The server communicates over stdio and exposes 15 MCP tools.</p>
+<h3 id="cli-tool-mode">CLI Tool Mode<a class="headerlink" href="#cli-tool-mode" title="Permanent link">&para;</a></h3>
+<p>For quick checks and operations directly from the terminal:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Market data</span>
+node<span class="w"> </span>scripts/justlend_api.mjs<span class="w"> </span>markets<span class="w">              </span><span class="c1"># List all markets with APY</span>
+node<span class="w"> </span>scripts/justlend_api.mjs<span class="w"> </span>dashboard<span class="w">            </span><span class="c1"># Protocol dashboard (TVL, users)</span>
+node<span class="w"> </span>scripts/justlend_api.mjs<span class="w"> </span>supported-markets<span class="w">    </span><span class="c1"># List supported markets &amp; addresses</span>
+
+<span class="c1"># Account queries</span>
+node<span class="w"> </span>scripts/justlend_api.mjs<span class="w"> </span>address<span class="w">              </span><span class="c1"># Show wallet address</span>
+node<span class="w"> </span>scripts/justlend_api.mjs<span class="w"> </span>balance<span class="w"> </span>&lt;addr&gt;<span class="w">       </span><span class="c1"># Check TRX balance</span>
+node<span class="w"> </span>scripts/justlend_api.mjs<span class="w"> </span>balance<span class="w"> </span>&lt;addr&gt;<span class="w"> </span>USDT<span class="w">  </span><span class="c1"># Check token balance</span>
+node<span class="w"> </span>scripts/justlend_api.mjs<span class="w"> </span>account<span class="w"> </span>&lt;addr&gt;<span class="w">       </span><span class="c1"># Account health status</span>
+node<span class="w"> </span>scripts/justlend_api.mjs<span class="w"> </span>account-api<span class="w"> </span>&lt;addr&gt;<span class="w">   </span><span class="c1"># Full account data from API</span>
+node<span class="w"> </span>scripts/justlend_api.mjs<span class="w"> </span>jtoken-details<span class="w"> </span>&lt;jtoken&gt;<span class="w">  </span><span class="c1"># Detailed jToken info</span>
+node<span class="w"> </span>scripts/justlend_api.mjs<span class="w"> </span>allowance<span class="w"> </span>&lt;addr&gt;<span class="w"> </span>USDT<span class="w">    </span><span class="c1"># Check TRC20 approval</span>
+
+<span class="c1"># Write operations</span>
+node<span class="w"> </span>scripts/justlend_api.mjs<span class="w"> </span>supply<span class="w"> </span>TRX<span class="w"> </span><span class="m">10</span><span class="w">        </span><span class="c1"># Supply 10 TRX</span>
+node<span class="w"> </span>scripts/justlend_api.mjs<span class="w"> </span>approve<span class="w"> </span>USDT<span class="w"> </span><span class="m">1000</span><span class="w">    </span><span class="c1"># Approve 1000 USDT</span>
+</code></pre></div>
+<h2 id="skills-reference">Skills Reference<a class="headerlink" href="#skills-reference" title="Permanent link">&para;</a></h2>
+<h3 id="justlend-lending-justlend-lending-v1">JustLend Lending (justlend-lending-v1)<a class="headerlink" href="#justlend-lending-justlend-lending-v1" title="Permanent link">&para;</a></h3>
+<p>Core lending skill providing supply, borrow, repay, and withdraw workflows with built-in health factor monitoring and TRC20 approval handling.</p>
+<p><strong>Workflow Rules:</strong></p>
+<ol>
+<li><strong>Always check before acting</strong> — use <code>get_all_markets</code> for APYs, <code>get_account_summary</code> for health factor, and <code>get_trx_balance</code> / <code>get_token_balance</code> to verify funds</li>
+<li><strong>TRC20 approval required</strong> — before <code>supply</code> or <code>repay</code> for TRC20 tokens, call <code>check_allowance</code> then <code>approve_underlying</code> if needed. Native TRX needs no approval.</li>
+<li><strong>Post-operation verification</strong> — call <code>get_account_summary</code> after any write operation to confirm success</li>
+</ol>
+<p><strong>Typical Workflow — Supply TRC20 (e.g., USDT):</strong></p>
+<ol>
+<li><code>get_token_balance</code> — verify sufficient funds</li>
+<li><code>check_allowance</code> — check if already approved</li>
+<li><code>approve_underlying</code> — approve if needed</li>
+<li><code>supply</code> — deposit USDT</li>
+<li><code>get_account_summary</code> — confirm position updated</li>
+</ol>
+<h3 id="strx-staking-justlend-trx-staking">sTRX Staking (justlend-trx-staking)<a class="headerlink" href="#strx-staking-justlend-trx-staking" title="Permanent link">&para;</a></h3>
+<p>Liquid staking skill for TRX. Stake TRX to receive sTRX tokens that earn staking rewards automatically while remaining usable in DeFi.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This skill requires the <a href="../mcp_server/">full MCP server</a> for tool execution.</p>
+</div>
+<p><strong>How it works:</strong> Deposit TRX → receive sTRX → rewards accrue via exchange rate appreciation → unstake with ~14 day unbonding period.</p>
+<h3 id="energy-rental-justlend-energy-rental">Energy Rental (justlend-energy-rental)<a class="headerlink" href="#energy-rental-justlend-energy-rental" title="Permanent link">&para;</a></h3>
+<p>Rent TRON Energy from the JustLend marketplace at 50-80% lower cost than burning TRX for transaction fees.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This skill requires the <a href="../mcp_server/">full MCP server</a> for tool execution.</p>
+</div>
+<h3 id="dao-governance-justlend-governance-v1">DAO Governance (justlend-governance-v1)<a class="headerlink" href="#dao-governance-justlend-governance-v1" title="Permanent link">&para;</a></h3>
+<p>Participate in JustLend DAO governance proposals. Deposit JST for voting power (1 JST = 1 Vote), cast votes, and reclaim votes after proposals end.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This skill requires the <a href="../mcp_server/">full MCP server</a> for tool execution.</p>
+</div>
+<p><strong>Voting Workflow:</strong></p>
+<ol>
+<li><code>get_proposal_list</code> — find active proposals</li>
+<li><code>get_vote_info</code> — check available voting power</li>
+<li>If no votes: <code>approve_jst_for_voting</code> → <code>deposit_jst_for_votes</code></li>
+<li><code>cast_vote</code> — vote FOR or AGAINST</li>
+<li>After proposal ends: <code>withdraw_votes_from_proposal</code> → <code>withdraw_votes_to_jst</code></li>
+</ol>
+<h2 id="mcp-tools-reference">MCP Tools Reference<a class="headerlink" href="#mcp-tools-reference" title="Permanent link">&para;</a></h2>
+<h3 id="read-only-tools">Read-Only Tools<a class="headerlink" href="#read-only-tools" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
 <th>Tool</th>
+<th>Inputs</th>
 <th>Description</th>
-<th>Write?</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>get_wallet_address</code></td>
-<td>Show active wallet address</td>
-<td>No</td>
+<td><code>get_all_markets</code></td>
+<td>—</td>
+<td>All markets with supply/borrow APY, mining rewards, and TVL</td>
 </tr>
 <tr>
-<td><code>list_wallets</code></td>
-<td>List all wallets managed by agent-wallet</td>
-<td>No</td>
-</tr>
-<tr>
-<td><code>set_active_wallet</code></td>
-<td>Switch the active wallet by name</td>
-<td>No</td>
-</tr>
-<tr>
-<td><code>import_wallet</code></td>
-<td>Import a wallet from private key or mnemonic (CLI import recommended for security)</td>
-<td><strong>Yes</strong></td>
-</tr>
-<tr>
-<td><code>get_supported_networks</code></td>
-<td>List available networks</td>
-<td>No</td>
+<td><code>get_dashboard</code></td>
+<td>—</td>
+<td>Protocol overview: total supply, borrow, TVL, user count</td>
 </tr>
 <tr>
 <td><code>get_supported_markets</code></td>
-<td>List all jToken markets with addresses</td>
-<td>No</td>
-</tr>
-</tbody>
-</table>
-<h4 id="market-data">Market Data<a class="headerlink" href="#market-data" title="Permanent link">&para;</a></h4>
-<table>
-<thead>
-<tr>
-<th>Tool</th>
-<th>Description</th>
-<th>Write?</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>get_market_data</code></td>
-<td>Detailed data for one market (APY, TVL, rates) - Contract query</td>
-<td>No</td>
+<td>—</td>
+<td>List all supported markets with jToken/underlying addresses</td>
 </tr>
 <tr>
-<td><code>get_all_markets</code></td>
-<td>Overview of all markets - Contract query</td>
-<td>No</td>
+<td><code>get_jtoken_details</code></td>
+<td><code>jtokenAddr</code></td>
+<td>Detailed jToken info: interest rate model, reserves, mining rewards</td>
 </tr>
 <tr>
-<td><code>get_protocol_summary</code></td>
-<td>Comptroller config &amp; protocol parameters - Contract query</td>
-<td>No</td>
+<td><code>get_wallet_address</code></td>
+<td>—</td>
+<td>Currently configured wallet address</td>
 </tr>
-<tr>
-<td><code>get_markets_from_api</code></td>
-<td><strong>[API]</strong> All market data with mining rewards &amp; trends</td>
-<td>No</td>
-</tr>
-<tr>
-<td><code>get_dashboard_from_api</code></td>
-<td><strong>[API]</strong> Protocol-level statistics (TVL, users, etc.)</td>
-<td>No</td>
-</tr>
-<tr>
-<td><code>get_jtoken_details_from_api</code></td>
-<td><strong>[API]</strong> Detailed jToken info with interest rate model</td>
-<td>No</td>
-</tr>
-</tbody>
-</table>
-<h4 id="account-balances">Account &amp; Balances<a class="headerlink" href="#account-balances" title="Permanent link">&para;</a></h4>
-<table>
-<thead>
-<tr>
-<th>Tool</th>
-<th>Description</th>
-<th>Write?</th>
-</tr>
-</thead>
-<tbody>
 <tr>
 <td><code>get_account_summary</code></td>
-<td>Full position: supplies, borrows, health factor - Contract query</td>
-<td>No</td>
+<td><code>address</code></td>
+<td>Health factor, liquidity, liquidation risk</td>
 </tr>
 <tr>
 <td><code>get_account_data_from_api</code></td>
-<td><strong>[API]</strong> Enhanced account data with mining rewards &amp; trends</td>
-<td>No</td>
-</tr>
-<tr>
-<td><code>check_allowance</code></td>
-<td>Check TRC20 approval for jToken</td>
-<td>No</td>
+<td><code>address</code></td>
+<td>Comprehensive account data from API (positions, rewards)</td>
 </tr>
 <tr>
 <td><code>get_trx_balance</code></td>
-<td>TRX balance</td>
-<td>No</td>
+<td><code>address</code></td>
+<td>Native TRX balance</td>
 </tr>
 <tr>
 <td><code>get_token_balance</code></td>
-<td>TRC20 token balance</td>
-<td>No</td>
+<td><code>address</code>, <code>token</code></td>
+<td>TRC20 token balance (USDT, USDD, etc.)</td>
+</tr>
+<tr>
+<td><code>check_allowance</code></td>
+<td><code>address</code>, <code>asset</code></td>
+<td>Check TRC20 approval status for JustLend contracts</td>
 </tr>
 </tbody>
 </table>
-<h4 id="lending-operations">Lending Operations<a class="headerlink" href="#lending-operations" title="Permanent link">&para;</a></h4>
+<h3 id="write-operations">Write Operations<a class="headerlink" href="#write-operations" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
 <th>Tool</th>
+<th>Inputs</th>
 <th>Description</th>
-<th>Write?</th>
 </tr>
 </thead>
 <tbody>
 <tr>
+<td><code>approve_underlying</code></td>
+<td><code>asset</code>, <code>amount?</code></td>
+<td>Approve TRC20 for JustLend (required before supply/repay for TRC20 tokens)</td>
+</tr>
+<tr>
 <td><code>supply</code></td>
-<td>Deposit assets to earn interest</td>
-<td><strong>Yes</strong></td>
+<td><code>asset</code>, <code>amount</code></td>
+<td>Deposit assets (TRX or TRC20) to earn interest</td>
 </tr>
 <tr>
 <td><code>withdraw</code></td>
-<td>Withdraw supplied assets</td>
-<td><strong>Yes</strong></td>
-</tr>
-<tr>
-<td><code>withdraw_all</code></td>
-<td>Withdraw all from a market</td>
-<td><strong>Yes</strong></td>
+<td><code>asset</code>, <code>amount</code></td>
+<td>Redeem supplied assets</td>
 </tr>
 <tr>
 <td><code>borrow</code></td>
+<td><code>asset</code>, <code>amount</code></td>
 <td>Borrow against collateral</td>
-<td><strong>Yes</strong></td>
 </tr>
 <tr>
 <td><code>repay</code></td>
-<td>Repay outstanding borrows</td>
-<td><strong>Yes</strong></td>
-</tr>
-<tr>
-<td><code>enter_market</code></td>
-<td>Enable market as collateral</td>
-<td><strong>Yes</strong></td>
-</tr>
-<tr>
-<td><code>exit_market</code></td>
-<td>Disable market as collateral</td>
-<td><strong>Yes</strong></td>
-</tr>
-<tr>
-<td><code>approve_underlying</code></td>
-<td>Approve TRC20 for jToken</td>
-<td><strong>Yes</strong></td>
-</tr>
-<tr>
-<td><code>claim_rewards</code></td>
-<td>Claim mining rewards</td>
-<td><strong>Yes</strong></td>
-</tr>
-</tbody>
-</table>
-<h4 id="jst-voting-governance">JST Voting / Governance<a class="headerlink" href="#jst-voting-governance" title="Permanent link">&para;</a></h4>
-<table>
-<thead>
-<tr>
-<th>Tool</th>
-<th>Description</th>
-<th>Write?</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>get_proposal_list</code></td>
-<td>List all governance proposals with status and vote counts</td>
-<td>No</td>
-</tr>
-<tr>
-<td><code>get_user_vote_status</code></td>
-<td>User's voting history: voted proposals, withdrawable votes</td>
-<td>No</td>
-</tr>
-<tr>
-<td><code>get_vote_info</code></td>
-<td>Voting power: JST balance, available votes, locked votes</td>
-<td>No</td>
-</tr>
-<tr>
-<td><code>get_locked_votes</code></td>
-<td>Votes locked in a specific proposal</td>
-<td>No</td>
-</tr>
-<tr>
-<td><code>check_jst_allowance_for_voting</code></td>
-<td>Check JST approval for WJST voting contract</td>
-<td>No</td>
-</tr>
-<tr>
-<td><code>approve_jst_for_voting</code></td>
-<td>Approve JST for the WJST voting contract</td>
-<td><strong>Yes</strong></td>
-</tr>
-<tr>
-<td><code>deposit_jst_for_votes</code></td>
-<td>Deposit JST to get voting power (1 JST = 1 Vote)</td>
-<td><strong>Yes</strong></td>
-</tr>
-<tr>
-<td><code>withdraw_votes_to_jst</code></td>
-<td>Withdraw WJST back to JST</td>
-<td><strong>Yes</strong></td>
-</tr>
-<tr>
-<td><code>cast_vote</code></td>
-<td>Cast for/against votes on a proposal</td>
-<td><strong>Yes</strong></td>
-</tr>
-<tr>
-<td><code>withdraw_votes_from_proposal</code></td>
-<td>Reclaim votes from completed proposals</td>
-<td><strong>Yes</strong></td>
-</tr>
-</tbody>
-</table>
-<h4 id="energy-rental">Energy Rental<a class="headerlink" href="#energy-rental" title="Permanent link">&para;</a></h4>
-<table>
-<thead>
-<tr>
-<th>Tool</th>
-<th>Description</th>
-<th>Write?</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>get_energy_rental_dashboard</code></td>
-<td>Market data: TRX price, exchange rate, APY, energy per TRX</td>
-<td>No</td>
-</tr>
-<tr>
-<td><code>get_energy_rental_params</code></td>
-<td>On-chain params: fees, limits, pause status, usage charge ratio</td>
-<td>No</td>
-</tr>
-<tr>
-<td><code>calculate_energy_rental_price</code></td>
-<td>Estimate cost for renting energy (prepayment, deposit, daily cost)</td>
-<td>No</td>
-</tr>
-<tr>
-<td><code>get_energy_rental_rate</code></td>
-<td>Current rental rate for a given TRX amount</td>
-<td>No</td>
-</tr>
-<tr>
-<td><code>get_user_energy_rental_orders</code></td>
-<td>User's rental orders (as renter, receiver, or all)</td>
-<td>No</td>
-</tr>
-<tr>
-<td><code>get_energy_rent_info</code></td>
-<td>On-chain rental info for a renter-receiver pair</td>
-<td>No</td>
-</tr>
-<tr>
-<td><code>get_return_rental_info</code></td>
-<td>Return/cancel estimation (refund, remaining rent, daily cost)</td>
-<td>No</td>
-</tr>
-<tr>
-<td><code>rent_energy</code></td>
-<td>Rent energy for a receiver (with balance, pause, limit checks)</td>
-<td><strong>Yes</strong></td>
-</tr>
-<tr>
-<td><code>return_energy_rental</code></td>
-<td>Cancel an active rental (with active order check)</td>
-<td><strong>Yes</strong></td>
-</tr>
-</tbody>
-</table>
-<h4 id="strx-staking">sTRX Staking<a class="headerlink" href="#strx-staking" title="Permanent link">&para;</a></h4>
-<table>
-<thead>
-<tr>
-<th>Tool</th>
-<th>Description</th>
-<th>Write?</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>get_strx_dashboard</code></td>
-<td>Staking market data: exchange rate, APY, total supply</td>
-<td>No</td>
-</tr>
-<tr>
-<td><code>get_strx_account</code></td>
-<td>User staking account: staked amount, income, rewards</td>
-<td>No</td>
-</tr>
-<tr>
-<td><code>get_strx_balance</code></td>
-<td>sTRX token balance for an address</td>
-<td>No</td>
-</tr>
-<tr>
-<td><code>check_strx_withdrawal_eligibility</code></td>
-<td>Check unbonding status, pending/completed withdrawal rounds</td>
-<td>No</td>
-</tr>
-<tr>
-<td><code>stake_trx_to_strx</code></td>
-<td>Stake TRX to receive sTRX (with balance check)</td>
-<td><strong>Yes</strong></td>
-</tr>
-<tr>
-<td><code>unstake_strx</code></td>
-<td>Unstake sTRX to receive TRX back (with balance check)</td>
-<td><strong>Yes</strong></td>
-</tr>
-<tr>
-<td><code>claim_strx_rewards</code></td>
-<td>Claim all staking rewards (with rewards existence check)</td>
-<td><strong>Yes</strong></td>
-</tr>
-</tbody>
-</table>
-<h3 id="prompts-ai-guided-workflows">Prompts (AI-Guided Workflows)<a class="headerlink" href="#prompts-ai-guided-workflows" title="Permanent link">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th>Prompt</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>supply_assets</code></td>
-<td>Step-by-step supply with balance checks and approval</td>
-</tr>
-<tr>
-<td><code>borrow_assets</code></td>
-<td>Safe borrowing with risk assessment and health factor checks</td>
-</tr>
-<tr>
-<td><code>repay_borrow</code></td>
-<td>Guided repayment with verification</td>
-</tr>
-<tr>
-<td><code>analyze_portfolio</code></td>
-<td>Comprehensive portfolio analysis with risk scoring</td>
-</tr>
-<tr>
-<td><code>compare_markets</code></td>
-<td>Find best supply/borrow opportunities</td>
-</tr>
-<tr>
-<td><code>rent_energy</code></td>
-<td>Guided energy rental with price estimation and balance checks</td>
-</tr>
-<tr>
-<td><code>stake_trx</code></td>
-<td>Guided TRX staking to sTRX with APY info and verification</td>
+<td><code>asset</code>, <code>amount</code></td>
+<td>Repay outstanding loans</td>
 </tr>
 </tbody>
 </table>
 <h2 id="security-considerations">Security Considerations<a class="headerlink" href="#security-considerations" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Encrypted wallet</strong>: Private keys are encrypted at rest in <code>~/.agent-wallet/</code> with file permissions <code>0600</code>/<code>0700</code> — never stored in environment variables or config files</li>
-<li><strong>No key in parameters</strong>: All signing functions use the agent-wallet internally; private keys are never passed as function parameters or exposed via MCP tools</li>
-<li><strong>Import via CLI</strong>: Use <code>npx agent-wallet import</code> from a terminal rather than the <code>import_wallet</code> MCP tool to avoid key exposure in AI conversation logs</li>
-<li><strong>Write operations</strong> are clearly marked with <code>destructiveHint: true</code> in MCP annotations</li>
-<li><strong>Health factor checks</strong> in prompts prevent dangerous borrowing</li>
-<li>Always <strong>test on Nile testnet</strong> before mainnet operations</li>
-<li>Be cautious with <strong>unlimited approvals</strong> (<code>approve_underlying</code> with <code>max</code>)</li>
+<li><strong>Burner Wallet Only</strong>: Always use a dedicated wallet with minimal funds for AI interactions. Never use your main wallet.</li>
+<li><strong>Read-Only Mode</strong>: Omit <code>TRON_PRIVATE_KEY</code> from <code>.env</code> to restrict the agent to read-only operations.</li>
+<li><strong>Private Keys</strong>: Stored only in <code>.env</code> (gitignored), never exposed via MCP tools or AI conversation logs.</li>
+<li><strong>Test First</strong>: Use Nile testnet (<code>NETWORK=nile</code>) before mainnet operations.</li>
+<li><strong>Health Factor</strong>: Always check account health before borrowing. If <code>shortfallUSD &gt; 0</code>, the position is at liquidation risk.</li>
+<li><strong>Gas</strong>: Keep at least 50-100 TRX in the wallet for transaction fees (Energy and Bandwidth).</li>
 </ul>
 <h2 id="example-conversations">Example Conversations<a class="headerlink" href="#example-conversations" title="Permanent link">&para;</a></h2>
-<p><strong>"What are the best supply rates on JustLend right now?"</strong>
-→ AI calls <code>get_all_markets</code>, sorts by supplyAPY, presents ranking</p>
-<p><strong>"I want to supply 10,000 USDT to earn interest"</strong>
-→ AI uses <code>supply_assets</code> prompt: checks balance → approves USDT → supplies → verifies</p>
-<p><strong>"Am I at risk of liquidation?"</strong>
-→ AI calls <code>get_account_summary</code>, analyzes health factor, warns if &lt; 1.5</p>
-<p><strong>"Borrow 500 USDT against my TRX collateral"</strong>
-→ AI uses <code>borrow_assets</code> prompt: checks collateral → calculates new health factor → executes if safe</p>
-<p><strong>"What is the TRX balance of address TXxx...?"</strong>
-→ AI calls the general-purpose TRX balance tool, returns balance in both TRX and Sun</p>
-<p><strong>"Freeze 100 TRX for ENERGY"</strong>
-→ AI calls staking service to freeze via Stake 2.0, returns transaction hash</p>
-<p><strong>"Show me the latest governance proposals"</strong>
-→ AI calls <code>get_proposal_list</code>, displays proposals sorted by ID with status and vote counts</p>
-<p><strong>"I want to vote for proposal #425 with 1000 JST"</strong>
-→ AI checks <code>get_vote_info</code> → if no votes, suggests <code>approve_jst_for_voting</code> + <code>deposit_jst_for_votes</code> → then <code>cast_vote</code></p>
-<p><strong>"Withdraw my votes from completed proposals"</strong>
-→ AI calls <code>get_user_vote_status</code> to find withdrawable proposals → calls <code>withdraw_votes_from_proposal</code> for each</p>
-<p><strong>"How much does it cost to rent 300,000 energy for 7 days?"</strong>
-→ AI calls <code>calculate_energy_rental_price</code> with energyAmount=300000, durationDays=7, returns cost breakdown</p>
-<p><strong>"Rent 500,000 energy to address TXxx... for 14 days"</strong>
-→ AI uses <code>rent_energy</code> prompt: checks balance → checks rental status → calculates price → rents energy → verifies</p>
-<p><strong>"Cancel my energy rental to TXxx..."</strong>
-→ AI calls <code>get_energy_rent_info</code> to verify active rental → calls <code>return_energy_rental</code> → confirms refund</p>
-<p><strong>"Stake 1000 TRX to earn sTRX rewards"</strong>
-→ AI uses <code>stake_trx</code> prompt: checks balance → checks exchange rate &amp; APY → stakes TRX → verifies sTRX received</p>
-<p><strong>"Do I have any sTRX rewards to claim?"</strong>
-→ AI calls <code>get_strx_account</code> to check claimable rewards → calls <code>claim_strx_rewards</code> if available</p>
-<p><strong>"Can I withdraw my unstaked TRX?"</strong>
-→ AI calls <code>check_strx_withdrawal_eligibility</code> to check unbonding status and completed withdrawal rounds</p>
+<p><strong>"What are the best supply rates on JustLend?"</strong>
+→ AI calls <code>get_all_markets</code>, sorts by totalSupplyAPY (includes mining rewards), presents ranking</p>
+<p><strong>"Show me the JustLend protocol stats"</strong>
+→ AI calls <code>get_dashboard</code>, displays total TVL, supply/borrow volume, user count</p>
+<p><strong>"Check if my position is safe"</strong>
+→ AI calls <code>get_account_data_from_api</code> for full position details, analyzes health factor</p>
+<p><strong>"Supply 1000 USDT to JustLend"</strong>
+→ AI checks balance → <code>check_allowance</code> → if needed <code>approve_underlying</code> → <code>supply</code> → confirms</p>
+<p><strong>"Repay 100 TRX borrow"</strong>
+→ AI calls <code>repay</code> directly (TRX needs no approval)</p>
+<p><strong>"What markets have mining rewards?"</strong>
+→ AI calls <code>get_all_markets</code>, filters by miningAPY &gt; 0, presents markets with active rewards</p>
+<p><strong>"Show me detailed info for the jUSDT market"</strong>
+→ AI calls <code>get_jtoken_details</code> with jUSDT address, displays interest rate model, reserves, and mining rewards</p>
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
+<h3 id="out_of_energy-or-bandwidth_error"><code>OUT_OF_ENERGY</code> or <code>BANDWIDTH_ERROR</code><a class="headerlink" href="#out_of_energy-or-bandwidth_error" title="Permanent link">&para;</a></h3>
+<p>The wallet needs TRX to pay for transaction fees. Ensure at least 50-100 TRX is available in the wallet.</p>
+<h3 id="revert-on-supplyrepay"><code>REVERT</code> on Supply/Repay<a class="headerlink" href="#revert-on-supplyrepay" title="Permanent link">&para;</a></h3>
+<p>TRC20 tokens (USDT, USDD) require approval before the JustLend contract can move them. Call <code>approve_underlying</code> first. Native TRX does not need approval.</p>
+<h3 id="exit_market-failure"><code>exit_market</code> Failure<a class="headerlink" href="#exit_market-failure" title="Permanent link">&para;</a></h3>
+<p>Cannot disable collateral if it would push health factor below 1.0. Repay debt or add more collateral first.</p>
+<h3 id="private-key-not-configured">Private Key Not Configured<a class="headerlink" href="#private-key-not-configured" title="Permanent link">&para;</a></h3>
+<p>Write operations require <code>TRON_PRIVATE_KEY</code> in <code>.env</code>. Run <code>bash install.sh</code> to set up the environment, or manually edit <code>.env</code>.</p>
+<h3 id="trongrid-api-errors">TronGrid API Errors<a class="headerlink" href="#trongrid-api-errors" title="Permanent link">&para;</a></h3>
+<p>Verify your <code>TRONGRID_API_KEY</code> is valid and not rate-limited. Get a key from <a href="https://www.trongrid.io/">trongrid.io</a>.</p>
 
 
 
