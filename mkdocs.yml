@@ -36,6 +36,7 @@ nav:
         - APIs: developers/apis.md
     - AI SUPPORT:
         - MCP Server: ai_support/mcp_server.md
+        - JustLend Skills: ai_support/skills.md
     - RESOURCES:
         - Community:
             - Links: resources/community/links.md
