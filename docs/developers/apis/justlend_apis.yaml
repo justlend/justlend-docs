@@ -142,7 +142,7 @@ paths:
                                                 items:
                                                     '$ref': '#/components/schemas/jTokenToAddress'
                                             updateTime:
-                                                type: long
+                                                type: integer
                                                 description: Data update timestamp (milliseconds).
                                                 examples:
                                                     - 1770275708508
@@ -168,9 +168,6 @@ paths:
                 - Supply and Borrow Market
             summary: Get User Supply Mining Reward Information
             description: Query to get user's the latest usdd mining reward information, which includes the current mining phase and its rewards, mining start time and end time. （To pass parameters to obtain specific information, please click 「Test」and fill in the address information in the Query parameters section）
-            operationId: getAddress
-            security:
-                - {}
             parameters:
                 - '$ref': '#/components/parameters/address'
                 - '$ref': '#/components/parameters/address1'
@@ -250,9 +247,6 @@ paths:
                 - Supply and Borrow Market
             summary: Get User Supply Mining Reward Distributions
             description: Query to get user's all reward distributions, including mining token address, if the mining reward has been claimed or not claimed, and the reward amount in the corresponding cycle. (To pass parameters to obtain specific information, please click 「Test」and fill in the address information in the Query parameters section.)
-            operationId: getAddress
-            security:
-                - {}
             parameters:
                 - '$ref': '#/components/parameters/address'
                 - '$ref': '#/components/parameters/address1'
@@ -463,21 +457,21 @@ components:
             name: address
             in: path
             description: Query of the user address.
-            required: ture
+            required: true
             schema:
                 type: string
         addresses:
             name: addresses
             in: query
             description: Query of the user addresses. (To query multiple addresses at the same time, please use ‘,’ to separate multiple addresses.)
-            required: ture
+            required: true
             schema:
                 type: string
         address1:
             name: address
             in: query
             description: Query of the user address.
-            required: ture
+            required: true
             schema:
                 type: string
         minStrxBalance:
@@ -767,7 +761,7 @@ components:
                         - :0x6933158b3c05
                 claimed:
                     type: boolean
-                    description: Indicates if this phase reward has been claimed. Ture means claimed, false means not yet.
+                    description: Indicates if this phase reward has been claimed. True means claimed, false means not yet.
                 index:
                     type: string
                     description: Index in hexadecimal format.
