@@ -132,10 +132,10 @@ Withdraw(address user, uint256 strx, uint256 trxAmount, uint256 userHoldStrx)
     * `userHoldStrx:` the total amount of sTRX held by user after the withdrawal.
 
 
-### **Withdraw sTRX (with the amount of TRX specified)**
-Specify the amount of TRX user hopes to obtain through withdrawal, the minimum unit.
+### **Withdraw sTRX (with the amount of sTRX specified)**
+Specify the amount of sTRX user hopes to obtain through withdrawal, the minimum unit.
 ``` solidity
-function withdrawExact(uint256 trxAmount) external returns (uint256)
+function withdrawExact(uint256 tokenAmount) external returns (uint256)
 ```
 
 * **Parameter description:**
