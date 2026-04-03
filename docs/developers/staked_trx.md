@@ -139,7 +139,7 @@ function withdrawExact(uint256 trxAmount) external returns (uint256)
 ```
 
 * **Parameter description:**
-    * `tokenAmount:` the specific amount of sTRX to withdraw.
+    * `trxAmount:` the specific amount of TRX.
 * **Returns:** the amount of sTRX withdrawn by user, the minimum unit.
 
 
