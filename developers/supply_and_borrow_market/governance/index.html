@@ -1789,11 +1789,11 @@ governance module(<a href="https://tronscan.org/#/contract/TEqiF5JbhDPD77yjEfnEM
 <h2 id="poll-vote"><strong>Poll &amp; Vote</strong><a class="headerlink" href="#poll-vote" title="Permanent link">&para;</a></h2>
 <h3 id="deposit"><strong>Deposit</strong><a class="headerlink" href="#deposit" title="Permanent link">&para;</a></h3>
 <p>Calling this method exchanges JST for WJST at a one-to-one ratio.
-<div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">deposit</span><span class="p">(</span><span class="kt">uint256</span><span class="w"> </span><span class="nv">sad</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span>
+<div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">deposit</span><span class="p">(</span><span class="kt">uint256</span><span class="w"> </span><span class="nv">amount</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span>
 </code></pre></div></p>
 <ul>
 <li><strong>Parameter description:</strong><ul>
-<li><code>sad:</code> number of votes(WJST) to exchange.</li>
+<li><code>amount:</code> number of votes(WJST) to exchange.</li>
 </ul>
 </li>
 <li><strong>Returns:</strong> None, reverts on error.</li>
@@ -1813,7 +1813,7 @@ governance module(<a href="https://tronscan.org/#/contract/TEqiF5JbhDPD77yjEfnEM
 </ul>
 <h3 id="cast-vote-with-reason"><strong>Cast Vote With Reason</strong><a class="headerlink" href="#cast-vote-with-reason" title="Permanent link">&para;</a></h3>
 <p>Calling this method casts a vote on a proposal. The reason can be submitted simultaneously.
-<div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">castVoteWithReason</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">proposalId</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">votes</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nv">support</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nv">calldata</span><span class="w"> </span>reson<span class="p">)</span><span class="w"> </span><span class="kt">public</span>
+<div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">castVoteWithReason</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">proposalId</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">votes</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nv">support</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nv">calldata</span><span class="w"> </span>reason<span class="p">)</span><span class="w"> </span><span class="kt">public</span>
 </code></pre></div></p>
 <ul>
 <li><strong>Parameter description:</strong><ul>
