@@ -119,11 +119,11 @@ function state(uint proposalId) public view returns (ProposalState)
 ### **Deposit**
 Calling this method exchanges JST for WJST at a one-to-one ratio.
 ``` solidity
-function deposit(uint256 sad) public
+function deposit(uint256 amount) public
 ```
 
 * **Parameter description:**
-    * `sad:` number of votes(WJST) to exchange.
+    * `amount:` number of votes(WJST) to exchange.
 * **Returns:** None, reverts on error.
 
 
@@ -143,7 +143,7 @@ function castVote(uint proposalId, uint votes, bool support) public
 ### **Cast Vote With Reason**
 Calling this method casts a vote on a proposal. The reason can be submitted simultaneously.
 ``` solidity
-function castVoteWithReason(uint proposalId, uint votes, bool support, string calldata reson) public
+function castVoteWithReason(uint proposalId, uint votes, bool support, string calldata reason) public
 ```
 
 * **Parameter description:**
