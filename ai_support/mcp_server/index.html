@@ -1196,6 +1196,15 @@
   
 </li>
       
+        <li class="md-nav__item ">
+  <a href="#quick-setup" class="md-nav__link" >
+    <span class="md-ellipsis">
+      Quick Setup
+    </span>
+  </a>
+  
+</li>
+      
         <li class="md-nav__item has-children">
   <a href="#configuration" class="md-nav__link" onclick="toggleChildren(event)" aria-expanded="false">
     <span class="md-ellipsis">
@@ -1207,9 +1216,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item ">
-  <a href="#wallet-setup-v102" class="md-nav__link" >
+  <a href="#wallet-setup-first-use-choice" class="md-nav__link" >
     <span class="md-ellipsis">
-      Wallet Setup (v1.0.2+)
+      Wallet Setup (First-Use Choice)
     </span>
   </a>
   
@@ -1258,9 +1267,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item ">
-  <a href="#tools-54-total" class="md-nav__link" >
+  <a href="#tools-60-total" class="md-nav__link" >
     <span class="md-ellipsis">
-      Tools (54 total)
+      Tools (60 total)
     </span>
   </a>
   
@@ -1698,7 +1707,7 @@
 <p>Beyond JustLend-specific operations, the server also exposes a full set of <strong>general-purpose TRON chain utilities</strong> — balance queries, block/transaction data, token metadata, TRX transfers, smart contract reads/writes, staking (Stake 2.0), multicall, and more.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Current version (<strong>v1.0.2</strong>) supports <strong>JustLend V1</strong> protocol. All contract addresses, ABIs, calculation functions, and lending operations are for V1.</p>
+<p>Current version (<strong>v1.0.3</strong>) supports <strong>JustLend V1</strong> protocol. All contract addresses, ABIs, calculation functions, and lending operations are for V1.</p>
 </div>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
 <p><a href="https://justlend.org">JustLend DAO</a> is the largest lending protocol on TRON, based on the Compound V2 architecture. This MCP server wraps the full protocol functionality into tools and guided prompts that AI agents (Claude Desktop, Cursor, etc.) can use.</p>
@@ -1706,15 +1715,16 @@
 <p><strong>JustLend Protocol</strong></p>
 <ul>
 <li><strong>Market Data</strong>: Real-time APYs, TVL, utilization rates, prices for all markets<ul>
-<li>Direct contract queries for on-chain accuracy</li>
-<li>API-based queries for comprehensive market data (more stable, includes historical data and mining rewards)</li>
+<li>Smart fallback: contract queries first, API fallback for reliability</li>
+<li>TTL caching (30–60s) to reduce RPC calls</li>
 </ul>
 </li>
-<li><strong>Account Data</strong>: Full position analysis with API support<ul>
-<li>Contract-based: Health factor, collateral, borrow positions</li>
-<li>API-based: Enhanced data with mining rewards, historical trends, risk metrics</li>
+<li><strong>Account Data</strong>: Full position analysis via Multicall3 batch queries (~2.5s vs ~8s legacy)<ul>
+<li>Health factor, collateral, borrow positions</li>
+<li>On-chain Oracle prices with API fallback</li>
 </ul>
 </li>
+<li><strong>Batch Wallet Balances</strong>: Query all TRC20 token balances in a single Multicall3 RPC call</li>
 <li><strong>Mining Rewards</strong>: Advanced mining reward calculation<ul>
 <li>Detailed breakdown by market and reward token (USDD, TRX, WBTC, etc.)</li>
 <li>Separates new period vs. last period rewards</li>
@@ -1729,9 +1739,16 @@
 <li><strong>Collateral Management</strong>: Enter/exit markets, manage what counts as collateral</li>
 <li><strong>Portfolio Analysis</strong>: AI-guided risk assessment, health factor monitoring, optimization</li>
 <li><strong>Token Approvals</strong>: Manage TRC20 approvals for jToken contracts</li>
+<li><strong>Energy Cost Estimation</strong>: Estimate energy, bandwidth, and TRX cost for any lending operation before executing</li>
 <li><strong>JST Voting / Governance</strong>: View proposals, cast votes, deposit/withdraw JST for voting power, reclaim votes</li>
 <li><strong>Energy Rental</strong>: Rent energy from JustLend, calculate rental prices, query rental orders, return/cancel rentals</li>
 <li><strong>sTRX Staking</strong>: Stake TRX to receive sTRX, unstake sTRX, claim staking rewards, check withdrawal eligibility</li>
+</ul>
+<p><strong>Browser Wallet Signing (New in v1.0.3)</strong></p>
+<ul>
+<li><strong>TronLink Integration</strong>: Connect TronLink or other browser wallets via localhost HTTP bridge</li>
+<li><strong>Sign-only mode</strong>: Server builds transactions, browser only signs — private keys never leave the wallet</li>
+<li><strong>Dual wallet mode</strong>: Users choose between <code>browser</code> (recommended) or <code>agent</code> (encrypted local storage)</li>
 </ul>
 <p><strong>General TRON Chain</strong></p>
 <ul>
@@ -1743,7 +1760,7 @@
 <li><strong>Transfers</strong>: Send TRX, transfer TRC20 tokens, approve spenders</li>
 <li><strong>Staking (Stake 2.0)</strong>: Freeze/unfreeze TRX for BANDWIDTH or ENERGY, withdraw expired unfreeze</li>
 <li><strong>Address Utilities</strong>: Hex ↔ Base58 conversion, address validation, resolution</li>
-<li><strong>Wallet</strong>: Encrypted local wallet management via agent-wallet, multi-wallet support, sign messages, sign typed data (EIP-712)</li>
+<li><strong>Wallet</strong>: Sign messages, secure key management via agent-wallet or browser wallet</li>
 </ul>
 <h2 id="supported-markets">Supported Markets<a class="headerlink" href="#supported-markets" title="Permanent link">&para;</a></h2>
 <table>
@@ -1807,30 +1824,73 @@
 <span class="nb">cd</span><span class="w"> </span>mcp-server-justlend
 npm<span class="w"> </span>install
 </code></pre></div>
+<h2 id="quick-setup">Quick Setup<a class="headerlink" href="#quick-setup" title="Permanent link">&para;</a></h2>
+<p>For a guided setup experience (build, configure, generate <code>.mcp.json</code>):</p>
+<div class="highlight"><pre><span></span><code>bash<span class="w"> </span>scripts/setup-mcp-test.sh
+<span class="c1"># Add --claude-desktop to also output Claude Desktop config</span>
+</code></pre></div>
+<p>The script checks Node.js 20+, installs dependencies, builds the project, and generates the MCP client configuration.</p>
 <h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
-<h3 id="wallet-setup-v102">Wallet Setup (v1.0.2+)<a class="headerlink" href="#wallet-setup-v102" title="Permanent link">&para;</a></h3>
-<p>Starting from v1.0.2, private keys are managed by <a href="https://www.npmjs.com/package/@bankofai/agent-wallet"><code>@bankofai/agent-wallet</code></a> — an encrypted local wallet solution. Private keys are <strong>never</strong> stored in environment variables, config files, or passed as function parameters. They are encrypted at rest in <code>~/.agent-wallet/</code> with proper file permissions (<code>0600</code>).</p>
-<h4 id="zero-config-auto-generation">Zero-Config Auto-Generation<a class="headerlink" href="#zero-config-auto-generation" title="Permanent link">&para;</a></h4>
-<p>Simply start the server — if no wallet exists, one is automatically generated:</p>
-<div class="highlight"><pre><span></span><code>npm<span class="w"> </span>start
-<span class="c1"># → Wallet: auto-generated new wallet &quot;default&quot;</span>
-<span class="c1"># → Address: TXxx...xxx</span>
-<span class="c1"># → Encrypted private key stored in ~/.agent-wallet/</span>
-</code></pre></div>
-<p>The wallet persists across restarts (the address does not change).</p>
-<h4 id="import-an-existing-wallet">Import an Existing Wallet<a class="headerlink" href="#import-an-existing-wallet" title="Permanent link">&para;</a></h4>
-<p>To use an existing private key, import it via the <code>agent-wallet</code> CLI (recommended over MCP tool to avoid key exposure in conversation logs):</p>
-<div class="highlight"><pre><span></span><code>npx<span class="w"> </span>agent-wallet<span class="w"> </span>import<span class="w"> </span>&lt;wallet-name&gt;<span class="w"> </span>--private-key<span class="w"> </span>&lt;hex&gt;
-npx<span class="w"> </span>agent-wallet<span class="w"> </span>import<span class="w"> </span>&lt;wallet-name&gt;<span class="w"> </span>--mnemonic<span class="w"> </span><span class="s2">&quot;word1 word2 ... word12&quot;</span>
-</code></pre></div>
-<h4 id="multi-wallet-management">Multi-Wallet Management<a class="headerlink" href="#multi-wallet-management" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="c1"># List all wallets</span>
+<h3 id="wallet-setup-first-use-choice">Wallet Setup (First-Use Choice)<a class="headerlink" href="#wallet-setup-first-use-choice" title="Permanent link">&para;</a></h3>
+<p>On first use, the server presents a wallet mode selection. Users choose between:</p>
+<ol>
+<li><strong>Browser mode</strong> (recommended): Connect TronLink via <code>connect_browser_wallet</code> — private keys never leave the browser</li>
+<li><strong>Agent mode</strong>: Encrypted local wallet via <code>set_wallet_mode</code> with <code>mode="agent"</code> — keys stored in <code>~/.agent-wallet/</code></li>
+</ol>
+<p>Private keys are <strong>never</strong> stored in environment variables by default.</p>
+<p>You can also manage wallets via <strong>CLI</strong> or <strong>MCP tools</strong>:</p>
+<h4 id="cli-agent-wallet">CLI (agent-wallet)<a class="headerlink" href="#cli-agent-wallet" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="c1"># Import an existing private key or mnemonic</span>
+npx<span class="w"> </span>agent-wallet<span class="w"> </span>add
+
+<span class="c1"># Generate a new wallet</span>
+npx<span class="w"> </span>agent-wallet<span class="w"> </span>generate
+
+<span class="c1"># List all wallets</span>
 npx<span class="w"> </span>agent-wallet<span class="w"> </span>list
 
-<span class="c1"># Set active wallet</span>
-npx<span class="w"> </span>agent-wallet<span class="w"> </span>use<span class="w"> </span>&lt;wallet-name&gt;
+<span class="c1"># Switch active wallet</span>
+npx<span class="w"> </span>agent-wallet<span class="w"> </span>activate<span class="w"> </span>&lt;wallet-id&gt;
 </code></pre></div>
-<p>You can also manage wallets at runtime via the MCP tools <code>list_wallets</code>, <code>set_active_wallet</code>, and <code>import_wallet</code>.</p>
+<h4 id="mcp-tools-runtime">MCP Tools (runtime)<a class="headerlink" href="#mcp-tools-runtime" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>get_wallet_address</code></td>
+<td>Shows current address, or returns first-use wallet selection guidance</td>
+</tr>
+<tr>
+<td><code>connect_browser_wallet</code></td>
+<td>Connect TronLink / browser wallet for signing</td>
+</tr>
+<tr>
+<td><code>set_wallet_mode</code></td>
+<td>Switch between <code>browser</code> and <code>agent</code> signing</td>
+</tr>
+<tr>
+<td><code>get_wallet_mode</code></td>
+<td>Show current signing mode and addresses</td>
+</tr>
+<tr>
+<td><code>import_wallet</code></td>
+<td>Import an existing private key (stored encrypted)</td>
+</tr>
+<tr>
+<td><code>list_wallets</code></td>
+<td>List all wallets with IDs, types, addresses</td>
+</tr>
+<tr>
+<td><code>set_active_wallet</code></td>
+<td>Switch active wallet by ID</td>
+</tr>
+</tbody>
+</table>
 <h3 id="environment-variables">Environment Variables<a class="headerlink" href="#environment-variables" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="c1"># Strongly recommended — avoids TronGrid 429 rate limiting on mainnet</span>
 <span class="nb">export</span><span class="w"> </span><span class="nv">TRONGRID_API_KEY</span><span class="o">=</span><span class="s2">&quot;your_trongrid_api_key&quot;</span>
@@ -1858,7 +1918,7 @@ npx<span class="w"> </span>agent-wallet<span class="w"> </span>use<span class="w
 </code></pre></div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>No <code>TRON_PRIVATE_KEY</code> needed — the server uses the encrypted agent-wallet automatically.</p>
+<p>No <code>TRON_PRIVATE_KEY</code> needed — the server uses the encrypted agent-wallet or browser wallet automatically.</p>
 </div>
 <h4 id="cursor">Cursor<a class="headerlink" href="#cursor" title="Permanent link">&para;</a></h4>
 <p>Add to <code>.cursor/mcp.json</code>:</p>
@@ -1886,7 +1946,7 @@ npm<span class="w"> </span>run<span class="w"> </span>start:http
 npm<span class="w"> </span>run<span class="w"> </span>dev
 </code></pre></div>
 <h2 id="api-reference">API Reference<a class="headerlink" href="#api-reference" title="Permanent link">&para;</a></h2>
-<h3 id="tools-54-total">Tools (54 total)<a class="headerlink" href="#tools-54-total" title="Permanent link">&para;</a></h3>
+<h3 id="tools-60-total">Tools (60 total)<a class="headerlink" href="#tools-60-total" title="Permanent link">&para;</a></h3>
 <h4 id="wallet-network">Wallet &amp; Network<a class="headerlink" href="#wallet-network" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
@@ -1899,23 +1959,38 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 <tbody>
 <tr>
 <td><code>get_wallet_address</code></td>
-<td>Show active wallet address</td>
+<td>Show wallet address or first-use wallet selection guidance</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>connect_browser_wallet</code></td>
+<td>Connect TronLink / browser wallet for signing</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>set_wallet_mode</code></td>
+<td>Switch between <code>browser</code> and <code>agent</code> signing</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>get_wallet_mode</code></td>
+<td>Show current signing mode and addresses</td>
 <td>No</td>
 </tr>
 <tr>
 <td><code>list_wallets</code></td>
-<td>List all wallets managed by agent-wallet</td>
+<td>List all wallets (IDs, types, addresses)</td>
 <td>No</td>
 </tr>
 <tr>
 <td><code>set_active_wallet</code></td>
-<td>Switch the active wallet by name</td>
+<td>Switch active wallet by wallet ID</td>
 <td>No</td>
 </tr>
 <tr>
 <td><code>import_wallet</code></td>
-<td>Import a wallet from private key or mnemonic (CLI import recommended for security)</td>
-<td><strong>Yes</strong></td>
+<td>Import existing private key (stored encrypted)</td>
+<td>No</td>
 </tr>
 <tr>
 <td><code>get_supported_networks</code></td>
@@ -1925,6 +2000,16 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 <tr>
 <td><code>get_supported_markets</code></td>
 <td>List all jToken markets with addresses</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>set_network</code></td>
+<td>Set global default network (mainnet, nile)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>get_network</code></td>
+<td>Get current global default network</td>
 <td>No</td>
 </tr>
 </tbody>
@@ -1941,32 +2026,17 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 <tbody>
 <tr>
 <td><code>get_market_data</code></td>
-<td>Detailed data for one market (APY, TVL, rates) - Contract query</td>
+<td>Detailed data for one market (APY, TVL, rates) — contract + API fallback</td>
 <td>No</td>
 </tr>
 <tr>
 <td><code>get_all_markets</code></td>
-<td>Overview of all markets - Contract query</td>
+<td>Overview of all markets — contract + API fallback</td>
 <td>No</td>
 </tr>
 <tr>
 <td><code>get_protocol_summary</code></td>
-<td>Comptroller config &amp; protocol parameters - Contract query</td>
-<td>No</td>
-</tr>
-<tr>
-<td><code>get_markets_from_api</code></td>
-<td><strong>[API]</strong> All market data with mining rewards &amp; trends</td>
-<td>No</td>
-</tr>
-<tr>
-<td><code>get_dashboard_from_api</code></td>
-<td><strong>[API]</strong> Protocol-level statistics (TVL, users, etc.)</td>
-<td>No</td>
-</tr>
-<tr>
-<td><code>get_jtoken_details_from_api</code></td>
-<td><strong>[API]</strong> Detailed jToken info with interest rate model</td>
+<td>Comptroller config &amp; protocol parameters — contract query</td>
 <td>No</td>
 </tr>
 </tbody>
@@ -1983,12 +2053,7 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 <tbody>
 <tr>
 <td><code>get_account_summary</code></td>
-<td>Full position: supplies, borrows, health factor - Contract query</td>
-<td>No</td>
-</tr>
-<tr>
-<td><code>get_account_data_from_api</code></td>
-<td><strong>[API]</strong> Enhanced account data with mining rewards &amp; trends</td>
+<td>Full position: supplies, borrows, health factor — Multicall3 batch</td>
 <td>No</td>
 </tr>
 <tr>
@@ -2004,6 +2069,11 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 <tr>
 <td><code>get_token_balance</code></td>
 <td>TRC20 token balance</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>get_wallet_balances</code></td>
+<td>Batch-fetch TRC20 balances across multiple markets via Multicall3</td>
 <td>No</td>
 </tr>
 </tbody>
@@ -2062,6 +2132,38 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 <td><code>claim_rewards</code></td>
 <td>Claim mining rewards</td>
 <td><strong>Yes</strong></td>
+</tr>
+<tr>
+<td><code>estimate_lending_energy</code></td>
+<td>Estimate energy/bandwidth/TRX cost for any lending operation</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<h4 id="mining-rewards">Mining &amp; Rewards<a class="headerlink" href="#mining-rewards" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Description</th>
+<th>Write?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>get_mining_rewards</code></td>
+<td>Unclaimed mining rewards, APY, and reward breakdown</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>get_usdd_mining_config</code></td>
+<td>USDD mining periods, reward tokens, and schedule</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>get_wbtc_mining_config</code></td>
+<td>WBTC supply mining configuration and activity details</td>
+<td>No</td>
 </tr>
 </tbody>
 </table>
@@ -2231,6 +2333,28 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 </tr>
 </tbody>
 </table>
+<h4 id="transfers">Transfers<a class="headerlink" href="#transfers" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Description</th>
+<th>Write?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>transfer_trx</code></td>
+<td>Transfer TRX to another address (with balance check)</td>
+<td><strong>Yes</strong></td>
+</tr>
+<tr>
+<td><code>transfer_trc20</code></td>
+<td>Transfer TRC20 tokens by symbol or contract address</td>
+<td><strong>Yes</strong></td>
+</tr>
+</tbody>
+</table>
 <h3 id="prompts-ai-guided-workflows">Prompts (AI-Guided Workflows)<a class="headerlink" href="#prompts-ai-guided-workflows" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -2240,6 +2364,10 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 </tr>
 </thead>
 <tbody>
+<tr>
+<td><code>getting_started</code></td>
+<td>First-time onboarding: wallet setup, connection, feature tour</td>
+</tr>
 <tr>
 <td><code>supply_assets</code></td>
 <td>Step-by-step supply with balance checks and approval</td>
@@ -2272,8 +2400,9 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 </table>
 <h2 id="security-considerations">Security Considerations<a class="headerlink" href="#security-considerations" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Encrypted wallet</strong>: Private keys are encrypted at rest in <code>~/.agent-wallet/</code> with file permissions <code>0600</code>/<code>0700</code> — never stored in environment variables or config files</li>
-<li><strong>No key in parameters</strong>: All signing functions use the agent-wallet internally; private keys are never passed as function parameters or exposed via MCP tools</li>
+<li><strong>Browser wallet (recommended)</strong>: Private keys never leave TronLink — MCP server only sends unsigned transactions to the browser and receives signed results</li>
+<li><strong>Encrypted agent-wallet</strong>: Private keys are encrypted at rest in <code>~/.agent-wallet/</code> with file permissions <code>0600</code>/<code>0700</code> — never stored in environment variables or config files</li>
+<li><strong>No key in parameters</strong>: All signing functions use the agent-wallet or browser wallet internally; private keys are never passed as function parameters or exposed via MCP tools</li>
 <li><strong>Import via CLI</strong>: Use <code>npx agent-wallet import</code> from a terminal rather than the <code>import_wallet</code> MCP tool to avoid key exposure in AI conversation logs</li>
 <li><strong>Write operations</strong> are clearly marked with <code>destructiveHint: true</code> in MCP annotations</li>
 <li><strong>Health factor checks</strong> in prompts prevent dangerous borrowing</li>
@@ -2311,6 +2440,10 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 → AI calls <code>get_strx_account</code> to check claimable rewards → calls <code>claim_strx_rewards</code> if available</p>
 <p><strong>"Can I withdraw my unstaked TRX?"</strong>
 → AI calls <code>check_strx_withdrawal_eligibility</code> to check unbonding status and completed withdrawal rounds</p>
+<p><strong>"Connect my TronLink wallet"</strong>
+→ AI calls <code>connect_browser_wallet</code>, opens browser window for user to approve in TronLink</p>
+<p><strong>"How much energy will supplying 100 USDT cost?"</strong>
+→ AI calls <code>estimate_lending_energy</code> with operation=supply, market=jUSDT, amount=100, returns energy/bandwidth/TRX breakdown</p>
 
 
 
