@@ -7,7 +7,7 @@ The JustLend MCP Server (`@justlend/mcp-server-justlend`) is a [Model Context Pr
 Beyond JustLend-specific operations, the server also exposes a full set of **general-purpose TRON chain utilities** — balance queries, block/transaction data, token metadata, TRX transfers, smart contract reads/writes, staking (Stake 2.0), multicall, and more.
 
 !!! note
-    Current version (**v1.0.2**) supports **JustLend V1** protocol. All contract addresses, ABIs, calculation functions, and lending operations are for V1.
+    Current version (**v1.0.3**) supports **JustLend V1** protocol. All contract addresses, ABIs, calculation functions, and lending operations are for V1.
 
 ## Overview
 
@@ -18,11 +18,12 @@ Beyond JustLend-specific operations, the server also exposes a full set of **gen
 **JustLend Protocol**
 
 - **Market Data**: Real-time APYs, TVL, utilization rates, prices for all markets
-    - Direct contract queries for on-chain accuracy
-    - API-based queries for comprehensive market data (more stable, includes historical data and mining rewards)
-- **Account Data**: Full position analysis with API support
-    - Contract-based: Health factor, collateral, borrow positions
-    - API-based: Enhanced data with mining rewards, historical trends, risk metrics
+    - Smart fallback: contract queries first, API fallback for reliability
+    - TTL caching (30–60s) to reduce RPC calls
+- **Account Data**: Full position analysis via Multicall3 batch queries (~2.5s vs ~8s legacy)
+    - Health factor, collateral, borrow positions
+    - On-chain Oracle prices with API fallback
+- **Batch Wallet Balances**: Query all TRC20 token balances in a single Multicall3 RPC call
 - **Mining Rewards**: Advanced mining reward calculation
     - Detailed breakdown by market and reward token (USDD, TRX, WBTC, etc.)
     - Separates new period vs. last period rewards
@@ -35,9 +36,16 @@ Beyond JustLend-specific operations, the server also exposes a full set of **gen
 - **Collateral Management**: Enter/exit markets, manage what counts as collateral
 - **Portfolio Analysis**: AI-guided risk assessment, health factor monitoring, optimization
 - **Token Approvals**: Manage TRC20 approvals for jToken contracts
+- **Energy Cost Estimation**: Estimate energy, bandwidth, and TRX cost for any lending operation before executing
 - **JST Voting / Governance**: View proposals, cast votes, deposit/withdraw JST for voting power, reclaim votes
 - **Energy Rental**: Rent energy from JustLend, calculate rental prices, query rental orders, return/cancel rentals
 - **sTRX Staking**: Stake TRX to receive sTRX, unstake sTRX, claim staking rewards, check withdrawal eligibility
+
+**Browser Wallet Signing (New in v1.0.3)**
+
+- **TronLink Integration**: Connect TronLink or other browser wallets via localhost HTTP bridge
+- **Sign-only mode**: Server builds transactions, browser only signs — private keys never leave the wallet
+- **Dual wallet mode**: Users choose between `browser` (recommended) or `agent` (encrypted local storage)
 
 **General TRON Chain**
 
@@ -49,7 +57,7 @@ Beyond JustLend-specific operations, the server also exposes a full set of **gen
 - **Transfers**: Send TRX, transfer TRC20 tokens, approve spenders
 - **Staking (Stake 2.0)**: Freeze/unfreeze TRX for BANDWIDTH or ENERGY, withdraw expired unfreeze
 - **Address Utilities**: Hex ↔ Base58 conversion, address validation, resolution
-- **Wallet**: Encrypted local wallet management via agent-wallet, multi-wallet support, sign messages, sign typed data (EIP-712)
+- **Wallet**: Sign messages, secure key management via agent-wallet or browser wallet
 
 ## Supported Markets
 
@@ -77,45 +85,56 @@ cd mcp-server-justlend
 npm install
 ```
 
+## Quick Setup
+
+For a guided setup experience (build, configure, generate `.mcp.json`):
+
+```bash
+bash scripts/setup-mcp-test.sh
+# Add --claude-desktop to also output Claude Desktop config
+```
+
+The script checks Node.js 20+, installs dependencies, builds the project, and generates the MCP client configuration.
+
 ## Configuration
 
-### Wallet Setup (v1.0.2+)
+### Wallet Setup (First-Use Choice)
 
-Starting from v1.0.2, private keys are managed by [`@bankofai/agent-wallet`](https://www.npmjs.com/package/@bankofai/agent-wallet) — an encrypted local wallet solution. Private keys are **never** stored in environment variables, config files, or passed as function parameters. They are encrypted at rest in `~/.agent-wallet/` with proper file permissions (`0600`).
+On first use, the server presents a wallet mode selection. Users choose between:
 
-#### Zero-Config Auto-Generation
+1. **Browser mode** (recommended): Connect TronLink via `connect_browser_wallet` — private keys never leave the browser
+2. **Agent mode**: Encrypted local wallet via `set_wallet_mode` with `mode="agent"` — keys stored in `~/.agent-wallet/`
 
-Simply start the server — if no wallet exists, one is automatically generated:
+Private keys are **never** stored in environment variables by default.
 
+You can also manage wallets via **CLI** or **MCP tools**:
+
+#### CLI (agent-wallet)
 ```bash
-npm start
-# → Wallet: auto-generated new wallet "default"
-# → Address: TXxx...xxx
-# → Encrypted private key stored in ~/.agent-wallet/
-```
+# Import an existing private key or mnemonic
+npx agent-wallet add
 
-The wallet persists across restarts (the address does not change).
+# Generate a new wallet
+npx agent-wallet generate
 
-#### Import an Existing Wallet
-
-To use an existing private key, import it via the `agent-wallet` CLI (recommended over MCP tool to avoid key exposure in conversation logs):
-
-```bash
-npx agent-wallet import <wallet-name> --private-key <hex>
-npx agent-wallet import <wallet-name> --mnemonic "word1 word2 ... word12"
-```
-
-#### Multi-Wallet Management
-
-```bash
 # List all wallets
 npx agent-wallet list
 
-# Set active wallet
-npx agent-wallet use <wallet-name>
+# Switch active wallet
+npx agent-wallet activate <wallet-id>
 ```
 
-You can also manage wallets at runtime via the MCP tools `list_wallets`, `set_active_wallet`, and `import_wallet`.
+#### MCP Tools (runtime)
+
+| Tool | Description |
+|------|-------------|
+| `get_wallet_address` | Shows current address, or returns first-use wallet selection guidance |
+| `connect_browser_wallet` | Connect TronLink / browser wallet for signing |
+| `set_wallet_mode` | Switch between `browser` and `agent` signing |
+| `get_wallet_mode` | Show current signing mode and addresses |
+| `import_wallet` | Import an existing private key (stored encrypted) |
+| `list_wallets` | List all wallets with IDs, types, addresses |
+| `set_active_wallet` | Switch active wallet by ID |
 
 ### Environment Variables
 
@@ -151,7 +170,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 ```
 
 !!! tip
-    No `TRON_PRIVATE_KEY` needed — the server uses the encrypted agent-wallet automatically.
+    No `TRON_PRIVATE_KEY` needed — the server uses the encrypted agent-wallet or browser wallet automatically.
 
 #### Cursor
 
@@ -187,39 +206,41 @@ npm run dev
 
 ## API Reference
 
-### Tools (54 total)
+### Tools (60 total)
 
 #### Wallet & Network
 
 | Tool | Description | Write? |
 |------|-------------|--------|
-| `get_wallet_address` | Show active wallet address | No |
-| `list_wallets` | List all wallets managed by agent-wallet | No |
-| `set_active_wallet` | Switch the active wallet by name | No |
-| `import_wallet` | Import a wallet from private key or mnemonic (CLI import recommended for security) | **Yes** |
+| `get_wallet_address` | Show wallet address or first-use wallet selection guidance | No |
+| `connect_browser_wallet` | Connect TronLink / browser wallet for signing | Yes |
+| `set_wallet_mode` | Switch between `browser` and `agent` signing | Yes |
+| `get_wallet_mode` | Show current signing mode and addresses | No |
+| `list_wallets` | List all wallets (IDs, types, addresses) | No |
+| `set_active_wallet` | Switch active wallet by wallet ID | No |
+| `import_wallet` | Import existing private key (stored encrypted) | No |
 | `get_supported_networks` | List available networks | No |
 | `get_supported_markets` | List all jToken markets with addresses | No |
+| `set_network` | Set global default network (mainnet, nile) | Yes |
+| `get_network` | Get current global default network | No |
 
 #### Market Data
 
 | Tool | Description | Write? |
 |------|-------------|--------|
-| `get_market_data` | Detailed data for one market (APY, TVL, rates) - Contract query | No |
-| `get_all_markets` | Overview of all markets - Contract query | No |
-| `get_protocol_summary` | Comptroller config & protocol parameters - Contract query | No |
-| `get_markets_from_api` | **[API]** All market data with mining rewards & trends | No |
-| `get_dashboard_from_api` | **[API]** Protocol-level statistics (TVL, users, etc.) | No |
-| `get_jtoken_details_from_api` | **[API]** Detailed jToken info with interest rate model | No |
+| `get_market_data` | Detailed data for one market (APY, TVL, rates) — contract + API fallback | No |
+| `get_all_markets` | Overview of all markets — contract + API fallback | No |
+| `get_protocol_summary` | Comptroller config & protocol parameters — contract query | No |
 
 #### Account & Balances
 
 | Tool | Description | Write? |
 |------|-------------|--------|
-| `get_account_summary` | Full position: supplies, borrows, health factor - Contract query | No |
-| `get_account_data_from_api` | **[API]** Enhanced account data with mining rewards & trends | No |
+| `get_account_summary` | Full position: supplies, borrows, health factor — Multicall3 batch | No |
 | `check_allowance` | Check TRC20 approval for jToken | No |
 | `get_trx_balance` | TRX balance | No |
 | `get_token_balance` | TRC20 token balance | No |
+| `get_wallet_balances` | Batch-fetch TRC20 balances across multiple markets via Multicall3 | No |
 
 #### Lending Operations
 
@@ -234,6 +255,15 @@ npm run dev
 | `exit_market` | Disable market as collateral | **Yes** |
 | `approve_underlying` | Approve TRC20 for jToken | **Yes** |
 | `claim_rewards` | Claim mining rewards | **Yes** |
+| `estimate_lending_energy` | Estimate energy/bandwidth/TRX cost for any lending operation | No |
+
+#### Mining & Rewards
+
+| Tool | Description | Write? |
+|------|-------------|--------|
+| `get_mining_rewards` | Unclaimed mining rewards, APY, and reward breakdown | No |
+| `get_usdd_mining_config` | USDD mining periods, reward tokens, and schedule | No |
+| `get_wbtc_mining_config` | WBTC supply mining configuration and activity details | No |
 
 #### JST Voting / Governance
 
@@ -276,10 +306,18 @@ npm run dev
 | `unstake_strx` | Unstake sTRX to receive TRX back (with balance check) | **Yes** |
 | `claim_strx_rewards` | Claim all staking rewards (with rewards existence check) | **Yes** |
 
+#### Transfers
+
+| Tool | Description | Write? |
+|------|-------------|--------|
+| `transfer_trx` | Transfer TRX to another address (with balance check) | **Yes** |
+| `transfer_trc20` | Transfer TRC20 tokens by symbol or contract address | **Yes** |
+
 ### Prompts (AI-Guided Workflows)
 
 | Prompt | Description |
 |--------|-------------|
+| `getting_started` | First-time onboarding: wallet setup, connection, feature tour |
 | `supply_assets` | Step-by-step supply with balance checks and approval |
 | `borrow_assets` | Safe borrowing with risk assessment and health factor checks |
 | `repay_borrow` | Guided repayment with verification |
@@ -290,8 +328,9 @@ npm run dev
 
 ## Security Considerations
 
-- **Encrypted wallet**: Private keys are encrypted at rest in `~/.agent-wallet/` with file permissions `0600`/`0700` — never stored in environment variables or config files
-- **No key in parameters**: All signing functions use the agent-wallet internally; private keys are never passed as function parameters or exposed via MCP tools
+- **Browser wallet (recommended)**: Private keys never leave TronLink — MCP server only sends unsigned transactions to the browser and receives signed results
+- **Encrypted agent-wallet**: Private keys are encrypted at rest in `~/.agent-wallet/` with file permissions `0600`/`0700` — never stored in environment variables or config files
+- **No key in parameters**: All signing functions use the agent-wallet or browser wallet internally; private keys are never passed as function parameters or exposed via MCP tools
 - **Import via CLI**: Use `npx agent-wallet import` from a terminal rather than the `import_wallet` MCP tool to avoid key exposure in AI conversation logs
 - **Write operations** are clearly marked with `destructiveHint: true` in MCP annotations
 - **Health factor checks** in prompts prevent dangerous borrowing
@@ -344,3 +383,9 @@ npm run dev
 
 **"Can I withdraw my unstaked TRX?"**
 → AI calls `check_strx_withdrawal_eligibility` to check unbonding status and completed withdrawal rounds
+
+**"Connect my TronLink wallet"**
+→ AI calls `connect_browser_wallet`, opens browser window for user to approve in TronLink
+
+**"How much energy will supplying 100 USDT cost?"**
+→ AI calls `estimate_lending_energy` with operation=supply, market=jUSDT, amount=100, returns energy/bandwidth/TRX breakdown
