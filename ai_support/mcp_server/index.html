@@ -1267,9 +1267,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item ">
-  <a href="#tools-60-total" class="md-nav__link" >
+  <a href="#tools-59-total" class="md-nav__link" >
     <span class="md-ellipsis">
-      Tools (60 total)
+      Tools (59 total)
     </span>
   </a>
   
@@ -1707,10 +1707,10 @@
 <p>Beyond JustLend-specific operations, the server also exposes a full set of <strong>general-purpose TRON chain utilities</strong> — balance queries, block/transaction data, token metadata, TRX transfers, smart contract reads/writes, staking (Stake 2.0), multicall, and more.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Current version (<strong>v1.0.3</strong>) supports <strong>JustLend V1</strong> protocol. All contract addresses, ABIs, calculation functions, and lending operations are for V1.</p>
+<p>Current version (<strong>v1.0.4</strong>) supports <strong>JustLend V1</strong> protocol. All contract addresses, ABIs, calculation functions, and lending operations are for V1.</p>
 </div>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
-<p><a href="https://justlend.org">JustLend DAO</a> is the largest lending protocol on TRON, based on the Compound V2 architecture. This MCP server wraps the full protocol functionality into tools and guided prompts that AI agents (Claude Desktop, Cursor, etc.) can use.</p>
+<p><a href="https://justlend.org">JustLend DAO</a> is the largest lending protocol on TRON, based on the Compound V2 architecture. This MCP server wraps the full protocol functionality into tools and guided prompts that local MCP clients such as Claude Desktop, Claude Code, and Cursor can use.</p>
 <h3 id="key-capabilities">Key Capabilities<a class="headerlink" href="#key-capabilities" title="Permanent link">&para;</a></h3>
 <p><strong>JustLend Protocol</strong></p>
 <ul>
@@ -1744,9 +1744,9 @@
 <li><strong>Energy Rental</strong>: Rent energy from JustLend, calculate rental prices, query rental orders, return/cancel rentals</li>
 <li><strong>sTRX Staking</strong>: Stake TRX to receive sTRX, unstake sTRX, claim staking rewards, check withdrawal eligibility</li>
 </ul>
-<p><strong>Browser Wallet Signing (New in v1.0.3)</strong></p>
+<p><strong>Browser Wallet Signing</strong></p>
 <ul>
-<li><strong>TronLink Integration</strong>: Connect TronLink or other browser wallets via localhost HTTP bridge</li>
+<li><strong>TronLink Integration</strong>: Connect TronLink or other browser wallets via <code>tronlink-signer</code> SDK</li>
 <li><strong>Sign-only mode</strong>: Server builds transactions, browser only signs — private keys never leave the wallet</li>
 <li><strong>Dual wallet mode</strong>: Users choose between <code>browser</code> (recommended) or <code>agent</code> (encrypted local storage)</li>
 </ul>
@@ -1827,9 +1827,9 @@ npm<span class="w"> </span>install
 <h2 id="quick-setup">Quick Setup<a class="headerlink" href="#quick-setup" title="Permanent link">&para;</a></h2>
 <p>For a guided setup experience (build, configure, generate <code>.mcp.json</code>):</p>
 <div class="highlight"><pre><span></span><code>bash<span class="w"> </span>scripts/setup-mcp-test.sh
-<span class="c1"># Add --claude-desktop to also output Claude Desktop config</span>
+<span class="c1"># Add --claude-desktop to also print Claude Desktop JSON</span>
 </code></pre></div>
-<p>The script checks Node.js 20+, installs dependencies, builds the project, and generates the MCP client configuration.</p>
+<p>The script checks Node.js 20+, installs dependencies, builds the project, and generates local Claude Code config.</p>
 <h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
 <h3 id="wallet-setup-first-use-choice">Wallet Setup (First-Use Choice)<a class="headerlink" href="#wallet-setup-first-use-choice" title="Permanent link">&para;</a></h3>
 <p>On first use, the server presents a wallet mode selection. Users choose between:</p>
@@ -1878,10 +1878,6 @@ npx<span class="w"> </span>agent-wallet<span class="w"> </span>activate<span cla
 <td>Show current signing mode and addresses</td>
 </tr>
 <tr>
-<td><code>import_wallet</code></td>
-<td>Import an existing private key (stored encrypted)</td>
-</tr>
-<tr>
 <td><code>list_wallets</code></td>
 <td>List all wallets with IDs, types, addresses</td>
 </tr>
@@ -1891,6 +1887,9 @@ npx<span class="w"> </span>agent-wallet<span class="w"> </span>activate<span cla
 </tr>
 </tbody>
 </table>
+<p>Importing an existing private key is intentionally not exposed as an MCP tool because MCP arguments can be logged by clients and transports. Use the CLI instead:</p>
+<div class="highlight"><pre><span></span><code>npx<span class="w"> </span>agent-wallet<span class="w"> </span>import
+</code></pre></div>
 <h3 id="environment-variables">Environment Variables<a class="headerlink" href="#environment-variables" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="c1"># Strongly recommended — avoids TronGrid 429 rate limiting on mainnet</span>
 <span class="nb">export</span><span class="w"> </span><span class="nv">TRONGRID_API_KEY</span><span class="o">=</span><span class="s2">&quot;your_trongrid_api_key&quot;</span>
@@ -1901,14 +1900,33 @@ npx<span class="w"> </span>agent-wallet<span class="w"> </span>activate<span cla
 <span class="nb">export</span><span class="w"> </span><span class="nv">MCP_HTTP_HOST</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="w">  </span><span class="c1"># HTTP server host (default: 127.0.0.1)</span>
 </code></pre></div>
 <h3 id="client-configuration">Client Configuration<a class="headerlink" href="#client-configuration" title="Permanent link">&para;</a></h3>
+<p>Build the local server first:</p>
+<div class="highlight"><pre><span></span><code>npm<span class="w"> </span>run<span class="w"> </span>build
+</code></pre></div>
+<p>All local client examples below use the built stdio entrypoint:</p>
+<div class="highlight"><pre><span></span><code>node<span class="w"> </span>/absolute/path/to/mcp-server-justlend/build/index.js
+</code></pre></div>
 <h4 id="claude-desktop">Claude Desktop<a class="headerlink" href="#claude-desktop" title="Permanent link">&para;</a></h4>
 <p>Add to <code>~/Library/Application Support/Claude/claude_desktop_config.json</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
 <span class="w">  </span><span class="nt">&quot;mcpServers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;mcp-server-justlend&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;stdio&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;npx&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;tsx&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@justlend/mcp-server-justlend&quot;</span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;justlend&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;node&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;/absolute/path/to/mcp-server-justlend/build/index.js&quot;</span><span class="p">],</span>
+<span class="w">      </span><span class="nt">&quot;env&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;TRONGRID_API_KEY&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SET_VIA_SYSTEM_ENV&quot;</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h4 id="claude-code">Claude Code<a class="headerlink" href="#claude-code" title="Permanent link">&para;</a></h4>
+<p>Add to <code>.mcp.json</code> in the project root:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;mcpServers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;justlend&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;node&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;/absolute/path/to/mcp-server-justlend/build/index.js&quot;</span><span class="p">],</span>
 <span class="w">      </span><span class="nt">&quot;env&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="nt">&quot;TRONGRID_API_KEY&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SET_VIA_SYSTEM_ENV&quot;</span>
 <span class="w">      </span><span class="p">}</span>
@@ -1924,10 +1942,9 @@ npx<span class="w"> </span>agent-wallet<span class="w"> </span>activate<span cla
 <p>Add to <code>.cursor/mcp.json</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
 <span class="w">  </span><span class="nt">&quot;mcpServers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;mcp-server-justlend&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;stdio&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;npx&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;tsx&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@justlend/mcp-server-justlend&quot;</span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;justlend&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;node&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;/absolute/path/to/mcp-server-justlend/build/index.js&quot;</span><span class="p">],</span>
 <span class="w">      </span><span class="nt">&quot;env&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="nt">&quot;TRONGRID_API_KEY&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SET_VIA_SYSTEM_ENV&quot;</span>
 <span class="w">      </span><span class="p">}</span>
@@ -1946,7 +1963,7 @@ npm<span class="w"> </span>run<span class="w"> </span>start:http
 npm<span class="w"> </span>run<span class="w"> </span>dev
 </code></pre></div>
 <h2 id="api-reference">API Reference<a class="headerlink" href="#api-reference" title="Permanent link">&para;</a></h2>
-<h3 id="tools-60-total">Tools (60 total)<a class="headerlink" href="#tools-60-total" title="Permanent link">&para;</a></h3>
+<h3 id="tools-59-total">Tools (59 total)<a class="headerlink" href="#tools-59-total" title="Permanent link">&para;</a></h3>
 <h4 id="wallet-network">Wallet &amp; Network<a class="headerlink" href="#wallet-network" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
@@ -1985,11 +2002,6 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 <tr>
 <td><code>set_active_wallet</code></td>
 <td>Switch active wallet by wallet ID</td>
-<td>No</td>
-</tr>
-<tr>
-<td><code>import_wallet</code></td>
-<td>Import existing private key (stored encrypted)</td>
 <td>No</td>
 </tr>
 <tr>
@@ -2396,14 +2408,22 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 <td><code>stake_trx</code></td>
 <td>Guided TRX staking to sTRX with APY info and verification</td>
 </tr>
+<tr>
+<td><code>query_proposals</code></td>
+<td>Browse and query governance proposals, check voting requirements</td>
+</tr>
+<tr>
+<td><code>cast_vote</code></td>
+<td>Guided governance voting with vote verification</td>
+</tr>
 </tbody>
 </table>
 <h2 id="security-considerations">Security Considerations<a class="headerlink" href="#security-considerations" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Browser wallet (recommended)</strong>: Private keys never leave TronLink — MCP server only sends unsigned transactions to the browser and receives signed results</li>
+<li><strong>Browser wallet (recommended)</strong>: Private keys never leave TronLink — the <code>tronlink-signer</code> SDK sends unsigned transactions to the browser and receives signed results</li>
 <li><strong>Encrypted agent-wallet</strong>: Private keys are encrypted at rest in <code>~/.agent-wallet/</code> with file permissions <code>0600</code>/<code>0700</code> — never stored in environment variables or config files</li>
 <li><strong>No key in parameters</strong>: All signing functions use the agent-wallet or browser wallet internally; private keys are never passed as function parameters or exposed via MCP tools</li>
-<li><strong>Import via CLI</strong>: Use <code>npx agent-wallet import</code> from a terminal rather than the <code>import_wallet</code> MCP tool to avoid key exposure in AI conversation logs</li>
+<li><strong>Import via CLI</strong>: Use <code>npx agent-wallet import</code> from a terminal — private key import is not exposed as an MCP tool to avoid key exposure in AI conversation logs</li>
 <li><strong>Write operations</strong> are clearly marked with <code>destructiveHint: true</code> in MCP annotations</li>
 <li><strong>Health factor checks</strong> in prompts prevent dangerous borrowing</li>
 <li>Always <strong>test on Nile testnet</strong> before mainnet operations</li>
@@ -2429,7 +2449,7 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 <p><strong>"Withdraw my votes from completed proposals"</strong>
 → AI calls <code>get_user_vote_status</code> to find withdrawable proposals → calls <code>withdraw_votes_from_proposal</code> for each</p>
 <p><strong>"How much does it cost to rent 300,000 energy for 7 days?"</strong>
-→ AI calls <code>calculate_energy_rental_price</code> with energyAmount=300000, durationDays=7, returns cost breakdown</p>
+→ AI calls <code>calculate_energy_rental_price</code> with energyAmount=300000, durationHours=168, returns cost breakdown</p>
 <p><strong>"Rent 500,000 energy to address TXxx... for 14 days"</strong>
 → AI uses <code>rent_energy</code> prompt: checks balance → checks rental status → calculates price → rents energy → verifies</p>
 <p><strong>"Cancel my energy rental to TXxx..."</strong>
