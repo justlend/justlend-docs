@@ -11,7 +11,7 @@ Beyond JustLend-specific operations, the server also exposes a full set of **gen
 
 ## Overview
 
-[JustLend DAO](https://justlend.org) is the largest lending protocol on TRON, based on the Compound V2 architecture. This MCP server wraps the full protocol functionality into tools and guided prompts that local MCP clients such as Claude Desktop, Codex, Claude Code, and Cursor can use.
+[JustLend DAO](https://justlend.org) is the largest lending protocol on TRON, based on the Compound V2 architecture. This MCP server wraps the full protocol functionality into tools and guided prompts that local MCP clients such as Claude Desktop, Claude Code, and Cursor can use.
 
 ### Key Capabilities
 
@@ -87,14 +87,14 @@ npm install
 
 ## Quick Setup
 
-For a guided setup experience (build, configure, generate `.mcp.json`, print Codex setup command):
+For a guided setup experience (build, configure, generate `.mcp.json`):
 
 ```bash
 bash scripts/setup-mcp-test.sh
 # Add --claude-desktop to also print Claude Desktop JSON
 ```
 
-The script checks Node.js 20+, installs dependencies, builds the project, generates local Claude Code config, and prints the local Codex registration command.
+The script checks Node.js 20+, installs dependencies, builds the project, and generates local Claude Code config.
 
 ## Configuration
 
@@ -183,29 +183,6 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
     }
   }
 }
-```
-
-#### Codex
-
-Recommended: register the local stdio server with `codex mcp add`:
-
-```bash
-codex mcp add justlend --env TRONGRID_API_KEY=your_trongrid_api_key -- \
-  node /absolute/path/to/mcp-server-justlend/build/index.js
-```
-
-If you do not want to set a TronGrid key yet, omit the `--env` flag:
-
-```bash
-codex mcp add justlend -- node /absolute/path/to/mcp-server-justlend/build/index.js
-```
-
-Useful maintenance commands:
-
-```bash
-codex mcp list
-codex mcp get justlend
-codex mcp remove justlend
 ```
 
 #### Claude Code
