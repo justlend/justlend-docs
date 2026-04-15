@@ -7,11 +7,11 @@ The JustLend MCP Server (`@justlend/mcp-server-justlend`) is a [Model Context Pr
 Beyond JustLend-specific operations, the server also exposes a full set of **general-purpose TRON chain utilities** — balance queries, block/transaction data, token metadata, TRX transfers, smart contract reads/writes, staking (Stake 2.0), multicall, and more.
 
 !!! note
-    Current version (**v1.0.3**) supports **JustLend V1** protocol. All contract addresses, ABIs, calculation functions, and lending operations are for V1.
+    Current version (**v1.0.4**) supports **JustLend V1** protocol. All contract addresses, ABIs, calculation functions, and lending operations are for V1.
 
 ## Overview
 
-[JustLend DAO](https://justlend.org) is the largest lending protocol on TRON, based on the Compound V2 architecture. This MCP server wraps the full protocol functionality into tools and guided prompts that AI agents (Claude Desktop, Cursor, etc.) can use.
+[JustLend DAO](https://justlend.org) is the largest lending protocol on TRON, based on the Compound V2 architecture. This MCP server wraps the full protocol functionality into tools and guided prompts that local MCP clients such as Claude Desktop, Claude Code, and Cursor can use.
 
 ### Key Capabilities
 
@@ -41,9 +41,9 @@ Beyond JustLend-specific operations, the server also exposes a full set of **gen
 - **Energy Rental**: Rent energy from JustLend, calculate rental prices, query rental orders, return/cancel rentals
 - **sTRX Staking**: Stake TRX to receive sTRX, unstake sTRX, claim staking rewards, check withdrawal eligibility
 
-**Browser Wallet Signing (New in v1.0.3)**
+**Browser Wallet Signing**
 
-- **TronLink Integration**: Connect TronLink or other browser wallets via localhost HTTP bridge
+- **TronLink Integration**: Connect TronLink or other browser wallets via `tronlink-signer` SDK
 - **Sign-only mode**: Server builds transactions, browser only signs — private keys never leave the wallet
 - **Dual wallet mode**: Users choose between `browser` (recommended) or `agent` (encrypted local storage)
 
@@ -91,10 +91,10 @@ For a guided setup experience (build, configure, generate `.mcp.json`):
 
 ```bash
 bash scripts/setup-mcp-test.sh
-# Add --claude-desktop to also output Claude Desktop config
+# Add --claude-desktop to also print Claude Desktop JSON
 ```
 
-The script checks Node.js 20+, installs dependencies, builds the project, and generates the MCP client configuration.
+The script checks Node.js 20+, installs dependencies, builds the project, and generates local Claude Code config.
 
 ## Configuration
 
@@ -132,9 +132,14 @@ npx agent-wallet activate <wallet-id>
 | `connect_browser_wallet` | Connect TronLink / browser wallet for signing |
 | `set_wallet_mode` | Switch between `browser` and `agent` signing |
 | `get_wallet_mode` | Show current signing mode and addresses |
-| `import_wallet` | Import an existing private key (stored encrypted) |
 | `list_wallets` | List all wallets with IDs, types, addresses |
 | `set_active_wallet` | Switch active wallet by ID |
+
+Importing an existing private key is intentionally not exposed as an MCP tool because MCP arguments can be logged by clients and transports. Use the CLI instead:
+
+```bash
+npx agent-wallet import
+```
 
 ### Environment Variables
 
@@ -150,6 +155,18 @@ export MCP_HTTP_HOST="127.0.0.1"  # HTTP server host (default: 127.0.0.1)
 
 ### Client Configuration
 
+Build the local server first:
+
+```bash
+npm run build
+```
+
+All local client examples below use the built stdio entrypoint:
+
+```bash
+node /absolute/path/to/mcp-server-justlend/build/index.js
+```
+
 #### Claude Desktop
 
 Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
@@ -157,10 +174,27 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 ```json
 {
   "mcpServers": {
-    "mcp-server-justlend": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["tsx", "@justlend/mcp-server-justlend"],
+    "justlend": {
+      "command": "node",
+      "args": ["/absolute/path/to/mcp-server-justlend/build/index.js"],
+      "env": {
+        "TRONGRID_API_KEY": "SET_VIA_SYSTEM_ENV"
+      }
+    }
+  }
+}
+```
+
+#### Claude Code
+
+Add to `.mcp.json` in the project root:
+
+```json
+{
+  "mcpServers": {
+    "justlend": {
+      "command": "node",
+      "args": ["/absolute/path/to/mcp-server-justlend/build/index.js"],
       "env": {
         "TRONGRID_API_KEY": "SET_VIA_SYSTEM_ENV"
       }
@@ -179,10 +213,9 @@ Add to `.cursor/mcp.json`:
 ```json
 {
   "mcpServers": {
-    "mcp-server-justlend": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["tsx", "@justlend/mcp-server-justlend"],
+    "justlend": {
+      "command": "node",
+      "args": ["/absolute/path/to/mcp-server-justlend/build/index.js"],
       "env": {
         "TRONGRID_API_KEY": "SET_VIA_SYSTEM_ENV"
       }
@@ -206,7 +239,7 @@ npm run dev
 
 ## API Reference
 
-### Tools (60 total)
+### Tools (59 total)
 
 #### Wallet & Network
 
@@ -218,7 +251,6 @@ npm run dev
 | `get_wallet_mode` | Show current signing mode and addresses | No |
 | `list_wallets` | List all wallets (IDs, types, addresses) | No |
 | `set_active_wallet` | Switch active wallet by wallet ID | No |
-| `import_wallet` | Import existing private key (stored encrypted) | No |
 | `get_supported_networks` | List available networks | No |
 | `get_supported_markets` | List all jToken markets with addresses | No |
 | `set_network` | Set global default network (mainnet, nile) | Yes |
@@ -325,13 +357,15 @@ npm run dev
 | `compare_markets` | Find best supply/borrow opportunities |
 | `rent_energy` | Guided energy rental with price estimation and balance checks |
 | `stake_trx` | Guided TRX staking to sTRX with APY info and verification |
+| `query_proposals` | Browse and query governance proposals, check voting requirements |
+| `cast_vote` | Guided governance voting with vote verification |
 
 ## Security Considerations
 
-- **Browser wallet (recommended)**: Private keys never leave TronLink — MCP server only sends unsigned transactions to the browser and receives signed results
+- **Browser wallet (recommended)**: Private keys never leave TronLink — the `tronlink-signer` SDK sends unsigned transactions to the browser and receives signed results
 - **Encrypted agent-wallet**: Private keys are encrypted at rest in `~/.agent-wallet/` with file permissions `0600`/`0700` — never stored in environment variables or config files
 - **No key in parameters**: All signing functions use the agent-wallet or browser wallet internally; private keys are never passed as function parameters or exposed via MCP tools
-- **Import via CLI**: Use `npx agent-wallet import` from a terminal rather than the `import_wallet` MCP tool to avoid key exposure in AI conversation logs
+- **Import via CLI**: Use `npx agent-wallet import` from a terminal — private key import is not exposed as an MCP tool to avoid key exposure in AI conversation logs
 - **Write operations** are clearly marked with `destructiveHint: true` in MCP annotations
 - **Health factor checks** in prompts prevent dangerous borrowing
 - Always **test on Nile testnet** before mainnet operations
@@ -367,7 +401,7 @@ npm run dev
 → AI calls `get_user_vote_status` to find withdrawable proposals → calls `withdraw_votes_from_proposal` for each
 
 **"How much does it cost to rent 300,000 energy for 7 days?"**
-→ AI calls `calculate_energy_rental_price` with energyAmount=300000, durationDays=7, returns cost breakdown
+→ AI calls `calculate_energy_rental_price` with energyAmount=300000, durationHours=168, returns cost breakdown
 
 **"Rent 500,000 energy to address TXxx... for 14 days"**
 → AI uses `rent_energy` prompt: checks balance → checks rental status → calculates price → rents energy → verifies
