@@ -168,9 +168,6 @@ paths:
                 - Supply and Borrow Market
             summary: Get User Supply Mining Reward Information
             description: Query to get user's the latest usdd mining reward information, which includes the current mining phase and its rewards, mining start time and end time. （To pass parameters to obtain specific information, please click 「Test」and fill in the address information in the Query parameters section）
-            operationId: getAddress
-            security:
-                - {}
             parameters:
                 - '$ref': '#/components/parameters/address'
                 - '$ref': '#/components/parameters/address1'
@@ -250,9 +247,6 @@ paths:
                 - Supply and Borrow Market
             summary: Get User Supply Mining Reward Distributions
             description: Query to get user's all reward distributions, including mining token address, if the mining reward has been claimed or not claimed, and the reward amount in the corresponding cycle. (To pass parameters to obtain specific information, please click 「Test」and fill in the address information in the Query parameters section.)
-            operationId: getAddress
-            security:
-                - {}
             parameters:
                 - '$ref': '#/components/parameters/address'
                 - '$ref': '#/components/parameters/address1'
@@ -463,7 +457,7 @@ components:
             name: address
             in: path
             description: Query of the user address.
-            required: ture
+            required: true
             schema:
                 type: string
         addresses:
