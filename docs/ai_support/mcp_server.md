@@ -174,7 +174,23 @@ export MCP_API_KEY="your_strong_random_secret"
 
 `MCP_API_KEY` is a self-chosen Bearer-token shared secret between the server and its clients. It is **not** issued by Anthropic, JustLend, or any third party — you generate it yourself, set it on the server, and share it with clients you trust.
 
-The HTTP server reads the variable at startup and **refuses to start without it**. Every incoming request to `/sse` and `/messages` must carry an `Authorization: Bearer <MCP_API_KEY>` header — anything else returns `401 Unauthorized`. The `/health` endpoint is the only exception. As of v1.0.5 the comparison uses `crypto.timingSafeEqual` with an explicit length check, closing the timing side-channel that existed in earlier versions.
+The HTTP server reads the variable at startup and **refuses to start without it**. Every incoming request to `/sse` and `/messages` must carry an `Authorization: Bearer <MCP_API_KEY>` header — anything else returns `401 Unauthorized`. The `/health` endpoint is the only exception.
+
+##### Version history
+
+The variable name has been around for a while; what changed is how the server treats it. To avoid confusion when reading older deployment guides:
+
+| Version | Behavior |
+|---------|----------|
+| v1.0.1 – v1.0.3 | `MCP_API_KEY` exists but is **optional**. If unset, the HTTP server starts with no auth (every request is accepted). |
+| **v1.0.4** | `MCP_API_KEY` becomes **required**. The server refuses to start without it, returning `MCP_API_KEY is required in HTTP mode. Refusing to start without authentication.` Comparison still uses plain string equality. |
+| **v1.0.5** | Comparison upgraded to `crypto.timingSafeEqual` with an explicit length check, closing a timing side-channel. The variable itself is unchanged — same name, same role, same "required" semantics as v1.0.4. |
+
+##### Why the timing-safe upgrade matters
+
+Plain string equality (`provided === expected`) returns at the first byte mismatch. An attacker who can measure response latency — for example, by sending many requests from the same network — can distinguish "first byte matched, second byte mismatched" (slightly slower) from "first byte mismatched" (slightly faster) and recover the secret one byte at a time. Network jitter and CPU noise blunt the signal but do not eliminate it; the [classic demonstration](https://crypto.stanford.edu/~dabo/papers/ssl-timing.pdf) recovers cross-network secrets in hours.
+
+`crypto.timingSafeEqual` compares every byte regardless of where the first mismatch occurs, so the runtime depends only on the input length, not the input content. Length is checked separately because `timingSafeEqual` throws on unequal lengths, and the length of `Bearer <key>` is not itself the secret.
 
 #### When you need it
 
