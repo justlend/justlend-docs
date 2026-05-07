@@ -162,10 +162,77 @@ export MCP_TRANSPORT="http"       # Use HTTP/SSE instead of stdio
 export MCP_HTTP_PORT="3000"       # HTTP server port (default: 3000)
 export MCP_HTTP_HOST="127.0.0.1"  # HTTP server host (default: 127.0.0.1)
 
-# Required in HTTP mode — Bearer token clients must send in Authorization header.
-# The server refuses to start without it. Comparison is timing-safe (v1.0.5+).
+# Required in HTTP mode — see "HTTP Mode Authentication" below for how to generate one
 export MCP_API_KEY="your_strong_random_secret"
 ```
+
+### HTTP Mode Authentication (`MCP_API_KEY`)
+
+**Most users do not need this.** Claude Desktop, Claude Code, and Cursor connect over **stdio** by default, which has no network surface and no auth. `MCP_API_KEY` only applies when you run the server in **HTTP/SSE mode** (`npm run start:http` or `MCP_TRANSPORT=http`).
+
+#### What it is
+
+`MCP_API_KEY` is a self-chosen Bearer-token shared secret between the server and its clients. It is **not** issued by Anthropic, JustLend, or any third party — you generate it yourself, set it on the server, and share it with clients you trust.
+
+The HTTP server reads the variable at startup and **refuses to start without it**. Every incoming request to `/sse` and `/messages` must carry an `Authorization: Bearer <MCP_API_KEY>` header — anything else returns `401 Unauthorized`. The `/health` endpoint is the only exception. As of v1.0.5 the comparison uses `crypto.timingSafeEqual` with an explicit length check, closing the timing side-channel that existed in earlier versions.
+
+#### When you need it
+
+You need to set `MCP_API_KEY` if any of the following apply:
+
+- You are deploying the MCP server to a remote machine and connecting over SSE.
+- You are exposing the server behind a reverse proxy (NGINX, Caddy) on a LAN, container network, or the public internet.
+- You are writing or running an MCP client that talks to this server over HTTP rather than over stdio.
+
+If you are simply running Claude Desktop / Claude Code / Cursor against a local stdio server (the default), you can ignore this variable entirely.
+
+#### How to generate one
+
+Generate a strong random string locally — any of the following work:
+
+```bash
+# 32 random bytes, base64-encoded (recommended)
+openssl rand -base64 32
+
+# Or hex
+openssl rand -hex 32
+
+# Or a UUID
+uuidgen
+```
+
+Set it on the server before starting:
+
+```bash
+export MCP_API_KEY="$(openssl rand -base64 32)"
+npm run start:http
+```
+
+#### How clients send it
+
+Clients pass the same value as a Bearer token on every request:
+
+```
+Authorization: Bearer <your-MCP_API_KEY>
+```
+
+For example, a `curl` health-check vs. an authenticated SSE connection:
+
+```bash
+# /health does not require the header
+curl http://127.0.0.1:3001/health
+
+# /sse requires the Authorization header — without it the server returns 401
+curl -N -H "Authorization: Bearer $MCP_API_KEY" http://127.0.0.1:3001/sse
+```
+
+#### Security guidelines
+
+- Treat `MCP_API_KEY` like a database password: never commit it to git, never paste it into issue trackers or chat logs, and rotate it if it leaks.
+- Use **at least 32 bytes** of entropy. Short or guessable values defeat the purpose.
+- Always pair HTTP mode with **TLS** (HTTPS) when the server is reachable from anywhere other than `localhost`. A Bearer token sent over plain HTTP is sent in cleartext on every request.
+- Bind to `127.0.0.1` (the default) unless you explicitly need remote access. If you need remote access, terminate TLS at a reverse proxy and only forward to the local port.
+- The same key is shared by every client that connects. If you need per-client identities, put a proxy in front of the server that maps client identities to a single back-end key.
 
 ### Client Configuration
 
