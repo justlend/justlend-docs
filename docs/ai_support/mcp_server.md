@@ -7,7 +7,7 @@ The JustLend MCP Server (`@justlend/mcp-server-justlend`) is a [Model Context Pr
 Beyond JustLend-specific operations, the server also exposes a full set of **general-purpose TRON chain utilities** — balance queries, block/transaction data, token metadata, TRX transfers, smart contract reads/writes, staking (Stake 2.0), multicall, and more.
 
 !!! note
-    Current version (**v1.0.4**) supports **JustLend V1** protocol. All contract addresses, ABIs, calculation functions, and lending operations are for V1.
+    Current version (**v1.0.5**) supports **JustLend V1** protocol. All contract addresses, ABIs, calculation functions, and lending operations are for V1.
 
 ## Overview
 
@@ -61,16 +61,26 @@ Beyond JustLend-specific operations, the server also exposes a full set of **gen
 
 ## Supported Markets
 
-| jToken | Underlying | Description |
-|--------|-----------|-------------|
-| jTRX   | TRX       | Native TRON token |
-| jUSDT  | USDT      | Tether USD |
-| jUSDC  | USDC      | USD Coin |
-| jBTC   | BTC       | Bitcoin (wrapped) |
-| jETH   | ETH       | Ethereum (wrapped) |
-| jSUN   | SUN       | SUN token |
-| jWIN   | WIN       | WINkLink |
-| jTUSD  | TUSD      | TrueUSD |
+The protocol exposes 22 jToken markets in total (16 active + 6 paused legacy markets). Call `get_supported_markets` for the live list with addresses. The active markets are:
+
+| jToken     | Underlying | Description |
+|------------|-----------|-------------|
+| jTRX       | TRX       | Native TRON token |
+| jUSDT      | USDT      | Tether USD |
+| jUSDD      | USDD      | Decentralized USD (USDD/TRX dual-mining rewards) |
+| jUSD1      | USD1      | World Liberty Financial USD |
+| jTUSD      | TUSD      | TrueUSD |
+| jwstUSDT   | wstUSDT   | Wrapped staked USDT (yields underlying staking APY) |
+| jsTRX      | sTRX      | Staked TRX (yields underlying staking APY) |
+| jBTC       | BTC       | Bitcoin (wrapped) |
+| jWBTC      | WBTC      | Wrapped Bitcoin |
+| jETH       | ETH       | Ethereum (wrapped) |
+| jETHB      | ETHB      | Bridged Ethereum |
+| jSUN       | SUN       | SUN token |
+| jJST       | JST       | JUST governance token |
+| jWIN       | WIN       | WINkLink |
+| jBTT       | BTT       | BitTorrent token |
+| jNFT       | NFT       | APENFT |
 
 ## Prerequisites
 
@@ -151,6 +161,10 @@ export TRONGRID_API_KEY="your_trongrid_api_key"
 export MCP_TRANSPORT="http"       # Use HTTP/SSE instead of stdio
 export MCP_HTTP_PORT="3000"       # HTTP server port (default: 3000)
 export MCP_HTTP_HOST="127.0.0.1"  # HTTP server host (default: 127.0.0.1)
+
+# Required in HTTP mode — Bearer token clients must send in Authorization header.
+# The server refuses to start without it. Comparison is timing-safe (v1.0.5+).
+export MCP_API_KEY="your_strong_random_secret"
 ```
 
 ### Client Configuration
