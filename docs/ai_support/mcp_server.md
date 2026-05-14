@@ -7,11 +7,14 @@ The JustLend MCP Server (`@justlend/mcp-server-justlend`) is a [Model Context Pr
 Beyond JustLend-specific operations, the server also exposes a full set of **general-purpose TRON chain utilities** — balance queries, block/transaction data, token metadata, TRX transfers, smart contract reads/writes, staking (Stake 2.0), multicall, and more.
 
 !!! note
-    Current version (**v1.0.5**) supports **JustLend V1** protocol. All contract addresses, ABIs, calculation functions, and lending operations are for V1.
+    Current version (**v1.0.6**) supports **JustLend V1** protocol. All contract addresses, ABIs, calculation functions, and lending operations are for V1.
+
+!!! tip "v1.0.6 Update"
+    This release focuses on transaction safety, numeric precision, and data availability. It validates TRC20 allowances before supply/repay, requires explicit approval amounts, preserves precision for high-TVL/scientific-notation values, handles typed broadcast responses consistently, skips failed governance proposals when checking user vote status, and degrades gracefully when the Nile mining rewards API is unavailable.
 
 ## Overview
 
-[JustLend DAO](https://justlend.org) is the largest lending protocol on TRON, based on the Compound V2 architecture. This MCP server wraps the full protocol functionality into tools and guided prompts that local MCP clients such as Claude Desktop, Claude Code, and Cursor can use.
+[JustLend DAO](https://justlend.org) is the largest lending protocol on TRON, based on the Compound V2 architecture. This MCP server wraps the full protocol functionality into tools and guided prompts that local MCP clients such as Claude Desktop, Codex, Claude Code, and Cursor can use.
 
 ### Key Capabilities
 
@@ -29,10 +32,8 @@ Beyond JustLend-specific operations, the server also exposes a full set of **gen
     - Separates new period vs. last period rewards
     - USD value calculation with live token prices
     - Mining status tracking (ongoing/paused/ended) and period end times
-- **Supply**: Deposit TRX or TRC20 tokens to earn interest (mint jTokens)
-- **Borrow**: Borrow assets against your collateral with health factor monitoring
-- **Repay**: Repay outstanding borrows with full or partial amounts
-- **Withdraw**: Redeem jTokens back to underlying assets
+    - Nile fallback returns an empty reward set instead of failing when the testnet rewards API is unavailable
+- **Supply / Borrow / Repay / Withdraw**: Full lending operations with pre-flight checks
 - **Collateral Management**: Enter/exit markets, manage what counts as collateral
 - **Portfolio Analysis**: AI-guided risk assessment, health factor monitoring, optimization
 - **Token Approvals**: Manage TRC20 approvals for jToken contracts
@@ -301,7 +302,7 @@ Add to `.mcp.json` in the project root:
 ```
 
 !!! tip
-    No `TRON_PRIVATE_KEY` needed — the server uses the encrypted agent-wallet or browser wallet automatically.
+    No `TRON_PRIVATE_KEY` needed — choose browser-wallet signing or encrypted agent-wallet mode at runtime.
 
 #### Cursor
 
@@ -463,6 +464,9 @@ npm run dev
 - **Encrypted agent-wallet**: Private keys are encrypted at rest in `~/.agent-wallet/` with file permissions `0600`/`0700` — never stored in environment variables or config files
 - **No key in parameters**: All signing functions use the agent-wallet or browser wallet internally; private keys are never passed as function parameters or exposed via MCP tools
 - **Import via CLI**: Use `npx agent-wallet import` from a terminal — private key import is not exposed as an MCP tool to avoid key exposure in AI conversation logs
+- **Explicit approvals**: TRC20/JST approval tools require an exact amount, while `max` remains available only when the user explicitly opts in
+- **Pre-flight checks**: Supply/repay validate allowance first, lending tools report energy/bandwidth sufficiency warnings, and reverted simulations are not broadcast
+- **Typed broadcasts**: Transaction broadcasts are parsed with typed responses so failed or rejected broadcasts surface as errors instead of ambiguous transaction IDs
 - **Write operations** are clearly marked with `destructiveHint: true` in MCP annotations
 - **Health factor checks** in prompts prevent dangerous borrowing
 - Always **test on Nile testnet** before mainnet operations
