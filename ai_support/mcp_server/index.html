@@ -1234,6 +1234,15 @@
 </li>
         
           <li class="md-nav__item ">
+  <a href="#http-mode-authentication-mcp_api_key" class="md-nav__link" >
+    <span class="md-ellipsis">
+      HTTP Mode Authentication (MCP_API_KEY)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item ">
   <a href="#client-configuration" class="md-nav__link" >
     <span class="md-ellipsis">
       Client Configuration
@@ -1707,7 +1716,7 @@
 <p>Beyond JustLend-specific operations, the server also exposes a full set of <strong>general-purpose TRON chain utilities</strong> — balance queries, block/transaction data, token metadata, TRX transfers, smart contract reads/writes, staking (Stake 2.0), multicall, and more.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Current version (<strong>v1.0.4</strong>) supports <strong>JustLend V1</strong> protocol. All contract addresses, ABIs, calculation functions, and lending operations are for V1.</p>
+<p>Current version (<strong>v1.0.5</strong>) supports <strong>JustLend V1</strong> protocol. All contract addresses, ABIs, calculation functions, and lending operations are for V1.</p>
 </div>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
 <p><a href="https://justlend.org">JustLend DAO</a> is the largest lending protocol on TRON, based on the Compound V2 architecture. This MCP server wraps the full protocol functionality into tools and guided prompts that local MCP clients such as Claude Desktop, Claude Code, and Cursor can use.</p>
@@ -1763,6 +1772,7 @@
 <li><strong>Wallet</strong>: Sign messages, secure key management via agent-wallet or browser wallet</li>
 </ul>
 <h2 id="supported-markets">Supported Markets<a class="headerlink" href="#supported-markets" title="Permanent link">&para;</a></h2>
+<p>The protocol exposes 22 jToken markets in total (16 active + 6 paused legacy markets). Call <code>get_supported_markets</code> for the live list with addresses. The active markets are:</p>
 <table>
 <thead>
 <tr>
@@ -1783,9 +1793,29 @@
 <td>Tether USD</td>
 </tr>
 <tr>
-<td>jUSDC</td>
-<td>USDC</td>
-<td>USD Coin</td>
+<td>jUSDD</td>
+<td>USDD</td>
+<td>Decentralized USD (USDD/TRX dual-mining rewards)</td>
+</tr>
+<tr>
+<td>jUSD1</td>
+<td>USD1</td>
+<td>World Liberty Financial USD</td>
+</tr>
+<tr>
+<td>jTUSD</td>
+<td>TUSD</td>
+<td>TrueUSD</td>
+</tr>
+<tr>
+<td>jwstUSDT</td>
+<td>wstUSDT</td>
+<td>Wrapped staked USDT (yields underlying staking APY)</td>
+</tr>
+<tr>
+<td>jsTRX</td>
+<td>sTRX</td>
+<td>Staked TRX (yields underlying staking APY)</td>
 </tr>
 <tr>
 <td>jBTC</td>
@@ -1793,9 +1823,19 @@
 <td>Bitcoin (wrapped)</td>
 </tr>
 <tr>
+<td>jWBTC</td>
+<td>WBTC</td>
+<td>Wrapped Bitcoin</td>
+</tr>
+<tr>
 <td>jETH</td>
 <td>ETH</td>
 <td>Ethereum (wrapped)</td>
+</tr>
+<tr>
+<td>jETHB</td>
+<td>ETHB</td>
+<td>Bridged Ethereum</td>
 </tr>
 <tr>
 <td>jSUN</td>
@@ -1803,14 +1843,24 @@
 <td>SUN token</td>
 </tr>
 <tr>
+<td>jJST</td>
+<td>JST</td>
+<td>JUST governance token</td>
+</tr>
+<tr>
 <td>jWIN</td>
 <td>WIN</td>
 <td>WINkLink</td>
 </tr>
 <tr>
-<td>jTUSD</td>
-<td>TUSD</td>
-<td>TrueUSD</td>
+<td>jBTT</td>
+<td>BTT</td>
+<td>BitTorrent token</td>
+</tr>
+<tr>
+<td>jNFT</td>
+<td>NFT</td>
+<td>APENFT</td>
 </tr>
 </tbody>
 </table>
@@ -1898,7 +1948,84 @@ npx<span class="w"> </span>agent-wallet<span class="w"> </span>activate<span cla
 <span class="nb">export</span><span class="w"> </span><span class="nv">MCP_TRANSPORT</span><span class="o">=</span><span class="s2">&quot;http&quot;</span><span class="w">       </span><span class="c1"># Use HTTP/SSE instead of stdio</span>
 <span class="nb">export</span><span class="w"> </span><span class="nv">MCP_HTTP_PORT</span><span class="o">=</span><span class="s2">&quot;3000&quot;</span><span class="w">       </span><span class="c1"># HTTP server port (default: 3000)</span>
 <span class="nb">export</span><span class="w"> </span><span class="nv">MCP_HTTP_HOST</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="w">  </span><span class="c1"># HTTP server host (default: 127.0.0.1)</span>
+
+<span class="c1"># Required in HTTP mode — see &quot;HTTP Mode Authentication&quot; below for how to generate one</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MCP_API_KEY</span><span class="o">=</span><span class="s2">&quot;your_strong_random_secret&quot;</span>
 </code></pre></div>
+<h3 id="http-mode-authentication-mcp_api_key">HTTP Mode Authentication (<code>MCP_API_KEY</code>)<a class="headerlink" href="#http-mode-authentication-mcp_api_key" title="Permanent link">&para;</a></h3>
+<p><strong>Most users do not need this.</strong> Claude Desktop, Claude Code, and Cursor connect over <strong>stdio</strong> by default, which has no network surface and no auth. <code>MCP_API_KEY</code> only applies when you run the server in <strong>HTTP/SSE mode</strong> (<code>npm run start:http</code> or <code>MCP_TRANSPORT=http</code>).</p>
+<h4 id="what-it-is">What it is<a class="headerlink" href="#what-it-is" title="Permanent link">&para;</a></h4>
+<p><code>MCP_API_KEY</code> is a self-chosen Bearer-token shared secret between the server and its clients. It is <strong>not</strong> issued by Anthropic, JustLend, or any third party — you generate it yourself, set it on the server, and share it with clients you trust.</p>
+<p>The HTTP server reads the variable at startup and <strong>refuses to start without it</strong>. Every incoming request to <code>/sse</code> and <code>/messages</code> must carry an <code>Authorization: Bearer &lt;MCP_API_KEY&gt;</code> header — anything else returns <code>401 Unauthorized</code>. The <code>/health</code> endpoint is the only exception.</p>
+<h5 id="version-history">Version history<a class="headerlink" href="#version-history" title="Permanent link">&para;</a></h5>
+<p>The variable name has been around for a while; what changed is how the server treats it. To avoid confusion when reading older deployment guides:</p>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v1.0.1 – v1.0.3</td>
+<td><code>MCP_API_KEY</code> exists but is <strong>optional</strong>. If unset, the HTTP server starts with no auth (every request is accepted).</td>
+</tr>
+<tr>
+<td><strong>v1.0.4</strong></td>
+<td><code>MCP_API_KEY</code> becomes <strong>required</strong>. The server refuses to start without it, returning <code>MCP_API_KEY is required in HTTP mode. Refusing to start without authentication.</code> Comparison still uses plain string equality.</td>
+</tr>
+<tr>
+<td><strong>v1.0.5</strong></td>
+<td>Comparison upgraded to <code>crypto.timingSafeEqual</code> with an explicit length check, closing a timing side-channel. The variable itself is unchanged — same name, same role, same "required" semantics as v1.0.4.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="why-the-timing-safe-upgrade-matters">Why the timing-safe upgrade matters<a class="headerlink" href="#why-the-timing-safe-upgrade-matters" title="Permanent link">&para;</a></h5>
+<p>Plain string equality (<code>provided === expected</code>) returns at the first byte mismatch. An attacker who can measure response latency — for example, by sending many requests from the same network — can distinguish "first byte matched, second byte mismatched" (slightly slower) from "first byte mismatched" (slightly faster) and recover the secret one byte at a time. Network jitter and CPU noise blunt the signal but do not eliminate it; the <a href="https://crypto.stanford.edu/~dabo/papers/ssl-timing.pdf">classic demonstration</a> recovers cross-network secrets in hours.</p>
+<p><code>crypto.timingSafeEqual</code> compares every byte regardless of where the first mismatch occurs, so the runtime depends only on the input length, not the input content. Length is checked separately because <code>timingSafeEqual</code> throws on unequal lengths, and the length of <code>Bearer &lt;key&gt;</code> is not itself the secret.</p>
+<h4 id="when-you-need-it">When you need it<a class="headerlink" href="#when-you-need-it" title="Permanent link">&para;</a></h4>
+<p>You need to set <code>MCP_API_KEY</code> if any of the following apply:</p>
+<ul>
+<li>You are deploying the MCP server to a remote machine and connecting over SSE.</li>
+<li>You are exposing the server behind a reverse proxy (NGINX, Caddy) on a LAN, container network, or the public internet.</li>
+<li>You are writing or running an MCP client that talks to this server over HTTP rather than over stdio.</li>
+</ul>
+<p>If you are simply running Claude Desktop / Claude Code / Cursor against a local stdio server (the default), you can ignore this variable entirely.</p>
+<h4 id="how-to-generate-one">How to generate one<a class="headerlink" href="#how-to-generate-one" title="Permanent link">&para;</a></h4>
+<p>Generate a strong random string locally — any of the following work:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 32 random bytes, base64-encoded (recommended)</span>
+openssl<span class="w"> </span>rand<span class="w"> </span>-base64<span class="w"> </span><span class="m">32</span>
+
+<span class="c1"># Or hex</span>
+openssl<span class="w"> </span>rand<span class="w"> </span>-hex<span class="w"> </span><span class="m">32</span>
+
+<span class="c1"># Or a UUID</span>
+uuidgen
+</code></pre></div>
+<p>Set it on the server before starting:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">MCP_API_KEY</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>openssl<span class="w"> </span>rand<span class="w"> </span>-base64<span class="w"> </span><span class="m">32</span><span class="k">)</span><span class="s2">&quot;</span>
+npm<span class="w"> </span>run<span class="w"> </span>start:http
+</code></pre></div>
+<h4 id="how-clients-send-it">How clients send it<a class="headerlink" href="#how-clients-send-it" title="Permanent link">&para;</a></h4>
+<p>Clients pass the same value as a Bearer token on every request:</p>
+<div class="highlight"><pre><span></span><code>Authorization: Bearer &lt;your-MCP_API_KEY&gt;
+</code></pre></div>
+<p>For example, a <code>curl</code> health-check vs. an authenticated SSE connection:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># /health does not require the header</span>
+curl<span class="w"> </span>http://127.0.0.1:3001/health
+
+<span class="c1"># /sse requires the Authorization header — without it the server returns 401</span>
+curl<span class="w"> </span>-N<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="nv">$MCP_API_KEY</span><span class="s2">&quot;</span><span class="w"> </span>http://127.0.0.1:3001/sse
+</code></pre></div>
+<h4 id="security-guidelines">Security guidelines<a class="headerlink" href="#security-guidelines" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Treat <code>MCP_API_KEY</code> like a database password: never commit it to git, never paste it into issue trackers or chat logs, and rotate it if it leaks.</li>
+<li>Use <strong>at least 32 bytes</strong> of entropy. Short or guessable values defeat the purpose.</li>
+<li>Always pair HTTP mode with <strong>TLS</strong> (HTTPS) when the server is reachable from anywhere other than <code>localhost</code>. A Bearer token sent over plain HTTP is sent in cleartext on every request.</li>
+<li>Bind to <code>127.0.0.1</code> (the default) unless you explicitly need remote access. If you need remote access, terminate TLS at a reverse proxy and only forward to the local port.</li>
+<li>The same key is shared by every client that connects. If you need per-client identities, put a proxy in front of the server that maps client identities to a single back-end key.</li>
+</ul>
 <h3 id="client-configuration">Client Configuration<a class="headerlink" href="#client-configuration" title="Permanent link">&para;</a></h3>
 <p>Build the local server first:</p>
 <div class="highlight"><pre><span></span><code>npm<span class="w"> </span>run<span class="w"> </span>build
