@@ -23,7 +23,7 @@ Beyond JustLend-specific operations, the server also exposes a full set of **gen
 - **Market Data**: Real-time APYs, TVL, utilization rates, prices for all markets
     - Smart fallback: contract queries first, API fallback for reliability
     - TTL caching (30–60s) to reduce RPC calls
-- **Account Data**: Full position analysis via Multicall3 batch queries
+- **Account Data**: Full position analysis via Multicall3 batch queries (~2.5s vs ~8s legacy)
     - Health factor, collateral, borrow positions
     - On-chain Oracle prices with API fallback
 - **Batch Wallet Balances**: Query all TRC20 token balances in a single Multicall3 RPC call
@@ -36,15 +36,17 @@ Beyond JustLend-specific operations, the server also exposes a full set of **gen
 - **Supply / Borrow / Repay / Withdraw**: Full lending operations with pre-flight checks
 - **Collateral Management**: Enter/exit markets, manage what counts as collateral
 - **Portfolio Analysis**: AI-guided risk assessment, health factor monitoring, optimization
+- **Token Approvals**: Manage TRC20 approvals for jToken contracts
+- **Energy Cost Estimation**: Estimate energy, bandwidth, and TRX cost for any lending operation before executing
 - **JST Voting / Governance**: View proposals, cast votes, deposit/withdraw JST for voting power, reclaim votes
 - **Energy Rental**: Rent energy from JustLend, calculate rental prices, query rental orders, return/cancel rentals
 - **sTRX Staking**: Stake TRX to receive sTRX, unstake sTRX, claim staking rewards, check withdrawal eligibility
 
 **Browser Wallet Signing**
 
-- **TronLink Integration**: Connect TronLink and other TIP-6963 browser wallets via the `tronlink-signer` SDK
-- **Sign-only mode**: The server builds transactions and the browser wallet signs them, so private keys never leave the wallet
-- **Dual wallet mode**: Users choose between `browser` mode (recommended) or `agent` mode (encrypted local storage)
+- **TronLink Integration**: Connect TronLink or other browser wallets via `tronlink-signer` SDK
+- **Sign-only mode**: Server builds transactions, browser only signs — private keys never leave the wallet
+- **Dual wallet mode**: Users choose between `browser` (recommended) or `agent` (encrypted local storage)
 
 **General TRON Chain**
 
@@ -60,16 +62,26 @@ Beyond JustLend-specific operations, the server also exposes a full set of **gen
 
 ## Supported Markets
 
-| jToken | Underlying | Description |
-|--------|-----------|-------------|
-| jTRX   | TRX       | Native TRON token |
-| jUSDT  | USDT      | Tether USD |
-| jUSDC  | USDC      | USD Coin |
-| jBTC   | BTC       | Bitcoin (wrapped) |
-| jETH   | ETH       | Ethereum (wrapped) |
-| jSUN   | SUN       | SUN token |
-| jWIN   | WIN       | WINkLink |
-| jTUSD  | TUSD      | TrueUSD |
+The protocol exposes 22 jToken markets in total (16 active + 6 paused legacy markets). Call `get_supported_markets` for the live list with addresses. The active markets are:
+
+| jToken     | Underlying | Description |
+|------------|-----------|-------------|
+| jTRX       | TRX       | Native TRON token |
+| jUSDT      | USDT      | Tether USD |
+| jUSDD      | USDD      | Decentralized USD (USDD/TRX dual-mining rewards) |
+| jUSD1      | USD1      | World Liberty Financial USD |
+| jTUSD      | TUSD      | TrueUSD |
+| jwstUSDT   | wstUSDT   | Wrapped staked USDT (yields underlying staking APY) |
+| jsTRX      | sTRX      | Staked TRX (yields underlying staking APY) |
+| jBTC       | BTC       | Bitcoin (wrapped) |
+| jWBTC      | WBTC      | Wrapped Bitcoin |
+| jETH       | ETH       | Ethereum (wrapped) |
+| jETHB      | ETHB      | Bridged Ethereum |
+| jSUN       | SUN       | SUN token |
+| jJST       | JST       | JUST governance token |
+| jWIN       | WIN       | WINkLink |
+| jBTT       | BTT       | BitTorrent token |
+| jNFT       | NFT       | APENFT |
 
 ## Prerequisites
 
@@ -84,29 +96,61 @@ cd mcp-server-justlend
 npm install
 ```
 
+## Quick Setup
+
+For a guided setup experience (build, configure, generate `.mcp.json`):
+
+```bash
+bash scripts/setup-mcp-test.sh
+# Add --claude-desktop to also print Claude Desktop JSON
+```
+
+The script checks Node.js 20+, installs dependencies, builds the project, and generates local Claude Code config.
+
 ## Configuration
 
 ### Wallet Setup (First-Use Choice)
 
-On first use, the server does **not** force a wallet choice. Users can explicitly choose between:
+On first use, the server presents a wallet mode selection. Users choose between:
 
-1. `browser` mode via TronLink using `connect_browser_wallet`
-2. `agent` mode via encrypted local wallet using `set_wallet_mode` with `mode="agent"`
+1. **Browser mode** (recommended): Connect TronLink via `connect_browser_wallet` — private keys never leave the browser
+2. **Agent mode**: Encrypted local wallet via `set_wallet_mode` with `mode="agent"` — keys stored in `~/.agent-wallet/`
 
-Private keys are **never** stored in environment variables by default. If the user selects `agent` mode, the encrypted wallet is stored in `~/.agent-wallet/`.
+Private keys are **never** stored in environment variables by default.
 
-#### Agent Wallet CLI
+You can also manage wallets via **CLI** or **MCP tools**:
 
-To use local encrypted signing, generate or import a wallet with the `agent-wallet` CLI:
-
+#### CLI (agent-wallet)
 ```bash
-npx agent-wallet generate
+# Import an existing private key or mnemonic
 npx agent-wallet add
+
+# Generate a new wallet
+npx agent-wallet generate
+
+# List all wallets
 npx agent-wallet list
+
+# Switch active wallet
 npx agent-wallet activate <wallet-id>
 ```
 
-You can also manage wallets at runtime via the MCP tools `list_wallets`, `set_active_wallet`, `connect_browser_wallet`, `set_wallet_mode`, and `get_wallet_mode`.
+#### MCP Tools (runtime)
+
+| Tool | Description |
+|------|-------------|
+| `get_wallet_address` | Shows current address, or returns first-use wallet selection guidance |
+| `connect_browser_wallet` | Connect TronLink / browser wallet for signing |
+| `set_wallet_mode` | Switch between `browser` and `agent` signing |
+| `get_wallet_mode` | Show current signing mode and addresses |
+| `list_wallets` | List all wallets with IDs, types, addresses |
+| `set_active_wallet` | Switch active wallet by ID |
+
+Importing an existing private key is intentionally not exposed as an MCP tool because MCP arguments can be logged by clients and transports. Use the CLI instead:
+
+```bash
+npx agent-wallet import
+```
 
 ### Environment Variables
 
@@ -118,9 +162,108 @@ export TRONGRID_API_KEY="your_trongrid_api_key"
 export MCP_TRANSPORT="http"       # Use HTTP/SSE instead of stdio
 export MCP_HTTP_PORT="3000"       # HTTP server port (default: 3000)
 export MCP_HTTP_HOST="127.0.0.1"  # HTTP server host (default: 127.0.0.1)
+
+# Required in HTTP mode — see "HTTP Mode Authentication" below for how to generate one
+export MCP_API_KEY="your_strong_random_secret"
 ```
 
+### HTTP Mode Authentication (`MCP_API_KEY`)
+
+**Most users do not need this.** Claude Desktop, Claude Code, and Cursor connect over **stdio** by default, which has no network surface and no auth. `MCP_API_KEY` only applies when you run the server in **HTTP/SSE mode** (`npm run start:http` or `MCP_TRANSPORT=http`).
+
+#### What it is
+
+`MCP_API_KEY` is a self-chosen Bearer-token shared secret between the server and its clients. It is **not** issued by Anthropic, JustLend, or any third party — you generate it yourself, set it on the server, and share it with clients you trust.
+
+The HTTP server reads the variable at startup and **refuses to start without it**. Every incoming request to `/sse` and `/messages` must carry an `Authorization: Bearer <MCP_API_KEY>` header — anything else returns `401 Unauthorized`. The `/health` endpoint is the only exception.
+
+##### Version history
+
+The variable name has been around for a while; what changed is how the server treats it. To avoid confusion when reading older deployment guides:
+
+| Version | Behavior |
+|---------|----------|
+| v1.0.1 – v1.0.3 | `MCP_API_KEY` exists but is **optional**. If unset, the HTTP server starts with no auth (every request is accepted). |
+| **v1.0.4** | `MCP_API_KEY` becomes **required**. The server refuses to start without it, returning `MCP_API_KEY is required in HTTP mode. Refusing to start without authentication.` Comparison still uses plain string equality. |
+| **v1.0.5** | Comparison upgraded to `crypto.timingSafeEqual` with an explicit length check, closing a timing side-channel. The variable itself is unchanged — same name, same role, same "required" semantics as v1.0.4. |
+
+##### Why the timing-safe upgrade matters
+
+Plain string equality (`provided === expected`) returns at the first byte mismatch. An attacker who can measure response latency — for example, by sending many requests from the same network — can distinguish "first byte matched, second byte mismatched" (slightly slower) from "first byte mismatched" (slightly faster) and recover the secret one byte at a time. Network jitter and CPU noise blunt the signal but do not eliminate it; the [classic demonstration](https://crypto.stanford.edu/~dabo/papers/ssl-timing.pdf) recovers cross-network secrets in hours.
+
+`crypto.timingSafeEqual` compares every byte regardless of where the first mismatch occurs, so the runtime depends only on the input length, not the input content. Length is checked separately because `timingSafeEqual` throws on unequal lengths, and the length of `Bearer <key>` is not itself the secret.
+
+#### When you need it
+
+You need to set `MCP_API_KEY` if any of the following apply:
+
+- You are deploying the MCP server to a remote machine and connecting over SSE.
+- You are exposing the server behind a reverse proxy (NGINX, Caddy) on a LAN, container network, or the public internet.
+- You are writing or running an MCP client that talks to this server over HTTP rather than over stdio.
+
+If you are simply running Claude Desktop / Claude Code / Cursor against a local stdio server (the default), you can ignore this variable entirely.
+
+#### How to generate one
+
+Generate a strong random string locally — any of the following work:
+
+```bash
+# 32 random bytes, base64-encoded (recommended)
+openssl rand -base64 32
+
+# Or hex
+openssl rand -hex 32
+
+# Or a UUID
+uuidgen
+```
+
+Set it on the server before starting:
+
+```bash
+export MCP_API_KEY="$(openssl rand -base64 32)"
+npm run start:http
+```
+
+#### How clients send it
+
+Clients pass the same value as a Bearer token on every request:
+
+```
+Authorization: Bearer <your-MCP_API_KEY>
+```
+
+For example, a `curl` health-check vs. an authenticated SSE connection:
+
+```bash
+# /health does not require the header
+curl http://127.0.0.1:3001/health
+
+# /sse requires the Authorization header — without it the server returns 401
+curl -N -H "Authorization: Bearer $MCP_API_KEY" http://127.0.0.1:3001/sse
+```
+
+#### Security guidelines
+
+- Treat `MCP_API_KEY` like a database password: never commit it to git, never paste it into issue trackers or chat logs, and rotate it if it leaks.
+- Use **at least 32 bytes** of entropy. Short or guessable values defeat the purpose.
+- Always pair HTTP mode with **TLS** (HTTPS) when the server is reachable from anywhere other than `localhost`. A Bearer token sent over plain HTTP is sent in cleartext on every request.
+- Bind to `127.0.0.1` (the default) unless you explicitly need remote access. If you need remote access, terminate TLS at a reverse proxy and only forward to the local port.
+- The same key is shared by every client that connects. If you need per-client identities, put a proxy in front of the server that maps client identities to a single back-end key.
+
 ### Client Configuration
+
+Build the local server first:
+
+```bash
+npm run build
+```
+
+All local client examples below use the built stdio entrypoint:
+
+```bash
+node /absolute/path/to/mcp-server-justlend/build/index.js
+```
 
 #### Claude Desktop
 
@@ -129,10 +272,27 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 ```json
 {
   "mcpServers": {
-    "mcp-server-justlend": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["tsx", "@justlend/mcp-server-justlend"],
+    "justlend": {
+      "command": "node",
+      "args": ["/absolute/path/to/mcp-server-justlend/build/index.js"],
+      "env": {
+        "TRONGRID_API_KEY": "SET_VIA_SYSTEM_ENV"
+      }
+    }
+  }
+}
+```
+
+#### Claude Code
+
+Add to `.mcp.json` in the project root:
+
+```json
+{
+  "mcpServers": {
+    "justlend": {
+      "command": "node",
+      "args": ["/absolute/path/to/mcp-server-justlend/build/index.js"],
       "env": {
         "TRONGRID_API_KEY": "SET_VIA_SYSTEM_ENV"
       }
@@ -151,10 +311,9 @@ Add to `.cursor/mcp.json`:
 ```json
 {
   "mcpServers": {
-    "mcp-server-justlend": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["tsx", "@justlend/mcp-server-justlend"],
+    "justlend": {
+      "command": "node",
+      "args": ["/absolute/path/to/mcp-server-justlend/build/index.js"],
       "env": {
         "TRONGRID_API_KEY": "SET_VIA_SYSTEM_ENV"
       }
@@ -277,10 +436,18 @@ npm run dev
 | `unstake_strx` | Unstake sTRX to receive TRX back (with balance check) | **Yes** |
 | `claim_strx_rewards` | Claim all staking rewards (with rewards existence check) | **Yes** |
 
+#### Transfers
+
+| Tool | Description | Write? |
+|------|-------------|--------|
+| `transfer_trx` | Transfer TRX to another address (with balance check) | **Yes** |
+| `transfer_trc20` | Transfer TRC20 tokens by symbol or contract address | **Yes** |
+
 ### Prompts (AI-Guided Workflows)
 
 | Prompt | Description |
 |--------|-------------|
+| `getting_started` | First-time onboarding: wallet setup, connection, feature tour |
 | `supply_assets` | Step-by-step supply with balance checks and approval |
 | `borrow_assets` | Safe borrowing with risk assessment and health factor checks |
 | `repay_borrow` | Guided repayment with verification |
@@ -288,14 +455,15 @@ npm run dev
 | `compare_markets` | Find best supply/borrow opportunities |
 | `rent_energy` | Guided energy rental with price estimation and balance checks |
 | `stake_trx` | Guided TRX staking to sTRX with APY info and verification |
-| `getting_started` | First-use setup guidance for wallet mode and network selection |
-| `query_proposals` | Guided proposal lookup and status review |
-| `cast_vote` | Guided governance voting flow with vote-power checks |
+| `query_proposals` | Browse and query governance proposals, check voting requirements |
+| `cast_vote` | Guided governance voting with vote verification |
 
 ## Security Considerations
 
-- **Browser wallet mode**: Recommended for interactive use; transactions are built by the server and signed by TronLink/browser wallets
-- **Agent wallet mode**: Local private keys are encrypted at rest in `~/.agent-wallet/` and are never stored in environment variables
+- **Browser wallet (recommended)**: Private keys never leave TronLink — the `tronlink-signer` SDK sends unsigned transactions to the browser and receives signed results
+- **Encrypted agent-wallet**: Private keys are encrypted at rest in `~/.agent-wallet/` with file permissions `0600`/`0700` — never stored in environment variables or config files
+- **No key in parameters**: All signing functions use the agent-wallet or browser wallet internally; private keys are never passed as function parameters or exposed via MCP tools
+- **Import via CLI**: Use `npx agent-wallet import` from a terminal — private key import is not exposed as an MCP tool to avoid key exposure in AI conversation logs
 - **Explicit approvals**: TRC20/JST approval tools require an exact amount, while `max` remains available only when the user explicitly opts in
 - **Pre-flight checks**: Supply/repay validate allowance first, lending tools report energy/bandwidth sufficiency warnings, and reverted simulations are not broadcast
 - **Typed broadcasts**: Transaction broadcasts are parsed with typed responses so failed or rejected broadcasts surface as errors instead of ambiguous transaction IDs
@@ -334,7 +502,7 @@ npm run dev
 → AI calls `get_user_vote_status` to find withdrawable proposals → calls `withdraw_votes_from_proposal` for each
 
 **"How much does it cost to rent 300,000 energy for 7 days?"**
-→ AI calls `calculate_energy_rental_price` with energyAmount=300000, durationDays=7, returns cost breakdown
+→ AI calls `calculate_energy_rental_price` with energyAmount=300000, durationHours=168, returns cost breakdown
 
 **"Rent 500,000 energy to address TXxx... for 14 days"**
 → AI uses `rent_energy` prompt: checks balance → checks rental status → calculates price → rents energy → verifies
@@ -350,3 +518,9 @@ npm run dev
 
 **"Can I withdraw my unstaked TRX?"**
 → AI calls `check_strx_withdrawal_eligibility` to check unbonding status and completed withdrawal rounds
+
+**"Connect my TronLink wallet"**
+→ AI calls `connect_browser_wallet`, opens browser window for user to approve in TronLink
+
+**"How much energy will supplying 100 USDT cost?"**
+→ AI calls `estimate_lending_energy` with operation=supply, market=jUSDT, amount=100, returns energy/bandwidth/TRX breakdown
