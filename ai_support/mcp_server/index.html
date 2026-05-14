@@ -1716,10 +1716,14 @@
 <p>Beyond JustLend-specific operations, the server also exposes a full set of <strong>general-purpose TRON chain utilities</strong> — balance queries, block/transaction data, token metadata, TRX transfers, smart contract reads/writes, staking (Stake 2.0), multicall, and more.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Current version (<strong>v1.0.5</strong>) supports <strong>JustLend V1</strong> protocol. All contract addresses, ABIs, calculation functions, and lending operations are for V1.</p>
+<p>Current version (<strong>v1.0.6</strong>) supports <strong>JustLend V1</strong> protocol. All contract addresses, ABIs, calculation functions, and lending operations are for V1.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">v1.0.6 Update</p>
+<p>This release focuses on transaction safety, numeric precision, and data availability. It validates TRC20 allowances before supply/repay, requires explicit approval amounts, preserves precision for high-TVL/scientific-notation values, handles typed broadcast responses consistently, skips failed governance proposals when checking user vote status, and degrades gracefully when the Nile mining rewards API is unavailable.</p>
 </div>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
-<p><a href="https://justlend.org">JustLend DAO</a> is the largest lending protocol on TRON, based on the Compound V2 architecture. This MCP server wraps the full protocol functionality into tools and guided prompts that local MCP clients such as Claude Desktop, Claude Code, and Cursor can use.</p>
+<p><a href="https://justlend.org">JustLend DAO</a> is the largest lending protocol on TRON, based on the Compound V2 architecture. This MCP server wraps the full protocol functionality into tools and guided prompts that local MCP clients such as Claude Desktop, Codex, Claude Code, and Cursor can use.</p>
 <h3 id="key-capabilities">Key Capabilities<a class="headerlink" href="#key-capabilities" title="Permanent link">&para;</a></h3>
 <p><strong>JustLend Protocol</strong></p>
 <ul>
@@ -1739,12 +1743,10 @@
 <li>Separates new period vs. last period rewards</li>
 <li>USD value calculation with live token prices</li>
 <li>Mining status tracking (ongoing/paused/ended) and period end times</li>
+<li>Nile fallback returns an empty reward set instead of failing when the testnet rewards API is unavailable</li>
 </ul>
 </li>
-<li><strong>Supply</strong>: Deposit TRX or TRC20 tokens to earn interest (mint jTokens)</li>
-<li><strong>Borrow</strong>: Borrow assets against your collateral with health factor monitoring</li>
-<li><strong>Repay</strong>: Repay outstanding borrows with full or partial amounts</li>
-<li><strong>Withdraw</strong>: Redeem jTokens back to underlying assets</li>
+<li><strong>Supply / Borrow / Repay / Withdraw</strong>: Full lending operations with pre-flight checks</li>
 <li><strong>Collateral Management</strong>: Enter/exit markets, manage what counts as collateral</li>
 <li><strong>Portfolio Analysis</strong>: AI-guided risk assessment, health factor monitoring, optimization</li>
 <li><strong>Token Approvals</strong>: Manage TRC20 approvals for jToken contracts</li>
@@ -2063,7 +2065,7 @@ curl<span class="w"> </span>-N<span class="w"> </span>-H<span class="w"> </span>
 </code></pre></div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>No <code>TRON_PRIVATE_KEY</code> needed — the server uses the encrypted agent-wallet or browser wallet automatically.</p>
+<p>No <code>TRON_PRIVATE_KEY</code> needed — choose browser-wallet signing or encrypted agent-wallet mode at runtime.</p>
 </div>
 <h4 id="cursor">Cursor<a class="headerlink" href="#cursor" title="Permanent link">&para;</a></h4>
 <p>Add to <code>.cursor/mcp.json</code>:</p>
@@ -2551,6 +2553,9 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 <li><strong>Encrypted agent-wallet</strong>: Private keys are encrypted at rest in <code>~/.agent-wallet/</code> with file permissions <code>0600</code>/<code>0700</code> — never stored in environment variables or config files</li>
 <li><strong>No key in parameters</strong>: All signing functions use the agent-wallet or browser wallet internally; private keys are never passed as function parameters or exposed via MCP tools</li>
 <li><strong>Import via CLI</strong>: Use <code>npx agent-wallet import</code> from a terminal — private key import is not exposed as an MCP tool to avoid key exposure in AI conversation logs</li>
+<li><strong>Explicit approvals</strong>: TRC20/JST approval tools require an exact amount, while <code>max</code> remains available only when the user explicitly opts in</li>
+<li><strong>Pre-flight checks</strong>: Supply/repay validate allowance first, lending tools report energy/bandwidth sufficiency warnings, and reverted simulations are not broadcast</li>
+<li><strong>Typed broadcasts</strong>: Transaction broadcasts are parsed with typed responses so failed or rejected broadcasts surface as errors instead of ambiguous transaction IDs</li>
 <li><strong>Write operations</strong> are clearly marked with <code>destructiveHint: true</code> in MCP annotations</li>
 <li><strong>Health factor checks</strong> in prompts prevent dangerous borrowing</li>
 <li>Always <strong>test on Nile testnet</strong> before mainnet operations</li>
