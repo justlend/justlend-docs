@@ -7,37 +7,44 @@ The JustLend MCP Server (`@justlend/mcp-server-justlend`) is a [Model Context Pr
 Beyond JustLend-specific operations, the server also exposes a full set of **general-purpose TRON chain utilities** — balance queries, block/transaction data, token metadata, TRX transfers, smart contract reads/writes, staking (Stake 2.0), multicall, and more.
 
 !!! note
-    Current version (**v1.0.2**) supports **JustLend V1** protocol. All contract addresses, ABIs, calculation functions, and lending operations are for V1.
+    Current version (**v1.0.6**) supports **JustLend V1** protocol. All contract addresses, ABIs, calculation functions, and lending operations are for V1.
+
+!!! tip "v1.0.6 Update"
+    This release focuses on transaction safety, numeric precision, and data availability. It validates TRC20 allowances before supply/repay, requires explicit approval amounts, preserves precision for high-TVL/scientific-notation values, handles typed broadcast responses consistently, skips failed governance proposals when checking user vote status, and degrades gracefully when the Nile mining rewards API is unavailable.
 
 ## Overview
 
-[JustLend DAO](https://justlend.org) is the largest lending protocol on TRON, based on the Compound V2 architecture. This MCP server wraps the full protocol functionality into tools and guided prompts that AI agents (Claude Desktop, Cursor, etc.) can use.
+[JustLend DAO](https://justlend.org) is the largest lending protocol on TRON, based on the Compound V2 architecture. This MCP server wraps the full protocol functionality into tools and guided prompts that local MCP clients such as Claude Desktop, Codex, Claude Code, and Cursor can use.
 
 ### Key Capabilities
 
 **JustLend Protocol**
 
 - **Market Data**: Real-time APYs, TVL, utilization rates, prices for all markets
-    - Direct contract queries for on-chain accuracy
-    - API-based queries for comprehensive market data (more stable, includes historical data and mining rewards)
-- **Account Data**: Full position analysis with API support
-    - Contract-based: Health factor, collateral, borrow positions
-    - API-based: Enhanced data with mining rewards, historical trends, risk metrics
+    - Smart fallback: contract queries first, API fallback for reliability
+    - TTL caching (30–60s) to reduce RPC calls
+- **Account Data**: Full position analysis via Multicall3 batch queries
+    - Health factor, collateral, borrow positions
+    - On-chain Oracle prices with API fallback
+- **Batch Wallet Balances**: Query all TRC20 token balances in a single Multicall3 RPC call
 - **Mining Rewards**: Advanced mining reward calculation
     - Detailed breakdown by market and reward token (USDD, TRX, WBTC, etc.)
     - Separates new period vs. last period rewards
     - USD value calculation with live token prices
     - Mining status tracking (ongoing/paused/ended) and period end times
-- **Supply**: Deposit TRX or TRC20 tokens to earn interest (mint jTokens)
-- **Borrow**: Borrow assets against your collateral with health factor monitoring
-- **Repay**: Repay outstanding borrows with full or partial amounts
-- **Withdraw**: Redeem jTokens back to underlying assets
+    - Nile fallback returns an empty reward set instead of failing when the testnet rewards API is unavailable
+- **Supply / Borrow / Repay / Withdraw**: Full lending operations with pre-flight checks
 - **Collateral Management**: Enter/exit markets, manage what counts as collateral
 - **Portfolio Analysis**: AI-guided risk assessment, health factor monitoring, optimization
-- **Token Approvals**: Manage TRC20 approvals for jToken contracts
 - **JST Voting / Governance**: View proposals, cast votes, deposit/withdraw JST for voting power, reclaim votes
 - **Energy Rental**: Rent energy from JustLend, calculate rental prices, query rental orders, return/cancel rentals
 - **sTRX Staking**: Stake TRX to receive sTRX, unstake sTRX, claim staking rewards, check withdrawal eligibility
+
+**Browser Wallet Signing**
+
+- **TronLink Integration**: Connect TronLink and other TIP-6963 browser wallets via the `tronlink-signer` SDK
+- **Sign-only mode**: The server builds transactions and the browser wallet signs them, so private keys never leave the wallet
+- **Dual wallet mode**: Users choose between `browser` mode (recommended) or `agent` mode (encrypted local storage)
 
 **General TRON Chain**
 
@@ -49,7 +56,7 @@ Beyond JustLend-specific operations, the server also exposes a full set of **gen
 - **Transfers**: Send TRX, transfer TRC20 tokens, approve spenders
 - **Staking (Stake 2.0)**: Freeze/unfreeze TRX for BANDWIDTH or ENERGY, withdraw expired unfreeze
 - **Address Utilities**: Hex ↔ Base58 conversion, address validation, resolution
-- **Wallet**: Encrypted local wallet management via agent-wallet, multi-wallet support, sign messages, sign typed data (EIP-712)
+- **Wallet**: Sign messages, secure key management via agent-wallet or browser wallet
 
 ## Supported Markets
 
@@ -79,43 +86,27 @@ npm install
 
 ## Configuration
 
-### Wallet Setup (v1.0.2+)
+### Wallet Setup (First-Use Choice)
 
-Starting from v1.0.2, private keys are managed by [`@bankofai/agent-wallet`](https://www.npmjs.com/package/@bankofai/agent-wallet) — an encrypted local wallet solution. Private keys are **never** stored in environment variables, config files, or passed as function parameters. They are encrypted at rest in `~/.agent-wallet/` with proper file permissions (`0600`).
+On first use, the server does **not** force a wallet choice. Users can explicitly choose between:
 
-#### Zero-Config Auto-Generation
+1. `browser` mode via TronLink using `connect_browser_wallet`
+2. `agent` mode via encrypted local wallet using `set_wallet_mode` with `mode="agent"`
 
-Simply start the server — if no wallet exists, one is automatically generated:
+Private keys are **never** stored in environment variables by default. If the user selects `agent` mode, the encrypted wallet is stored in `~/.agent-wallet/`.
 
-```bash
-npm start
-# → Wallet: auto-generated new wallet "default"
-# → Address: TXxx...xxx
-# → Encrypted private key stored in ~/.agent-wallet/
-```
+#### Agent Wallet CLI
 
-The wallet persists across restarts (the address does not change).
-
-#### Import an Existing Wallet
-
-To use an existing private key, import it via the `agent-wallet` CLI (recommended over MCP tool to avoid key exposure in conversation logs):
+To use local encrypted signing, generate or import a wallet with the `agent-wallet` CLI:
 
 ```bash
-npx agent-wallet import <wallet-name> --private-key <hex>
-npx agent-wallet import <wallet-name> --mnemonic "word1 word2 ... word12"
-```
-
-#### Multi-Wallet Management
-
-```bash
-# List all wallets
+npx agent-wallet generate
+npx agent-wallet add
 npx agent-wallet list
-
-# Set active wallet
-npx agent-wallet use <wallet-name>
+npx agent-wallet activate <wallet-id>
 ```
 
-You can also manage wallets at runtime via the MCP tools `list_wallets`, `set_active_wallet`, and `import_wallet`.
+You can also manage wallets at runtime via the MCP tools `list_wallets`, `set_active_wallet`, `connect_browser_wallet`, `set_wallet_mode`, and `get_wallet_mode`.
 
 ### Environment Variables
 
@@ -151,7 +142,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 ```
 
 !!! tip
-    No `TRON_PRIVATE_KEY` needed — the server uses the encrypted agent-wallet automatically.
+    No `TRON_PRIVATE_KEY` needed — choose browser-wallet signing or encrypted agent-wallet mode at runtime.
 
 #### Cursor
 
@@ -187,39 +178,40 @@ npm run dev
 
 ## API Reference
 
-### Tools (54 total)
+### Tools (59 total)
 
 #### Wallet & Network
 
 | Tool | Description | Write? |
 |------|-------------|--------|
-| `get_wallet_address` | Show active wallet address | No |
-| `list_wallets` | List all wallets managed by agent-wallet | No |
-| `set_active_wallet` | Switch the active wallet by name | No |
-| `import_wallet` | Import a wallet from private key or mnemonic (CLI import recommended for security) | **Yes** |
+| `get_wallet_address` | Show wallet address or first-use wallet selection guidance | No |
+| `connect_browser_wallet` | Connect TronLink / browser wallet for signing | Yes |
+| `set_wallet_mode` | Switch between `browser` and `agent` signing | Yes |
+| `get_wallet_mode` | Show current signing mode and addresses | No |
+| `list_wallets` | List all wallets (IDs, types, addresses) | No |
+| `set_active_wallet` | Switch active wallet by wallet ID | No |
 | `get_supported_networks` | List available networks | No |
 | `get_supported_markets` | List all jToken markets with addresses | No |
+| `set_network` | Set global default network (mainnet, nile) | Yes |
+| `get_network` | Get current global default network | No |
 
 #### Market Data
 
 | Tool | Description | Write? |
 |------|-------------|--------|
-| `get_market_data` | Detailed data for one market (APY, TVL, rates) - Contract query | No |
-| `get_all_markets` | Overview of all markets - Contract query | No |
-| `get_protocol_summary` | Comptroller config & protocol parameters - Contract query | No |
-| `get_markets_from_api` | **[API]** All market data with mining rewards & trends | No |
-| `get_dashboard_from_api` | **[API]** Protocol-level statistics (TVL, users, etc.) | No |
-| `get_jtoken_details_from_api` | **[API]** Detailed jToken info with interest rate model | No |
+| `get_market_data` | Detailed data for one market (APY, TVL, rates) — contract + API fallback | No |
+| `get_all_markets` | Overview of all markets — contract + API fallback | No |
+| `get_protocol_summary` | Comptroller config & protocol parameters — contract query | No |
 
 #### Account & Balances
 
 | Tool | Description | Write? |
 |------|-------------|--------|
-| `get_account_summary` | Full position: supplies, borrows, health factor - Contract query | No |
-| `get_account_data_from_api` | **[API]** Enhanced account data with mining rewards & trends | No |
+| `get_account_summary` | Full position: supplies, borrows, health factor — Multicall3 batch | No |
 | `check_allowance` | Check TRC20 approval for jToken | No |
 | `get_trx_balance` | TRX balance | No |
 | `get_token_balance` | TRC20 token balance | No |
+| `get_wallet_balances` | Batch-fetch TRC20 balances across multiple markets via Multicall3 | No |
 
 #### Lending Operations
 
@@ -234,6 +226,15 @@ npm run dev
 | `exit_market` | Disable market as collateral | **Yes** |
 | `approve_underlying` | Approve TRC20 for jToken | **Yes** |
 | `claim_rewards` | Claim mining rewards | **Yes** |
+| `estimate_lending_energy` | Estimate energy/bandwidth/TRX cost for any lending operation | No |
+
+#### Mining & Rewards
+
+| Tool | Description | Write? |
+|------|-------------|--------|
+| `get_mining_rewards` | Unclaimed mining rewards, APY, and reward breakdown | No |
+| `get_usdd_mining_config` | USDD mining periods, reward tokens, and schedule | No |
+| `get_wbtc_mining_config` | WBTC supply mining configuration and activity details | No |
 
 #### JST Voting / Governance
 
@@ -287,12 +288,17 @@ npm run dev
 | `compare_markets` | Find best supply/borrow opportunities |
 | `rent_energy` | Guided energy rental with price estimation and balance checks |
 | `stake_trx` | Guided TRX staking to sTRX with APY info and verification |
+| `getting_started` | First-use setup guidance for wallet mode and network selection |
+| `query_proposals` | Guided proposal lookup and status review |
+| `cast_vote` | Guided governance voting flow with vote-power checks |
 
 ## Security Considerations
 
-- **Encrypted wallet**: Private keys are encrypted at rest in `~/.agent-wallet/` with file permissions `0600`/`0700` — never stored in environment variables or config files
-- **No key in parameters**: All signing functions use the agent-wallet internally; private keys are never passed as function parameters or exposed via MCP tools
-- **Import via CLI**: Use `npx agent-wallet import` from a terminal rather than the `import_wallet` MCP tool to avoid key exposure in AI conversation logs
+- **Browser wallet mode**: Recommended for interactive use; transactions are built by the server and signed by TronLink/browser wallets
+- **Agent wallet mode**: Local private keys are encrypted at rest in `~/.agent-wallet/` and are never stored in environment variables
+- **Explicit approvals**: TRC20/JST approval tools require an exact amount, while `max` remains available only when the user explicitly opts in
+- **Pre-flight checks**: Supply/repay validate allowance first, lending tools report energy/bandwidth sufficiency warnings, and reverted simulations are not broadcast
+- **Typed broadcasts**: Transaction broadcasts are parsed with typed responses so failed or rejected broadcasts surface as errors instead of ambiguous transaction IDs
 - **Write operations** are clearly marked with `destructiveHint: true` in MCP annotations
 - **Health factor checks** in prompts prevent dangerous borrowing
 - Always **test on Nile testnet** before mainnet operations
