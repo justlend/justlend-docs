@@ -7,7 +7,7 @@ The JustLend MCP Server (`@justlend/mcp-server-justlend`) is a [Model Context Pr
 Beyond JustLend-specific operations, the server also exposes a full set of **general-purpose TRON chain utilities** — balance queries, block/transaction data, token metadata, TRX transfers, smart contract reads/writes, staking (Stake 2.0), multicall, and more.
 
 !!! note
-    Current version (**v1.0.4**) supports **JustLend V1** protocol. All contract addresses, ABIs, calculation functions, and lending operations are for V1.
+    Current version (**v1.0.5**) supports **JustLend V1** protocol. All contract addresses, ABIs, calculation functions, and lending operations are for V1.
 
 ## Overview
 
@@ -61,16 +61,26 @@ Beyond JustLend-specific operations, the server also exposes a full set of **gen
 
 ## Supported Markets
 
-| jToken | Underlying | Description |
-|--------|-----------|-------------|
-| jTRX   | TRX       | Native TRON token |
-| jUSDT  | USDT      | Tether USD |
-| jUSDC  | USDC      | USD Coin |
-| jBTC   | BTC       | Bitcoin (wrapped) |
-| jETH   | ETH       | Ethereum (wrapped) |
-| jSUN   | SUN       | SUN token |
-| jWIN   | WIN       | WINkLink |
-| jTUSD  | TUSD      | TrueUSD |
+The protocol exposes 22 jToken markets in total (16 active + 6 paused legacy markets). Call `get_supported_markets` for the live list with addresses. The active markets are:
+
+| jToken     | Underlying | Description |
+|------------|-----------|-------------|
+| jTRX       | TRX       | Native TRON token |
+| jUSDT      | USDT      | Tether USD |
+| jUSDD      | USDD      | Decentralized USD (USDD/TRX dual-mining rewards) |
+| jUSD1      | USD1      | World Liberty Financial USD |
+| jTUSD      | TUSD      | TrueUSD |
+| jwstUSDT   | wstUSDT   | Wrapped staked USDT (yields underlying staking APY) |
+| jsTRX      | sTRX      | Staked TRX (yields underlying staking APY) |
+| jBTC       | BTC       | Bitcoin (wrapped) |
+| jWBTC      | WBTC      | Wrapped Bitcoin |
+| jETH       | ETH       | Ethereum (wrapped) |
+| jETHB      | ETHB      | Bridged Ethereum |
+| jSUN       | SUN       | SUN token |
+| jJST       | JST       | JUST governance token |
+| jWIN       | WIN       | WINkLink |
+| jBTT       | BTT       | BitTorrent token |
+| jNFT       | NFT       | APENFT |
 
 ## Prerequisites
 
@@ -151,7 +161,94 @@ export TRONGRID_API_KEY="your_trongrid_api_key"
 export MCP_TRANSPORT="http"       # Use HTTP/SSE instead of stdio
 export MCP_HTTP_PORT="3000"       # HTTP server port (default: 3000)
 export MCP_HTTP_HOST="127.0.0.1"  # HTTP server host (default: 127.0.0.1)
+
+# Required in HTTP mode — see "HTTP Mode Authentication" below for how to generate one
+export MCP_API_KEY="your_strong_random_secret"
 ```
+
+### HTTP Mode Authentication (`MCP_API_KEY`)
+
+**Most users do not need this.** Claude Desktop, Claude Code, and Cursor connect over **stdio** by default, which has no network surface and no auth. `MCP_API_KEY` only applies when you run the server in **HTTP/SSE mode** (`npm run start:http` or `MCP_TRANSPORT=http`).
+
+#### What it is
+
+`MCP_API_KEY` is a self-chosen Bearer-token shared secret between the server and its clients. It is **not** issued by Anthropic, JustLend, or any third party — you generate it yourself, set it on the server, and share it with clients you trust.
+
+The HTTP server reads the variable at startup and **refuses to start without it**. Every incoming request to `/sse` and `/messages` must carry an `Authorization: Bearer <MCP_API_KEY>` header — anything else returns `401 Unauthorized`. The `/health` endpoint is the only exception.
+
+##### Version history
+
+The variable name has been around for a while; what changed is how the server treats it. To avoid confusion when reading older deployment guides:
+
+| Version | Behavior |
+|---------|----------|
+| v1.0.1 – v1.0.3 | `MCP_API_KEY` exists but is **optional**. If unset, the HTTP server starts with no auth (every request is accepted). |
+| **v1.0.4** | `MCP_API_KEY` becomes **required**. The server refuses to start without it, returning `MCP_API_KEY is required in HTTP mode. Refusing to start without authentication.` Comparison still uses plain string equality. |
+| **v1.0.5** | Comparison upgraded to `crypto.timingSafeEqual` with an explicit length check, closing a timing side-channel. The variable itself is unchanged — same name, same role, same "required" semantics as v1.0.4. |
+
+##### Why the timing-safe upgrade matters
+
+Plain string equality (`provided === expected`) returns at the first byte mismatch. An attacker who can measure response latency — for example, by sending many requests from the same network — can distinguish "first byte matched, second byte mismatched" (slightly slower) from "first byte mismatched" (slightly faster) and recover the secret one byte at a time. Network jitter and CPU noise blunt the signal but do not eliminate it; the [classic demonstration](https://crypto.stanford.edu/~dabo/papers/ssl-timing.pdf) recovers cross-network secrets in hours.
+
+`crypto.timingSafeEqual` compares every byte regardless of where the first mismatch occurs, so the runtime depends only on the input length, not the input content. Length is checked separately because `timingSafeEqual` throws on unequal lengths, and the length of `Bearer <key>` is not itself the secret.
+
+#### When you need it
+
+You need to set `MCP_API_KEY` if any of the following apply:
+
+- You are deploying the MCP server to a remote machine and connecting over SSE.
+- You are exposing the server behind a reverse proxy (NGINX, Caddy) on a LAN, container network, or the public internet.
+- You are writing or running an MCP client that talks to this server over HTTP rather than over stdio.
+
+If you are simply running Claude Desktop / Claude Code / Cursor against a local stdio server (the default), you can ignore this variable entirely.
+
+#### How to generate one
+
+Generate a strong random string locally — any of the following work:
+
+```bash
+# 32 random bytes, base64-encoded (recommended)
+openssl rand -base64 32
+
+# Or hex
+openssl rand -hex 32
+
+# Or a UUID
+uuidgen
+```
+
+Set it on the server before starting:
+
+```bash
+export MCP_API_KEY="$(openssl rand -base64 32)"
+npm run start:http
+```
+
+#### How clients send it
+
+Clients pass the same value as a Bearer token on every request:
+
+```
+Authorization: Bearer <your-MCP_API_KEY>
+```
+
+For example, a `curl` health-check vs. an authenticated SSE connection:
+
+```bash
+# /health does not require the header
+curl http://127.0.0.1:3001/health
+
+# /sse requires the Authorization header — without it the server returns 401
+curl -N -H "Authorization: Bearer $MCP_API_KEY" http://127.0.0.1:3001/sse
+```
+
+#### Security guidelines
+
+- Treat `MCP_API_KEY` like a database password: never commit it to git, never paste it into issue trackers or chat logs, and rotate it if it leaks.
+- Use **at least 32 bytes** of entropy. Short or guessable values defeat the purpose.
+- Always pair HTTP mode with **TLS** (HTTPS) when the server is reachable from anywhere other than `localhost`. A Bearer token sent over plain HTTP is sent in cleartext on every request.
+- Bind to `127.0.0.1` (the default) unless you explicitly need remote access. If you need remote access, terminate TLS at a reverse proxy and only forward to the local port.
+- The same key is shared by every client that connects. If you need per-client identities, put a proxy in front of the server that maps client identities to a single back-end key.
 
 ### Client Configuration
 
