@@ -16,7 +16,7 @@ JST tokens enable holders to collectively act as managers of the protocol, enabl
 
 ![proposal process](https://raw.githubusercontent.com/justlend/justlend-docs/main/images/proposal.png)
 
-1. JST holders call governance contracts to create proposals. Once a proposal is successfully created, it will undergo a 2-day review period. Voting rights are then recorded, and the voting process begins after the review period ends.
+1. JST holders call governance contracts to create proposals. Once a proposal is successfully established, the voting active begins immediately.
 2. JST holders receive votes and can choose to either support or oppose a proposal based on its content. Each JST holder is entitled to one vote. The voting period lasts for 3 days.
 3. Once the voting period ends, the governance contract will determine whether the proposal has been approved based on the number of votes. If the proposal does not pass, it will be terminated. If the proposal is approved, it will trigger the time lock executor.
 4. If the proposal is passed, the proposal will enter a lock-up period of 48 hours. After the lock-up period ends, the proposal will be in a pending state, and the proposal will take effect immediately after the execution.
