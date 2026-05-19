@@ -1,5 +1,5 @@
 site_name: JustLend DAO Documentation
-site_url: !ENV [SITE_URL, 'https://docs.justlend.org/']
+site_url: https://docs.justlend.org/
 
 nav:
     - GETTING STARTED:
@@ -34,7 +34,6 @@ nav:
         - Energy Rental: developers/energy_rental.md
         - Deployed Contracts: developers/deployed_contracts.md
         - APIs: developers/apis.md
-        - API Playground: developers/apis-playground.md
     - AI SUPPORT:
         - MCP Server: ai_support/mcp_server.md
         - JustLend Skills: ai_support/justlend_skills.md

@@ -4,9 +4,6 @@ on:
     branches:
       - main  #监控master分支，一旦master分支有改动，则触发该工作流
     workflow_dispatch:    # 允许手动触发该工作流，即在GitHub UI上actions里有一个Run workflow按钮，否则没有该按钮。
-permissions:
-  contents: write   # 允许工作流向 gh-pages 分支 push
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -30,37 +27,16 @@ jobs:
         pip install jieba==0.42.1   # 安装依赖
         pip install mkdocs-swagger-ui-tag
         
-    - name: Resolve deployment target
-      id: target
-      # 上游仓库 (justlend/justlend-docs) 用 docs.justlend.org + CNAME；
-      # 任何 fork 用 github.io 子路径，跳过 CNAME，避免抢占自定义域名。
-      env:
-        REPO: ${{ github.repository }}
-        OWNER: ${{ github.repository_owner }}
-        NAME: ${{ github.event.repository.name }}
-      run: |
-        if [ "$REPO" = "justlend/justlend-docs" ]; then
-          echo "site_url=https://docs.justlend.org/" >> "$GITHUB_OUTPUT"
-          echo "with_cname=true" >> "$GITHUB_OUTPUT"
-        else
-          echo "site_url=https://${OWNER}.github.io/${NAME}/" >> "$GITHUB_OUTPUT"
-          echo "with_cname=false" >> "$GITHUB_OUTPUT"
-        fi
-
     - name: Build the document
-      env:
-        SITE_URL: ${{ steps.target.outputs.site_url }}
-      run: mkdocs build  # 构建mkdocs站点，site_url 由上一步注入
+      run: mkdocs build  # 构建mkdocs站点
 
     - name: Add CNAME file
-      if: steps.target.outputs.with_cname == 'true'
       run: echo 'docs.justlend.org' > site/CNAME
 
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@v4
       with:
-        # 上游若配了自定义 PAT 名 TOKEN 就用它；否则回退到 fork/普通 repo 自动注入的 GITHUB_TOKEN。
-        token: ${{ secrets.TOKEN || secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.TOKEN}}  
         branch: gh-pages # 将站点的build结果放到gh-pages分支上
         folder: site # MkDocs 默认的构建输出目录
 
