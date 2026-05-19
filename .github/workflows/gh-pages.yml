@@ -27,10 +27,30 @@ jobs:
         pip install jieba==0.42.1   # 安装依赖
         pip install mkdocs-swagger-ui-tag
         
+    - name: Resolve deployment target
+      id: target
+      # 上游仓库 (justlend/justlend-docs) 用 docs.justlend.org + CNAME；
+      # 任何 fork 用 github.io 子路径，跳过 CNAME，避免抢占自定义域名。
+      env:
+        REPO: ${{ github.repository }}
+        OWNER: ${{ github.repository_owner }}
+        NAME: ${{ github.event.repository.name }}
+      run: |
+        if [ "$REPO" = "justlend/justlend-docs" ]; then
+          echo "site_url=https://docs.justlend.org/" >> "$GITHUB_OUTPUT"
+          echo "with_cname=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "site_url=https://${OWNER}.github.io/${NAME}/" >> "$GITHUB_OUTPUT"
+          echo "with_cname=false" >> "$GITHUB_OUTPUT"
+        fi
+
     - name: Build the document
-      run: mkdocs build  # 构建mkdocs站点
+      env:
+        SITE_URL: ${{ steps.target.outputs.site_url }}
+      run: mkdocs build  # 构建mkdocs站点，site_url 由上一步注入
 
     - name: Add CNAME file
+      if: steps.target.outputs.with_cname == 'true'
       run: echo 'docs.justlend.org' > site/CNAME
 
     - name: Deploy
