@@ -4,6 +4,9 @@ on:
     branches:
       - main  #监控master分支，一旦master分支有改动，则触发该工作流
     workflow_dispatch:    # 允许手动触发该工作流，即在GitHub UI上actions里有一个Run workflow按钮，否则没有该按钮。
+permissions:
+  contents: write   # 允许工作流向 gh-pages 分支 push
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -56,7 +59,8 @@ jobs:
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@v4
       with:
-        token: ${{ secrets.TOKEN}}  
+        # 上游若配了自定义 PAT 名 TOKEN 就用它；否则回退到 fork/普通 repo 自动注入的 GITHUB_TOKEN。
+        token: ${{ secrets.TOKEN || secrets.GITHUB_TOKEN }}
         branch: gh-pages # 将站点的build结果放到gh-pages分支上
         folder: site # MkDocs 默认的构建输出目录
 
