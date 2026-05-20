@@ -2,38 +2,39 @@ name: Publish Document
 on:
   push:
     branches:
-      - main  #监控master分支，一旦master分支有改动，则触发该工作流
-    workflow_dispatch:    # 允许手动触发该工作流，即在GitHub UI上actions里有一个Run workflow按钮，否则没有该按钮。
+      - main  # Trigger this workflow whenever the main branch changes.
+    workflow_dispatch:    # Allow manual runs from the GitHub UI (adds a "Run workflow" button under Actions).
 permissions:
-  contents: write   # 允许工作流向 gh-pages 分支 push
+  contents: write   # Required so the workflow can push to the gh-pages branch.
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v4  #拉取仓库代码的库
+      uses: actions/checkout@v4  # Pull the repository contents.
       with:
-        persist-credentials: false   #禁止默认的 GITHUB_TOKEN 自动注入，在后续步骤中，可以提供更高级别的权限token
+        persist-credentials: false   # Skip the default GITHUB_TOKEN credential helper; the deploy step uses its own token.
 
     - name: Setup Python
       uses: actions/setup-python@v4
       with:
-        python-version: 3.x   # 安装python
+        python-version: 3.x   # Install Python.
 
-    - name: Install dependencies  
+    - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install pygments==2.17.2 pymdown-extensions
         pip install mkdocs-exclude
         pip install mkdocs-material==9.6.8
-        pip install jieba==0.42.1   # 安装依赖
+        pip install jieba==0.42.1   # Install build dependencies.
         pip install mkdocs-swagger-ui-tag
-        
+
     - name: Resolve deployment target
       id: target
-      # 上游仓库 (justlend/justlend-docs) 用 docs.justlend.org + CNAME；
-      # 任何 fork 用 github.io 子路径，跳过 CNAME，避免抢占自定义域名。
+      # Upstream repo (justlend/justlend-docs) uses docs.justlend.org + CNAME.
+      # Any fork uses the github.io subpath and skips the CNAME so it does not
+      # try to claim the custom domain.
       env:
         REPO: ${{ github.repository }}
         OWNER: ${{ github.repository_owner }}
@@ -50,7 +51,7 @@ jobs:
     - name: Build the document
       env:
         SITE_URL: ${{ steps.target.outputs.site_url }}
-      run: mkdocs build  # 构建mkdocs站点，site_url 由上一步注入
+      run: mkdocs build  # Build the MkDocs site; site_url is injected from the previous step.
 
     - name: Add CNAME file
       if: steps.target.outputs.with_cname == 'true'
@@ -59,8 +60,8 @@ jobs:
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@v4
       with:
-        # 上游若配了自定义 PAT 名 TOKEN 就用它；否则回退到 fork/普通 repo 自动注入的 GITHUB_TOKEN。
+        # Prefer a custom PAT named TOKEN if the repo provides one; otherwise
+        # fall back to the auto-injected GITHUB_TOKEN (works on forks too).
         token: ${{ secrets.TOKEN || secrets.GITHUB_TOKEN }}
-        branch: gh-pages # 将站点的build结果放到gh-pages分支上
-        folder: site # MkDocs 默认的构建输出目录
-
+        branch: gh-pages  # Publish the built site to the gh-pages branch.
+        folder: site      # MkDocs default build output directory.
