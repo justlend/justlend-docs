@@ -1216,6 +1216,77 @@
   
 </li>
       
+        
+
+
+
+<li class="md-nav__item has-children">
+  <a href="#examples-tronweb" class="md-nav__link" aria-expanded="true">
+    <span class="md-ellipsis">
+      Examples (TronWeb)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Examples (TronWeb)">
+      <ul class="md-nav__list">
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#1-stake-trx-receive-strx" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Stake TRX → receive sTRX
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#2-read-exchange-rate-quote-strx-youd-receive" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Read exchange rate &amp; quote sTRX you'd receive
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#3-unstake-strx-enters-14-day-unbonding-queue" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Unstake sTRX → enters 14-day unbonding queue
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#4-claim-unfrozen-trx-after-the-14-day-round-completes" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Claim unfrozen TRX (after the 14-day round completes)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1747,6 +1818,10 @@
 
 
 <h1 id="staked-trx">Staked TRX<a class="headerlink" href="#staked-trx" title="Permanent link">&para;</a></h1>
+<div class="admonition info">
+<p class="admonition-title">Network &amp; precision</p>
+<p>The contract address below is <strong>TRON Mainnet</strong>. TRX amounts are in <strong>sun</strong> (1 TRX = 10⁶ sun). sTRX is an 18-decimal TRC20. The <code>exchangeRate()</code> is scaled by <code>1e18</code>.</p>
+</div>
 <p>Based on Stake 2.0, with TRX Liquid Staking, users can stake TRX to get sTRX tokens and gain high rewards. Compared to traditional staking, TRX Liquid Staking is easier to use and more profitable. Staked TRX will be used automatically for voting and governance, and gain rewards via Energy Rental.
 The contract <a href="https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5">StakedTRX</a> used to set up the staked TRX service.</p>
 <h2 id="query-interface"><strong>Query Interface</strong><a class="headerlink" href="#query-interface" title="Permanent link">&para;</a></h2>
@@ -1898,6 +1973,66 @@ The contract <a href="https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZxoqQ
 <li><strong>Parameter description:</strong> N/A.</li>
 <li><strong>Returns:</strong> the amount of TRX claimed by the user for all expired unfreezing rounds, the minimum unit.</li>
 </ul>
+<h2 id="examples-tronweb"><strong>Examples (TronWeb)</strong><a class="headerlink" href="#examples-tronweb" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">TronWeb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;tronweb&#39;</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">tronWeb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">TronWeb</span><span class="p">({</span>
+<span class="w">  </span><span class="nx">fullHost</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;https://api.trongrid.io&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">headers</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s1">&#39;TRON-PRO-API-KEY&#39;</span><span class="o">:</span><span class="w"> </span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">TRONGRID_API_KEY</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nx">privateKey</span><span class="o">:</span><span class="w"> </span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PRIVATE_KEY</span><span class="p">,</span>
+<span class="p">});</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">STRX</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5&#39;</span><span class="p">;</span><span class="w"> </span><span class="c1">// sTRX on TRON Mainnet</span>
+</code></pre></div>
+<h3 id="1-stake-trx-receive-strx">1. Stake TRX → receive sTRX<a class="headerlink" href="#1-stake-trx-receive-strx" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">stake</span><span class="p">(</span><span class="nx">trxAmount</span><span class="w"> </span><span class="cm">/* in TRX, e.g. 1000 */</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">strx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">tronWeb</span><span class="p">.</span><span class="nx">contract</span><span class="p">().</span><span class="nx">at</span><span class="p">(</span><span class="nx">STRX</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">txId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">strx</span><span class="p">.</span><span class="nx">deposit</span><span class="p">().</span><span class="nx">send</span><span class="p">({</span>
+<span class="w">    </span><span class="nx">callValue</span><span class="o">:</span><span class="w"> </span><span class="nx">trxAmount</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1</span><span class="nx">_000_000</span><span class="p">,</span><span class="w"> </span><span class="c1">// TRX → sun</span>
+<span class="w">    </span><span class="nx">feeLimit</span><span class="o">:</span><span class="w"> </span><span class="mf">100</span><span class="nx">_000_000</span><span class="p">,</span>
+<span class="w">  </span><span class="p">});</span>
+<span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;deposit tx:&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">txId</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="2-read-exchange-rate-quote-strx-youd-receive">2. Read exchange rate &amp; quote sTRX you'd receive<a class="headerlink" href="#2-read-exchange-rate-quote-strx-youd-receive" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">quoteStake</span><span class="p">(</span><span class="nx">trxAmount</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">strx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">tronWeb</span><span class="p">.</span><span class="nx">contract</span><span class="p">().</span><span class="nx">at</span><span class="p">(</span><span class="nx">STRX</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">rate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">strx</span><span class="p">.</span><span class="nx">exchangeRate</span><span class="p">().</span><span class="nx">call</span><span class="p">();</span><span class="w"> </span><span class="c1">// sTRX per TRX, scaled 1e18</span>
+<span class="w">  </span><span class="c1">// strxReceived = trxAmount * 1e18 / rate  (both scaled 1e18 in different ways)</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">trxSun</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">BigInt</span><span class="p">(</span><span class="nx">trxAmount</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1</span><span class="nx">_000_000n</span><span class="p">;</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">strxReceived</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nx">trxSun</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="mi">10n</span><span class="w"> </span><span class="o">**</span><span class="w"> </span><span class="mi">18n</span><span class="p">))</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nb">BigInt</span><span class="p">(</span><span class="nx">rate</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">strxReceived</span><span class="p">;</span><span class="w"> </span><span class="c1">// in sTRX smallest unit (18 decimals)</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="3-unstake-strx-enters-14-day-unbonding-queue">3. Unstake sTRX → enters 14-day unbonding queue<a class="headerlink" href="#3-unstake-strx-enters-14-day-unbonding-queue" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">unstake</span><span class="p">(</span><span class="nx">strxAmountUnits</span><span class="w"> </span><span class="cm">/* in sTRX smallest unit, 18 decimals */</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">strx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">tronWeb</span><span class="p">.</span><span class="nx">contract</span><span class="p">().</span><span class="nx">at</span><span class="p">(</span><span class="nx">STRX</span><span class="p">);</span>
+<span class="w">  </span><span class="c1">// Burns sTRX immediately; TRX enters the unfreezing queue.</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">txId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">strx</span><span class="p">.</span><span class="nx">withdraw</span><span class="p">(</span><span class="nx">strxAmountUnits</span><span class="p">).</span><span class="nx">send</span><span class="p">({</span><span class="w"> </span><span class="nx">feeLimit</span><span class="o">:</span><span class="w"> </span><span class="mf">100</span><span class="nx">_000_000</span><span class="w"> </span><span class="p">});</span>
+<span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;withdraw tx:&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">txId</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// Or: specify the exact TRX you want to receive</span>
+<span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">unstakeExact</span><span class="p">(</span><span class="nx">trxAmountSun</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">strx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">tronWeb</span><span class="p">.</span><span class="nx">contract</span><span class="p">().</span><span class="nx">at</span><span class="p">(</span><span class="nx">STRX</span><span class="p">);</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">strx</span><span class="p">.</span><span class="nx">withdrawExact</span><span class="p">(</span><span class="nx">trxAmountSun</span><span class="p">).</span><span class="nx">send</span><span class="p">({</span><span class="w"> </span><span class="nx">feeLimit</span><span class="o">:</span><span class="w"> </span><span class="mf">100</span><span class="nx">_000_000</span><span class="w"> </span><span class="p">});</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="4-claim-unfrozen-trx-after-the-14-day-round-completes">4. Claim unfrozen TRX (after the 14-day round completes)<a class="headerlink" href="#4-claim-unfrozen-trx-after-the-14-day-round-completes" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">claim</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">strx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">tronWeb</span><span class="p">.</span><span class="nx">contract</span><span class="p">().</span><span class="nx">at</span><span class="p">(</span><span class="nx">STRX</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Check whether anything is claimable first</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">claimable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">strx</span><span class="p">.</span><span class="nx">claimable</span><span class="p">().</span><span class="nx">call</span><span class="p">();</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">claimable</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s1">&#39;0&#39;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;nothing to claim yet — unbonding not complete&#39;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">// claim() returns oldest finished round; claimAll() returns every finished round</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">txId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">strx</span><span class="p">.</span><span class="nx">claimAll</span><span class="p">().</span><span class="nx">send</span><span class="p">({</span><span class="w"> </span><span class="nx">feeLimit</span><span class="o">:</span><span class="w"> </span><span class="mf">100</span><span class="nx">_000_000</span><span class="w"> </span><span class="p">});</span>
+<span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;claim tx:&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">txId</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
 
 
 

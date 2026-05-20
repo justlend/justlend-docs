@@ -1228,6 +1228,129 @@
 
 
 <li class="md-nav__item has-children">
+  <a href="#examples-tronweb" class="md-nav__link" aria-expanded="true">
+    <span class="md-ellipsis">
+      Examples (TronWeb)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Examples (TronWeb)">
+      <ul class="md-nav__list">
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Setup
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#1-supply-usdt-approve-mint" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Supply USDT
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#2-supply-trx-mint-payable-no-approval-needed" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Supply TRX
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#3-enable-supplied-asset-as-collateral-entermarkets" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Enable supplied asset as collateral
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#4-borrow-trx-against-existing-collateral" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Borrow TRX against existing collateral
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#5-repay-usdt-approve-repayborrow" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Repay USDT
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#6-redeem-withdraw-by-jtoken-units-or-by-underlying" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Redeem (withdraw)
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#7-apy-conversion-from-per-block-rates" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. APY conversion from per-block rates
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item has-children">
   <a href="#error-code-and-failure-info" class="md-nav__link" aria-expanded="true">
     <span class="md-ellipsis">
       Error Code And Failure info
@@ -1917,6 +2040,15 @@
 
 
 <h1 id="sbm">SBM<a class="headerlink" href="#sbm" title="Permanent link">&para;</a></h1>
+<div class="admonition info">
+<p class="admonition-title">Units &amp; precision</p>
+<ul>
+<li>Amounts passed to <code>mint</code>/<code>borrow</code>/<code>repayBorrow</code>/<code>redeemUnderlying</code> are in the <strong>underlying's smallest unit</strong> — always read <code>decimals()</code> on the underlying TRC20 first. TRX = 6, USDT = 6, USDC = 6, USDD = 18, BTC/WBTC = 8, ETH = 18.</li>
+<li>jToken amounts (<code>redeem</code>, <code>transfer</code>, <code>balanceOf</code>) are in <strong>8 decimals</strong> regardless of the underlying.</li>
+<li>Rates (<code>borrowRatePerBlock</code>, <code>supplyRatePerBlock</code>) and the exchange rate are scaled by <strong><code>1e18</code></strong>, per-block.</li>
+<li>Network in all examples below is <strong>TRON Mainnet</strong>. Test on Nile first.</li>
+</ul>
+</div>
 <p>The JustLend DAO Supply and Borrow Market (SBM) is a decentralized  liquidity pool where users can participate as suppliers, borrowers or liquidators. Suppliers provide liquidity to a market and can earn interest on the assets provided, where borrowers are able to borrow in a collateralize assets way.</p>
 <p>The SBM contract is the main user-facing contract. Most user interactions with the JustLend DAO Protocol occur via the Ctoken contract. It exposes the liquidity management methods that can be invoked using either Solidity or Web3 libraries.</p>
 <p><code>Ctoken.sol:</code> allows users to:</p>
@@ -2243,9 +2375,121 @@
 </ul>
 </li>
 </ul>
-<p>&emsp;
-&emsp;
-&emsp;</p>
+<p>&emsp;</p>
+<h2 id="examples-tronweb"><strong>Examples (TronWeb)</strong><a class="headerlink" href="#examples-tronweb" title="Permanent link">&para;</a></h2>
+<p>The snippets below use <a href="https://developers.tron.network/reference/tronweb-object">TronWeb</a>. Replace the <code>// PRIVATE_KEY=…</code> literal with your own loading mechanism — <strong>never commit a key</strong>. All addresses below are TRON Mainnet.</p>
+<h3 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">TronWeb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;tronweb&#39;</span><span class="p">);</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">tronWeb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">TronWeb</span><span class="p">({</span>
+<span class="w">  </span><span class="nx">fullHost</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;https://api.trongrid.io&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">headers</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s1">&#39;TRON-PRO-API-KEY&#39;</span><span class="o">:</span><span class="w"> </span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">TRONGRID_API_KEY</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="c1">// strongly recommended</span>
+<span class="w">  </span><span class="nx">privateKey</span><span class="o">:</span><span class="w"> </span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PRIVATE_KEY</span><span class="p">,</span>
+<span class="p">});</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">UNITROLLER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7&#39;</span><span class="p">;</span><span class="w"> </span><span class="c1">// Comptroller proxy</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">JUSDT</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;TXJgMdjVX5dKiQaUi9QobwNxtSQaFqccvd&#39;</span><span class="p">;</span><span class="w"> </span><span class="c1">// jUSDT CErc20Delegator</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">JTRX</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP&#39;</span><span class="p">;</span><span class="w"> </span><span class="c1">// jTRX</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">USDT</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t&#39;</span><span class="p">;</span><span class="w"> </span><span class="c1">// USDT underlying</span>
+</code></pre></div>
+<h3 id="1-supply-usdt-approve-mint">1. Supply USDT — <code>approve</code> → <code>mint</code><a class="headerlink" href="#1-supply-usdt-approve-mint" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">supplyUSDT</span><span class="p">(</span><span class="nx">amountWithDecimals</span><span class="w"> </span><span class="cm">/* e.g. &quot;1000000000&quot; for 1,000 USDT */</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">usdt</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">tronWeb</span><span class="p">.</span><span class="nx">contract</span><span class="p">().</span><span class="nx">at</span><span class="p">(</span><span class="nx">USDT</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">jusdt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">tronWeb</span><span class="p">.</span><span class="nx">contract</span><span class="p">().</span><span class="nx">at</span><span class="p">(</span><span class="nx">JUSDT</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// 1. Approve the jUSDT contract to pull USDT from this wallet.</span>
+<span class="w">  </span><span class="c1">//    Skip if you&#39;ve already approved a sufficient amount.</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">usdt</span><span class="p">.</span><span class="nx">approve</span><span class="p">(</span><span class="nx">JUSDT</span><span class="p">,</span><span class="w"> </span><span class="nx">amountWithDecimals</span><span class="p">).</span><span class="nx">send</span><span class="p">();</span>
+
+<span class="w">  </span><span class="c1">// 2. Mint jUSDT (supply USDT). Returns 0 on success.</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">txId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">jusdt</span><span class="p">.</span><span class="nx">mint</span><span class="p">(</span><span class="nx">amountWithDecimals</span><span class="p">).</span><span class="nx">send</span><span class="p">({</span>
+<span class="w">    </span><span class="nx">feeLimit</span><span class="o">:</span><span class="w"> </span><span class="mf">200</span><span class="nx">_000_000</span><span class="p">,</span><span class="w"> </span><span class="c1">// 200 TRX feeLimit</span>
+<span class="w">  </span><span class="p">});</span>
+<span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;mint tx:&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">txId</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="2-supply-trx-mint-payable-no-approval-needed">2. Supply TRX — <code>mint()</code> (payable, no approval needed)<a class="headerlink" href="#2-supply-trx-mint-payable-no-approval-needed" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">supplyTRX</span><span class="p">(</span><span class="nx">amountInSun</span><span class="w"> </span><span class="cm">/* 1 TRX = 1_000_000 sun */</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">jtrx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">tronWeb</span><span class="p">.</span><span class="nx">contract</span><span class="p">().</span><span class="nx">at</span><span class="p">(</span><span class="nx">JTRX</span><span class="p">);</span>
+
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">txId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">jtrx</span><span class="p">.</span><span class="nx">mint</span><span class="p">().</span><span class="nx">send</span><span class="p">({</span>
+<span class="w">    </span><span class="nx">callValue</span><span class="o">:</span><span class="w"> </span><span class="nx">amountInSun</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">feeLimit</span><span class="o">:</span><span class="w"> </span><span class="mf">200</span><span class="nx">_000_000</span><span class="p">,</span>
+<span class="w">  </span><span class="p">});</span>
+<span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;mint tx:&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">txId</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="3-enable-supplied-asset-as-collateral-entermarkets">3. Enable supplied asset as collateral — <code>enterMarkets</code><a class="headerlink" href="#3-enable-supplied-asset-as-collateral-entermarkets" title="Permanent link">&para;</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Required before borrowing</p>
+<p>Supplying alone does <strong>not</strong> make the asset count as collateral. You must call <code>enterMarkets</code> on the Unitroller with the <strong>jToken</strong> addresses you want enabled.</p>
+</div>
+<div class="highlight"><pre><span></span><code><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">enableCollateral</span><span class="p">(</span><span class="nx">jTokens</span><span class="w"> </span><span class="cm">/* e.g. [JUSDT, JTRX] */</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">comptroller</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">tronWeb</span><span class="p">.</span><span class="nx">contract</span><span class="p">().</span><span class="nx">at</span><span class="p">(</span><span class="nx">UNITROLLER</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">txId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">comptroller</span><span class="p">.</span><span class="nx">enterMarkets</span><span class="p">(</span><span class="nx">jTokens</span><span class="p">).</span><span class="nx">send</span><span class="p">({</span><span class="w"> </span><span class="nx">feeLimit</span><span class="o">:</span><span class="w"> </span><span class="mf">200</span><span class="nx">_000_000</span><span class="w"> </span><span class="p">});</span>
+<span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;enterMarkets tx:&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">txId</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="4-borrow-trx-against-existing-collateral">4. Borrow TRX against existing collateral<a class="headerlink" href="#4-borrow-trx-against-existing-collateral" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">borrowTRX</span><span class="p">(</span><span class="nx">amountInSun</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">jtrx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">tronWeb</span><span class="p">.</span><span class="nx">contract</span><span class="p">().</span><span class="nx">at</span><span class="p">(</span><span class="nx">JTRX</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Pre-flight: confirm the account has positive liquidity (no shortfall)</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">comptroller</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">tronWeb</span><span class="p">.</span><span class="nx">contract</span><span class="p">().</span><span class="nx">at</span><span class="p">(</span><span class="nx">UNITROLLER</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">[</span><span class="nx">error</span><span class="p">,</span><span class="w"> </span><span class="nx">liquidity</span><span class="p">,</span><span class="w"> </span><span class="nx">shortfall</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">comptroller</span>
+<span class="w">    </span><span class="p">.</span><span class="nx">getAccountLiquidity</span><span class="p">(</span><span class="nx">tronWeb</span><span class="p">.</span><span class="nx">defaultAddress</span><span class="p">.</span><span class="nx">base58</span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="nx">call</span><span class="p">();</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">error</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="s1">&#39;0&#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nx">shortfall</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="s1">&#39;0&#39;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="s1">&#39;account is not healthy enough to borrow&#39;</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">txId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">jtrx</span><span class="p">.</span><span class="nx">borrow</span><span class="p">(</span><span class="nx">amountInSun</span><span class="p">).</span><span class="nx">send</span><span class="p">({</span><span class="w"> </span><span class="nx">feeLimit</span><span class="o">:</span><span class="w"> </span><span class="mf">200</span><span class="nx">_000_000</span><span class="w"> </span><span class="p">});</span>
+<span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;borrow tx:&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">txId</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="5-repay-usdt-approve-repayborrow">5. Repay USDT — <code>approve</code> → <code>repayBorrow</code><a class="headerlink" href="#5-repay-usdt-approve-repayborrow" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">repayUSDT</span><span class="p">(</span><span class="nx">amountWithDecimals</span><span class="w"> </span><span class="cm">/* underlying smallest unit */</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">usdt</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">tronWeb</span><span class="p">.</span><span class="nx">contract</span><span class="p">().</span><span class="nx">at</span><span class="p">(</span><span class="nx">USDT</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">jusdt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">tronWeb</span><span class="p">.</span><span class="nx">contract</span><span class="p">().</span><span class="nx">at</span><span class="p">(</span><span class="nx">JUSDT</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">usdt</span><span class="p">.</span><span class="nx">approve</span><span class="p">(</span><span class="nx">JUSDT</span><span class="p">,</span><span class="w"> </span><span class="nx">amountWithDecimals</span><span class="p">).</span><span class="nx">send</span><span class="p">();</span>
+
+<span class="w">  </span><span class="c1">// Pass uint256(-1) for a full repayment</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">txId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">jusdt</span><span class="p">.</span><span class="nx">repayBorrow</span><span class="p">(</span><span class="nx">amountWithDecimals</span><span class="p">).</span><span class="nx">send</span><span class="p">({</span><span class="w"> </span><span class="nx">feeLimit</span><span class="o">:</span><span class="w"> </span><span class="mf">200</span><span class="nx">_000_000</span><span class="w"> </span><span class="p">});</span>
+<span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;repay tx:&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">txId</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="6-redeem-withdraw-by-jtoken-units-or-by-underlying">6. Redeem (withdraw) — by jToken units or by underlying<a class="headerlink" href="#6-redeem-withdraw-by-jtoken-units-or-by-underlying" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="c1">// Redeem by jToken units (8 decimals)</span>
+<span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">redeemJUSDT</span><span class="p">(</span><span class="nx">jTokens</span><span class="w"> </span><span class="cm">/* in 8 decimals */</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">jusdt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">tronWeb</span><span class="p">.</span><span class="nx">contract</span><span class="p">().</span><span class="nx">at</span><span class="p">(</span><span class="nx">JUSDT</span><span class="p">);</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">jusdt</span><span class="p">.</span><span class="nx">redeem</span><span class="p">(</span><span class="nx">jTokens</span><span class="p">).</span><span class="nx">send</span><span class="p">({</span><span class="w"> </span><span class="nx">feeLimit</span><span class="o">:</span><span class="w"> </span><span class="mf">200</span><span class="nx">_000_000</span><span class="w"> </span><span class="p">});</span>
+<span class="p">}</span>
+
+<span class="c1">// Redeem an exact underlying amount (in underlying&#39;s decimals)</span>
+<span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">redeemUSDTExact</span><span class="p">(</span><span class="nx">amountWithDecimals</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">jusdt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">tronWeb</span><span class="p">.</span><span class="nx">contract</span><span class="p">().</span><span class="nx">at</span><span class="p">(</span><span class="nx">JUSDT</span><span class="p">);</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">jusdt</span><span class="p">.</span><span class="nx">redeemUnderlying</span><span class="p">(</span><span class="nx">amountWithDecimals</span><span class="p">).</span><span class="nx">send</span><span class="p">({</span><span class="w"> </span><span class="nx">feeLimit</span><span class="o">:</span><span class="w"> </span><span class="mf">200</span><span class="nx">_000_000</span><span class="w"> </span><span class="p">});</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="7-apy-conversion-from-per-block-rates">7. APY conversion from per-block rates<a class="headerlink" href="#7-apy-conversion-from-per-block-rates" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">BLOCKS_PER_YEAR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">10</span><span class="nx">_512_000n</span><span class="p">;</span><span class="w"> </span><span class="c1">// ~3s blocks</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">SCALE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10n</span><span class="w"> </span><span class="o">**</span><span class="w"> </span><span class="mi">18n</span><span class="p">;</span>
+
+<span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">apys</span><span class="p">(</span><span class="nx">jTokenAddr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">jt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">tronWeb</span><span class="p">.</span><span class="nx">contract</span><span class="p">().</span><span class="nx">at</span><span class="p">(</span><span class="nx">jTokenAddr</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">[</span><span class="nx">supplyRate</span><span class="p">,</span><span class="w"> </span><span class="nx">borrowRate</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nb">Promise</span><span class="p">.</span><span class="nx">all</span><span class="p">([</span>
+<span class="w">    </span><span class="nx">jt</span><span class="p">.</span><span class="nx">supplyRatePerBlock</span><span class="p">().</span><span class="nx">call</span><span class="p">(),</span>
+<span class="w">    </span><span class="nx">jt</span><span class="p">.</span><span class="nx">borrowRatePerBlock</span><span class="p">().</span><span class="nx">call</span><span class="p">(),</span>
+<span class="w">  </span><span class="p">]);</span>
+<span class="w">  </span><span class="c1">// Simple (non-compounded) annualized rate as a decimal</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">supplyAPR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Number</span><span class="p">(</span><span class="nb">BigInt</span><span class="p">(</span><span class="nx">supplyRate</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nx">BLOCKS_PER_YEAR</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nb">Number</span><span class="p">(</span><span class="nx">SCALE</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">borrowAPR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Number</span><span class="p">(</span><span class="nb">BigInt</span><span class="p">(</span><span class="nx">borrowRate</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nx">BLOCKS_PER_YEAR</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nb">Number</span><span class="p">(</span><span class="nx">SCALE</span><span class="p">);</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">supplyAPR</span><span class="p">,</span><span class="w"> </span><span class="nx">borrowAPR</span><span class="w"> </span><span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>For mining-reward-inclusive APY, prefer the API field <code>supplyApy</code> on <code>GET /lend/jtoken</code>.</p>
+<p>&emsp;</p>
 <h2 id="error-code-and-failure-info"><strong>Error Code And Failure info</strong><a class="headerlink" href="#error-code-and-failure-info" title="Permanent link">&para;</a></h2>
 <h3 id="error-code"><strong>Error code</strong><a class="headerlink" href="#error-code" title="Permanent link">&para;</a></h3>
 <table>

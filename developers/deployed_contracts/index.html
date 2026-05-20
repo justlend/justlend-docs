@@ -1058,9 +1058,61 @@
 
 
 <li class="md-nav__item ">
-  <a href="#supply-and-borrow-market" class="md-nav__link">
+  <a href="#supply-and-borrow-market-core" class="md-nav__link">
     <span class="md-ellipsis">
       Supply and Borrow Market
+    </span>
+  </a>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item ">
+  <a href="#supply-and-borrow-market-jtoken-markets" class="md-nav__link">
+    <span class="md-ellipsis">
+      Supply and Borrow Market
+    </span>
+  </a>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item ">
+  <a href="#interest-rate-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      Interest Rate Models
+    </span>
+  </a>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item ">
+  <a href="#price-oracle" class="md-nav__link">
+    <span class="md-ellipsis">
+      Price Oracle
+    </span>
+  </a>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item ">
+  <a href="#governance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Governance
     </span>
   </a>
   
@@ -1579,133 +1631,466 @@
 
 
 <h1 id="deployed-contracts">Deployed Contracts<a class="headerlink" href="#deployed-contracts" title="Permanent link">&para;</a></h1>
-<h3 id="supply-and-borrow-market"><strong>Supply and Borrow Market</strong><a class="headerlink" href="#supply-and-borrow-market" title="Permanent link">&para;</a></h3>
+<div class="admonition info">
+<p class="admonition-title">Network: TRON Mainnet</p>
+<p>Every address on this page is deployed on <strong>TRON Mainnet</strong> (Chain ID <code>0x2b6653dc</code>). For <strong>Nile testnet</strong>, see the <a href="https://github.com/justlend/mcp-server-justlend/blob/main/src/core/chains.ts"><code>src/core/chains.ts</code></a> configuration in the JustLend MCP server repository.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Machine-readable ABIs</p>
+<p>Tronscan provides verified-contract ABIs on the <strong>Contract</strong> tab of each link below — click the "ABI" sub-tab to copy or download. Programmatic consumers can also use the bundled ABIs in <a href="https://github.com/justlend/mcp-server-justlend/blob/main/src/core/abis.ts"><code>src/core/abis.ts</code></a> of the MCP server (TypeScript), which covers jToken, Comptroller, PriceOracle, and TRC20.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Decimals / precision</p>
+<p>The Compound V2 architecture treats every token amount in <strong>its underlying's smallest unit</strong>. Always read <code>decimals()</code> on the underlying TRC20 before constructing <code>mint</code>, <code>borrow</code>, <code>repayBorrow</code>, or <code>redeemUnderlying</code> amounts. Common cases: TRX/USDT/USDC = 6, USDD/ETH = 18, BTC/WBTC = 8. jToken amounts (<code>redeem</code>, <code>transfer</code>) use <strong>8 decimals</strong> regardless of the underlying.</p>
+</div>
+<hr />
+<h2 id="supply-and-borrow-market-core">Supply and Borrow Market — Core<a class="headerlink" href="#supply-and-borrow-market-core" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Contract</th>
+<th>Address</th>
+<th>Tronscan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Comptroller (proxy)</td>
+<td><code>Unitroller</code></td>
+<td><code>TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7</code></td>
+<td><a href="https://tronscan.org/#/contract/TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7">Contract</a></td>
+</tr>
+<tr>
+<td>Comptroller (impl)</td>
+<td><code>Comptroller</code></td>
+<td><code>TB23wYojvAsSx6gR8ebHiBqwSeABiBMPAr</code></td>
+<td><a href="https://tronscan.org/#/contract/TB23wYojvAsSx6gR8ebHiBqwSeABiBMPAr">Contract</a></td>
+</tr>
+</tbody>
+</table>
+<p>The entrypoint that users and contracts call is <strong>Unitroller</strong> (the proxy). The implementation address rotates with upgrades.</p>
+<h2 id="supply-and-borrow-market-jtoken-markets">Supply and Borrow Market — jToken Markets<a class="headerlink" href="#supply-and-borrow-market-jtoken-markets" title="Permanent link">&para;</a></h2>
+<p>The address users interact with for <code>mint</code>/<code>borrow</code>/<code>repayBorrow</code>/<code>redeem</code>/<code>liquidateBorrow</code> is the <strong>CErc20Delegator</strong> (proxy). The <strong>CErc20Delegate</strong> address is the implementation behind it.</p>
+<div class="admonition warning">
+<p class="admonition-title">Legacy markets (marked <code>(legacy)</code>)</p>
+<p>Rows tagged <code>(legacy)</code> — <code>jUSDCOLD</code>, <code>jUSDDOLD</code>, <code>jBUSDOLD</code>, <code>jSUNOLD</code>, <code>jUSDJ</code>, <code>jWBTT</code> — have been <strong>closed to new supply and borrow</strong>. The contracts are still queryable for read operations and for existing positions to be unwound, but <strong>do not direct new deposits to them</strong>. Refer to <code>apis.md</code> §2 (jToken Address Reference) for the most up-to-date status.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">ETH / ETHB display-name swap</p>
+<p>The JustLend dApp UI labels two markets with renamed legends:</p>
 <ul>
-<li>
-<p><strong>JToken</strong></p>
-<ul>
-<li><code>Unitroller:</code> <a href="https://tronscan.org/#/contract/TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7">TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7</a></li>
-<li><code>TRX CErc20Delegate:</code> NA</li>
-<li><code>TRX CErc20Delegator:</code> <a href="https://tronscan.org/#/token20/TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP">TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP</a></li>
-<li><code>USDD:</code> <a href="https://tronscan.org/#/token20/TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz">TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz</a></li>
-<li><code>USDD CErc20Delegate:</code> <a href="https://tronscan.org/#/token20/TLrEfG4QCbax8MTYgZzmjj4gE8RPVNvUn4">TLrEfG4QCbax8MTYgZzmjj4gE8RPVNvUn4</a></li>
-<li><code>USDD CErc20Delegator:</code> <a href="https://tronscan.org/#/token20/TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf">TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf</a></li>
-<li><code>USDT:</code> <a href="https://tronscan.org/#/token20/TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t">TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t</a></li>
-<li><code>USDT CErc20Delegate:</code> <a href="https://tronscan.org/#/contract/TLjn59xNM7VEK6VZ3VQ8Y1ipxsdsFka5wZ">TLjn59xNM7VEK6VZ3VQ8Y1ipxsdsFka5wZ</a></li>
-<li><code>USDT CErc20Delegator:</code> <a href="https://tronscan.org/#/contract/TXJgMdjVX5dKiQaUi9QobwNxtSQaFqccvd">TXJgMdjVX5dKiQaUi9QobwNxtSQaFqccvd</a></li>
-<li><code>wstUSDT:</code> <a href="https://tronscan.org/#/token20/TGkxzkDKyMeq2T7edKnyjZoFypyzjkkssq">TGkxzkDKyMeq2T7edKnyjZoFypyzjkkssq</a></li>
-<li><code>wstUSDT CErc20Delegate:</code> <a href="https://tronscan.org/#/token20/TUx4cV8FQNR5W4FhtF7mHZwaJMoco2464o">TUx4cV8FQNR5W4FhtF7mHZwaJMoco2464o</a></li>
-<li><code>wstUSDT CErc20Delegator:</code> <a href="https://tronscan.org/#/token20/TD5SdLw5scR6mXgyMK2xKrFJpauDjpKqrW">TD5SdLw5scR6mXgyMK2xKrFJpauDjpKqrW</a></li>
-<li><code>sTRX:</code> <a href="https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5">TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5</a></li>
-<li><code>sTRX CErc20Delegate:</code> <a href="https://tronscan.org/#/token20/TCyNbCipGbAybb8rG4aatEoEnfuYpVYCPP">TCyNbCipGbAybb8rG4aatEoEnfuYpVYCPP</a></li>
-<li><code>sTRX CErc20Delegator:</code> <a href="https://tronscan.org/#/token20/TJQ9rbVe9ei3nNtyGgBL22Fuu2xYjZaLAQ">TJQ9rbVe9ei3nNtyGgBL22Fuu2xYjZaLAQ</a></li>
-<li><code>SUN:</code> <a href="https://tronscan.org/#/token20/TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S">TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S</a></li>
-<li><code>SUN CErc20Delegate:</code> <a href="https://tronscan.org/#/contract/TM82erAZJSP7NKc17JdTnzVC8WKJHismWB">TM82erAZJSP7NKc17JdTnzVC8WKJHismWB</a></li>
-<li><code>SUN CErc20Delegator:</code> <a href="https://tronscan.org/#/contract/TPXDpkg9e3eZzxqxAUyke9S4z4pGJBJw9e">TPXDpkg9e3eZzxqxAUyke9S4z4pGJBJw9e</a></li>
-<li><code>BTT:</code> <a href="https://tronscan.org/#/token20/TAFjULxiVgT4qWk6UZwjqwZXTSaGaqnVp4">TAFjULxiVgT4qWk6UZwjqwZXTSaGaqnVp4</a></li>
-<li><code>BTT CErc20Delegate:</code> <a href="https://tronscan.org/#/token20/TH3x5EqLnPduHNX41MaCCb2UfnfFMLuYwe">TH3x5EqLnPduHNX41MaCCb2UfnfFMLuYwe</a></li>
-<li><code>BTT CErc20Delegator:</code> <a href="https://tronscan.org/#/token20/TUaUHU9Dy8x5yNi1pKnFYqHWojot61Jfto">TUaUHU9Dy8x5yNi1pKnFYqHWojot61Jfto</a></li>
-<li><code>NFT:</code> <a href="https://tronscan.org/#/token20/TFczxzPhnThNSqr5by8tvxsdCFRRz6cPNq">TFczxzPhnThNSqr5by8tvxsdCFRRz6cPNq</a></li>
-<li><code>NFT CErc20Delegate:</code> <a href="https://tronscan.org/#/contract/TLkUdtDBLMfJdXni2iTa4u2DKM53XmDJHi">TLkUdtDBLMfJdXni2iTa4u2DKM53XmDJHi</a></li>
-<li><code>NFT CErc20Delegator:</code> <a href="https://tronscan.org/#/contract/TFpPyDCKvNFgos3g3WVsAqMrdqhB81JXHE">TFpPyDCKvNFgos3g3WVsAqMrdqhB81JXHE</a></li>
-<li><code>JST:</code> <a href="https://tronscan.org/#/token20/TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9">TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9</a></li>
-<li><code>JST CErc20Delegate:</code> <a href="https://tronscan.org/#/contract/TQ2sbnmxtR7jrNk4nxz2A8f9sneCqmk6SB">TQ2sbnmxtR7jrNk4nxz2A8f9sneCqmk6SB</a></li>
-<li><code>JST CErc20Delegator:</code> <a href="https://tronscan.org/#/contract/TWQhCXaWz4eHK4Kd1ErSDHjMFPoPc9czts">TWQhCXaWz4eHK4Kd1ErSDHjMFPoPc9czts</a></li>
-<li><code>WIN:</code> <a href="https://tronscan.org/#/token20/TLa2f6VPqDgRE67v1736s7bJ8Ray5wYjU7">TLa2f6VPqDgRE67v1736s7bJ8Ray5wYjU7</a></li>
-<li><code>WIN CErc20Delegate:</code> <a href="https://tronscan.org/#/contract/TW3GyD3hYkKwzSGytWwWGXpe2a93zCpRzJ">TW3GyD3hYkKwzSGytWwWGXpe2a93zCpRzJ</a></li>
-<li><code>WIN CErc20Delegator:</code> <a href="https://tronscan.org/#/contract/TRg6MnpsFXc82ymUPgf5qbj59ibxiEDWvv">TRg6MnpsFXc82ymUPgf5qbj59ibxiEDWvv</a></li>
-<li><code>USDJ:</code> <a href="https://tronscan.org/#/token20/TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT">TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT</a></li>
-<li><code>USDJ CErc20Delegate:</code> <a href="https://tronscan.org/#/contract/TYSHTEq9NFSgst94saeRvt6rAYgWkqMFbj">TYSHTEq9NFSgst94saeRvt6rAYgWkqMFbj</a></li>
-<li><code>USDJ CErc20Delegator:</code> <a href="https://tronscan.org/#/contract/TL5x9MtSnDy537FXKx53yAaHRRNdg9TkkA">TL5x9MtSnDy537FXKx53yAaHRRNdg9TkkA</a></li>
-<li><code>USDC:</code> <a href="https://tronscan.org/#/token20/TLZSucJRjnqBKwvQz6n5hd29gbS4P7u7w8">TLZSucJRjnqBKwvQz6n5hd29gbS4P7u7w8</a></li>
-<li><code>USDC CErc20Delegate:</code> <a href="https://tronscan.org/#/contract/THQY8YX19jLFSFg1xhthM5wb7xZvKLCzgq">THQY8YX19jLFSFg1xhthM5wb7xZvKLCzgq</a></li>
-<li><code>USDC CErc20Delegator:</code> <a href="https://tronscan.org/#/contract/TNSBA6KvSvMoTqQcEgpVK7VhHT3z7wifxy">TNSBA6KvSvMoTqQcEgpVK7VhHT3z7wifxy</a></li>
-<li><code>TUSD:</code> <a href="https://tronscan.org/#/token20/TUpMhErZL2fhh4sVNULAbNKLokS4GjC1F4">TUpMhErZL2fhh4sVNULAbNKLokS4GjC1F4</a></li>
-<li><code>TUSD CErc20Delegate:</code> <a href="https://tronscan.org/#/contract/THbrSjDsDA2KJRxx8K73tN7vLgaXSUNQFk">THbrSjDsDA2KJRxx8K73tN7vLgaXSUNQFk</a></li>
-<li><code>TUSD CErc20Delegator:</code> <a href="https://tronscan.org/#/contract/TSXv71Fy5XdL3Rh2QfBoUu3NAaM4sMif8R">TSXv71Fy5XdL3Rh2QfBoUu3NAaM4sMif8R</a></li>
-<li><code>BTC:</code> <a href="https://tronscan.org/#/token20/TN3W4H6rK2ce4vX9YnFQHwKENnHjoxb3m9">TN3W4H6rK2ce4vX9YnFQHwKENnHjoxb3m9</a></li>
-<li><code>BTC CErc20Delegate:</code> <a href="https://tronscan.org/#/contract/TVsKSRgRoMcCp798qqRGesXRfzy2MzRjkR">TVsKSRgRoMcCp798qqRGesXRfzy2MzRjkR</a></li>
-<li><code>BTC CErc20Delegator:</code> <a href="https://tronscan.org/#/contract/TLeEu311Cbw63BcmMHDgDLu7fnk9fqGcqT">TLeEu311Cbw63BcmMHDgDLu7fnk9fqGcqT</a></li>
-<li><code>ETHB:</code> <a href="https://tronscan.org/#/token20/TRFe3hT5oYhjSZ6f3ji5FJ7YCfrkWnHRvh">TRFe3hT5oYhjSZ6f3ji5FJ7YCfrkWnHRvh</a></li>
-<li><code>ETHB CErc20Delegate:</code> <a href="https://tronscan.org/#/token20/TS9fVh58y2RMDnpucGXkbfZhAJxmGafGqe">TS9fVh58y2RMDnpucGXkbfZhAJxmGafGqe</a></li>
-<li><code>ETHB CErc20Delegator:</code> <a href="https://tronscan.org/#/token20/TWBxQMb6RD3qmkXUXpNwVCYbL8SHNreru6">TWBxQMb6RD3qmkXUXpNwVCYbL8SHNreru6</a></li>
-<li><code>ETH:</code> <a href="https://tronscan.org/#/token20/THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF">THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF</a></li>
-<li><code>ETH CErc20Delegate:</code> <a href="https://tronscan.org/#/contract/TQBvTVisiceDvsQVbLbcYyWQGWP7wtaQnc">TQBvTVisiceDvsQVbLbcYyWQGWP7wtaQnc</a></li>
-<li><code>ETH CErc20Delegator:</code> <a href="https://tronscan.org/#/token20/TR7BUFRQeq1w5jAZf1FKx85SHuX6PfMqsV">TR7BUFRQeq1w5jAZf1FKx85SHuX6PfMqsV</a></li>
-<li><code>USD1:</code> <a href="https://tronscan.org/#/token20/TPFqcBAaaUMCSVRCqPaQ9QnzKhmuoLR6Rc">TPFqcBAaaUMCSVRCqPaQ9QnzKhmuoLR6Rc</a></li>
-<li><code>USD1 CErc20Delegate:</code> <a href="https://tronscan.org/#/contract/TRo2exz6ZHn6W3Ey3G93FnzhWvjLPUcR2B">TRo2exz6ZHn6W3Ey3G93FnzhWvjLPUcR2B</a></li>
-<li><code>USD1 CErc20Delegator:</code> <a href="https://tronscan.org/#/token20/TBEKggwqFkrc4KckQVR9BLucAmQugafEZf">TBEKggwqFkrc4KckQVR9BLucAmQugafEZf</a></li>
-<li><code>WBTT:</code> <a href="https://tronscan.org/#/token20/TKfjV9RNKJJCqPvBtK8L7Knykh7DNWvnYt">TKfjV9RNKJJCqPvBtK8L7Knykh7DNWvnYt</a></li>
-<li><code>WBTT CErc20Delegate:</code> <a href="https://tronscan.org/#/contract/TV4WWBqBfn1kd4KmpYeSJpVAfybfrxEN9L">TV4WWBqBfn1kd4KmpYeSJpVAfybfrxEN9L</a></li>
-<li><code>WBTT CErc20Delegator:</code> <a href="https://tronscan.org/#/contract/TUY54PVeH6WCcYCd6ZXXoBDsHytN9V5PXt">TUY54PVeH6WCcYCd6ZXXoBDsHytN9V5PXt</a></li>
-<li><code>BUSDOLD:</code> <a href="https://tronscan.org/#/token20/TMz2SWatiAtZVVcH2ebpsbVtYwUPT9EdjH">TMz2SWatiAtZVVcH2ebpsbVtYwUPT9EdjH</a></li>
-<li><code>BUSDOLD CErc20Delegate:</code> <a href="https://tronscan.org/#/contract/TNRUqbYfYv4iizWa1b2kd6ZBaoh5zrg3yk">TNRUqbYfYv4iizWa1b2kd6ZBaoh5zrg3yk</a></li>
-<li><code>BUSDOLD CErc20Delegator:</code> <a href="https://tronscan.org/#/contract/TLHASseQymmpGQdfAyNjkMXFTJh8nzR2x2">TLHASseQymmpGQdfAyNjkMXFTJh8nzR2x2</a></li>
-<li><code>SUNOLD:</code> <a href="https://tronscan.org/#/token20/TKkeiboTkxXKJpbmVFbv4a8ov5rAfRDMf9">TKkeiboTkxXKJpbmVFbv4a8ov5rAfRDMf9</a></li>
-<li><code>SUNOLD CErc20Delegate:</code> <a href="https://tronscan.org/#/contract/TSCpzKvJfXHj1HW5jKg9dZA8z9aMxxGLd8">TSCpzKvJfXHj1HW5jKg9dZA8z9aMxxGLd8</a></li>
-<li><code>SUNOLD CErc20Delegator:</code> <a href="https://tronscan.org/#/contract/TGBr8uh9jBVHJhhkwSJvQN2ZAKzVkxDmno">TGBr8uh9jBVHJhhkwSJvQN2ZAKzVkxDmno</a></li>
-<li><code>WBTC:</code> <a href="https://tronscan.org/#/token20/TYhWwKpw43ENFWBTGpzLHn3882f2au7SMi">TYhWwKpw43ENFWBTGpzLHn3882f2au7SMi</a></li>
-<li><code>WBTC CErc20Delegate:</code> <a href="https://tronscan.org/#/contract/TDwUJqxB1962DSfKHWMnEu1sWMGGRvHDB5">TDwUJqxB1962DSfKHWMnEu1sWMGGRvHDB5</a></li>
-<li><code>WBTC CErc20Delegator:</code> <a href="https://tronscan.org/#/token20/TVyvpmaVmz25z2GaXBDDjzLZi5iR5dBzGd">TVyvpmaVmz25z2GaXBDDjzLZi5iR5dBzGd</a></li>
+<li>The market with delegator <code>TR7BUFRQeq1w5jAZf1FKx85SHuX6PfMqsV</code> (this doc's <code>jETH</code> row) is now displayed in the dApp as <strong>"ETH"</strong> (formerly "ETHOLD"). Underlying TRC20: <code>THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF</code>.</li>
+<li>The market with delegator <code>TWBxQMb6RD3qmkXUXpNwVCYbL8SHNreru6</code> (this doc's <code>jETHB</code> row) is now displayed in the dApp as <strong>"ETHB"</strong> (formerly "ETH"). Underlying TRC20: <code>TRFe3hT5oYhjSZ6f3ji5FJ7YCfrkWnHRvh</code>.</li>
 </ul>
-</li>
-<li>
-<p><strong>InterestRateModel</strong></p>
-<ul>
-<li><code>WhitePaperModelTRX (WhitePaperInterestRateModel):</code> <a href="https://tronscan.org/#/contract/TF8B4iysAGfrssdQhMJGYsdd9SZoxGsH7M">TF8B4iysAGfrssdQhMJGYsdd9SZoxGsH7M</a></li>
-<li><code>WhitePaperModelBTC (WhitePaperInterestRateModel):</code> <a href="https://tronscan.org/#/contract/TYJi9q4qLQWoBiKmMQY3Mn81tmhw7SeCmh">TYJi9q4qLQWoBiKmMQY3Mn81tmhw7SeCmh</a></li>
-<li><code>jumpRateTRX (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TMca13trZmVvVttrGWJyUSm33qZdohDDuh">TMca13trZmVvVttrGWJyUSm33qZdohDDuh</a></li>
-<li><code>jumpRateUSDDOLD (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TDoB7y9HHj6bXTwEe6BhfAkdETjQR2He6u">TDoB7y9HHj6bXTwEe6BhfAkdETjQR2He6u</a></li>
-<li><code>jumpRateUSDT (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TTetZxp98wcPaciyBMHYvQkS735RZ3tyXY">TTetZxp98wcPaciyBMHYvQkS735RZ3tyXY</a></li>
-<li><code>jumpRatewstUSDT (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TPqKsaTnSKEU3aGHanpVFNU3cE8SmJsAYz">TPqKsaTnSKEU3aGHanpVFNU3cE8SmJsAYz</a></li>
-<li><code>jumpRatesTRX (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TW4fpkc98kzVbdiPhutCg2uivwVJ9MDa2P">TW4fpkc98kzVbdiPhutCg2uivwVJ9MDa2P</a></li>
-<li><code>jumpRateSUN (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/THCVC3DHgZ5qmUcJPutw7TrMMfj1h2bvkZ">THCVC3DHgZ5qmUcJPutw7TrMMfj1h2bvkZ</a></li>
-<li><code>jumpRateBTT (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TQ9zMkrqgej7GjLdMrpNuURozg8J2fSXsW">TQ9zMkrqgej7GjLdMrpNuURozg8J2fSXsW</a></li>
-<li><code>jumpRateNFT (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TBE9tkWYdZPEHLNeKC6Xn44YFLpieiM3xq">TBE9tkWYdZPEHLNeKC6Xn44YFLpieiM3xq</a></li>
-<li><code>jumpRateJST (JumpRateModelV2)</code> <a href="https://tronscan.org/#/contract/TMNXjQTa8x4wNHBa3X647KRnkRQpSuXBRT">TMNXjQTa8x4wNHBa3X647KRnkRQpSuXBRT</a></li>
-<li><code>jumpRateWIN (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TBtChPo34CGJkb1QVEwPhxS8HQE2Xp7ir2">TBtChPo34CGJkb1QVEwPhxS8HQE2Xp7ir2</a></li>
-<li><code>jumpRateUSDJ (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TLScd7kpWnKADtH7ZXKzrJHAxJUnjiiExq">TLScd7kpWnKADtH7ZXKzrJHAxJUnjiiExq</a></li>
-<li><code>jumpRateUSDC (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TDECE4PZFEkmTyFk9sJMya9PY99BapHpyP">TDECE4PZFEkmTyFk9sJMya9PY99BapHpyP</a></li>
-<li><code>jumpRateTUSD (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TLY3wRNGrQpJCZrYKu9VjntMj2kNxisAL2">TLY3wRNGrQpJCZrYKu9VjntMj2kNxisAL2</a></li>
-<li><code>jumpRateBTC (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TYJi9q4qLQWoBiKmMQY3Mn81tmhw7SeCmh">TYJi9q4qLQWoBiKmMQY3Mn81tmhw7SeCmh</a></li>
-<li><code>jumpRateETHB (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TD5wmR7NfBM2JdSGSTTq1MgMARX2k5KE2b">TD5wmR7NfBM2JdSGSTTq1MgMARX2k5KE2b</a></li>
-<li><code>jumpRateWBTT (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TJAfCJdJZa44pG5adQGLMLh27hJqPeLxod">TJAfCJdJZa44pG5adQGLMLh27hJqPeLxod</a></li>
-<li><code>jumpRateBUSD (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TUSGt1WAYeJSV94M5muFi2KvtE6EquZPUC">TUSGt1WAYeJSV94M5muFi2KvtE6EquZPUC</a></li>
-<li><code>jumpRateSUNOLD (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TK7WVRz34wUVRCpsgbW1wUCPmh5bSnCqg1">TK7WVRz34wUVRCpsgbW1wUCPmh5bSnCqg1</a></li>
-<li><code>jumpRateETH (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TCiKn6EFBsNrNCFQXWaEuAxr8Su3y4Rx9D">TCiKn6EFBsNrNCFQXWaEuAxr8Su3y4Rx9D</a></li>
-<li><code>jumpRateUSD1 (JumpRateModelV2):</code> <a href="https://tronscan.org/#/contract/TKgX5vEds8UW8bd5fSDGHpTT4UwmVz4yPS">TKgX5vEds8UW8bd5fSDGHpTT4UwmVz4yPS</a></li>
-</ul>
-</li>
-<li>
-<p><strong>Price Oracle</strong></p>
-<ul>
-<li><code>Oracle Price (PriceOracle):</code> <a href="https://tronscan.org/#/contract/TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV/code">TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV</a></li>
-<li><code>Oracle Proxy (PriceOracleProxy):</code> <a href="https://tronscan.org/#/contract/TCKp2AzuhzV4B4Ahx1ej4mvQgHZ1kH7F7k">TCKp2AzuhzV4B4Ahx1ej4mvQgHZ1kH7F7k</a></li>
-</ul>
-</li>
-<li>
-<p><strong>Governance</strong></p>
-<ul>
-<li><code>GovernorBravoDelegate:</code> <a href="https://tronscan.io/#/contract/TUeNh9BsYK44XePmFAuKZWg2rJuU7bSt5u">TCiQTkxhzwSeXhRsNdHCvrxHRAvpjQn5Dt</a></li>
-<li><code>GovernorBravoDelegator:</code> <a href="https://tronscan.org/#/contract/TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD">TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD</a></li>
-<li><code>Timelock:</code> <a href="https://tronscan.org/#/contract/TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x">TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x</a></li>
-</ul>
-</li>
-<li>
-<p><strong>Comptroller</strong></p>
-<ul>
-<li><code>Comptroller:</code> <a href="https://tronscan.org/#/contract/TB23wYojvAsSx6gR8ebHiBqwSeABiBMPAr">TB23wYojvAsSx6gR8ebHiBqwSeABiBMPAr</a></li>
-</ul>
-</li>
-</ul>
-<h3 id="staked-trx"><strong>Staked TRX</strong><a class="headerlink" href="#staked-trx" title="Permanent link">&para;</a></h3>
-<ul>
-<li><code>StakedTRX (sTRX):</code> <a href="https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5">TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5</a></li>
-</ul>
-<h3 id="energy-rental"><strong>Energy Rental</strong><a class="headerlink" href="#energy-rental" title="Permanent link">&para;</a></h3>
-<ul>
-<li><code>EnergyRental:</code> <a href="https://tronscan.io/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd">TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd</a></li>
-</ul>
+<p>The on-chain addresses are unchanged — only the dApp display names swapped.</p>
+</div>
+<table>
+<thead>
+<tr>
+<th>Market</th>
+<th>Underlying TRC20</th>
+<th>CErc20Delegator (entrypoint)</th>
+<th>CErc20Delegate (impl)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>jTRX</td>
+<td><em>native</em></td>
+<td><a href="https://tronscan.org/#/token20/TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP"><code>TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP</code></a></td>
+<td>NA</td>
+</tr>
+<tr>
+<td>jUSDT</td>
+<td><a href="https://tronscan.org/#/token20/TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"><code>TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t</code></a></td>
+<td><a href="https://tronscan.org/#/contract/TXJgMdjVX5dKiQaUi9QobwNxtSQaFqccvd"><code>TXJgMdjVX5dKiQaUi9QobwNxtSQaFqccvd</code></a></td>
+<td><a href="https://tronscan.org/#/contract/TLjn59xNM7VEK6VZ3VQ8Y1ipxsdsFka5wZ"><code>TLjn59xNM7VEK6VZ3VQ8Y1ipxsdsFka5wZ</code></a></td>
+</tr>
+<tr>
+<td>jUSDD</td>
+<td><a href="https://tronscan.org/#/token20/TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz"><code>TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz</code></a></td>
+<td><a href="https://tronscan.org/#/token20/TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf"><code>TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf</code></a></td>
+<td><a href="https://tronscan.org/#/token20/TLrEfG4QCbax8MTYgZzmjj4gE8RPVNvUn4"><code>TLrEfG4QCbax8MTYgZzmjj4gE8RPVNvUn4</code></a></td>
+</tr>
+<tr>
+<td>jUSDCOLD (legacy)</td>
+<td><a href="https://tronscan.org/#/token20/TLZSucJRjnqBKwvQz6n5hd29gbS4P7u7w8"><code>TLZSucJRjnqBKwvQz6n5hd29gbS4P7u7w8</code></a></td>
+<td><a href="https://tronscan.org/#/contract/TNSBA6KvSvMoTqQcEgpVK7VhHT3z7wifxy"><code>TNSBA6KvSvMoTqQcEgpVK7VhHT3z7wifxy</code></a></td>
+<td><a href="https://tronscan.org/#/contract/THQY8YX19jLFSFg1xhthM5wb7xZvKLCzgq"><code>THQY8YX19jLFSFg1xhthM5wb7xZvKLCzgq</code></a></td>
+</tr>
+<tr>
+<td>jUSDJ (legacy)</td>
+<td><a href="https://tronscan.org/#/token20/TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT"><code>TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT</code></a></td>
+<td><a href="https://tronscan.org/#/contract/TL5x9MtSnDy537FXKx53yAaHRRNdg9TkkA"><code>TL5x9MtSnDy537FXKx53yAaHRRNdg9TkkA</code></a></td>
+<td><a href="https://tronscan.org/#/contract/TYSHTEq9NFSgst94saeRvt6rAYgWkqMFbj"><code>TYSHTEq9NFSgst94saeRvt6rAYgWkqMFbj</code></a></td>
+</tr>
+<tr>
+<td>jTUSD</td>
+<td><a href="https://tronscan.org/#/token20/TUpMhErZL2fhh4sVNULAbNKLokS4GjC1F4"><code>TUpMhErZL2fhh4sVNULAbNKLokS4GjC1F4</code></a></td>
+<td><a href="https://tronscan.org/#/contract/TSXv71Fy5XdL3Rh2QfBoUu3NAaM4sMif8R"><code>TSXv71Fy5XdL3Rh2QfBoUu3NAaM4sMif8R</code></a></td>
+<td><a href="https://tronscan.org/#/contract/THbrSjDsDA2KJRxx8K73tN7vLgaXSUNQFk"><code>THbrSjDsDA2KJRxx8K73tN7vLgaXSUNQFk</code></a></td>
+</tr>
+<tr>
+<td>jUSD1</td>
+<td><a href="https://tronscan.org/#/token20/TPFqcBAaaUMCSVRCqPaQ9QnzKhmuoLR6Rc"><code>TPFqcBAaaUMCSVRCqPaQ9QnzKhmuoLR6Rc</code></a></td>
+<td><a href="https://tronscan.org/#/token20/TBEKggwqFkrc4KckQVR9BLucAmQugafEZf"><code>TBEKggwqFkrc4KckQVR9BLucAmQugafEZf</code></a></td>
+<td><a href="https://tronscan.org/#/contract/TRo2exz6ZHn6W3Ey3G93FnzhWvjLPUcR2B"><code>TRo2exz6ZHn6W3Ey3G93FnzhWvjLPUcR2B</code></a></td>
+</tr>
+<tr>
+<td>jwstUSDT</td>
+<td><a href="https://tronscan.org/#/token20/TGkxzkDKyMeq2T7edKnyjZoFypyzjkkssq"><code>TGkxzkDKyMeq2T7edKnyjZoFypyzjkkssq</code></a></td>
+<td><a href="https://tronscan.org/#/token20/TD5SdLw5scR6mXgyMK2xKrFJpauDjpKqrW"><code>TD5SdLw5scR6mXgyMK2xKrFJpauDjpKqrW</code></a></td>
+<td><a href="https://tronscan.org/#/token20/TUx4cV8FQNR5W4FhtF7mHZwaJMoco2464o"><code>TUx4cV8FQNR5W4FhtF7mHZwaJMoco2464o</code></a></td>
+</tr>
+<tr>
+<td>jsTRX</td>
+<td><a href="https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5"><code>TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5</code></a></td>
+<td><a href="https://tronscan.org/#/token20/TJQ9rbVe9ei3nNtyGgBL22Fuu2xYjZaLAQ"><code>TJQ9rbVe9ei3nNtyGgBL22Fuu2xYjZaLAQ</code></a></td>
+<td><a href="https://tronscan.org/#/token20/TCyNbCipGbAybb8rG4aatEoEnfuYpVYCPP"><code>TCyNbCipGbAybb8rG4aatEoEnfuYpVYCPP</code></a></td>
+</tr>
+<tr>
+<td>jSUN</td>
+<td><a href="https://tronscan.org/#/token20/TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S"><code>TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S</code></a></td>
+<td><a href="https://tronscan.org/#/contract/TPXDpkg9e3eZzxqxAUyke9S4z4pGJBJw9e"><code>TPXDpkg9e3eZzxqxAUyke9S4z4pGJBJw9e</code></a></td>
+<td><a href="https://tronscan.org/#/contract/TM82erAZJSP7NKc17JdTnzVC8WKJHismWB"><code>TM82erAZJSP7NKc17JdTnzVC8WKJHismWB</code></a></td>
+</tr>
+<tr>
+<td>jBTT</td>
+<td><a href="https://tronscan.org/#/token20/TAFjULxiVgT4qWk6UZwjqwZXTSaGaqnVp4"><code>TAFjULxiVgT4qWk6UZwjqwZXTSaGaqnVp4</code></a></td>
+<td><a href="https://tronscan.org/#/token20/TUaUHU9Dy8x5yNi1pKnFYqHWojot61Jfto"><code>TUaUHU9Dy8x5yNi1pKnFYqHWojot61Jfto</code></a></td>
+<td><a href="https://tronscan.org/#/token20/TH3x5EqLnPduHNX41MaCCb2UfnfFMLuYwe"><code>TH3x5EqLnPduHNX41MaCCb2UfnfFMLuYwe</code></a></td>
+</tr>
+<tr>
+<td>jNFT</td>
+<td><a href="https://tronscan.org/#/token20/TFczxzPhnThNSqr5by8tvxsdCFRRz6cPNq"><code>TFczxzPhnThNSqr5by8tvxsdCFRRz6cPNq</code></a></td>
+<td><a href="https://tronscan.org/#/contract/TFpPyDCKvNFgos3g3WVsAqMrdqhB81JXHE"><code>TFpPyDCKvNFgos3g3WVsAqMrdqhB81JXHE</code></a></td>
+<td><a href="https://tronscan.org/#/contract/TLkUdtDBLMfJdXni2iTa4u2DKM53XmDJHi"><code>TLkUdtDBLMfJdXni2iTa4u2DKM53XmDJHi</code></a></td>
+</tr>
+<tr>
+<td>jJST</td>
+<td><a href="https://tronscan.org/#/token20/TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9"><code>TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9</code></a></td>
+<td><a href="https://tronscan.org/#/contract/TWQhCXaWz4eHK4Kd1ErSDHjMFPoPc9czts"><code>TWQhCXaWz4eHK4Kd1ErSDHjMFPoPc9czts</code></a></td>
+<td><a href="https://tronscan.org/#/contract/TQ2sbnmxtR7jrNk4nxz2A8f9sneCqmk6SB"><code>TQ2sbnmxtR7jrNk4nxz2A8f9sneCqmk6SB</code></a></td>
+</tr>
+<tr>
+<td>jWIN</td>
+<td><a href="https://tronscan.org/#/token20/TLa2f6VPqDgRE67v1736s7bJ8Ray5wYjU7"><code>TLa2f6VPqDgRE67v1736s7bJ8Ray5wYjU7</code></a></td>
+<td><a href="https://tronscan.org/#/contract/TRg6MnpsFXc82ymUPgf5qbj59ibxiEDWvv"><code>TRg6MnpsFXc82ymUPgf5qbj59ibxiEDWvv</code></a></td>
+<td><a href="https://tronscan.org/#/contract/TW3GyD3hYkKwzSGytWwWGXpe2a93zCpRzJ"><code>TW3GyD3hYkKwzSGytWwWGXpe2a93zCpRzJ</code></a></td>
+</tr>
+<tr>
+<td>jHTX</td>
+<td><a href="https://tronscan.org/#/token20/TUPM7K8REVzD2UdV4R5fe5M8XbnR2DdoJ6"><code>TUPM7K8REVzD2UdV4R5fe5M8XbnR2DdoJ6</code></a></td>
+<td><a href="https://tronscan.org/#/contract/TDA1mWPyAjTRATMGA55UTswGAHhV2itEXR"><code>TDA1mWPyAjTRATMGA55UTswGAHhV2itEXR</code></a></td>
+<td><em>(see Tronscan)</em></td>
+</tr>
+<tr>
+<td>jBTC</td>
+<td><a href="https://tronscan.org/#/token20/TN3W4H6rK2ce4vX9YnFQHwKENnHjoxb3m9"><code>TN3W4H6rK2ce4vX9YnFQHwKENnHjoxb3m9</code></a></td>
+<td><a href="https://tronscan.org/#/contract/TLeEu311Cbw63BcmMHDgDLu7fnk9fqGcqT"><code>TLeEu311Cbw63BcmMHDgDLu7fnk9fqGcqT</code></a></td>
+<td><a href="https://tronscan.org/#/contract/TVsKSRgRoMcCp798qqRGesXRfzy2MzRjkR"><code>TVsKSRgRoMcCp798qqRGesXRfzy2MzRjkR</code></a></td>
+</tr>
+<tr>
+<td>jWBTC</td>
+<td><a href="https://tronscan.org/#/token20/TYhWwKpw43ENFWBTGpzLHn3882f2au7SMi"><code>TYhWwKpw43ENFWBTGpzLHn3882f2au7SMi</code></a></td>
+<td><a href="https://tronscan.org/#/token20/TVyvpmaVmz25z2GaXBDDjzLZi5iR5dBzGd"><code>TVyvpmaVmz25z2GaXBDDjzLZi5iR5dBzGd</code></a></td>
+<td><a href="https://tronscan.org/#/contract/TDwUJqxB1962DSfKHWMnEu1sWMGGRvHDB5"><code>TDwUJqxB1962DSfKHWMnEu1sWMGGRvHDB5</code></a></td>
+</tr>
+<tr>
+<td>jETHB</td>
+<td><a href="https://tronscan.org/#/token20/TRFe3hT5oYhjSZ6f3ji5FJ7YCfrkWnHRvh"><code>TRFe3hT5oYhjSZ6f3ji5FJ7YCfrkWnHRvh</code></a></td>
+<td><a href="https://tronscan.org/#/token20/TWBxQMb6RD3qmkXUXpNwVCYbL8SHNreru6"><code>TWBxQMb6RD3qmkXUXpNwVCYbL8SHNreru6</code></a></td>
+<td><a href="https://tronscan.org/#/token20/TS9fVh58y2RMDnpucGXkbfZhAJxmGafGqe"><code>TS9fVh58y2RMDnpucGXkbfZhAJxmGafGqe</code></a></td>
+</tr>
+<tr>
+<td>jETH</td>
+<td><a href="https://tronscan.org/#/token20/THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF"><code>THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF</code></a></td>
+<td><a href="https://tronscan.org/#/token20/TR7BUFRQeq1w5jAZf1FKx85SHuX6PfMqsV"><code>TR7BUFRQeq1w5jAZf1FKx85SHuX6PfMqsV</code></a></td>
+<td><a href="https://tronscan.org/#/contract/TQBvTVisiceDvsQVbLbcYyWQGWP7wtaQnc"><code>TQBvTVisiceDvsQVbLbcYyWQGWP7wtaQnc</code></a></td>
+</tr>
+<tr>
+<td>jWBTT (legacy)</td>
+<td><a href="https://tronscan.org/#/token20/TKfjV9RNKJJCqPvBtK8L7Knykh7DNWvnYt"><code>TKfjV9RNKJJCqPvBtK8L7Knykh7DNWvnYt</code></a></td>
+<td><a href="https://tronscan.org/#/contract/TUY54PVeH6WCcYCd6ZXXoBDsHytN9V5PXt"><code>TUY54PVeH6WCcYCd6ZXXoBDsHytN9V5PXt</code></a></td>
+<td><a href="https://tronscan.org/#/contract/TV4WWBqBfn1kd4KmpYeSJpVAfybfrxEN9L"><code>TV4WWBqBfn1kd4KmpYeSJpVAfybfrxEN9L</code></a></td>
+</tr>
+<tr>
+<td>jBUSDOLD (legacy)</td>
+<td><a href="https://tronscan.org/#/token20/TMz2SWatiAtZVVcH2ebpsbVtYwUPT9EdjH"><code>TMz2SWatiAtZVVcH2ebpsbVtYwUPT9EdjH</code></a></td>
+<td><a href="https://tronscan.org/#/contract/TLHASseQymmpGQdfAyNjkMXFTJh8nzR2x2"><code>TLHASseQymmpGQdfAyNjkMXFTJh8nzR2x2</code></a></td>
+<td><a href="https://tronscan.org/#/contract/TNRUqbYfYv4iizWa1b2kd6ZBaoh5zrg3yk"><code>TNRUqbYfYv4iizWa1b2kd6ZBaoh5zrg3yk</code></a></td>
+</tr>
+<tr>
+<td>jUSDDOLD (legacy)</td>
+<td><em>(see Tronscan)</em></td>
+<td><a href="https://tronscan.org/#/contract/TX7kybeP6UwTBRHLNPYmswFESHfyjm9bAS"><code>TX7kybeP6UwTBRHLNPYmswFESHfyjm9bAS</code></a></td>
+<td><em>(see Tronscan)</em></td>
+</tr>
+<tr>
+<td>jSUNOLD (legacy)</td>
+<td><a href="https://tronscan.org/#/token20/TKkeiboTkxXKJpbmVFbv4a8ov5rAfRDMf9"><code>TKkeiboTkxXKJpbmVFbv4a8ov5rAfRDMf9</code></a></td>
+<td><a href="https://tronscan.org/#/contract/TGBr8uh9jBVHJhhkwSJvQN2ZAKzVkxDmno"><code>TGBr8uh9jBVHJhhkwSJvQN2ZAKzVkxDmno</code></a></td>
+<td><a href="https://tronscan.org/#/contract/TSCpzKvJfXHj1HW5jKg9dZA8z9aMxxGLd8"><code>TSCpzKvJfXHj1HW5jKg9dZA8z9aMxxGLd8</code></a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="interest-rate-models">Interest Rate Models<a class="headerlink" href="#interest-rate-models" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Type</th>
+<th>Address</th>
+<th>Tronscan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>WhitePaperModelTRX</td>
+<td><code>WhitePaperInterestRateModel</code></td>
+<td><code>TF8B4iysAGfrssdQhMJGYsdd9SZoxGsH7M</code></td>
+<td><a href="https://tronscan.org/#/contract/TF8B4iysAGfrssdQhMJGYsdd9SZoxGsH7M">Contract</a></td>
+</tr>
+<tr>
+<td>WhitePaperModelBTC</td>
+<td><code>WhitePaperInterestRateModel</code></td>
+<td><code>TYJi9q4qLQWoBiKmMQY3Mn81tmhw7SeCmh</code></td>
+<td><a href="https://tronscan.org/#/contract/TYJi9q4qLQWoBiKmMQY3Mn81tmhw7SeCmh">Contract</a></td>
+</tr>
+<tr>
+<td>jumpRateTRX</td>
+<td><code>JumpRateModelV2</code></td>
+<td><code>TMca13trZmVvVttrGWJyUSm33qZdohDDuh</code></td>
+<td><a href="https://tronscan.org/#/contract/TMca13trZmVvVttrGWJyUSm33qZdohDDuh">Contract</a></td>
+</tr>
+<tr>
+<td>jumpRateUSDDOLD</td>
+<td><code>JumpRateModelV2</code></td>
+<td><code>TDoB7y9HHj6bXTwEe6BhfAkdETjQR2He6u</code></td>
+<td><a href="https://tronscan.org/#/contract/TDoB7y9HHj6bXTwEe6BhfAkdETjQR2He6u">Contract</a></td>
+</tr>
+<tr>
+<td>jumpRateUSDT</td>
+<td><code>JumpRateModelV2</code></td>
+<td><code>TTetZxp98wcPaciyBMHYvQkS735RZ3tyXY</code></td>
+<td><a href="https://tronscan.org/#/contract/TTetZxp98wcPaciyBMHYvQkS735RZ3tyXY">Contract</a></td>
+</tr>
+<tr>
+<td>jumpRatewstUSDT</td>
+<td><code>JumpRateModelV2</code></td>
+<td><code>TPqKsaTnSKEU3aGHanpVFNU3cE8SmJsAYz</code></td>
+<td><a href="https://tronscan.org/#/contract/TPqKsaTnSKEU3aGHanpVFNU3cE8SmJsAYz">Contract</a></td>
+</tr>
+<tr>
+<td>jumpRatesTRX</td>
+<td><code>JumpRateModelV2</code></td>
+<td><code>TW4fpkc98kzVbdiPhutCg2uivwVJ9MDa2P</code></td>
+<td><a href="https://tronscan.org/#/contract/TW4fpkc98kzVbdiPhutCg2uivwVJ9MDa2P">Contract</a></td>
+</tr>
+<tr>
+<td>jumpRateSUN</td>
+<td><code>JumpRateModelV2</code></td>
+<td><code>THCVC3DHgZ5qmUcJPutw7TrMMfj1h2bvkZ</code></td>
+<td><a href="https://tronscan.org/#/contract/THCVC3DHgZ5qmUcJPutw7TrMMfj1h2bvkZ">Contract</a></td>
+</tr>
+<tr>
+<td>jumpRateBTT</td>
+<td><code>JumpRateModelV2</code></td>
+<td><code>TQ9zMkrqgej7GjLdMrpNuURozg8J2fSXsW</code></td>
+<td><a href="https://tronscan.org/#/contract/TQ9zMkrqgej7GjLdMrpNuURozg8J2fSXsW">Contract</a></td>
+</tr>
+<tr>
+<td>jumpRateNFT</td>
+<td><code>JumpRateModelV2</code></td>
+<td><code>TBE9tkWYdZPEHLNeKC6Xn44YFLpieiM3xq</code></td>
+<td><a href="https://tronscan.org/#/contract/TBE9tkWYdZPEHLNeKC6Xn44YFLpieiM3xq">Contract</a></td>
+</tr>
+<tr>
+<td>jumpRateJST</td>
+<td><code>JumpRateModelV2</code></td>
+<td><code>TMNXjQTa8x4wNHBa3X647KRnkRQpSuXBRT</code></td>
+<td><a href="https://tronscan.org/#/contract/TMNXjQTa8x4wNHBa3X647KRnkRQpSuXBRT">Contract</a></td>
+</tr>
+<tr>
+<td>jumpRateWIN</td>
+<td><code>JumpRateModelV2</code></td>
+<td><code>TBtChPo34CGJkb1QVEwPhxS8HQE2Xp7ir2</code></td>
+<td><a href="https://tronscan.org/#/contract/TBtChPo34CGJkb1QVEwPhxS8HQE2Xp7ir2">Contract</a></td>
+</tr>
+<tr>
+<td>jumpRateUSDJ</td>
+<td><code>JumpRateModelV2</code></td>
+<td><code>TLScd7kpWnKADtH7ZXKzrJHAxJUnjiiExq</code></td>
+<td><a href="https://tronscan.org/#/contract/TLScd7kpWnKADtH7ZXKzrJHAxJUnjiiExq">Contract</a></td>
+</tr>
+<tr>
+<td>jumpRateUSDC</td>
+<td><code>JumpRateModelV2</code></td>
+<td><code>TDECE4PZFEkmTyFk9sJMya9PY99BapHpyP</code></td>
+<td><a href="https://tronscan.org/#/contract/TDECE4PZFEkmTyFk9sJMya9PY99BapHpyP">Contract</a></td>
+</tr>
+<tr>
+<td>jumpRateTUSD</td>
+<td><code>JumpRateModelV2</code></td>
+<td><code>TLY3wRNGrQpJCZrYKu9VjntMj2kNxisAL2</code></td>
+<td><a href="https://tronscan.org/#/contract/TLY3wRNGrQpJCZrYKu9VjntMj2kNxisAL2">Contract</a></td>
+</tr>
+<tr>
+<td>jumpRateBTC</td>
+<td><code>JumpRateModelV2</code></td>
+<td><code>TYJi9q4qLQWoBiKmMQY3Mn81tmhw7SeCmh</code></td>
+<td><a href="https://tronscan.org/#/contract/TYJi9q4qLQWoBiKmMQY3Mn81tmhw7SeCmh">Contract</a></td>
+</tr>
+<tr>
+<td>jumpRateETHB</td>
+<td><code>JumpRateModelV2</code></td>
+<td><code>TD5wmR7NfBM2JdSGSTTq1MgMARX2k5KE2b</code></td>
+<td><a href="https://tronscan.org/#/contract/TD5wmR7NfBM2JdSGSTTq1MgMARX2k5KE2b">Contract</a></td>
+</tr>
+<tr>
+<td>jumpRateWBTT</td>
+<td><code>JumpRateModelV2</code></td>
+<td><code>TJAfCJdJZa44pG5adQGLMLh27hJqPeLxod</code></td>
+<td><a href="https://tronscan.org/#/contract/TJAfCJdJZa44pG5adQGLMLh27hJqPeLxod">Contract</a></td>
+</tr>
+<tr>
+<td>jumpRateBUSD</td>
+<td><code>JumpRateModelV2</code></td>
+<td><code>TUSGt1WAYeJSV94M5muFi2KvtE6EquZPUC</code></td>
+<td><a href="https://tronscan.org/#/contract/TUSGt1WAYeJSV94M5muFi2KvtE6EquZPUC">Contract</a></td>
+</tr>
+<tr>
+<td>jumpRateSUNOLD</td>
+<td><code>JumpRateModelV2</code></td>
+<td><code>TK7WVRz34wUVRCpsgbW1wUCPmh5bSnCqg1</code></td>
+<td><a href="https://tronscan.org/#/contract/TK7WVRz34wUVRCpsgbW1wUCPmh5bSnCqg1">Contract</a></td>
+</tr>
+<tr>
+<td>jumpRateETH</td>
+<td><code>JumpRateModelV2</code></td>
+<td><code>TCiKn6EFBsNrNCFQXWaEuAxr8Su3y4Rx9D</code></td>
+<td><a href="https://tronscan.org/#/contract/TCiKn6EFBsNrNCFQXWaEuAxr8Su3y4Rx9D">Contract</a></td>
+</tr>
+<tr>
+<td>jumpRateUSD1</td>
+<td><code>JumpRateModelV2</code></td>
+<td><code>TKgX5vEds8UW8bd5fSDGHpTT4UwmVz4yPS</code></td>
+<td><a href="https://tronscan.org/#/contract/TKgX5vEds8UW8bd5fSDGHpTT4UwmVz4yPS">Contract</a></td>
+</tr>
+</tbody>
+</table>
+<p>See <a href="../supply_and_borrow_market/interest_rate_model/">Interest Rate Model</a> for the formulas backing these contracts.</p>
+<h2 id="price-oracle">Price Oracle<a class="headerlink" href="#price-oracle" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Contract</th>
+<th>Address</th>
+<th>Tronscan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Oracle Proxy</td>
+<td><code>PriceOracleProxy</code></td>
+<td><code>TCKp2AzuhzV4B4Ahx1ej4mvQgHZ1kH7F7k</code></td>
+<td><a href="https://tronscan.org/#/contract/TCKp2AzuhzV4B4Ahx1ej4mvQgHZ1kH7F7k">Contract</a></td>
+</tr>
+<tr>
+<td>Oracle (impl)</td>
+<td><code>PriceOracle</code></td>
+<td><code>TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV</code></td>
+<td><a href="https://tronscan.org/#/contract/TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV/code">Contract / Code</a></td>
+</tr>
+</tbody>
+</table>
+<p>Prices are denominated in sun (10⁻⁶ TRX), scaled by <code>10^(tokenDecimal − 6)</code>. See <a href="../supply_and_borrow_market/price_oracle/">Price Oracle</a>.</p>
+<h2 id="governance">Governance<a class="headerlink" href="#governance" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Contract</th>
+<th>Address</th>
+<th>Tronscan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Governor (proxy / entrypoint)</td>
+<td><code>GovernorBravoDelegator</code></td>
+<td><code>TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD</code></td>
+<td><a href="https://tronscan.org/#/contract/TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD">Contract</a></td>
+</tr>
+<tr>
+<td>Governor (impl)</td>
+<td><code>GovernorBravoDelegate</code></td>
+<td><code>TCiQTkxhzwSeXhRsNdHCvrxHRAvpjQn5Dt</code></td>
+<td><a href="https://tronscan.org/#/contract/TCiQTkxhzwSeXhRsNdHCvrxHRAvpjQn5Dt">Contract</a></td>
+</tr>
+<tr>
+<td>Time-lock</td>
+<td><code>Timelock</code></td>
+<td><code>TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x</code></td>
+<td><a href="https://tronscan.org/#/contract/TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x">Contract</a></td>
+</tr>
+<tr>
+<td>JST token</td>
+<td><code>JST</code></td>
+<td><code>TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9</code></td>
+<td><a href="https://tronscan.org/#/token20/TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9">Token20</a></td>
+</tr>
+<tr>
+<td>WJST (voting)</td>
+<td><code>WJST</code></td>
+<td><code>TXk9LnTnLN7oH96H3sKxJayMxLxR9M4ZD6</code></td>
+<td><a href="https://tronscan.org/#/contract/TXk9LnTnLN7oH96H3sKxJayMxLxR9M4ZD6/code">Contract / Code</a></td>
+</tr>
+</tbody>
+</table>
+<p>See <a href="../supply_and_borrow_market/governance/">Governance</a> for the proposal lifecycle and voting flow.</p>
+<h2 id="staked-trx">Staked TRX<a class="headerlink" href="#staked-trx" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Contract</th>
+<th>Address</th>
+<th>Tronscan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>StakedTRX</td>
+<td><code>sTRX</code></td>
+<td><code>TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5</code></td>
+<td><a href="https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5">Token20</a></td>
+</tr>
+</tbody>
+</table>
+<p>See <a href="../staked_trx/">Staked TRX</a> for the contract reference.</p>
+<h2 id="energy-rental">Energy Rental<a class="headerlink" href="#energy-rental" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Contract</th>
+<th>Address</th>
+<th>Tronscan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EnergyRental</td>
+<td><code>EnergyRental</code></td>
+<td><code>TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd</code></td>
+<td><a href="https://tronscan.io/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd">Contract</a></td>
+</tr>
+</tbody>
+</table>
+<p>See <a href="../energy_rental/">Energy Rental</a> for the contract reference.</p>
 
 
 

@@ -2010,6 +2010,7 @@
 <hr />
 <h2 id="2-jtoken-address-reference">2. jToken Address Reference<a class="headerlink" href="#2-jtoken-address-reference" title="Permanent link">&para;</a></h2>
 <p>Several endpoints key their payloads by jToken address (e.g. <code>data["TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf"]</code>). Use this table to translate.</p>
+<p>The protocol currently exposes <strong>17 active + 6 legacy = 23 markets</strong>. Legacy markets are closed to new supply and borrow — existing positions remain queryable so they can be unwound, but do not direct new deposits to them.</p>
 <table>
 <thead>
 <tr>
@@ -2111,22 +2112,16 @@
 <td></td>
 </tr>
 <tr>
-<td><code>jWBTT</code></td>
-<td><code>TUY54PVeH6WCcYCd6ZXXoBDsHytN9V5PXt</code></td>
-<td>WBTT</td>
-<td></td>
-</tr>
-<tr>
 <td><code>jSUN</code></td>
 <td><code>TPXDpkg9e3eZzxqxAUyke9S4z4pGJBJw9e</code></td>
 <td>SUN</td>
 <td></td>
 </tr>
 <tr>
-<td><code>jUSDJ</code></td>
-<td><code>TL5x9MtSnDy537FXKx53yAaHRRNdg9TkkA</code></td>
-<td>USDJ</td>
-<td></td>
+<td><code>jHTX</code></td>
+<td><code>TDA1mWPyAjTRATMGA55UTswGAHhV2itEXR</code></td>
+<td>HTX</td>
+<td>HTX token (underlying <code>TUPM7K8REVzD2UdV4R5fe5M8XbnR2DdoJ6</code>)</td>
 </tr>
 <tr>
 <td><code>jSUNOLD</code></td>
@@ -2151,6 +2146,18 @@
 <td><code>TX7kybeP6UwTBRHLNPYmswFESHfyjm9bAS</code></td>
 <td>USDD (old)</td>
 <td>Legacy</td>
+</tr>
+<tr>
+<td><code>jUSDJ</code></td>
+<td><code>TL5x9MtSnDy537FXKx53yAaHRRNdg9TkkA</code></td>
+<td>USDJ</td>
+<td>Legacy, closed to new supply/borrow</td>
+</tr>
+<tr>
+<td><code>jWBTT</code></td>
+<td><code>TUY54PVeH6WCcYCd6ZXXoBDsHytN9V5PXt</code></td>
+<td>WBTT</td>
+<td>Legacy, closed to new supply/borrow</td>
 </tr>
 </tbody>
 </table>

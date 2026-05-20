@@ -1353,6 +1353,19 @@
   
 </li>
         
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#machine-readable-abis" class="md-nav__link">
+    <span class="md-ellipsis">
+      Machine-Readable ABIs
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1842,7 +1855,7 @@
 <li><strong>Wallet</strong>: Sign messages, secure key management via agent-wallet or browser wallet</li>
 </ul>
 <h2 id="supported-markets">Supported Markets<a class="headerlink" href="#supported-markets" title="Permanent link">&para;</a></h2>
-<p>The protocol exposes 22 jToken markets in total (16 active + 6 paused legacy markets). Call <code>get_supported_markets</code> for the live list with addresses. The active markets are:</p>
+<p>The protocol exposes 23 jToken markets in total (17 active + 6 paused legacy markets). Call <code>get_supported_markets</code> for the live list with addresses. The active markets are:</p>
 <table>
 <thead>
 <tr>
@@ -1931,6 +1944,11 @@
 <td>jNFT</td>
 <td>NFT</td>
 <td>APENFT</td>
+</tr>
+<tr>
+<td>jHTX</td>
+<td>HTX</td>
+<td>HTX token</td>
 </tr>
 </tbody>
 </table>
@@ -2615,6 +2633,12 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 </tr>
 </tbody>
 </table>
+<h3 id="machine-readable-abis">Machine-Readable ABIs<a class="headerlink" href="#machine-readable-abis" title="Permanent link">&para;</a></h3>
+<p>For programmatic contract calls without re-fetching from Tronscan, the MCP server bundles all JustLend contract ABIs in TypeScript form:</p>
+<ul>
+<li><strong>Source</strong>: <a href="https://github.com/justlend/mcp-server-justlend/blob/main/src/core/abis.ts"><code>src/core/abis.ts</code></a> (jToken, Comptroller, Oracle, TRC20)</li>
+<li><strong>Chain configs (Mainnet / Nile testnet)</strong>: <a href="https://github.com/justlend/mcp-server-justlend/blob/main/src/core/chains.ts"><code>src/core/chains.ts</code></a></li>
+</ul>
 <h2 id="security-considerations">Security Considerations<a class="headerlink" href="#security-considerations" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Browser wallet (recommended)</strong>: Private keys never leave TronLink — the <code>tronlink-signer</code> SDK sends unsigned transactions to the browser and receives signed results</li>

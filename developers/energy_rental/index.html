@@ -1251,6 +1251,77 @@
   
 </li>
       
+        
+
+
+
+<li class="md-nav__item has-children">
+  <a href="#examples-tronweb" class="md-nav__link" aria-expanded="true">
+    <span class="md-ellipsis">
+      Examples (TronWeb)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Examples (TronWeb)">
+      <ul class="md-nav__list">
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#1-convert-i-want-n-energy-required-delegated-trx" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Convert "I want N energy" → required delegated TRX
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#2-rent-energy-the-rentresource-call" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Rent energy (the rentResource call)
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#3-return-rental-reclaim-deposit" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Return rental &amp; reclaim deposit
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#4-query-an-active-rental" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Query an active rental
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1760,6 +1831,10 @@
 
 
 <h1 id="energy-rental">Energy Rental<a class="headerlink" href="#energy-rental" title="Permanent link">&para;</a></h1>
+<div class="admonition info">
+<p class="admonition-title">Network &amp; precision</p>
+<p>Contract address below is <strong>TRON Mainnet</strong>. <code>amount</code> parameters refer to the <strong>delegated TRX amount in sun</strong> (1 TRX = 10⁶ sun) — not the energy amount. To go from desired energy to TRX, divide by <code>energyStakePerTrx</code> from the dashboard. <code>resourceType</code>: <code>0 = bandwidth</code>, <code>1 = energy</code>.</p>
+</div>
 <p>All transactions on JustLend DAO require Energy, which can only be acquired through staking or burning TRX. This process involves high costs and lengthy procedures. In response, JustLend DAO introduces the Energy Rental service, allowing users to rent Energy at a significantly reduced price compared to staking or burning TRX.
 The contract <a href="https://tronscan.io/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd">EnergyRental</a> used to set up the Energy Rental service.</p>
 <h3 id="prepay-refund"><strong>PrePay &amp; Refund</strong><a class="headerlink" href="#prepay-refund" title="Permanent link">&para;</a></h3>
@@ -2002,6 +2077,86 @@ on the <strong>Rental Amount</strong> and <strong>Rental Duration</strong>. The 
 </ul>
 </li>
 </ul>
+<h2 id="examples-tronweb"><strong>Examples (TronWeb)</strong><a class="headerlink" href="#examples-tronweb" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">TronWeb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;tronweb&#39;</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">tronWeb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">TronWeb</span><span class="p">({</span>
+<span class="w">  </span><span class="nx">fullHost</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;https://api.trongrid.io&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">headers</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s1">&#39;TRON-PRO-API-KEY&#39;</span><span class="o">:</span><span class="w"> </span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">TRONGRID_API_KEY</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nx">privateKey</span><span class="o">:</span><span class="w"> </span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PRIVATE_KEY</span><span class="p">,</span>
+<span class="p">});</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">ENERGY_RENTAL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd&#39;</span><span class="p">;</span><span class="w"> </span><span class="c1">// TRON Mainnet</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">ENERGY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1</span><span class="p">;</span><span class="w">     </span><span class="c1">// resourceType for energy</span>
+<span class="c1">// const BANDWIDTH = 0; // resourceType for bandwidth</span>
+</code></pre></div>
+<h3 id="1-convert-i-want-n-energy-required-delegated-trx">1. Convert "I want N energy" → required delegated TRX<a class="headerlink" href="#1-convert-i-want-n-energy-required-delegated-trx" title="Permanent link">&para;</a></h3>
+<p>The contract takes <strong>delegated TRX in sun</strong>, not energy units. First query the current ratio:</p>
+<div class="highlight"><pre><span></span><code><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">energyToDelegatedSun</span><span class="p">(</span><span class="nx">targetEnergy</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// GET https://openapi.just.network/strx/dashboard → energyStakePerTrx</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">fetch</span><span class="p">(</span><span class="s1">&#39;https://openapi.just.network/strx/dashboard&#39;</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">energyPerTrx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Number</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">energyStakePerTrx</span><span class="p">);</span><span class="w"> </span><span class="c1">// energy per 1 TRX</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">trxNeeded</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="nx">targetEnergy</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nx">energyPerTrx</span><span class="p">;</span><span class="w">    </span><span class="c1">// in TRX</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nb">BigInt</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">ceil</span><span class="p">(</span><span class="nx">trxNeeded</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1</span><span class="nx">_000_000</span><span class="p">));</span><span class="w">     </span><span class="c1">// sun</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="2-rent-energy-the-rentresource-call">2. Rent energy (the <code>rentResource</code> call)<a class="headerlink" href="#2-rent-energy-the-rentresource-call" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">rentEnergy</span><span class="p">({</span><span class="w"> </span><span class="nx">receiver</span><span class="p">,</span><span class="w"> </span><span class="nx">targetEnergy</span><span class="p">,</span><span class="w"> </span><span class="nx">durationSeconds</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">rental</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">tronWeb</span><span class="p">.</span><span class="nx">contract</span><span class="p">().</span><span class="nx">at</span><span class="p">(</span><span class="nx">ENERGY_RENTAL</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Compute prepayment off-chain (formula from the page above):</span>
+<span class="w">  </span><span class="c1">//   prepay = trxAmount × max(rentalRate, stableRate) × (duration + 86400 + liquidateThreshold) + fee</span>
+<span class="w">  </span><span class="c1">// Easiest: query `_rentalRate(amount, resourceType)` for the current per-second rate</span>
+<span class="w">  </span><span class="c1">//   and the EnergyRental dashboard for `stableRate`, `liquidateThreshold`, and `fee`.</span>
+<span class="w">  </span><span class="c1">// Simplest path: overshoot the prepayment slightly; the unused portion is refunded on return.</span>
+
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">amountSun</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">energyToDelegatedSun</span><span class="p">(</span><span class="nx">targetEnergy</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">rentalRate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">BigInt</span><span class="p">((</span><span class="k">await</span><span class="w"> </span><span class="nx">rental</span><span class="p">.</span><span class="nx">_rentalRate</span><span class="p">(</span><span class="nx">amountSun</span><span class="p">,</span><span class="w"> </span><span class="nx">ENERGY</span><span class="p">).</span><span class="nx">call</span><span class="p">()).</span><span class="nx">toString</span><span class="p">());</span>
+
+<span class="w">  </span><span class="c1">// Rough prepayment (use a conservative buffer; precise formula in the page above)</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">buffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">BigInt</span><span class="p">(</span><span class="nx">durationSeconds</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">86</span><span class="nx">_400</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">fee</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mf">20</span><span class="nx">_000_000n</span><span class="p">;</span><span class="w"> </span><span class="c1">// 20 TRX minimum liquidation reserve</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">prepay</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">amountSun</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nx">rentalRate</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nx">buffer</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mi">10n</span><span class="w"> </span><span class="o">**</span><span class="w"> </span><span class="mi">18n</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">fee</span><span class="p">;</span>
+
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">txId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">rental</span>
+<span class="w">    </span><span class="p">.</span><span class="nx">rentResource</span><span class="p">(</span><span class="nx">receiver</span><span class="p">,</span><span class="w"> </span><span class="nx">amountSun</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span><span class="w"> </span><span class="nx">ENERGY</span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="nx">send</span><span class="p">({</span><span class="w"> </span><span class="nx">callValue</span><span class="o">:</span><span class="w"> </span><span class="nb">Number</span><span class="p">(</span><span class="nx">prepay</span><span class="p">),</span><span class="w"> </span><span class="nx">feeLimit</span><span class="o">:</span><span class="w"> </span><span class="mf">200</span><span class="nx">_000_000</span><span class="w"> </span><span class="p">});</span>
+
+<span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;rent tx:&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">txId</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>For prepayment precision, use the JustLend MCP server's <code>calculate_energy_rental_price</code> tool — it implements the full formula and accounts for <code>stableRate</code> and <code>liquidateThreshold</code>. See <a href="../../ai_support/mcp_server/">MCP Server</a>.</p>
+</div>
+<h3 id="3-return-rental-reclaim-deposit">3. Return rental &amp; reclaim deposit<a class="headerlink" href="#3-return-rental-reclaim-deposit" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">returnEnergy</span><span class="p">({</span><span class="w"> </span><span class="nx">receiver</span><span class="p">,</span><span class="w"> </span><span class="nx">returnAmountSun</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">rental</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">tronWeb</span><span class="p">.</span><span class="nx">contract</span><span class="p">().</span><span class="nx">at</span><span class="p">(</span><span class="nx">ENERGY_RENTAL</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Called by the *payer* (renter)</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">txId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">rental</span>
+<span class="w">    </span><span class="p">.</span><span class="nx">returnResource</span><span class="p">(</span><span class="nx">receiver</span><span class="p">,</span><span class="w"> </span><span class="nx">returnAmountSun</span><span class="p">,</span><span class="w"> </span><span class="nx">ENERGY</span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="nx">send</span><span class="p">({</span><span class="w"> </span><span class="nx">feeLimit</span><span class="o">:</span><span class="w"> </span><span class="mf">200</span><span class="nx">_000_000</span><span class="w"> </span><span class="p">});</span>
+<span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;return tx:&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">txId</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// If called by the receiver of the rented energy:</span>
+<span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">returnByReceiver</span><span class="p">({</span><span class="w"> </span><span class="nx">renter</span><span class="p">,</span><span class="w"> </span><span class="nx">returnAmountSun</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">rental</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">tronWeb</span><span class="p">.</span><span class="nx">contract</span><span class="p">().</span><span class="nx">at</span><span class="p">(</span><span class="nx">ENERGY_RENTAL</span><span class="p">);</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">rental</span>
+<span class="w">    </span><span class="p">.</span><span class="nx">returnResourceByReceiver</span><span class="p">(</span><span class="nx">renter</span><span class="p">,</span><span class="w"> </span><span class="nx">returnAmountSun</span><span class="p">,</span><span class="w"> </span><span class="nx">ENERGY</span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="nx">send</span><span class="p">({</span><span class="w"> </span><span class="nx">feeLimit</span><span class="o">:</span><span class="w"> </span><span class="mf">200</span><span class="nx">_000_000</span><span class="w"> </span><span class="p">});</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="4-query-an-active-rental">4. Query an active rental<a class="headerlink" href="#4-query-an-active-rental" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">getRental</span><span class="p">({</span><span class="w"> </span><span class="nx">renter</span><span class="p">,</span><span class="w"> </span><span class="nx">receiver</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">rental</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">tronWeb</span><span class="p">.</span><span class="nx">contract</span><span class="p">().</span><span class="nx">at</span><span class="p">(</span><span class="nx">ENERGY_RENTAL</span><span class="p">);</span>
+<span class="w">  </span><span class="c1">// Real-time view (updated to current block)</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">[</span><span class="nx">securityDeposit</span><span class="p">,</span><span class="w"> </span><span class="nx">rentIndex</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">rental</span>
+<span class="w">    </span><span class="p">.</span><span class="nx">getRentInfo</span><span class="p">(</span><span class="nx">renter</span><span class="p">,</span><span class="w"> </span><span class="nx">receiver</span><span class="p">,</span><span class="w"> </span><span class="nx">ENERGY</span><span class="p">).</span><span class="nx">call</span><span class="p">();</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">securityDeposit</span><span class="o">:</span><span class="w"> </span><span class="nx">securityDeposit</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span><span class="w"> </span><span class="nx">rentIndex</span><span class="o">:</span><span class="w"> </span><span class="nx">rentIndex</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span><span class="w"> </span><span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div>
 
 
 

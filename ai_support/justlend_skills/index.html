@@ -1952,11 +1952,6 @@
 <td>Decentralized USD</td>
 </tr>
 <tr>
-<td>jUSDC</td>
-<td>USDC</td>
-<td>USD Coin</td>
-</tr>
-<tr>
 <td>jBTC</td>
 <td>BTC</td>
 <td>Bitcoin (TRC20)</td>
@@ -1964,7 +1959,12 @@
 <tr>
 <td>jETH</td>
 <td>ETH</td>
-<td>Ethereum (TRC20)</td>
+<td>Ethereum (TRC20) — dApp display name "ETH" (formerly "ETHOLD")</td>
+</tr>
+<tr>
+<td>jETHB</td>
+<td>ETHB</td>
+<td>Ethereum bridged — dApp display name "ETHB" (formerly "ETH")</td>
 </tr>
 <tr>
 <td>jSUN</td>
@@ -1976,8 +1976,17 @@
 <td>WIN</td>
 <td>WINkLink</td>
 </tr>
+<tr>
+<td>jHTX</td>
+<td>HTX</td>
+<td>HTX token</td>
+</tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="admonition-title">Authoritative current market list</p>
+<p>The full live list (17 active + 6 legacy) is in <a href="../../developers/apis/#2-jtoken-address-reference">APIs §2 — jToken Address Reference</a>. Markets currently <strong>closed</strong> to new supply/borrow: <code>jUSDCOLD</code>, <code>jUSDDOLD</code>, <code>jUSDJ</code>, <code>jWBTT</code>, <code>jSUNOLD</code>, <code>jBUSDOLD</code>. The on-chain contracts remain queryable so existing positions can be unwound — do not direct new deposits to them.</p>
+</div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>The full MCP server supports 24+ markets including jsTRX, jwstUSDT, jWBTC, and more.</p>
