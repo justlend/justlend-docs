@@ -62,7 +62,7 @@ Beyond JustLend-specific operations, the server also exposes a full set of **gen
 
 ## Supported Markets
 
-The protocol exposes 22 jToken markets in total (16 active + 6 paused legacy markets). Call `get_supported_markets` for the live list with addresses. The active markets are:
+The protocol exposes 23 jToken markets in total (17 active + 6 paused legacy markets). Call `get_supported_markets` for the live list with addresses. The active markets are:
 
 | jToken     | Underlying | Description |
 |------------|-----------|-------------|
@@ -82,6 +82,7 @@ The protocol exposes 22 jToken markets in total (16 active + 6 paused legacy mar
 | jWIN       | WIN       | WINkLink |
 | jBTT       | BTT       | BitTorrent token |
 | jNFT       | NFT       | APENFT |
+| jHTX       | HTX       | HTX token |
 
 ## Prerequisites
 

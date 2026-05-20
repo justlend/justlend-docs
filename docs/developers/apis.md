@@ -96,6 +96,8 @@ Endpoints that accept `pageNo` and `pageSize` return:
 
 Several endpoints key their payloads by jToken address (e.g. `data["TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf"]`). Use this table to translate.
 
+The protocol currently exposes **17 active + 6 legacy = 23 markets**. Legacy markets are closed to new supply and borrow — existing positions remain queryable so they can be unwound, but do not direct new deposits to them.
+
 | jToken      | Address                                | Underlying | Notes                                       |
 |-------------|----------------------------------------|------------|---------------------------------------------|
 | `jTRX`      | `TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP`   | TRX        | Native TRON token                           |
@@ -113,13 +115,14 @@ Several endpoints key their payloads by jToken address (e.g. `data["TKFRELGGoRgi
 | `jWIN`      | `TRg6MnpsFXc82ymUPgf5qbj59ibxiEDWvv`   | WIN        |                                             |
 | `jNFT`      | `TFpPyDCKvNFgos3g3WVsAqMrdqhB81JXHE`   | NFT        |                                             |
 | `jBTT`      | `TUaUHU9Dy8x5yNi1pKnFYqHWojot61Jfto`   | BTT        |                                             |
-| `jWBTT`     | `TUY54PVeH6WCcYCd6ZXXoBDsHytN9V5PXt`   | WBTT       |                                             |
 | `jSUN`      | `TPXDpkg9e3eZzxqxAUyke9S4z4pGJBJw9e`   | SUN        |                                             |
-| `jUSDJ`     | `TL5x9MtSnDy537FXKx53yAaHRRNdg9TkkA`   | USDJ       |                                             |
+| `jHTX`      | `TDA1mWPyAjTRATMGA55UTswGAHhV2itEXR`   | HTX        | HTX token (underlying `TUPM7K8REVzD2UdV4R5fe5M8XbnR2DdoJ6`) |
 | `jSUNOLD`   | `TGBr8uh9jBVHJhhkwSJvQN2ZAKzVkxDmno`   | SUN (old)  | Legacy, do not deposit new funds            |
 | `jBUSDOLD`  | `TLHASseQymmpGQdfAyNjkMXFTJh8nzR2x2`   | BUSD (old) | Legacy                                      |
 | `jUSDCOLD`  | `TNSBA6KvSvMoTqQcEgpVK7VhHT3z7wifxy`   | USDC (old) | Legacy                                      |
 | `jUSDDOLD`  | `TX7kybeP6UwTBRHLNPYmswFESHfyjm9bAS`   | USDD (old) | Legacy                                      |
+| `jUSDJ`     | `TL5x9MtSnDy537FXKx53yAaHRRNdg9TkkA`   | USDJ       | Legacy, closed to new supply/borrow         |
+| `jWBTT`     | `TUY54PVeH6WCcYCd6ZXXoBDsHytN9V5PXt`   | WBTT       | Legacy, closed to new supply/borrow         |
 
 ---
 
