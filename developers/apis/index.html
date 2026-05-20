@@ -1,595 +1,3399 @@
 
-<!DOCTYPE html>
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://docs.justlend.org/developers/apis/">
+      
+      
+        <link rel="prev" href="../deployed_contracts/">
+      
+      
+        <link rel="next" href="../../ai_support/mcp_server/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.8">
+    
+    
+      
+        <title>APIs - JustLend DAO Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.8608ea7d.min.css">
+      
+      
 
-<html class="no-js" lang="en">
-<head>
-<meta charset="utf-8"/>
-<meta content="width=device-width,initial-scale=1" name="viewport"/>
-<link href="https://docs.justlend.org/developers/apis/" rel="canonical"/>
-<link href="../deployed_contracts/" rel="prev"/>
-<link href="../../ai_support/mcp_server/" rel="next"/>
-<link href="../../assets/images/favicon.png" rel="icon"/>
-<meta content="mkdocs-1.6.1, mkdocs-material-9.6.8" name="generator"/>
-<title>APIs - JustLend DAO Documentation</title>
-<link href="../../assets/stylesheets/main.8608ea7d.min.css" rel="stylesheet"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
-<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
-<link href="../../stylesheets/extra.css" rel="stylesheet"/>
-<link href="../../stylesheets/hide_elements.css" rel="stylesheet"/>
-<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
-</head>
-<body dir="ltr">
-<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
-<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
-<label class="md-overlay" for="__drawer"></label>
-<div data-md-component="skip">
-</div>
-<div data-md-component="announce">
-</div>
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../../stylesheets/hide_elements.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#justlend-dao-api" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
 <header class="md-header md-header--shadow" data-md-component="header">
-<nav aria-label="Header" class="md-header__inner md-grid">
-<a aria-label="JustLend DAO Documentation" class="md-header__button md-logo" data-md-component="logo" href="../.." title="JustLend DAO Documentation">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
-</a>
-<label class="md-header__button md-icon" for="__drawer">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
-</label>
-<div class="md-header__title" data-md-component="header-title">
-<div class="md-header__ellipsis">
-<div class="md-header__topic">
-<span class="md-ellipsis">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="JustLend DAO Documentation" class="md-header__button md-logo" aria-label="JustLend DAO Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
             JustLend DAO Documentation
           </span>
-</div>
-<div class="md-header__topic" data-md-component="header-topic">
-<span class="md-ellipsis">
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
             
               APIs
             
           </span>
-</div>
-</div>
-</div>
-<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
-<label class="md-header__button md-icon" for="__search">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
-</label>
-<div class="md-search" data-md-component="search" role="dialog">
-<label class="md-search__overlay" for="__search"></label>
-<div class="md-search__inner" role="search">
-<form class="md-search__form" name="search">
-<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
-<label class="md-search__icon md-icon" for="__search">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
-</label>
-<nav aria-label="Search" class="md-search__options">
-<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
-</button>
-</nav>
-<div class="md-search__suggest" data-md-component="search-suggest"></div>
-</form>
-<div class="md-search__output">
-<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
-<div class="md-search-result" data-md-component="search-result">
-<div class="md-search-result__meta">
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
             Initializing search
           </div>
-<ol class="md-search-result__list" role="presentation"></ol>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-</div>
-</div>
-</div>
-</div>
-</nav>
+    
+    
+  </nav>
+  
 </header>
-<div class="md-container" data-md-component="container">
-<main class="md-main" data-md-component="main">
-<div class="md-main__inner md-grid">
-<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
-<div class="md-sidebar__scrollwrap">
-<div class="md-sidebar__inner">
-<nav aria-label="Navigation" class="md-nav md-nav--primary md-nav--integrated" data-md-level="0">
-<label class="md-nav__title" for="__drawer">
-<a aria-label="JustLend DAO Documentation" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="JustLend DAO Documentation">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
-</a>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="JustLend DAO Documentation" class="md-nav__button md-logo" aria-label="JustLend DAO Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
     JustLend DAO Documentation
   </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item md-nav__item--section md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" id="__nav_1" type="checkbox"/>
-<label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="">
-<span class="md-ellipsis">
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
     GETTING STARTED
     
   </span>
-<span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-expanded="false" aria-labelledby="__nav_1_label" class="md-nav" data-md-level="1">
-<label class="md-nav__title" for="__nav_1">
-<span class="md-nav__icon md-icon"></span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
             GETTING STARTED
           </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../getting_started/overview/">
-<span class="md-ellipsis">
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
     Overview
     
   </span>
-</a>
-</li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" id="__nav_1_2" type="checkbox"/>
-<label class="md-nav__link" for="__nav_1_2" id="__nav_1_2_label" tabindex="0">
-<span class="md-ellipsis">
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_2" id="__nav_1_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
     Concepts
     
   </span>
-<span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-expanded="false" aria-labelledby="__nav_1_2_label" class="md-nav" data-md-level="2">
-<label class="md-nav__title" for="__nav_1_2">
-<span class="md-nav__icon md-icon"></span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_2">
+            <span class="md-nav__icon md-icon"></span>
             Concepts
           </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../getting_started/concepts/supply/">
-<span class="md-ellipsis">
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/concepts/supply/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
     Supply
     
   </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../getting_started/concepts/borrow/">
-<span class="md-ellipsis">
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/concepts/borrow/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
     Borrow
     
   </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../getting_started/concepts/withdraw/">
-<span class="md-ellipsis">
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/concepts/withdraw/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
     Withdraw
     
   </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../getting_started/concepts/repay/">
-<span class="md-ellipsis">
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/concepts/repay/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
     Repay
     
   </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../getting_started/concepts/liquidations/">
-<span class="md-ellipsis">
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/concepts/liquidations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
     Liquidations
     
   </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../getting_started/concepts/risks/">
-<span class="md-ellipsis">
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/concepts/risks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
     Risks
     
   </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../getting_started/concepts/staked_trx/">
-<span class="md-ellipsis">
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/concepts/staked_trx/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
     Staked TRX
     
   </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../getting_started/concepts/energy_rental/">
-<span class="md-ellipsis">
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/concepts/energy_rental/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
     Energy Rental
     
   </span>
-</a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="https://justlend.org/docs/justlend_whitepaper_en.pdf">
-<span class="md-ellipsis">
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://justlend.org/docs/justlend_whitepaper_en.pdf" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
     Whitepaper
     
   </span>
-</a>
-</li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" id="__nav_1_4" type="checkbox"/>
-<label class="md-nav__link" for="__nav_1_4" id="__nav_1_4_label" tabindex="0">
-<span class="md-ellipsis">
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_4" id="__nav_1_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
     FAQs
     
   </span>
-<span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-expanded="false" aria-labelledby="__nav_1_4_label" class="md-nav" data-md-level="2">
-<label class="md-nav__title" for="__nav_1_4">
-<span class="md-nav__icon md-icon"></span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_4">
+            <span class="md-nav__icon md-icon"></span>
             FAQs
           </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../getting_started/faqs/wallet_connection_questions/">
-<span class="md-ellipsis">
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/faqs/wallet_connection_questions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
     Wallet Connection Questions
     
   </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../getting_started/faqs/spending_cap_issue/">
-<span class="md-ellipsis">
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/faqs/spending_cap_issue/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
     Spending Cap Issue During Transactions
     
   </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="https://support.justlend.org/hc/en-us/sections/360011389611-Questions">
-<span class="md-ellipsis">
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://support.justlend.org/hc/en-us/sections/360011389611-Questions" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
     More Questions
     
   </span>
-</a>
-</li>
-</ul>
-</nav>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item md-nav__item--section md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" id="__nav_2" type="checkbox"/>
-<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
-<span class="md-ellipsis">
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
     GOVERNANCE
     
   </span>
-<span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
-<label class="md-nav__title" for="__nav_2">
-<span class="md-nav__icon md-icon"></span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
             GOVERNANCE
           </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../governance/jips/">
-<span class="md-ellipsis">
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../governance/jips/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
     JIPs
     
   </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../governance/tokenomics/">
-<span class="md-ellipsis">
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../governance/tokenomics/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
     Tokenomics
     
   </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="https://forum.justlend.org">
-<span class="md-ellipsis">
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://forum.justlend.org" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
     Community Forum
     
   </span>
-</a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
-<input checked="" class="md-nav__toggle md-toggle" id="__nav_3" type="checkbox"/>
-<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
-<span class="md-ellipsis">
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
     DEVELOPERS
     
   </span>
-<span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-expanded="true" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
-<label class="md-nav__title" for="__nav_3">
-<span class="md-nav__icon md-icon"></span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
             DEVELOPERS
           </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../contracts_overview/">
-<span class="md-ellipsis">
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contracts_overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
     Contracts Overview
     
   </span>
-</a>
-</li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" id="__nav_3_2" type="checkbox"/>
-<label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
-<span class="md-ellipsis">
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
     Supply and Borrow Market
     
   </span>
-<span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-expanded="false" aria-labelledby="__nav_3_2_label" class="md-nav" data-md-level="2">
-<label class="md-nav__title" for="__nav_3_2">
-<span class="md-nav__icon md-icon"></span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
             Supply and Borrow Market
           </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../supply_and_borrow_market/sbm/">
-<span class="md-ellipsis">
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../supply_and_borrow_market/sbm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
     SBM
     
   </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../supply_and_borrow_market/interest_rate_model/">
-<span class="md-ellipsis">
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../supply_and_borrow_market/interest_rate_model/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
     Interest Rate Model
     
   </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../supply_and_borrow_market/governance/">
-<span class="md-ellipsis">
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../supply_and_borrow_market/governance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
     Governance
     
   </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../supply_and_borrow_market/price_oracle/">
-<span class="md-ellipsis">
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../supply_and_borrow_market/price_oracle/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
     Price Oracle
     
   </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../supply_and_borrow_market/comptroller/">
-<span class="md-ellipsis">
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../supply_and_borrow_market/comptroller/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
     Comptroller
     
   </span>
-</a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../staked_trx/">
-<span class="md-ellipsis">
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../staked_trx/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
     Staked TRX
     
   </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../energy_rental/">
-<span class="md-ellipsis">
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../energy_rental/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
     Energy Rental
     
   </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../deployed_contracts/">
-<span class="md-ellipsis">
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployed_contracts/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
     Deployed Contracts
     
   </span>
-</a>
-</li>
-<li class="md-nav__item md-nav__item--active">
-<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
-<a class="md-nav__link md-nav__link--active" href="./">
-<span class="md-ellipsis">
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
     APIs
     
   </span>
-</a>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    APIs
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        
+
+
+
+<li class="md-nav__item has-children">
+  <a href="#1-conventions" class="md-nav__link" aria-expanded="true">
+    <span class="md-ellipsis">
+      1. Conventions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Conventions">
+      <ul class="md-nav__list">
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#11-response-envelope" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.1 Response envelope
+    </span>
+  </a>
+  
 </li>
-</ul>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#12-address-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.2 Address format
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#13-numeric-formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.3 Numeric formats
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#14-rate-apy-semantics" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.4 Rate / APY semantics
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#15-pagination" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.5 Pagination
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#16-error-responses" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.6 Error responses
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item ">
+  <a href="#2-jtoken-address-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. jToken Address Reference
+    </span>
+  </a>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item has-children">
+  <a href="#3-supply-borrow-market" class="md-nav__link" aria-expanded="true">
+    <span class="md-ellipsis">
+      3. Supply &amp; Borrow Market
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Supply &amp; Borrow Market">
+      <ul class="md-nav__list">
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#31-get-lendjtoken-list-all-sbm-markets" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.1 /lend/jtoken
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#32-get-lendaccount-user-sbm-positions" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.2 /lend/account
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#33-get-justlendliquidatehighriskaccountlist-highrisk-accounts" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.3 /justlend/liquidate/highRiskAccountList
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item has-children">
+  <a href="#4-usdd-supply-mining" class="md-nav__link" aria-expanded="true">
+    <span class="md-ellipsis">
+      4. USDD Supply Mining
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. USDD Supply Mining">
+      <ul class="md-nav__list">
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#41-get-miningapy-mining-apy-per-market" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.1 /mining/apy
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#42-get-miningreward-current-phase-status-for-a-user" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.2 /mining/reward
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#43-get-miningdistributions-claim-proofs-for-all-phases" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.3 /mining/distributions
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item has-children">
+  <a href="#5-staked-trx-energy-rental" class="md-nav__link" aria-expanded="true">
+    <span class="md-ellipsis">
+      5. Staked TRX &amp; Energy Rental
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Staked TRX &amp; Energy Rental">
+      <ul class="md-nav__list">
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#51-get-lendstrx-strx-market-energy-rental-snapshot" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.1 /lend/strx
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#52-get-lendstrxstakeaccount-user-strx-positions" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.2 /lend/strxStake/account
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#53-get-lendrentresourceaccount-user-energy-rental-positions" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.3 /lend/rentResource/account
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item ">
+  <a href="#6-quick-reference-for-ai-agents" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Quick reference for AI agents
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
-</li>
-<li class="md-nav__item md-nav__item--section md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" id="__nav_4" type="checkbox"/>
-<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
-<span class="md-ellipsis">
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
     AI SUPPORT
     
   </span>
-<span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
-<label class="md-nav__title" for="__nav_4">
-<span class="md-nav__icon md-icon"></span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
             AI SUPPORT
           </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../ai_support/mcp_server/">
-<span class="md-ellipsis">
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai_support/mcp_server/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
     MCP Server
     
   </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../ai_support/justlend_skills/">
-<span class="md-ellipsis">
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai_support/justlend_skills/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
     JustLend Skills
     
   </span>
-</a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item md-nav__item--section md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" id="__nav_5" type="checkbox"/>
-<label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
-<span class="md-ellipsis">
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
     RESOURCES
     
   </span>
-<span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-expanded="false" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
-<label class="md-nav__title" for="__nav_5">
-<span class="md-nav__icon md-icon"></span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
             RESOURCES
           </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" id="__nav_5_1" type="checkbox"/>
-<label class="md-nav__link" for="__nav_5_1" id="__nav_5_1_label" tabindex="0">
-<span class="md-ellipsis">
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1" id="__nav_5_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
     Community
     
   </span>
-<span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-expanded="false" aria-labelledby="__nav_5_1_label" class="md-nav" data-md-level="2">
-<label class="md-nav__title" for="__nav_5_1">
-<span class="md-nav__icon md-icon"></span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1">
+            <span class="md-nav__icon md-icon"></span>
             Community
           </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../resources/community/links/">
-<span class="md-ellipsis">
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../resources/community/links/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
     Links
     
   </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../resources/community/wallet_integration_cooperation/">
-<span class="md-ellipsis">
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../resources/community/wallet_integration_cooperation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
     Wallet Integration Cooperation
     
   </span>
-</a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../resources/risk_warning/">
-<span class="md-ellipsis">
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../resources/risk_warning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
     Risk Warning
     
   </span>
-</a>
-</li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" id="__nav_5_3" type="checkbox"/>
-<label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
-<span class="md-ellipsis">
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
     Audits
     
   </span>
-<span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-expanded="false" aria-labelledby="__nav_5_3_label" class="md-nav" data-md-level="2">
-<label class="md-nav__title" for="__nav_5_3">
-<span class="md-nav__icon md-icon"></span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_3">
+            <span class="md-nav__icon md-icon"></span>
             Audits
           </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="https://justlend.org/docs/justlend_audit_en.pdf">
-<span class="md-ellipsis">
-    Supply &amp; Borrow
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://justlend.org/docs/justlend_audit_en.pdf" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Supply & Borrow
     
   </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="https://justlend.org/docs/justlend_strx_audit_en.pdf">
-<span class="md-ellipsis">
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://justlend.org/docs/justlend_strx_audit_en.pdf" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
     Staked TRX
     
   </span>
-</a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" id="__nav_5_4" type="checkbox"/>
-<label class="md-nav__link" for="__nav_5_4" id="__nav_5_4_label" tabindex="0">
-<span class="md-ellipsis">
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_4" id="__nav_5_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
     Terms of Service
     
   </span>
-<span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-expanded="false" aria-labelledby="__nav_5_4_label" class="md-nav" data-md-level="2">
-<label class="md-nav__title" for="__nav_5_4">
-<span class="md-nav__icon md-icon"></span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_4">
+            <span class="md-nav__icon md-icon"></span>
             Terms of Service
           </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="https://justlend.org/docs/JustLend_Terms_of_Use_en.pdf">
-<span class="md-ellipsis">
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://justlend.org/docs/JustLend_Terms_of_Use_en.pdf" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
     Terms of Service
     
   </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="https://justlend.org/docs/JustLend_Privacy_Policy_en.pdf">
-<span class="md-ellipsis">
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://justlend.org/docs/JustLend_Privacy_Policy_en.pdf" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
     Privacy Policy
     
   </span>
-</a>
-</li>
-</ul>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
 </nav>
-</li>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="justlend-dao-api">JustLend DAO API<a class="headerlink" href="#justlend-dao-api" title="Permanent link">&para;</a></h1>
+<p>Public REST endpoints for querying JustLend DAO protocol state: lending markets, user positions, liquidation risk, USDD supply‑mining rewards, sTRX staking, and Energy Rental.</p>
+<ul>
+<li><strong>Base URL:</strong> <code>https://openapi.just.network</code></li>
+<li><strong>Method:</strong> All endpoints are <code>GET</code>. No authentication.</li>
+<li><strong>Content‑Type:</strong> <code>application/json</code></li>
+<li><strong>Machine‑readable spec:</strong> <a href="justlend_apis.yaml"><code>justlend_apis.yaml</code></a> (OpenAPI 3.1). Importable into Swagger UI, Postman, Insomnia, or any LLM tool.</li>
 </ul>
-</nav>
-</li>
+<hr />
+<h2 id="1-conventions">1. Conventions<a class="headerlink" href="#1-conventions" title="Permanent link">&para;</a></h2>
+<p>These conventions apply to <strong>every</strong> response unless an endpoint says otherwise.</p>
+<h3 id="11-response-envelope">1.1 Response envelope<a class="headerlink" href="#11-response-envelope" title="Permanent link">&para;</a></h3>
+<p>Every successful response uses the same envelope:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SUCCESS&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td>integer</td>
+<td><code>0</code> means success. Non‑zero values indicate an error.</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td>string</td>
+<td><code>"SUCCESS"</code> on success, otherwise a short error description.</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td>object</td>
+<td>Endpoint payload. Shape is documented per endpoint below.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="12-address-format">1.2 Address format<a class="headerlink" href="#12-address-format" title="Permanent link">&para;</a></h3>
+<p>All addresses are TRON <strong>Base58</strong> addresses (start with <code>T</code>, 34 chars). Examples: <code>TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf</code>.</p>
+<h3 id="13-numeric-formats">1.3 Numeric formats<a class="headerlink" href="#13-numeric-formats" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Format</th>
+<th>Where it appears</th>
+<th>How to read it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Decimal string/number</td>
+<td><code>borrowRate</code>, <code>supplyRate</code>, <code>apy</code>, <code>collateralFactor</code>, <code>health</code>, <code>risk</code>, <code>exchangeRate</code>, etc.</td>
+<td>Already human‑readable. <code>0.064673</code> means <code>6.4673 %</code> for rates, <code>0.75</code> means <code>75 %</code> for factors.</td>
+</tr>
+<tr>
+<td>Underlying amount</td>
+<td><code>cash</code>, <code>totalBorrows</code>, <code>reserves</code>, <code>supplyBalanceUnderlying</code>, <code>borrowBalanceUnderlying</code></td>
+<td>Already de‑scaled by the asset's decimals. Use as‑is for display.</td>
+</tr>
+<tr>
+<td>jToken amount</td>
+<td><code>totalSupply</code> of <code>/lend/jtoken</code>, <code>supplyBalanceJtoken</code></td>
+<td>jToken units (jTokens always have <strong>8</strong> decimals on TRON).</td>
+</tr>
+<tr>
+<td>TRX value</td>
+<td>Anything ending in <code>InTrx</code></td>
+<td>Already de‑scaled (TRX has 6 decimals). For example <code>totalBorrowValueInTrx: 11.277370</code> means 11.277 TRX.</td>
+</tr>
+<tr>
+<td>USD value</td>
+<td>Anything ending in <code>Usd</code></td>
+<td>Already de‑scaled US dollars.</td>
+</tr>
+<tr>
+<td>Hex string</td>
+<td><code>amount</code>, <code>index</code>, <code>merkleIndex</code>, <code>merkleRoot</code>, <code>proof</code> in <code>/mining/distributions</code></td>
+<td>Hex‑encoded <code>uint256</code>. <strong>The leading <code>:</code> shown in some legacy examples is a delimiter and is not part of the value.</strong> Pass directly to the on‑chain claim contract.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="14-rate-apy-semantics">1.4 Rate / APY semantics<a class="headerlink" href="#14-rate-apy-semantics" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p><strong>All <code>*Rate</code> and <code>apy</code> values are annualized decimals.</strong> Multiply by 100 to get a percentage.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Meaning</th>
+<th>Example value</th>
+<th>Display</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>supplyRate</code></td>
+<td>Annualized interest a supplier earns (excluding mining rewards).</td>
+<td><code>0.00904450</code></td>
+<td><code>0.90 % APY</code></td>
+</tr>
+<tr>
+<td><code>borrowRate</code></td>
+<td>Annualized interest a borrower pays.</td>
+<td><code>0.06467371</code></td>
+<td><code>6.47 % APY</code></td>
+</tr>
+<tr>
+<td><code>apy</code> (mining)</td>
+<td>Annualized USDD mining reward APY paid on top of <code>supplyRate</code>.</td>
+<td><code>0.09175706</code></td>
+<td><code>9.18 % APY</code></td>
+</tr>
+</tbody>
+</table>
+<p>A user's <strong>total supply APY</strong> in a market that has mining enabled is therefore <code>supplyRate + apy</code>.</p>
+<h3 id="15-pagination">1.5 Pagination<a class="headerlink" href="#15-pagination" title="Permanent link">&para;</a></h3>
+<p>Endpoints that accept <code>pageNo</code> and <code>pageSize</code> return:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"> </span><span class="nt">&quot;totalCount&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1234</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;totalPage&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;list&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<ul>
+<li><code>pageNo</code> is 1‑based. Default = <code>1</code>.</li>
+<li><code>pageSize</code> default = <code>10</code>, <strong>max = <code>1000</code></strong>.</li>
 </ul>
-</nav>
-</div>
-</div>
-</div>
-<div class="md-content" data-md-component="content">
-<article class="md-content__inner md-typeset">
-<h1>APIs</h1>
-<p><iframe class="swagger-ui-iframe" frameborder="0" id="18aefa6b" onload="this.style.display = 'block'; this.style.overflow = 'hidden'; this.style.width = '100%';" src="swagger-18aefa6b.html" style="display:none;" width="100%"></iframe></p>
-<hr class="content-footer-divider"/> <!-- 添加的水平线 -->
-<footer class="md-footer">
-<!--div class="md-footer-meta md-typeset">
+<h3 id="16-error-responses">1.6 Error responses<a class="headerlink" href="#16-error-responses" title="Permanent link">&para;</a></h3>
+<p><code>code</code> is non‑zero and a payload conforming to <a href="https://datatracker.ietf.org/doc/html/rfc7807">RFC 7807</a> is returned:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://example.com/errors/generic-error&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Something went wrong here.&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">400</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Unfortunately, we can&#39;t provide further information.&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>HTTP status</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>400</code></td>
+<td>Bad Request — missing or malformed parameters.</td>
+</tr>
+<tr>
+<td><code>401</code></td>
+<td>Unauthorized.</td>
+</tr>
+<tr>
+<td><code>403</code></td>
+<td>Forbidden.</td>
+</tr>
+<tr>
+<td><code>404</code></td>
+<td>Not Found.</td>
+</tr>
+<tr>
+<td><code>5xx</code></td>
+<td>Server error. Safe to retry with backoff.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2-jtoken-address-reference">2. jToken Address Reference<a class="headerlink" href="#2-jtoken-address-reference" title="Permanent link">&para;</a></h2>
+<p>Several endpoints key their payloads by jToken address (e.g. <code>data["TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf"]</code>). Use this table to translate.</p>
+<table>
+<thead>
+<tr>
+<th>jToken</th>
+<th>Address</th>
+<th>Underlying</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>jTRX</code></td>
+<td><code>TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP</code></td>
+<td>TRX</td>
+<td>Native TRON token</td>
+</tr>
+<tr>
+<td><code>jUSDT</code></td>
+<td><code>TXJgMdjVX5dKiQaUi9QobwNxtSQaFqccvd</code></td>
+<td>USDT</td>
+<td>Tether</td>
+</tr>
+<tr>
+<td><code>jUSDD</code></td>
+<td><code>TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf</code></td>
+<td>USDD</td>
+<td><strong>USDD supply‑mining market</strong> (see §4)</td>
+</tr>
+<tr>
+<td><code>jUSD1</code></td>
+<td><code>TBEKggwqFkrc4KckQVR9BLucAmQugafEZf</code></td>
+<td>USD1</td>
+<td>World Liberty Financial USD</td>
+</tr>
+<tr>
+<td><code>jTUSD</code></td>
+<td><code>TSXv71Fy5XdL3Rh2QfBoUu3NAaM4sMif8R</code></td>
+<td>TUSD</td>
+<td>TrueUSD</td>
+</tr>
+<tr>
+<td><code>jwstUSDT</code></td>
+<td><code>TD5SdLw5scR6mXgyMK2xKrFJpauDjpKqrW</code></td>
+<td>wstUSDT</td>
+<td>Wrapped staked USDT</td>
+</tr>
+<tr>
+<td><code>jsTRX</code></td>
+<td><code>TJQ9rbVe9ei3nNtyGgBL22Fuu2xYjZaLAQ</code></td>
+<td>sTRX</td>
+<td>Staked TRX</td>
+</tr>
+<tr>
+<td><code>jBTC</code></td>
+<td><code>TLeEu311Cbw63BcmMHDgDLu7fnk9fqGcqT</code></td>
+<td>BTC</td>
+<td></td>
+</tr>
+<tr>
+<td><code>jWBTC</code></td>
+<td><code>TVyvpmaVmz25z2GaXBDDjzLZi5iR5dBzGd</code></td>
+<td>WBTC</td>
+<td>Wrapped Bitcoin</td>
+</tr>
+<tr>
+<td><code>jETH</code></td>
+<td><code>TR7BUFRQeq1w5jAZf1FKx85SHuX6PfMqsV</code></td>
+<td>ETH</td>
+<td></td>
+</tr>
+<tr>
+<td><code>jETHB</code></td>
+<td><code>TWBxQMb6RD3qmkXUXpNwVCYbL8SHNreru6</code></td>
+<td>ETHB</td>
+<td>Bridged Ethereum</td>
+</tr>
+<tr>
+<td><code>jJST</code></td>
+<td><code>TWQhCXaWz4eHK4Kd1ErSDHjMFPoPc9czts</code></td>
+<td>JST</td>
+<td>JUST</td>
+</tr>
+<tr>
+<td><code>jWIN</code></td>
+<td><code>TRg6MnpsFXc82ymUPgf5qbj59ibxiEDWvv</code></td>
+<td>WIN</td>
+<td></td>
+</tr>
+<tr>
+<td><code>jNFT</code></td>
+<td><code>TFpPyDCKvNFgos3g3WVsAqMrdqhB81JXHE</code></td>
+<td>NFT</td>
+<td></td>
+</tr>
+<tr>
+<td><code>jBTT</code></td>
+<td><code>TUaUHU9Dy8x5yNi1pKnFYqHWojot61Jfto</code></td>
+<td>BTT</td>
+<td></td>
+</tr>
+<tr>
+<td><code>jWBTT</code></td>
+<td><code>TUY54PVeH6WCcYCd6ZXXoBDsHytN9V5PXt</code></td>
+<td>WBTT</td>
+<td></td>
+</tr>
+<tr>
+<td><code>jSUN</code></td>
+<td><code>TPXDpkg9e3eZzxqxAUyke9S4z4pGJBJw9e</code></td>
+<td>SUN</td>
+<td></td>
+</tr>
+<tr>
+<td><code>jUSDJ</code></td>
+<td><code>TL5x9MtSnDy537FXKx53yAaHRRNdg9TkkA</code></td>
+<td>USDJ</td>
+<td></td>
+</tr>
+<tr>
+<td><code>jSUNOLD</code></td>
+<td><code>TGBr8uh9jBVHJhhkwSJvQN2ZAKzVkxDmno</code></td>
+<td>SUN (old)</td>
+<td>Legacy, do not deposit new funds</td>
+</tr>
+<tr>
+<td><code>jBUSDOLD</code></td>
+<td><code>TLHASseQymmpGQdfAyNjkMXFTJh8nzR2x2</code></td>
+<td>BUSD (old)</td>
+<td>Legacy</td>
+</tr>
+<tr>
+<td><code>jUSDCOLD</code></td>
+<td><code>TNSBA6KvSvMoTqQcEgpVK7VhHT3z7wifxy</code></td>
+<td>USDC (old)</td>
+<td>Legacy</td>
+</tr>
+<tr>
+<td><code>jUSDDOLD</code></td>
+<td><code>TX7kybeP6UwTBRHLNPYmswFESHfyjm9bAS</code></td>
+<td>USDD (old)</td>
+<td>Legacy</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-supply-borrow-market">3. Supply &amp; Borrow Market<a class="headerlink" href="#3-supply-borrow-market" title="Permanent link">&para;</a></h2>
+<h3 id="31-get-lendjtoken-list-all-sbm-markets">3.1 <code>GET /lend/jtoken</code> — List all SBM markets<a class="headerlink" href="#31-get-lendjtoken-list-all-sbm-markets" title="Permanent link">&para;</a></h3>
+<p>Returns the on‑chain state of every Supply &amp; Borrow market: rates, total supply/borrow, exchange rates, prices, and collateral factor.</p>
+<p><strong>Parameters:</strong> none.</p>
+<p><strong>Response data</strong></p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SUCCESS&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;tokenList&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;address&quot;</span><span class="p">:</span><span class="w">              </span><span class="s2">&quot;TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;symbol&quot;</span><span class="p">:</span><span class="w">               </span><span class="s2">&quot;jTRX&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;underlyingAddress&quot;</span><span class="p">:</span><span class="w">    </span><span class="s2">&quot;T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;underlyingSymbol&quot;</span><span class="p">:</span><span class="w">     </span><span class="s2">&quot;TRX&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;underlyingDecimal&quot;</span><span class="p">:</span><span class="w">    </span><span class="mi">6</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;underlyingPriceInTrx&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;borrowIndex&quot;</span><span class="p">:</span><span class="w">          </span><span class="mi">1224530412174750380</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;borrowRate&quot;</span><span class="p">:</span><span class="w">           </span><span class="mf">0.064673716541040000</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;supplyRate&quot;</span><span class="p">:</span><span class="w">           </span><span class="mf">0.009044500002192000</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;cash&quot;</span><span class="p">:</span><span class="w">                 </span><span class="mf">349909392.537020000000000000</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;reserves&quot;</span><span class="p">:</span><span class="w">             </span><span class="mf">2300647.881336000000000000</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;totalBorrows&quot;</span><span class="p">:</span><span class="w">         </span><span class="mf">63951044.565948000000000000</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;totalSupply&quot;</span><span class="p">:</span><span class="w">          </span><span class="mf">39391010299.49149122</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;exchangeRate&quot;</span><span class="p">:</span><span class="w">         </span><span class="mf">0.010448063811832339</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;collateralFactor&quot;</span><span class="p">:</span><span class="w">     </span><span class="mf">0.750000000000000000</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;reserveFactor&quot;</span><span class="p">:</span><span class="w">        </span><span class="mf">0.100000000000000000</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>Field reference</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Unit / Format</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>address</code></td>
+<td>string</td>
+<td>TRON address</td>
+<td>jToken contract address (the market).</td>
+</tr>
+<tr>
+<td><code>symbol</code></td>
+<td>string</td>
+<td>text</td>
+<td>jToken symbol, e.g. <code>jTRX</code>, <code>jUSDD</code>.</td>
+</tr>
+<tr>
+<td><code>underlyingAddress</code></td>
+<td>string</td>
+<td>TRON address</td>
+<td>Underlying asset contract address.</td>
+</tr>
+<tr>
+<td><code>underlyingSymbol</code></td>
+<td>string</td>
+<td>text</td>
+<td>Underlying asset symbol.</td>
+</tr>
+<tr>
+<td><code>underlyingDecimal</code></td>
+<td>integer</td>
+<td>count</td>
+<td>Decimals of the underlying asset.</td>
+</tr>
+<tr>
+<td><code>underlyingPriceInTrx</code></td>
+<td>number</td>
+<td>TRX</td>
+<td>Oracle price of 1 unit of underlying, denominated in TRX.</td>
+</tr>
+<tr>
+<td><code>borrowIndex</code></td>
+<td>integer</td>
+<td>scaled 1e18</td>
+<td>Cumulative borrow interest index. Used for accurate per‑user accounting.</td>
+</tr>
+<tr>
+<td><code>borrowRate</code></td>
+<td>number</td>
+<td>annualized decimal</td>
+<td>Borrow APY. <code>0.0647</code> = <code>6.47 %</code>.</td>
+</tr>
+<tr>
+<td><code>supplyRate</code></td>
+<td>number</td>
+<td>annualized decimal</td>
+<td>Supply APY (excluding mining).</td>
+</tr>
+<tr>
+<td><code>cash</code></td>
+<td>number</td>
+<td>underlying units</td>
+<td>Available underlying liquidity in the market.</td>
+</tr>
+<tr>
+<td><code>reserves</code></td>
+<td>number</td>
+<td>underlying units</td>
+<td>Protocol reserves in the market.</td>
+</tr>
+<tr>
+<td><code>totalBorrows</code></td>
+<td>number</td>
+<td>underlying units</td>
+<td>Total outstanding debt.</td>
+</tr>
+<tr>
+<td><code>totalSupply</code></td>
+<td>number</td>
+<td>jToken units (8 decimals)</td>
+<td>Total minted jTokens.</td>
+</tr>
+<tr>
+<td><code>exchangeRate</code></td>
+<td>number</td>
+<td>underlying per jToken</td>
+<td>Current jToken → underlying conversion ratio.</td>
+</tr>
+<tr>
+<td><code>collateralFactor</code></td>
+<td>number</td>
+<td>decimal (0–1)</td>
+<td>LTV cap when used as collateral. <code>0.75</code> = <code>75 %</code>.</td>
+</tr>
+<tr>
+<td><code>reserveFactor</code></td>
+<td>number</td>
+<td>decimal (0–1)</td>
+<td>Share of borrow interest taken as protocol reserve.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="32-get-lendaccount-user-sbm-positions">3.2 <code>GET /lend/account</code> — User SBM positions<a class="headerlink" href="#32-get-lendaccount-user-sbm-positions" title="Permanent link">&para;</a></h3>
+<p>Returns each queried wallet's supply/borrow positions, health factor and totals.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>In</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>addresses</code></td>
+<td>query</td>
+<td>string</td>
+<td>yes</td>
+<td>One or more TRON addresses, <strong>comma‑separated</strong> (no spaces).</td>
+</tr>
+<tr>
+<td><code>minBorrowValueInTrx</code></td>
+<td>query</td>
+<td>number</td>
+<td>no</td>
+<td>Only return accounts whose total borrow value (in TRX) is ≥ this threshold.</td>
+</tr>
+<tr>
+<td><code>maxHealth</code></td>
+<td>query</td>
+<td>number</td>
+<td>no</td>
+<td>Only return accounts whose health is ≤ this threshold (useful to find risky).</td>
+</tr>
+<tr>
+<td><code>pageNo</code></td>
+<td>query</td>
+<td>integer</td>
+<td>no</td>
+<td>1‑based page number. Default <code>1</code>.</td>
+</tr>
+<tr>
+<td><code>pageSize</code></td>
+<td>query</td>
+<td>integer</td>
+<td>no</td>
+<td>Page size. Default <code>10</code>, max <code>1000</code>.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example request</strong></p>
+<div class="highlight"><pre><span></span><code>GET /lend/account?addresses=T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb,TXJgM...&amp;pageNo=1&amp;pageSize=20
+</code></pre></div>
+<p><strong>Response data</strong></p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SUCCESS&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;totalCount&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;totalPage&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;list&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;addresses&quot;</span><span class="p">:</span><span class="w">                 </span><span class="s2">&quot;T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;health&quot;</span><span class="p">:</span><span class="w">                    </span><span class="mf">5.88</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;totalCollateralValueInTrx&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">24.126681</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;totalBorrowValueInTrx&quot;</span><span class="p">:</span><span class="w">     </span><span class="mf">11.277370</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;liquidateStatusStartTime&quot;</span><span class="p">:</span><span class="w">  </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;tokens&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;address&quot;</span><span class="p">:</span><span class="w">                </span><span class="s2">&quot;TNSBA6KvSvMoTqQcEgpVK7VhHT3z7wifxy&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;underlyingSymbol&quot;</span><span class="p">:</span><span class="w">       </span><span class="s2">&quot;USDD&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;entered&quot;</span><span class="p">:</span><span class="w">                </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;supplyBalanceJtoken&quot;</span><span class="p">:</span><span class="w">    </span><span class="mf">1.09062037</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;supplyBalanceUnderlying&quot;</span><span class="p">:</span><span class="mf">0.01148891329334797277745383</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;borrowBalanceUnderlying&quot;</span><span class="p">:</span><span class="mf">0.704372293431165977793198</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">]</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>Field reference</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Unit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>addresses</code></td>
+<td>string</td>
+<td>TRON address</td>
+<td>Wallet address.</td>
+</tr>
+<tr>
+<td><code>health</code></td>
+<td>number</td>
+<td>ratio</td>
+<td>Health factor. <code>&gt; 1</code> healthy, <code>≤ 1</code> liquidatable. <code>5.88</code> = very safe.</td>
+</tr>
+<tr>
+<td><code>totalCollateralValueInTrx</code></td>
+<td>number</td>
+<td>TRX</td>
+<td>Sum of collateral value (after <code>collateralFactor</code>).</td>
+</tr>
+<tr>
+<td><code>totalBorrowValueInTrx</code></td>
+<td>number</td>
+<td>TRX</td>
+<td>Sum of outstanding borrow value.</td>
+</tr>
+<tr>
+<td><code>liquidateStatusStartTime</code></td>
+<td>string|null</td>
+<td>ISO 8601</td>
+<td>Timestamp when this account first entered a liquidatable state, or <code>null</code> if safe.</td>
+</tr>
+<tr>
+<td><code>tokens[].address</code></td>
+<td>string</td>
+<td>TRON address</td>
+<td>jToken address of this position.</td>
+</tr>
+<tr>
+<td><code>tokens[].underlyingSymbol</code></td>
+<td>string</td>
+<td>text</td>
+<td>Underlying symbol, e.g. <code>USDD</code>.</td>
+</tr>
+<tr>
+<td><code>tokens[].entered</code></td>
+<td>integer</td>
+<td>0 / 1</td>
+<td><code>1</code> if the user has entered this market as collateral, <code>0</code> otherwise.</td>
+</tr>
+<tr>
+<td><code>tokens[].supplyBalanceJtoken</code></td>
+<td>number</td>
+<td>jToken units (8d)</td>
+<td>Supplied balance in jTokens.</td>
+</tr>
+<tr>
+<td><code>tokens[].supplyBalanceUnderlying</code></td>
+<td>number</td>
+<td>underlying</td>
+<td>Supplied balance in underlying.</td>
+</tr>
+<tr>
+<td><code>tokens[].borrowBalanceUnderlying</code></td>
+<td>number</td>
+<td>underlying</td>
+<td>Outstanding borrow in underlying.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="33-get-justlendliquidatehighriskaccountlist-highrisk-accounts">3.3 <code>GET /justlend/liquidate/highRiskAccountList</code> — High‑risk accounts<a class="headerlink" href="#33-get-justlendliquidatehighriskaccountlist-highrisk-accounts" title="Permanent link">&para;</a></h3>
+<p>Returns accounts that are currently liquidatable or close to it. Use this to drive liquidation bots.</p>
+<p><strong>Parameters:</strong> none.</p>
+<p><strong>Response data</strong></p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SUCCESS&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;updateTime&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1770275708508</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;jtokens&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;jUSDD&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;jTRX&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;...&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;...&quot;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;accounts&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;borrower&quot;</span><span class="p">:</span><span class="w">                </span><span class="s2">&quot;TLc34aTvy1vBFzLvM9oz36ihhb7sVpQmgQ&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;risk&quot;</span><span class="p">:</span><span class="w">                    </span><span class="s2">&quot;1.105684&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;totalCollateralUsd&quot;</span><span class="p">:</span><span class="w">      </span><span class="s2">&quot;234.063780&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;totalBorrowUsd&quot;</span><span class="p">:</span><span class="w">          </span><span class="s2">&quot;193.705172&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;liquidateStatusStartTime&quot;</span><span class="p">:</span><span class="mi">1770089973150</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;collateralTokenList&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;jtokenAddress&quot;</span><span class="p">:</span><span class="w">    </span><span class="s2">&quot;TR7BUFRQeq1w5jAZf1FKx85SHuX6PfMqsV&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;symbol&quot;</span><span class="p">:</span><span class="w">           </span><span class="s2">&quot;jETH&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;amount&quot;</span><span class="p">:</span><span class="w">           </span><span class="s2">&quot;11.03049909&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;price&quot;</span><span class="p">:</span><span class="w">            </span><span class="s2">&quot;21.090028146702653201&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;valueUsd&quot;</span><span class="p">:</span><span class="w">         </span><span class="s2">&quot;232.633536&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;exchangeRate&quot;</span><span class="p">:</span><span class="w">     </span><span class="s2">&quot;0.010021847796289808&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;collateralFactor&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0.750000000000000000&quot;</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">],</span>
+<span class="w">        </span><span class="nt">&quot;borrowTokenList&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;tokenAddress&quot;</span><span class="p">:</span><span class="w">     </span><span class="s2">&quot;TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;symbol&quot;</span><span class="p">:</span><span class="w">           </span><span class="s2">&quot;JST&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;amount&quot;</span><span class="p">:</span><span class="w">           </span><span class="s2">&quot;19.357667866419444238&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;price&quot;</span><span class="p">:</span><span class="w">            </span><span class="s2">&quot;0.040802750477000000&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;valueUsd&quot;</span><span class="p">:</span><span class="w">         </span><span class="s2">&quot;0.789846&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;exchangeRate&quot;</span><span class="p">:</span><span class="w">     </span><span class="s2">&quot;0.010481635809265784&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;collateralFactor&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0.600000000000000000&quot;</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">]</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>Field reference</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Unit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>updateTime</code></td>
+<td>integer</td>
+<td>epoch ms</td>
+<td>When the snapshot was computed.</td>
+</tr>
+<tr>
+<td><code>jtokens</code></td>
+<td>object</td>
+<td>symbol → address</td>
+<td>jToken symbol‑to‑address lookup. Same data as §2.</td>
+</tr>
+<tr>
+<td><code>accounts[].borrower</code></td>
+<td>string</td>
+<td>TRON address</td>
+<td>Borrower wallet.</td>
+</tr>
+<tr>
+<td><code>accounts[].risk</code></td>
+<td>string</td>
+<td>ratio</td>
+<td><strong>Higher = riskier.</strong> <code>&gt; 1</code> means the account is liquidatable now.</td>
+</tr>
+<tr>
+<td><code>accounts[].totalCollateralUsd</code></td>
+<td>string</td>
+<td>USD</td>
+<td>Total collateral value.</td>
+</tr>
+<tr>
+<td><code>accounts[].totalBorrowUsd</code></td>
+<td>string</td>
+<td>USD</td>
+<td>Total borrow value.</td>
+</tr>
+<tr>
+<td><code>accounts[].liquidateStatusStartTime</code></td>
+<td>integer</td>
+<td>epoch ms</td>
+<td>When the account first became liquidatable.</td>
+</tr>
+<tr>
+<td><code>accounts[].collateralTokenList[]</code></td>
+<td>array</td>
+<td>object</td>
+<td>One entry per collateral position (see below).</td>
+</tr>
+<tr>
+<td><code>accounts[].borrowTokenList[]</code></td>
+<td>array</td>
+<td>object</td>
+<td>One entry per borrow position (see below).</td>
+</tr>
+<tr>
+<td><code>collateralTokenList[].jtokenAddress</code></td>
+<td>string</td>
+<td>TRON address</td>
+<td>jToken address of the collateral.</td>
+</tr>
+<tr>
+<td><code>collateralTokenList[].amount</code></td>
+<td>string</td>
+<td>jToken units (8d)</td>
+<td>Amount of jTokens held as collateral.</td>
+</tr>
+<tr>
+<td><code>collateralTokenList[].price</code></td>
+<td>string</td>
+<td>USD</td>
+<td>Current price of the <strong>jToken</strong> in USD (already multiplied by <code>exchangeRate</code>).</td>
+</tr>
+<tr>
+<td><code>collateralTokenList[].valueUsd</code></td>
+<td>string</td>
+<td>USD</td>
+<td><code>amount × price</code>.</td>
+</tr>
+<tr>
+<td><code>collateralTokenList[].exchangeRate</code></td>
+<td>string</td>
+<td>underlying / jToken</td>
+<td>jToken → underlying conversion ratio.</td>
+</tr>
+<tr>
+<td><code>collateralTokenList[].collateralFactor</code></td>
+<td>string</td>
+<td>decimal (0–1)</td>
+<td>Collateral factor applied for risk calculation.</td>
+</tr>
+<tr>
+<td><code>borrowTokenList[].tokenAddress</code></td>
+<td>string</td>
+<td>TRON address</td>
+<td><strong>Underlying</strong> asset address (note: this list keys by underlying, not jToken).</td>
+</tr>
+<tr>
+<td><code>borrowTokenList[].amount</code></td>
+<td>string</td>
+<td>underlying</td>
+<td>Outstanding borrowed amount of underlying.</td>
+</tr>
+<tr>
+<td><code>borrowTokenList[].price</code></td>
+<td>string</td>
+<td>USD</td>
+<td>Underlying asset price.</td>
+</tr>
+<tr>
+<td><code>borrowTokenList[].valueUsd</code></td>
+<td>string</td>
+<td>USD</td>
+<td><code>amount × price</code>.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-usdd-supply-mining">4. USDD Supply Mining<a class="headerlink" href="#4-usdd-supply-mining" title="Permanent link">&para;</a></h2>
+<p>JustLend rewards users who <strong>supply into the USDD market (<code>jUSDD = TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf</code>)</strong> with extra USDD. Rewards are distributed in time‑bounded <strong>phases (cycles)</strong>; each phase publishes a Merkle root, and users claim by submitting their <code>(index, amount, proof)</code> to the on‑chain claim contract.</p>
+<blockquote>
+<p><strong>Reward = supplied‑USDD × <code>apy</code> × time_in_phase</strong>. Once a phase ends, the API exposes per‑user Merkle proofs the user submits on‑chain to claim accrued USDD.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Phase / Cycle</strong></td>
+<td>A reward window with a fixed <code>start</code> and <code>end</code> time. <code>currPhase</code> is the phase that is in progress now.</td>
+</tr>
+<tr>
+<td><strong>Phase status</strong></td>
+<td><code>0</code> = not started · <code>1</code> = ongoing · <code>2</code> = ended (finalized, claimable) · <code>3</code> = paused.</td>
+</tr>
+<tr>
+<td><strong>Mining APY</strong></td>
+<td>Annualized USDD bonus paid on top of the underlying market <code>supplyRate</code>. Decimal, e.g. <code>0.0917</code> = 9.17 %.</td>
+</tr>
+<tr>
+<td><strong>Claim</strong></td>
+<td>After a phase ends, users submit <code>(merkleIndex, index, amount, proof, merkleRoot)</code> on‑chain to receive USDD.</td>
+</tr>
+<tr>
+<td><strong>Markets covered</strong></td>
+<td>Currently only jUSDD. New markets may be added in the future.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="41-get-miningapy-mining-apy-per-market">4.1 <code>GET /mining/apy</code> — Mining APY per market<a class="headerlink" href="#41-get-miningapy-mining-apy-per-market" title="Permanent link">&para;</a></h3>
+<p>Returns the current USDD mining APY for every market that has supply‑mining enabled.</p>
+<p><strong>Parameters:</strong> none.</p>
+<p><strong>Response data</strong></p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SUCCESS&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;USDD&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.09175706</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>Field reference</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Unit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>key (top‑level)</td>
+<td>string</td>
+<td>jToken address</td>
+<td>The market the reward applies to. Look up in §2 (here <code>TKFREL…</code> is <code>jUSDD</code>).</td>
+</tr>
+<tr>
+<td><code>USDD</code></td>
+<td>number</td>
+<td>annualized decimal</td>
+<td>USDD mining APY paid to suppliers of this market. <code>0.09175706</code> = <strong>9.18 % APY</strong>, on top of <code>supplyRate</code>.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>If a market is missing from the response, mining is <strong>not active</strong> there. If <code>USDD</code> is <code>0</code>, mining is paused / waiting for the next phase.</p>
+</blockquote>
+<p><strong>Worked example</strong></p>
+<p>A user supplies <code>1,000</code> USDD into jUSDD. With <code>supplyRate = 0.012</code> and <code>apy = 0.09175706</code>:</p>
+<ul>
+<li>Base supply yield: <code>1000 × 0.012 = 12 USDD / year</code></li>
+<li>Mining bonus:     <code>1000 × 0.09175706 = 91.76 USDD / year</code></li>
+<li><strong>Combined:</strong>     <code>~103.76 USDD / year (≈ 10.38 % total APY)</code></li>
+</ul>
+<hr />
+<h3 id="42-get-miningreward-current-phase-status-for-a-user">4.2 <code>GET /mining/reward</code> — Current phase status for a user<a class="headerlink" href="#42-get-miningreward-current-phase-status-for-a-user" title="Permanent link">&para;</a></h3>
+<p>Returns the active and previous mining phase for the given user, per market.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>In</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>address</code></td>
+<td>query</td>
+<td>string</td>
+<td>yes</td>
+<td>Single TRON wallet address.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example request</strong></p>
+<div class="highlight"><pre><span></span><code>GET /mining/reward?address=T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb
+</code></pre></div>
+<p><strong>Response data</strong></p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SUCCESS&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;currPhase&quot;</span><span class="p">:</span><span class="w">         </span><span class="mi">64</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;currStartTime&quot;</span><span class="p">:</span><span class="w">     </span><span class="s2">&quot;2026-05-12T00:00:00Z&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;currEndTime&quot;</span><span class="p">:</span><span class="w">       </span><span class="s2">&quot;2026-05-19T00:00:00Z&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;currReward&quot;</span><span class="p">:</span><span class="w">        </span><span class="mf">0.0000</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;currRewardStatus&quot;</span><span class="p">:</span><span class="w">  </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;lastStartTime&quot;</span><span class="p">:</span><span class="w">     </span><span class="s2">&quot;2026-05-05T00:00:00Z&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;lastEndTime&quot;</span><span class="p">:</span><span class="w">       </span><span class="s2">&quot;2026-05-12T00:00:00Z&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;lastReward&quot;</span><span class="p">:</span><span class="w">        </span><span class="mf">0.0000</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;lastRewardStatus&quot;</span><span class="p">:</span><span class="w">  </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;price&quot;</span><span class="p">:</span><span class="w">             </span><span class="mf">1.000000000000000000</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>Field reference</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Unit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>key (top‑level)</td>
+<td>string</td>
+<td>jToken address</td>
+<td>Market the rewards refer to (<code>TKFREL…</code> = <code>jUSDD</code>).</td>
+</tr>
+<tr>
+<td><code>currPhase</code></td>
+<td>integer</td>
+<td>count</td>
+<td>Sequential phase number that is <strong>in progress</strong> now.</td>
+</tr>
+<tr>
+<td><code>currStartTime</code></td>
+<td>string</td>
+<td>ISO 8601 UTC</td>
+<td>Start of current phase.</td>
+</tr>
+<tr>
+<td><code>currEndTime</code></td>
+<td>string</td>
+<td>ISO 8601 UTC</td>
+<td>End of current phase.</td>
+</tr>
+<tr>
+<td><code>currReward</code></td>
+<td>number</td>
+<td>USDD</td>
+<td>Estimated/accrued reward for the user in the current phase. Updates over time.</td>
+</tr>
+<tr>
+<td><code>currRewardStatus</code></td>
+<td>integer</td>
+<td>enum</td>
+<td><code>0</code>=not started, <code>1</code>=ongoing, <code>2</code>=ended (claimable), <code>3</code>=paused.</td>
+</tr>
+<tr>
+<td><code>lastStartTime</code></td>
+<td>string</td>
+<td>ISO 8601 UTC</td>
+<td>Start of previous (most recently finalized) phase.</td>
+</tr>
+<tr>
+<td><code>lastEndTime</code></td>
+<td>string</td>
+<td>ISO 8601 UTC</td>
+<td>End of previous phase.</td>
+</tr>
+<tr>
+<td><code>lastReward</code></td>
+<td>number</td>
+<td>USDD</td>
+<td>Finalized reward for the user in the previous phase. Use <code>/mining/distributions</code> to fetch the claim proof.</td>
+</tr>
+<tr>
+<td><code>lastRewardStatus</code></td>
+<td>integer</td>
+<td>enum</td>
+<td>Same enum as <code>currRewardStatus</code>. Usually <code>2</code> (ended/claimable).</td>
+</tr>
+<tr>
+<td><code>price</code></td>
+<td>number</td>
+<td>USD</td>
+<td>Current price of the <strong>reward token</strong> (USDD ≈ 1 USD).</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="43-get-miningdistributions-claim-proofs-for-all-phases">4.3 <code>GET /mining/distributions</code> — Claim proofs for all phases<a class="headerlink" href="#43-get-miningdistributions-claim-proofs-for-all-phases" title="Permanent link">&para;</a></h3>
+<p>Returns <strong>every</strong> mining phase the user has ever been entitled to, including claimed and unclaimed phases. Each entry carries the Merkle proof needed to call the on‑chain claim function.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>In</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>address</code></td>
+<td>query</td>
+<td>string</td>
+<td>yes</td>
+<td>Single TRON wallet address.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example request</strong></p>
+<div class="highlight"><pre><span></span><code>GET /mining/distributions?address=T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb
+</code></pre></div>
+<p><strong>Response data</strong></p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SUCCESS&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;Phase 22&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;tokenAddress&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;TPYmHEhy5n8TCEfYGqW2rPxsghSfzghPDn&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;claimed&quot;</span><span class="p">:</span><span class="w">      </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;merkleIndex&quot;</span><span class="p">:</span><span class="w">  </span><span class="s2">&quot;0x00&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;index&quot;</span><span class="p">:</span><span class="w">        </span><span class="s2">&quot;0x0659&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;amount&quot;</span><span class="p">:</span><span class="w">       </span><span class="s2">&quot;0x6933158b3c05&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;merkleRoot&quot;</span><span class="p">:</span><span class="w">   </span><span class="s2">&quot;0x3fdc21ab4fed9e13714fa852ff2e659f9e32af553f4426810ff75e38ccf17a97&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;proof&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;0x6b734d20b9ca2a0dda57b184789dbb6df2d2993049a9365b6eafe932cd435255&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;0xb1c6c5a90e8c2b8e6b1aa9b2ffaef1f0a36c12c3f95dd84d96cd6f8a9b0a0a0a&quot;</span>
+<span class="w">      </span><span class="p">]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>Field reference</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Format</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>key (<code>Phase N</code>)</td>
+<td>string</td>
+<td>text</td>
+<td>Phase label, e.g. <code>"Phase 22"</code>. Phases are 1‑based and monotonically increasing.</td>
+</tr>
+<tr>
+<td><code>tokenAddress</code></td>
+<td>string</td>
+<td>TRON address</td>
+<td>Distribution contract address for this phase.</td>
+</tr>
+<tr>
+<td><code>claimed</code></td>
+<td>boolean</td>
+<td>true / false</td>
+<td><code>true</code> if the user has already claimed this phase, <code>false</code> if still claimable.</td>
+</tr>
+<tr>
+<td><code>merkleIndex</code></td>
+<td>string</td>
+<td>hex <code>uint256</code></td>
+<td>Index of the Merkle tree this phase belongs to (some contracts maintain multiple trees).</td>
+</tr>
+<tr>
+<td><code>index</code></td>
+<td>string</td>
+<td>hex <code>uint256</code></td>
+<td>Leaf index of the user inside the Merkle tree.</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>string</td>
+<td>hex <code>uint256</code></td>
+<td>Claimable reward amount in <strong>underlying smallest units</strong> (USDD = 6 decimals).</td>
+</tr>
+<tr>
+<td><code>merkleRoot</code></td>
+<td>string</td>
+<td>hex <code>bytes32</code></td>
+<td>Merkle root of this phase.</td>
+</tr>
+<tr>
+<td><code>proof</code></td>
+<td>array&lt;string&gt;</td>
+<td>hex <code>bytes32</code> each</td>
+<td>Merkle proof from the user's leaf to <code>merkleRoot</code>.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>All hex strings are bare <code>0x…</code> values.</strong> Older docs may show a leading <code>:</code> (e.g. <code>:0x6933158b3c05</code>); that colon is a delimiter and is <strong>not</strong> part of the value.</p>
+</blockquote>
+<h4 id="decoding-amount">Decoding <code>amount</code><a class="headerlink" href="#decoding-amount" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="c1"># Python</span>
+<span class="n">hex_amount</span> <span class="o">=</span> <span class="s2">&quot;0x6933158b3c05&quot;</span>
+<span class="n">raw</span>        <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">hex_amount</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>              <span class="c1"># 115698932195333</span>
+<span class="n">human_usdd</span> <span class="o">=</span> <span class="n">raw</span> <span class="o">/</span> <span class="mi">10</span> <span class="o">**</span> <span class="mi">6</span>                    <span class="c1"># 115698932.195333</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1">// JS / TS — use BigInt for safety</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">raw</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="nb">BigInt</span><span class="p">(</span><span class="s2">&quot;0x6933158b3c05&quot;</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">humanUsdd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Number</span><span class="p">(</span><span class="nx">raw</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1e6</span><span class="p">;</span>
+</code></pre></div>
+<h4 id="typical-claim-workflow">Typical claim workflow<a class="headerlink" href="#typical-claim-workflow" title="Permanent link">&para;</a></h4>
+<ol>
+<li><code>GET /mining/distributions?address={user}</code></li>
+<li>Filter entries where <code>claimed == false</code>.</li>
+<li>For each unclaimed phase, call the distribution contract's <code>claim</code> function with <code>(merkleIndex, index, amount, proof)</code> (the contract verifies them against the stored <code>merkleRoot</code>).</li>
+<li>After the on‑chain transaction succeeds, the next API call returns <code>claimed: true</code>.</li>
+</ol>
+<hr />
+<h2 id="5-staked-trx-energy-rental">5. Staked TRX &amp; Energy Rental<a class="headerlink" href="#5-staked-trx-energy-rental" title="Permanent link">&para;</a></h2>
+<h3 id="51-get-lendstrx-strx-market-energy-rental-snapshot">5.1 <code>GET /lend/strx</code> — sTRX market &amp; Energy Rental snapshot<a class="headerlink" href="#51-get-lendstrx-strx-market-energy-rental-snapshot" title="Permanent link">&para;</a></h3>
+<p>Returns global state for the sTRX liquid‑staking pool and the Energy Rental market.</p>
+<p><strong>Parameters:</strong> none.</p>
+<p><strong>Response data</strong></p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SUCCESS&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;stakeInfo&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;strxAddress&quot;</span><span class="p">:</span><span class="w">         </span><span class="s2">&quot;TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;symbol&quot;</span><span class="p">:</span><span class="w">              </span><span class="s2">&quot;sTRX&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;decimal&quot;</span><span class="p">:</span><span class="w">             </span><span class="mi">18</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;underlyingDecimal&quot;</span><span class="p">:</span><span class="w">   </span><span class="mi">6</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;exchangeRate&quot;</span><span class="p">:</span><span class="w">        </span><span class="mf">1.181813870419231022</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;supplyRate&quot;</span><span class="p">:</span><span class="w">          </span><span class="mf">0.03937302</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;totalSupply&quot;</span><span class="p">:</span><span class="w">         </span><span class="mf">6553955254.250487546804870562</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;totalUnderlying&quot;</span><span class="p">:</span><span class="w">     </span><span class="mf">7745555225.580224</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;totalSupplyUsd&quot;</span><span class="p">:</span><span class="w">      </span><span class="mf">1729932328.75828661</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;trxPrice&quot;</span><span class="p">:</span><span class="w">            </span><span class="mf">0.223345167438102719</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;reserse&quot;</span><span class="p">:</span><span class="w">             </span><span class="mf">71933070.321420</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;rentReserveFactor&quot;</span><span class="p">:</span><span class="w">   </span><span class="mf">0.200000000000000000</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;rewardReserveFactor&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.200000000000000000</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;rentInfo&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;rentMarketAddress&quot;</span><span class="p">:</span><span class="w">       </span><span class="s2">&quot;TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;priceFor10KEnergByRent&quot;</span><span class="p">:</span><span class="w">  </span><span class="mf">0.65530713</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;priceFor10KEnergByStake&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">885.28697646</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;priceFor10KEnergByBurn&quot;</span><span class="p">:</span><span class="w">  </span><span class="mf">4.20000000</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;totalDelegatedEnergyTrx&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">162748507.908930</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;totalDelegatedEnergyRate&quot;</span><span class="p">:</span><span class="mf">0.03254970</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong><code>stakeInfo</code> field reference</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Unit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>strxAddress</code></td>
+<td>string</td>
+<td>TRON address</td>
+<td>sTRX token contract.</td>
+</tr>
+<tr>
+<td><code>symbol</code></td>
+<td>string</td>
+<td>text</td>
+<td>Token symbol (<code>sTRX</code>).</td>
+</tr>
+<tr>
+<td><code>decimal</code></td>
+<td>integer</td>
+<td>count</td>
+<td>sTRX decimals (<code>18</code>).</td>
+</tr>
+<tr>
+<td><code>underlyingDecimal</code></td>
+<td>integer</td>
+<td>count</td>
+<td>TRX decimals (<code>6</code>).</td>
+</tr>
+<tr>
+<td><code>exchangeRate</code></td>
+<td>number</td>
+<td>TRX per sTRX</td>
+<td>Current redemption rate. <code>1.18</code> means 1 sTRX = 1.18 TRX.</td>
+</tr>
+<tr>
+<td><code>supplyRate</code></td>
+<td>number</td>
+<td>annualized decimal</td>
+<td>sTRX staking APY. <code>0.0394</code> = <code>3.94 % APY</code>.</td>
+</tr>
+<tr>
+<td><code>totalSupply</code></td>
+<td>number</td>
+<td>sTRX units</td>
+<td>Total sTRX issued.</td>
+</tr>
+<tr>
+<td><code>totalUnderlying</code></td>
+<td>number</td>
+<td>TRX</td>
+<td>Total TRX held by the pool.</td>
+</tr>
+<tr>
+<td><code>totalSupplyUsd</code></td>
+<td>number</td>
+<td>USD</td>
+<td>TVL of the sTRX pool in USD.</td>
+</tr>
+<tr>
+<td><code>trxPrice</code></td>
+<td>number</td>
+<td>USD</td>
+<td>Current TRX price.</td>
+</tr>
+<tr>
+<td><code>reserse</code></td>
+<td>number</td>
+<td>TRX</td>
+<td>Protocol reserves (<strong>typo preserved for backwards compatibility</strong> — read as <code>reserves</code>).</td>
+</tr>
+<tr>
+<td><code>rentReserveFactor</code></td>
+<td>number</td>
+<td>decimal (0–1)</td>
+<td>Share of rental revenue taken as reserve.</td>
+</tr>
+<tr>
+<td><code>rewardReserveFactor</code></td>
+<td>number</td>
+<td>decimal (0–1)</td>
+<td>Share of staking reward taken as reserve.</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>rentInfo</code> field reference</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Unit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>rentMarketAddress</code></td>
+<td>string</td>
+<td>TRON address</td>
+<td>Energy Rental contract.</td>
+</tr>
+<tr>
+<td><code>priceFor10KEnergByRent</code></td>
+<td>number</td>
+<td>TRX / 10 000 ⚡</td>
+<td>TRX cost to obtain 10 000 Energy via <strong>rental</strong> (cheapest path).</td>
+</tr>
+<tr>
+<td><code>priceFor10KEnergByStake</code></td>
+<td>number</td>
+<td>TRX / 10 000 ⚡</td>
+<td>TRX <strong>stake</strong> required to produce 10 000 Energy yourself.</td>
+</tr>
+<tr>
+<td><code>priceFor10KEnergByBurn</code></td>
+<td>number</td>
+<td>TRX / 10 000 ⚡</td>
+<td>TRX cost to obtain 10 000 Energy by <strong>burning</strong> TRX in a transaction.</td>
+</tr>
+<tr>
+<td><code>totalDelegatedEnergyTrx</code></td>
+<td>number</td>
+<td>TRX</td>
+<td>Total TRX delegated through the rental market.</td>
+</tr>
+<tr>
+<td><code>totalDelegatedEnergyRate</code></td>
+<td>number</td>
+<td>decimal (0–1)</td>
+<td>Utilization rate of the rental pool.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="52-get-lendstrxstakeaccount-user-strx-positions">5.2 <code>GET /lend/strxStake/account</code> — User sTRX positions<a class="headerlink" href="#52-get-lendstrxstakeaccount-user-strx-positions" title="Permanent link">&para;</a></h3>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>In</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>addresses</code></td>
+<td>query</td>
+<td>string</td>
+<td>yes</td>
+<td>One or more TRON addresses, comma‑separated.</td>
+</tr>
+<tr>
+<td><code>pageNo</code></td>
+<td>query</td>
+<td>integer</td>
+<td>no</td>
+<td>1‑based page number. Default <code>1</code>.</td>
+</tr>
+<tr>
+<td><code>pageSize</code></td>
+<td>query</td>
+<td>integer</td>
+<td>no</td>
+<td>Page size. Default <code>10</code>, max <code>1000</code>.</td>
+</tr>
+<tr>
+<td><code>minStrxBalance</code></td>
+<td>query</td>
+<td>number</td>
+<td>no</td>
+<td>Only include accounts with sTRX balance ≥ this threshold.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Response data</strong></p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SUCCESS&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;totalCount&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;totalPage&quot;</span><span class="p">:</span><span class="w">  </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;list&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;addresses&quot;</span><span class="p">:</span><span class="w">             </span><span class="s2">&quot;TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;sTRXBalance&quot;</span><span class="p">:</span><span class="w">           </span><span class="mf">1.000000000000000000</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;availableWithdrawAmount&quot;</span><span class="p">:</span><span class="mf">150865439.643028</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;unstakingAmount&quot;</span><span class="p">:</span><span class="w">       </span><span class="mf">24120999.583032</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Unit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>addresses</code></td>
+<td>string</td>
+<td>—</td>
+<td>User wallet.</td>
+</tr>
+<tr>
+<td><code>sTRXBalance</code></td>
+<td>number</td>
+<td>sTRX</td>
+<td>Current sTRX balance.</td>
+</tr>
+<tr>
+<td><code>unstakingAmount</code></td>
+<td>number</td>
+<td>TRX</td>
+<td>Amount currently in the un‑staking cooldown period.</td>
+</tr>
+<tr>
+<td><code>availableWithdrawAmount</code></td>
+<td>number</td>
+<td>TRX</td>
+<td>TRX already through the cooldown and ready to withdraw.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="53-get-lendrentresourceaccount-user-energy-rental-positions">5.3 <code>GET /lend/rentResource/account</code> — User Energy Rental positions<a class="headerlink" href="#53-get-lendrentresourceaccount-user-energy-rental-positions" title="Permanent link">&para;</a></h3>
+<p>Currently only <strong>Energy</strong> rentals are exposed.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>In</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>addresses</code></td>
+<td>query</td>
+<td>string</td>
+<td>yes</td>
+<td>One or more TRON addresses, comma‑separated.</td>
+</tr>
+<tr>
+<td><code>pageNo</code></td>
+<td>query</td>
+<td>integer</td>
+<td>no</td>
+<td>1‑based page number. Default <code>1</code>.</td>
+</tr>
+<tr>
+<td><code>pageSize</code></td>
+<td>query</td>
+<td>integer</td>
+<td>no</td>
+<td>Page size. Default <code>10</code>, max <code>1000</code>.</td>
+</tr>
+<tr>
+<td><code>minStrxBalance</code></td>
+<td>query</td>
+<td>number</td>
+<td>no</td>
+<td>Filter by minimum sTRX balance held by the renter.</td>
+</tr>
+<tr>
+<td><code>maxRemainingRentAmount</code></td>
+<td>query</td>
+<td>number</td>
+<td>no</td>
+<td>Only include orders with remaining rent ≤ this threshold.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Response data</strong></p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SUCCESS&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;totalCount&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;totalPage&quot;</span><span class="p">:</span><span class="w">  </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;list&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;rentType&quot;</span><span class="p">:</span><span class="w">         </span><span class="s2">&quot;Energy&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;renter&quot;</span><span class="p">:</span><span class="w">           </span><span class="s2">&quot;TWdWEHRLPBVGsXhwjSUv45XwnsfUHXydJa&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;receiver&quot;</span><span class="p">:</span><span class="w">         </span><span class="s2">&quot;TWdWEHRLPBVGsXhwjSUv45XwnsfUHXydJa&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;delegatedAmount&quot;</span><span class="p">:</span><span class="w">  </span><span class="mf">10000.000000</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;rentRemainAmount&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">8500.000000</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;rentAmountPerDay&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1500.000000</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Unit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>rentType</code></td>
+<td>string</td>
+<td>enum</td>
+<td><code>"Energy"</code>. Bandwidth not exposed yet.</td>
+</tr>
+<tr>
+<td><code>renter</code></td>
+<td>string</td>
+<td>TRON address</td>
+<td>The account paying the rent.</td>
+</tr>
+<tr>
+<td><code>receiver</code></td>
+<td>string</td>
+<td>TRON address</td>
+<td>The account receiving the delegated Energy.</td>
+</tr>
+<tr>
+<td><code>delegatedAmount</code></td>
+<td>number</td>
+<td>TRX</td>
+<td>TRX equivalent of the energy currently delegated.</td>
+</tr>
+<tr>
+<td><code>rentRemainAmount</code></td>
+<td>number</td>
+<td>TRX</td>
+<td>TRX prepayment still remaining for this order.</td>
+</tr>
+<tr>
+<td><code>rentAmountPerDay</code></td>
+<td>number</td>
+<td>TRX / day</td>
+<td>Daily TRX cost of the rental order.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="6-quick-reference-for-ai-agents">6. Quick reference for AI agents<a class="headerlink" href="#6-quick-reference-for-ai-agents" title="Permanent link">&para;</a></h2>
+<p>If you are an LLM tool building requests against this API, follow these rules:</p>
+<ol>
+<li><strong>All endpoints are <code>GET</code> against <code>https://openapi.just.network</code>.</strong></li>
+<li><strong>All responses are wrapped in <code>{code, message, data}</code>. Always check <code>code == 0</code> before reading <code>data</code>.</strong></li>
+<li><strong>Numbers are already de‑scaled</strong> — never multiply by <code>1e18</code> / <code>1e6</code> again unless explicitly told (the only exception is <code>amount</code> / <code>index</code> in <code>/mining/distributions</code>, which are hex <code>uint256</code> in raw smallest units).</li>
+<li><strong>Rates (<code>*Rate</code>, <code>apy</code>) are annualized decimals.</strong> Multiply by 100 for <code>%</code>.</li>
+<li><strong>A market's effective supply APY</strong> = <code>tokenList[i].supplyRate</code> + (mining apy if <code>tokenList[i].address</code> appears in <code>/mining/apy</code>, else 0).</li>
+<li><strong>Address‑keyed objects</strong> — look up the jToken address in §2 to know which market a sub‑object refers to.</li>
+<li><strong>Liquidations</strong> — pull <code>/justlend/liquidate/highRiskAccountList</code> periodically; <code>risk &gt; 1</code> ⇒ liquidatable.</li>
+<li><strong>Mining claims</strong> — every entry of <code>/mining/distributions</code> with <code>claimed == false</code> is a free transaction the user should submit.</li>
+</ol>
+<p>The machine‑readable OpenAPI 3.1 spec lives at <a href="justlend_apis.yaml"><code>apis/justlend_apis.yaml</code></a> and stays consistent with this page.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+		  <hr class="content-footer-divider">  <!-- 添加的水平线 -->
+      	    	  <footer class="md-footer">
+  
+  <!--div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
       <div class="md-copyright">
   
@@ -604,86 +3408,26 @@
     </div>
   </div-->
 </footer>
-</article>
-</div>
+                
+              </article>
+            </div>
+          
+          
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
-</div>
-</main>
-</div>
-<div class="md-dialog" data-md-component="dialog">
-<div class="md-dialog__inner md-typeset"></div>
-</div>
-<script id="__config" type="application/json">{"base": "../..", "features": ["navigation.sections", "toc.integrate", "search.highlight", "search.suggest", "content.code.annotate", "content.tooltips"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
-<script src="../../assets/javascripts/bundle.c8b220af.min.js"></script>
-<script>document$.subscribe(() => {
-            window.update_swagger_ui_iframe_height = function (id) {
-                var iFrameID = document.getElementById(id);
-                if (iFrameID) {
-                    full_height = (iFrameID.contentWindow.document.body.scrollHeight + 80) + "px";
-                    iFrameID.height = full_height;
-                    iFrameID.style.height = full_height;
-                }
-            }
+        </div>
         
-            let iframe_id_list = []
-            var iframes = document.getElementsByClassName("swagger-ui-iframe");
-            for (var i = 0; i < iframes.length; i++) { 
-                iframe_id_list.push(iframes[i].getAttribute("id"))
-            }
-            let ticking = false;
-            document.addEventListener('scroll', function(e) {
-                if (!ticking) {
-                    window.requestAnimationFrame(()=> {
-                        let half_vh = window.innerHeight/2;
-                        for(var i = 0; i < iframe_id_list.length; i++) {
-                            let element = document.getElementById(iframe_id_list[i])
-                            if(element==null){
-                                return
-                            }
-                            let diff = element.getBoundingClientRect().top
-                            if(element.contentWindow.update_top_val){
-                                element.contentWindow.update_top_val(half_vh - diff)
-                            }
-                        }
-                        ticking = false;
-                    });
-                    ticking = true;
-                }
-            });
-        
-            const dark_scheme_name = "slate"
-            
-            const schemeAttr = document.body.getAttribute("data-md-color-scheme");
-            const isMediaPrefersScheme = document.body.getAttribute("data-md-color-media") === "(prefers-color-scheme: dark)";
-
-            if (!isMediaPrefersScheme) {
-                window.__init_is_dark_mode = (schemeAttr === dark_scheme_name);
-            } else {
-                const computedScheme = window.getComputedStyle(document.body).getPropertyValue('color-scheme');
-                window.__init_is_dark_mode = computedScheme === "dark";
-            }
-            const options = {
-                attributeFilter: ['data-md-color-scheme'],
-            };
-            function color_scheme_callback(mutations) {
-                for (let mutation of mutations) {
-                    if (mutation.attributeName === "data-md-color-scheme") {
-                        scheme = document.body.getAttribute("data-md-color-scheme")
-                        var iframe_list = document.getElementsByClassName("swagger-ui-iframe")
-                        for(var i = 0; i < iframe_list.length; i++) {
-                            var ele = iframe_list.item(i);
-                            if (ele) {
-                                if (scheme === dark_scheme_name) {
-                                    ele.contentWindow.enable_dark_mode();
-                                } else {
-                                    ele.contentWindow.disable_dark_mode();
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            observer = new MutationObserver(color_scheme_callback);
-            observer.observe(document.body, options);
-            })</script></body>
+      </main>
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.sections", "toc.integrate", "search.highlight", "search.suggest", "content.code.annotate", "content.tooltips"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.c8b220af.min.js"></script>
+      
+    
+  </body>
 </html>

@@ -1,1176 +1,864 @@
-openapi: 3.1.1
+openapi: 3.1.0
 info:
     title: JustLend DAO API
-    version: 1.0.0
+    version: '1.0.0'
+    summary: Public read‑only API for JustLend DAO protocol data.
+    description: |
+        Public REST endpoints for querying JustLend DAO protocol state:
+        lending markets, user positions, liquidation risk, USDD supply‑mining
+        rewards, sTRX staking, and Energy Rental.
 
+        ## Conventions
+
+        * **Envelope** — every successful response is `{ code: 0, message: "SUCCESS", data: { ... } }`.
+        * **Addresses** — TRON Base58 (`T...`, 34 chars).
+        * **Numbers** — already de‑scaled to human‑readable units unless explicitly noted.
+            * `*Rate` and `apy` fields are **annualized decimals** (`0.0917` = 9.17 %).
+            * `*Factor` fields are decimals in `[0, 1]` (`0.75` = 75 %).
+            * Amounts in `cash` / `reserves` / `totalBorrows` / `supplyBalanceUnderlying` etc. are already in underlying units.
+            * jToken amounts (`totalSupply` of `/lend/jtoken`, `supplyBalanceJtoken`) are in jToken units (8 decimals).
+        * **Hex numbers** — `amount`, `index`, `merkleIndex`, `merkleRoot`, `proof` returned by `/mining/distributions` are bare `0x…` hex `uint256`. Pass directly to the on‑chain claim contract; decode the amount with `parseInt(hex, 16) / 1e6` for USDD.
+        * **Mining APY** — paid on top of `supplyRate`. Effective supply APY = `supplyRate + apy`.
+        * **Pagination** — `pageNo` is 1‑based, default `1`. `pageSize` default `10`, max `1000`.
+        * **Errors** — non‑zero `code` plus an RFC 7807 body. See the `Error` schema.
+
+        See [`/developers/apis`](https://docs.justlend.org/developers/apis) for the
+        human‑readable version with tables, worked examples, and the jToken
+        address reference.
 
 servers:
     - url: https://openapi.just.network
-    - url: '{protocol}://openapi.just.network/{path}'
-      description: Responds with your request data.
-      variables:
-          protocol:
-              enum:
-                  - https
-              default: https
-          path:
-              default: ''
+      description: Production
 
 tags:
     - name: Supply and Borrow Market
-    - name: Staked TRX Market and Energy Rental
+      description: |
+          Core lending protocol. Query market parameters, per‑user positions,
+          and liquidatable accounts.
+    - name: Mining
+      description: |
+          USDD supply‑mining rewards. Suppliers of jUSDD
+          (`TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf`) earn additional USDD distributed
+          in time‑bounded **phases**. Use these endpoints to query the active
+          APY, per‑user phase status, and Merkle claim proofs.
+    - name: Staked TRX and Energy Rental
+      description: |
+          sTRX liquid‑staking pool and the Energy Rental market.
 
 paths:
-    '/lend/jtoken':
+    /lend/jtoken:
         get:
-            tags:
-                - Supply and Borrow Market
-            summary: Get Supply and Borrow Market Information
-            description: Query to get all the supply and borrow market information, which includes token information of each market.
-            parameters:
-                - '$ref': '#/components/parameters/noParameters'
+            tags: [Supply and Borrow Market]
+            operationId: listMarkets
+            summary: List all SBM markets
+            description: |
+                Returns the on‑chain state of every Supply & Borrow market:
+                rates, total supply/borrow, exchange rate, oracle price, and
+                collateral factor.
             responses:
                 '200':
-                    description: Return the list of market information.
+                    description: Market list.
                     content:
                         application/json:
                             schema:
-                                type: object
-                                properties:
-                                    code:
-                                        type: integer
-                                        description: Status code of the response, 0 means success.
-                                        examples:
-                                            - 0
-                                    data:
-                                        type: object
-                                        description: Token information of each market.
-                                        properties:
-                                            tokenList:
-                                                type: array
-                                                items:
-                                                    '$ref': '#/components/schemas/tokenList'
-                                    message:
-                                        type: string
-                                        description: Response message, eg.SUCCESS.
-                                        examples:
-                                            - SUCCESS
+                                $ref: '#/components/schemas/MarketListResponse'
                 '400':
-                    description: Bad Request
-                    content:
-                        application/json:
-                            schema:
-                                '$ref': '#/components/responses/BadRequest'
-    '/lend/account':
+                    $ref: '#/components/responses/BadRequest'
+
+    /lend/account:
         get:
-            tags:
-                - Supply and Borrow Market
-            summary: Get Account Information
-            description: Query to get the SBM user account information. (To pass parameters to obtain specific information, please click 「Test」and fill in the address information in the Query parameters section.)
+            tags: [Supply and Borrow Market]
+            operationId: getAccount
+            summary: Get a user's SBM positions
+            description: |
+                Returns each queried wallet's supply / borrow positions, health
+                factor, and totals.
             parameters:
-                - '$ref': '#/components/parameters/addresses'
-                - '$ref': '#/components/parameters/minBorrowValueInTrx'
-                - '$ref': '#/components/parameters/maxHealth'
-                - '$ref': '#/components/parameters/pageNo'
-                - '$ref': '#/components/parameters/pageSize'
+                - $ref: '#/components/parameters/addresses'
+                - $ref: '#/components/parameters/minBorrowValueInTrx'
+                - $ref: '#/components/parameters/maxHealth'
+                - $ref: '#/components/parameters/pageNo'
+                - $ref: '#/components/parameters/pageSize'
             responses:
                 '200':
-                    description: Return the list of user account information.
+                    description: User account list.
                     content:
                         application/json:
                             schema:
-                                type: object
-                                properties:
-                                    code:
-                                        type: integer
-                                        description: Status code of the response, 0 means success.
-                                        examples:
-                                            - 0
-                                    data:
-                                        type: object
-                                        description: User token information.
-                                        properties:
-                                            totalPage:
-                                                type: integer
-                                                description: Total number of pages.
-                                            list:
-                                                type: array
-                                                items:
-                                                    '$ref': '#/components/schemas/list'
-                                            totalCount:
-                                                type: integer
-                                                description: Total count of user tokens.
-                                    message:
-                                        type: string
-                                        description: Response message, eg.SUCCESS.
-                                        examples:
-                                            - SUCCESS
+                                $ref: '#/components/schemas/AccountListResponse'
                 '400':
-                    description: Bad Request
-                    content:
-                        application/json:
-                            schema:
-                                '$ref': '#/components/responses/BadRequest'
-    '/justlend/liquidate/highRiskAccountList':
+                    $ref: '#/components/responses/BadRequest'
+
+    /justlend/liquidate/highRiskAccountList:
         get:
-            tags:
-                - Supply and Borrow Market
-            summary: Get High-Risk Liquidation Account Information
-            description: Query to get a list of high-risk liquidation accounts in the JustLend DAO lending protocol to identify liquidated accounts.
-            parameters:
-                - '$ref': '#/components/parameters/noParameters'
+            tags: [Supply and Borrow Market]
+            operationId: listHighRiskAccounts
+            summary: List high‑risk / liquidatable accounts
+            description: |
+                Returns accounts whose health factor is at or near the
+                liquidation threshold. `risk > 1` means the account is
+                liquidatable now.
             responses:
                 '200':
-                    description: Return a list of high-risk liquidation accounts.
+                    description: High‑risk account list.
                     content:
                         application/json:
                             schema:
-                                type: object
-                                properties:
-                                    code:
-                                        type: integer
-                                        description: Status code of the response, 0 means success.
-                                        examples:
-                                            - 0
-                                    data:
-                                        type: object
-                                        description: Response message data.
-                                        properties:
-                                            jtokens:
-                                                type: array
-                                                description: jToken mapping table to addresses.
-                                                items:
-                                                    '$ref': '#/components/schemas/jTokenToAddress'
-                                            updateTime:
-                                                type: long
-                                                description: Data update timestamp (milliseconds).
-                                                examples:
-                                                    - 1770275708508
-                                            accounts:
-                                                type: array
-                                                description: List of high-risk accounts.
-                                                items:
-                                                    '$ref': '#/components/schemas/highRiskAccounts'
-                                    message:
-                                        type: string
-                                        description: Response message, eg.SUCCESS.
-                                        examples:
-                                            - SUCCESS
+                                $ref: '#/components/schemas/HighRiskAccountListResponse'
                 '400':
-                    description: Bad Request
-                    content:
-                        application/json:
-                            schema:
-                                '$ref': '#/components/responses/BadRequest'
-    '/mining/reward':
+                    $ref: '#/components/responses/BadRequest'
+
+    /mining/apy:
         get:
-            tags:
-                - Supply and Borrow Market
-            summary: Get User Supply Mining Reward Information
-            description: Query to get user's the latest usdd mining reward information, which includes the current mining phase and its rewards, mining start time and end time. （To pass parameters to obtain specific information, please click 「Test」and fill in the address information in the Query parameters section）
-            parameters:
-                - '$ref': '#/components/parameters/address'
-                - '$ref': '#/components/parameters/address1'
+            tags: [Mining]
+            operationId: getMiningApy
+            summary: Get USDD mining APY per market
+            description: |
+                Returns the current USDD supply‑mining APY for every market
+                that has mining enabled. The response is keyed by jToken
+                address (currently only `TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf` —
+                jUSDD).
+
+                The value is an **annualized decimal**: `0.09175706` = 9.18 %.
+                It is paid on top of `supplyRate` returned by `/lend/jtoken`.
+
+                A user's effective supply APY in this market is
+                `supplyRate + apy`.
             responses:
                 '200':
-                    description: Returns the user's supply mining reward information.
+                    description: Mining APY per market.
                     content:
                         application/json:
                             schema:
-                                type: object
-                                properties:
-                                    code:
-                                        type: integer
-                                        description: Status code of the response, 0 means success.
-                                        examples:
-                                            - 0
-                                    data:
-                                        type: object
-                                        description: Reward information for each pool.
-                                        properties:
-                                            TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf:
-                                                type: object
-                                                '$ref': '#/components/schemas/USDD'
-                                    message:
-                                        type: string
-                                        description: Response message, eg.SUCCESS.
-                                        examples:
-                                            - SUCCESS
+                                $ref: '#/components/schemas/MiningApyResponse'
+                            example:
+                                code: 0
+                                message: SUCCESS
+                                data:
+                                    TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf:
+                                        USDD: 0.09175706
                 '400':
-                    description: Bad Request
-                    content:
-                        application/json:
-                            schema:
-                                '$ref': '#/components/responses/BadRequest'
-    '/mining/apy':
+                    $ref: '#/components/responses/BadRequest'
+
+    /mining/reward:
         get:
-            tags:
-                - Supply and Borrow Market
-            summary: Get Market Mining APY Information
-            description: Query to get the mining APY information of each market's USDD rewards. The Mining APY for each market will be adjusted according to market conditions. Currently, the supply mining activities are mainly in the USDD market, and new markets may be added in the future based on market demand.
+            tags: [Mining]
+            operationId: getMiningReward
+            summary: Get current/last phase status for a user
+            description: |
+                Returns the user's status in the current and previous USDD
+                mining phase for each market with mining enabled.
+
+                Each phase has a `start` time, `end` time, accrued reward, and
+                a status enum:
+
+                | `*RewardStatus` | Meaning                             |
+                |-----------------|-------------------------------------|
+                | `0`             | Phase not started                   |
+                | `1`             | Phase in progress                   |
+                | `2`             | Phase ended (finalized / claimable) |
+                | `3`             | Phase paused                        |
+
+                Once a phase reaches status `2`, call `/mining/distributions`
+                to fetch the Merkle proof needed to claim on‑chain.
             parameters:
-                - '$ref': '#/components/parameters/noParameters'
+                - $ref: '#/components/parameters/addressQuery'
             responses:
                 '200':
-                    description: Return the mining APY information of each market's USDD rewards.
+                    description: User's mining phase status per market.
                     content:
                         application/json:
                             schema:
-                                type: object
-                                properties:
-                                    code:
-                                        type: integer
-                                        description: Status code of the response, 0 means success.
-                                        examples:
-                                            - 0
-                                    data:
-                                        type: object
-                                        description: Mining APY information of each market.
-                                        properties:
-                                            TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf:
-                                                type: object
-                                                '$ref': '#/components/schemas/USDDapy'
-                                    message:
-                                        type: string
-                                        description: Response message, eg.SUCCESS.
-                                        examples:
-                                            - SUCCESS
+                                $ref: '#/components/schemas/MiningRewardResponse'
                 '400':
-                    description: Bad Request
-                    content:
-                        application/json:
-                            schema:
-                                '$ref': '#/components/responses/BadRequest'
-    '/mining/distributions':
+                    $ref: '#/components/responses/BadRequest'
+
+    /mining/distributions:
         get:
-            tags:
-                - Supply and Borrow Market
-            summary: Get User Supply Mining Reward Distributions
-            description: Query to get user's all reward distributions, including mining token address, if the mining reward has been claimed or not claimed, and the reward amount in the corresponding cycle. (To pass parameters to obtain specific information, please click 「Test」and fill in the address information in the Query parameters section.)
+            tags: [Mining]
+            operationId: getMiningDistributions
+            summary: Get Merkle claim proofs for all phases
+            description: |
+                Returns every mining phase the user has ever been entitled to,
+                claimed or unclaimed. Each entry carries the data needed to
+                claim on‑chain: `merkleIndex`, `index`, `amount` (hex
+                `uint256`), `merkleRoot`, and `proof`.
+
+                **Decoding amount** — `parseInt(amount, 16) / 1e6` ⇒ USDD.
+
+                **Claim flow** — filter `claimed == false`, then call the
+                distribution contract with `(merkleIndex, index, amount, proof)`
+                per phase.
             parameters:
-                - '$ref': '#/components/parameters/address'
-                - '$ref': '#/components/parameters/address1'
+                - $ref: '#/components/parameters/addressQuery'
             responses:
                 '200':
-                    description: Return the user's all reward cycles, including those that have been claimed and those that have not been claimed. Filter out the cycles where claimed is false, that is, the unclaimed reward cycles.
+                    description: Per‑phase reward and Merkle proof list.
                     content:
                         application/json:
                             schema:
-                                type: object
-                                properties:
-                                    code:
-                                        type: integer
-                                        description: Status code of the response, 0 means success.
-                                        examples:
-                                            - 0
-                                    data:
-                                        type: object
-                                        description: Reward information for each mining period.
-                                        properties:
-                                            Phase 22:
-                                                type: object
-                                                description: The phase of 22nd supply mining reward information
-                                                '$ref': '#/components/schemas/rewardDistribution'
-                                    message:
-                                        type: string
-                                        description: Response message, eg.SUCCESS.
-                                        examples:
-                                            - SUCCESS
+                                $ref: '#/components/schemas/MiningDistributionsResponse'
                 '400':
-                    description: Bad Request
-                    content:
-                        application/json:
-                            schema:
-                                '$ref': '#/components/responses/BadRequest'
-    '/lend/strx':
+                    $ref: '#/components/responses/BadRequest'
+
+    /lend/strx:
         get:
-            tags:
-                - Staked TRX Market and Energy Rental
-            summary: Get Staked TRX and Energy Rental Markets Information
-            description: Query to get all the the sTRX staking and energy rental markets information.
-            parameters:
-                - '$ref': '#/components/parameters/noParameters'
+            tags: [Staked TRX and Energy Rental]
+            operationId: getStrxAndRentalSnapshot
+            summary: Get sTRX market and Energy Rental snapshot
+            description: |
+                Returns global state for both the sTRX liquid‑staking pool
+                (`stakeInfo`) and the Energy Rental market (`rentInfo`).
             responses:
                 '200':
-                    description: Return  the sTRX staking and energy rental markets information.
+                    description: Global sTRX/Energy Rental state.
                     content:
                         application/json:
                             schema:
-                                type: object
-                                properties:
-                                    code:
-                                        type: integer
-                                        description: Status code of the response, 0 means success.
-                                        examples:
-                                            - 0
-                                    data:
-                                        type: object
-                                        description: Rent and stake information.
-                                        properties:
-                                            rentInfo:
-                                                '$ref': '#/components/schemas/rentInfo'
-                                            stakeInfo:
-                                                '$ref': '#/components/schemas/stakeInfo'
-                                    message:
-                                        type: string
-                                        description: Response message, eg.SUCCESS.
-                                        examples:
-                                            - SUCCESS
+                                $ref: '#/components/schemas/StrxSnapshotResponse'
                 '400':
-                    description: Bad Request
-                    content:
-                        application/json:
-                            schema:
-                                '$ref': '#/components/responses/BadRequest'
-    '/lend/strxStake/account':
+                    $ref: '#/components/responses/BadRequest'
+
+    /lend/strxStake/account:
         get:
-            tags:
-                - Staked TRX Market and Energy Rental
-            summary: Get user data of sTRX liquidity staking
-            description: Query to get the list of user sTRX staking information.
+            tags: [Staked TRX and Energy Rental]
+            operationId: getStrxStakeAccount
+            summary: Get user's sTRX staking positions
+            description: |
+                Returns each queried wallet's sTRX balance, in‑cooldown amount,
+                and amount ready to withdraw.
             parameters:
-                - '$ref': '#/components/parameters/addresses'
-                - '$ref': '#/components/parameters/pageNo'
-                - '$ref': '#/components/parameters/pageSize'
-                - '$ref': '#/components/parameters/minStrxBalance'
+                - $ref: '#/components/parameters/addresses'
+                - $ref: '#/components/parameters/pageNo'
+                - $ref: '#/components/parameters/pageSize'
+                - $ref: '#/components/parameters/minStrxBalance'
             responses:
                 '200':
-                    description: Returns the list of user sTRX staking information.
+                    description: User sTRX positions.
                     content:
                         application/json:
                             schema:
-                                type: object
-                                properties:
-                                    code:
-                                        type: integer
-                                        description: Status code of the response, 0 means success.
-                                        examples:
-                                            - 0
-                                    data:
-                                        type: object
-                                        description: User staking sTRX information.
-                                        properties:
-                                            totalPage:
-                                                type: integer
-                                                description: Total number of pages.
-                                            list:
-                                                '$ref': '#/components/schemas/stakeList'
-                                            totalCount:
-                                                type: integer
-                                                description: Total count of records.
-                                    message:
-                                        type: string
-                                        description: Response message, eg.SUCCESS.
-                                        examples:
-                                            - SUCCESS
+                                $ref: '#/components/schemas/StrxStakeAccountResponse'
                 '400':
-                    description: Bad Request
-                    content:
-                        application/json:
-                            schema:
-                                '$ref': '#/components/responses/BadRequest'
-    '/lend/rentResource/account':
+                    $ref: '#/components/responses/BadRequest'
+
+    /lend/rentResource/account:
         get:
-            tags:
-                - Staked TRX Market and Energy Rental
-            summary: Get user data of resource rent (only supports Energy Rental currently)
-            description: Query to get the list of user energy rental information.
+            tags: [Staked TRX and Energy Rental]
+            operationId: getRentResourceAccount
+            summary: Get user's Energy Rental orders
+            description: |
+                Returns each queried wallet's Energy Rental orders.
+                Bandwidth rentals are not yet exposed.
             parameters:
-                - '$ref': '#/components/parameters/addresses'
-                - '$ref': '#/components/parameters/pageNo'
-                - '$ref': '#/components/parameters/pageSize'
-                - '$ref': '#/components/parameters/minStrxBalance'
-                - '$ref': '#/components/parameters/maxRemainingRentAmount'
+                - $ref: '#/components/parameters/addresses'
+                - $ref: '#/components/parameters/pageNo'
+                - $ref: '#/components/parameters/pageSize'
+                - $ref: '#/components/parameters/minStrxBalance'
+                - $ref: '#/components/parameters/maxRemainingRentAmount'
             responses:
                 '200':
-                    description: Returns the list of user energy rental information.
+                    description: User Energy Rental orders.
                     content:
                         application/json:
                             schema:
-                                type: object
-                                properties:
-                                    code:
-                                        type: integer
-                                        description: Status code of the response, 0 means success.
-                                        examples:
-                                            - 0
-                                    data:
-                                        type: object
-                                        description: User rent information.
-                                        properties:
-                                            totalPage:
-                                                type: integer
-                                                description: Total number of pages.
-                                            list:
-                                                '$ref': '#/components/schemas/rentList'
-                                            totalCount:
-                                                type: integer
-                                                description: Total count of records.
-                                    message:
-                                        type: string
-                                        description: Response message, eg.SUCCESS.
-                                        examples:
-                                            - SUCCESS
+                                $ref: '#/components/schemas/RentAccountResponse'
                 '400':
-                    description: Bad Request
-                    content:
-                        application/json:
-                            schema:
-                                '$ref': '#/components/responses/BadRequest'
+                    $ref: '#/components/responses/BadRequest'
 
 components:
     parameters:
-        noParameters:
-            name: No Parameters.
-            in: query
-        minBorrowValueInTrx:
-            name: minBorrowValueInTrx
-            in: query
-            description: Query the minimum value of borrowed asset in TRX.
-            required: false
-            schema:
-                type: string
-        maxHealth:
-            name: maxHealth
-            in: query
-            description: Query the max health level
-            required: false
-            schema:
-                type: string
-        pageNo:
-            name: pageNo
-            in: query
-            description: Page number.
-            required: false
-            schema:
-                type: integer
-                format: int64
-        pageSize:
-            name: pageSize
-            in: query
-            description: Page size, maximum 1000.
-            required: false
-            schema:
-                type: integer
-                format: int64
-        address:
-            name: address
-            in: path
-            description: Query of the user address.
-            required: true
-            schema:
-                type: string
         addresses:
             name: addresses
             in: query
-            description: Query of the user addresses. (To query multiple addresses at the same time, please use ‘,’ to separate multiple addresses.)
-            required: ture
+            description: |
+                One or more TRON Base58 addresses, **comma‑separated** (no
+                spaces). Example: `T9yD14...,TXJgM...`.
+            required: true
             schema:
                 type: string
-        address1:
+                example: T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb
+        addressQuery:
             name: address
             in: query
-            description: Query of the user address.
-            required: ture
+            description: A single TRON Base58 address.
+            required: true
             schema:
                 type: string
+                example: T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb
+        minBorrowValueInTrx:
+            name: minBorrowValueInTrx
+            in: query
+            description: Only return accounts whose total borrow value (TRX) is ≥ this threshold.
+            required: false
+            schema: { type: number, format: double }
+        maxHealth:
+            name: maxHealth
+            in: query
+            description: Only return accounts whose health factor is ≤ this threshold (useful to find risky borrowers).
+            required: false
+            schema: { type: number, format: double }
+        pageNo:
+            name: pageNo
+            in: query
+            description: 1‑based page number. Default `1`.
+            required: false
+            schema: { type: integer, format: int64, minimum: 1, default: 1 }
+        pageSize:
+            name: pageSize
+            in: query
+            description: Page size. Default `10`, max `1000`.
+            required: false
+            schema: { type: integer, format: int64, minimum: 1, maximum: 1000, default: 10 }
         minStrxBalance:
             name: minStrxBalance
             in: query
-            description: Minimum amount of sTRX held.
+            description: Minimum sTRX balance an account must hold to be included.
             required: false
-            schema:
-                type: string
+            schema: { type: number, format: double }
         maxRemainingRentAmount:
             name: maxRemainingRentAmount
             in: query
-            description: Maximum remaining rent amount.
+            description: Only include rental orders whose remaining rent is ≤ this threshold.
             required: false
-            schema:
-                type: string
+            schema: { type: number, format: double }
 
     responses:
         BadRequest:
-            description: Bad Request
+            description: Bad Request — missing or malformed parameters.
             content:
                 application/json:
                     schema:
-                        '$ref': '#/components/schemas/Error'
-        Forbidden:
-            description: Forbidden
-            content:
-                application/json:
-                    schema:
-                        '$ref': '#/components/schemas/Error'
-        NotFound:
-            description: NotFound
-            content:
-                application/json:
-                    schema:
-                        '$ref': '#/components/schemas/Error'
-        Unauthorized:
-            description: Unauthorized
-            content:
-                application/json:
-                    schema:
-                        '$ref': '#/components/schemas/Error'
+                        $ref: '#/components/schemas/Error'
 
     schemas:
-        tokenList:
+        # ------------------------------------------------------------------
+        # Common envelope pieces
+        # ------------------------------------------------------------------
+        EnvelopeOk:
             type: object
+            description: Shared shape of every successful response.
+            required: [code, message, data]
+            properties:
+                code:
+                    type: integer
+                    description: '`0` means success. Non‑zero values indicate an error; see `message` and the HTTP status code.'
+                    example: 0
+                message:
+                    type: string
+                    description: Status string. `"SUCCESS"` on success.
+                    example: SUCCESS
+                data:
+                    description: Endpoint‑specific payload. Shape documented per endpoint.
+
+        Pagination:
+            type: object
+            description: Pagination metadata.
+            properties:
+                totalCount: { type: integer, format: int64, description: Total number of records across all pages. }
+                totalPage:  { type: integer, format: int64, description: Total number of pages. }
+
+        Error:
+            type: object
+            description: RFC 7807 problem document.
+            properties:
+                type:   { type: string, example: 'https://docs.justlend.org/errors/bad-request' }
+                title:  { type: string, example: 'Bad Request' }
+                status: { type: integer, format: int32, example: 400 }
+                detail: { type: string, example: 'Parameter `addresses` is required.' }
+
+        # ------------------------------------------------------------------
+        # /lend/jtoken
+        # ------------------------------------------------------------------
+        Market:
+            type: object
+            description: One Supply & Borrow market.
             properties:
                 address:
                     type: string
-                    description: The address of the market.
-                    examples:
-                        - TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP
-                borrowIndex:
-                    type: integer
-                    description: The borrow index of the market.
-                    format: int64
-                    examples:
-                        - 1224530412174750380
-                borrowRate:
-                    type: integer
-                    description: The current borrow rate of the market.
-                    format: int64
-                    examples:
-                        - 0.064673716541040000
-                cash:
-                    type: integer
-                    description: The available cash amount.
-                    format: int64
-                    examples:
-                        - 349909392.537020000000000000
-                collateralFactor:
-                    type: integer
-                    description: The collateral factor for the market.
-                    format: int64
-                    examples:
-                        - 0.750000000000000000
-                exchangeRate:
-                    type: integer
-                    description: The current exchange rate.
-                    format: int64
-                    examples:
-                        - 0.010448063811832339
-                reserveFactor:
-                    type: integer
-                    description: The reserve factor for the market.
-                    format: int64
-                    examples:
-                        - 0.100000000000000000
-                reserves:
-                    type: integer
-                    description: The total reserves held.
-                    format: int64
-                    examples:
-                        - 2300647.881336000000000000
-                supplyRate:
-                    type: integer
-                    description: The current supply rate.
-                    format: int64
-                    examples:
-                        - 0.009044500002192000
+                    description: jToken contract address (the market).
+                    example: TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP
                 symbol:
                     type: string
-                    description: The symbol of the market.
-                    examples:
-                        - jTRX
-                totalBorrows:
-                    type: integer
-                    description: The total amount borrowed.
-                    format: int64
-                    examples:
-                        - 63951044.565948000000000000
-                totalSupply:
-                    type: integer
-                    description: The total supply of the asset.
-                    examples:
-                        - 39391010299.49149122
+                    description: jToken symbol, e.g. `jTRX`, `jUSDD`.
+                    example: jTRX
                 underlyingAddress:
                     type: string
-                    description: The underlying asset's address.
-                    examples:
-                        - T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb
-                underlyingDecimal:
-                    type: integer
-                    description: The decimal places for the underlying market, which is 18.
-                    format: int64
-                    examples:
-                        - 6
-                underlyingPriceInTrx:
-                    type: integer
-                    description: The price of the underlying market in TRX.
-                    format: int64
-                    examples:
-                        - 1.000000000000000000000000
+                    description: Underlying asset contract address.
+                    example: T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb
                 underlyingSymbol:
                     type: string
-                    description: The symbol of the underlying market.
-                    examples:
-                        - TRX
-        list:
+                    description: Underlying asset symbol.
+                    example: TRX
+                underlyingDecimal:
+                    type: integer
+                    format: int32
+                    description: Decimals of the underlying asset.
+                    example: 6
+                underlyingPriceInTrx:
+                    type: number
+                    format: double
+                    description: Oracle price of 1 unit of underlying, denominated in TRX.
+                    example: 1.0
+                borrowIndex:
+                    type: integer
+                    format: int64
+                    description: Cumulative borrow interest index (scaled `1e18`).
+                    example: 1224530412174750380
+                borrowRate:
+                    type: number
+                    format: double
+                    description: Borrow APY as annualized decimal. `0.0647` = 6.47 %.
+                    example: 0.06467371
+                supplyRate:
+                    type: number
+                    format: double
+                    description: Supply APY as annualized decimal (does **not** include mining rewards).
+                    example: 0.00904450
+                cash:
+                    type: number
+                    format: double
+                    description: Available underlying liquidity in the market.
+                    example: 349909392.537020
+                reserves:
+                    type: number
+                    format: double
+                    description: Protocol reserves in the market (underlying units).
+                    example: 2300647.881336
+                totalBorrows:
+                    type: number
+                    format: double
+                    description: Total outstanding debt (underlying units).
+                    example: 63951044.565948
+                totalSupply:
+                    type: number
+                    format: double
+                    description: Total minted jTokens (jToken units, 8 decimals).
+                    example: 39391010299.49149122
+                exchangeRate:
+                    type: number
+                    format: double
+                    description: Current jToken → underlying conversion ratio.
+                    example: 0.010448063811832339
+                collateralFactor:
+                    type: number
+                    format: double
+                    description: Loan‑to‑value cap when used as collateral. `0.75` = 75 %.
+                    example: 0.75
+                reserveFactor:
+                    type: number
+                    format: double
+                    description: Share of borrow interest taken as protocol reserve.
+                    example: 0.10
+
+        MarketListResponse:
+            allOf:
+                - $ref: '#/components/schemas/EnvelopeOk'
+                - type: object
+                  properties:
+                      data:
+                          type: object
+                          required: [tokenList]
+                          properties:
+                              tokenList:
+                                  type: array
+                                  items: { $ref: '#/components/schemas/Market' }
+
+        # ------------------------------------------------------------------
+        # /lend/account
+        # ------------------------------------------------------------------
+        UserTokenPosition:
             type: object
+            description: One jToken position for one user.
+            properties:
+                address:
+                    type: string
+                    description: jToken contract address.
+                    example: TNSBA6KvSvMoTqQcEgpVK7VhHT3z7wifxy
+                underlyingSymbol:
+                    type: string
+                    description: Underlying asset symbol.
+                    example: USDD
+                entered:
+                    type: integer
+                    format: int32
+                    description: '`1` if the user has entered this market as collateral, `0` otherwise.'
+                    enum: [0, 1]
+                    example: 1
+                supplyBalanceJtoken:
+                    type: number
+                    format: double
+                    description: Supplied balance in jTokens (8 decimals).
+                    example: 1.09062037
+                supplyBalanceUnderlying:
+                    type: number
+                    format: double
+                    description: Supplied balance in underlying units.
+                    example: 0.01148891329334797
+                borrowBalanceUnderlying:
+                    type: number
+                    format: double
+                    description: Outstanding borrow in underlying units.
+                    example: 0.704372293431166
+
+        UserAccount:
+            type: object
+            description: One wallet's aggregated SBM position.
             properties:
                 addresses:
                     type: string
-                    description: User's wallet addresses.
-                    examples:
-                        - T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb
+                    description: User wallet address.
+                    example: T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb
                 health:
-                    type: integer
-                    description: Health factor of the account.
-                    format: int64
-                    examples:
-                        - 5.88
+                    type: number
+                    format: double
+                    description: Health factor. `> 1` healthy, `≤ 1` liquidatable.
+                    example: 5.88
+                totalCollateralValueInTrx:
+                    type: number
+                    format: double
+                    description: Sum of collateral value in TRX (after `collateralFactor`).
+                    example: 24.126681
+                totalBorrowValueInTrx:
+                    type: number
+                    format: double
+                    description: Sum of outstanding borrow value in TRX.
+                    example: 11.277370
                 liquidateStatusStartTime:
                     type: string
                     format: date-time
                     nullable: true
-                    description: Start time of liquidation status.
+                    description: When the account first entered a liquidatable state, or `null` if currently safe.
                 tokens:
-                    '$ref': '#/components/schemas/tokens'
-                totalBorrowValueInTrx:
-                    type: integer
-                    description: Total borrowed value in TRX.
-                    format: int64
-                    examples:
-                        - 11.277370
-                totalCollateralValueInTrx:
-                    type: integer
-                    description: Total collateral value in TRX.
-                    format: int64
-                    examples:
-                        - 24.126681
-        tokens:
-            type: array
-            items:
-                type: object
-                properties:
-                    address:
-                        type: string
-                        description: Token contract address.
-                        examples:
-                            - TNSBA6KvSvMoTqQcEgpVK7VhHT3z7wifxy
-                    borrowBalanceUnderlying:
-                        type: integer
-                        description: Borrowed balance of the token in underlying units.
-                        format: int64
-                        examples:
-                            - 0.704372293431165977793198
-                    entered:
-                        type: integer
-                        description: Indicates if the token is entered into the market (1 or 0).
-                        format: int64
-                        examples:
-                            - 1
-                    supplyBalanceJtoken:
-                        type: integer
-                        description: Supplied balance in JToken units.
-                        format: int64
-                        examples:
-                            - 1.09062037
-                    supplyBalanceUnderlying:
-                        type: integer
-                        description: Supplied balance in underlying units.
-                        format: int64
-                        examples:
-                            - 0.01148891329334797277745383
-                    underlyingSymbol:
-                        type: string
-                        description: Symbol of the underlying asset.
-                        examples:
-                            - USDD
-        USDD:
+                    type: array
+                    items: { $ref: '#/components/schemas/UserTokenPosition' }
+
+        AccountListResponse:
+            allOf:
+                - $ref: '#/components/schemas/EnvelopeOk'
+                - type: object
+                  properties:
+                      data:
+                          allOf:
+                              - $ref: '#/components/schemas/Pagination'
+                              - type: object
+                                properties:
+                                    list:
+                                        type: array
+                                        items: { $ref: '#/components/schemas/UserAccount' }
+
+        # ------------------------------------------------------------------
+        # /justlend/liquidate/highRiskAccountList
+        # ------------------------------------------------------------------
+        CollateralToken:
             type: object
+            description: Collateral position of a high‑risk account.
             properties:
-                currEndTime:
-                    type: string
-                    format: date-time
-                    description: Current phase end time.
-                currPhase:
-                    type: integer
-                    description: Current phase number.
-                    format: int64
-                    examples:
-                        - 64
-                currReward:
-                    type: integer
-                    description: Current phase reward.
-                    format: int64
-                    examples:
-                        - 0.0000
-                currRewardStatus:
-                    type: integer
-                    description: Current phase reward status.
-                    format: int64
-                    examples:
-                        - 1
-                currStartTime:
-                    type: string
-                    format: date-time
-                    description: Current phase start time.
-                lastEndTime:
-                    type: string
-                    format: date-time
-                    description: Last phase end time.
-                lastReward:
-                    type: integer
-                    description: Last reward amount.
-                    format: int64
-                    examples:
-                        - 0
-                lastRewardStatus:
-                    type: integer
-                    description: Status of the last reward.
-                    format: int64
-                    examples:
-                        - 2
-                lastStartTime:
-                    type: string
-                    format: date-time
-                    description: Last phase start time.
-                price:
-                    type: integer
-                    description: Price of the asset.
-                    format: int64
-                    examples:
-                        - 1.000000000000000000
-        USDDapy:
+                jtokenAddress:    { type: string, description: jToken contract address., example: TR7BUFRQeq1w5jAZf1FKx85SHuX6PfMqsV }
+                symbol:           { type: string, description: jToken symbol., example: jETH }
+                amount:           { type: string, description: Collateral held, in jToken units (8 decimals)., example: '11.03049909' }
+                price:            { type: string, description: jToken price in USD (already multiplied by `exchangeRate`)., example: '21.090028146702653201' }
+                valueUsd:         { type: string, description: '`amount × price`.', example: '232.633536' }
+                exchangeRate:     { type: string, description: jToken → underlying conversion ratio., example: '0.010021847796289808' }
+                collateralFactor: { type: string, description: Collateral factor applied for risk calculation., example: '0.750000000000000000' }
+
+        BorrowToken:
             type: object
+            description: Borrow position of a high‑risk account.
+            properties:
+                tokenAddress:     { type: string, description: '**Underlying** asset address (note — keyed by underlying, not jToken).', example: TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9 }
+                symbol:           { type: string, description: Underlying asset symbol., example: JST }
+                amount:           { type: string, description: Outstanding borrowed amount in underlying units., example: '19.357667866419444238' }
+                price:            { type: string, description: Underlying asset price in USD., example: '0.040802750477000000' }
+                valueUsd:         { type: string, description: '`amount × price`.', example: '0.789846' }
+                exchangeRate:     { type: string, description: jToken → underlying conversion ratio for this market., example: '0.010481635809265784' }
+                collateralFactor: { type: string, description: Collateral factor of the corresponding jToken market., example: '0.600000000000000000' }
+
+        HighRiskAccount:
+            type: object
+            description: One liquidatable / near‑liquidatable account.
+            properties:
+                borrower:                 { type: string, description: Borrower wallet., example: TLc34aTvy1vBFzLvM9oz36ihhb7sVpQmgQ }
+                risk:                     { type: string, description: 'Risk coefficient. `> 1` ⇒ liquidatable now. Higher = riskier.', example: '1.105684' }
+                totalCollateralUsd:       { type: string, description: Total collateral value in USD., example: '234.063780' }
+                totalBorrowUsd:           { type: string, description: Total borrow value in USD., example: '193.705172' }
+                liquidateStatusStartTime: { type: integer, format: int64, description: Epoch ms when the account first became liquidatable., example: 1770089973150 }
+                collateralTokenList:
+                    type: array
+                    items: { $ref: '#/components/schemas/CollateralToken' }
+                borrowTokenList:
+                    type: array
+                    items: { $ref: '#/components/schemas/BorrowToken' }
+
+        JTokenAddressMap:
+            type: object
+            description: jToken symbol → contract address lookup.
+            additionalProperties:
+                type: string
+            example:
+                jTRX:  TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP
+                jUSDD: TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf
+                jUSDT: TXJgMdjVX5dKiQaUi9QobwNxtSQaFqccvd
+
+        HighRiskAccountListResponse:
+            allOf:
+                - $ref: '#/components/schemas/EnvelopeOk'
+                - type: object
+                  properties:
+                      data:
+                          type: object
+                          properties:
+                              updateTime:
+                                  type: integer
+                                  format: int64
+                                  description: Snapshot timestamp (epoch ms).
+                                  example: 1770275708508
+                              jtokens:
+                                  type: array
+                                  items: { $ref: '#/components/schemas/JTokenAddressMap' }
+                              accounts:
+                                  type: array
+                                  items: { $ref: '#/components/schemas/HighRiskAccount' }
+
+        # ------------------------------------------------------------------
+        # /mining/apy
+        # ------------------------------------------------------------------
+        MiningApy:
+            type: object
+            description: |
+                Mining APY for one market, keyed by reward token symbol.
+                Currently only `USDD` is paid out.
             properties:
                 USDD:
-                    type: integer
-                    description: USDD market apy.
-                    format: int64
-                    example:
-                        - 0.09175706
-        rewardDistribution:
+                    type: number
+                    format: double
+                    description: |
+                        USDD mining APY as annualized decimal. `0.09175706` =
+                        9.18 %. Paid on top of the market's `supplyRate`.
+                    example: 0.09175706
+
+        MiningApyResponse:
+            allOf:
+                - $ref: '#/components/schemas/EnvelopeOk'
+                - type: object
+                  properties:
+                      data:
+                          type: object
+                          description: |
+                              Keyed by **jToken address**. Currently only
+                              `TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf` (jUSDD)
+                              receives mining rewards. A market that does not
+                              appear has no mining.
+                          additionalProperties:
+                              $ref: '#/components/schemas/MiningApy'
+
+        # ------------------------------------------------------------------
+        # /mining/reward
+        # ------------------------------------------------------------------
+        PhaseStatus:
+            type: integer
+            format: int32
+            description: |
+                Phase status:
+                * `0` — not started
+                * `1` — in progress
+                * `2` — ended (finalized / claimable)
+                * `3` — paused
+            enum: [0, 1, 2, 3]
+            example: 1
+
+        MarketMiningPhase:
             type: object
+            description: |
+                User's status in the current and previous USDD mining phase
+                for one market.
+            properties:
+                currPhase:
+                    type: integer
+                    format: int64
+                    description: Sequential phase number that is **in progress** now.
+                    example: 64
+                currStartTime: { type: string, format: date-time, description: Start of current phase (UTC). }
+                currEndTime:   { type: string, format: date-time, description: End of current phase (UTC). }
+                currReward:
+                    type: number
+                    format: double
+                    description: User's accrued reward in the current phase (USDD). Updates over time.
+                    example: 0.0
+                currRewardStatus: { $ref: '#/components/schemas/PhaseStatus' }
+                lastStartTime: { type: string, format: date-time, description: Start of the previous (most recently finalized) phase. }
+                lastEndTime:   { type: string, format: date-time, description: End of the previous phase. }
+                lastReward:
+                    type: number
+                    format: double
+                    description: User's finalized reward in the previous phase (USDD). Use `/mining/distributions` for the on‑chain claim proof.
+                    example: 0.0
+                lastRewardStatus: { $ref: '#/components/schemas/PhaseStatus' }
+                price:
+                    type: number
+                    format: double
+                    description: Current price of the reward token in USD (USDD ≈ 1).
+                    example: 1.0
+
+        MiningRewardResponse:
+            allOf:
+                - $ref: '#/components/schemas/EnvelopeOk'
+                - type: object
+                  properties:
+                      data:
+                          type: object
+                          description: Keyed by **jToken address** of the rewarded market.
+                          additionalProperties:
+                              $ref: '#/components/schemas/MarketMiningPhase'
+
+        # ------------------------------------------------------------------
+        # /mining/distributions
+        # ------------------------------------------------------------------
+        PhaseDistribution:
+            type: object
+            description: |
+                Per‑phase claim data. All hex strings are bare `0x…` values.
             properties:
                 tokenAddress:
                     type: string
-                    description: The supply mining market address.
-                    examples:
-                        - TPYmHEhy5n8TCEfYGqW2rPxsghSfzghPDn
-                amount:
-                    type: string
-                    description: The amount of mining reward can be claimed in this phase, in hexadecimal format.
-                    examples:
-                        - :0x6933158b3c05
+                    description: Distribution contract address for this phase.
+                    example: TPYmHEhy5n8TCEfYGqW2rPxsghSfzghPDn
                 claimed:
                     type: boolean
-                    description: Indicates if this phase reward has been claimed. Ture means claimed, false means not yet.
-                index:
-                    type: string
-                    description: Index in hexadecimal format.
-                    examples:
-                        - :0x0659
+                    description: '`true` if the user has already claimed this phase.'
+                    example: false
                 merkleIndex:
                     type: string
-                    description: Merkle index in hexadecimal format.
-                    examples:
-                        - :0x00
-                proof:
-                    type: array
-                    description: Merkle proof element in hexadecimal format, which used to proof this phase reward belong to user.
-                    items:
-                        '$ref': '#/components/schemas/proofs'
+                    pattern: '^0x[0-9a-fA-F]+$'
+                    description: Index of the Merkle tree this phase belongs to.
+                    example: '0x00'
+                index:
+                    type: string
+                    pattern: '^0x[0-9a-fA-F]+$'
+                    description: Leaf index of the user inside the Merkle tree.
+                    example: '0x0659'
+                amount:
+                    type: string
+                    pattern: '^0x[0-9a-fA-F]+$'
+                    description: 'Claimable reward in **underlying smallest units** (USDD: 6 decimals). Decode: `parseInt(amount, 16) / 1e6`.'
+                    example: '0x6933158b3c05'
                 merkleRoot:
                     type: string
-                    description: Merkle root in hexadecimal format.
-                    examples:
-                        - :0x3fdc21ab4fed9e13714fa852ff2e659f9e32af553f4426810ff75e38ccf17a97
-        proofs:
-            type: array
-            items:
-                type: string
-                example:
-                    - :0x6b734d20b9ca2a0dda57b184789dbb6df2d2993049a9365b6eafe932cd435255
-        rentInfo:
-            type: object
-            properties:
-                priceFor10KEnergByBurn:
-                    type: integer
-                    format: int64
-                    examples:
-                        - 4.20000000
-                priceFor10KEnergByRent:
-                    type: integer
-                    format: int64
-                    examples:
-                        - 0.65530713
-                priceFor10KEnergByStake:
-                    type: integer
-                    format: int64
-                    examples:
-                        - 885.28697646
-                rentMarketAddress:
-                    type: string
-                    examples:
-                        - TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd
-                totalDelegatedEnergyRate:
-                    type: integer
-                    format: int64
-                    examples:
-                        - 0.03254970
-                totalDelegatedEnergyTrx:
-                    type: integer
-                    format: int64
-                    examples:
-                        - 162748507.908930
-        stakeInfo:
-            type: object
-            properties:
-                decimal:
-                    type: integer
-                    format: int64
-                    examples:
-                        - 18
-                exchangeRate:
-                    type: integer
-                    format: int64
-                    examples:
-                        - 1.181813870419231022
-                rentReserveFactor:
-                    type: integer
-                    format: int64
-                    examples:
-                        - 0.200000000000000000
-                reserse:
-                    type: integer
-                    format: int64
-                    examples:
-                        - 71933070.321420
-                rewardReserveFactor:
-                    type: integer
-                    format: int64
-                    examples:
-                        - 0.200000000000000000
-                strxAddress:
-                    type: string
-                    examples:
-                        - TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5
-                supplyRate:
-                    type: integer
-                    format: int64
-                    examples:
-                        - 0.03937302
-                symbol:
-                    type: string
-                    examples:
-                        - sTRX
-                totalSupply:
-                    type: integer
-                    format: int64
-                    examples:
-                        - 6553955254.250487546804870562
-                totalSupplyUsd:
-                    type: integer
-                    format: int64
-                    examples:
-                        - 1729932328.75828661
-                totalUnderlying:
-                    type: integer
-                    format: int64
-                    examples:
-                        - 7745555225.580224
-                trxPrice:
-                    type: integer
-                    format: int64
-                    examples:
-                        - 0.223345167438102719
-                underlyingDecimal:
-                    type: integer
-                    format: int64
-                    examples:
-                        - 6
-        stakeList:
-            type: array
-            items:
-                type: object
-                properties:
-                    addresses:
+                    pattern: '^0x[0-9a-fA-F]{64}$'
+                    description: Merkle root of this phase.
+                    example: '0x3fdc21ab4fed9e13714fa852ff2e659f9e32af553f4426810ff75e38ccf17a97'
+                proof:
+                    type: array
+                    description: Merkle proof from the user's leaf to `merkleRoot`.
+                    items:
                         type: string
-                        description: User's wallet addresses.
-                        examples:
-                            - TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5
-                    availableWithdrawAmount:
-                        type: integer
-                        format: int64
-                        description: Available amount for withdrawal.
-                        examples:
-                            - 150865439.643028
-                    unstakingAmount:
-                        type: integer
-                        format: int64
-                        description: The amount of unstaking trx.
-                        examples:
-                            - 24120999.583032
-                    sTRXBalance:
-                        type: integer
-                        format: int64
-                        description: The amount of sTRXBalance.
-                        examples:
-                            - 1.000000000000000000
-        rentList:
-            type: array
-            items:
-                type: object
-                properties:
-                    rentRemainAmount:
-                        type: integer
-                        format: int64
-                        description: Remaining amount of rent.
-                        examples:
-                            - 0.000000
-                    receiver:
-                        type: string
-                        description: Wallet address of the receiver.
-                        examples:
-                            - TWdWEHRLPBVGsXhwjSUv45XwnsfUHXydJa
-                    delegatedAmount:
-                        type: integer
-                        format: int64
-                        description: Amount delegated for rent.
-                        examples:
-                            - 0.000000
-                    rentAmountPerDay:
-                        type: integer
-                        format: int64
-                        description: Rent amount per day.
-                        examples:
-                            - 0.000000
-                    rentType:
-                        type: string
-                        description: Type of rent (e.g., Energy).
-                        examples:
-                            - Energy
-                    renter:
-                        type: string
-                        description: Wallet address of the renter.
-                        examples:
-                            - TWdWEHRLPBVGsXhwjSUv45XwnsfUHXydJa
-        jTokenToAddress:
+                        pattern: '^0x[0-9a-fA-F]{64}$'
+                        example: '0x6b734d20b9ca2a0dda57b184789dbb6df2d2993049a9365b6eafe932cd435255'
+
+        MiningDistributionsResponse:
+            allOf:
+                - $ref: '#/components/schemas/EnvelopeOk'
+                - type: object
+                  properties:
+                      data:
+                          type: object
+                          description: Keyed by phase label, e.g. `"Phase 22"`.
+                          additionalProperties:
+                              $ref: '#/components/schemas/PhaseDistribution'
+
+        # ------------------------------------------------------------------
+        # /lend/strx
+        # ------------------------------------------------------------------
+        StakeInfo:
             type: object
+            description: sTRX liquid‑staking pool snapshot.
             properties:
-                jTUSD:
-                    type: string
-                    examples:
-                        - TSXv71Fy5XdL3Rh2QfBoUu3NAaM4sMif8R
-                jTRX:
-                    type: string
-                    examples:
-                        - TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP
-                jWIN:
-                    type: string
-                    examples:
-                        - TRg6MnpsFXc82ymUPgf5qbj59ibxiEDWvv
-                jNFT:
-                    type: string
-                    examples:
-                        - TFpPyDCKvNFgos3g3WVsAqMrdqhB81JXHE
-                jETHB:
-                    type: string
-                    examples:
-                        - TWBxQMb6RD3qmkXUXpNwVCYbL8SHNreru6
-                jUSDT:
-                    type: string
-                    examples:
-                        - TXJgMdjVX5dKiQaUi9QobwNxtSQaFqccvd
-                jUSD1:
-                    type: string
-                    examples:
-                        - TBEKggwqFkrc4KckQVR9BLucAmQugafEZf
-                jBTT:
-                    type: string
-                    examples:
-                        - TUaUHU9Dy8x5yNi1pKnFYqHWojot61Jfto
-                jWBTT:
-                    type: string
-                    examples:
-                        - TUY54PVeH6WCcYCd6ZXXoBDsHytN9V5PXt
-                jSUNOLD:
-                    type: string
-                    examples:
-                        - TGBr8uh9jBVHJhhkwSJvQN2ZAKzVkxDmno
-                jBUSDOLD:
-                    type: string
-                    examples:
-                        - TLHASseQymmpGQdfAyNjkMXFTJh8nzR2x2
-                jUSDCOLD:
-                    type: string
-                    examples:
-                        - TNSBA6KvSvMoTqQcEgpVK7VhHT3z7wifxy
-                jJST:
-                    type: string
-                    examples:
-                        - TWQhCXaWz4eHK4Kd1ErSDHjMFPoPc9czts
-                jUSDDOLD:
-                    type: string
-                    examples:
-                        - TX7kybeP6UwTBRHLNPYmswFESHfyjm9bAS
-                jUSDJ:
-                    type: string
-                    examples:
-                        - TL5x9MtSnDy537FXKx53yAaHRRNdg9TkkA
-                jSUN:
-                    type: string
-                    examples:
-                        - TPXDpkg9e3eZzxqxAUyke9S4z4pGJBJw9e
-                jwstUSDT:
-                    type: string
-                    examples:
-                        - TD5SdLw5scR6mXgyMK2xKrFJpauDjpKqrW
-                jUSDD:
-                    type: string
-                    examples:
-                        - TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf
-                jBTC:
-                    type: string
-                    examples:
-                        - TLeEu311Cbw63BcmMHDgDLu7fnk9fqGcqT
-                jWBTC:
-                    type: string
-                    examples:
-                        - TVyvpmaVmz25z2GaXBDDjzLZi5iR5dBzGd
-                jsTRX:
-                    type: string
-                    examples:
-                        - TJQ9rbVe9ei3nNtyGgBL22Fuu2xYjZaLAQ
-                jETH:
-                    type: string
-                    examples:
-                        - TR7BUFRQeq1w5jAZf1FKx85SHuX6PfMqsV
-        highRiskAccounts:
+                strxAddress:         { type: string, description: sTRX token contract address., example: TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5 }
+                symbol:              { type: string, description: Token symbol., example: sTRX }
+                decimal:             { type: integer, format: int32, description: sTRX decimals., example: 18 }
+                underlyingDecimal:   { type: integer, format: int32, description: TRX decimals., example: 6 }
+                exchangeRate:        { type: number, format: double, description: 'TRX per sTRX. `1.18` means 1 sTRX = 1.18 TRX.', example: 1.181813870419231 }
+                supplyRate:          { type: number, format: double, description: sTRX staking APY as annualized decimal., example: 0.03937302 }
+                totalSupply:         { type: number, format: double, description: Total sTRX issued., example: 6553955254.250488 }
+                totalUnderlying:     { type: number, format: double, description: Total TRX held by the pool., example: 7745555225.580224 }
+                totalSupplyUsd:      { type: number, format: double, description: TVL in USD., example: 1729932328.7582867 }
+                trxPrice:            { type: number, format: double, description: Current TRX price in USD., example: 0.22334516743810272 }
+                reserse:             { type: number, format: double, description: Protocol reserves in TRX. (Field name is a legacy typo — read as `reserves`.), example: 71933070.32142 }
+                rentReserveFactor:   { type: number, format: double, description: Share of rental revenue taken as reserve., example: 0.20 }
+                rewardReserveFactor: { type: number, format: double, description: Share of staking reward taken as reserve., example: 0.20 }
+
+        RentInfo:
             type: object
+            description: Energy Rental market snapshot.
             properties:
-                borrower:
-                    type: string
-                    description: The wallet address of the borrower.
-                    examples:
-                        - TLc34aTvy1vBFzLvM9oz36ihhb7sVpQmgQ
-                collateralTokenList:
-                    '$ref': '#/components/schemas/collateralTokenList'
-                borrowTokenList:
-                    '$ref': '#/components/schemas/borrowTokenList'
-                totalCollateralUsd:
-                    type: string
-                    description: The total value of all collateralized assets in USD.
-                    examples:
-                        - 234.063780
-                totalBorrowUsd:
-                    type: string
-                    description: The total value of all borrowed assets in USD.
-                    examples:
-                        - 193.705172
-                risk:
-                    type: string
-                    description: Risk coefficient，higher values indicate higher risk.
-                    examples:
-                        - 1.105684
-                liquidateStatusStartTime:
-                    type: long
-                    description: The epoch timestamp (ms) when the account entered a liquidatable state.
-                    examples:
-                        - 1770089973150
-        collateralTokenList:
+                rentMarketAddress:        { type: string, description: Energy Rental contract address., example: TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd }
+                priceFor10KEnergByRent:   { type: number, format: double, description: TRX cost to obtain 10 000 Energy via **rental**., example: 0.65530713 }
+                priceFor10KEnergByStake:  { type: number, format: double, description: TRX **stake** needed to produce 10 000 Energy yourself., example: 885.28697646 }
+                priceFor10KEnergByBurn:   { type: number, format: double, description: TRX cost to obtain 10 000 Energy by **burning** TRX in a transaction., example: 4.20 }
+                totalDelegatedEnergyTrx:  { type: number, format: double, description: Total TRX delegated through the rental market., example: 162748507.90893 }
+                totalDelegatedEnergyRate: { type: number, format: double, description: Utilization rate of the rental pool., example: 0.0325497 }
+
+        StrxSnapshotResponse:
+            allOf:
+                - $ref: '#/components/schemas/EnvelopeOk'
+                - type: object
+                  properties:
+                      data:
+                          type: object
+                          properties:
+                              stakeInfo: { $ref: '#/components/schemas/StakeInfo' }
+                              rentInfo:  { $ref: '#/components/schemas/RentInfo' }
+
+        # ------------------------------------------------------------------
+        # /lend/strxStake/account
+        # ------------------------------------------------------------------
+        StrxStakePosition:
             type: object
-            description: A list of tokens provided by the user as collateral.
+            description: One wallet's sTRX position.
             properties:
-                jtokenAddress:
-                    type: string
-                    description: The smart contract address of jToken.
-                    examples:
-                        - TR7BUFRQeq1w5jAZf1FKx85SHuX6PfMqsV
-                amount:
-                    type: string
-                    description: The amount of jTokens.
-                    examples:
-                        - 11.03049909
-                price:
-                    type: string
-                    description: The current market price of the jToken in USD.
-                    examples:
-                        - 21.090028146702653201
-                valueUsd:
-                    type: string
-                    description: The collateral value in USD.
-                    examples:
-                        - 232.633536
-                symbol:
-                    type: string
-                    description: The symbol of the jToken.
-                    examples:
-                        - jETH
-                exchangeRate:
-                    type: string
-                    description: The conversion rate between the jToken and its underlying asset.
-                    examples:
-                        - 0.010021847796289808
-                collateralFactor:
-                    type: string
-                    description: The maximum percentage of value that can be borrowed against this asset.
-                    examples:
-                        - 0.750000000000000000
-        borrowTokenList:
+                addresses:               { type: string, description: User wallet., example: TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5 }
+                sTRXBalance:             { type: number, format: double, description: Current sTRX balance., example: 1.0 }
+                unstakingAmount:         { type: number, format: double, description: TRX currently in the un‑staking cooldown., example: 24120999.583032 }
+                availableWithdrawAmount: { type: number, format: double, description: TRX past cooldown and ready to withdraw., example: 150865439.643028 }
+
+        StrxStakeAccountResponse:
+            allOf:
+                - $ref: '#/components/schemas/EnvelopeOk'
+                - type: object
+                  properties:
+                      data:
+                          allOf:
+                              - $ref: '#/components/schemas/Pagination'
+                              - type: object
+                                properties:
+                                    list:
+                                        type: array
+                                        items: { $ref: '#/components/schemas/StrxStakePosition' }
+
+        # ------------------------------------------------------------------
+        # /lend/rentResource/account
+        # ------------------------------------------------------------------
+        RentOrder:
             type: object
-            description: A list of tokens currently borrowed by the user.
+            description: One Energy Rental order.
             properties:
-                tokenAddress:
-                    type: string
-                    description: The smart contract address of the underlying asset.
-                    examples:
-                        - TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9
-                amount:
-                    type: string
-                    description: The amount of the underlying asset borrowed.
-                    examples:
-                        - 19.3576678664194442381564147839259092
-                price:
-                    type: string
-                    description: The current market price of the underlying asset in USD.
-                    examples:
-                        - 0.040802750477000000
-                valueUsd:
-                    type: string
-                    description: The total value of the borrowed position expressed in USD.
-                    examples:
-                        - 0.789846
-                symbol:
-                    type: string
-                    description: The symbol of the underlying asset.
-                    examples:
-                        - JST
-                exchangeRate:
-                    type: string
-                    description: The conversion rate between the jToken and its underlying asset.
-                    examples:
-                        - 0.010481635809265784
-                collateralFactor:
-                    type: string
-                    description: The parameter representing the borrowing capacity of the asset.
-                    examples:
-                        - 0.600000000000000000
-        Error:
-            type: object
-            description: RFC 7807
-            properties:
-                type:
-                    type: string
-                    examples:
-                        - https://example.com/errors/generic-error
-                title:
-                    type: string
-                    examples:
-                        - Something went wrong here.
-                status:
-                    type: integer
-                    format: int64
-                    examples:
-                        - 403
-                detail:
-                    type: string
-                    examples:
-                        - Unfortunately, we can’t provide further information.
+                rentType:         { type: string, description: 'Resource type. Only `"Energy"` is exposed for now.', enum: ['Energy'], example: Energy }
+                renter:           { type: string, description: Account paying the rent., example: TWdWEHRLPBVGsXhwjSUv45XwnsfUHXydJa }
+                receiver:         { type: string, description: Account receiving the delegated Energy., example: TWdWEHRLPBVGsXhwjSUv45XwnsfUHXydJa }
+                delegatedAmount:  { type: number, format: double, description: TRX equivalent of the energy currently delegated., example: 10000.0 }
+                rentRemainAmount: { type: number, format: double, description: TRX prepayment still remaining for this order., example: 8500.0 }
+                rentAmountPerDay: { type: number, format: double, description: Daily TRX cost of the rental order., example: 1500.0 }
+
+        RentAccountResponse:
+            allOf:
+                - $ref: '#/components/schemas/EnvelopeOk'
+                - type: object
+                  properties:
+                      data:
+                          allOf:
+                              - $ref: '#/components/schemas/Pagination'
+                              - type: object
+                                properties:
+                                    list:
+                                        type: array
+                                        items: { $ref: '#/components/schemas/RentOrder' }
