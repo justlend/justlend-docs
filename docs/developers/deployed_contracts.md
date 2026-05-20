@@ -24,12 +24,15 @@ The entrypoint that users and contracts call is **Unitroller** (the proxy). The 
 
 The address users interact with for `mint`/`borrow`/`repayBorrow`/`redeem`/`liquidateBorrow` is the **CErc20Delegator** (proxy). The **CErc20Delegate** address is the implementation behind it.
 
+!!! warning "Legacy markets (marked `OLD`)"
+    Rows tagged `(legacy)` — `jUSDCOLD`, `jBUSDOLD`, `jSUNOLD` — have been **closed to new supply and borrow**. The contracts are still queryable for read operations and for existing positions to be unwound, but **do not direct new deposits to them**. Refer to `apis.md` §2 (jToken Address Reference) for the most up-to-date status.
+
 | Market | Underlying TRC20 | CErc20Delegator (entrypoint) | CErc20Delegate (impl) |
 |--------|------------------|------------------------------|------------------------|
 | jTRX | _native_ | [`TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP`](https://tronscan.org/#/token20/TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP) | NA |
 | jUSDT | [`TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t`](https://tronscan.org/#/token20/TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t) | [`TXJgMdjVX5dKiQaUi9QobwNxtSQaFqccvd`](https://tronscan.org/#/contract/TXJgMdjVX5dKiQaUi9QobwNxtSQaFqccvd) | [`TLjn59xNM7VEK6VZ3VQ8Y1ipxsdsFka5wZ`](https://tronscan.org/#/contract/TLjn59xNM7VEK6VZ3VQ8Y1ipxsdsFka5wZ) |
 | jUSDD | [`TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz`](https://tronscan.org/#/token20/TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz) | [`TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf`](https://tronscan.org/#/token20/TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf) | [`TLrEfG4QCbax8MTYgZzmjj4gE8RPVNvUn4`](https://tronscan.org/#/token20/TLrEfG4QCbax8MTYgZzmjj4gE8RPVNvUn4) |
-| jUSDC | [`TLZSucJRjnqBKwvQz6n5hd29gbS4P7u7w8`](https://tronscan.org/#/token20/TLZSucJRjnqBKwvQz6n5hd29gbS4P7u7w8) | [`TNSBA6KvSvMoTqQcEgpVK7VhHT3z7wifxy`](https://tronscan.org/#/contract/TNSBA6KvSvMoTqQcEgpVK7VhHT3z7wifxy) | [`THQY8YX19jLFSFg1xhthM5wb7xZvKLCzgq`](https://tronscan.org/#/contract/THQY8YX19jLFSFg1xhthM5wb7xZvKLCzgq) |
+| jUSDCOLD (legacy) | [`TLZSucJRjnqBKwvQz6n5hd29gbS4P7u7w8`](https://tronscan.org/#/token20/TLZSucJRjnqBKwvQz6n5hd29gbS4P7u7w8) | [`TNSBA6KvSvMoTqQcEgpVK7VhHT3z7wifxy`](https://tronscan.org/#/contract/TNSBA6KvSvMoTqQcEgpVK7VhHT3z7wifxy) | [`THQY8YX19jLFSFg1xhthM5wb7xZvKLCzgq`](https://tronscan.org/#/contract/THQY8YX19jLFSFg1xhthM5wb7xZvKLCzgq) |
 | jUSDJ | [`TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT`](https://tronscan.org/#/token20/TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT) | [`TL5x9MtSnDy537FXKx53yAaHRRNdg9TkkA`](https://tronscan.org/#/contract/TL5x9MtSnDy537FXKx53yAaHRRNdg9TkkA) | [`TYSHTEq9NFSgst94saeRvt6rAYgWkqMFbj`](https://tronscan.org/#/contract/TYSHTEq9NFSgst94saeRvt6rAYgWkqMFbj) |
 | jTUSD | [`TUpMhErZL2fhh4sVNULAbNKLokS4GjC1F4`](https://tronscan.org/#/token20/TUpMhErZL2fhh4sVNULAbNKLokS4GjC1F4) | [`TSXv71Fy5XdL3Rh2QfBoUu3NAaM4sMif8R`](https://tronscan.org/#/contract/TSXv71Fy5XdL3Rh2QfBoUu3NAaM4sMif8R) | [`THbrSjDsDA2KJRxx8K73tN7vLgaXSUNQFk`](https://tronscan.org/#/contract/THbrSjDsDA2KJRxx8K73tN7vLgaXSUNQFk) |
 | jUSD1 | [`TPFqcBAaaUMCSVRCqPaQ9QnzKhmuoLR6Rc`](https://tronscan.org/#/token20/TPFqcBAaaUMCSVRCqPaQ9QnzKhmuoLR6Rc) | [`TBEKggwqFkrc4KckQVR9BLucAmQugafEZf`](https://tronscan.org/#/token20/TBEKggwqFkrc4KckQVR9BLucAmQugafEZf) | [`TRo2exz6ZHn6W3Ey3G93FnzhWvjLPUcR2B`](https://tronscan.org/#/contract/TRo2exz6ZHn6W3Ey3G93FnzhWvjLPUcR2B) |

@@ -292,12 +292,14 @@ All addresses below are on **TRON Mainnet**. Testnet (Nile) addresses differ; te
 
 ### 5.2 jToken delegators (the addresses users interact with)
 
+Rows tagged `(legacy)` are **closed to new supply and borrow** — existing positions can still be unwound but do not direct new deposits to them. Always cross-check with `apis.md §2` for the latest status.
+
 | Underlying | jToken (CErc20Delegator) | Underlying TRC20 |
 |------------|--------------------------|------------------|
 | TRX        | `TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP`      | native           |
 | USDT       | `TXJgMdjVX5dKiQaUi9QobwNxtSQaFqccvd`      | `TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t` |
 | USDD       | `TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf`      | `TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz` |
-| USDC       | `TNSBA6KvSvMoTqQcEgpVK7VhHT3z7wifxy`      | `TLZSucJRjnqBKwvQz6n5hd29gbS4P7u7w8` |
+| USDCOLD (legacy) | `TNSBA6KvSvMoTqQcEgpVK7VhHT3z7wifxy`      | `TLZSucJRjnqBKwvQz6n5hd29gbS4P7u7w8` |
 | USDJ       | `TL5x9MtSnDy537FXKx53yAaHRRNdg9TkkA`      | `TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT` |
 | TUSD       | `TSXv71Fy5XdL3Rh2QfBoUu3NAaM4sMif8R`      | `TUpMhErZL2fhh4sVNULAbNKLokS4GjC1F4` |
 | USD1       | `TBEKggwqFkrc4KckQVR9BLucAmQugafEZf`      | `TPFqcBAaaUMCSVRCqPaQ9QnzKhmuoLR6Rc` |
