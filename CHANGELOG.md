@@ -13,6 +13,13 @@ For the JustLend protocol itself, see governance proposals on [forum.justlend.or
 ### Added
 - `CHANGELOG.md` (this file).
 - `mkdocs-git-revision-date-localized-plugin`: every page now shows last-updated date in the footer, sourced from git commit metadata.
+- `AI / LLMs` navigation page listing `/llms.txt`, `/llms-full.txt`, OpenAPI, `contracts.json`, and JSON ABI endpoints for agent users.
+- Machine-readable contract directory at `/developers/contracts.json`, including Mainnet and Nile addresses in Base58, EVM `0x` hex, and TRON-internal `41` hex.
+- JSON ABI files under `/developers/abis/` for jToken, Comptroller, PriceOracle, TRC20, governance, WJST, sTRX, Energy Rental, and rate-model contracts.
+- Nile testnet contract reference in `developers/deployed_contracts.md`, with the complete machine-readable list mirrored in `contracts.json`.
+- Public API rate-limit guidance in `developers/apis.md`, `llms.txt`, `llms-full.txt`, and the OpenAPI `x-rate-limit` extension, including `429` retry behavior.
+- Developer-reference cross-links from user concept pages to the corresponding contract functions and TronWeb examples.
+- `/.well-known/security.txt` for automated security-contact discovery.
 - Resolved `_(see Tronscan)_` placeholders in `deployed_contracts.md`:
   - `jHTX` delegate implementation: `TJD7nb5Wq1P1rRi3Se2vLpLhksALdW8adb`.
   - `jUSDDOLD` underlying TRC20: `TPYmHEhy5n8TCEfYGqW2rPxsghSfzghPDn`.
@@ -20,6 +27,10 @@ For the JustLend protocol itself, see governance proposals on [forum.justlend.or
 
 ### Removed
 - Orphan documentation pages that were being indexed by `sitemap.xml` but rendered nearly empty: `developers/supply_and_borrow_market.md` and `governance/community_forum.md`.
+
+### Fixed
+- Removed duplicate ABI guidance from `developers/deployed_contracts.md` after adding local JSON ABI downloads.
+- Added language tags to remaining unlabeled code fences in API and MCP docs.
 
 ---
 

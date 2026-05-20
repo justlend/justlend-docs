@@ -10,3 +10,11 @@ Borrowers can repay their loans using the same tokens they borrowed or through j
 1. Connect your Web3 wallet on TronLink or other supported wallet app to the JustLend DAO ([https://justlend.org](https://justlend.org)).
 2. Navigate to the "SBM" and choose the borrowed asset you want to withdraw, click 「Repay」.
 3. Specify the amount you want to repay and confirm the transaction.
+
+### Developer reference
+
+- Contract function: [`repayBorrow(amount)`](../../developers/supply_and_borrow_market/sbm.md#repayborrow) — pass `uint256(-1)` (i.e. `2^256 - 1`) to repay the full outstanding balance.
+- Repay on behalf of another account: [`repayBorrowBehalf(borrower, amount)`](../../developers/supply_and_borrow_market/sbm.md#repayborrowbehalf).
+- Required prerequisite for TRC20 markets: `approve()` on the underlying for the jToken delegator.
+- For jTRX, the call is `payable` — pass the TRX amount via `msg.value`.
+- Live runnable example: [Repay USDT — TronWeb](../../developers/supply_and_borrow_market/sbm.md#examples-tronweb).

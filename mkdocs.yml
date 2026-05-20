@@ -7,6 +7,9 @@ not_in_nav: |
     /llms.txt
     /llms-full.txt
     /robots.txt
+    /.well-known/security.txt
+    /developers/contracts.json
+    /developers/abis/*.json
 
 nav:
     - GETTING STARTED:
@@ -42,6 +45,7 @@ nav:
         - Deployed Contracts: developers/deployed_contracts.md
         - APIs: developers/apis.md
     - AI SUPPORT:
+        - AI / LLMs: ai_support/ai_llms.md
         - MCP Server: ai_support/mcp_server.md
         - JustLend Skills: ai_support/justlend_skills.md
     - RESOURCES:
@@ -114,6 +118,7 @@ plugins:
               # Legacy endpoint-level pages (API reference is now a single Swagger UI page)
               'developers/supply-and-borrow-market/get-market-mining-apy-information.md': 'developers/apis.md'
               # AI Support
+              'ai-support/ai-llms.md': 'ai_support/ai_llms.md'
               'ai-support/mcp-server.md': 'ai_support/mcp_server.md'
               'ai-support/justlend-skills.md': 'ai_support/justlend_skills.md'
               # Resources

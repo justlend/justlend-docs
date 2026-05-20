@@ -21,3 +21,12 @@ Supplying can be done with a user interface [JustLend SBM](https://app.justlend.
 1. Connect your Web3 wallet on TronLink or other supported wallet app to the JustLend DAO ([https://justlend.org](https://justlend.org)).
 2. Navigate to the "SBM" and choose the asset you want to supply. For example, if you want to supply TRX, click 「Supply」 on the TRX market.
 3. Specify the amount you want to supply. The selected assets are transferred directly from your wallet to JustLend DAO protocol, earning interest immediately. This interest will be automatically added to your Supply Balance.
+
+### Developer reference
+
+- Contract function: [`mint()` on `CToken.sol`](../../developers/supply_and_borrow_market/sbm.md#mint) — `payable` for jTRX, takes a `mintAmount` for jTRC20 markets.
+- Required prerequisite for TRC20 supply: call `approve()` on the underlying TRC20 contract first (granting the jToken delegator allowance).
+- Live runnable example: [Supply USDT — TronWeb](../../developers/supply_and_borrow_market/sbm.md#examples-tronweb).
+- Exchange rate evolution: [`exchangeRateCurrent()`](../../developers/supply_and_borrow_market/sbm.md#exchangerate) — scaled by `1e18`, increases over time as interest accrues.
+- Per-block supply rate: [`supplyRatePerBlock()`](../../developers/supply_and_borrow_market/sbm.md#supply-rate).
+- Underlying balance lookup: [`balanceOfUnderlying(owner)`](../../developers/supply_and_borrow_market/sbm.md#underlying-balance).

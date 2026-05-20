@@ -39,13 +39,16 @@
 - [Comptroller](https://docs.justlend.org/developers/supply_and_borrow_market/comptroller)
 - [Staked TRX contracts](https://docs.justlend.org/developers/staked_trx)
 - [Energy Rental contracts](https://docs.justlend.org/developers/energy_rental)
-- [Deployed Contracts (mainnet addresses)](https://docs.justlend.org/developers/deployed_contracts): All jTokens, interest rate models, oracle, governance, comptroller, sTRX, Energy Rental. **All addresses on TRON Mainnet.** Inspect ABI via Tronscan.
+- [Deployed Contracts](https://docs.justlend.org/developers/deployed_contracts): Mainnet and Nile addresses for jTokens, interest rate models, oracle, governance, comptroller, sTRX, and Energy Rental.
+- [Machine-readable contract directory](https://docs.justlend.org/developers/contracts.json): JSON address book with `base58`, `hex_evm`, `hex_tron`, and Tronscan links for Mainnet and Nile.
+- [Machine-readable ABIs](https://docs.justlend.org/developers/abis/jtoken.json): JSON ABI files under `/developers/abis/` for jToken, Comptroller, PriceOracle, TRC20, governance, WJST, sTRX, Energy Rental, and rate models.
 
 ## AI Agent integration
 
+- [AI / LLMs](https://docs.justlend.org/ai_support/ai_llms): Human-readable directory for `llms.txt`, `llms-full.txt`, OpenAPI, contract JSON, and ABI JSON endpoints.
 - [JustLend Skills](https://docs.justlend.org/ai_support/justlend_skills) (`@justlend/justlend-skills`): Read-only skills package + lightweight MCP server (**9 query tools**). Source: <https://github.com/justlend/justlend-skills>.
 - [Full MCP Server](https://docs.justlend.org/ai_support/mcp_server) (`@justlend/mcp-server-justlend`, v1.0.6, **59 tools**): Full read/write MCP server for supply, borrow, repay, withdraw, sTRX staking, energy rental, governance voting, mining rewards, transfers, and general TRON utilities. Source: <https://github.com/justlend/mcp-server-justlend>.
-- [Machine-readable ABIs](https://github.com/justlend/mcp-server-justlend/blob/main/src/core/abis.ts): jToken, Comptroller, Oracle, TRC20 — bundled in the MCP server. Network configs (Mainnet/Nile) in [`chains.ts`](https://github.com/justlend/mcp-server-justlend/blob/main/src/core/chains.ts).
+- [MCP source ABIs and network config](https://github.com/justlend/mcp-server-justlend): Upstream TypeScript definitions used to generate the docs JSON ABI and address files.
 
 ## API endpoints (read-only HTTP API)
 
@@ -72,7 +75,9 @@ Refer to the OpenAPI spec for the full endpoint list, request parameters, respon
 ## Notes for AI agents
 
 - **Network**: All deployed contract addresses listed in this documentation are on **TRON Mainnet**. Use Nile testnet (`NETWORK=nile`) for testing — testnet addresses differ and are not listed here.
+- **Networks and address formats**: Use [`/developers/contracts.json`](https://docs.justlend.org/developers/contracts.json) for Mainnet + Nile addresses in Base58, EVM `0x` hex, and TRON-internal `41` hex. Rendered tables may show Base58 only.
 - **Precision**: jToken balances are returned in jToken units (8 decimals). Underlying token amounts use that token's own decimals (TRX = 6, USDT = 6, USDC = 6, BTC = 8, ETH = 18, etc.). Always check the underlying token's `decimals()` before submitting transactions.
+- **Rate limits**: The public OpenAPI service is unauthenticated and may throttle abusive clients. Keep `pageSize <= 1000`, cache market metadata, avoid tight polling loops, and retry `429` / `5xx` with exponential backoff.
 - **Recommended source-of-truth priority**: (1) OpenAPI spec → (2) MCP server tools → (3) rendered docs. The HTML docs are for human reading; for programmatic use prefer the OpenAPI spec and MCP server.
 - **Read-only vs. write**: The HTTP API and the JustLend Skills MCP server are read-only. Only `@justlend/mcp-server-justlend` exposes write tools. Write operations are clearly marked with `destructiveHint: true` and require an encrypted local wallet via `@bankofai/agent-wallet`.
 

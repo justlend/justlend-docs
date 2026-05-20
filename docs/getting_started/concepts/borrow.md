@@ -24,3 +24,12 @@ Borrowing can be done with a user interface [JustLend SBM](https://app.justlend.
 1. Connect your Web3 wallet on TronLink or other supported wallet app to the JustLend DAO ([https://justlend.org](https://justlend.org)).
 2. Navigate to the "SBM" and choose the asset you want to borrow from the supported assets listed on the markets. For example, if you want to borrow TRX, click 「Borrow」 on the TRX market.
 3. Specify the amount you want to borrow and confirm the transaction.
+
+### Developer reference
+
+- Contract function: [`borrow(borrowAmount)` on `CToken.sol`](../../developers/supply_and_borrow_market/sbm.md#borrow) — reverts if the account is undercollateralized.
+- Required prerequisite: [`enterMarkets(jTokens[])` on Comptroller](../../developers/supply_and_borrow_market/comptroller.md#enter-markets) — supplied assets are **not** counted as collateral until the user enters that market.
+- Health check before borrow: [`getAccountLiquidity(account)`](../../developers/supply_and_borrow_market/comptroller.md#get-account-liquidity) returns `(error, liquidity, shortfall)`. Reject if `shortfall > 0`.
+- Live runnable example: [Borrow with pre-flight liquidity check — TronWeb](../../developers/supply_and_borrow_market/sbm.md#examples-tronweb).
+- Per-block borrow rate: [`borrowRatePerBlock()`](../../developers/supply_and_borrow_market/sbm.md#borrow-rate).
+- Current borrow balance: [`borrowBalanceCurrent(account)`](../../developers/supply_and_borrow_market/sbm.md#borrow-balance) — accrues interest before returning.

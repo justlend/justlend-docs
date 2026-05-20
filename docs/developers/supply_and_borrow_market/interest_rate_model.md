@@ -2,9 +2,9 @@
 
 JustLend DAO's interest rate model aims to maximize the utilization of assets while effectively managing liquidity risks. Therefore, the parameter utilization rate U of each market is particularly important, as it reflects the true situation of the available assets in each market. As the utilization rate approaches 100%, assets become scarce, making borrowing impossible.  Meanwhile, suppliers may be unable to withdraw their liquidity due to the lack of available assets. The formula of the utilization U is defined as:
 
-<div style="text-align: center; font-size: 20px;">
-    U = Total Borrows / Total Supply
-</div>
+$$
+U = \frac{\mathrm{Total\ Borrows}}{\mathrm{Total\ Supply}}
+$$
 
 To calibrate the interest rate model around an optimal utilization rate which reflects the real conditions, JustLend DAO provides variable interest rates for markets through two distinct interest models:
 
@@ -15,14 +15,15 @@ To calibrate the interest rate model around an optimal utilization rate which re
 The Whitepaper Rate Model is straightforward, as the borrowing rate is directly proportional to the utilization. The interest rate is defined as below.
 
 ### **Borrow Rate:**
-<div style="text-align: center; font-size: 20px;">
-    borrow_rate(u) = a ∗ u + b
-</div>
+$$
+\mathrm{borrowRate}(u) = a \times u + b
+$$
 
 where the borrow utilization rate `u` is defined as:
-<div style="text-align: center; font-size: 20px;">
-    u = borrows / (cash + borrows − reserves)
-</div>
+
+$$
+u = \frac{\mathrm{borrows}}{\mathrm{cash} + \mathrm{borrows} - \mathrm{reserves}}
+$$
 
 * `borrows:` the total amount borrowed in the market, denominated in the underlying asset, excluding bad debts;
 * `cash:` the total amount of the underlying asset held by the market at a specific time;
@@ -30,9 +31,9 @@ where the borrow utilization rate `u` is defined as:
 
 ### **Supply Rate:**
 
-<div style="text-align: center; font-size: 20px;">
-    supply_rate(u) = borrow_rate(u) ∗ u ∗ (1 − reserve_factor)
-</div>
+$$
+\mathrm{supplyRate}(u) = \mathrm{borrowRate}(u) \times u \times (1 - \mathrm{reserveFactor})
+$$
 
 #### **Model Parameters**
 * `a:` variable interest rate slope;
@@ -47,20 +48,22 @@ The interest rate is defined as below.
 ### **Borrow Rate:**
 
 **if u < kink:**
-<div style="text-align: center; font-size: 20px;">
-    supply_rate(u) = a_1 * u + b
-</div>
+
+$$
+\mathrm{borrowRate}(u) = a_1 \times u + b
+$$
 
 **if u >= kink:**
 
-<div style="text-align: center; font-size: 20px;">
-    supply_rate(u) = a_1 * kink + a_2 * (u - kink) + b
-</div>
+$$
+\mathrm{borrowRate}(u) = a_1 \times \mathrm{kink} + a_2 \times (u - \mathrm{kink}) + b
+$$
 
 where the borrow utilization rate `u` is defined as:
-<div style="text-align: center; font-size: 20px;">
-    u = borrows / (cash + borrows − reserves)
-</div>
+
+$$
+u = \frac{\mathrm{borrows}}{\mathrm{cash} + \mathrm{borrows} - \mathrm{reserves}}
+$$
 
 * `borrows:` the total amount borrowed in the market, denominated in the underlying asset, excluding bad debts.
 * `cash:` the total amount of the underlying asset held by the market at a specific time.
@@ -68,9 +71,9 @@ where the borrow utilization rate `u` is defined as:
 
 ### **Supply Rate:**
 
-<div style="text-align: center; font-size: 20px;">
-    supply_rate(u) = borrow_rate(u) ∗ u ∗ (1 − reserve_factor)
-</div>
+$$
+\mathrm{supplyRate}(u) = \mathrm{borrowRate}(u) \times u \times (1 - \mathrm{reserveFactor})
+$$
 
 #### **Model Parameters**
 * `a_1:` variable interest rate slope1;

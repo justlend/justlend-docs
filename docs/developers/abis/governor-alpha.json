@@ -1,0 +1,145 @@
+[
+  {
+    "type": "function",
+    "name": "castVote",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "proposalId"
+      },
+      {
+        "type": "uint256",
+        "name": "votes"
+      },
+      {
+        "type": "uint8",
+        "name": "support"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "withdrawVotes",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "proposalId"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "proposalCount",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "state",
+    "inputs": [
+      {
+        "name": "proposalId",
+        "type": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getReceipt",
+    "inputs": [
+      {
+        "name": "proposalId",
+        "type": "uint256"
+      },
+      {
+        "name": "voter",
+        "type": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "hasVoted",
+        "type": "bool"
+      },
+      {
+        "name": "support",
+        "type": "uint8"
+      },
+      {
+        "name": "votes",
+        "type": "uint96"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "proposals",
+    "inputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "id",
+        "type": "uint256"
+      },
+      {
+        "name": "proposer",
+        "type": "address"
+      },
+      {
+        "name": "eta",
+        "type": "uint256"
+      },
+      {
+        "name": "startBlock",
+        "type": "uint256"
+      },
+      {
+        "name": "endBlock",
+        "type": "uint256"
+      },
+      {
+        "name": "forVotes",
+        "type": "uint256"
+      },
+      {
+        "name": "againstVotes",
+        "type": "uint256"
+      },
+      {
+        "name": "abstainVotes",
+        "type": "uint256"
+      },
+      {
+        "name": "canceled",
+        "type": "bool"
+      },
+      {
+        "name": "executed",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  }
+]

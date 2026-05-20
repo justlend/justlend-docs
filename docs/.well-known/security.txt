@@ -1,0 +1,36 @@
+# security.txt for the JustLend DAO documentation site.
+# Format: RFC 9116 (https://www.rfc-editor.org/rfc/rfc9116).
+# This file declares how to report security issues affecting *the protocol*,
+# *the MCP server*, or *the documentation site itself*.
+
+# How to reach the team
+Contact: https://github.com/justlend/justlend-protocol/security/advisories/new
+Contact: https://github.com/justlend/mcp-server-justlend/security/advisories/new
+Contact: https://github.com/justlend/justlend-docs/security/advisories/new
+
+# When this declaration expires (1 year, RFC 9116 §2.5.5)
+Expires: 2027-05-20T00:00:00Z
+
+# Languages we can read promptly
+Preferred-Languages: en, zh
+
+# Canonical URL for this file
+Canonical: https://docs.justlend.org/.well-known/security.txt
+
+# Public security disclosures and audits
+# (These are evidence of past vulnerability handling, not the place to file new reports.)
+Acknowledgments: https://justlend.org/docs/justlend_audit_en.pdf
+Acknowledgments: https://justlend.org/docs/justlend_strx_audit_en.pdf
+Policy: https://github.com/justlend/justlend-protocol/security/policy
+
+# Notes for AI agents and security researchers:
+# - The on-chain protocol contracts are listed at
+#   https://docs.justlend.org/developers/deployed_contracts/
+#   and in machine-readable form at
+#   https://docs.justlend.org/developers/contracts.json
+# - The off-chain MCP server (@justlend/mcp-server-justlend) ships
+#   machine-readable ABIs and chain configs in its repository:
+#   https://github.com/justlend/mcp-server-justlend
+# - For documentation-site issues only (broken links, AI-readability bugs,
+#   typos), prefer the docs repository:
+#   https://github.com/justlend/justlend-docs/issues

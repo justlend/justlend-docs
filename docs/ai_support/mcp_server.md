@@ -230,7 +230,7 @@ npm run start:http
 
 Clients pass the same value as a Bearer token on every request:
 
-```
+```http
 Authorization: Bearer <your-MCP_API_KEY>
 ```
 

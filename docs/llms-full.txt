@@ -2,7 +2,7 @@
 
 > A condensed, single-document snapshot of the JustLend DAO documentation, intended for LLMs that prefer one-shot ingestion over per-page crawling. Authoritative source is the live site at <https://docs.justlend.org>; the OpenAPI spec at <https://docs.justlend.org/developers/apis/justlend_apis.yaml> is the machine-readable contract.
 
-This document covers: protocol overview, core concepts (supply / borrow / withdraw / repay / liquidation / risks / sTRX / energy rental), governance, developer contract reference, deployed addresses (TRON mainnet), the HTTP API surface, and the AI integration story (Skills + MCP). For exhaustive function signatures and field-by-field response schemas, see the individual reference pages and the OpenAPI YAML.
+This document covers: protocol overview, core concepts (supply / borrow / withdraw / repay / liquidation / risks / sTRX / energy rental), governance, developer contract reference, deployed addresses (TRON mainnet + Nile), the HTTP API surface, and the AI integration story (Skills + MCP). For exhaustive function signatures, field-by-field response schemas, JSON ABIs, and machine-readable address formats, see the individual reference pages and the OpenAPI YAML.
 
 ---
 
@@ -58,9 +58,9 @@ Pay back outstanding debt with the same underlying asset (or via `repayBorrowBeh
 
 Liquidation is triggered by **Risk Value**:
 
-```
-Risk Value = Total Borrow / Borrow Limit × 100
-```
+$$
+\mathrm{Risk\ Value} = \frac{\mathrm{Total\ Borrow}}{\mathrm{Borrow\ Limit}} \times 100
+$$
 
 | Range | Risk |
 |-------|------|
@@ -179,10 +179,18 @@ function liquidationIncentiveMantissa() view returns (uint256)         // scaled
 
 Two models in use:
 
-- **WhitePaperInterestRateModel** — `borrow_rate(u) = a·u + b`. Used for jTRX historically.
-- **JumpRateModelV2** — kinked. Below `kink`: `a1·u + b`. Above `kink`: `a1·kink + a2·(u−kink) + b`. Used for most TRC20 markets.
+- **WhitePaperInterestRateModel** — $\mathrm{borrowRate}(u) = a \times u + b$. Used for jTRX historically.
+- **JumpRateModelV2** — kinked. Below `kink`: $a_1 \times u + b$. Above `kink`: $a_1 \times \mathrm{kink} + a_2 \times (u - \mathrm{kink}) + b$. Used for most TRC20 markets.
 
-In both, `u = borrows / (cash + borrows − reserves)` and `supply_rate(u) = borrow_rate(u) · u · (1 − reserve_factor)`.
+In both:
+
+$$
+u = \frac{\mathrm{borrows}}{\mathrm{cash} + \mathrm{borrows} - \mathrm{reserves}}
+$$
+
+$$
+\mathrm{supplyRate}(u) = \mathrm{borrowRate}(u) \times u \times (1 - \mathrm{reserveFactor})
+$$
 
 ### 4.4 Price Oracle (`SimplePriceOracle.sol`, via `PriceOracleProxy`)
 
@@ -281,9 +289,9 @@ Full error code (17 codes) and failure-info enum (~78 entries) tables are on the
 
 ---
 
-## 5. Deployed Contracts (TRON Mainnet)
+## 5. Deployed Contracts (TRON Mainnet + Nile)
 
-All addresses below are on **TRON Mainnet**. Testnet (Nile) addresses differ; testnet must be configured separately. Inspect ABIs via Tronscan links.
+The rendered tables below summarize **TRON Mainnet** Base58 addresses. For machine use, fetch `/developers/contracts.json`; it includes Mainnet and Nile addresses in Base58, EVM `0x` hex, TRON-internal `41` hex, and Tronscan URLs. JSON ABI files are available under `/developers/abis/`.
 
 ### 5.1 SBM core
 
@@ -422,7 +430,7 @@ Guided prompts ship with the server (10 total): `getting_started`, `supply_asset
 
 **Transport modes**: `stdio` (local clients — Claude Desktop, Codex, Claude Code, Cursor) or `HTTP/SSE` (remote/multi-client). HTTP mode is **fail-closed**: `MCP_API_KEY` is required, binds to `127.0.0.1` by default, CORS disabled unless `MCP_CORS_ORIGIN` is set.
 
-**Machine-readable ABIs**: bundled in [`src/core/abis.ts`](https://github.com/justlend/mcp-server-justlend/blob/main/src/core/abis.ts) (TypeScript). Per-network contract addresses in [`src/core/chains.ts`](https://github.com/justlend/mcp-server-justlend/blob/main/src/core/chains.ts).
+**Machine-readable ABIs**: JSON files are available under <https://docs.justlend.org/developers/abis/>. The upstream MCP server keeps the source TypeScript definitions in [`src/core/abis.ts`](https://github.com/justlend/mcp-server-justlend/blob/main/src/core/abis.ts); per-network contract addresses are mirrored in `/developers/contracts.json` from [`src/core/chains.ts`](https://github.com/justlend/mcp-server-justlend/blob/main/src/core/chains.ts).
 
 ### 7.3 Recommended source-of-truth priority for AI agents
 
@@ -458,7 +466,8 @@ Guided prompts ship with the server (10 total): `getting_started`, `supply_asset
 ## 9. Notes & Caveats for LLM Consumers
 
 - This file is a **snapshot**, regenerated periodically. Treat live endpoints (OpenAPI YAML, sitemap, MCP `list_tools`) as the source of truth when numbers diverge.
-- Addresses in §5 are **TRON Mainnet only**. For Nile testnet, configure clients with `NETWORK=nile` and discover testnet addresses via the testnet deployment of the dApp.
+- Addresses summarized in §5 are rendered for readability. For exact Mainnet and Nile addresses in Base58, EVM `0x` hex, and TRON-internal `41` hex, use <https://docs.justlend.org/developers/contracts.json>.
+- The public OpenAPI service is unauthenticated and may throttle abusive clients. Keep `pageSize <= 1000`, cache stable market metadata, and retry `429` / transient `5xx` with exponential backoff and jitter.
 - Where this document gives APYs, TVL, or other dynamic numbers as examples (notably in the Energy Rental cost section), they reflect the moment the underlying example transactions were recorded and are not current.
 - Liquidation rules summarized here describe the contract-level mechanism. The official liquidation tool also enforces additional UX-level disclaimers — see <https://docs.justlend.org/resources/risk_warning>.
 - "Read-only" guarantees for the HTTP API and the Skills package are enforced by code paths (no signing keys), not just policy. The full MCP server is the only component that can submit transactions, and only through the encrypted agent-wallet.

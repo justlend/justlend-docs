@@ -1,4 +1,8 @@
 openapi: 3.1.0
+x-rate-limit:
+    authentication: none
+    pageSizeMax: 1000
+    policy: Public unauthenticated traffic may be throttled. Cache stable metadata and retry 429 or transient 5xx responses with exponential backoff and jitter.
 info:
     title: JustLend DAO API
     version: '1.0.0'
@@ -20,6 +24,7 @@ info:
         * **Hex numbers** — `amount`, `index`, `merkleIndex`, `merkleRoot`, `proof` returned by `/mining/distributions` are bare `0x…` hex `uint256`. Pass directly to the on‑chain claim contract; decode the amount with `parseInt(hex, 16) / 1e6` for USDD.
         * **Mining APY** — paid on top of `supplyRate`. Effective supply APY = `supplyRate + apy`.
         * **Pagination** — `pageNo` is 1‑based, default `1`. `pageSize` default `10`, max `1000`.
+        * **Rate limits** — public unauthenticated traffic may be throttled. Cache stable metadata and retry `429` / transient `5xx` with exponential backoff and jitter.
         * **Errors** — non‑zero `code` plus an RFC 7807 body. See the `Error` schema.
 
         See [`/developers/apis`](https://docs.justlend.org/developers/apis) for the
@@ -64,6 +69,8 @@ paths:
                                 $ref: '#/components/schemas/MarketListResponse'
                 '400':
                     $ref: '#/components/responses/BadRequest'
+                '429':
+                    $ref: '#/components/responses/TooManyRequests'
 
     /lend/account:
         get:
@@ -88,6 +95,8 @@ paths:
                                 $ref: '#/components/schemas/AccountListResponse'
                 '400':
                     $ref: '#/components/responses/BadRequest'
+                '429':
+                    $ref: '#/components/responses/TooManyRequests'
 
     /justlend/liquidate/highRiskAccountList:
         get:
@@ -107,6 +116,8 @@ paths:
                                 $ref: '#/components/schemas/HighRiskAccountListResponse'
                 '400':
                     $ref: '#/components/responses/BadRequest'
+                '429':
+                    $ref: '#/components/responses/TooManyRequests'
 
     /mining/apy:
         get:
@@ -139,6 +150,8 @@ paths:
                                         USDD: 0.09175706
                 '400':
                     $ref: '#/components/responses/BadRequest'
+                '429':
+                    $ref: '#/components/responses/TooManyRequests'
 
     /mining/reward:
         get:
@@ -172,6 +185,8 @@ paths:
                                 $ref: '#/components/schemas/MiningRewardResponse'
                 '400':
                     $ref: '#/components/responses/BadRequest'
+                '429':
+                    $ref: '#/components/responses/TooManyRequests'
 
     /mining/distributions:
         get:
@@ -200,6 +215,8 @@ paths:
                                 $ref: '#/components/schemas/MiningDistributionsResponse'
                 '400':
                     $ref: '#/components/responses/BadRequest'
+                '429':
+                    $ref: '#/components/responses/TooManyRequests'
 
     /lend/strx:
         get:
@@ -218,6 +235,8 @@ paths:
                                 $ref: '#/components/schemas/StrxSnapshotResponse'
                 '400':
                     $ref: '#/components/responses/BadRequest'
+                '429':
+                    $ref: '#/components/responses/TooManyRequests'
 
     /lend/strxStake/account:
         get:
@@ -241,6 +260,8 @@ paths:
                                 $ref: '#/components/schemas/StrxStakeAccountResponse'
                 '400':
                     $ref: '#/components/responses/BadRequest'
+                '429':
+                    $ref: '#/components/responses/TooManyRequests'
 
     /lend/rentResource/account:
         get:
@@ -265,6 +286,8 @@ paths:
                                 $ref: '#/components/schemas/RentAccountResponse'
                 '400':
                     $ref: '#/components/responses/BadRequest'
+                '429':
+                    $ref: '#/components/responses/TooManyRequests'
 
 components:
     parameters:
@@ -326,6 +349,18 @@ components:
     responses:
         BadRequest:
             description: Bad Request — missing or malformed parameters.
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/Error'
+        TooManyRequests:
+            description: Too Many Requests — slow down and retry with exponential backoff and jitter.
+            headers:
+                Retry-After:
+                    description: Optional server-provided delay, in seconds, before retrying.
+                    schema:
+                        type: integer
+                        minimum: 1
             content:
                 application/json:
                     schema:

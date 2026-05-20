@@ -39,3 +39,13 @@ The staking APY fluctuates with the changes in voting rewards and the Energy ren
     * Unstake via a third-party platform: You can initiate transactions on other platforms, such as HTX and SunSwap, to swap your sTRX.
 
 If you unstake your sTRX on JustLend DAO, you need to wait for 14 days before withdrawing the unstaked TRX by clicking 「Withdraw」 on the same page.
+
+### Developer reference
+
+- Stake TRX → receive sTRX: [`deposit()` payable](../../developers/staked_trx.md#deposit-trx) — pass TRX in `msg.value`.
+- Unstake by sTRX units: [`withdraw(tokenAmount)`](../../developers/staked_trx.md#withdraw-strx) — enters the 14-day unbonding queue.
+- Unstake by exact TRX amount: [`withdrawExact(trxAmount)`](../../developers/staked_trx.md#withdraw-strx-with-the-amount-of-trx-specified).
+- Claim unfrozen TRX (one round at a time): [`claim()`](../../developers/staked_trx.md#claim-trx).
+- Claim all completed rounds: [`claimAll()`](../../developers/staked_trx.md#claim-all-unfrozen-trx).
+- Exchange rate: [`exchangeRate()`](../../developers/staked_trx.md#exchange-rate) — sTRX-per-TRX, scaled by `1e18`. Always >= 1, grows over time.
+- Live runnable examples: [Stake / quote / unstake / claim — TronWeb](../../developers/staked_trx.md#examples-tronweb).

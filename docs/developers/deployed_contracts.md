@@ -1,13 +1,44 @@
 # Deployed Contracts
 
-!!! info "Network: TRON Mainnet"
-    Every address on this page is deployed on **TRON Mainnet** (Chain ID `0x2b6653dc`). For **Nile testnet**, see the [`src/core/chains.ts`](https://github.com/justlend/mcp-server-justlend/blob/main/src/core/chains.ts) configuration in the JustLend MCP server repository.
+!!! tip "Machine-readable contract directory"
+    For agents and tooling that need every address in **TRON Base58 + EVM 0x-Hex + TRON-internal 41-Hex** form, download [`contracts.json`](contracts.json). The file is structured as `networks.{mainnet,nile}.{comptroller,governance,price_oracle,jtokens,interest_rate_models,strx}`, with each address record carrying `base58 / hex_evm / hex_tron / tronscan` fields. The tables below show **Base58 only** for readability; use the JSON for cross-chain bridges, EVM-side tooling, Etherscan-like indexers, and TronGrid calls that require `41`-prefixed hex.
 
 !!! tip "Machine-readable ABIs"
-    Tronscan provides verified-contract ABIs on the **Contract** tab of each link below — click the "ABI" sub-tab to copy or download. Programmatic consumers can also use the bundled ABIs in [`src/core/abis.ts`](https://github.com/justlend/mcp-server-justlend/blob/main/src/core/abis.ts) of the MCP server (TypeScript), which covers jToken, Comptroller, PriceOracle, and TRC20.
+    Every contract referenced on this page has a downloadable JSON ABI under [`abis/`](abis/jtoken.json):
+    
+    | Contract | ABI |
+    |---|---|
+    | jToken (CErc20) — `mint` / `borrow` / `repayBorrow` / `redeem` / `liquidateBorrow` | [`abis/jtoken.json`](abis/jtoken.json) |
+    | jToken — TRX-specific `mint()` payable | [`abis/jtrx-mint.json`](abis/jtrx-mint.json) |
+    | jToken — TRX-specific `repayBorrow()` payable | [`abis/jtrx-repay.json`](abis/jtrx-repay.json) |
+    | Comptroller / Unitroller | [`abis/comptroller.json`](abis/comptroller.json) |
+    | PriceOracle | [`abis/price-oracle.json`](abis/price-oracle.json) |
+    | TRC20 (generic) | [`abis/trc20.json`](abis/trc20.json) |
+    | GovernorAlpha / Bravo | [`abis/governor-alpha.json`](abis/governor-alpha.json) |
+    | WJST (voting wrapper) | [`abis/wjst.json`](abis/wjst.json) |
+    | Poly helper | [`abis/poly.json`](abis/poly.json) |
+    | EnergyRental market | [`abis/energy-market.json`](abis/energy-market.json) |
+    | EnergyRateModel | [`abis/energy-rate-model.json`](abis/energy-rate-model.json) |
+    | sTRX | [`abis/strx.json`](abis/strx.json) |
+    | InterestRateModel (jump-rate / whitepaper) | [`abis/interest-rate-model.json`](abis/interest-rate-model.json) |
+    
+    These are sourced from the same definitions the [JustLend MCP server](../ai_support/mcp_server.md) uses at runtime — see [`src/core/abis.ts`](https://github.com/justlend/mcp-server-justlend/blob/main/src/core/abis.ts) for the upstream TypeScript form.
+
+!!! info "Network: TRON Mainnet (unless noted)"
+    Everything in the main tables below is deployed on **TRON Mainnet** (Chain ID `0x2b6653dc`). For **Nile testnet** addresses see the [Nile Testnet](#nile-testnet) section at the bottom of this page or the `nile` block of `contracts.json`.
 
 !!! warning "Decimals / precision"
     The Compound V2 architecture treats every token amount in **its underlying's smallest unit**. Always read `decimals()` on the underlying TRC20 before constructing `mint`, `borrow`, `repayBorrow`, or `redeemUnderlying` amounts. Common cases: TRX/USDT/USDC = 6, USDD/ETH = 18, BTC/WBTC = 8. jToken amounts (`redeem`, `transfer`) use **8 decimals** regardless of the underlying.
+
+## Address formats
+
+TRON addresses appear in three equivalent formats. Human-facing tables on this page use Base58; machine consumers should use [`contracts.json`](contracts.json) for all three forms.
+
+| Format | Example for Unitroller | Use cases |
+|--------|-------------------------|-----------|
+| Base58 | `TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7` | Wallets, Tronscan, TronWeb display, user prompts |
+| EVM 0x-Hex | `0x4a33bf2666f2e75f3d6ad3b9ad316685d5c668d4` | EVM-side tooling, bridges, indexers, byte-address comparisons |
+| TRON 41-Hex | `0x414a33bf2666f2e75f3d6ad3b9ad316685d5c668d4` | TronGrid / TronWeb low-level APIs that expect TRON-internal hex |
 
 ---
 
@@ -126,3 +157,37 @@ See [Staked TRX](staked_trx.md) for the contract reference.
 | EnergyRental | `EnergyRental` | `TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd` | [Contract](https://tronscan.io/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd) |
 
 See [Energy Rental](energy_rental.md) for the contract reference.
+
+---
+
+## Nile Testnet
+
+!!! warning "Testnet — not the production protocol"
+    Use these addresses only for development and integration testing. Some Nile contracts are placeholder/stub addresses — when in doubt, call `get_supported_networks` / `get_supported_markets` on the [JustLend MCP server](../ai_support/mcp_server.md) for the live runtime view, or consult the [`chains.ts` Nile section](https://github.com/justlend/mcp-server-justlend/blob/main/src/core/chains.ts).
+
+| Component | Contract | Address |
+|-----------|----------|---------|
+| Comptroller (proxy / entrypoint) | `Unitroller` | `TJUCStq3WqfKqZLuZje5v7z6Ua6iBry1P6` |
+| Governance | `GovernorBravoDelegator` | `TYCNENqt2oJK7eiwubi6YXXt8RHR1BnzBs` |
+| JST token (testnet) | `JST` | `TJqk3ChKSjmpoNm3gaqSEatNsueD37NGDK` |
+| WJST (voting wrapper, testnet) | `WJST` | `TCxA1eNhsAV3gvUwLjLtREW9f775V4h1h7` |
+| StakedTRX proxy (testnet) | `sTRX` | `TZ8du1HkatTWDbS6FLZei4dQfjfpSm9mxp` |
+
+The Nile testnet currently exposes a subset of the mainnet jToken markets plus four QA-only markets (`jUSD1test`, `jETHQA`, `jBUSDqa1`, `jBUSDqa2`). For the complete Nile jToken list with delegator and underlying addresses, see [`contracts.json` → `networks.nile`](contracts.json) or the [MCP server `chains.ts`](https://github.com/justlend/mcp-server-justlend/blob/main/src/core/chains.ts).
+
+### Configuring clients for Nile
+
+```bash
+# JustLend Skills / MCP server
+export NETWORK=nile
+```
+
+```javascript
+// TronWeb
+const tronWeb = new TronWeb({
+  fullHost: 'https://nile.trongrid.io',
+  // ...
+});
+```
+
+Tronscan testnet explorer: <https://nile.tronscan.org>.

@@ -6,6 +6,7 @@ Public REST endpoints for querying JustLend DAO protocol state: lending markets,
 - **Method:** All endpoints are `GET`. No authentication.
 - **Content‑Type:** `application/json`
 - **Machine‑readable spec:** [`justlend_apis.yaml`](./apis/justlend_apis.yaml) (OpenAPI 3.1). Importable into Swagger UI, Postman, Insomnia, or any LLM tool.
+- **Rate limits:** The public service is unauthenticated and may throttle abusive traffic. Keep `pageSize <= 1000`, cache stable metadata such as jToken lists, and retry `429` / `5xx` responses with exponential backoff.
 
 ---
 
@@ -88,7 +89,18 @@ Endpoints that accept `pageNo` and `pageSize` return:
 | `401`       | Unauthorized.                                    |
 | `403`       | Forbidden.                                       |
 | `404`       | Not Found.                                       |
+| `429`       | Too Many Requests — slow down and retry with exponential backoff. |
 | `5xx`       | Server error. Safe to retry with backoff.        |
+
+### 1.7 Rate limits and retry
+
+The public API is designed for read-only integrations and AI agents. It is not a bulk export interface.
+
+- Use `pageSize <= 1000`; this is the documented maximum for paginated endpoints.
+- Cache stable reference data such as jToken addresses, symbols, decimals, and collateral factors.
+- Avoid tight polling loops. Market dashboards normally do not need sub-second refreshes.
+- On `429` or transient `5xx`, retry with exponential backoff and jitter. Start around 1 second and cap retries to avoid request storms.
+- If you need sustained high-volume access, contact the JustLend team before production launch.
 
 ---
 
@@ -204,7 +216,7 @@ Returns each queried wallet's supply/borrow positions, health factor and totals.
 
 **Example request**
 
-```
+```http
 GET /lend/account?addresses=T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb,TXJgM...&pageNo=1&pageSize=20
 ```
 
@@ -399,7 +411,7 @@ Returns the active and previous mining phase for the given user, per market.
 
 **Example request**
 
-```
+```http
 GET /mining/reward?address=T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb
 ```
 
@@ -456,7 +468,7 @@ Returns **every** mining phase the user has ever been entitled to, including cla
 
 **Example request**
 
-```
+```http
 GET /mining/distributions?address=T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb
 ```
 
