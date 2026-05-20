@@ -292,7 +292,9 @@ All addresses below are on **TRON Mainnet**. Testnet (Nile) addresses differ; te
 
 ### 5.2 jToken delegators (the addresses users interact with)
 
-Rows tagged `(legacy)` are **closed to new supply and borrow** — existing positions can still be unwound but do not direct new deposits to them. Always cross-check with `apis.md §2` for the latest status.
+The protocol currently exposes **17 active** + **6 legacy** = 23 markets. Rows tagged `(legacy)` are **closed to new supply and borrow** — existing positions can still be unwound but do not direct new deposits to them. Always cross-check with `apis.md §2` for the latest status.
+
+Note: the dApp UI has renamed two markets — `jETH` is displayed as "ETH" (formerly "ETHOLD"), and `jETHB` is displayed as "ETHB" (formerly "ETH"). On-chain addresses are unchanged.
 
 | Underlying | jToken (CErc20Delegator) | Underlying TRC20 |
 |------------|--------------------------|------------------|
@@ -300,7 +302,7 @@ Rows tagged `(legacy)` are **closed to new supply and borrow** — existing posi
 | USDT       | `TXJgMdjVX5dKiQaUi9QobwNxtSQaFqccvd`      | `TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t` |
 | USDD       | `TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf`      | `TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz` |
 | USDCOLD (legacy) | `TNSBA6KvSvMoTqQcEgpVK7VhHT3z7wifxy`      | `TLZSucJRjnqBKwvQz6n5hd29gbS4P7u7w8` |
-| USDJ       | `TL5x9MtSnDy537FXKx53yAaHRRNdg9TkkA`      | `TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT` |
+| USDJ (legacy) | `TL5x9MtSnDy537FXKx53yAaHRRNdg9TkkA`      | `TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT` |
 | TUSD       | `TSXv71Fy5XdL3Rh2QfBoUu3NAaM4sMif8R`      | `TUpMhErZL2fhh4sVNULAbNKLokS4GjC1F4` |
 | USD1       | `TBEKggwqFkrc4KckQVR9BLucAmQugafEZf`      | `TPFqcBAaaUMCSVRCqPaQ9QnzKhmuoLR6Rc` |
 | wstUSDT    | `TD5SdLw5scR6mXgyMK2xKrFJpauDjpKqrW`      | `TGkxzkDKyMeq2T7edKnyjZoFypyzjkkssq` |
@@ -310,13 +312,15 @@ Rows tagged `(legacy)` are **closed to new supply and borrow** — existing posi
 | NFT        | `TFpPyDCKvNFgos3g3WVsAqMrdqhB81JXHE`      | `TFczxzPhnThNSqr5by8tvxsdCFRRz6cPNq` |
 | JST        | `TWQhCXaWz4eHK4Kd1ErSDHjMFPoPc9czts`      | `TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9` |
 | WIN        | `TRg6MnpsFXc82ymUPgf5qbj59ibxiEDWvv`      | `TLa2f6VPqDgRE67v1736s7bJ8Ray5wYjU7` |
+| HTX        | `TDA1mWPyAjTRATMGA55UTswGAHhV2itEXR`      | `TUPM7K8REVzD2UdV4R5fe5M8XbnR2DdoJ6` |
 | BTC        | `TLeEu311Cbw63BcmMHDgDLu7fnk9fqGcqT`      | `TN3W4H6rK2ce4vX9YnFQHwKENnHjoxb3m9` |
 | WBTC       | `TVyvpmaVmz25z2GaXBDDjzLZi5iR5dBzGd`      | `TYhWwKpw43ENFWBTGpzLHn3882f2au7SMi` |
 | ETHB       | `TWBxQMb6RD3qmkXUXpNwVCYbL8SHNreru6`      | `TRFe3hT5oYhjSZ6f3ji5FJ7YCfrkWnHRvh` |
 | ETH        | `TR7BUFRQeq1w5jAZf1FKx85SHuX6PfMqsV`      | `THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF` |
-| WBTT       | `TUY54PVeH6WCcYCd6ZXXoBDsHytN9V5PXt`      | `TKfjV9RNKJJCqPvBtK8L7Knykh7DNWvnYt` |
-| BUSDOLD    | `TLHASseQymmpGQdfAyNjkMXFTJh8nzR2x2`      | `TMz2SWatiAtZVVcH2ebpsbVtYwUPT9EdjH` |
-| SUNOLD     | `TGBr8uh9jBVHJhhkwSJvQN2ZAKzVkxDmno`      | `TKkeiboTkxXKJpbmVFbv4a8ov5rAfRDMf9` |
+| WBTT (legacy) | `TUY54PVeH6WCcYCd6ZXXoBDsHytN9V5PXt`      | `TKfjV9RNKJJCqPvBtK8L7Knykh7DNWvnYt` |
+| USDDOLD (legacy) | `TX7kybeP6UwTBRHLNPYmswFESHfyjm9bAS`      | _(see Tronscan)_ |
+| BUSDOLD (legacy) | `TLHASseQymmpGQdfAyNjkMXFTJh8nzR2x2`      | `TMz2SWatiAtZVVcH2ebpsbVtYwUPT9EdjH` |
+| SUNOLD (legacy)  | `TGBr8uh9jBVHJhhkwSJvQN2ZAKzVkxDmno`      | `TKkeiboTkxXKJpbmVFbv4a8ov5rAfRDMf9` |
 
 For the full list including each delegator's matching delegate-implementation contract, see <https://docs.justlend.org/developers/deployed_contracts>.
 

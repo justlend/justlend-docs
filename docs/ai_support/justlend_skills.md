@@ -42,12 +42,14 @@ The lending skill works with the built-in 9 query tools. The other three skills 
 | jUSDT  | USDT      | Tether USD |
 | jUSDD  | USDD      | Decentralized USD |
 | jBTC   | BTC       | Bitcoin (TRC20) |
-| jETH   | ETH       | Ethereum (TRC20) |
+| jETH   | ETH       | Ethereum (TRC20) — dApp display name "ETH" (formerly "ETHOLD") |
+| jETHB  | ETHB      | Ethereum bridged — dApp display name "ETHB" (formerly "ETH") |
 | jSUN   | SUN       | SUN Token |
 | jWIN   | WIN       | WINkLink |
+| jHTX   | HTX       | HTX token |
 
-!!! note
-    The USDC market has been **closed** and the contract renamed to `jUSDCOLD`. It is still readable for existing-position queries but no longer accepts new supply or borrow. For the authoritative list of every active and legacy jToken (including `jUSDCOLD`), see [APIs §2 — jToken Address Reference](../developers/apis.md#2-jtoken-address-reference).
+!!! note "Authoritative current market list"
+    The full live list (17 active + 6 legacy) is in [APIs §2 — jToken Address Reference](../developers/apis.md#2-jtoken-address-reference). Markets currently **closed** to new supply/borrow: `jUSDCOLD`, `jUSDDOLD`, `jUSDJ`, `jWBTT`, `jSUNOLD`, `jBUSDOLD`. The on-chain contracts remain queryable so existing positions can be unwound — do not direct new deposits to them.
 
 !!! tip
     The full MCP server supports 24+ markets including jsTRX, jwstUSDT, jWBTC, and more.
