@@ -1,6 +1,13 @@
 site_name: JustLend DAO Documentation
 site_url: https://docs.justlend.org/
 
+# AI-readability entry files served at the site root.
+# They are static (non-Markdown), so MkDocs copies them as-is.
+not_in_nav: |
+    /llms.txt
+    /llms-full.txt
+    /robots.txt
+
 nav:
     - GETTING STARTED:
         - Overview: getting_started/overview.md
@@ -68,6 +75,44 @@ extra_css:
 plugins:
       - search
       - swagger-ui-tag # 添加这个插件
+      # Redirects: legacy hyphenated URLs → current underscore URLs.
+      # MkDocs generates static HTML at the old paths with <meta http-equiv="refresh">
+      # plus <link rel="canonical"> pointing at the new path. Browsers and major
+      # crawlers (Google/Bing/ClaudeBot/GPTBot) treat this as equivalent to a 301.
+      # For true HTTP 301s, replicate this mapping in a Cloudflare Page Rule.
+      - redirects:
+          redirect_maps:
+              # Getting Started
+              'getting-started/overview.md': 'getting_started/overview.md'
+              'getting-started/concepts/supply.md': 'getting_started/concepts/supply.md'
+              'getting-started/concepts/borrow.md': 'getting_started/concepts/borrow.md'
+              'getting-started/concepts/withdraw.md': 'getting_started/concepts/withdraw.md'
+              'getting-started/concepts/repay.md': 'getting_started/concepts/repay.md'
+              'getting-started/concepts/liquidations.md': 'getting_started/concepts/liquidations.md'
+              'getting-started/concepts/risks.md': 'getting_started/concepts/risks.md'
+              'getting-started/concepts/staked-trx.md': 'getting_started/concepts/staked_trx.md'
+              'getting-started/concepts/energy-rental.md': 'getting_started/concepts/energy_rental.md'
+              'getting-started/faqs/wallet-connection-questions.md': 'getting_started/faqs/wallet_connection_questions.md'
+              'getting-started/faqs/spending-cap-issue.md': 'getting_started/faqs/spending_cap_issue.md'
+              # Developers
+              'developers/contracts-overview.md': 'developers/contracts_overview.md'
+              'developers/deployed-contracts.md': 'developers/deployed_contracts.md'
+              'developers/staked-trx.md': 'developers/staked_trx.md'
+              'developers/energy-rental.md': 'developers/energy_rental.md'
+              # Developers / Supply and Borrow Market
+              'developers/supply-and-borrow-market/sbm.md': 'developers/supply_and_borrow_market/sbm.md'
+              'developers/supply-and-borrow-market/interest-rate-model.md': 'developers/supply_and_borrow_market/interest_rate_model.md'
+              'developers/supply-and-borrow-market/governance.md': 'developers/supply_and_borrow_market/governance.md'
+              'developers/supply-and-borrow-market/price-oracle.md': 'developers/supply_and_borrow_market/price_oracle.md'
+              'developers/supply-and-borrow-market/comptroller.md': 'developers/supply_and_borrow_market/comptroller.md'
+              # Legacy endpoint-level pages (API reference is now a single Swagger UI page)
+              'developers/supply-and-borrow-market/get-market-mining-apy-information.md': 'developers/apis.md'
+              # AI Support
+              'ai-support/mcp-server.md': 'ai_support/mcp_server.md'
+              'ai-support/justlend-skills.md': 'ai_support/justlend_skills.md'
+              # Resources
+              'resources/risk-warning.md': 'resources/risk_warning.md'
+              'resources/community/wallet-integration-cooperation.md': 'resources/community/wallet_integration_cooperation.md'
 
 markdown_extensions:
         - admonition

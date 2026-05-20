@@ -1,5 +1,8 @@
 # Staked TRX
 
+!!! info "Network & precision"
+    The contract address below is **TRON Mainnet**. TRX amounts are in **sun** (1 TRX = 10⁶ sun). sTRX is an 18-decimal TRC20. The `exchangeRate()` is scaled by `1e18`.
+
 Based on Stake 2.0, with TRX Liquid Staking, users can stake TRX to get sTRX tokens and gain high rewards. Compared to traditional staking, TRX Liquid Staking is easier to use and more profitable. Staked TRX will be used automatically for voting and governance, and gain rewards via Energy Rental.
 The contract [StakedTRX](https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5) used to set up the staked TRX service.
 
@@ -171,7 +174,80 @@ function claimAll() external returns (uint256)
 * **Returns:** the amount of TRX claimed by the user for all expired unfreezing rounds, the minimum unit.
 
 
+## **Examples (TronWeb)**
 
+```javascript
+const TronWeb = require('tronweb');
+const tronWeb = new TronWeb({
+  fullHost: 'https://api.trongrid.io',
+  headers: { 'TRON-PRO-API-KEY': process.env.TRONGRID_API_KEY },
+  privateKey: process.env.PRIVATE_KEY,
+});
+
+const STRX = 'TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5'; // sTRX on TRON Mainnet
+```
+
+### 1. Stake TRX → receive sTRX
+
+```javascript
+async function stake(trxAmount /* in TRX, e.g. 1000 */) {
+  const strx = await tronWeb.contract().at(STRX);
+  const txId = await strx.deposit().send({
+    callValue: trxAmount * 1_000_000, // TRX → sun
+    feeLimit: 100_000_000,
+  });
+  console.log('deposit tx:', txId);
+}
+```
+
+### 2. Read exchange rate & quote sTRX you'd receive
+
+```javascript
+async function quoteStake(trxAmount) {
+  const strx = await tronWeb.contract().at(STRX);
+  const rate = await strx.exchangeRate().call(); // sTRX per TRX, scaled 1e18
+  // strxReceived = trxAmount * 1e18 / rate  (both scaled 1e18 in different ways)
+  const trxSun = BigInt(trxAmount) * 1_000_000n;
+  const strxReceived = (trxSun * (10n ** 18n)) / BigInt(rate.toString());
+  return strxReceived; // in sTRX smallest unit (18 decimals)
+}
+```
+
+### 3. Unstake sTRX → enters 14-day unbonding queue
+
+```javascript
+async function unstake(strxAmountUnits /* in sTRX smallest unit, 18 decimals */) {
+  const strx = await tronWeb.contract().at(STRX);
+  // Burns sTRX immediately; TRX enters the unfreezing queue.
+  const txId = await strx.withdraw(strxAmountUnits).send({ feeLimit: 100_000_000 });
+  console.log('withdraw tx:', txId);
+}
+
+// Or: specify the exact TRX you want to receive
+async function unstakeExact(trxAmountSun) {
+  const strx = await tronWeb.contract().at(STRX);
+  return strx.withdrawExact(trxAmountSun).send({ feeLimit: 100_000_000 });
+}
+```
+
+### 4. Claim unfrozen TRX (after the 14-day round completes)
+
+```javascript
+async function claim() {
+  const strx = await tronWeb.contract().at(STRX);
+
+  // Check whether anything is claimable first
+  const claimable = await strx.claimable().call();
+  if (claimable.toString() === '0') {
+    console.log('nothing to claim yet — unbonding not complete');
+    return;
+  }
+
+  // claim() returns oldest finished round; claimAll() returns every finished round
+  const txId = await strx.claimAll().send({ feeLimit: 100_000_000 });
+  console.log('claim tx:', txId);
+}
+```
 
 
 

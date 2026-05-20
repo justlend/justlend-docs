@@ -1,5 +1,11 @@
 # SBM
 
+!!! info "Units & precision"
+    * Amounts passed to `mint`/`borrow`/`repayBorrow`/`redeemUnderlying` are in the **underlying's smallest unit** — always read `decimals()` on the underlying TRC20 first. TRX = 6, USDT = 6, USDC = 6, USDD = 18, BTC/WBTC = 8, ETH = 18.
+    * jToken amounts (`redeem`, `transfer`, `balanceOf`) are in **8 decimals** regardless of the underlying.
+    * Rates (`borrowRatePerBlock`, `supplyRatePerBlock`) and the exchange rate are scaled by **`1e18`**, per-block.
+    * Network in all examples below is **TRON Mainnet**. Test on Nile first.
+
 The JustLend DAO Supply and Borrow Market (SBM) is a decentralized  liquidity pool where users can participate as suppliers, borrowers or liquidators. Suppliers provide liquidity to a market and can earn interest on the assets provided, where borrowers are able to borrow in a collateralize assets way.
 
 The SBM contract is the main user-facing contract. Most user interactions with the JustLend DAO Protocol occur via the Ctoken contract. It exposes the liquidity management methods that can be invoked using either Solidity or Web3 libraries.
@@ -336,11 +342,147 @@ LiquidateBorrow(address liquidator, address borrower, uint repayAmount, address 
     * `seizeTokens:` the tokens need to be liquidated.
 
 &emsp;
+
+## **Examples (TronWeb)**
+
+The snippets below use [TronWeb](https://developers.tron.network/reference/tronweb-object). Replace the `// PRIVATE_KEY=…` literal with your own loading mechanism — **never commit a key**. All addresses below are TRON Mainnet.
+
+### Setup
+
+```javascript
+const TronWeb = require('tronweb');
+
+const tronWeb = new TronWeb({
+  fullHost: 'https://api.trongrid.io',
+  headers: { 'TRON-PRO-API-KEY': process.env.TRONGRID_API_KEY }, // strongly recommended
+  privateKey: process.env.PRIVATE_KEY,
+});
+
+const UNITROLLER = 'TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7'; // Comptroller proxy
+const JUSDT      = 'TXJgMdjVX5dKiQaUi9QobwNxtSQaFqccvd'; // jUSDT CErc20Delegator
+const JTRX       = 'TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP'; // jTRX
+const USDT       = 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t'; // USDT underlying
+```
+
+### 1. Supply USDT — `approve` → `mint`
+
+```javascript
+async function supplyUSDT(amountWithDecimals /* e.g. "1000000000" for 1,000 USDT */) {
+  const usdt  = await tronWeb.contract().at(USDT);
+  const jusdt = await tronWeb.contract().at(JUSDT);
+
+  // 1. Approve the jUSDT contract to pull USDT from this wallet.
+  //    Skip if you've already approved a sufficient amount.
+  await usdt.approve(JUSDT, amountWithDecimals).send();
+
+  // 2. Mint jUSDT (supply USDT). Returns 0 on success.
+  const txId = await jusdt.mint(amountWithDecimals).send({
+    feeLimit: 200_000_000, // 200 TRX feeLimit
+  });
+  console.log('mint tx:', txId);
+}
+```
+
+### 2. Supply TRX — `mint()` (payable, no approval needed)
+
+```javascript
+async function supplyTRX(amountInSun /* 1 TRX = 1_000_000 sun */) {
+  const jtrx = await tronWeb.contract().at(JTRX);
+
+  const txId = await jtrx.mint().send({
+    callValue: amountInSun,
+    feeLimit: 200_000_000,
+  });
+  console.log('mint tx:', txId);
+}
+```
+
+### 3. Enable supplied asset as collateral — `enterMarkets`
+
+!!! warning "Required before borrowing"
+    Supplying alone does **not** make the asset count as collateral. You must call `enterMarkets` on the Unitroller with the **jToken** addresses you want enabled.
+
+```javascript
+async function enableCollateral(jTokens /* e.g. [JUSDT, JTRX] */) {
+  const comptroller = await tronWeb.contract().at(UNITROLLER);
+  const txId = await comptroller.enterMarkets(jTokens).send({ feeLimit: 200_000_000 });
+  console.log('enterMarkets tx:', txId);
+}
+```
+
+### 4. Borrow TRX against existing collateral
+
+```javascript
+async function borrowTRX(amountInSun) {
+  const jtrx = await tronWeb.contract().at(JTRX);
+
+  // Pre-flight: confirm the account has positive liquidity (no shortfall)
+  const comptroller = await tronWeb.contract().at(UNITROLLER);
+  const [error, liquidity, shortfall] = await comptroller
+    .getAccountLiquidity(tronWeb.defaultAddress.base58)
+    .call();
+  if (error.toString() !== '0' || shortfall.toString() !== '0') {
+    throw new Error('account is not healthy enough to borrow');
+  }
+
+  const txId = await jtrx.borrow(amountInSun).send({ feeLimit: 200_000_000 });
+  console.log('borrow tx:', txId);
+}
+```
+
+### 5. Repay USDT — `approve` → `repayBorrow`
+
+```javascript
+async function repayUSDT(amountWithDecimals /* underlying smallest unit */) {
+  const usdt  = await tronWeb.contract().at(USDT);
+  const jusdt = await tronWeb.contract().at(JUSDT);
+
+  await usdt.approve(JUSDT, amountWithDecimals).send();
+
+  // Pass uint256(-1) for a full repayment
+  const txId = await jusdt.repayBorrow(amountWithDecimals).send({ feeLimit: 200_000_000 });
+  console.log('repay tx:', txId);
+}
+```
+
+### 6. Redeem (withdraw) — by jToken units or by underlying
+
+```javascript
+// Redeem by jToken units (8 decimals)
+async function redeemJUSDT(jTokens /* in 8 decimals */) {
+  const jusdt = await tronWeb.contract().at(JUSDT);
+  return jusdt.redeem(jTokens).send({ feeLimit: 200_000_000 });
+}
+
+// Redeem an exact underlying amount (in underlying's decimals)
+async function redeemUSDTExact(amountWithDecimals) {
+  const jusdt = await tronWeb.contract().at(JUSDT);
+  return jusdt.redeemUnderlying(amountWithDecimals).send({ feeLimit: 200_000_000 });
+}
+```
+
+### 7. APY conversion from per-block rates
+
+```javascript
+const BLOCKS_PER_YEAR = 10_512_000n; // ~3s blocks
+const SCALE = 10n ** 18n;
+
+async function apys(jTokenAddr) {
+  const jt = await tronWeb.contract().at(jTokenAddr);
+  const [supplyRate, borrowRate] = await Promise.all([
+    jt.supplyRatePerBlock().call(),
+    jt.borrowRatePerBlock().call(),
+  ]);
+  // Simple (non-compounded) annualized rate as a decimal
+  const supplyAPR = Number(BigInt(supplyRate) * BLOCKS_PER_YEAR) / Number(SCALE);
+  const borrowAPR = Number(BigInt(borrowRate) * BLOCKS_PER_YEAR) / Number(SCALE);
+  return { supplyAPR, borrowAPR };
+}
+```
+
+For mining-reward-inclusive APY, prefer the API field `supplyApy` on `GET /lend/jtoken`.
+
 &emsp;
-&emsp;
-
-
-
 
 
 

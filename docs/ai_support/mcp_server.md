@@ -458,6 +458,13 @@ npm run dev
 | `query_proposals` | Browse and query governance proposals, check voting requirements |
 | `cast_vote` | Guided governance voting with vote verification |
 
+### Machine-Readable ABIs
+
+For programmatic contract calls without re-fetching from Tronscan, the MCP server bundles all JustLend contract ABIs in TypeScript form:
+
+- **Source**: [`src/core/abis.ts`](https://github.com/justlend/mcp-server-justlend/blob/main/src/core/abis.ts) (jToken, Comptroller, Oracle, TRC20)
+- **Chain configs (Mainnet / Nile testnet)**: [`src/core/chains.ts`](https://github.com/justlend/mcp-server-justlend/blob/main/src/core/chains.ts)
+
 ## Security Considerations
 
 - **Browser wallet (recommended)**: Private keys never leave TronLink — the `tronlink-signer` SDK sends unsigned transactions to the browser and receives signed results

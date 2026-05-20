@@ -1,0 +1,458 @@
+# JustLend DAO Documentation — Full Text Snapshot for LLMs
+
+> A condensed, single-document snapshot of the JustLend DAO documentation, intended for LLMs that prefer one-shot ingestion over per-page crawling. Authoritative source is the live site at <https://docs.justlend.org>; the OpenAPI spec at <https://docs.justlend.org/developers/apis/justlend_apis.yaml> is the machine-readable contract.
+
+This document covers: protocol overview, core concepts (supply / borrow / withdraw / repay / liquidation / risks / sTRX / energy rental), governance, developer contract reference, deployed addresses (TRON mainnet), the HTTP API surface, and the AI integration story (Skills + MCP). For exhaustive function signatures and field-by-field response schemas, see the individual reference pages and the OpenAPI YAML.
+
+---
+
+## 1. Protocol Overview
+
+JustLend DAO is the largest lending protocol on TRON, based on the Compound V2 architecture. It is a money market: suppliers deposit TRX or TRC20 assets into per-market liquidity pools and earn interest; borrowers over-collateralize an asset to borrow another asset from the pool. Interest rates float in real time as a function of utilization.
+
+### Roles
+
+- **Suppliers** — deposit underlying assets into a market via `mint()`. In return they receive jTokens (TRC20 receipts whose exchange rate to the underlying increases over time as interest accrues). Suppliers can `redeem` jTokens for the underlying at any time, subject to available liquidity.
+- **Borrowers** — over-collateralize one asset to borrow another. Borrow rates are determined per-block by the interest-rate model and apply uniformly to all borrowers of the same asset in the same block. Borrowers can `repayBorrow` at any time.
+- **Liquidators** — repay debt of unhealthy positions and seize a discounted portion of the collateral as a reward.
+
+### Integrated sub-protocols
+
+- **SBM (Supply and Borrow Market)** — core lending market, launched Dec 2020.
+- **sTRX (Staked TRX)** — liquid staking. Stake TRX, receive sTRX, earn voting + energy-rental yield. Launched Apr 2023.
+- **Energy Rental** — rent TRON Energy at a discount instead of burning/staking TRX yourself. Launched Apr 2023.
+- **Supply Mining** — JST-funded supply-side incentives administered by GrantsDAO.
+
+### Revenue distribution from protocol reserves
+
+Risk Fund 40% · DAO Reserve 30% · Supplier/Borrower Incentives 20% · Supply Mining Rewards 10%.
+
+---
+
+## 2. Core Concepts
+
+### 2.1 Supply
+
+Deposit an underlying asset → receive jTokens at the current exchange rate → earn interest via the exchange-rate appreciation of those jTokens.
+
+- **Supply APY** is driven by the borrow-utilization rate; community governance can adjust collateral factor, reserve factor, etc.
+- jTokens are TRC20 tokens; they can be transferred (subject to collateral constraints) and used as collateral.
+
+### 2.2 Borrow
+
+Borrow against supplied assets, up to a per-asset **Collateral Factor**.
+
+- **Borrow APY** rises with utilization (more borrowed → higher rate).
+- **Borrow Limit** = Σ (supplied amount × collateral factor) across the user's entered markets.
+- The user must `enterMarkets` on each asset they want counted as collateral.
+
+### 2.3 Withdraw
+
+Redeem jTokens for the underlying asset. Subject to (1) market liquidity and (2) maintaining adequate collateralization if there is an outstanding borrow.
+
+### 2.4 Repay
+
+Pay back outstanding debt with the same underlying asset (or via `repayBorrowBehalf` to repay on behalf of another address). Reduces total borrow, lowers Risk Value, and increases the amount of collateral that is safe to withdraw.
+
+### 2.5 Liquidation
+
+Liquidation is triggered by **Risk Value**:
+
+```
+Risk Value = Total Borrow / Borrow Limit × 100
+```
+
+| Range | Risk |
+|-------|------|
+| 0–35  | Low |
+| 35–60 | Medium |
+| 60–80 | High |
+| 80–100 | Extremely High |
+| > 100 | **Liquidatable** |
+
+- Observation threshold: Risk Value > 95 (account is listed on the liquidation page).
+- Execution threshold: Risk Value ≥ 100.
+- A liquidator may repay up to **50%** of a single borrowed asset in one transaction.
+- **Liquidation reward**: 8% of repaid debt value (paid in the seized jToken collateral).
+- Process is permissionless; any address may liquidate an eligible position.
+
+### 2.6 Risks (and mitigations)
+
+- **Smart-contract risk** — public audits, community review, ongoing bug bounty program.
+- **Oracle risk** — uses Chainlink decentralized price feeds.
+- **Collateral risk** — risk service providers, governance-set risk parameters (collateral factor, borrow caps), DAO oversight.
+
+### 2.7 Staked TRX (sTRX)
+
+One-click TRX liquid staking under Stake 2.0:
+
+- Deposit TRX into the sTRX contract → receive sTRX at the current exchange rate (1 sTRX ≥ 1 TRX, the ratio grows over time as rewards accrue).
+- sTRX is a standard TRC20 token and can be used in other TRON DeFi.
+- Yield sources: (1) Super Representative voting rewards, (2) Energy Rental revenue.
+- **Unstaking on JustLend has a 14-day unbonding period** before the underlying TRX can be claimed. Alternatively swap sTRX on a third-party DEX (SunSwap, HTX) for instant exit.
+
+### 2.8 Energy Rental
+
+Rent TRON Energy at 50–80% below the cost of burning TRX:
+
+- Specify: **Rental Amount** (energy units), **Rental Duration** (hourly or daily, max 30 days), **Receiving Address** (must be a regular account, not a contract).
+- Prepayment includes: Energy Fee (proportional to duration; unused portion refunded) + Security Deposit (~1 day's energy fee) + Liquidation Penalty (`max(20 TRX, 0.008% × delegated TRX)`).
+- One USDT transfer ≈ 120,000 energy (varies with contract usage).
+- Energy is fully restored after 24h and reusable.
+- For short rentals (< 3 hours), return immediately after use to avoid early liquidation from price fluctuations.
+
+---
+
+## 3. Governance
+
+### Process
+
+1. JST holders with ≥ 200M JST call `propose()` on `GovernorBravoDelegator`.
+2. 2-day review period; voting rights snapshot.
+3. 3-day voting period. 1 JST = 1 Vote (after depositing JST → WJST via `deposit()`).
+4. Approval requires (a) For votes > Against votes AND (b) For votes > 600M.
+5. Approved proposals enter a 48-hour Timelock, then can be `execute()`d.
+
+Full cycle ≥ ~1 week. Discussion happens at <https://forum.justlend.org> before on-chain submission.
+
+### Tokenomics (JST)
+
+JST is the governance and incentive token. Holders use it to vote on JIPs. JST is also used in the buyback-and-burn program (via GrantsDAO) — protocol base income and partner donations are converted to JST liquidity on SunSwap V2, and the resulting LP tokens are burned. This reduces effective supply while maintaining DEX liquidity.
+
+---
+
+## 4. Developer Reference — Core Contracts
+
+### 4.1 SBM (`CToken.sol` / `JToken`)
+
+User-facing contract. Methods listed below are on each jToken (e.g., jUSDT, jTRX).
+
+#### Query (read-only)
+
+```solidity
+function exchangeRateCurrent() public nonReentrant returns (uint)     // scaled 1e18
+function getCash() public view returns (uint)
+function totalBorrowsCurrent() external nonReentrant returns (uint)
+function borrowBalanceCurrent(address account) external nonReentrant returns (uint)
+function borrowRatePerBlock() external view returns (uint)            // scaled 1e18
+function supplyRatePerBlock() external view returns (uint)            // scaled 1e18
+function totalSupply() external view returns (uint256)
+function balanceOfUnderlying(address owner) external returns (uint)
+function totalReserves() returns (uint)
+function reserveFactorMantissa() returns (uint)
+```
+
+#### Write
+
+```solidity
+function mint() external payable                            // jTRX only — supply TRX via msg.value
+function mint(uint mintAmount) external returns (uint)      // jTRC20 — supply TRC20; requires prior approve()
+function borrow(uint borrowAmount) external returns (uint)
+function repayBorrow(uint amount) external payable          // jTRX: msg.value; jTRC20: amount param
+function repayBorrowBehalf(address borrower, uint amount) external payable
+function redeem(uint redeemTokens) external returns (uint)
+function redeemUnderlying(uint redeemAmount) external returns (uint)
+function transfer(address dst, uint256 amount) external nonReentrant returns (bool)
+function liquidateBorrow(address borrower, uint repayAmount, address jTokenCollateral) returns (uint)   // jTRC20
+function liquidateBorrow(address borrower, address jTokenCollateral) payable                            // jTRX
+```
+
+Events emitted: `Mint`, `Borrow`, `RepayBorrow`, `Redeem`, `LiquidateBorrow`. See the SBM reference page for full event signatures.
+
+### 4.2 Comptroller (Unitroller proxy → Comptroller impl)
+
+Risk management module. Users must `enterMarkets()` to use a supplied asset as collateral.
+
+```solidity
+function enterMarkets(address[] memory cTokens) public returns (uint[] memory)
+function exitMarket(address cTokenAddress) external returns (uint)
+function getAssetsIn(address account) external view returns (CToken[] memory)
+function markets(address cTokenAddress) view returns (bool isListed, uint collateralFactorMantissa, bool comped)
+function getAccountLiquidity(address account) public view returns (uint error, uint liquidity, uint shortfall)
+function closeFactorMantissa() view returns (uint256)                  // % of debt that may be liquidated in one call
+function liquidationIncentiveMantissa() view returns (uint256)         // scaled 1e18
+```
+
+`getAccountLiquidity` returns either `liquidity > 0` (healthy) or `shortfall > 0` (liquidatable) — at most one is non-zero.
+
+### 4.3 Interest Rate Models
+
+Two models in use:
+
+- **WhitePaperInterestRateModel** — `borrow_rate(u) = a·u + b`. Used for jTRX historically.
+- **JumpRateModelV2** — kinked. Below `kink`: `a1·u + b`. Above `kink`: `a1·kink + a2·(u−kink) + b`. Used for most TRC20 markets.
+
+In both, `u = borrows / (cash + borrows − reserves)` and `supply_rate(u) = borrow_rate(u) · u · (1 − reserve_factor)`.
+
+### 4.4 Price Oracle (`SimplePriceOracle.sol`, via `PriceOracleProxy`)
+
+Backed by Chainlink. Prices are denominated in sun (10⁻⁶ TRX), scaled by `10^(tokenDecimal − 6)`.
+
+```solidity
+function getPrice(address asset) public view returns (uint)
+function assetPrices(address asset) public view returns (uint)
+function anchors(address) view returns(uint256 period, uint256 priceMantissa)
+function poster() view returns(address)
+function setPrice(address asset, uint requestedPriceMantissa) public returns (uint)   // poster-only
+```
+
+### 4.5 Governance — `GovernorBravoDelegate.sol`
+
+```solidity
+function propose(address[] targets, uint[] values, string[] signatures, bytes[] calldatas, string description) public returns (uint)
+function queue(uint proposalId) public
+function execute(uint proposalId) public payable
+function cancel(uint proposalId) public
+function getActions(uint proposalId) public view returns (address[], uint[], string[], bytes[])
+function getReceipt(uint proposalId, address voter) public view returns (Receipt)   // {hasVoted, support, votes}
+function state(uint proposalId) public view returns (ProposalState)                  // Pending|Active|Canceled|Defeated|Succeeded|Queued|Expired|Executed
+function deposit(uint256 amount) public                                              // JST → WJST 1:1
+function castVote(uint proposalId, uint votes, bool support) public
+function castVoteWithReason(uint proposalId, uint votes, bool support, string reason) public
+```
+
+### 4.6 sTRX
+
+Contract: `TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5` (mainnet).
+
+```solidity
+function exchangeRate() public view returns (uint256)                  // sTRX → TRX, scaled 1e18
+function totalUnderlying() public view returns (uint256)
+function balanceInTrx(address _account) public view returns (uint256)
+function round() view external returns (uint256)                       // current unfreezing round (starts at 1)
+function claimable() external returns (uint256)
+function withdrawal() external returns (uint256)
+function balanceToUnfreeze() external returns (uint256)
+function balanceToFreeze() external returns (uint256)
+
+function deposit() external payable returns (uint256)                  // TRX → sTRX
+function withdraw(uint256 tokenAmount) external returns (uint256)      // sTRX → unfreezing queue
+function withdrawExact(uint256 trxAmount) external returns (uint256)
+function claim() external returns (uint256)                            // claim oldest finished round
+function claimAll() external returns (uint256)
+```
+
+### 4.7 Energy Rental
+
+Contract: `TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd` (mainnet).
+
+Prepayment formula:
+
+```
+Prepay  = trxAmount × max(rentalRate, stableRate) × (durationValueInSeconds + 86400 + liquidateThreshold) + fee
+Refund≥ = trxAmount × max(rentalRate, stableRate) × (21600              + liquidateThreshold) + fee
+```
+
+Key functions:
+
+```solidity
+function rentResource(address receiver, uint256 amount, uint256 resourceType) external payable
+function returnResource(address receiver, uint256 amount, uint256 resourceType) external returns (uint256)
+function returnResourceByReceiver(address renter, uint256 amount, uint256 resourceType) external returns (uint256)
+function liquidate(address renter, address receiver, uint256 resourceType) external returns (uint256)
+
+function rentals(address renter, address receiver, uint256 resourceType) public view returns (RentalInfo)
+function getRentInfo(address renter, address receiver, uint256 resourceType) external view returns (uint256, uint256)
+function _rentalRate(uint256 amount, uint256 resourceType) view external returns (uint256)
+function _liquidateRate(uint256 resourceType) view external returns (uint256)
+function badDebt() view external returns (uint256)
+function badDebtCovered() view external returns (uint256)
+function badDebtGap() view external returns (uint256)
+function totalRent() view external returns (uint256)
+```
+
+`resourceType`: `0 = bandwidth`, `1 = energy`.
+
+### 4.8 SBM Error Codes (selected)
+
+| Code | Name | Notes |
+|------|------|-------|
+| 0  | NO_ERROR | Success |
+| 1  | UNAUTHORIZED | |
+| 2  | BAD_INPUT | |
+| 3  | COMPTROLLER_REJECTION | Violates risk policy |
+| 9  | MATH_ERROR | |
+| 11 | MARKET_NOT_LISTED | |
+| 12 | TOKEN_INSUFFICIENT_ALLOWANCE | Run `approve()` first |
+| 13 | TOKEN_INSUFFICIENT_BALANCE | |
+| 14 | TOKEN_INSUFFICIENT_CASH | Try again later — market is empty |
+
+Full error code (17 codes) and failure-info enum (~78 entries) tables are on the SBM reference page.
+
+---
+
+## 5. Deployed Contracts (TRON Mainnet)
+
+All addresses below are on **TRON Mainnet**. Testnet (Nile) addresses differ; testnet must be configured separately. Inspect ABIs via Tronscan links.
+
+### 5.1 SBM core
+
+- **Unitroller (Comptroller proxy)**: `TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7`
+- **Comptroller (implementation)**: `TB23wYojvAsSx6gR8ebHiBqwSeABiBMPAr`
+
+### 5.2 jToken delegators (the addresses users interact with)
+
+| Underlying | jToken (CErc20Delegator) | Underlying TRC20 |
+|------------|--------------------------|------------------|
+| TRX        | `TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP`      | native           |
+| USDT       | `TXJgMdjVX5dKiQaUi9QobwNxtSQaFqccvd`      | `TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t` |
+| USDD       | `TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf`      | `TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz` |
+| USDC       | `TNSBA6KvSvMoTqQcEgpVK7VhHT3z7wifxy`      | `TLZSucJRjnqBKwvQz6n5hd29gbS4P7u7w8` |
+| USDJ       | `TL5x9MtSnDy537FXKx53yAaHRRNdg9TkkA`      | `TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT` |
+| TUSD       | `TSXv71Fy5XdL3Rh2QfBoUu3NAaM4sMif8R`      | `TUpMhErZL2fhh4sVNULAbNKLokS4GjC1F4` |
+| USD1       | `TBEKggwqFkrc4KckQVR9BLucAmQugafEZf`      | `TPFqcBAaaUMCSVRCqPaQ9QnzKhmuoLR6Rc` |
+| wstUSDT    | `TD5SdLw5scR6mXgyMK2xKrFJpauDjpKqrW`      | `TGkxzkDKyMeq2T7edKnyjZoFypyzjkkssq` |
+| sTRX       | `TJQ9rbVe9ei3nNtyGgBL22Fuu2xYjZaLAQ`      | `TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5` |
+| SUN        | `TPXDpkg9e3eZzxqxAUyke9S4z4pGJBJw9e`      | `TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S` |
+| BTT        | `TUaUHU9Dy8x5yNi1pKnFYqHWojot61Jfto`      | `TAFjULxiVgT4qWk6UZwjqwZXTSaGaqnVp4` |
+| NFT        | `TFpPyDCKvNFgos3g3WVsAqMrdqhB81JXHE`      | `TFczxzPhnThNSqr5by8tvxsdCFRRz6cPNq` |
+| JST        | `TWQhCXaWz4eHK4Kd1ErSDHjMFPoPc9czts`      | `TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9` |
+| WIN        | `TRg6MnpsFXc82ymUPgf5qbj59ibxiEDWvv`      | `TLa2f6VPqDgRE67v1736s7bJ8Ray5wYjU7` |
+| BTC        | `TLeEu311Cbw63BcmMHDgDLu7fnk9fqGcqT`      | `TN3W4H6rK2ce4vX9YnFQHwKENnHjoxb3m9` |
+| WBTC       | `TVyvpmaVmz25z2GaXBDDjzLZi5iR5dBzGd`      | `TYhWwKpw43ENFWBTGpzLHn3882f2au7SMi` |
+| ETHB       | `TWBxQMb6RD3qmkXUXpNwVCYbL8SHNreru6`      | `TRFe3hT5oYhjSZ6f3ji5FJ7YCfrkWnHRvh` |
+| ETH        | `TR7BUFRQeq1w5jAZf1FKx85SHuX6PfMqsV`      | `THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF` |
+| WBTT       | `TUY54PVeH6WCcYCd6ZXXoBDsHytN9V5PXt`      | `TKfjV9RNKJJCqPvBtK8L7Knykh7DNWvnYt` |
+| BUSDOLD    | `TLHASseQymmpGQdfAyNjkMXFTJh8nzR2x2`      | `TMz2SWatiAtZVVcH2ebpsbVtYwUPT9EdjH` |
+| SUNOLD     | `TGBr8uh9jBVHJhhkwSJvQN2ZAKzVkxDmno`      | `TKkeiboTkxXKJpbmVFbv4a8ov5rAfRDMf9` |
+
+For the full list including each delegator's matching delegate-implementation contract, see <https://docs.justlend.org/developers/deployed_contracts>.
+
+### 5.3 Price Oracle
+
+- **PriceOracle (impl)**: `TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV`
+- **PriceOracleProxy**: `TCKp2AzuhzV4B4Ahx1ej4mvQgHZ1kH7F7k`
+
+### 5.4 Governance
+
+- **GovernorBravoDelegator** (entrypoint): `TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD`
+- **GovernorBravoDelegate** (impl): `TCiQTkxhzwSeXhRsNdHCvrxHRAvpjQn5Dt`
+- **Timelock**: `TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x`
+- **JST** (token): `TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9`
+
+### 5.5 Other
+
+- **sTRX**: `TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5`
+- **Energy Rental**: `TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd`
+
+Interest-rate models and CErc20Delegate implementations are also listed at <https://docs.justlend.org/developers/deployed_contracts>.
+
+---
+
+## 6. HTTP API
+
+Base URL: `https://openapi.just.network`. Authoritative schema: <https://docs.justlend.org/developers/apis/justlend_apis.yaml> (OpenAPI 3.1). Importable into Swagger UI, Postman, and any LLM tool.
+
+### Endpoints
+
+| Method | Path | Purpose |
+|--------|------|---------|
+| GET | `/lend/jtoken` | All SBM markets — supply/borrow APY, mining rewards, TVL, decimals, prices |
+| GET | `/lend/account` | Per-address SBM positions, health, with pagination & filters |
+| GET | `/justlend/liquidate/highRiskAccountList` | Accounts with Risk Value > observation threshold, useful for liquidator bots |
+| GET | `/mining/reward` | Mining reward configuration per market |
+| GET | `/mining/apy` | Per-market mining APY |
+| GET | `/mining/distributions` | Reward distribution snapshots |
+| GET | `/lend/strx` | sTRX market dashboard |
+| GET | `/lend/strxStake/account` | Per-address sTRX staking state |
+| GET | `/lend/rentResource/account` | Per-address energy rental orders |
+
+### Response envelope
+
+```json
+{
+  "code": 0,             // 0 = success
+  "message": "SUCCESS",
+  "data": { ... }
+}
+```
+
+Status codes follow standard HTTP (`200` OK, `400` Bad Request). Field types and units (jToken units = 8 decimals, APY as annualized decimal, USD values pre-scaled where indicated) are spelled out in the OpenAPI components schemas — **prefer the YAML to free-text interpretation**.
+
+---
+
+## 7. AI Agent Integration
+
+JustLend ships two distinct AI Agent packages:
+
+### 7.1 JustLend Skills — `@justlend/justlend-skills`
+
+Read-only skills package. Repo: <https://github.com/justlend/justlend-skills>.
+
+- Combines structured **skill instructions** (for any Claude-compatible agent — Claude Code, Claude Desktop, Cursor, Codex) with a lightweight built-in **read-only MCP server** exposing **9 query tools**.
+- Also runs standalone as a **CLI** (`node scripts/justlend_api.mjs markets|dashboard|account ...`).
+- Requires `TRONGRID_API_KEY` (free at <https://trongrid.io>). Supports `NETWORK=mainnet|nile`.
+- **No wallet, no signing, no write operations** — strictly read-only by design.
+
+Skill modules:
+
+| Skill | Function | Backend |
+|-------|----------|---------|
+| `justlend-lending-v1`  | Market queries, account analysis, health monitoring | Built-in MCP (read-only) |
+| `justlend-trx-staking` | sTRX staking guidance                              | Requires full MCP (write) |
+| `justlend-energy-rental` | Energy rental guidance                           | Requires full MCP (write) |
+| `justlend-governance-v1` | JIP voting guidance                              | Requires full MCP (write) |
+
+Built-in MCP tools (all read-only): `get_all_markets`, `get_dashboard`, `get_supported_markets`, `get_jtoken_details`, `get_account_summary`, `get_account_data_from_api`, `get_trx_balance`, `get_token_balance`, `check_allowance`.
+
+### 7.2 Full MCP Server — `@justlend/mcp-server-justlend`
+
+Read + write MCP server, **59 tools**, version **v1.0.6**. Repo: <https://github.com/justlend/mcp-server-justlend>. Targets **JustLend V1**.
+
+Capability domains:
+
+- **Wallet & Network** (10 tools) — dual-mode signing: `browser` (TronLink via `tronlink-signer` SDK, TIP-6963; **recommended** — private keys never leave the wallet) or `agent` (encrypted local wallet under `~/.agent-wallet/`, managed by `@bankofai/agent-wallet`). Importing an existing key is intentionally CLI-only (`npx agent-wallet add`) — not exposed as an MCP tool, since MCP arguments can be logged by clients. Tools: `get_wallet_address`, `connect_browser_wallet`, `set_wallet_mode`, `get_wallet_mode`, `list_wallets`, `set_active_wallet`, `get_supported_networks`, `get_supported_markets`, `set_network`, `get_network`.
+- **Market Data** (3 tools) — contract queries first with API fallback; TTL caching (30–60s). `get_market_data`, `get_all_markets`, `get_protocol_summary`.
+- **Account & Balances** (5 tools) — Multicall3 batch queries (~2.5s vs ~8s legacy). `get_account_summary`, `check_allowance`, `get_trx_balance`, `get_token_balance`, `get_wallet_balances`.
+- **Lending Operations** (10 tools) — `supply`, `withdraw`, `withdraw_all`, `borrow`, `repay`, `enter_market`, `exit_market`, `approve_underlying`, `claim_rewards`, `estimate_lending_energy`. Write tools marked with `destructiveHint: true`.
+- **Mining & Rewards** (3 tools) — `get_mining_rewards`, `get_usdd_mining_config`, `get_wbtc_mining_config`.
+- **JST Voting / Governance** (10 tools) — `get_proposal_list`, `get_user_vote_status`, `get_vote_info`, `get_locked_votes`, `check_jst_allowance_for_voting`, `approve_jst_for_voting`, `deposit_jst_for_votes`, `withdraw_votes_to_jst`, `cast_vote`, `withdraw_votes_from_proposal`.
+- **Energy Rental** (9 tools) — dashboard, params, price calculator, rate, orders, rent info, return info, `rent_energy`, `return_energy_rental`.
+- **sTRX Staking** (7 tools) — dashboard, account, balance, withdrawal-eligibility check, `stake_trx_to_strx`, `unstake_strx`, `claim_strx_rewards`.
+- **Transfers** (2 tools) — `transfer_trx`, `transfer_trc20`.
+- **General TRON utilities** (via the same tool set) — balances, blocks, transactions, contract read/write, multicall, TRC20/TRC721/TRC1155 metadata, transfers, Stake 2.0 freeze/unfreeze, address conversion, wallet management, message signing.
+
+Guided prompts ship with the server (10 total): `getting_started`, `supply_assets`, `borrow_assets`, `repay_borrow`, `analyze_portfolio`, `compare_markets`, `rent_energy`, `stake_trx`, `query_proposals`, `cast_vote`.
+
+**Transport modes**: `stdio` (local clients — Claude Desktop, Codex, Claude Code, Cursor) or `HTTP/SSE` (remote/multi-client). HTTP mode is **fail-closed**: `MCP_API_KEY` is required, binds to `127.0.0.1` by default, CORS disabled unless `MCP_CORS_ORIGIN` is set.
+
+**Machine-readable ABIs**: bundled in [`src/core/abis.ts`](https://github.com/justlend/mcp-server-justlend/blob/main/src/core/abis.ts) (TypeScript). Per-network contract addresses in [`src/core/chains.ts`](https://github.com/justlend/mcp-server-justlend/blob/main/src/core/chains.ts).
+
+### 7.3 Recommended source-of-truth priority for AI agents
+
+1. **OpenAPI spec + the `https://openapi.just.network` HTTP API** — typed, versioned, machine-readable.
+2. **MCP server tools** — structured, schema-defined, side-effects clearly marked.
+3. **Rendered HTML docs** — for concept understanding; do not rely on free-text fields for precise numbers (APYs, TVL, tool counts, addresses) without cross-checking against (1) or (2).
+
+### 7.4 Precision and units (AI must respect)
+
+- **jToken balances**: scaled by `1e8` (8 decimals).
+- **Underlying TRC20 amounts**: each token's own decimals — TRX = 6, USDT = 6, USDC = 6, USDD = 18, BTC/WBTC = 8, ETH = 18, etc. Always call `decimals()` on the underlying before constructing a `mint` / `borrow` / `repayBorrow` amount.
+- **Rates** (`borrowRatePerBlock`, `supplyRatePerBlock`): scaled by `1e18`, per-block. To convert to APY, multiply by blocks-per-year (~10,512,000 on TRON at 3 s/block) and compound; or use the API's pre-computed APY fields.
+- **Prices** from the oracle: in sun (10⁻⁶ TRX), scaled by `10^(tokenDecimal − 6)`.
+- **Collateral factor, reserve factor, exchange rate, liquidation incentive**: all mantissa-scaled by `1e18`.
+
+---
+
+## 8. Resources
+
+- **Audit — SBM**: <https://justlend.org/docs/justlend_audit_en.pdf>
+- **Audit — sTRX**: <https://justlend.org/docs/justlend_strx_audit_en.pdf>
+- **Whitepaper**: <https://justlend.org/docs/justlend_whitepaper_en.pdf>
+- **Forum**: <https://forum.justlend.org>
+- **dApp**: <https://app.justlend.org>
+- **GitHub (protocol)**: <https://github.com/justlend/justlend-protocol>
+- **GitHub (Skills)**: <https://github.com/justlend/justlend-skills>
+- **GitHub (MCP server)**: <https://github.com/justlend/mcp-server-justlend>
+- **Terms of Service**: <https://justlend.org/docs/JustLend_Terms_of_Use_en.pdf>
+- **Privacy Policy**: <https://justlend.org/docs/JustLend_Privacy_Policy_en.pdf>
+
+---
+
+## 9. Notes & Caveats for LLM Consumers
+
+- This file is a **snapshot**, regenerated periodically. Treat live endpoints (OpenAPI YAML, sitemap, MCP `list_tools`) as the source of truth when numbers diverge.
+- Addresses in §5 are **TRON Mainnet only**. For Nile testnet, configure clients with `NETWORK=nile` and discover testnet addresses via the testnet deployment of the dApp.
+- Where this document gives APYs, TVL, or other dynamic numbers as examples (notably in the Energy Rental cost section), they reflect the moment the underlying example transactions were recorded and are not current.
+- Liquidation rules summarized here describe the contract-level mechanism. The official liquidation tool also enforces additional UX-level disclaimers — see <https://docs.justlend.org/resources/risk_warning>.
+- "Read-only" guarantees for the HTTP API and the Skills package are enforced by code paths (no signing keys), not just policy. The full MCP server is the only component that can submit transactions, and only through the encrypted agent-wallet.

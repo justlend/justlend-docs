@@ -18,7 +18,7 @@ jobs:
       with:
         python-version: 3.x   # 安装python
 
-    - name: Install dependencies  
+    - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install pygments==2.17.2 pymdown-extensions
@@ -26,7 +26,8 @@ jobs:
         pip install mkdocs-material==9.6.8
         pip install jieba==0.42.1   # 安装依赖
         pip install mkdocs-swagger-ui-tag
-        
+        pip install mkdocs-redirects==1.2.2   # legacy hyphenated URLs → current underscore URLs
+
     - name: Build the document
       run: mkdocs build  # 构建mkdocs站点
 
