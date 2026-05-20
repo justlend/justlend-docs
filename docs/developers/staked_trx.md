@@ -9,6 +9,8 @@ The contract [StakedTRX](https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZx
 
 ## **Query Interface**
 
+<a id="exchange-rate"></a>
+
 ### **Exchange Rate**
 Query the exchange rate between sTRX and TRX.
 ``` solidity
@@ -93,6 +95,8 @@ function balanceToFreeze() external returns (uint256)
 
 ## **Write Interface**
 
+<a id="deposit-trx"></a>
+
 ### **Deposit TRX**
 Deposit TRX assets and receive sTRX.
 ``` solidity
@@ -113,6 +117,8 @@ Deposit(address user, uint256 trxAmount, uint256 strx, uint256 userHoldStrx)
     * `strx:` the amount of sTRX user gets;
     * `userHoldStrx:` the total amount of sTRX held by user after the deposit.
 
+
+<a id="withdraw-strx"></a>
 
 ### **Withdraw sTRX**
 Specify the amount of sTRX to withdraw, the minimum unit.
@@ -135,6 +141,8 @@ Withdraw(address user, uint256 strx, uint256 trxAmount, uint256 userHoldStrx)
     * `userHoldStrx:` the total amount of sTRX held by user after the withdrawal.
 
 
+<a id="withdraw-strx-with-the-amount-of-trx-specified"></a>
+
 ### **Withdraw sTRX (with the amount of TRX specified)**
 Specify the amount of TRX user hopes to obtain through withdrawal, the minimum unit.
 ``` solidity
@@ -145,6 +153,8 @@ function withdrawExact(uint256 trxAmount) external returns (uint256)
     * `trxAmount:` the specific amount of TRX.
 * **Returns:** the amount of sTRX withdrawn by user, the minimum unit.
 
+
+<a id="claim-trx"></a>
 
 ### **Claim TRX**
 Claim the ready-to-be-withdrawn TRX unfrozen in the earliest round.
@@ -164,6 +174,8 @@ Claim(address user, uint256 trxAmount)
     * `trxAmount:` the amount of TRX user claims.
 
 
+<a id="claim-all-unfrozen-trx"></a>
+
 ### **Claim all unfrozen TRX**
 Claim all ready-to-be-withdrawn, unfrozen TRX
 ``` solidity
@@ -173,6 +185,8 @@ function claimAll() external returns (uint256)
 * **Parameter description:** N/A.
 * **Returns:** the amount of TRX claimed by the user for all expired unfreezing rounds, the minimum unit.
 
+
+<a id="examples-tronweb"></a>
 
 ## **Examples (TronWeb)**
 
@@ -248,7 +262,6 @@ async function claim() {
   console.log('claim tx:', txId);
 }
 ```
-
 
 
 

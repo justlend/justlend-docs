@@ -142,6 +142,8 @@ function _liquidateRate(uint256 resourceType) view external returns (uint256)
 * **Returns:** current liquidation rate.
 
 
+<a id="rental-rate"></a>
+
 ### **Rental Rate**
 Get the latest rental rate. when the amount is passed as 0, it returns the current tental rate. When the amount is greater than 0, for example, 100, it returns the rental rate after the energy changes by 100.
 ``` solidity
@@ -156,6 +158,8 @@ function _rentalRate(uint256 amount, uint256 resourceType) view external returns
 
 
 ## **Write Interface**
+
+<a id="rent-resources"></a>
 
 ### **Rent Resources**
 Rent resources, allow amount = 0 (extension only) or msg.value = 0 (no new deposit), both are 0 is not allowed.
@@ -185,6 +189,8 @@ RentResource (address indexed renter, address indexed receiver, uint256 addedAmo
     * `amount:` the total amount of rental resources in the order after renting.
 
 
+<a id="return-resources-called-by-payer"></a>
+
 ### **Return Resources (called by payer)**
 Return resources. Return resources in the order (msg.sender, receiver, resourceType). When the remaining deposit is insufficient, all resources will be forcibly emptied, and the remaining deposit will be returned to the order payer.
 ``` solidity
@@ -212,6 +218,8 @@ ReturnResource( address indexed renter, address indexed receiver, uint256 subedA
     * `subedSecurityDeposit:` the refunded deposit amount (0 for partial returns);
     * `amount:` the remaining amount of rental resources after returning resources.
 
+
+<a id="return-resources-called-by-receiver"></a>
 
 ### **Return resources (called by receiver)**
 Return resources. Return resources in the order (renter, msg.sender, resourceType). When the remaining deposit is insufficient, all resources will be forcibly emptied, and the remaining deposit will be returned to the order payer.
@@ -255,6 +263,8 @@ Liquidate( address indexed liquidator, address indexed renter, address indexed r
     * `liquidateFee:` the liquidation reward received by the liquidator;
     * `sendBack:` the remaining deposit received by the payer.
 
+
+<a id="examples-tronweb"></a>
 
 ## **Examples (TronWeb)**
 

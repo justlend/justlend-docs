@@ -852,6 +852,17 @@
             "tronscan": "https://tronscan.org/#/contract/TX7kybeP6UwTBRHLNPYmswFESHfyjm9bAS",
             "role": "entrypoint"
           },
+          "delegate": {
+            "label": "jUSDDOLD CErc20Delegate",
+            "address": {
+              "base58": "TFdTqrMyb6PMMqTa9vnhmQHDFDU2oUhw9W",
+              "hex_evm": "0x3e14d306e506eadb6f51bf271af3969bb8c9802f",
+              "hex_tron": "0x413e14d306e506eadb6f51bf271af3969bb8c9802f"
+            },
+            "network": "mainnet",
+            "tronscan": "https://tronscan.org/#/contract/TFdTqrMyb6PMMqTa9vnhmQHDFDU2oUhw9W",
+            "role": "implementation"
+          },
           "underlying": {
             "label": "USDDOLD TRC20",
             "address": {

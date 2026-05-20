@@ -65,6 +65,8 @@ function markets(address cTokenAddress) view returns (bool, uint, bool)
 
 ## **Collateral & Liquidation**
 
+<a id="get-account-liquidity"></a>
+
 ### **Get Account Liquidity**
 Calling this method returns the liquidity and shortfall of a user.
 ``` solidity
@@ -97,4 +99,3 @@ function liquidationIncentiveMantissa() view returns (uint256)
 
 * **Parameter description:** N/A.
 * **Returns:** The close factor, scaled by 1e18.
-

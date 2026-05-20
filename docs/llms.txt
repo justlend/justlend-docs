@@ -74,8 +74,8 @@ Refer to the OpenAPI spec for the full endpoint list, request parameters, respon
 
 ## Notes for AI agents
 
-- **Network**: All deployed contract addresses listed in this documentation are on **TRON Mainnet**. Use Nile testnet (`NETWORK=nile`) for testing — testnet addresses differ and are not listed here.
-- **Networks and address formats**: Use [`/developers/contracts.json`](https://docs.justlend.org/developers/contracts.json) for Mainnet + Nile addresses in Base58, EVM `0x` hex, and TRON-internal `41` hex. Rendered tables may show Base58 only.
+- **Networks**: Rendered contract tables are **TRON Mainnet** unless a section says otherwise. Use Nile testnet (`NETWORK=nile`) for testing, and fetch [`/developers/contracts.json`](https://docs.justlend.org/developers/contracts.json) for Mainnet + Nile addresses.
+- **Address formats**: `contracts.json` includes Base58, EVM `0x` hex, and TRON-internal `41` hex. Rendered tables may show Base58 only.
 - **Precision**: jToken balances are returned in jToken units (8 decimals). Underlying token amounts use that token's own decimals (TRX = 6, USDT = 6, USDC = 6, BTC = 8, ETH = 18, etc.). Always check the underlying token's `decimals()` before submitting transactions.
 - **Rate limits**: The public OpenAPI service is unauthenticated and may throttle abusive clients. Keep `pageSize <= 1000`, cache market metadata, avoid tight polling loops, and retry `429` / `5xx` with exponential backoff.
 - **Recommended source-of-truth priority**: (1) OpenAPI spec → (2) MCP server tools → (3) rendered docs. The HTML docs are for human reading; for programmatic use prefer the OpenAPI spec and MCP server.
