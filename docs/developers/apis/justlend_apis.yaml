@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
     title: JustLend DAO API
-    version: '1.1.0'
+    version: '3.1.0'
     summary: Public read‑only API for JustLend DAO protocol data.
     description: |
         Public REST endpoints for querying JustLend DAO protocol state:
