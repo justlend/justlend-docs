@@ -1,0 +1,39 @@
+[
+  {
+    "type": "function",
+    "name": "getVoteInfo",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "user"
+      },
+      {
+        "type": "address",
+        "name": "jstAddr"
+      },
+      {
+        "type": "address",
+        "name": "wjstAddr"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": "jstBalance"
+      },
+      {
+        "type": "uint256",
+        "name": "surplusVotes"
+      },
+      {
+        "type": "uint256",
+        "name": "totalVote"
+      },
+      {
+        "type": "uint256",
+        "name": "castVote"
+      }
+    ],
+    "stateMutability": "view"
+  }
+]

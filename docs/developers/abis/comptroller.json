@@ -1,0 +1,204 @@
+[
+  {
+    "type": "function",
+    "name": "oracle",
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "closeFactorMantissa",
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "liquidationIncentiveMantissa",
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getAllMarkets",
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "address[]"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getAssetsIn",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "account"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "address[]"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "markets",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "jToken"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "bool",
+        "name": "isListed"
+      },
+      {
+        "type": "uint256",
+        "name": "collateralFactorMantissa"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getAccountLiquidity",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "account"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": "err"
+      },
+      {
+        "type": "uint256",
+        "name": "liquidity"
+      },
+      {
+        "type": "uint256",
+        "name": "shortfall"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "checkMembership",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "account"
+      },
+      {
+        "type": "address",
+        "name": "jToken"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "mintGuardianPaused",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "jToken"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "borrowGuardianPaused",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "jToken"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "enterMarkets",
+    "inputs": [
+      {
+        "type": "address[]",
+        "name": "jTokens"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "exitMarket",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "jToken"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "claimReward",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "holder"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  }
+]

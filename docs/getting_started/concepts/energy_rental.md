@@ -81,3 +81,13 @@ By comparing these two scenarios, it becomes evident that the cost of using rent
 | rent energy cost | $1.57                 | $1.80                 |
 | burn TRX cost    | $5.4689               | $ 11.0129             |
 | save             | - $3.8989             | - $9.2129             |
+
+### Developer reference
+
+- Rent resources: [`rentResource(receiver, amount, resourceType)`](../../developers/energy_rental.md#rent-resources) — `amount` is the **delegated TRX in sun** (not energy units); divide target energy by `energyStakePerTrx` from the `/strx/dashboard` API.
+- Return rental (called by payer): [`returnResource(receiver, amount, resourceType)`](../../developers/energy_rental.md#return-resources-called-by-payer).
+- Return rental (called by receiver): [`returnResourceByReceiver(renter, amount, resourceType)`](../../developers/energy_rental.md#return-resources-called-by-receiver).
+- Liquidate an undercollateralized rental: [`liquidate(renter, receiver, resourceType)`](../../developers/energy_rental.md#liquidate).
+- `resourceType`: `0` = bandwidth, `1` = energy.
+- Prepayment formula and refund math: [Energy Rental prepay & refund](../../developers/energy_rental.md#prepay-refund).
+- Live runnable examples: [Energy→TRX conversion / rent / return — TronWeb](../../developers/energy_rental.md#examples-tronweb).

@@ -12,6 +12,19 @@ This is the official developer documentation for the JustLend DAO, providing com
 - [GitHub Pages](https://pages.github.com/) - Hosting service
 - [GitHub Actions](https://github.com/features/actions) - CI/CD for deployment
 
+## 🛠️ Local Development
+
+```bash
+python -m pip install -r requirements.txt
+mkdocs serve
+```
+
+Before opening a pull request, run:
+
+```bash
+mkdocs build --strict
+```
+
 
 ## 🤝 Contact Us
 

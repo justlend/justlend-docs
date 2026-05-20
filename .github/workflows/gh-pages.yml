@@ -12,6 +12,7 @@ jobs:
       uses: actions/checkout@v4  # Action that checks out the repository
       with:
         persist-credentials: false   # Disable auto-injection of GITHUB_TOKEN so a higher-privilege token can be supplied in later steps
+        fetch-depth: 0   # Required by mkdocs-git-revision-date-localized-plugin to compute per-page last-updated
 
     - name: Setup Python
       uses: actions/setup-python@v4
@@ -27,6 +28,7 @@ jobs:
         pip install jieba==0.42.1   # Install dependency
         pip install mkdocs-swagger-ui-tag
         pip install mkdocs-redirects==1.2.2   # legacy hyphenated URLs → current underscore URLs
+        pip install mkdocs-git-revision-date-localized-plugin==1.4.7   # per-page last-updated from git history
 
     - name: Build the document
       run: mkdocs build  # Build the MkDocs site

@@ -11,3 +11,10 @@ When withdrawing with an active borrow position, it’s essential to carefully m
 1. Connect your Web3 wallet on TronLink or other supported wallet app to the JustLend DAO ([https://justlend.org](https://justlend.org)).
 2. Navigate to the "SBM" and choose the supplied asset you want to withdraw, click 「Withdraw」.
 3. Specify the amount you want to withdraw and confirm the transaction.
+
+### Developer reference
+
+- Contract function (by jToken units): [`redeem(redeemTokens)`](../../developers/supply_and_borrow_market/sbm.md#redeem) — burns the specified jToken amount and returns the equivalent underlying.
+- Contract function (by exact underlying amount): [`redeemUnderlying(redeemAmount)`](../../developers/supply_and_borrow_market/sbm.md#redeemunderlying) — burns enough jTokens to return exactly `redeemAmount` of underlying.
+- Both revert if liquidity falls below the borrow position's collateral requirement; check [`getAccountLiquidity(account)`](../../developers/supply_and_borrow_market/comptroller.md#get-account-liquidity) before withdrawing collateral.
+- Live runnable example: [Redeem by jToken vs underlying — TronWeb](../../developers/supply_and_borrow_market/sbm.md#examples-tronweb).

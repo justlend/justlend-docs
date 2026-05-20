@@ -1,0 +1,22 @@
+[
+  {
+    "type": "function",
+    "name": "getRentalRate",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "totalFrozen"
+      },
+      {
+        "type": "uint256",
+        "name": "totalDelegated"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  }
+]
