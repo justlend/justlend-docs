@@ -1,4 +1,8 @@
 openapi: 3.1.0
+x-schema-version: '1.0.0'
+x-compatibility:
+    policy: Backward-compatible optional fields may be added without notice. Field removals, type changes, or semantic changes require a documentation version update and deprecation note.
+    sourceOfTruth: https://docs.justlend.org/developers/apis/justlend_apis.yaml
 x-rate-limit:
     authentication: none
     pageSizeMax: 1000
@@ -7,6 +11,13 @@ info:
     title: JustLend DAO API
     version: '1.0.0'
     summary: Public read‑only API for JustLend DAO protocol data.
+    termsOfService: https://justlend.org/docs/JustLend_Terms_of_Use_en.pdf
+    contact:
+        name: JustLend DAO
+        url: https://support.justlend.org/
+    license:
+        name: Documentation license and terms
+        url: https://justlend.org/docs/JustLend_Terms_of_Use_en.pdf
     description: |
         Public REST endpoints for querying JustLend DAO protocol state:
         lending markets, user positions, liquidation risk, USDD supply‑mining
@@ -26,6 +37,9 @@ info:
         * **Pagination** — `pageNo` is 1‑based, default `1`. `pageSize` default `10`, max `1000`.
         * **Rate limits** — public unauthenticated traffic may be throttled. Cache stable metadata and retry `429` / transient `5xx` with exponential backoff and jitter.
         * **Errors** — non‑zero `code` plus an RFC 7807 body. See the `Error` schema.
+        * **Compatibility** — clients should ignore unknown fields. Field removals,
+          type changes, or semantic changes require a documentation version update
+          and deprecation note.
 
         See [`/developers/apis`](https://docs.justlend.org/developers/apis) for the
         human‑readable version with tables, worked examples, and the jToken
