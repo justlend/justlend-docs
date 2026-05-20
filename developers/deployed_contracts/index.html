@@ -1058,6 +1058,19 @@
 
 
 <li class="md-nav__item ">
+  <a href="#address-formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      Address formats
+    </span>
+  </a>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item ">
   <a href="#supply-and-borrow-market-core" class="md-nav__link">
     <span class="md-ellipsis">
       Supply and Borrow Market
@@ -1144,6 +1157,38 @@
   
 </li>
       
+        
+
+
+
+<li class="md-nav__item has-children">
+  <a href="#nile-testnet" class="md-nav__link" aria-expanded="true">
+    <span class="md-ellipsis">
+      Nile Testnet
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Nile Testnet">
+      <ul class="md-nav__list">
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#configuring-clients-for-nile" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuring clients for Nile
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1222,6 +1267,28 @@
             AI SUPPORT
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai_support/ai_llms/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AI / LLMs
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -1631,18 +1698,113 @@
 
 
 <h1 id="deployed-contracts">Deployed Contracts<a class="headerlink" href="#deployed-contracts" title="Permanent link">&para;</a></h1>
-<div class="admonition info">
-<p class="admonition-title">Network: TRON Mainnet</p>
-<p>Every address on this page is deployed on <strong>TRON Mainnet</strong> (Chain ID <code>0x2b6653dc</code>). For <strong>Nile testnet</strong>, see the <a href="https://github.com/justlend/mcp-server-justlend/blob/main/src/core/chains.ts"><code>src/core/chains.ts</code></a> configuration in the JustLend MCP server repository.</p>
+<div class="admonition tip">
+<p class="admonition-title">Machine-readable contract directory</p>
+<p>For agents and tooling that need every address in <strong>TRON Base58 + EVM 0x-Hex + TRON-internal 41-Hex</strong> form, download <a href="../contracts.json"><code>contracts.json</code></a>. The file is structured as <code>networks.{mainnet,nile}.{comptroller,governance,price_oracle,jtokens,interest_rate_models,strx}</code>, with each address record carrying <code>base58 / hex_evm / hex_tron / tronscan</code> fields. The tables below show <strong>Base58 only</strong> for readability; use the JSON for cross-chain bridges, EVM-side tooling, Etherscan-like indexers, and TronGrid calls that require <code>41</code>-prefixed hex.</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Machine-readable ABIs</p>
-<p>Tronscan provides verified-contract ABIs on the <strong>Contract</strong> tab of each link below — click the "ABI" sub-tab to copy or download. Programmatic consumers can also use the bundled ABIs in <a href="https://github.com/justlend/mcp-server-justlend/blob/main/src/core/abis.ts"><code>src/core/abis.ts</code></a> of the MCP server (TypeScript), which covers jToken, Comptroller, PriceOracle, and TRC20.</p>
+<p>Every contract referenced on this page has a downloadable JSON ABI under <a href="../abis/jtoken.json"><code>abis/</code></a>:</p>
+<table>
+<thead>
+<tr>
+<th>Contract</th>
+<th>ABI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>jToken (CErc20) — <code>mint</code> / <code>borrow</code> / <code>repayBorrow</code> / <code>redeem</code> / <code>liquidateBorrow</code></td>
+<td><a href="../abis/jtoken.json"><code>abis/jtoken.json</code></a></td>
+</tr>
+<tr>
+<td>jToken — TRX-specific <code>mint()</code> payable</td>
+<td><a href="../abis/jtrx-mint.json"><code>abis/jtrx-mint.json</code></a></td>
+</tr>
+<tr>
+<td>jToken — TRX-specific <code>repayBorrow()</code> payable</td>
+<td><a href="../abis/jtrx-repay.json"><code>abis/jtrx-repay.json</code></a></td>
+</tr>
+<tr>
+<td>Comptroller / Unitroller</td>
+<td><a href="../abis/comptroller.json"><code>abis/comptroller.json</code></a></td>
+</tr>
+<tr>
+<td>PriceOracle</td>
+<td><a href="../abis/price-oracle.json"><code>abis/price-oracle.json</code></a></td>
+</tr>
+<tr>
+<td>TRC20 (generic)</td>
+<td><a href="../abis/trc20.json"><code>abis/trc20.json</code></a></td>
+</tr>
+<tr>
+<td>GovernorAlpha / Bravo</td>
+<td><a href="../abis/governor-alpha.json"><code>abis/governor-alpha.json</code></a></td>
+</tr>
+<tr>
+<td>WJST (voting wrapper)</td>
+<td><a href="../abis/wjst.json"><code>abis/wjst.json</code></a></td>
+</tr>
+<tr>
+<td>Poly helper</td>
+<td><a href="../abis/poly.json"><code>abis/poly.json</code></a></td>
+</tr>
+<tr>
+<td>EnergyRental market</td>
+<td><a href="../abis/energy-market.json"><code>abis/energy-market.json</code></a></td>
+</tr>
+<tr>
+<td>EnergyRateModel</td>
+<td><a href="../abis/energy-rate-model.json"><code>abis/energy-rate-model.json</code></a></td>
+</tr>
+<tr>
+<td>sTRX</td>
+<td><a href="../abis/strx.json"><code>abis/strx.json</code></a></td>
+</tr>
+<tr>
+<td>InterestRateModel (jump-rate / whitepaper)</td>
+<td><a href="../abis/interest-rate-model.json"><code>abis/interest-rate-model.json</code></a></td>
+</tr>
+</tbody>
+</table>
+<p>These are sourced from the same definitions the <a href="../../ai_support/mcp_server/">JustLend MCP server</a> uses at runtime — see <a href="https://github.com/justlend/mcp-server-justlend/blob/main/src/core/abis.ts"><code>src/core/abis.ts</code></a> for the upstream TypeScript form.</p>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Network: TRON Mainnet (unless noted)</p>
+<p>Everything in the main tables below is deployed on <strong>TRON Mainnet</strong> (Chain ID <code>0x2b6653dc</code>). For <strong>Nile testnet</strong> addresses see the <a href="#nile-testnet">Nile Testnet</a> section at the bottom of this page or the <code>nile</code> block of <code>contracts.json</code>.</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Decimals / precision</p>
 <p>The Compound V2 architecture treats every token amount in <strong>its underlying's smallest unit</strong>. Always read <code>decimals()</code> on the underlying TRC20 before constructing <code>mint</code>, <code>borrow</code>, <code>repayBorrow</code>, or <code>redeemUnderlying</code> amounts. Common cases: TRX/USDT/USDC = 6, USDD/ETH = 18, BTC/WBTC = 8. jToken amounts (<code>redeem</code>, <code>transfer</code>) use <strong>8 decimals</strong> regardless of the underlying.</p>
 </div>
+<h2 id="address-formats">Address formats<a class="headerlink" href="#address-formats" title="Permanent link">&para;</a></h2>
+<p>TRON addresses appear in three equivalent formats. Human-facing tables on this page use Base58; machine consumers should use <a href="../contracts.json"><code>contracts.json</code></a> for all three forms.</p>
+<table>
+<thead>
+<tr>
+<th>Format</th>
+<th>Example for Unitroller</th>
+<th>Use cases</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Base58</td>
+<td><code>TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7</code></td>
+<td>Wallets, Tronscan, TronWeb display, user prompts</td>
+</tr>
+<tr>
+<td>EVM 0x-Hex</td>
+<td><code>0x4a33bf2666f2e75f3d6ad3b9ad316685d5c668d4</code></td>
+<td>EVM-side tooling, bridges, indexers, byte-address comparisons</td>
+</tr>
+<tr>
+<td>TRON 41-Hex</td>
+<td><code>0x414a33bf2666f2e75f3d6ad3b9ad316685d5c668d4</code></td>
+<td>TronGrid / TronWeb low-level APIs that expect TRON-internal hex</td>
+</tr>
+</tbody>
+</table>
 <hr />
 <h2 id="supply-and-borrow-market-core">Supply and Borrow Market — Core<a class="headerlink" href="#supply-and-borrow-market-core" title="Permanent link">&para;</a></h2>
 <table>
@@ -1783,7 +1945,7 @@
 <td>jHTX</td>
 <td><a href="https://tronscan.org/#/token20/TUPM7K8REVzD2UdV4R5fe5M8XbnR2DdoJ6"><code>TUPM7K8REVzD2UdV4R5fe5M8XbnR2DdoJ6</code></a></td>
 <td><a href="https://tronscan.org/#/contract/TDA1mWPyAjTRATMGA55UTswGAHhV2itEXR"><code>TDA1mWPyAjTRATMGA55UTswGAHhV2itEXR</code></a></td>
-<td><em>(see Tronscan)</em></td>
+<td><a href="https://tronscan.org/#/contract/TJD7nb5Wq1P1rRi3Se2vLpLhksALdW8adb"><code>TJD7nb5Wq1P1rRi3Se2vLpLhksALdW8adb</code></a></td>
 </tr>
 <tr>
 <td>jBTC</td>
@@ -1823,9 +1985,9 @@
 </tr>
 <tr>
 <td>jUSDDOLD (legacy)</td>
-<td><em>(see Tronscan)</em></td>
+<td><a href="https://tronscan.org/#/token20/TPYmHEhy5n8TCEfYGqW2rPxsghSfzghPDn"><code>TPYmHEhy5n8TCEfYGqW2rPxsghSfzghPDn</code></a></td>
 <td><a href="https://tronscan.org/#/contract/TX7kybeP6UwTBRHLNPYmswFESHfyjm9bAS"><code>TX7kybeP6UwTBRHLNPYmswFESHfyjm9bAS</code></a></td>
-<td><em>(see Tronscan)</em></td>
+<td><a href="https://tronscan.org/#/contract/TFdTqrMyb6PMMqTa9vnhmQHDFDU2oUhw9W"><code>TFdTqrMyb6PMMqTa9vnhmQHDFDU2oUhw9W</code></a></td>
 </tr>
 <tr>
 <td>jSUNOLD (legacy)</td>
@@ -2091,6 +2253,60 @@
 </tbody>
 </table>
 <p>See <a href="../energy_rental/">Energy Rental</a> for the contract reference.</p>
+<hr />
+<h2 id="nile-testnet">Nile Testnet<a class="headerlink" href="#nile-testnet" title="Permanent link">&para;</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Testnet — not the production protocol</p>
+<p>Use these addresses only for development and integration testing. Some Nile contracts are placeholder/stub addresses — when in doubt, call <code>get_supported_networks</code> / <code>get_supported_markets</code> on the <a href="../../ai_support/mcp_server/">JustLend MCP server</a> for the live runtime view, or consult the <a href="https://github.com/justlend/mcp-server-justlend/blob/main/src/core/chains.ts"><code>chains.ts</code> Nile section</a>.</p>
+</div>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Contract</th>
+<th>Address</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Comptroller (proxy / entrypoint)</td>
+<td><code>Unitroller</code></td>
+<td><code>TJUCStq3WqfKqZLuZje5v7z6Ua6iBry1P6</code></td>
+</tr>
+<tr>
+<td>Governance</td>
+<td><code>GovernorBravoDelegator</code></td>
+<td><code>TYCNENqt2oJK7eiwubi6YXXt8RHR1BnzBs</code></td>
+</tr>
+<tr>
+<td>JST token (testnet)</td>
+<td><code>JST</code></td>
+<td><code>TJqk3ChKSjmpoNm3gaqSEatNsueD37NGDK</code></td>
+</tr>
+<tr>
+<td>WJST (voting wrapper, testnet)</td>
+<td><code>WJST</code></td>
+<td><code>TCxA1eNhsAV3gvUwLjLtREW9f775V4h1h7</code></td>
+</tr>
+<tr>
+<td>StakedTRX proxy (testnet)</td>
+<td><code>sTRX</code></td>
+<td><code>TZ8du1HkatTWDbS6FLZei4dQfjfpSm9mxp</code></td>
+</tr>
+</tbody>
+</table>
+<p>The Nile testnet currently exposes a subset of the mainnet jToken markets plus four QA-only markets (<code>jUSD1test</code>, <code>jETHQA</code>, <code>jBUSDqa1</code>, <code>jBUSDqa2</code>). For the complete Nile jToken list with delegator and underlying addresses, see <a href="../contracts.json"><code>contracts.json</code> → <code>networks.nile</code></a> or the <a href="https://github.com/justlend/mcp-server-justlend/blob/main/src/core/chains.ts">MCP server <code>chains.ts</code></a>.</p>
+<h3 id="configuring-clients-for-nile">Configuring clients for Nile<a class="headerlink" href="#configuring-clients-for-nile" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># JustLend Skills / MCP server</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">NETWORK</span><span class="o">=</span>nile
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1">// TronWeb</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">tronWeb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">TronWeb</span><span class="p">({</span>
+<span class="w">  </span><span class="nx">fullHost</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;https://nile.trongrid.io&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="c1">// ...</span>
+<span class="p">});</span>
+</code></pre></div>
+<p>Tronscan testnet explorer: <a href="https://nile.tronscan.org">https://nile.tronscan.org</a>.</p>
 
 
 
@@ -2098,6 +2314,27 @@
 
 
 
+  
+    
+  
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Last update">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 20, 2026 08:32:13 UTC">2026-05-20</span>
+  </span>
+
+    
+    
+    
+    
+  </aside>
 
 
 

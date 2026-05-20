@@ -529,6 +529,19 @@
   
 </li>
       
+        
+
+
+
+<li class="md-nav__item ">
+  <a href="#developer-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      Developer reference
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1163,6 +1176,28 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../ai_support/ai_llms/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AI / LLMs
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../ai_support/mcp_server/" class="md-nav__link">
         
   
@@ -1752,6 +1787,16 @@
 </tr>
 </tbody>
 </table>
+<h3 id="developer-reference">Developer reference<a class="headerlink" href="#developer-reference" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Rent resources: <a href="../../../developers/energy_rental/#rent-resources"><code>rentResource(receiver, amount, resourceType)</code></a> — <code>amount</code> is the <strong>delegated TRX in sun</strong> (not energy units); divide target energy by <code>energyStakePerTrx</code> from the <code>/strx/dashboard</code> API.</li>
+<li>Return rental (called by payer): <a href="../../../developers/energy_rental/#return-resources-called-by-payer"><code>returnResource(receiver, amount, resourceType)</code></a>.</li>
+<li>Return rental (called by receiver): <a href="../../../developers/energy_rental/#return-resources-called-by-receiver"><code>returnResourceByReceiver(renter, amount, resourceType)</code></a>.</li>
+<li>Liquidate an undercollateralized rental: <a href="../../../developers/energy_rental/#liquidate"><code>liquidate(renter, receiver, resourceType)</code></a>.</li>
+<li><code>resourceType</code>: <code>0</code> = bandwidth, <code>1</code> = energy.</li>
+<li>Prepayment formula and refund math: <a href="../../../developers/energy_rental/#prepay-refund">Energy Rental prepay &amp; refund</a>.</li>
+<li>Live runnable examples: <a href="../../../developers/energy_rental/#examples-tronweb">Energy→TRX conversion / rent / return — TronWeb</a>.</li>
+</ul>
 
 
 
@@ -1759,6 +1804,27 @@
 
 
 
+  
+    
+  
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Last update">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 20, 2026 08:12:06 UTC">2026-05-20</span>
+  </span>
+
+    
+    
+    
+    
+  </aside>
 
 
 

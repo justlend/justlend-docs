@@ -1417,6 +1417,28 @@
   
   
     <li class="md-nav__item">
+      <a href="../../ai_support/ai_llms/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AI / LLMs
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../ai_support/mcp_server/" class="md-nav__link">
         
   
@@ -1825,6 +1847,7 @@
 <p>Based on Stake 2.0, with TRX Liquid Staking, users can stake TRX to get sTRX tokens and gain high rewards. Compared to traditional staking, TRX Liquid Staking is easier to use and more profitable. Staked TRX will be used automatically for voting and governance, and gain rewards via Energy Rental.
 The contract <a href="https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5">StakedTRX</a> used to set up the staked TRX service.</p>
 <h2 id="query-interface"><strong>Query Interface</strong><a class="headerlink" href="#query-interface" title="Permanent link">&para;</a></h2>
+<p><a id="exchange-rate"></a></p>
 <h3 id="exchange-rate"><strong>Exchange Rate</strong><a class="headerlink" href="#exchange-rate" title="Permanent link">&para;</a></h3>
 <p>Query the exchange rate between sTRX and TRX.
 <div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">exchangeRate</span><span class="p">()</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>view<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint256</span><span class="p">)</span>
@@ -1893,6 +1916,7 @@ The contract <a href="https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZxoqQ
 <li><strong>Returns:</strong> the amount of TRX to be frozen, minimum unit.</li>
 </ul>
 <h2 id="write-interface"><strong>Write Interface</strong><a class="headerlink" href="#write-interface" title="Permanent link">&para;</a></h2>
+<p><a id="deposit-trx"></a></p>
 <h3 id="deposit-trx"><strong>Deposit TRX</strong><a class="headerlink" href="#deposit-trx" title="Permanent link">&para;</a></h3>
 <p>Deposit TRX assets and receive sTRX.
 <div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">deposit</span><span class="p">()</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">payable</span><span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint256</span><span class="p">)</span>
@@ -1915,6 +1939,7 @@ The contract <a href="https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZxoqQ
 </ul>
 </li>
 </ul>
+<p><a id="withdraw-strx"></a></p>
 <h3 id="withdraw-strx"><strong>Withdraw sTRX</strong><a class="headerlink" href="#withdraw-strx" title="Permanent link">&para;</a></h3>
 <p>Specify the amount of sTRX to withdraw, the minimum unit.
 <div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">withdraw</span><span class="p">(</span><span class="kt">uint256</span><span class="w"> </span><span class="nv">tokenAmount</span><span class="p">)</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint256</span><span class="p">)</span>
@@ -1937,6 +1962,7 @@ The contract <a href="https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZxoqQ
 </ul>
 </li>
 </ul>
+<p><a id="withdraw-strx-with-the-amount-of-trx-specified"></a></p>
 <h3 id="withdraw-strx-with-the-amount-of-trx-specified"><strong>Withdraw sTRX (with the amount of TRX specified)</strong><a class="headerlink" href="#withdraw-strx-with-the-amount-of-trx-specified" title="Permanent link">&para;</a></h3>
 <p>Specify the amount of TRX user hopes to obtain through withdrawal, the minimum unit.
 <div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">withdrawExact</span><span class="p">(</span><span class="kt">uint256</span><span class="w"> </span><span class="nv">trxAmount</span><span class="p">)</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint256</span><span class="p">)</span>
@@ -1948,6 +1974,7 @@ The contract <a href="https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZxoqQ
 </li>
 <li><strong>Returns:</strong> the amount of sTRX withdrawn by user, the minimum unit.</li>
 </ul>
+<p><a id="claim-trx"></a></p>
 <h3 id="claim-trx"><strong>Claim TRX</strong><a class="headerlink" href="#claim-trx" title="Permanent link">&para;</a></h3>
 <p>Claim the ready-to-be-withdrawn TRX unfrozen in the earliest round.
 <div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">claim</span><span class="p">()</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint256</span><span class="p">)</span>
@@ -1965,6 +1992,7 @@ The contract <a href="https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZxoqQ
 </ul>
 </li>
 </ul>
+<p><a id="claim-all-unfrozen-trx"></a></p>
 <h3 id="claim-all-unfrozen-trx"><strong>Claim all unfrozen TRX</strong><a class="headerlink" href="#claim-all-unfrozen-trx" title="Permanent link">&para;</a></h3>
 <p>Claim all ready-to-be-withdrawn, unfrozen TRX
 <div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">claimAll</span><span class="p">()</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint256</span><span class="p">)</span>
@@ -1973,6 +2001,7 @@ The contract <a href="https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZxoqQ
 <li><strong>Parameter description:</strong> N/A.</li>
 <li><strong>Returns:</strong> the amount of TRX claimed by the user for all expired unfreezing rounds, the minimum unit.</li>
 </ul>
+<p><a id="examples-tronweb"></a></p>
 <h2 id="examples-tronweb"><strong>Examples (TronWeb)</strong><a class="headerlink" href="#examples-tronweb" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">TronWeb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;tronweb&#39;</span><span class="p">);</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">tronWeb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">TronWeb</span><span class="p">({</span>
@@ -2040,6 +2069,27 @@ The contract <a href="https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZxoqQ
 
 
 
+  
+    
+  
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Last update">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 20, 2026 08:32:13 UTC">2026-05-20</span>
+  </span>
+
+    
+    
+    
+    
+  </aside>
 
 
 

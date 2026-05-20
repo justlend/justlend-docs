@@ -1,0 +1,98 @@
+[
+  {
+    "type": "function",
+    "name": "baseRatePerBlock",
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "multiplierPerBlock",
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "jumpMultiplierPerBlock",
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "kink",
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getBorrowRate",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "cash"
+      },
+      {
+        "type": "uint256",
+        "name": "borrows"
+      },
+      {
+        "type": "uint256",
+        "name": "reserves"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getSupplyRate",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "cash"
+      },
+      {
+        "type": "uint256",
+        "name": "borrows"
+      },
+      {
+        "type": "uint256",
+        "name": "reserves"
+      },
+      {
+        "type": "uint256",
+        "name": "reserveFactorMantissa"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  }
+]

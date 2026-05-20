@@ -1,0 +1,18 @@
+[
+  {
+    "type": "function",
+    "name": "getUnderlyingPrice",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "jToken"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  }
+]

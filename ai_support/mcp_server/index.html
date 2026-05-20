@@ -11,7 +11,7 @@
         <link rel="canonical" href="https://docs.justlend.org/ai_support/mcp_server/">
       
       
-        <link rel="prev" href="../../developers/apis/">
+        <link rel="prev" href="../ai_llms/">
       
       
         <link rel="next" href="../justlend_skills/">
@@ -1095,6 +1095,28 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../ai_llms/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AI / LLMs
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -1797,11 +1819,11 @@
 <p>Beyond JustLend-specific operations, the server also exposes a full set of <strong>general-purpose TRON chain utilities</strong> — balance queries, block/transaction data, token metadata, TRX transfers, smart contract reads/writes, staking (Stake 2.0), multicall, and more.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Current version (<strong>v1.0.6</strong>) supports <strong>JustLend V1</strong> protocol. All contract addresses, ABIs, calculation functions, and lending operations are for V1.</p>
+<p>Current version (<strong>v1.0.7</strong>) supports <strong>JustLend V1</strong> protocol. All contract addresses, ABIs, calculation functions, and lending operations are for V1.</p>
 </div>
 <div class="admonition tip">
-<p class="admonition-title">v1.0.6 Update</p>
-<p>This release focuses on transaction safety, numeric precision, and data availability. It validates TRC20 allowances before supply/repay, requires explicit approval amounts, preserves precision for high-TVL/scientific-notation values, handles typed broadcast responses consistently, skips failed governance proposals when checking user vote status, and degrades gracefully when the Nile mining rewards API is unavailable.</p>
+<p class="admonition-title">v1.0.7 Update</p>
+<p>This release keeps the <strong>59-tool</strong> surface and focuses on dependency/runtime freshness plus precision-safe staking. It uses <code>@modelcontextprotocol/sdk</code> <code>1.29.0</code>, <code>tronweb</code> <code>6.2.2</code>, <code>@bankofai/agent-wallet</code> <code>2.3.0</code>, and <code>tronlink-signer</code> <code>0.1.1</code>; sTRX staking paths use string/BigInt parsing for TRX Sun conversion and 18-decimal sTRX balances/exchange-rate display. The v1.0.6 safety work remains in place: TRC20 allowance checks before supply/repay, explicit approval amounts, typed broadcast handling, governance failed-proposal filtering, and Nile mining fallback.</p>
 </div>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
 <p><a href="https://justlend.org">JustLend DAO</a> is the largest lending protocol on TRON, based on the Compound V2 architecture. This MCP server wraps the full protocol functionality into tools and guided prompts that local MCP clients such as Claude Desktop, Codex, Claude Code, and Cursor can use.</p>
@@ -1834,7 +1856,10 @@
 <li><strong>Energy Cost Estimation</strong>: Estimate energy, bandwidth, and TRX cost for any lending operation before executing</li>
 <li><strong>JST Voting / Governance</strong>: View proposals, cast votes, deposit/withdraw JST for voting power, reclaim votes</li>
 <li><strong>Energy Rental</strong>: Rent energy from JustLend, calculate rental prices, query rental orders, return/cancel rentals</li>
-<li><strong>sTRX Staking</strong>: Stake TRX to receive sTRX, unstake sTRX, claim staking rewards, check withdrawal eligibility</li>
+<li><strong>sTRX Staking</strong>: Stake TRX to receive sTRX, unstake sTRX, claim staking rewards, check withdrawal eligibility<ul>
+<li>Precision-safe BigInt/string math for TRX Sun conversion and 18-decimal sTRX balances/exchange-rate display</li>
+</ul>
+</li>
 </ul>
 <p><strong>Browser Wallet Signing</strong></p>
 <ul>
@@ -2097,7 +2122,7 @@ npm<span class="w"> </span>run<span class="w"> </span>start:http
 </code></pre></div>
 <h4 id="how-clients-send-it">How clients send it<a class="headerlink" href="#how-clients-send-it" title="Permanent link">&para;</a></h4>
 <p>Clients pass the same value as a Bearer token on every request:</p>
-<div class="highlight"><pre><span></span><code>Authorization: Bearer &lt;your-MCP_API_KEY&gt;
+<div class="highlight"><pre><span></span><code><span class="err">Authorization: Bearer &lt;your-MCP_API_KEY&gt;</span>
 </code></pre></div>
 <p>For example, a <code>curl</code> health-check vs. an authenticated SSE connection:</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># /health does not require the header</span>
@@ -2545,7 +2570,7 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 </tr>
 <tr>
 <td><code>stake_trx_to_strx</code></td>
-<td>Stake TRX to receive sTRX (with balance check)</td>
+<td>Stake TRX to receive sTRX with precision-safe string amount parsing (with balance check)</td>
 <td><strong>Yes</strong></td>
 </tr>
 <tr>
@@ -2695,6 +2720,27 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 
 
 
+  
+    
+  
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Last update">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 20, 2026 08:18:05 UTC">2026-05-20</span>
+  </span>
+
+    
+    
+    
+    
+  </aside>
 
 
 
