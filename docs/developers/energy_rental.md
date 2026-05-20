@@ -1,5 +1,8 @@
 # Energy Rental
 
+!!! info "Network & precision"
+    Contract address below is **TRON Mainnet**. `amount` parameters refer to the **delegated TRX amount in sun** (1 TRX = 10⁶ sun) — not the energy amount. To go from desired energy to TRX, divide by `energyStakePerTrx` from the dashboard. `resourceType`: `0 = bandwidth`, `1 = energy`.
+
 All transactions on JustLend DAO require Energy, which can only be acquired through staking or burning TRX. This process involves high costs and lengthy procedures. In response, JustLend DAO introduces the Energy Rental service, allowing users to rent Energy at a significantly reduced price compared to staking or burning TRX.
 The contract [EnergyRental](https://tronscan.io/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd) used to set up the Energy Rental service.
 
@@ -251,3 +254,99 @@ Liquidate( address indexed liquidator, address indexed renter, address indexed r
     * `usageRental:` the fee for the recovery time of the order resource usage;
     * `liquidateFee:` the liquidation reward received by the liquidator;
     * `sendBack:` the remaining deposit received by the payer.
+
+
+## **Examples (TronWeb)**
+
+```javascript
+const TronWeb = require('tronweb');
+const tronWeb = new TronWeb({
+  fullHost: 'https://api.trongrid.io',
+  headers: { 'TRON-PRO-API-KEY': process.env.TRONGRID_API_KEY },
+  privateKey: process.env.PRIVATE_KEY,
+});
+
+const ENERGY_RENTAL = 'TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd'; // TRON Mainnet
+const ENERGY = 1;     // resourceType for energy
+// const BANDWIDTH = 0; // resourceType for bandwidth
+```
+
+### 1. Convert "I want N energy" → required delegated TRX
+
+The contract takes **delegated TRX in sun**, not energy units. First query the current ratio:
+
+```javascript
+async function energyToDelegatedSun(targetEnergy) {
+  // GET https://openapi.just.network/strx/dashboard → energyStakePerTrx
+  const res = await fetch('https://openapi.just.network/strx/dashboard');
+  const { data } = await res.json();
+  const energyPerTrx = Number(data.energyStakePerTrx); // energy per 1 TRX
+  const trxNeeded    = targetEnergy / energyPerTrx;    // in TRX
+  return BigInt(Math.ceil(trxNeeded * 1_000_000));     // sun
+}
+```
+
+### 2. Rent energy (the `rentResource` call)
+
+```javascript
+async function rentEnergy({ receiver, targetEnergy, durationSeconds }) {
+  const rental = await tronWeb.contract().at(ENERGY_RENTAL);
+
+  // Compute prepayment off-chain (formula from the page above):
+  //   prepay = trxAmount × max(rentalRate, stableRate) × (duration + 86400 + liquidateThreshold) + fee
+  // Easiest: query `_rentalRate(amount, resourceType)` for the current per-second rate
+  //   and the EnergyRental dashboard for `stableRate`, `liquidateThreshold`, and `fee`.
+  // Simplest path: overshoot the prepayment slightly; the unused portion is refunded on return.
+
+  const amountSun = await energyToDelegatedSun(targetEnergy);
+  const rentalRate = BigInt((await rental._rentalRate(amountSun, ENERGY).call()).toString());
+
+  // Rough prepayment (use a conservative buffer; precise formula in the page above)
+  const buffer = BigInt(durationSeconds + 86_400);
+  const fee    = 20_000_000n; // 20 TRX minimum liquidation reserve
+  const prepay = amountSun * rentalRate * buffer / (10n ** 18n) + fee;
+
+  const txId = await rental
+    .rentResource(receiver, amountSun.toString(), ENERGY)
+    .send({ callValue: Number(prepay), feeLimit: 200_000_000 });
+
+  console.log('rent tx:', txId);
+}
+```
+
+!!! tip
+    For prepayment precision, use the JustLend MCP server's `calculate_energy_rental_price` tool — it implements the full formula and accounts for `stableRate` and `liquidateThreshold`. See [MCP Server](../ai_support/mcp_server.md).
+
+### 3. Return rental & reclaim deposit
+
+```javascript
+async function returnEnergy({ receiver, returnAmountSun }) {
+  const rental = await tronWeb.contract().at(ENERGY_RENTAL);
+
+  // Called by the *payer* (renter)
+  const txId = await rental
+    .returnResource(receiver, returnAmountSun, ENERGY)
+    .send({ feeLimit: 200_000_000 });
+  console.log('return tx:', txId);
+}
+
+// If called by the receiver of the rented energy:
+async function returnByReceiver({ renter, returnAmountSun }) {
+  const rental = await tronWeb.contract().at(ENERGY_RENTAL);
+  return rental
+    .returnResourceByReceiver(renter, returnAmountSun, ENERGY)
+    .send({ feeLimit: 200_000_000 });
+}
+```
+
+### 4. Query an active rental
+
+```javascript
+async function getRental({ renter, receiver }) {
+  const rental = await tronWeb.contract().at(ENERGY_RENTAL);
+  // Real-time view (updated to current block)
+  const [securityDeposit, rentIndex] = await rental
+    .getRentInfo(renter, receiver, ENERGY).call();
+  return { securityDeposit: securityDeposit.toString(), rentIndex: rentIndex.toString() };
+}
+```

@@ -1,0 +1,79 @@
+# JustLend DAO Documentation
+
+> JustLend DAO is the largest lending protocol on TRON, based on the Compound V2 architecture. Users supply TRX and TRC20 assets as collateral to earn interest, borrow against that collateral, stake TRX for sTRX (liquid staking), or rent TRON Energy at a discount. This site documents the protocol for users, integrators, and AI agents.
+
+## Authoritative machine-readable sources
+
+- [OpenAPI 3.1 specification](https://docs.justlend.org/developers/apis/justlend_apis.yaml): Machine-readable contract for the public read-only HTTP API at `https://openapi.just.network`. Importable into Swagger UI, Postman, or any LLM tool.
+- [API reference (rendered)](https://docs.justlend.org/developers/apis): Swagger UI rendering of the OpenAPI spec.
+- [sitemap.xml](https://docs.justlend.org/sitemap.xml): Full list of indexable documentation pages.
+
+## Getting started
+
+- [Overview](https://docs.justlend.org/getting_started/overview): Protocol model — suppliers, borrowers, jTokens, interest rates, liquidation.
+- [Whitepaper (PDF)](https://justlend.org/docs/justlend_whitepaper_en.pdf): Full protocol design.
+- [Supply concept](https://docs.justlend.org/getting_started/concepts/supply)
+- [Borrow concept](https://docs.justlend.org/getting_started/concepts/borrow)
+- [Withdraw concept](https://docs.justlend.org/getting_started/concepts/withdraw)
+- [Repay concept](https://docs.justlend.org/getting_started/concepts/repay)
+- [Liquidations](https://docs.justlend.org/getting_started/concepts/liquidations)
+- [Risks](https://docs.justlend.org/getting_started/concepts/risks)
+- [Staked TRX (sTRX)](https://docs.justlend.org/getting_started/concepts/staked_trx)
+- [Energy Rental](https://docs.justlend.org/getting_started/concepts/energy_rental)
+
+## Governance
+
+- [JIPs (JustLend Improvement Proposals)](https://docs.justlend.org/governance/jips)
+- [Tokenomics (JST)](https://docs.justlend.org/governance/tokenomics)
+- [Community Forum](https://forum.justlend.org)
+
+## Developer reference
+
+- [Contracts Overview](https://docs.justlend.org/developers/contracts_overview): Architecture across SBM, interest rate models, oracle, governance, comptroller.
+- [Supply and Borrow Market (SBM)](https://docs.justlend.org/developers/supply_and_borrow_market/sbm): Function signatures for `mint`, `borrow`, `repayBorrow`, `redeem`, `borrowBalanceCurrent`, etc.
+- [Interest Rate Model](https://docs.justlend.org/developers/supply_and_borrow_market/interest_rate_model)
+- [Governance contracts](https://docs.justlend.org/developers/supply_and_borrow_market/governance)
+- [Price Oracle](https://docs.justlend.org/developers/supply_and_borrow_market/price_oracle)
+- [Comptroller](https://docs.justlend.org/developers/supply_and_borrow_market/comptroller)
+- [Staked TRX contracts](https://docs.justlend.org/developers/staked_trx)
+- [Energy Rental contracts](https://docs.justlend.org/developers/energy_rental)
+- [Deployed Contracts (mainnet addresses)](https://docs.justlend.org/developers/deployed_contracts): All jTokens, interest rate models, oracle, governance, comptroller, sTRX, Energy Rental. **All addresses on TRON Mainnet.** Inspect ABI via Tronscan.
+
+## AI Agent integration
+
+- [JustLend Skills](https://docs.justlend.org/ai_support/justlend_skills) (`@justlend/justlend-skills`): Read-only skills package + lightweight MCP server (**9 query tools**). Source: <https://github.com/justlend/justlend-skills>.
+- [Full MCP Server](https://docs.justlend.org/ai_support/mcp_server) (`@justlend/mcp-server-justlend`, v1.0.6, **59 tools**): Full read/write MCP server for supply, borrow, repay, withdraw, sTRX staking, energy rental, governance voting, mining rewards, transfers, and general TRON utilities. Source: <https://github.com/justlend/mcp-server-justlend>.
+- [Machine-readable ABIs](https://github.com/justlend/mcp-server-justlend/blob/main/src/core/abis.ts): jToken, Comptroller, Oracle, TRC20 — bundled in the MCP server. Network configs (Mainnet/Nile) in [`chains.ts`](https://github.com/justlend/mcp-server-justlend/blob/main/src/core/chains.ts).
+
+## API endpoints (read-only HTTP API)
+
+Base URL: `https://openapi.just.network`. Schema in [justlend_apis.yaml](https://docs.justlend.org/developers/apis/justlend_apis.yaml). Endpoints include:
+
+- `GET /lend/jtoken` — All jToken markets with supply/borrow APY, mining rewards, TVL.
+- `GET /lend/jtoken/{address}` — Single jToken details.
+- `GET /lend/account/{address}` — Account positions, health factor, rewards.
+- `GET /lend/dashboard` — Protocol-level totals (TVL, supply, borrow, users).
+- `GET /lend/mining` — Mining reward configuration and status.
+
+Refer to the OpenAPI spec for the full endpoint list, request parameters, response schemas, units, and error responses.
+
+## Resources
+
+- [Audits — Supply & Borrow (PDF)](https://justlend.org/docs/justlend_audit_en.pdf)
+- [Audits — Staked TRX (PDF)](https://justlend.org/docs/justlend_strx_audit_en.pdf)
+- [Risk Warning](https://docs.justlend.org/resources/risk_warning)
+- [Wallet Integration Cooperation](https://docs.justlend.org/resources/community/wallet_integration_cooperation)
+- [Community Links](https://docs.justlend.org/resources/community/links)
+- [Terms of Service (PDF)](https://justlend.org/docs/JustLend_Terms_of_Use_en.pdf)
+- [Privacy Policy (PDF)](https://justlend.org/docs/JustLend_Privacy_Policy_en.pdf)
+
+## Notes for AI agents
+
+- **Network**: All deployed contract addresses listed in this documentation are on **TRON Mainnet**. Use Nile testnet (`NETWORK=nile`) for testing — testnet addresses differ and are not listed here.
+- **Precision**: jToken balances are returned in jToken units (8 decimals). Underlying token amounts use that token's own decimals (TRX = 6, USDT = 6, USDC = 6, BTC = 8, ETH = 18, etc.). Always check the underlying token's `decimals()` before submitting transactions.
+- **Recommended source-of-truth priority**: (1) OpenAPI spec → (2) MCP server tools → (3) rendered docs. The HTML docs are for human reading; for programmatic use prefer the OpenAPI spec and MCP server.
+- **Read-only vs. write**: The HTTP API and the JustLend Skills MCP server are read-only. Only `@justlend/mcp-server-justlend` exposes write tools. Write operations are clearly marked with `destructiveHint: true` and require an encrypted local wallet via `@bankofai/agent-wallet`.
+
+## Optional
+
+- [llms-full.txt](https://docs.justlend.org/llms-full.txt) — Condensed full-text snapshot of the documentation for single-fetch LLM consumption.
