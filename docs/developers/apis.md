@@ -8,6 +8,30 @@ Public REST endpoints for querying JustLend DAO protocol state: lending markets,
 - **Machine‑readable spec:** [`justlend_apis.yaml`](./apis/justlend_apis.yaml) (OpenAPI 3.1). Importable into Swagger UI, Postman, Insomnia, or any LLM tool.
 - **Rate limits:** The public service is unauthenticated and may throttle abusive traffic. Keep `pageSize <= 1000`, cache stable metadata such as jToken lists, and retry `429` / `5xx` responses with exponential backoff.
 
+## Quick start
+
+Run this read-only request to verify connectivity and inspect the current JustLend market list:
+
+```bash
+curl -sS https://openapi.just.network/lend/jtoken
+```
+
+Expected result:
+
+```json
+{
+  "code": 0,
+  "message": "SUCCESS",
+  "data": {
+    "tokenList": [
+      { "symbol": "jTRX", "underlyingSymbol": "TRX" }
+    ]
+  }
+}
+```
+
+For integrations, import the OpenAPI schema from [`apis/justlend_apis.yaml`](./apis/justlend_apis.yaml), then start with `GET /lend/jtoken` for market metadata and `GET /lend/account?addresses={wallet}` for a user's positions.
+
 ---
 
 ## 1. Conventions
@@ -101,6 +125,15 @@ The public API is designed for read-only integrations and AI agents. It is not a
 - Avoid tight polling loops. Market dashboards normally do not need sub-second refreshes.
 - On `429` or transient `5xx`, retry with exponential backoff and jitter. Start around 1 second and cap retries to avoid request storms.
 - If you need sustained high-volume access, contact the JustLend team before production launch.
+
+### 1.8 Versioning and compatibility
+
+The OpenAPI `info.version` is the documentation schema version. The HTTP API is read-only and backward-compatible unless an endpoint or field is explicitly marked otherwise.
+
+- Existing fields may be extended with new optional fields. Clients should ignore unknown fields.
+- Field removals, type changes, or semantic changes require a documentation version update and deprecation note before rollout.
+- Legacy fields can remain documented for compatibility. For example, `reserse` is preserved as returned by the service and should be read as `reserves`.
+- When the rendered page and OpenAPI YAML differ, treat [`apis/justlend_apis.yaml`](./apis/justlend_apis.yaml) as the source of truth for request and response shapes.
 
 ---
 
