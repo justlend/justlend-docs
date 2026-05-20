@@ -20,6 +20,7 @@ For the JustLend protocol itself, see governance proposals on [forum.justlend.or
 - Public API rate-limit guidance in `developers/apis.md`, `llms.txt`, `llms-full.txt`, and the OpenAPI `x-rate-limit` extension, including `429` retry behavior.
 - Developer-reference cross-links from user concept pages to the corresponding contract functions and TronWeb examples.
 - `/.well-known/security.txt` for automated security-contact discovery.
+- MCP server docs synced to `@justlend/mcp-server-justlend` v1.0.7, including current dependency/runtime versions and precision-safe sTRX staking behavior.
 - Resolved `_(see Tronscan)_` placeholders in `deployed_contracts.md`:
   - `jHTX` delegate implementation: `TJD7nb5Wq1P1rRi3Se2vLpLhksALdW8adb`.
   - `jUSDDOLD` underlying TRC20: `TPYmHEhy5n8TCEfYGqW2rPxsghSfzghPDn`.

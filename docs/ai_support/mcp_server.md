@@ -7,10 +7,10 @@ The JustLend MCP Server (`@justlend/mcp-server-justlend`) is a [Model Context Pr
 Beyond JustLend-specific operations, the server also exposes a full set of **general-purpose TRON chain utilities** — balance queries, block/transaction data, token metadata, TRX transfers, smart contract reads/writes, staking (Stake 2.0), multicall, and more.
 
 !!! note
-    Current version (**v1.0.6**) supports **JustLend V1** protocol. All contract addresses, ABIs, calculation functions, and lending operations are for V1.
+    Current version (**v1.0.7**) supports **JustLend V1** protocol. All contract addresses, ABIs, calculation functions, and lending operations are for V1.
 
-!!! tip "v1.0.6 Update"
-    This release focuses on transaction safety, numeric precision, and data availability. It validates TRC20 allowances before supply/repay, requires explicit approval amounts, preserves precision for high-TVL/scientific-notation values, handles typed broadcast responses consistently, skips failed governance proposals when checking user vote status, and degrades gracefully when the Nile mining rewards API is unavailable.
+!!! tip "v1.0.7 Update"
+    This release keeps the **59-tool** surface and focuses on dependency/runtime freshness plus precision-safe staking. It uses `@modelcontextprotocol/sdk` `1.29.0`, `tronweb` `6.2.2`, `@bankofai/agent-wallet` `2.3.0`, and `tronlink-signer` `0.1.1`; sTRX staking paths use string/BigInt parsing for TRX Sun conversion and 18-decimal sTRX balances/exchange-rate display. The v1.0.6 safety work remains in place: TRC20 allowance checks before supply/repay, explicit approval amounts, typed broadcast handling, governance failed-proposal filtering, and Nile mining fallback.
 
 ## Overview
 
@@ -41,6 +41,7 @@ Beyond JustLend-specific operations, the server also exposes a full set of **gen
 - **JST Voting / Governance**: View proposals, cast votes, deposit/withdraw JST for voting power, reclaim votes
 - **Energy Rental**: Rent energy from JustLend, calculate rental prices, query rental orders, return/cancel rentals
 - **sTRX Staking**: Stake TRX to receive sTRX, unstake sTRX, claim staking rewards, check withdrawal eligibility
+    - Precision-safe BigInt/string math for TRX Sun conversion and 18-decimal sTRX balances/exchange-rate display
 
 **Browser Wallet Signing**
 
@@ -433,7 +434,7 @@ npm run dev
 | `get_strx_account` | User staking account: staked amount, income, rewards | No |
 | `get_strx_balance` | sTRX token balance for an address | No |
 | `check_strx_withdrawal_eligibility` | Check unbonding status, pending/completed withdrawal rounds | No |
-| `stake_trx_to_strx` | Stake TRX to receive sTRX (with balance check) | **Yes** |
+| `stake_trx_to_strx` | Stake TRX to receive sTRX with precision-safe string amount parsing (with balance check) | **Yes** |
 | `unstake_strx` | Unstake sTRX to receive TRX back (with balance check) | **Yes** |
 | `claim_strx_rewards` | Claim all staking rewards (with rewards existence check) | **Yes** |
 

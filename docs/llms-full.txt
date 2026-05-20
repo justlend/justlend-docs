@@ -411,7 +411,7 @@ Built-in MCP tools (all read-only): `get_all_markets`, `get_dashboard`, `get_sup
 
 ### 7.2 Full MCP Server — `@justlend/mcp-server-justlend`
 
-Read + write MCP server, **59 tools**, version **v1.0.6**. Repo: <https://github.com/justlend/mcp-server-justlend>. Targets **JustLend V1**.
+Read + write MCP server, **59 tools**, version **v1.0.7**. Repo: <https://github.com/justlend/mcp-server-justlend>. Targets **JustLend V1**.
 
 Capability domains:
 
@@ -422,7 +422,7 @@ Capability domains:
 - **Mining & Rewards** (3 tools) — `get_mining_rewards`, `get_usdd_mining_config`, `get_wbtc_mining_config`.
 - **JST Voting / Governance** (10 tools) — `get_proposal_list`, `get_user_vote_status`, `get_vote_info`, `get_locked_votes`, `check_jst_allowance_for_voting`, `approve_jst_for_voting`, `deposit_jst_for_votes`, `withdraw_votes_to_jst`, `cast_vote`, `withdraw_votes_from_proposal`.
 - **Energy Rental** (9 tools) — dashboard, params, price calculator, rate, orders, rent info, return info, `rent_energy`, `return_energy_rental`.
-- **sTRX Staking** (7 tools) — dashboard, account, balance, withdrawal-eligibility check, `stake_trx_to_strx`, `unstake_strx`, `claim_strx_rewards`.
+- **sTRX Staking** (7 tools) — dashboard, account, balance, withdrawal-eligibility check, `stake_trx_to_strx`, `unstake_strx`, `claim_strx_rewards`. Staking paths use precision-safe string/BigInt math for TRX Sun conversion and 18-decimal sTRX balances/exchange-rate display.
 - **Transfers** (2 tools) — `transfer_trx`, `transfer_trc20`.
 - **General TRON utilities** (via the same tool set) — balances, blocks, transactions, contract read/write, multicall, TRC20/TRC721/TRC1155 metadata, transfers, Stake 2.0 freeze/unfreeze, address conversion, wallet management, message signing.
 
