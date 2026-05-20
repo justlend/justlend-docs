@@ -318,7 +318,7 @@ Note: the dApp UI has renamed two markets — `jETH` is displayed as "ETH" (form
 | ETHB       | `TWBxQMb6RD3qmkXUXpNwVCYbL8SHNreru6`      | `TRFe3hT5oYhjSZ6f3ji5FJ7YCfrkWnHRvh` |
 | ETH        | `TR7BUFRQeq1w5jAZf1FKx85SHuX6PfMqsV`      | `THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF` |
 | WBTT (legacy) | `TUY54PVeH6WCcYCd6ZXXoBDsHytN9V5PXt`      | `TKfjV9RNKJJCqPvBtK8L7Knykh7DNWvnYt` |
-| USDDOLD (legacy) | `TX7kybeP6UwTBRHLNPYmswFESHfyjm9bAS`      | _(see Tronscan)_ |
+| USDDOLD (legacy) | `TX7kybeP6UwTBRHLNPYmswFESHfyjm9bAS`      | `TPYmHEhy5n8TCEfYGqW2rPxsghSfzghPDn` |
 | BUSDOLD (legacy) | `TLHASseQymmpGQdfAyNjkMXFTJh8nzR2x2`      | `TMz2SWatiAtZVVcH2ebpsbVtYwUPT9EdjH` |
 | SUNOLD (legacy)  | `TGBr8uh9jBVHJhhkwSJvQN2ZAKzVkxDmno`      | `TKkeiboTkxXKJpbmVFbv4a8ov5rAfRDMf9` |
 

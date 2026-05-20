@@ -698,3 +698,11 @@ If you are an LLM tool building requests against this API, follow these rules:
 8. **Mining claims** — every entry of `/mining/distributions` with `claimed == false` is a free transaction the user should submit.
 
 The machine‑readable OpenAPI 3.1 spec lives at [`apis/justlend_apis.yaml`](./apis/justlend_apis.yaml) and stays consistent with this page.
+
+---
+
+## 7. Interactive API Explorer
+
+Use the embedded Swagger UI below to call endpoints directly from this page. Same OpenAPI spec as the YAML link above.
+
+<swagger-ui src="../developers/apis/justlend_apis.yaml" />

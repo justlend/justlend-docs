@@ -75,6 +75,12 @@ extra_css:
 plugins:
       - search
       - swagger-ui-tag # 添加这个插件
+      # Per-page last-updated, sourced from git commit metadata.
+      # Requires the GitHub Actions checkout step to use `fetch-depth: 0`.
+      - git-revision-date-localized:
+          enable_creation_date: false
+          fallback_to_build_date: true
+          type: iso_date
       # Redirects: legacy hyphenated URLs → current underscore URLs.
       # MkDocs generates static HTML at the old paths with <meta http-equiv="refresh">
       # plus <link rel="canonical"> pointing at the new path. Browsers and major
