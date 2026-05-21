@@ -34,7 +34,16 @@ The project includes 4 structured skill modules in the `/skills` directory that 
 
 The lending skill works with the built-in 9 query tools. The other three skills provide instructional guidance and require the [full MCP server](mcp_server.md) for write operations.
 
-## Supported Markets
+## Featured Markets (CLI Quick Reference)
+
+!!! warning "Not an exhaustive market list"
+    The table below lists the **9 markets the bundled CLI examples target by symbol shortcut**. It is **not** the protocol's full market roster. The JustLend DAO protocol currently exposes **17 active + 6 legacy = 23 markets total** (see the single source of truth below). All 23 are queryable through the Skills MCP server via `get_supported_markets` / `get_all_markets` — the CLI shortcuts are just a convenience subset for human terminal use.
+
+**Single source of truth for the live market list (in order of preference):**
+
+1. **Live API** — `GET https://openapi.just.network/lend/jtoken` returns the authoritative jToken list with addresses, APYs, and TVL.
+2. **Machine-readable address book** — [`/developers/contracts.json`](../developers/contracts.json) (regenerated from the MCP server's `chains.ts`).
+3. **Rendered table** — [APIs §2 — jToken Address Reference](../developers/apis.md#2-jtoken-address-reference) (all 23 markets, legacy rows tagged).
 
 | jToken | Underlying | Description |
 |--------|-----------|-------------|
@@ -48,11 +57,7 @@ The lending skill works with the built-in 9 query tools. The other three skills 
 | jWIN   | WIN       | WINkLink |
 | jHTX   | HTX       | HTX token |
 
-!!! note "Authoritative current market list"
-    The full live list (17 active + 6 legacy) is in [APIs §2 — jToken Address Reference](../developers/apis.md#2-jtoken-address-reference). Markets currently **closed** to new supply/borrow: `jUSDCOLD`, `jUSDDOLD`, `jUSDJ`, `jWBTT`, `jSUNOLD`, `jBUSDOLD`. The on-chain contracts remain queryable so existing positions can be unwound — do not direct new deposits to them.
-
-!!! tip
-    The full MCP server supports 24+ markets including jsTRX, jwstUSDT, jWBTC, and more.
+Markets currently **closed** to new supply/borrow (legacy, queryable but do not direct new deposits to them): `jUSDCOLD`, `jUSDDOLD`, `jUSDJ`, `jWBTT`, `jSUNOLD`, `jBUSDOLD`.
 
 ## Prerequisites
 

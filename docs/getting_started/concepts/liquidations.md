@@ -1,3 +1,6 @@
+!!! info "About this page"
+    **Protocol:** JustLend DAO (Compound V2 fork on TRON) · **Network:** TRON Mainnet · **Page scope:** how liquidation works for **SBM (Supply & Borrow Market)** positions on JustLend — risk-value formula, thresholds, on-chain mechanics, and the manual liquidation workflow. · **Unit conventions used here:** `Collateral Factor` ∈ [0, 1] (decimal, e.g. `0.80` = 80%); `Risk Value` is a percentage scalar (`100` means at the liquidation threshold, **not** `1.0`); USD amounts are de-scaled human numbers. · **Related contracts:** `Comptroller` (sets `closeFactorMantissa`, `liquidationIncentiveMantissa`, and per-market `collateralFactorMantissa`; see [Comptroller](../../developers/supply_and_borrow_market/comptroller.md)) and `CErc20Delegator` jTokens (expose `liquidateBorrow`; see [SBM](../../developers/supply_and_borrow_market/sbm.md)). · **Key terms defined inline below:** Risk Value, Borrow Limit, Total Borrow, Collateral Factor, Observation Threshold, Liquidation Threshold, Liquidation Reward.
+
 Liquidation is determined by **Risk Value**, which is a critical metric within the JustLend DAO Protocol that measures the safety of a borrow position. It is calculated as:
 
 $$
