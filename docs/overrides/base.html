@@ -80,6 +80,15 @@
         <meta {% for key, value in tag.items() %} {{ key }}="{{value}}" {% endfor %}>
       {% endfor %}
     {% endif %}
+    {# AI / LLM discoverability hints — non-standard rel values per llmstxt.org. #}
+    {# Crawlers that don't recognize them ignore them; the ones that do (and    #}
+    {# tools that look for them, e.g. agent indexers) can locate the AI-only   #}
+    {# entry files without guessing paths.                                     #}
+    <link rel="llms" href="{{ '/llms.txt' | url }}" type="text/plain">
+    <link rel="llms-full" href="{{ '/llms-full.txt' | url }}" type="text/plain">
+    <link rel="alternate" type="text/plain" title="llms.txt — site index for LLMs" href="{{ '/llms.txt' | url }}">
+    <link rel="alternate" type="text/plain" title="llms-full.txt — full-text snapshot for LLMs" href="{{ '/llms-full.txt' | url }}">
+    <meta name="ai-content-declaration" content="llms.txt,llms-full.txt">
     {% block extrahead %}{% endblock %}
   </head>
   {% set direction = config.theme.direction or lang.t("direction") %}

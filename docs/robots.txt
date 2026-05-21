@@ -70,7 +70,14 @@ Allow: /
 # Authoritative entry points for AI agents
 Sitemap: https://docs.justlend.org/sitemap.xml
 
-# AI-friendly indexes (RFC-style hints; non-standard but increasingly recognized)
-# llms.txt — site navigation for LLMs
-# llms-full.txt — condensed full-text snapshot
-# See: https://llmstxt.org/
+# AI-friendly indexes (non-standard but increasingly recognized — see https://llmstxt.org/).
+# These appear here both as explicit `Allow:` rules (so crawlers know they're fair game)
+# and as named entry points for tools that scan robots.txt for AI metadata.
+Allow: /llms.txt
+Allow: /llms-full.txt
+Allow: /developers/contracts.json
+Allow: /developers/abis/
+
+# Named entry points (non-standard directives — recognized by some AI indexers).
+LLM-Index: https://docs.justlend.org/llms.txt
+LLM-Full-Index: https://docs.justlend.org/llms-full.txt

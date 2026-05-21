@@ -10,7 +10,19 @@ For the JustLend protocol itself, see governance proposals on [forum.justlend.or
 
 ## [Unreleased]
 
-### Added
+### Added — 2026-05-21 AI-data-consistency pass
+
+- **`/llms-full.txt` snapshot metadata header** (`§0`): `last_generated`, `docs_commit`, `contracts_json_source`, `mcp_server_version` so consumers can detect staleness without diffing the body.
+- **Homepage freshness admonition** in `getting_started/overview.md` covering protocol name, network (TRON Mainnet), market count (17 active + 6 legacy = 23), and pointers to the rendered footer date, `CHANGELOG.md`, and `/llms-full.txt`.
+- **Self-contained "About this page" admonitions** at the top of `developers/contracts_overview.md` and `getting_started/concepts/liquidations.md` (P1 #4 fix from the v4 audit) so that RAG chunks retrieved in isolation still carry protocol + network + units context.
+- **Structured contract overview table** in `developers/contracts_overview.md` (P1 #3) with one row per contract: address, upgradeable?, proxy mode, key functions, ABI link, doc link. Replaces the previous prose-only "navigation shell".
+- **`<link rel="llms" href="/llms.txt">` discoverability hint** in `docs/overrides/base.html` `<head>` (P1 #5) plus `Sitemap`/`Allow: /llms.txt`-class entries already in `robots.txt`.
+
+### Fixed — 2026-05-21 AI-data-consistency pass
+
+- **Cross-page jToken count contradiction (P0 #1).** `ai_support/justlend_skills.md` previously titled its 9-row table "Supported Markets", which RAG chunks misread as the protocol's full market list, contradicting `llms-full.txt` (17 active + 6 legacy = 23). Renamed to "Featured Markets (CLI Quick Reference)" and reframed: the table is now explicitly a CLI shortcut subset, with the authoritative source-of-truth ordering (live API → `contracts.json` → `apis.md` §2) stated above it. `llms-full.txt §5.2` similarly hardened to cite the same single source of truth in-chunk.
+
+### Added — prior to 2026-05-21
 - `CHANGELOG.md` (this file).
 - `mkdocs-git-revision-date-localized-plugin`: every page now shows last-updated date in the footer, sourced from git commit metadata.
 - `AI / LLMs` navigation page listing `/llms.txt`, `/llms-full.txt`, OpenAPI, `contracts.json`, and JSON ABI endpoints for agent users.
