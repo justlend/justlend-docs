@@ -1,10 +1,15 @@
+---
+title: Energy Rental — contract reference
+description: JustLend DAO EnergyRental contract reference — rentResource, returnResource, returnResourceByReceiver, liquidate, getRentInfo, plus TronWeb examples. Powers the one-to-many TRON Energy marketplace.
+---
+
 # Energy Rental
 
-!!! info "Network & precision"
-    Contract address below is **TRON Mainnet**. `amount` parameters refer to the **delegated TRX amount in sun** (1 TRX = 10⁶ sun) — not the energy amount. To go from desired energy to TRX, divide by `energyStakePerTrx` from the dashboard. `resourceType`: `0 = bandwidth`, `1 = energy`.
+!!! info "About this page"
+    **Protocol:** JustLend DAO Energy Rental (one-to-many TRON Energy marketplace) · **Network:** TRON Mainnet · **Contract:** [`TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd`](https://tronscan.org/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd) (immutable) · **Units:** `amount` parameters refer to the **delegated TRX amount in sun** (1 TRX = 10⁶ sun), **not** the energy amount — divide your target energy by `energyStakePerTrx` from the dashboard API to get TRX. · **`resourceType`:** `0 = bandwidth`, `1 = energy`. · **Constraint:** receiver must be a regular account, not a contract. · **User-side overview:** [Energy Rental concept](../getting_started/concepts/energy_rental.md) · **ABI:** [`abis/energy-market.json`](abis/energy-market.json), rate model in [`abis/energy-rate-model.json`](abis/energy-rate-model.json).
 
 All transactions on JustLend DAO require Energy, which can only be acquired through staking or burning TRX. This process involves high costs and lengthy procedures. In response, JustLend DAO introduces the Energy Rental service, allowing users to rent Energy at a significantly reduced price compared to staking or burning TRX.
-The contract [EnergyRental](https://tronscan.io/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd) used to set up the Energy Rental service.
+The contract [EnergyRental](https://tronscan.org/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd) used to set up the Energy Rental service.
 
 
 ### **PrePay & Refund**
@@ -38,7 +43,7 @@ Upon normal termination of the rental, a portion of the deposit will be refunded
 * `liquidateThreshold:` the liquidation threshold, which is the remaining rental duration of the user's prepayment, initialized to 0.
 * `fee:` the penalty reserve for liquidation. Users who execute liquidation can receive a liquidation reward calculated as `Max(20 TRX, 0.01% * energyAmount / energyRentPerTrx)`, which can be retrieved by calling the [/strx/dashboard](https://labc.ablesdxd.link/strx/dashboard) API. The minimum fee is 20 TRX.
 
-**Note:** the parameters of `rentalRate`, `stableRate` and `liquidateThreshold` can be obtained by calling the [EnergyRental](https://tronscan.io/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd) contract.
+**Note:** the parameters of `rentalRate`, `stableRate` and `liquidateThreshold` can be obtained by calling the [EnergyRental](https://tronscan.org/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd) contract.
 
 
 

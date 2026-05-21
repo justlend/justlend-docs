@@ -6,8 +6,8 @@
 
 | Field | Value |
 |-------|-------|
-| `last_generated` | **2026-05-21** (ISO 8601, UTC date) |
-| `docs_commit` | [`718ae87`](https://github.com/justlend/justlend-docs/commit/718ae87) (latest commit on `main` when this snapshot was generated) |
+| `last_generated` | **{{LAST_GENERATED}}** (ISO 8601, UTC date — substituted at build time) |
+| `docs_commit` | [`{{DOCS_COMMIT_SHORT}}`](https://github.com/justlend/justlend-docs/commit/{{DOCS_COMMIT}}) (the commit SHA this snapshot was built from — substituted at build time) |
 | `contracts_json_source` | [`/developers/contracts.json`](https://docs.justlend.org/developers/contracts.json) — see its `_meta.last_generated` for the address-data snapshot date |
 | `mcp_server_version` | `@justlend/mcp-server-justlend` **v1.0.7** (sync date 2026-05-20) |
 | `changelog` | [`CHANGELOG.md`](https://github.com/justlend/justlend-docs/blob/main/CHANGELOG.md) |
@@ -396,6 +396,16 @@ Base URL: `https://openapi.just.network`. Authoritative schema: <https://docs.ju
 
 Status codes follow standard HTTP (`200` OK, `400` Bad Request). Field types and units (jToken units = 8 decimals, APY as annualized decimal, USD values pre-scaled where indicated) are spelled out in the OpenAPI components schemas — **prefer the YAML to free-text interpretation**.
 
+### Event-stream / historical-event indexing
+
+The HTTP API returns **current state**. For historical events (`Mint`, `Borrow`, `RepayBorrow`, `LiquidateBorrow`, governance `VoteCast`, sTRX `Deposit`, EnergyRental `RentResource`, etc.) there is **no official JustLend subgraph or hosted indexer**. Use one of:
+
+1. **TronGrid event filter** — `GET /v1/contracts/{address}/events?event_name=Mint&...`. Free tier suffices for ad-hoc analytics; ~30-day retention. Best for low-volume agent queries.
+2. **Self-hosted indexer** — DipDup (TRON support via the EVM adapter), Substreams via the EVM bridge, or a custom decoder against a `java-tron` archive node + the JSON ABIs at <https://docs.justlend.org/developers/abis/>. Best for production analytics, full historical backfills.
+3. **Compose MCP server read primitives** — for low-volume agent-driven lookups via `@justlend/mcp-server-justlend`. Not optimized for historical-event sweeps.
+
+ABIs at `/developers/abis/` carry the canonical event signatures — derive `topic0` at runtime via `keccak256("Mint(address,uint256,uint256)")` rather than hard-coding. See [APIs §8](https://docs.justlend.org/developers/apis#8-event-stream-and-indexing-options) for the full table.
+
 ---
 
 ## 7. AI Agent Integration
@@ -455,7 +465,7 @@ Guided prompts ship with the server (10 total): `getting_started`, `supply_asset
 
 - **jToken balances**: scaled by `1e8` (8 decimals).
 - **Underlying TRC20 amounts**: each token's own decimals — TRX = 6, USDT = 6, USDC = 6, USDD = 18, BTC/WBTC = 8, ETH = 18, etc. Always call `decimals()` on the underlying before constructing a `mint` / `borrow` / `repayBorrow` amount.
-- **Rates** (`borrowRatePerBlock`, `supplyRatePerBlock`): scaled by `1e18`, per-block. To convert to APY, multiply by blocks-per-year (~10,512,000 on TRON at 3 s/block) and compound; or use the API's pre-computed APY fields.
+- **Rates** (`borrowRatePerBlock`, `supplyRatePerBlock`): scaled by `1e18`, per-block. To convert to APY, multiply by blocks-per-year and compound; on TRON at the current ~3 s/block this is approximately **10,512,000** (`365 × 86400 / 3`) for a 365-day year or **10,517,760** (`365.25 × 86400 / 3`) when accounting for the leap-year average. Both are approximations — the on-chain block cadence drifts. **Prefer the API's pre-computed `apy` / `supplyRate` / `borrowRate` fields** when you need precision; only do the conversion yourself when the API is unreachable.
 - **Prices** from the oracle: in sun (10⁻⁶ TRX), scaled by `10^(tokenDecimal − 6)`.
 - **Collateral factor, reserve factor, exchange rate, liquidation incentive**: all mantissa-scaled by `1e18`.
 

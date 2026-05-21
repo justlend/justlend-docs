@@ -1,6 +1,27 @@
+---
+title: JustLend DAO API Reference
+description: Public read-only REST API at openapi.just.network — markets, account positions, liquidation risk, USDD supply-mining rewards, sTRX staking, Energy Rental. Authoritative schema is the OpenAPI 3.1 YAML.
+---
+
 # JustLend DAO API
 
 Public REST endpoints for querying JustLend DAO protocol state: lending markets, user positions, liquidation risk, USDD supply‑mining rewards, sTRX staking, and Energy Rental.
+
+## Contents
+
+This page is the human-readable reference. The [OpenAPI 3.1 YAML](apis/justlend_apis.yaml) is the machine-readable contract — treat the YAML as authoritative if they ever diverge.
+
+- [Quick start](#quick-start) — connectivity check + minimal response example.
+- [§1 Conventions](#1-conventions) — response envelope, address format, numeric formats, rate / APY semantics, pagination, error responses, rate limits, versioning.
+- [§2 jToken Address Reference](#2-jtoken-address-reference) — the 23-market table with `status: active|legacy` and the programmatic-filter tip.
+- [§3 Supply & Borrow Market endpoints](#3-supply-borrow-market) — `/lend/jtoken`, `/lend/account`, `/justlend/liquidate/highRiskAccountList`.
+- [§4 USDD Supply Mining](#4-usdd-supply-mining) — `/mining/reward`, `/mining/apy`, `/mining/distributions`.
+- [§5 Staked TRX & Energy Rental](#5-staked-trx-energy-rental) — `/lend/strx`, `/lend/strxStake/account`, `/lend/rentResource/account`.
+- [§6 Quick reference for AI agents](#6-quick-reference-for-ai-agents) — common end-to-end recipes.
+- [§7 Interactive API Explorer](#7-interactive-api-explorer) — embedded Swagger UI.
+- [§8 Event-stream and indexing options](#8-event-stream-and-indexing-options) — how to query historical Mint / Borrow / Repay events on TRON.
+
+For gotchas while using these endpoints (USDT-style approve race, decimals mismatch, close-factor cap, etc.), see [Common Pitfalls](common_pitfalls.md). For precise term definitions, see the [Glossary](../resources/glossary.md).
 
 - **Base URL:** `https://openapi.just.network`
 - **Method:** All endpoints are `GET`. No authentication.
@@ -16,7 +37,7 @@ Run this read-only request to verify connectivity and inspect the current JustLe
 curl -sS https://openapi.just.network/lend/jtoken
 ```
 
-Expected result:
+Expected result (one token shown in full; real response has ~23 entries with the same shape):
 
 ```json
 {
@@ -24,11 +45,37 @@ Expected result:
   "message": "SUCCESS",
   "data": {
     "tokenList": [
-      { "symbol": "jTRX", "underlyingSymbol": "TRX" }
+      {
+        "address":              "TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP",
+        "symbol":               "jTRX",
+        "underlyingAddress":    "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "underlyingSymbol":     "TRX",
+        "underlyingDecimal":    6,
+        "underlyingPriceInTrx": 1.0,
+        "underlyingPriceInUsd": 0.21,
+        "borrowIndex":          1224530412174750380,
+        "borrowRate":           0.064673716541040000,
+        "supplyRate":           0.009044500002192000,
+        "apy":                  0.000000000000000000,
+        "cash":                 349909392.537020000000000000,
+        "totalSupply":          12345678901234,
+        "totalBorrows":         123456789.012345,
+        "reserveFactor":        0.20,
+        "collateralFactor":     0.75,
+        "exchangeRate":         200345678901234567890000000
+      }
+      /* ... 22 more entries ... */
     ]
   }
 }
 ```
+
+**Units cheat-sheet for the response above** (see [§1.3](#13-numeric-formats) and [§1.4](#14-rate-apy-semantics) for the full table):
+
+- `borrowRate`, `supplyRate`, `apy`, `collateralFactor`, `reserveFactor` — annualized / fractional **decimals**. Multiply by 100 for percent. See [§1.4 Rate / APY semantics](#14-rate-apy-semantics) for the full table.
+- `cash`, `totalBorrows` — already de-scaled by the underlying's decimals. Use as-is.
+- `totalSupply` — **jToken** units (always 8 decimals).
+- `borrowIndex`, `exchangeRate` — mantissa-scaled by `1e18` (see [Glossary → mantissa](../resources/glossary.md#mantissa)).
 
 For integrations, import the OpenAPI schema from [`apis/justlend_apis.yaml`](./apis/justlend_apis.yaml), then start with `GET /lend/jtoken` for market metadata and `GET /lend/account?addresses={wallet}` for a user's positions.
 
@@ -120,11 +167,34 @@ Endpoints that accept `pageNo` and `pageSize` return:
 
 The public API is designed for read-only integrations and AI agents. It is not a bulk export interface.
 
+**Soft limits (observed; not contractual):**
+
+| Limit | Approximate value | Notes |
+|---|---|---|
+| Sustained rate | **~10 req/s per source IP** | Steady traffic above this is silently throttled to `429`. |
+| Burst rate | **~30 req/s for ≤ 3 s** | OK for occasional batches; do not chain bursts. |
+| Concurrent connections | **≤ 4 per source IP** | Above this, new connections are queued or refused. |
+| `pageSize` cap | **`1000`** | Documented hard maximum on paginated endpoints. |
+
+These numbers are conservative estimates suitable for sizing client-side backoff. They are not a contract — the operator may tighten them under load or relax them after coordination.
+
+**Retry policy (recommended):**
+
+```text
+on 429 or 5xx:
+    sleep = base * (2 ** attempt) + random(0, jitter_ms)
+    base = 1000 ms, max attempt = 5, max sleep = 30 s
+on persistent 429:
+    cut request rate in half; reset attempt counter
+```
+
+**General hygiene:**
+
 - Use `pageSize <= 1000`; this is the documented maximum for paginated endpoints.
-- Cache stable reference data such as jToken addresses, symbols, decimals, and collateral factors.
-- Avoid tight polling loops. Market dashboards normally do not need sub-second refreshes.
-- On `429` or transient `5xx`, retry with exponential backoff and jitter. Start around 1 second and cap retries to avoid request storms.
-- If you need sustained high-volume access, contact the JustLend team before production launch.
+- Cache stable reference data such as jToken addresses, symbols, decimals, and collateral factors (TTL ≥ 5 min is safe; these change only via governance).
+- Avoid tight polling loops. Market dashboards normally do not need sub-second refreshes; a 30-second refresh is plenty.
+- For per-account health monitoring across many addresses, batch via the high-risk endpoint (`/justlend/liquidate/highRiskAccountList`) rather than polling `/lend/account` per address.
+- If you need sustained traffic above the soft limit, contact the JustLend team before production launch (the public service is unauthenticated and has no per-key tier).
 
 ### 1.8 Versioning and compatibility
 
@@ -142,6 +212,9 @@ The OpenAPI `info.version` is the documentation schema version. The HTTP API is 
 Several endpoints key their payloads by jToken address (e.g. `data["TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf"]`). Use this table to translate.
 
 The protocol currently exposes **17 active + 6 legacy = 23 markets**. Legacy markets are closed to new supply and borrow — existing positions remain queryable so they can be unwound, but do not direct new deposits to them.
+
+!!! tip "Programmatic filter"
+    For agents that prefer not to parse prose: each entry in [`/developers/contracts.json` → `networks.mainnet.jtokens.<symbol>`](contracts.json) carries an explicit `status` field with value `"active"` or `"legacy"`. Filter `status == "active"` to get the 17 active markets, `status == "legacy"` to get the 6 legacy ones. The schema and enum are documented in [`contracts.schema.json`](contracts.schema.json).
 
 | jToken      | Address                                | Underlying | Notes                                       |
 |-------------|----------------------------------------|------------|---------------------------------------------|
@@ -751,3 +824,54 @@ The machine‑readable OpenAPI 3.1 spec lives at [`apis/justlend_apis.yaml`](./a
 Use the embedded Swagger UI below to call endpoints directly from this page. Same OpenAPI spec as the YAML link above.
 
 <swagger-ui src="../developers/apis/justlend_apis.yaml" />
+
+---
+
+## 8. Event-stream and indexing options
+
+The HTTP API exposes **current state**. For **historical events** (every `Mint`, `Borrow`, `RepayBorrow`, `Redeem`, `LiquidateBorrow`, `enterMarkets`, governance `ProposalCreated`/`VoteCast`/`ProposalExecuted`, sTRX `Deposit`/`Withdrawal`, EnergyRental `RentResource`/`ReturnResource`) you need an event source.
+
+**There is currently no official JustLend subgraph or hosted indexer.** Use one of these patterns instead:
+
+### 8.1 TronGrid event filter (recommended for low-volume queries)
+
+[TronGrid](https://www.trongrid.io/) exposes `GET /v1/contracts/{address}/events` for any contract. Filter by `event_name` and time range. Free tier covers most ad-hoc analytics; paid tiers raise the rate limit.
+
+```bash
+# All Mint events on jUSDT for the last hour
+curl -H "TRON-PRO-API-KEY: $TRONGRID_API_KEY" \
+  "https://api.trongrid.io/v1/contracts/TXJgMdjVX5dKiQaUi9QobwNxtSQaFqccvd/events?event_name=Mint&min_block_timestamp=$(($(date +%s%3N)-3600000))"
+```
+
+Pros: zero setup, well-documented, works for any JustLend contract. Cons: cursored pagination only, ~30-day retention on the free tier, not great for full historical backfills.
+
+### 8.2 Self-hosted indexer (recommended for production analytics)
+
+Stand up a TRON-aware indexer that consumes block ranges and writes typed event tables. Options:
+
+- **DipDup** ([dipdup.io](https://dipdup.io)) — Python-based, has TRON support via the EVM-compatible adapter. Define handlers for `Mint`, `Borrow`, etc. and DipDup catches up from any block height into Postgres.
+- **Substreams** — Streaming-based; works against TRON via the EVM bridge. Larger setup cost, but ideal for high-throughput pipelines.
+- **Custom node + The Graph–style schema** — Run a TRON full node (`java-tron`) or use a TronGrid full-archive endpoint, decode events with the ABIs at [`/developers/abis/`](abis/jtoken.json), and write your own schema. Most flexible, most operational overhead.
+
+### 8.3 MCP server `read_events` (when integrating with an AI agent)
+
+For low-volume agent-driven queries, the [full MCP server](../ai_support/mcp_server.md) exposes contract read primitives that can be composed into event lookups (`get_account_summary`, `get_market_data`, etc.). For raw event log access, fall back to TronGrid via your own tooling — MCP is not optimized for historical-event sweeps.
+
+### 8.4 Quick reference: event signatures by contract
+
+ABIs at [`/developers/abis/`](abis/jtoken.json) carry the canonical event signatures. The most commonly indexed:
+
+| Contract | Event | Topic 0 (keccak256 signature hash) |
+|---|---|---|
+| jToken (`jtoken.json`) | `Mint(address minter, uint mintAmount, uint mintTokens)` | derived from ABI |
+| jToken | `Borrow(address borrower, uint borrowAmount, uint accountBorrows, uint totalBorrows)` | derived from ABI |
+| jToken | `RepayBorrow(address payer, address borrower, uint repayAmount, uint accountBorrows, uint totalBorrows)` | derived from ABI |
+| jToken | `Redeem(address redeemer, uint redeemAmount, uint redeemTokens)` | derived from ABI |
+| jToken | `LiquidateBorrow(address liquidator, address borrower, uint repayAmount, address cTokenCollateral, uint seizeTokens)` | derived from ABI |
+| Comptroller (`comptroller.json`) | `MarketEntered(CToken cToken, address account)` | derived from ABI |
+| Comptroller | `MarketExited(CToken cToken, address account)` | derived from ABI |
+| GovernorBravo (`governor-alpha.json`) | `ProposalCreated`, `VoteCast`, `ProposalExecuted`, `ProposalCanceled` | derived from ABI |
+| sTRX (`strx.json`) | `Deposit(address user, uint trxAmount, uint sTRXAmount)`, `WithdrawRequested`, `Claim` | derived from ABI |
+| EnergyRental (`energy-market.json`) | `RentResource(address renter, address receiver, uint amount, uint resourceType)`, `ReturnResource`, `Liquidate` | derived from ABI |
+
+Compute the topic 0 with any standard tool: `web3.utils.sha3('Mint(address,uint256,uint256)')`. Avoid hard-coding topic hashes in source — derive from the JSON ABIs at runtime, since event signatures could change in a future upgrade.

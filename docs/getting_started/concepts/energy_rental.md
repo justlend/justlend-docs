@@ -1,3 +1,13 @@
+---
+title: Energy Rental on JustLend DAO
+description: Rent TRON Energy 50–80% cheaper than burning TRX — rental amount, duration (hourly or daily, max 30 days), receiving address, prepayment formula (Energy Fee + Security Deposit + Liquidation Penalty).
+---
+
+# Energy Rental
+
+!!! info "About this page"
+    **Protocol:** JustLend DAO Energy Rental (one-to-many TRON Energy marketplace) · **Network:** TRON Mainnet · **Energy Rental contract:** `TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd` (see [Deployed Contracts](../../developers/deployed_contracts.md#energy-rental)) · **Receiving address constraint:** must be a regular account, **not** a contract · **Units:** prepayment is denominated in TRX (6 decimals); on-chain amounts use **sun** (1 TRX = 10⁶ sun; see [Glossary → sun](../../resources/glossary.md#sun)); rental duration is in seconds, capped at 30 days. · **Refund:** unused Energy Fee + (conditionally) the Security Deposit and Liquidation Penalty are refunded on timely return. · **Snapshot caveat:** the USD cost tables further down were captured at a single past moment — see the [snapshot warning](#cost-estimation) below.
+
 JustLend DAO integrates the energy rental protocol, which aims to provide users with a more convenient and cheaper way to obtain energy. The energy rental protocol is open to all TRON network users and supports one-to-many renting, enabling users to rent energy not only for themselves but also for others. The user-friendly interface is designed to accommodate users managing multiple orders seamlessly.
 
 When renting energy, you need to specify three key parameters based on your requirements, which are **Rental Amount**, **Rental Duration** and **Receiving Address**.
@@ -46,6 +56,10 @@ We recommend users customize their leasing plans based on their specific needs:
 * **For users with regular daily transactions**, we suggest opting for a long-term hassle-free rental plan by renting energy for 30 days based on daily energy consumption. With the 24-hour full restoration rule, there is no need to rent excessive amounts of energy.
 
 ### **Cost Estimation**
+
+!!! warning "Snapshot, not live — for illustration only"
+    The TRX, gas, and USD numbers in the tables below were captured during a specific past test transaction (see the Tronscan links in the rightmost column). They illustrate the **shape** of the cost comparison, but the absolute values move with the TRX/USD price, energy rental rate, and TRON network conditions. For a current quote, hit `GET /strx/dashboard` and the EnergyRental contract's `_rentalRate()`, or call the `rent_energy` MCP tool with `--dry-run`. Do not feed the literal "$1.57" / "$5.4689" numbers into a live pricing decision.
+
 To provide a clearer understanding of the costs involved in transferring USDT by renting energy versus directly burning TRX, we present the following cost estimates through two examples:
 
 **Scenario 1: Renting 200k Energy for One Day to Transfer USDT**

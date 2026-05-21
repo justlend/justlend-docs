@@ -1,4 +1,12 @@
+---
+title: JustLend Improvement Proposals (JIPs)
+description: How the JustLend DAO proposal lifecycle works — discussion on the forum, on-chain submission via GovernorBravo, 3-day voting period, 48-hour Timelock, then execution. JST holders with ≥ 200M JST can propose.
+---
+
 # JustLend Improvement Proposals
+
+!!! info "About this page"
+    **Protocol:** JustLend DAO · **Network:** TRON Mainnet · **Scope:** the user-facing proposal lifecycle — how anyone with enough JST can introduce, debate, and pass changes to the protocol. · **Lifecycle:** off-chain discussion at <https://forum.justlend.org> → on-chain `propose()` on `GovernorBravoDelegator` (`TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD`) → 2-day review → 3-day voting (1 JST = 1 Vote after `deposit()`-ing into WJST) → 48-hour Timelock → `execute()`. **Approval threshold:** For votes > Against votes **AND** For votes > 600,000,000. **Proposal threshold:** ≥ 200,000,000 JST. · **Developer reference:** [Governance contract reference](../developers/supply_and_borrow_market/governance.md).
 
 The JustLend DAO introduces a structured approach to decentralizing the JustLend protocol and empowering community autonomy. JustLend DAO fosters consensus among all participants in the JustLend ecosystem through governance mechanisms and economic incentives. The protocol's functions and the JST token serve as core security elements of the JustLend protocol.
 

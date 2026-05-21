@@ -1,3 +1,8 @@
+---
+title: Deployed Contracts (Mainnet + Nile)
+description: Base58 addresses for every JustLend DAO contract on TRON Mainnet, plus the Nile testnet subset. For machine consumers, the same data is available with Base58 / 0x / 41-hex formats in /developers/contracts.json.
+---
+
 # Deployed Contracts
 
 !!! tip "Machine-readable contract directory"
@@ -55,8 +60,23 @@ The entrypoint that users and contracts call is **Unitroller** (the proxy). The 
 
 The address users interact with for `mint`/`borrow`/`repayBorrow`/`redeem`/`liquidateBorrow` is the **CErc20Delegator** (proxy). The **CErc20Delegate** address is the implementation behind it.
 
-!!! warning "Legacy markets (marked `(legacy)`)"
-    Rows tagged `(legacy)` — `jUSDCOLD`, `jUSDDOLD`, `jBUSDOLD`, `jSUNOLD`, `jUSDJ`, `jWBTT` — have been **closed to new supply and borrow**. The contracts are still queryable for read operations and for existing positions to be unwound, but **do not direct new deposits to them**. Refer to `apis.md` §2 (jToken Address Reference) for the most up-to-date status.
+!!! warning "Legacy markets (marked `(legacy)`) — policy + support window"
+    Rows tagged `(legacy)` — `jUSDCOLD`, `jUSDDOLD`, `jBUSDOLD`, `jSUNOLD`, `jUSDJ`, `jWBTT` — have been **closed to new supply and borrow** at the dApp / policy layer.
+
+    **What still works on a legacy market:**
+
+    - Read-only queries against the contract (`balanceOf`, `borrowBalanceCurrent`, `exchangeRateCurrent`, etc.) — unchanged forever.
+    - Unwinding existing positions: `repayBorrow`, `redeem`, `redeemUnderlying`, `liquidateBorrow`.
+    - The underlying TRC20 of the legacy market is unaffected — only the JustLend market is frozen.
+
+    **What does NOT work:**
+
+    - The dApp UI suppresses these markets from the supply / borrow lists.
+    - New deposits are operationally discouraged; programmatic callers SHOULD filter `status == "active"` from [`contracts.json`](contracts.json) and avoid routing new flow to legacy markets even though a `mint()` call would technically succeed at the contract level.
+
+    **Support window.** There is **no announced sunset date** for legacy contracts. They remain live and queryable indefinitely. Addresses are never reused; the same delegator address always refers to the same market. JustLend has not committed to a deprecation timeline — treat "legacy" as "supply/borrow frozen, read forever."
+
+    For the most up-to-date status table, see [`apis.md §2`](apis.md#2-jtoken-address-reference) or filter [`contracts.json`](contracts.json) by `status`.
 
 !!! note "ETH / ETHB display-name swap"
     The JustLend dApp UI labels two markets with renamed legends:
@@ -154,7 +174,7 @@ See [Staked TRX](staked_trx.md) for the contract reference.
 
 | Component | Contract | Address | Tronscan |
 |-----------|----------|---------|----------|
-| EnergyRental | `EnergyRental` | `TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd` | [Contract](https://tronscan.io/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd) |
+| EnergyRental | `EnergyRental` | `TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd` | [Contract](https://tronscan.org/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd) |
 
 See [Energy Rental](energy_rental.md) for the contract reference.
 

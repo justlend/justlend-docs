@@ -1,6 +1,23 @@
+---
+title: JustLend MCP Server (full, read + write)
+description: "@justlend/mcp-server-justlend v1.0.7 — 59 MCP tools for supply, borrow, repay, sTRX staking, energy rental, governance voting, mining rewards, transfers, plus general TRON utilities. Dual-mode signing (browser TronLink or encrypted agent-wallet)."
+---
+
 # MCP Server
 
 **GitHub**: [https://github.com/justlend/mcp-server-justlend](https://github.com/justlend/mcp-server-justlend)
+
+## Contents
+
+This page is the human-readable reference for the full MCP server. For agent users who want quick lookups, [`/llms.txt`](../llms.txt) summarizes the same surface in 50 lines.
+
+- [Overview](#overview) — what this server is and how it differs from [Skills](justlend_skills.md).
+- [Installation](#installation) — npm, source, and Claude Desktop config.
+- [Wallet setup (browser vs agent-wallet)](#wallet-setup-first-use-choice) — browser (TronLink TIP-6963) vs agent-wallet (encrypted local).
+- [HTTP-mode authentication (`MCP_API_KEY`)](#http-mode-authentication-mcp_api_key) — stdio (local clients) is open; HTTP/SSE is fail-closed.
+- [Tool catalog (59 tools across 10 categories)](#tools-59-total) — Wallet & Network · Market Data · Account & Balances · Lending Operations · Mining & Rewards · JST Voting / Governance · Energy Rental · sTRX Staking · Transfers · General TRON.
+- [Guided prompts](#prompts-ai-guided-workflows) — the 10 shipped MCP prompts (`supply_assets`, `analyze_portfolio`, `cast_vote`, …).
+- [Security considerations](#security-considerations) — `destructiveHint`, dry-run mode, source-of-truth priority, HTTP-mode `MCP_API_KEY`.
 
 The JustLend MCP Server (`@justlend/mcp-server-justlend`) is a [Model Context Protocol](https://modelcontextprotocol.io/) server that enables AI agents to interact with the **JustLend DAO** protocol on TRON. Supply assets, borrow against collateral, manage positions, rent energy, stake TRX for sTRX, and analyze DeFi portfolios — all through a unified AI interface.
 

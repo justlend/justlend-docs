@@ -1,3 +1,10 @@
+---
+title: Overview of JustLend DAO
+description: JustLend DAO is the largest lending protocol on TRON (Compound V2 architecture) — suppliers, borrowers, jTokens, liquidation, supply mining. Entry point for the full documentation set.
+---
+
+# Overview
+
 !!! info "Documentation freshness"
     **Protocol:** JustLend DAO · **Network:** TRON Mainnet · **Markets:** 17 active + 6 legacy = 23 jToken markets ([authoritative list](../developers/apis.md#2-jtoken-address-reference)). Per-page `last-updated` is rendered in the footer (sourced from git commit history). For changelog see [CHANGELOG.md](https://github.com/justlend/justlend-docs/blob/main/CHANGELOG.md); for the machine-readable snapshot see [`/llms-full.txt`](../llms-full.txt) (header includes `last_generated` and `docs_commit`).
 

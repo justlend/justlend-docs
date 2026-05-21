@@ -1,3 +1,8 @@
+---
+title: SBM — Supply & Borrow Market contracts
+description: JustLend DAO core lending contract reference — jToken (`CErc20Delegator`) function signatures for mint, borrow, repayBorrow, redeem, liquidateBorrow, with TronWeb examples and error codes.
+---
+
 # SBM
 
 !!! info "Units & precision"
@@ -5,6 +10,24 @@
     * jToken amounts (`redeem`, `transfer`, `balanceOf`) are in **8 decimals** regardless of the underlying.
     * Rates (`borrowRatePerBlock`, `supplyRatePerBlock`) and the exchange rate are scaled by **`1e18`**, per-block.
     * Network in all examples below is **TRON Mainnet**. Test on Nile first.
+
+!!! warning "TRC20 `approve()` race condition (USDT-style underlyings)"
+    Several TRC20s used as JustLend underlyings — notably **TRON USDT** (`TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t`) — are non-standard implementations that **reject `approve(spender, newAmount)` if the current allowance is non-zero**. If a previous `approve()` left a residual allowance, the next call will revert with `SafeERC20: approve from non-zero to non-zero allowance` (or its TRC20 equivalent), and the subsequent `mint`/`repayBorrow` will fail to pull funds.
+
+    **Safe pattern** before every `mint(uint)` / `repayBorrow(uint)` / `liquidateBorrow(...)` on jUSDT / jUSDCOLD / jTUSD / jUSDDOLD / jBUSDOLD-style markets:
+
+    ```javascript
+    // 1. Read the current allowance
+    const current = await usdt.methods.allowance(user, jUSDT).call();
+    // 2. If non-zero AND different from the target, zero it first
+    if (current !== '0' && current !== targetAmount) {
+        await usdt.methods.approve(jUSDT, 0).send({ from: user });
+    }
+    // 3. Set the actual allowance
+    await usdt.methods.approve(jUSDT, targetAmount).send({ from: user });
+    ```
+
+    Standard-compliant TRC20s (e.g. USDD, BTC, WBTC, sTRX) do not have this constraint, but using the safe pattern unconditionally costs only one extra `approve(0)` when an actual change is needed — cheap insurance.
 
 The JustLend DAO Supply and Borrow Market (SBM) is a decentralized  liquidity pool where users can participate as suppliers, borrowers or liquidators. Suppliers provide liquidity to a market and can earn interest on the assets provided, where borrowers are able to borrow in a collateralize assets way.
 
@@ -15,7 +38,7 @@ The SBM contract is the main user-facing contract. Most user interactions with t
 * Supply
 * Borrow
 * Withdraw
-* Reapy
+* Repay
 * Liquidation
 
 The source code is available on [Github](https://github.com/justlend/justlend-protocol/blob/main/contracts/CToken.sol).

@@ -1,3 +1,10 @@
+---
+title: Tokenomics — JST
+description: JST is the governance and incentive token of JustLend DAO — distribution, voting power via WJST escrow, and the GrantsDAO buyback-and-burn program funded by protocol reserves.
+---
+
+# Tokenomics
+
 The term tokenomics encompasses a wide range of concepts that defines the science and behavior of blockchain economies. In simple terms, tokenomics are the financial foundation of blockchains. Each protocol has its unique economic model, and for the protocol's healthy and enduring development, the economic model should include design, distribution, and management of tokens, as well as the incentives and mechanisms that drive their value and utilization.
 
 The JustLend tokenomics  is designed to promote a healthy, long term self-sustaining economy with participant incentives aligned to the security and decentralization of the network. The main participants in this economy are suppliers, borrowers and clients who stakes TRX or USDT. The protocol revenue from users will be used to optimize income distribution and cater to the protocol's present and future needs.

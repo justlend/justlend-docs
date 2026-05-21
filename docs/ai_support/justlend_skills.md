@@ -1,3 +1,8 @@
+---
+title: JustLend Skills (read-only)
+description: "@justlend/justlend-skills — 9 read-only MCP tools and 4 skill modules for AI agents to query JustLend market data, account health, and balances. CLI also available."
+---
+
 # JustLend Skills
 
 **GitHub**: [https://github.com/justlend/justlend-skills](https://github.com/justlend/justlend-skills)
@@ -93,6 +98,25 @@ NETWORK=mainnet
 ```
 
 ### Client Configuration
+
+!!! tip "Resolving the install path"
+    The MCP config snippets below use `/ABSOLUTE_PATH_TO/justlend-skills/...` as a placeholder. Replace it with the absolute path of the directory you cloned into. From inside the cloned repo, the absolute path to the server entry script is just:
+
+    ```bash
+    echo "$(pwd)/scripts/mcp_server.mjs"
+    ```
+
+    For a one-step install on macOS / Linux, the following command edits Claude Desktop's config in place using `jq` (after you have cloned the repo and `cd`-ed into it):
+
+    ```bash
+    JL_DIR="$(pwd)"
+    CONFIG="$HOME/Library/Application Support/Claude/claude_desktop_config.json"
+    mkdir -p "$(dirname "$CONFIG")"
+    [ -f "$CONFIG" ] || echo '{"mcpServers":{}}' > "$CONFIG"
+    jq --arg cmd node --arg arg "$JL_DIR/scripts/mcp_server.mjs" --arg key "${TRONGRID_API_KEY:?set TRONGRID_API_KEY first}" \
+       '.mcpServers.justlend = {command:$cmd, args:[$arg], env:{TRONGRID_API_KEY:$key}}' \
+       "$CONFIG" > "$CONFIG.tmp" && mv "$CONFIG.tmp" "$CONFIG"
+    ```
 
 #### Claude Desktop
 
