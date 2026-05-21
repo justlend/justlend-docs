@@ -76,7 +76,9 @@ Sitemap: https://docs.justlend.org/sitemap.xml
 Allow: /llms.txt
 Allow: /llms-full.txt
 Allow: /developers/contracts.json
+Allow: /developers/contracts.schema.json
 Allow: /developers/abis/
+Allow: /.well-known/security.txt
 
 # Named entry points (non-standard directives — recognized by some AI indexers).
 LLM-Index: https://docs.justlend.org/llms.txt

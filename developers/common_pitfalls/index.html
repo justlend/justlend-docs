@@ -6,19 +6,19 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Base58 addresses for every JustLend DAO contract on TRON Mainnet, plus the Nile testnet subset. For machine consumers, the same data is available with Base58 / 0x / 41-hex formats in /developers/contracts.json.">
+        <meta name="description" content="The 10 most common foot-guns when integrating with JustLend DAO on TRON — USDT-style approve race, enterMarkets requirement, mint() overload between jTRX and jTRC20, redeem vs redeemUnderlying, jToken decimals mismatch, liquidateBorrow close factor, uint256(-1) magic, TRX gas model, oracle-staleness behavior, and legacy market caveats.">
       
       
         <meta name="author" content="JustLend DAO">
       
       
-        <link rel="canonical" href="https://docs.justlend.org/developers/deployed_contracts/">
+        <link rel="canonical" href="https://docs.justlend.org/developers/common_pitfalls/">
       
       
-        <link rel="prev" href="../energy_rental/">
+        <link rel="prev" href="../apis/">
       
       
-        <link rel="next" href="../apis/">
+        <link rel="next" href="../../ai_support/ai_llms/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -26,7 +26,7 @@
     
     
       
-        <title>Deployed Contracts (Mainnet + Nile) - JustLend DAO Documentation</title>
+        <title>Common Pitfalls (Developer Reference) - JustLend DAO Documentation</title>
       
     
     
@@ -125,9 +125,9 @@
         },
         {
           "@type": "TechArticle",
-          "@id": "https://docs.justlend.org/developers/deployed_contracts/#article",
-          "headline": "Deployed Contracts",
-          "url": "https://docs.justlend.org/developers/deployed_contracts/",
+          "@id": "https://docs.justlend.org/developers/common_pitfalls/#article",
+          "headline": "Common Pitfalls",
+          "url": "https://docs.justlend.org/developers/common_pitfalls/",
           "inLanguage": "en",
           "isPartOf": {
             "@type": "WebSite",
@@ -137,7 +137,7 @@
             "publisher": { "@id": "https://justlend.org/#org" }
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
-          "description": "Base58 addresses for every JustLend DAO contract on TRON Mainnet, plus the Nile testnet subset. For machine consumers, the same data is available with Base58 / 0x / 41-hex formats in /developers/contracts.json."
+          "description": "The 10 most common foot-guns when integrating with JustLend DAO on TRON \u2014 USDT-style approve race, enterMarkets requirement, mint() overload between jTRX and jTRC20, redeem vs redeemUnderlying, jToken decimals mismatch, liquidateBorrow close factor, uint256(-1) magic, TRX gas model, oracle-staleness behavior, and legacy market caveats."
         }
       ]
     }
@@ -155,7 +155,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#deployed-contracts" class="md-skip">
+        <a href="#common-pitfalls" class="md-skip">
           Skip to content
         </a>
       
@@ -191,7 +191,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Deployed Contracts (Mainnet + Nile)
+              Common Pitfalls (Developer Reference)
             
           </span>
         </div>
@@ -1090,31 +1090,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Deployed Contracts
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../deployed_contracts/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1124,162 +1103,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        
-
-
-
-<li class="md-nav__item ">
-  <a href="#address-formats" class="md-nav__link">
-    <span class="md-ellipsis">
-      Address formats
-    </span>
-  </a>
-  
-</li>
-      
-        
-
-
-
-<li class="md-nav__item ">
-  <a href="#supply-and-borrow-market-core" class="md-nav__link">
-    <span class="md-ellipsis">
-      Supply and Borrow Market
-    </span>
-  </a>
-  
-</li>
-      
-        
-
-
-
-<li class="md-nav__item ">
-  <a href="#supply-and-borrow-market-jtoken-markets" class="md-nav__link">
-    <span class="md-ellipsis">
-      Supply and Borrow Market
-    </span>
-  </a>
-  
-</li>
-      
-        
-
-
-
-<li class="md-nav__item ">
-  <a href="#interest-rate-models" class="md-nav__link">
-    <span class="md-ellipsis">
-      Interest Rate Models
-    </span>
-  </a>
-  
-</li>
-      
-        
-
-
-
-<li class="md-nav__item ">
-  <a href="#price-oracle" class="md-nav__link">
-    <span class="md-ellipsis">
-      Price Oracle
-    </span>
-  </a>
-  
-</li>
-      
-        
-
-
-
-<li class="md-nav__item ">
-  <a href="#governance" class="md-nav__link">
-    <span class="md-ellipsis">
-      Governance
-    </span>
-  </a>
-  
-</li>
-      
-        
-
-
-
-<li class="md-nav__item ">
-  <a href="#staked-trx" class="md-nav__link">
-    <span class="md-ellipsis">
-      Staked TRX
-    </span>
-  </a>
-  
-</li>
-      
-        
-
-
-
-<li class="md-nav__item ">
-  <a href="#energy-rental" class="md-nav__link">
-    <span class="md-ellipsis">
-      Energy Rental
-    </span>
-  </a>
-  
-</li>
-      
-        
-
-
-
-<li class="md-nav__item has-children">
-  <a href="#nile-testnet" class="md-nav__link" aria-expanded="true">
-    <span class="md-ellipsis">
-      Nile Testnet
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Nile Testnet">
-      <ul class="md-nav__list">
-        
-          
-
-
-
-<li class="md-nav__item ">
-  <a href="#configuring-clients-for-nile" class="md-nav__link">
-    <span class="md-ellipsis">
-      Configuring clients for Nile
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1311,10 +1134,31 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../common_pitfalls/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Common Pitfalls
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -1324,6 +1168,182 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        
+
+
+
+<li class="md-nav__item ">
+  <a href="#tldr-for-ai-agents" class="md-nav__link">
+    <span class="md-ellipsis">
+      TL;DR for AI agents
+    </span>
+  </a>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item ">
+  <a href="#1-usdt-style-approve-race-condition" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. USDT-style approve() race condition
+    </span>
+  </a>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item ">
+  <a href="#2-entermarkets-is-required-for-collateral-to-count" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. enterMarkets() is required for collateral to count
+    </span>
+  </a>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item ">
+  <a href="#3-mint-is-overloaded-different-signature-for-jtrx-vs-jtrc20" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. mint() is overloaded
+    </span>
+  </a>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item ">
+  <a href="#4-redeem-vs-redeemunderlying" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. redeem() vs redeemUnderlying()
+    </span>
+  </a>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item ">
+  <a href="#5-jtoken-8-underlying-varies-decimals" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. jToken (8) ↔ underlying (varies) decimals
+    </span>
+  </a>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item ">
+  <a href="#6-liquidateborrow-close-factor-50" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. liquidateBorrow() close factor (50%)
+    </span>
+  </a>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item ">
+  <a href="#7-uint256-1-for-repay-full-balance" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. uint256(-1) for "repay full balance"
+    </span>
+  </a>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item ">
+  <a href="#8-tron-resource-model-not-ethereum-gas" class="md-nav__link">
+    <span class="md-ellipsis">
+      8. TRON resource model
+    </span>
+  </a>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item ">
+  <a href="#9-oracle-freshness-is-not-enforced-on-chain" class="md-nav__link">
+    <span class="md-ellipsis">
+      9. Oracle freshness is not enforced on-chain
+    </span>
+  </a>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item ">
+  <a href="#10-legacy-markets" class="md-nav__link">
+    <span class="md-ellipsis">
+      10. Legacy markets
+    </span>
+  </a>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item ">
+  <a href="#where-to-look-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      Where to look next
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1828,629 +1848,215 @@
 
 
 
-<h1 id="deployed-contracts">Deployed Contracts<a class="headerlink" href="#deployed-contracts" title="Permanent link">&para;</a></h1>
-<div class="admonition tip">
-<p class="admonition-title">Machine-readable contract directory</p>
-<p>For agents and tooling that need every address in <strong>TRON Base58 + EVM 0x-Hex + TRON-internal 41-Hex</strong> form, download <a href="../contracts.json"><code>contracts.json</code></a>. The file is structured as <code>networks.{mainnet,nile}.{comptroller,governance,price_oracle,jtokens,interest_rate_models,strx}</code>, with each address record carrying <code>base58 / hex_evm / hex_tron / tronscan</code> fields. The tables below show <strong>Base58 only</strong> for readability; use the JSON for cross-chain bridges, EVM-side tooling, Etherscan-like indexers, and TronGrid calls that require <code>41</code>-prefixed hex.</p>
-</div>
-<div class="admonition tip">
-<p class="admonition-title">Machine-readable ABIs</p>
-<p>Every contract referenced on this page has a downloadable JSON ABI under <a href="../abis/jtoken.json"><code>abis/</code></a>:</p>
-<table>
-<thead>
-<tr>
-<th>Contract</th>
-<th>ABI</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>jToken (CErc20) — <code>mint</code> / <code>borrow</code> / <code>repayBorrow</code> / <code>redeem</code> / <code>liquidateBorrow</code></td>
-<td><a href="../abis/jtoken.json"><code>abis/jtoken.json</code></a></td>
-</tr>
-<tr>
-<td>jToken — TRX-specific <code>mint()</code> payable</td>
-<td><a href="../abis/jtrx-mint.json"><code>abis/jtrx-mint.json</code></a></td>
-</tr>
-<tr>
-<td>jToken — TRX-specific <code>repayBorrow()</code> payable</td>
-<td><a href="../abis/jtrx-repay.json"><code>abis/jtrx-repay.json</code></a></td>
-</tr>
-<tr>
-<td>Comptroller / Unitroller</td>
-<td><a href="../abis/comptroller.json"><code>abis/comptroller.json</code></a></td>
-</tr>
-<tr>
-<td>PriceOracle</td>
-<td><a href="../abis/price-oracle.json"><code>abis/price-oracle.json</code></a></td>
-</tr>
-<tr>
-<td>TRC20 (generic)</td>
-<td><a href="../abis/trc20.json"><code>abis/trc20.json</code></a></td>
-</tr>
-<tr>
-<td>GovernorAlpha / Bravo</td>
-<td><a href="../abis/governor-alpha.json"><code>abis/governor-alpha.json</code></a></td>
-</tr>
-<tr>
-<td>WJST (voting wrapper)</td>
-<td><a href="../abis/wjst.json"><code>abis/wjst.json</code></a></td>
-</tr>
-<tr>
-<td>Poly helper</td>
-<td><a href="../abis/poly.json"><code>abis/poly.json</code></a></td>
-</tr>
-<tr>
-<td>EnergyRental market</td>
-<td><a href="../abis/energy-market.json"><code>abis/energy-market.json</code></a></td>
-</tr>
-<tr>
-<td>EnergyRateModel</td>
-<td><a href="../abis/energy-rate-model.json"><code>abis/energy-rate-model.json</code></a></td>
-</tr>
-<tr>
-<td>sTRX</td>
-<td><a href="../abis/strx.json"><code>abis/strx.json</code></a></td>
-</tr>
-<tr>
-<td>InterestRateModel (jump-rate / whitepaper)</td>
-<td><a href="../abis/interest-rate-model.json"><code>abis/interest-rate-model.json</code></a></td>
-</tr>
-</tbody>
-</table>
-<p>These are sourced from the same definitions the <a href="../../ai_support/mcp_server/">JustLend MCP server</a> uses at runtime — see <a href="https://github.com/justlend/mcp-server-justlend/blob/main/src/core/abis.ts"><code>src/core/abis.ts</code></a> for the upstream TypeScript form.</p>
-</div>
+<h1 id="common-pitfalls">Common Pitfalls<a class="headerlink" href="#common-pitfalls" title="Permanent link">&para;</a></h1>
 <div class="admonition info">
-<p class="admonition-title">Network: TRON Mainnet (unless noted)</p>
-<p>Everything in the main tables below is deployed on <strong>TRON Mainnet</strong> (Chain ID <code>0x2b6653dc</code>). For <strong>Nile testnet</strong> addresses see the <a href="#nile-testnet">Nile Testnet</a> section at the bottom of this page or the <code>nile</code> block of <code>contracts.json</code>.</p>
+<p class="admonition-title">About this page</p>
+<p><strong>Protocol:</strong> JustLend DAO (Compound V2 fork on TRON) · <strong>Network:</strong> TRON Mainnet (same patterns apply on Nile testnet) · <strong>Scope:</strong> the gotchas that bite even when the <a href="../supply_and_borrow_market/sbm/">contract reference</a>, <a href="../apis/">APIs</a>, and <a href="../../resources/glossary/">glossary</a> are all open. Each entry is a one-liner symptom → root cause → safe pattern. · <strong>Convention:</strong> examples use TronWeb; Solidity / Web3.js patterns translate directly. · <strong>Companion pages:</strong> <a href="../../resources/glossary/">Glossary</a>, <a href="../supply_and_borrow_market/sbm/">SBM reference</a>, <a href="../supply_and_borrow_market/comptroller/">Comptroller reference</a>, <a href="../deployed_contracts/">Deployed Contracts</a>.</p>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Decimals / precision</p>
-<p>The Compound V2 architecture treats every token amount in <strong>its underlying's smallest unit</strong>. Always read <code>decimals()</code> on the underlying TRC20 before constructing <code>mint</code>, <code>borrow</code>, <code>repayBorrow</code>, or <code>redeemUnderlying</code> amounts. Common cases: TRX/USDT/USDC = 6, USDD/ETH = 18, BTC/WBTC = 8. jToken amounts (<code>redeem</code>, <code>transfer</code>) use <strong>8 decimals</strong> regardless of the underlying.</p>
-</div>
-<h2 id="address-formats">Address formats<a class="headerlink" href="#address-formats" title="Permanent link">&para;</a></h2>
-<p>TRON addresses appear in three equivalent formats. Human-facing tables on this page use Base58; machine consumers should use <a href="../contracts.json"><code>contracts.json</code></a> for all three forms.</p>
+<h2 id="tldr-for-ai-agents">TL;DR for AI agents<a class="headerlink" href="#tldr-for-ai-agents" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Format</th>
-<th>Example for Unitroller</th>
-<th>Use cases</th>
+<th>#</th>
+<th>Symptom</th>
+<th>Pitfall</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Base58</td>
-<td><code>TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7</code></td>
-<td>Wallets, Tronscan, TronWeb display, user prompts</td>
+<td>1</td>
+<td><code>approve()</code> reverts mid-flow</td>
+<td>USDT-style TRC20 needs <code>approve(0)</code> before <code>approve(N)</code>.</td>
 </tr>
 <tr>
-<td>EVM 0x-Hex</td>
-<td><code>0x4a33bf2666f2e75f3d6ad3b9ad316685d5c668d4</code></td>
-<td>EVM-side tooling, bridges, indexers, byte-address comparisons</td>
+<td>2</td>
+<td><code>borrow()</code> reverts with <code>COMPTROLLER_REJECTION</code> despite plenty of collateral</td>
+<td>Forgot <code>enterMarkets()</code> — supplied assets do not count as collateral until you opt in.</td>
 </tr>
 <tr>
-<td>TRON 41-Hex</td>
-<td><code>0x414a33bf2666f2e75f3d6ad3b9ad316685d5c668d4</code></td>
-<td>TronGrid / TronWeb low-level APIs that expect TRON-internal hex</td>
+<td>3</td>
+<td><code>mint()</code> reverts with "wrong number of arguments"</td>
+<td>jTRX uses <code>mint() payable</code>; jTRC20 uses <code>mint(uint)</code>. Different signatures.</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>redeem()</code> returns less than expected</td>
+<td>You called <code>redeem(amount)</code> thinking it was underlying — <code>redeem()</code> takes <strong>jToken units</strong> (8 decimals). Use <code>redeemUnderlying()</code> for underlying-denominated.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Off-by-10⁰ to 10¹² errors</td>
+<td>jToken is 8 decimals; underlying is its own decimals; you mixed them.</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>liquidateBorrow()</code> reverts with <code>LIQUIDATE_CLOSE_AMOUNT_IS_UINT_MAX</code> or too-large</td>
+<td>Close factor caps <code>repayAmount</code> at <strong>50%</strong> of the borrower's debt for that asset in a single call.</td>
+</tr>
+<tr>
+<td>7</td>
+<td>"Full repay" leaves dust</td>
+<td>Pass <code>repayBorrow(uint256(-1))</code> — i.e. <code>2^256 - 1</code> — as the amount sentinel, not your locally-computed balance.</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Transaction reverts with "out of energy" despite low gas</td>
+<td>TRON's resource model is energy + bandwidth, not gas. Rent energy or stake TRX first.</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Oracle price is stale or zero</td>
+<td><code>Poster</code>-relayed Chainlink feed; on-chain freshness is not guaranteed. See <a href="../supply_and_borrow_market/price_oracle/">Price Oracle</a>.</td>
+</tr>
+<tr>
+<td>10</td>
+<td>New deposit went to a legacy market</td>
+<td><code>(legacy)</code>-tagged markets accept deposits at the contract level but are governance-frozen for new business. Filter <code>status == "active"</code> in <a href="../contracts.json"><code>contracts.json</code></a>.</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2 id="supply-and-borrow-market-core">Supply and Borrow Market — Core<a class="headerlink" href="#supply-and-borrow-market-core" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Component</th>
-<th>Contract</th>
-<th>Address</th>
-<th>Tronscan</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Comptroller (proxy)</td>
-<td><code>Unitroller</code></td>
-<td><code>TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7</code></td>
-<td><a href="https://tronscan.org/#/contract/TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7">Contract</a></td>
-</tr>
-<tr>
-<td>Comptroller (impl)</td>
-<td><code>Comptroller</code></td>
-<td><code>TB23wYojvAsSx6gR8ebHiBqwSeABiBMPAr</code></td>
-<td><a href="https://tronscan.org/#/contract/TB23wYojvAsSx6gR8ebHiBqwSeABiBMPAr">Contract</a></td>
-</tr>
-</tbody>
-</table>
-<p>The entrypoint that users and contracts call is <strong>Unitroller</strong> (the proxy). The implementation address rotates with upgrades.</p>
-<h2 id="supply-and-borrow-market-jtoken-markets">Supply and Borrow Market — jToken Markets<a class="headerlink" href="#supply-and-borrow-market-jtoken-markets" title="Permanent link">&para;</a></h2>
-<p>The address users interact with for <code>mint</code>/<code>borrow</code>/<code>repayBorrow</code>/<code>redeem</code>/<code>liquidateBorrow</code> is the <strong>CErc20Delegator</strong> (proxy). The <strong>CErc20Delegate</strong> address is the implementation behind it.</p>
-<div class="admonition warning">
-<p class="admonition-title">Legacy markets (marked <code>(legacy)</code>) — policy + support window</p>
-<p>Rows tagged <code>(legacy)</code> — <code>jUSDCOLD</code>, <code>jUSDDOLD</code>, <code>jBUSDOLD</code>, <code>jSUNOLD</code>, <code>jUSDJ</code>, <code>jWBTT</code> — have been <strong>closed to new supply and borrow</strong> at the dApp / policy layer.</p>
-<p><strong>What still works on a legacy market:</strong></p>
-<ul>
-<li>Read-only queries against the contract (<code>balanceOf</code>, <code>borrowBalanceCurrent</code>, <code>exchangeRateCurrent</code>, etc.) — unchanged forever.</li>
-<li>Unwinding existing positions: <code>repayBorrow</code>, <code>redeem</code>, <code>redeemUnderlying</code>, <code>liquidateBorrow</code>.</li>
-<li>The underlying TRC20 of the legacy market is unaffected — only the JustLend market is frozen.</li>
-</ul>
-<p><strong>What does NOT work:</strong></p>
-<ul>
-<li>The dApp UI suppresses these markets from the supply / borrow lists.</li>
-<li>New deposits are operationally discouraged; programmatic callers SHOULD filter <code>status == "active"</code> from <a href="../contracts.json"><code>contracts.json</code></a> and avoid routing new flow to legacy markets even though a <code>mint()</code> call would technically succeed at the contract level.</li>
-</ul>
-<p><strong>Support window.</strong> There is <strong>no announced sunset date</strong> for legacy contracts. They remain live and queryable indefinitely. Addresses are never reused; the same delegator address always refers to the same market. JustLend has not committed to a deprecation timeline — treat "legacy" as "supply/borrow frozen, read forever."</p>
-<p>For the most up-to-date status table, see <a href="../apis/#2-jtoken-address-reference"><code>apis.md §2</code></a> or filter <a href="../contracts.json"><code>contracts.json</code></a> by <code>status</code>.</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">ETH / ETHB display-name swap</p>
-<p>The JustLend dApp UI labels two markets with renamed legends:</p>
-<ul>
-<li>The market with delegator <code>TR7BUFRQeq1w5jAZf1FKx85SHuX6PfMqsV</code> (this doc's <code>jETH</code> row) is now displayed in the dApp as <strong>"ETH"</strong> (formerly "ETHOLD"). Underlying TRC20: <code>THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF</code>.</li>
-<li>The market with delegator <code>TWBxQMb6RD3qmkXUXpNwVCYbL8SHNreru6</code> (this doc's <code>jETHB</code> row) is now displayed in the dApp as <strong>"ETHB"</strong> (formerly "ETH"). Underlying TRC20: <code>TRFe3hT5oYhjSZ6f3ji5FJ7YCfrkWnHRvh</code>.</li>
-</ul>
-<p>The on-chain addresses are unchanged — only the dApp display names swapped.</p>
-</div>
-<table>
-<thead>
-<tr>
-<th>Market</th>
-<th>Underlying TRC20</th>
-<th>CErc20Delegator (entrypoint)</th>
-<th>CErc20Delegate (impl)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>jTRX</td>
-<td><em>native</em></td>
-<td><a href="https://tronscan.org/#/token20/TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP"><code>TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP</code></a></td>
-<td>NA</td>
-</tr>
-<tr>
-<td>jUSDT</td>
-<td><a href="https://tronscan.org/#/token20/TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"><code>TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t</code></a></td>
-<td><a href="https://tronscan.org/#/contract/TXJgMdjVX5dKiQaUi9QobwNxtSQaFqccvd"><code>TXJgMdjVX5dKiQaUi9QobwNxtSQaFqccvd</code></a></td>
-<td><a href="https://tronscan.org/#/contract/TLjn59xNM7VEK6VZ3VQ8Y1ipxsdsFka5wZ"><code>TLjn59xNM7VEK6VZ3VQ8Y1ipxsdsFka5wZ</code></a></td>
-</tr>
-<tr>
-<td>jUSDD</td>
-<td><a href="https://tronscan.org/#/token20/TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz"><code>TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz</code></a></td>
-<td><a href="https://tronscan.org/#/token20/TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf"><code>TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf</code></a></td>
-<td><a href="https://tronscan.org/#/token20/TLrEfG4QCbax8MTYgZzmjj4gE8RPVNvUn4"><code>TLrEfG4QCbax8MTYgZzmjj4gE8RPVNvUn4</code></a></td>
-</tr>
-<tr>
-<td>jUSDCOLD (legacy)</td>
-<td><a href="https://tronscan.org/#/token20/TLZSucJRjnqBKwvQz6n5hd29gbS4P7u7w8"><code>TLZSucJRjnqBKwvQz6n5hd29gbS4P7u7w8</code></a></td>
-<td><a href="https://tronscan.org/#/contract/TNSBA6KvSvMoTqQcEgpVK7VhHT3z7wifxy"><code>TNSBA6KvSvMoTqQcEgpVK7VhHT3z7wifxy</code></a></td>
-<td><a href="https://tronscan.org/#/contract/THQY8YX19jLFSFg1xhthM5wb7xZvKLCzgq"><code>THQY8YX19jLFSFg1xhthM5wb7xZvKLCzgq</code></a></td>
-</tr>
-<tr>
-<td>jUSDJ (legacy)</td>
-<td><a href="https://tronscan.org/#/token20/TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT"><code>TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT</code></a></td>
-<td><a href="https://tronscan.org/#/contract/TL5x9MtSnDy537FXKx53yAaHRRNdg9TkkA"><code>TL5x9MtSnDy537FXKx53yAaHRRNdg9TkkA</code></a></td>
-<td><a href="https://tronscan.org/#/contract/TYSHTEq9NFSgst94saeRvt6rAYgWkqMFbj"><code>TYSHTEq9NFSgst94saeRvt6rAYgWkqMFbj</code></a></td>
-</tr>
-<tr>
-<td>jTUSD</td>
-<td><a href="https://tronscan.org/#/token20/TUpMhErZL2fhh4sVNULAbNKLokS4GjC1F4"><code>TUpMhErZL2fhh4sVNULAbNKLokS4GjC1F4</code></a></td>
-<td><a href="https://tronscan.org/#/contract/TSXv71Fy5XdL3Rh2QfBoUu3NAaM4sMif8R"><code>TSXv71Fy5XdL3Rh2QfBoUu3NAaM4sMif8R</code></a></td>
-<td><a href="https://tronscan.org/#/contract/THbrSjDsDA2KJRxx8K73tN7vLgaXSUNQFk"><code>THbrSjDsDA2KJRxx8K73tN7vLgaXSUNQFk</code></a></td>
-</tr>
-<tr>
-<td>jUSD1</td>
-<td><a href="https://tronscan.org/#/token20/TPFqcBAaaUMCSVRCqPaQ9QnzKhmuoLR6Rc"><code>TPFqcBAaaUMCSVRCqPaQ9QnzKhmuoLR6Rc</code></a></td>
-<td><a href="https://tronscan.org/#/token20/TBEKggwqFkrc4KckQVR9BLucAmQugafEZf"><code>TBEKggwqFkrc4KckQVR9BLucAmQugafEZf</code></a></td>
-<td><a href="https://tronscan.org/#/contract/TRo2exz6ZHn6W3Ey3G93FnzhWvjLPUcR2B"><code>TRo2exz6ZHn6W3Ey3G93FnzhWvjLPUcR2B</code></a></td>
-</tr>
-<tr>
-<td>jwstUSDT</td>
-<td><a href="https://tronscan.org/#/token20/TGkxzkDKyMeq2T7edKnyjZoFypyzjkkssq"><code>TGkxzkDKyMeq2T7edKnyjZoFypyzjkkssq</code></a></td>
-<td><a href="https://tronscan.org/#/token20/TD5SdLw5scR6mXgyMK2xKrFJpauDjpKqrW"><code>TD5SdLw5scR6mXgyMK2xKrFJpauDjpKqrW</code></a></td>
-<td><a href="https://tronscan.org/#/token20/TUx4cV8FQNR5W4FhtF7mHZwaJMoco2464o"><code>TUx4cV8FQNR5W4FhtF7mHZwaJMoco2464o</code></a></td>
-</tr>
-<tr>
-<td>jsTRX</td>
-<td><a href="https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5"><code>TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5</code></a></td>
-<td><a href="https://tronscan.org/#/token20/TJQ9rbVe9ei3nNtyGgBL22Fuu2xYjZaLAQ"><code>TJQ9rbVe9ei3nNtyGgBL22Fuu2xYjZaLAQ</code></a></td>
-<td><a href="https://tronscan.org/#/token20/TCyNbCipGbAybb8rG4aatEoEnfuYpVYCPP"><code>TCyNbCipGbAybb8rG4aatEoEnfuYpVYCPP</code></a></td>
-</tr>
-<tr>
-<td>jSUN</td>
-<td><a href="https://tronscan.org/#/token20/TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S"><code>TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S</code></a></td>
-<td><a href="https://tronscan.org/#/contract/TPXDpkg9e3eZzxqxAUyke9S4z4pGJBJw9e"><code>TPXDpkg9e3eZzxqxAUyke9S4z4pGJBJw9e</code></a></td>
-<td><a href="https://tronscan.org/#/contract/TM82erAZJSP7NKc17JdTnzVC8WKJHismWB"><code>TM82erAZJSP7NKc17JdTnzVC8WKJHismWB</code></a></td>
-</tr>
-<tr>
-<td>jBTT</td>
-<td><a href="https://tronscan.org/#/token20/TAFjULxiVgT4qWk6UZwjqwZXTSaGaqnVp4"><code>TAFjULxiVgT4qWk6UZwjqwZXTSaGaqnVp4</code></a></td>
-<td><a href="https://tronscan.org/#/token20/TUaUHU9Dy8x5yNi1pKnFYqHWojot61Jfto"><code>TUaUHU9Dy8x5yNi1pKnFYqHWojot61Jfto</code></a></td>
-<td><a href="https://tronscan.org/#/token20/TH3x5EqLnPduHNX41MaCCb2UfnfFMLuYwe"><code>TH3x5EqLnPduHNX41MaCCb2UfnfFMLuYwe</code></a></td>
-</tr>
-<tr>
-<td>jNFT</td>
-<td><a href="https://tronscan.org/#/token20/TFczxzPhnThNSqr5by8tvxsdCFRRz6cPNq"><code>TFczxzPhnThNSqr5by8tvxsdCFRRz6cPNq</code></a></td>
-<td><a href="https://tronscan.org/#/contract/TFpPyDCKvNFgos3g3WVsAqMrdqhB81JXHE"><code>TFpPyDCKvNFgos3g3WVsAqMrdqhB81JXHE</code></a></td>
-<td><a href="https://tronscan.org/#/contract/TLkUdtDBLMfJdXni2iTa4u2DKM53XmDJHi"><code>TLkUdtDBLMfJdXni2iTa4u2DKM53XmDJHi</code></a></td>
-</tr>
-<tr>
-<td>jJST</td>
-<td><a href="https://tronscan.org/#/token20/TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9"><code>TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9</code></a></td>
-<td><a href="https://tronscan.org/#/contract/TWQhCXaWz4eHK4Kd1ErSDHjMFPoPc9czts"><code>TWQhCXaWz4eHK4Kd1ErSDHjMFPoPc9czts</code></a></td>
-<td><a href="https://tronscan.org/#/contract/TQ2sbnmxtR7jrNk4nxz2A8f9sneCqmk6SB"><code>TQ2sbnmxtR7jrNk4nxz2A8f9sneCqmk6SB</code></a></td>
-</tr>
-<tr>
-<td>jWIN</td>
-<td><a href="https://tronscan.org/#/token20/TLa2f6VPqDgRE67v1736s7bJ8Ray5wYjU7"><code>TLa2f6VPqDgRE67v1736s7bJ8Ray5wYjU7</code></a></td>
-<td><a href="https://tronscan.org/#/contract/TRg6MnpsFXc82ymUPgf5qbj59ibxiEDWvv"><code>TRg6MnpsFXc82ymUPgf5qbj59ibxiEDWvv</code></a></td>
-<td><a href="https://tronscan.org/#/contract/TW3GyD3hYkKwzSGytWwWGXpe2a93zCpRzJ"><code>TW3GyD3hYkKwzSGytWwWGXpe2a93zCpRzJ</code></a></td>
-</tr>
-<tr>
-<td>jHTX</td>
-<td><a href="https://tronscan.org/#/token20/TUPM7K8REVzD2UdV4R5fe5M8XbnR2DdoJ6"><code>TUPM7K8REVzD2UdV4R5fe5M8XbnR2DdoJ6</code></a></td>
-<td><a href="https://tronscan.org/#/contract/TDA1mWPyAjTRATMGA55UTswGAHhV2itEXR"><code>TDA1mWPyAjTRATMGA55UTswGAHhV2itEXR</code></a></td>
-<td><a href="https://tronscan.org/#/contract/TJD7nb5Wq1P1rRi3Se2vLpLhksALdW8adb"><code>TJD7nb5Wq1P1rRi3Se2vLpLhksALdW8adb</code></a></td>
-</tr>
-<tr>
-<td>jBTC</td>
-<td><a href="https://tronscan.org/#/token20/TN3W4H6rK2ce4vX9YnFQHwKENnHjoxb3m9"><code>TN3W4H6rK2ce4vX9YnFQHwKENnHjoxb3m9</code></a></td>
-<td><a href="https://tronscan.org/#/contract/TLeEu311Cbw63BcmMHDgDLu7fnk9fqGcqT"><code>TLeEu311Cbw63BcmMHDgDLu7fnk9fqGcqT</code></a></td>
-<td><a href="https://tronscan.org/#/contract/TVsKSRgRoMcCp798qqRGesXRfzy2MzRjkR"><code>TVsKSRgRoMcCp798qqRGesXRfzy2MzRjkR</code></a></td>
-</tr>
-<tr>
-<td>jWBTC</td>
-<td><a href="https://tronscan.org/#/token20/TYhWwKpw43ENFWBTGpzLHn3882f2au7SMi"><code>TYhWwKpw43ENFWBTGpzLHn3882f2au7SMi</code></a></td>
-<td><a href="https://tronscan.org/#/token20/TVyvpmaVmz25z2GaXBDDjzLZi5iR5dBzGd"><code>TVyvpmaVmz25z2GaXBDDjzLZi5iR5dBzGd</code></a></td>
-<td><a href="https://tronscan.org/#/contract/TDwUJqxB1962DSfKHWMnEu1sWMGGRvHDB5"><code>TDwUJqxB1962DSfKHWMnEu1sWMGGRvHDB5</code></a></td>
-</tr>
-<tr>
-<td>jETHB</td>
-<td><a href="https://tronscan.org/#/token20/TRFe3hT5oYhjSZ6f3ji5FJ7YCfrkWnHRvh"><code>TRFe3hT5oYhjSZ6f3ji5FJ7YCfrkWnHRvh</code></a></td>
-<td><a href="https://tronscan.org/#/token20/TWBxQMb6RD3qmkXUXpNwVCYbL8SHNreru6"><code>TWBxQMb6RD3qmkXUXpNwVCYbL8SHNreru6</code></a></td>
-<td><a href="https://tronscan.org/#/token20/TS9fVh58y2RMDnpucGXkbfZhAJxmGafGqe"><code>TS9fVh58y2RMDnpucGXkbfZhAJxmGafGqe</code></a></td>
-</tr>
-<tr>
-<td>jETH</td>
-<td><a href="https://tronscan.org/#/token20/THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF"><code>THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF</code></a></td>
-<td><a href="https://tronscan.org/#/token20/TR7BUFRQeq1w5jAZf1FKx85SHuX6PfMqsV"><code>TR7BUFRQeq1w5jAZf1FKx85SHuX6PfMqsV</code></a></td>
-<td><a href="https://tronscan.org/#/contract/TQBvTVisiceDvsQVbLbcYyWQGWP7wtaQnc"><code>TQBvTVisiceDvsQVbLbcYyWQGWP7wtaQnc</code></a></td>
-</tr>
-<tr>
-<td>jWBTT (legacy)</td>
-<td><a href="https://tronscan.org/#/token20/TKfjV9RNKJJCqPvBtK8L7Knykh7DNWvnYt"><code>TKfjV9RNKJJCqPvBtK8L7Knykh7DNWvnYt</code></a></td>
-<td><a href="https://tronscan.org/#/contract/TUY54PVeH6WCcYCd6ZXXoBDsHytN9V5PXt"><code>TUY54PVeH6WCcYCd6ZXXoBDsHytN9V5PXt</code></a></td>
-<td><a href="https://tronscan.org/#/contract/TV4WWBqBfn1kd4KmpYeSJpVAfybfrxEN9L"><code>TV4WWBqBfn1kd4KmpYeSJpVAfybfrxEN9L</code></a></td>
-</tr>
-<tr>
-<td>jBUSDOLD (legacy)</td>
-<td><a href="https://tronscan.org/#/token20/TMz2SWatiAtZVVcH2ebpsbVtYwUPT9EdjH"><code>TMz2SWatiAtZVVcH2ebpsbVtYwUPT9EdjH</code></a></td>
-<td><a href="https://tronscan.org/#/contract/TLHASseQymmpGQdfAyNjkMXFTJh8nzR2x2"><code>TLHASseQymmpGQdfAyNjkMXFTJh8nzR2x2</code></a></td>
-<td><a href="https://tronscan.org/#/contract/TNRUqbYfYv4iizWa1b2kd6ZBaoh5zrg3yk"><code>TNRUqbYfYv4iizWa1b2kd6ZBaoh5zrg3yk</code></a></td>
-</tr>
-<tr>
-<td>jUSDDOLD (legacy)</td>
-<td><a href="https://tronscan.org/#/token20/TPYmHEhy5n8TCEfYGqW2rPxsghSfzghPDn"><code>TPYmHEhy5n8TCEfYGqW2rPxsghSfzghPDn</code></a></td>
-<td><a href="https://tronscan.org/#/contract/TX7kybeP6UwTBRHLNPYmswFESHfyjm9bAS"><code>TX7kybeP6UwTBRHLNPYmswFESHfyjm9bAS</code></a></td>
-<td><a href="https://tronscan.org/#/contract/TFdTqrMyb6PMMqTa9vnhmQHDFDU2oUhw9W"><code>TFdTqrMyb6PMMqTa9vnhmQHDFDU2oUhw9W</code></a></td>
-</tr>
-<tr>
-<td>jSUNOLD (legacy)</td>
-<td><a href="https://tronscan.org/#/token20/TKkeiboTkxXKJpbmVFbv4a8ov5rAfRDMf9"><code>TKkeiboTkxXKJpbmVFbv4a8ov5rAfRDMf9</code></a></td>
-<td><a href="https://tronscan.org/#/contract/TGBr8uh9jBVHJhhkwSJvQN2ZAKzVkxDmno"><code>TGBr8uh9jBVHJhhkwSJvQN2ZAKzVkxDmno</code></a></td>
-<td><a href="https://tronscan.org/#/contract/TSCpzKvJfXHj1HW5jKg9dZA8z9aMxxGLd8"><code>TSCpzKvJfXHj1HW5jKg9dZA8z9aMxxGLd8</code></a></td>
-</tr>
-</tbody>
-</table>
-<h2 id="interest-rate-models">Interest Rate Models<a class="headerlink" href="#interest-rate-models" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Model</th>
-<th>Type</th>
-<th>Address</th>
-<th>Tronscan</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>WhitePaperModelTRX</td>
-<td><code>WhitePaperInterestRateModel</code></td>
-<td><code>TF8B4iysAGfrssdQhMJGYsdd9SZoxGsH7M</code></td>
-<td><a href="https://tronscan.org/#/contract/TF8B4iysAGfrssdQhMJGYsdd9SZoxGsH7M">Contract</a></td>
-</tr>
-<tr>
-<td>WhitePaperModelBTC</td>
-<td><code>WhitePaperInterestRateModel</code></td>
-<td><code>TYJi9q4qLQWoBiKmMQY3Mn81tmhw7SeCmh</code></td>
-<td><a href="https://tronscan.org/#/contract/TYJi9q4qLQWoBiKmMQY3Mn81tmhw7SeCmh">Contract</a></td>
-</tr>
-<tr>
-<td>jumpRateTRX</td>
-<td><code>JumpRateModelV2</code></td>
-<td><code>TMca13trZmVvVttrGWJyUSm33qZdohDDuh</code></td>
-<td><a href="https://tronscan.org/#/contract/TMca13trZmVvVttrGWJyUSm33qZdohDDuh">Contract</a></td>
-</tr>
-<tr>
-<td>jumpRateUSDDOLD</td>
-<td><code>JumpRateModelV2</code></td>
-<td><code>TDoB7y9HHj6bXTwEe6BhfAkdETjQR2He6u</code></td>
-<td><a href="https://tronscan.org/#/contract/TDoB7y9HHj6bXTwEe6BhfAkdETjQR2He6u">Contract</a></td>
-</tr>
-<tr>
-<td>jumpRateUSDT</td>
-<td><code>JumpRateModelV2</code></td>
-<td><code>TTetZxp98wcPaciyBMHYvQkS735RZ3tyXY</code></td>
-<td><a href="https://tronscan.org/#/contract/TTetZxp98wcPaciyBMHYvQkS735RZ3tyXY">Contract</a></td>
-</tr>
-<tr>
-<td>jumpRatewstUSDT</td>
-<td><code>JumpRateModelV2</code></td>
-<td><code>TPqKsaTnSKEU3aGHanpVFNU3cE8SmJsAYz</code></td>
-<td><a href="https://tronscan.org/#/contract/TPqKsaTnSKEU3aGHanpVFNU3cE8SmJsAYz">Contract</a></td>
-</tr>
-<tr>
-<td>jumpRatesTRX</td>
-<td><code>JumpRateModelV2</code></td>
-<td><code>TW4fpkc98kzVbdiPhutCg2uivwVJ9MDa2P</code></td>
-<td><a href="https://tronscan.org/#/contract/TW4fpkc98kzVbdiPhutCg2uivwVJ9MDa2P">Contract</a></td>
-</tr>
-<tr>
-<td>jumpRateSUN</td>
-<td><code>JumpRateModelV2</code></td>
-<td><code>THCVC3DHgZ5qmUcJPutw7TrMMfj1h2bvkZ</code></td>
-<td><a href="https://tronscan.org/#/contract/THCVC3DHgZ5qmUcJPutw7TrMMfj1h2bvkZ">Contract</a></td>
-</tr>
-<tr>
-<td>jumpRateBTT</td>
-<td><code>JumpRateModelV2</code></td>
-<td><code>TQ9zMkrqgej7GjLdMrpNuURozg8J2fSXsW</code></td>
-<td><a href="https://tronscan.org/#/contract/TQ9zMkrqgej7GjLdMrpNuURozg8J2fSXsW">Contract</a></td>
-</tr>
-<tr>
-<td>jumpRateNFT</td>
-<td><code>JumpRateModelV2</code></td>
-<td><code>TBE9tkWYdZPEHLNeKC6Xn44YFLpieiM3xq</code></td>
-<td><a href="https://tronscan.org/#/contract/TBE9tkWYdZPEHLNeKC6Xn44YFLpieiM3xq">Contract</a></td>
-</tr>
-<tr>
-<td>jumpRateJST</td>
-<td><code>JumpRateModelV2</code></td>
-<td><code>TMNXjQTa8x4wNHBa3X647KRnkRQpSuXBRT</code></td>
-<td><a href="https://tronscan.org/#/contract/TMNXjQTa8x4wNHBa3X647KRnkRQpSuXBRT">Contract</a></td>
-</tr>
-<tr>
-<td>jumpRateWIN</td>
-<td><code>JumpRateModelV2</code></td>
-<td><code>TBtChPo34CGJkb1QVEwPhxS8HQE2Xp7ir2</code></td>
-<td><a href="https://tronscan.org/#/contract/TBtChPo34CGJkb1QVEwPhxS8HQE2Xp7ir2">Contract</a></td>
-</tr>
-<tr>
-<td>jumpRateUSDJ</td>
-<td><code>JumpRateModelV2</code></td>
-<td><code>TLScd7kpWnKADtH7ZXKzrJHAxJUnjiiExq</code></td>
-<td><a href="https://tronscan.org/#/contract/TLScd7kpWnKADtH7ZXKzrJHAxJUnjiiExq">Contract</a></td>
-</tr>
-<tr>
-<td>jumpRateUSDC</td>
-<td><code>JumpRateModelV2</code></td>
-<td><code>TDECE4PZFEkmTyFk9sJMya9PY99BapHpyP</code></td>
-<td><a href="https://tronscan.org/#/contract/TDECE4PZFEkmTyFk9sJMya9PY99BapHpyP">Contract</a></td>
-</tr>
-<tr>
-<td>jumpRateTUSD</td>
-<td><code>JumpRateModelV2</code></td>
-<td><code>TLY3wRNGrQpJCZrYKu9VjntMj2kNxisAL2</code></td>
-<td><a href="https://tronscan.org/#/contract/TLY3wRNGrQpJCZrYKu9VjntMj2kNxisAL2">Contract</a></td>
-</tr>
-<tr>
-<td>jumpRateBTC</td>
-<td><code>JumpRateModelV2</code></td>
-<td><code>TYJi9q4qLQWoBiKmMQY3Mn81tmhw7SeCmh</code></td>
-<td><a href="https://tronscan.org/#/contract/TYJi9q4qLQWoBiKmMQY3Mn81tmhw7SeCmh">Contract</a></td>
-</tr>
-<tr>
-<td>jumpRateETHB</td>
-<td><code>JumpRateModelV2</code></td>
-<td><code>TD5wmR7NfBM2JdSGSTTq1MgMARX2k5KE2b</code></td>
-<td><a href="https://tronscan.org/#/contract/TD5wmR7NfBM2JdSGSTTq1MgMARX2k5KE2b">Contract</a></td>
-</tr>
-<tr>
-<td>jumpRateWBTT</td>
-<td><code>JumpRateModelV2</code></td>
-<td><code>TJAfCJdJZa44pG5adQGLMLh27hJqPeLxod</code></td>
-<td><a href="https://tronscan.org/#/contract/TJAfCJdJZa44pG5adQGLMLh27hJqPeLxod">Contract</a></td>
-</tr>
-<tr>
-<td>jumpRateBUSD</td>
-<td><code>JumpRateModelV2</code></td>
-<td><code>TUSGt1WAYeJSV94M5muFi2KvtE6EquZPUC</code></td>
-<td><a href="https://tronscan.org/#/contract/TUSGt1WAYeJSV94M5muFi2KvtE6EquZPUC">Contract</a></td>
-</tr>
-<tr>
-<td>jumpRateSUNOLD</td>
-<td><code>JumpRateModelV2</code></td>
-<td><code>TK7WVRz34wUVRCpsgbW1wUCPmh5bSnCqg1</code></td>
-<td><a href="https://tronscan.org/#/contract/TK7WVRz34wUVRCpsgbW1wUCPmh5bSnCqg1">Contract</a></td>
-</tr>
-<tr>
-<td>jumpRateETH</td>
-<td><code>JumpRateModelV2</code></td>
-<td><code>TCiKn6EFBsNrNCFQXWaEuAxr8Su3y4Rx9D</code></td>
-<td><a href="https://tronscan.org/#/contract/TCiKn6EFBsNrNCFQXWaEuAxr8Su3y4Rx9D">Contract</a></td>
-</tr>
-<tr>
-<td>jumpRateUSD1</td>
-<td><code>JumpRateModelV2</code></td>
-<td><code>TKgX5vEds8UW8bd5fSDGHpTT4UwmVz4yPS</code></td>
-<td><a href="https://tronscan.org/#/contract/TKgX5vEds8UW8bd5fSDGHpTT4UwmVz4yPS">Contract</a></td>
-</tr>
-</tbody>
-</table>
-<p>See <a href="../supply_and_borrow_market/interest_rate_model/">Interest Rate Model</a> for the formulas backing these contracts.</p>
-<h2 id="price-oracle">Price Oracle<a class="headerlink" href="#price-oracle" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Component</th>
-<th>Contract</th>
-<th>Address</th>
-<th>Tronscan</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Oracle Proxy</td>
-<td><code>PriceOracleProxy</code></td>
-<td><code>TCKp2AzuhzV4B4Ahx1ej4mvQgHZ1kH7F7k</code></td>
-<td><a href="https://tronscan.org/#/contract/TCKp2AzuhzV4B4Ahx1ej4mvQgHZ1kH7F7k">Contract</a></td>
-</tr>
-<tr>
-<td>Oracle (impl)</td>
-<td><code>PriceOracle</code></td>
-<td><code>TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV</code></td>
-<td><a href="https://tronscan.org/#/contract/TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV/code">Contract / Code</a></td>
-</tr>
-</tbody>
-</table>
-<p>Prices are denominated in sun (10⁻⁶ TRX), scaled by <code>10^(tokenDecimal − 6)</code>. See <a href="../supply_and_borrow_market/price_oracle/">Price Oracle</a>.</p>
-<h2 id="governance">Governance<a class="headerlink" href="#governance" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Component</th>
-<th>Contract</th>
-<th>Address</th>
-<th>Tronscan</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Governor (proxy / entrypoint)</td>
-<td><code>GovernorBravoDelegator</code></td>
-<td><code>TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD</code></td>
-<td><a href="https://tronscan.org/#/contract/TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD">Contract</a></td>
-</tr>
-<tr>
-<td>Governor (impl)</td>
-<td><code>GovernorBravoDelegate</code></td>
-<td><code>TCiQTkxhzwSeXhRsNdHCvrxHRAvpjQn5Dt</code></td>
-<td><a href="https://tronscan.org/#/contract/TCiQTkxhzwSeXhRsNdHCvrxHRAvpjQn5Dt">Contract</a></td>
-</tr>
-<tr>
-<td>Time-lock</td>
-<td><code>Timelock</code></td>
-<td><code>TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x</code></td>
-<td><a href="https://tronscan.org/#/contract/TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x">Contract</a></td>
-</tr>
-<tr>
-<td>JST token</td>
-<td><code>JST</code></td>
-<td><code>TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9</code></td>
-<td><a href="https://tronscan.org/#/token20/TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9">Token20</a></td>
-</tr>
-<tr>
-<td>WJST (voting)</td>
-<td><code>WJST</code></td>
-<td><code>TXk9LnTnLN7oH96H3sKxJayMxLxR9M4ZD6</code></td>
-<td><a href="https://tronscan.org/#/contract/TXk9LnTnLN7oH96H3sKxJayMxLxR9M4ZD6/code">Contract / Code</a></td>
-</tr>
-</tbody>
-</table>
-<p>See <a href="../supply_and_borrow_market/governance/">Governance</a> for the proposal lifecycle and voting flow.</p>
-<h2 id="staked-trx">Staked TRX<a class="headerlink" href="#staked-trx" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Component</th>
-<th>Contract</th>
-<th>Address</th>
-<th>Tronscan</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>StakedTRX</td>
-<td><code>sTRX</code></td>
-<td><code>TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5</code></td>
-<td><a href="https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5">Token20</a></td>
-</tr>
-</tbody>
-</table>
-<p>See <a href="../staked_trx/">Staked TRX</a> for the contract reference.</p>
-<h2 id="energy-rental">Energy Rental<a class="headerlink" href="#energy-rental" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Component</th>
-<th>Contract</th>
-<th>Address</th>
-<th>Tronscan</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>EnergyRental</td>
-<td><code>EnergyRental</code></td>
-<td><code>TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd</code></td>
-<td><a href="https://tronscan.org/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd">Contract</a></td>
-</tr>
-</tbody>
-</table>
-<p>See <a href="../energy_rental/">Energy Rental</a> for the contract reference.</p>
+<h2 id="1-usdt-style-approve-race-condition">1. USDT-style <code>approve()</code> race condition<a class="headerlink" href="#1-usdt-style-approve-race-condition" title="Permanent link">&para;</a></h2>
+<p><strong>Symptom.</strong> Your second call to <code>approve(jUSDT, N)</code> reverts. Your <code>mint(N)</code> then fails to pull funds.</p>
+<p><strong>Root cause.</strong> Some TRC20s — notably <strong>TRON USDT</strong> (<code>TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t</code>) — reject <code>approve(spender, newAmount)</code> when the current allowance is non-zero. This is non-standard but historical and not going to change. JustLend markets affected today: <code>jUSDT</code>, <code>jUSDCOLD</code>, <code>jTUSD</code>, <code>jUSDDOLD</code>, <code>jBUSDOLD</code> (and any future USDT-derived underlying).</p>
+<p><strong>Safe pattern.</strong></p>
+<div class="highlight"><pre><span></span><code><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">safeApprove</span><span class="p">(</span><span class="nx">token</span><span class="p">,</span><span class="w"> </span><span class="nx">spender</span><span class="p">,</span><span class="w"> </span><span class="nx">amount</span><span class="p">,</span><span class="w"> </span><span class="nx">sender</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">current</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">token</span><span class="p">.</span><span class="nx">methods</span><span class="p">.</span><span class="nx">allowance</span><span class="p">(</span><span class="nx">sender</span><span class="p">,</span><span class="w"> </span><span class="nx">spender</span><span class="p">).</span><span class="nx">call</span><span class="p">();</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">current</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="s1">&#39;0&#39;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">current</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="nb">String</span><span class="p">(</span><span class="nx">amount</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="nx">token</span><span class="p">.</span><span class="nx">methods</span><span class="p">.</span><span class="nx">approve</span><span class="p">(</span><span class="nx">spender</span><span class="p">,</span><span class="w"> </span><span class="mf">0</span><span class="p">).</span><span class="nx">send</span><span class="p">({</span><span class="w"> </span><span class="kr">from</span><span class="o">:</span><span class="w"> </span><span class="nx">sender</span><span class="w"> </span><span class="p">});</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">token</span><span class="p">.</span><span class="nx">methods</span><span class="p">.</span><span class="nx">approve</span><span class="p">(</span><span class="nx">spender</span><span class="p">,</span><span class="w"> </span><span class="nx">amount</span><span class="p">).</span><span class="nx">send</span><span class="p">({</span><span class="w"> </span><span class="kr">from</span><span class="o">:</span><span class="w"> </span><span class="nx">sender</span><span class="w"> </span><span class="p">});</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Standard-compliant TRC20s (USDD, BTC, WBTC, sTRX, …) tolerate non-zero → non-zero, but running the pattern unconditionally costs one extra <code>approve(0)</code> only when changing the value — cheap insurance.</p>
 <hr />
-<h2 id="nile-testnet">Nile Testnet<a class="headerlink" href="#nile-testnet" title="Permanent link">&para;</a></h2>
-<div class="admonition warning">
-<p class="admonition-title">Testnet — not the production protocol</p>
-<p>Use these addresses only for development and integration testing. Some Nile contracts are placeholder/stub addresses — when in doubt, call <code>get_supported_networks</code> / <code>get_supported_markets</code> on the <a href="../../ai_support/mcp_server/">JustLend MCP server</a> for the live runtime view, or consult the <a href="https://github.com/justlend/mcp-server-justlend/blob/main/src/core/chains.ts"><code>chains.ts</code> Nile section</a>.</p>
-</div>
+<h2 id="2-entermarkets-is-required-for-collateral-to-count">2. <code>enterMarkets()</code> is required for collateral to count<a class="headerlink" href="#2-entermarkets-is-required-for-collateral-to-count" title="Permanent link">&para;</a></h2>
+<p><strong>Symptom.</strong> <code>borrow()</code> reverts with <code>COMPTROLLER_REJECTION</code> even though you supplied plenty of an asset whose <code>collateralFactorMantissa &gt; 0</code>.</p>
+<p><strong>Root cause.</strong> Compound V2's design: supplying tokens credits your jToken balance but <strong>does not automatically opt that jToken in as collateral</strong>. You must call <code>Comptroller.enterMarkets([jTokenAddr])</code> once per jToken you want counted.</p>
+<p><strong>Safe pattern (pre-borrow check).</strong></p>
+<div class="highlight"><pre><span></span><code><span class="c1">// 1. Make sure we&#39;re in every market we want as collateral</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">inMarkets</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">comptroller</span><span class="p">.</span><span class="nx">methods</span><span class="p">.</span><span class="nx">getAssetsIn</span><span class="p">(</span><span class="nx">user</span><span class="p">).</span><span class="nx">call</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">need</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="nx">jUSDT</span><span class="p">,</span><span class="w"> </span><span class="nx">jTRX</span><span class="p">].</span><span class="nx">filter</span><span class="p">(</span><span class="nx">jt</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="o">!</span><span class="nx">inMarkets</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="nx">jt</span><span class="p">));</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">need</span><span class="p">.</span><span class="nx">length</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">comptroller</span><span class="p">.</span><span class="nx">methods</span><span class="p">.</span><span class="nx">enterMarkets</span><span class="p">(</span><span class="nx">need</span><span class="p">).</span><span class="nx">send</span><span class="p">({</span><span class="w"> </span><span class="kr">from</span><span class="o">:</span><span class="w"> </span><span class="nx">user</span><span class="w"> </span><span class="p">});</span>
+<span class="p">}</span>
+<span class="c1">// 2. Now borrow</span>
+<span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">error</span><span class="p">,</span><span class="w"> </span><span class="nx">liquidity</span><span class="p">,</span><span class="w"> </span><span class="nx">shortfall</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">comptroller</span><span class="p">.</span><span class="nx">methods</span><span class="p">.</span><span class="nx">getAccountLiquidity</span><span class="p">(</span><span class="nx">user</span><span class="p">).</span><span class="nx">call</span><span class="p">();</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">error</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="s1">&#39;0&#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nx">shortfall</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="s1">&#39;0&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="s1">&#39;not enough collateral&#39;</span><span class="p">);</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">jSUN</span><span class="p">.</span><span class="nx">methods</span><span class="p">.</span><span class="nx">borrow</span><span class="p">(</span><span class="nx">amount</span><span class="p">).</span><span class="nx">send</span><span class="p">({</span><span class="w"> </span><span class="kr">from</span><span class="o">:</span><span class="w"> </span><span class="nx">user</span><span class="w"> </span><span class="p">});</span>
+</code></pre></div>
+<p><code>exitMarket(jToken)</code> is the inverse; it reverts if exiting would put the account below the borrow limit.</p>
+<hr />
+<h2 id="3-mint-is-overloaded-different-signature-for-jtrx-vs-jtrc20">3. <code>mint()</code> is overloaded — different signature for jTRX vs jTRC20<a class="headerlink" href="#3-mint-is-overloaded-different-signature-for-jtrx-vs-jtrc20" title="Permanent link">&para;</a></h2>
+<p><strong>jTRX:</strong>
+<div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">mint</span><span class="p">()</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">payable</span><span class="p">;</span><span class="w">   </span><span class="c1">// amount is sent via msg.value</span>
+</code></pre></div></p>
+<p><strong>Every other jToken (jTRC20):</strong>
+<div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">mint</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">mintAmount</span><span class="p">)</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="p">);</span><span class="w">  </span><span class="c1">// requires prior approve()</span>
+</code></pre></div></p>
+<p>Calling <code>mint(amount)</code> on jTRX reverts; calling <code>mint()</code> on jUSDT reverts. This bites code that auto-dispatches on the jToken address. Branch on the underlying:</p>
+<div class="highlight"><pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">jTokenSymbol</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s1">&#39;jTRX&#39;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">jTRX</span><span class="p">.</span><span class="nx">methods</span><span class="p">.</span><span class="nx">mint</span><span class="p">().</span><span class="nx">send</span><span class="p">({</span><span class="w"> </span><span class="kr">from</span><span class="o">:</span><span class="w"> </span><span class="nx">user</span><span class="p">,</span><span class="w"> </span><span class="nx">callValue</span><span class="o">:</span><span class="w"> </span><span class="nx">amount</span><span class="w"> </span><span class="p">});</span>
+<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">safeApprove</span><span class="p">(</span><span class="nx">underlying</span><span class="p">,</span><span class="w"> </span><span class="nx">jToken</span><span class="p">.</span><span class="nx">address</span><span class="p">,</span><span class="w"> </span><span class="nx">amount</span><span class="p">,</span><span class="w"> </span><span class="nx">user</span><span class="p">);</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">jToken</span><span class="p">.</span><span class="nx">methods</span><span class="p">.</span><span class="nx">mint</span><span class="p">(</span><span class="nx">amount</span><span class="p">).</span><span class="nx">send</span><span class="p">({</span><span class="w"> </span><span class="kr">from</span><span class="o">:</span><span class="w"> </span><span class="nx">user</span><span class="w"> </span><span class="p">});</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Same overload pattern applies to <code>repayBorrow(uint)</code> vs <code>repayBorrow() payable</code> and <code>liquidateBorrow(...)</code>.</p>
+<hr />
+<h2 id="4-redeem-vs-redeemunderlying">4. <code>redeem()</code> vs <code>redeemUnderlying()</code><a class="headerlink" href="#4-redeem-vs-redeemunderlying" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Component</th>
-<th>Contract</th>
-<th>Address</th>
+<th>Function</th>
+<th>Argument unit</th>
+<th>When to use</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Comptroller (proxy / entrypoint)</td>
-<td><code>Unitroller</code></td>
-<td><code>TJUCStq3WqfKqZLuZje5v7z6Ua6iBry1P6</code></td>
+<td><code>redeem(redeemTokens)</code></td>
+<td><strong>jToken</strong> (always 8 decimals)</td>
+<td>"Withdraw a specific number of jTokens."</td>
 </tr>
 <tr>
-<td>Governance</td>
-<td><code>GovernorBravoDelegator</code></td>
-<td><code>TYCNENqt2oJK7eiwubi6YXXt8RHR1BnzBs</code></td>
-</tr>
-<tr>
-<td>JST token (testnet)</td>
-<td><code>JST</code></td>
-<td><code>TJqk3ChKSjmpoNm3gaqSEatNsueD37NGDK</code></td>
-</tr>
-<tr>
-<td>WJST (voting wrapper, testnet)</td>
-<td><code>WJST</code></td>
-<td><code>TCxA1eNhsAV3gvUwLjLtREW9f775V4h1h7</code></td>
-</tr>
-<tr>
-<td>StakedTRX proxy (testnet)</td>
-<td><code>sTRX</code></td>
-<td><code>TZ8du1HkatTWDbS6FLZei4dQfjfpSm9mxp</code></td>
+<td><code>redeemUnderlying(redeemAmount)</code></td>
+<td><strong>underlying</strong> (token's own decimals)</td>
+<td>"Withdraw a specific number of underlying tokens."</td>
 </tr>
 </tbody>
 </table>
-<p>The Nile testnet currently exposes a subset of the mainnet jToken markets plus four QA-only markets (<code>jUSD1test</code>, <code>jETHQA</code>, <code>jBUSDqa1</code>, <code>jBUSDqa2</code>). For the complete Nile jToken list with delegator and underlying addresses, see <a href="../contracts.json"><code>contracts.json</code> → <code>networks.nile</code></a> or the <a href="https://github.com/justlend/mcp-server-justlend/blob/main/src/core/chains.ts">MCP server <code>chains.ts</code></a>.</p>
-<h3 id="configuring-clients-for-nile">Configuring clients for Nile<a class="headerlink" href="#configuring-clients-for-nile" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="c1"># JustLend Skills / MCP server</span>
-<span class="nb">export</span><span class="w"> </span><span class="nv">NETWORK</span><span class="o">=</span>nile
+<p>The arguments are not interchangeable. <code>redeem(100e6)</code> on jUSDT redeems <code>100e6 / 10⁸ = 0.01</code> jTokens (a tiny amount). <code>redeemUnderlying(100e6)</code> on jUSDT redeems whatever number of jTokens is needed to return <code>100 USDT</code> (6-decimal underlying). Pick by intent; verify with <a href="../supply_and_borrow_market/sbm/#underlying-balance"><code>balanceOfUnderlying(user)</code></a> before sending.</p>
+<hr />
+<h2 id="5-jtoken-8-underlying-varies-decimals">5. jToken (8) ↔ underlying (varies) decimals<a class="headerlink" href="#5-jtoken-8-underlying-varies-decimals" title="Permanent link">&para;</a></h2>
+<p><strong>Symptom.</strong> Off-by-10² to 10¹² error in a downstream balance calculation.</p>
+<p><strong>Rule.</strong> Every jToken is 8 decimals. The underlying may be anything from 6 (TRX, USDT, USDC) to 8 (BTC, sTRX) to 18 (USDD, ETH). The exchange rate compensates, but only if you remember which side of the conversion you're on.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// jUSDT (jToken 8 dec) ↔ USDT (underlying 6 dec)</span>
+<span class="c1">// exchange rate is scaled by 1e18 and encodes both the price *and* the decimal diff</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">er</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">BigInt</span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">jUSDT</span><span class="p">.</span><span class="nx">methods</span><span class="p">.</span><span class="nx">exchangeRateCurrent</span><span class="p">().</span><span class="nx">call</span><span class="p">());</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">jUSDTBalance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">BigInt</span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">jUSDT</span><span class="p">.</span><span class="nx">methods</span><span class="p">.</span><span class="nx">balanceOf</span><span class="p">(</span><span class="nx">user</span><span class="p">).</span><span class="nx">call</span><span class="p">());</span><span class="w">   </span><span class="c1">// 8 decimals</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">underlyingBalance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jUSDTBalance</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nx">er</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">10n</span><span class="o">**</span><span class="mi">18n</span><span class="p">;</span><span class="w">                     </span><span class="c1">// 6 decimals</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="c1">// TronWeb</span>
-<span class="kd">const</span><span class="w"> </span><span class="nx">tronWeb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">TronWeb</span><span class="p">({</span>
-<span class="w">  </span><span class="nx">fullHost</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;https://nile.trongrid.io&#39;</span><span class="p">,</span>
-<span class="w">  </span><span class="c1">// ...</span>
-<span class="p">});</span>
+<p>The <code>balanceOfUnderlying(account)</code> helper does this conversion for you and is the recommended path.</p>
+<hr />
+<h2 id="6-liquidateborrow-close-factor-50">6. <code>liquidateBorrow()</code> close factor (50%)<a class="headerlink" href="#6-liquidateborrow-close-factor-50" title="Permanent link">&para;</a></h2>
+<p><strong>Symptom.</strong> Liquidation reverts with <code>LIQUIDATE_CLOSE_AMOUNT_TOO_LARGE</code> or similar.</p>
+<p><strong>Rule.</strong> In a single <code>liquidateBorrow()</code> call, you may repay <strong>at most <code>closeFactorMantissa / 1e18 = 50%</code></strong> of the borrower's outstanding debt <strong>on that specific borrowed asset</strong>. To fully liquidate, call repeatedly.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">debt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">BigInt</span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">jUSDT</span><span class="p">.</span><span class="nx">methods</span><span class="p">.</span><span class="nx">borrowBalanceCurrent</span><span class="p">(</span><span class="nx">borrower</span><span class="p">).</span><span class="nx">call</span><span class="p">());</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">closeFactor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">BigInt</span><span class="p">(</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">comptroller</span><span class="p">.</span><span class="nx">methods</span><span class="p">.</span><span class="nx">closeFactorMantissa</span><span class="p">().</span><span class="nx">call</span><span class="p">()</span>
+<span class="p">);</span><span class="w">  </span><span class="c1">// 5e17 = 0.5 = 50%</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">maxRepay</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">debt</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nx">closeFactor</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">10n</span><span class="o">**</span><span class="mi">18n</span><span class="p">;</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">jUSDT</span><span class="p">.</span><span class="nx">methods</span><span class="p">.</span><span class="nx">liquidateBorrow</span><span class="p">(</span><span class="nx">borrower</span><span class="p">,</span><span class="w"> </span><span class="nx">maxRepay</span><span class="p">,</span><span class="w"> </span><span class="nx">jCollateral</span><span class="p">)</span>
+<span class="w">  </span><span class="p">.</span><span class="nx">send</span><span class="p">({</span><span class="w"> </span><span class="kr">from</span><span class="o">:</span><span class="w"> </span><span class="nx">liquidator</span><span class="w"> </span><span class="p">});</span>
 </code></pre></div>
-<p>Tronscan testnet explorer: <a href="https://nile.tronscan.org">https://nile.tronscan.org</a>.</p>
+<p>The liquidator receives <code>repayAmount × liquidationIncentiveMantissa / 1e18</code> worth of <code>jCollateral</code> — for JustLend, <code>1.08</code> → 8% bonus over the debt value.</p>
+<hr />
+<h2 id="7-uint256-1-for-repay-full-balance">7. <code>uint256(-1)</code> for "repay full balance"<a class="headerlink" href="#7-uint256-1-for-repay-full-balance" title="Permanent link">&para;</a></h2>
+<p><strong>Symptom.</strong> <code>repayBorrow(balance)</code> leaves a tiny residual that keeps the position open.</p>
+<p><strong>Root cause.</strong> Between when you read <code>borrowBalanceCurrent(account)</code> off-chain and when the transaction lands on-chain, more interest accrues. Your repay amount is now slightly short.</p>
+<p><strong>Magic sentinel.</strong> Pass <code>uint256(-1)</code> — i.e. <code>2n ** 256n - 1n</code>, all-ones — as the amount. The contract recognizes this as "repay everything" and uses the freshly-accrued balance internally.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">MAX_UINT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2n</span><span class="w"> </span><span class="o">**</span><span class="w"> </span><span class="mi">256n</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1n</span><span class="p">;</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">jUSDT</span><span class="p">.</span><span class="nx">methods</span><span class="p">.</span><span class="nx">repayBorrow</span><span class="p">(</span><span class="nx">MAX_UINT</span><span class="p">.</span><span class="nx">toString</span><span class="p">()).</span><span class="nx">send</span><span class="p">({</span><span class="w"> </span><span class="kr">from</span><span class="o">:</span><span class="w"> </span><span class="nx">borrower</span><span class="w"> </span><span class="p">});</span>
+</code></pre></div>
+<p>Same sentinel works for <code>repayBorrowBehalf(borrower, MAX_UINT)</code>. Make sure your <code>approve()</code> allowance is at least equal to the current debt (or use <code>MAX_UINT</code> for the approval too — but mind pitfall #1 for USDT-style underlyings).</p>
+<hr />
+<h2 id="8-tron-resource-model-not-ethereum-gas">8. TRON resource model — not Ethereum gas<a class="headerlink" href="#8-tron-resource-model-not-ethereum-gas" title="Permanent link">&para;</a></h2>
+<p><strong>Symptom.</strong> "out of energy" revert despite the TRX balance looking fine.</p>
+<p><strong>Difference.</strong> TRON transactions consume <strong>energy</strong> (for contract calls) and <strong>bandwidth</strong> (for byte size), not gas. Account energy/bandwidth replenish daily from staked TRX (TRON Power) or can be rented per-call via <a href="../energy_rental/">JustLend Energy Rental</a>. A <code>mint</code> / <code>borrow</code> on a jToken typically consumes ~60k–130k energy depending on cold/warm storage and oracle freshness.</p>
+<p><strong>Pre-flight estimator (recommended).</strong> Use the <a href="../../ai_support/mcp_server/">MCP server's <code>estimate_lending_energy</code> tool</a> or query the rental dashboard's <code>energyStakePerTrx</code> and convert: needed_energy / energyStakePerTrx = TRX-to-rent. For one-off transactions, the dApp UI handles energy automatically; for programmatic callers, rent in the same transaction batch or pre-stake TRX once.</p>
+<hr />
+<h2 id="9-oracle-freshness-is-not-enforced-on-chain">9. Oracle freshness is not enforced on-chain<a class="headerlink" href="#9-oracle-freshness-is-not-enforced-on-chain" title="Permanent link">&para;</a></h2>
+<p><strong>Symptom.</strong> <code>getUnderlyingPrice(jToken)</code> returns a value stale by minutes during a fast market move; liquidations momentarily look healthy when off-chain prices say they're not (or vice versa).</p>
+<p><strong>Root cause.</strong> JustLend's <code>PriceOracle</code> is updated by a <code>Poster</code> role that relays Chainlink prices on-chain. There is no per-call "must be fresher than X seconds" check inside <code>getUnderlyingPrice</code>. The poster has its own update cadence (typically tight, but not contractually bounded).</p>
+<p><strong>Mitigation for integrators.</strong></p>
+<ul>
+<li>For monitoring / dashboards: cross-check the on-chain oracle against Chainlink's off-chain feed before alerting.</li>
+<li>For liquidation bots: do not assume the oracle moves in lockstep with CEX prices during volatile minutes. Add a fairness window before firing.</li>
+<li>For builders of dependent protocols: consider a TWAP read or a freshness-required wrapper before quoting prices into your own pricing logic.</li>
+</ul>
+<p>See <a href="../supply_and_borrow_market/price_oracle/">Price Oracle reference</a>.</p>
+<hr />
+<h2 id="10-legacy-markets">10. Legacy markets<a class="headerlink" href="#10-legacy-markets" title="Permanent link">&para;</a></h2>
+<p><strong>Symptom.</strong> A user "supplies" to <code>jUSDCOLD</code> and is surprised it doesn't show on the dApp.</p>
+<p><strong>Status field.</strong> Each jToken in <a href="../contracts.json"><code>contracts.json</code></a> carries <code>status: "active" | "legacy"</code>. Current <code>legacy</code> markets: <code>jUSDCOLD</code>, <code>jUSDDOLD</code>, <code>jBUSDOLD</code>, <code>jSUNOLD</code>, <code>jUSDJ</code>, <code>jWBTT</code>. These are <strong>closed to new supply and borrow at the dApp / policy layer</strong>, but the contracts are still live on-chain — a direct <code>mint()</code> may technically succeed.</p>
+<p><strong>Filter at the policy layer</strong>, not the contract layer:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// AI agent / integration code</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">markets</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">fetch</span><span class="p">(</span><span class="s1">&#39;/lend/jtoken&#39;</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">r</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">r</span><span class="p">.</span><span class="nx">json</span><span class="p">())).</span><span class="nx">data</span><span class="p">.</span><span class="nx">tokenList</span><span class="p">;</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">markets</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">m</span><span class="w"> </span><span class="p">=&gt;</span>
+<span class="w">  </span><span class="nx">contractsJson</span><span class="p">.</span><span class="nx">networks</span><span class="p">.</span><span class="nx">mainnet</span><span class="p">.</span><span class="nx">jtokens</span><span class="p">[</span><span class="nx">m</span><span class="p">.</span><span class="nx">symbol</span><span class="p">]</span><span class="o">?</span><span class="p">.</span><span class="nx">status</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s1">&#39;active&#39;</span>
+<span class="p">);</span>
+</code></pre></div>
+<p>Existing positions on legacy markets remain operable — borrowers can <code>repayBorrow</code>, suppliers can <code>redeem</code> — but <strong>do not direct new deposits to legacy markets</strong> without explicit user consent. There is currently no announced sunset date for the legacy contracts themselves; they remain queryable indefinitely.</p>
+<hr />
+<h2 id="where-to-look-next">Where to look next<a class="headerlink" href="#where-to-look-next" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../supply_and_borrow_market/sbm/">SBM contract reference</a> — full function signatures + TronWeb examples.</li>
+<li><a href="../apis/#1-conventions">APIs §1</a> — envelope, units, error codes for the public HTTP API.</li>
+<li><a href="../../resources/glossary/">Glossary</a> — precise term definitions referenced from this page.</li>
+<li><a href="../../llms-full.txt"><code>/llms-full.txt</code></a> — single-file snapshot for one-shot LLM ingestion.</li>
+</ul>
 
 
 

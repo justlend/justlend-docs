@@ -6,6 +6,10 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
+        <meta name="description" content="How the JustLend DAO proposal lifecycle works — discussion on the forum, on-chain submission via GovernorBravo, 3-day voting period, 48-hour Timelock, then execution. JST holders with ≥ 200M JST can propose.">
+      
+      
+        <meta name="author" content="JustLend DAO">
       
       
         <link rel="canonical" href="https://docs.justlend.org/governance/jips/">
@@ -22,7 +26,7 @@
     
     
       
-        <title>JIPs - JustLend DAO Documentation</title>
+        <title>JustLend Improvement Proposals (JIPs) - JustLend DAO Documentation</title>
       
     
     
@@ -64,6 +68,80 @@
     <link rel="alternate" type="text/plain" title="llms.txt — site index for LLMs" href="/llms.txt">
     <link rel="alternate" type="text/plain" title="llms-full.txt — full-text snapshot for LLMs" href="/llms-full.txt">
     <meta name="ai-content-declaration" content="llms.txt,llms-full.txt">
+    
+    
+    
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://justlend.org/#org",
+          "name": "JustLend DAO",
+          "url": "https://justlend.org",
+          "sameAs": [
+            "https://app.justlend.org",
+            "https://forum.justlend.org",
+            "https://github.com/justlend",
+            "https://t.me/officialjustlend"
+          ]
+        },
+        {
+          "@type": ["SoftwareApplication", "FinancialProduct"],
+          "@id": "https://docs.justlend.org/#protocol",
+          "name": "JustLend DAO Protocol",
+          "alternateName": ["JustLend", "JustLend DAO"],
+          "applicationCategory": "DecentralizedFinance",
+          "applicationSubCategory": "Lending",
+          "operatingSystem": "TRON",
+          "softwareVersion": "compound-v2-fork",
+          "url": "https://docs.justlend.org/",
+          "sameAs": [
+            "https://github.com/justlend/justlend-protocol",
+            "https://github.com/justlend/mcp-server-justlend",
+            "https://github.com/justlend/justlend-skills"
+          ],
+          "provider": { "@id": "https://justlend.org/#org" },
+          "documentation": "https://docs.justlend.org/llms.txt",
+          "potentialAction": [
+            {
+              "@type": "ConsumeAction",
+              "name": "Read full-text snapshot for LLMs",
+              "target": "https://docs.justlend.org/llms-full.txt"
+            },
+            {
+              "@type": "ConsumeAction",
+              "name": "Fetch machine-readable contract directory",
+              "target": "https://docs.justlend.org/developers/contracts.json"
+            },
+            {
+              "@type": "ConsumeAction",
+              "name": "Fetch OpenAPI 3.1 specification",
+              "target": "https://docs.justlend.org/developers/apis/justlend_apis.yaml"
+            }
+          ]
+        },
+        {
+          "@type": "TechArticle",
+          "@id": "https://docs.justlend.org/governance/jips/#article",
+          "headline": "JIPs",
+          "url": "https://docs.justlend.org/governance/jips/",
+          "inLanguage": "en",
+          "isPartOf": {
+            "@type": "WebSite",
+            "@id": "https://docs.justlend.org/#site",
+            "name": "JustLend DAO Documentation",
+            "url": "https://docs.justlend.org/",
+            "publisher": { "@id": "https://justlend.org/#org" }
+          },
+          "about": { "@id": "https://docs.justlend.org/#protocol" },
+          "description": "How the JustLend DAO proposal lifecycle works \u2014 discussion on the forum, on-chain submission via GovernorBravo, 3-day voting period, 48-hour Timelock, then execution. JST holders with \u2265 200M JST can propose."
+        }
+      ]
+    }
+    </script>
     
   </head>
   
@@ -113,7 +191,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              JIPs
+              JustLend Improvement Proposals (JIPs)
             
           </span>
         </div>
@@ -1106,6 +1184,28 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/common_pitfalls/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Common Pitfalls
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1386,6 +1486,28 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../../resources/glossary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Glossary
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
     
@@ -1396,10 +1518,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4" >
         
           
-          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_5_4" id="__nav_5_4_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -1411,8 +1533,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5_3">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_4">
             <span class="md-nav__icon md-icon"></span>
             Audits
           </label>
@@ -1486,10 +1608,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_5" >
         
           
-          <label class="md-nav__link" for="__nav_5_4" id="__nav_5_4_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_5_5" id="__nav_5_5_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -1501,8 +1623,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5_4">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_5">
             <span class="md-nav__icon md-icon"></span>
             Terms of Service
           </label>
@@ -1584,6 +1706,10 @@
 
 
 <h1 id="justlend-improvement-proposals">JustLend Improvement Proposals<a class="headerlink" href="#justlend-improvement-proposals" title="Permanent link">&para;</a></h1>
+<div class="admonition info">
+<p class="admonition-title">About this page</p>
+<p><strong>Protocol:</strong> JustLend DAO · <strong>Network:</strong> TRON Mainnet · <strong>Scope:</strong> the user-facing proposal lifecycle — how anyone with enough JST can introduce, debate, and pass changes to the protocol. · <strong>Lifecycle:</strong> off-chain discussion at <a href="https://forum.justlend.org">https://forum.justlend.org</a> → on-chain <code>propose()</code> on <code>GovernorBravoDelegator</code> (<code>TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD</code>) → 2-day review → 3-day voting (1 JST = 1 Vote after <code>deposit()</code>-ing into WJST) → 48-hour Timelock → <code>execute()</code>. <strong>Approval threshold:</strong> For votes &gt; Against votes <strong>AND</strong> For votes &gt; 600,000,000. <strong>Proposal threshold:</strong> ≥ 200,000,000 JST. · <strong>Developer reference:</strong> <a href="../../developers/supply_and_borrow_market/governance/">Governance contract reference</a>.</p>
+</div>
 <p>The JustLend DAO introduces a structured approach to decentralizing the JustLend protocol and empowering community autonomy. JustLend DAO fosters consensus among all participants in the JustLend ecosystem through governance mechanisms and economic incentives. The protocol's functions and the JST token serve as core security elements of the JustLend protocol.</p>
 <p>Governance mechanisms in decentralized protocols are driven by participation, incentives, self-regulation, and policy management within the community, adapting to and coexisting with the market dynamics. JustLend DAO manages on-chain operations through proposals, enabling the protocol to achieve self-operation, self-governance, and self-evolution based on predefined rules through intelligent management and token economic incentives, without third-party intervention, ultimately maximizing efficiency and value transfer.</p>
 <p>An essential incentive method in the governance process of JustLend DAO, JST tokenizes various organizational elements, integrating monetary capital, human capital, and other resources to enhance organizational efficiency significantly. The goal of the JST economy is to facilitate the virtuous and long-term development of the entire JustLend DAO ecosystem, allowing stakeholders and investors to benefit from a more secure agreement. JST holders are accountable for the protocol and ecosystem, contributing through practical actions such as technical integration (e.g., DeFi front-end integration) or financial investments (e.g., liquidity provision), significantly enhancing protocol execution, security, and functionality.</p>
@@ -1619,7 +1745,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 14, 2026 06:21:29 UTC">2026-05-14</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 21, 2026 10:22:46 UTC">2026-05-21</span>
   </span>
 
     

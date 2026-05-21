@@ -5,12 +5,14 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Public read-only REST API at openapi.just.network — markets, account positions, liquidation risk, USDD supply-mining rewards, sTRX staking, Energy Rental. Authoritative schema is the OpenAPI 3.1 YAML." name="description"/>
+<meta content="JustLend DAO" name="author"/>
 <link href="https://docs.justlend.org/developers/apis/" rel="canonical"/>
 <link href="../deployed_contracts/" rel="prev"/>
-<link href="../../ai_support/ai_llms/" rel="next"/>
+<link href="../common_pitfalls/" rel="next"/>
 <link href="../../assets/images/favicon.png" rel="icon"/>
 <meta content="mkdocs-1.6.1, mkdocs-material-9.6.8" name="generator"/>
-<title>APIs - JustLend DAO Documentation</title>
+<title>JustLend DAO API Reference - JustLend DAO Documentation</title>
 <link href="../../assets/stylesheets/main.8608ea7d.min.css" rel="stylesheet"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
@@ -23,6 +25,76 @@
 <link href="/llms.txt" rel="alternate" title="llms.txt — site index for LLMs" type="text/plain"/>
 <link href="/llms-full.txt" rel="alternate" title="llms-full.txt — full-text snapshot for LLMs" type="text/plain"/>
 <meta content="llms.txt,llms-full.txt" name="ai-content-declaration"/>
+<script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://justlend.org/#org",
+          "name": "JustLend DAO",
+          "url": "https://justlend.org",
+          "sameAs": [
+            "https://app.justlend.org",
+            "https://forum.justlend.org",
+            "https://github.com/justlend",
+            "https://t.me/officialjustlend"
+          ]
+        },
+        {
+          "@type": ["SoftwareApplication", "FinancialProduct"],
+          "@id": "https://docs.justlend.org/#protocol",
+          "name": "JustLend DAO Protocol",
+          "alternateName": ["JustLend", "JustLend DAO"],
+          "applicationCategory": "DecentralizedFinance",
+          "applicationSubCategory": "Lending",
+          "operatingSystem": "TRON",
+          "softwareVersion": "compound-v2-fork",
+          "url": "https://docs.justlend.org/",
+          "sameAs": [
+            "https://github.com/justlend/justlend-protocol",
+            "https://github.com/justlend/mcp-server-justlend",
+            "https://github.com/justlend/justlend-skills"
+          ],
+          "provider": { "@id": "https://justlend.org/#org" },
+          "documentation": "https://docs.justlend.org/llms.txt",
+          "potentialAction": [
+            {
+              "@type": "ConsumeAction",
+              "name": "Read full-text snapshot for LLMs",
+              "target": "https://docs.justlend.org/llms-full.txt"
+            },
+            {
+              "@type": "ConsumeAction",
+              "name": "Fetch machine-readable contract directory",
+              "target": "https://docs.justlend.org/developers/contracts.json"
+            },
+            {
+              "@type": "ConsumeAction",
+              "name": "Fetch OpenAPI 3.1 specification",
+              "target": "https://docs.justlend.org/developers/apis/justlend_apis.yaml"
+            }
+          ]
+        },
+        {
+          "@type": "TechArticle",
+          "@id": "https://docs.justlend.org/developers/apis/#article",
+          "headline": "APIs",
+          "url": "https://docs.justlend.org/developers/apis/",
+          "inLanguage": "en",
+          "isPartOf": {
+            "@type": "WebSite",
+            "@id": "https://docs.justlend.org/#site",
+            "name": "JustLend DAO Documentation",
+            "url": "https://docs.justlend.org/",
+            "publisher": { "@id": "https://justlend.org/#org" }
+          },
+          "about": { "@id": "https://docs.justlend.org/#protocol" },
+          "description": "Public read-only REST API at openapi.just.network \u2014 markets, account positions, liquidation risk, USDD supply-mining rewards, sTRX staking, Energy Rental. Authoritative schema is the OpenAPI 3.1 YAML."
+        }
+      ]
+    }
+    </script>
 </head>
 <body dir="ltr">
 <input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
@@ -53,7 +125,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              APIs
+              JustLend DAO API Reference
             
           </span>
 </div>
@@ -434,6 +506,13 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
+<a class="md-nav__link" href="#contents">
+<span class="md-ellipsis">
+      Contents
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="#quick-start">
 <span class="md-ellipsis">
       Quick start
@@ -624,8 +703,55 @@
     </span>
 </a>
 </li>
+<li class="md-nav__item has-children">
+<a aria-expanded="true" class="md-nav__link" href="#8-event-stream-and-indexing-options">
+<span class="md-ellipsis">
+      8. Event-stream and indexing options
+    </span>
+</a>
+<nav aria-label="8. Event-stream and indexing options" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#81-trongrid-event-filter-recommended-for-low-volume-queries">
+<span class="md-ellipsis">
+      8.1 TronGrid event filter (recommended for low-volume queries)
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#82-self-hosted-indexer-recommended-for-production-analytics">
+<span class="md-ellipsis">
+      8.2 Self-hosted indexer (recommended for production analytics)
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#83-mcp-server-read_events-when-integrating-with-an-ai-agent">
+<span class="md-ellipsis">
+      8.3 MCP server read_events (when integrating with an AI agent)
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#84-quick-reference-event-signatures-by-contract">
+<span class="md-ellipsis">
+      8.4 Quick reference: event signatures by contract
+    </span>
+</a>
+</li>
 </ul>
 </nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../common_pitfalls/">
+<span class="md-ellipsis">
+    Common Pitfalls
+    
+  </span>
+</a>
 </li>
 </ul>
 </nav>
@@ -729,17 +855,25 @@
   </span>
 </a>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../resources/glossary/">
+<span class="md-ellipsis">
+    Glossary
+    
+  </span>
+</a>
+</li>
 <li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" id="__nav_5_3" type="checkbox"/>
-<label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
+<input class="md-nav__toggle md-toggle" id="__nav_5_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_4" id="__nav_5_4_label" tabindex="0">
 <span class="md-ellipsis">
     Audits
     
   </span>
 <span class="md-nav__icon md-icon"></span>
 </label>
-<nav aria-expanded="false" aria-labelledby="__nav_5_3_label" class="md-nav" data-md-level="2">
-<label class="md-nav__title" for="__nav_5_3">
+<nav aria-expanded="false" aria-labelledby="__nav_5_4_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_4">
 <span class="md-nav__icon md-icon"></span>
             Audits
           </label>
@@ -764,16 +898,16 @@
 </nav>
 </li>
 <li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" id="__nav_5_4" type="checkbox"/>
-<label class="md-nav__link" for="__nav_5_4" id="__nav_5_4_label" tabindex="0">
+<input class="md-nav__toggle md-toggle" id="__nav_5_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_5" id="__nav_5_5_label" tabindex="0">
 <span class="md-ellipsis">
     Terms of Service
     
   </span>
 <span class="md-nav__icon md-icon"></span>
 </label>
-<nav aria-expanded="false" aria-labelledby="__nav_5_4_label" class="md-nav" data-md-level="2">
-<label class="md-nav__title" for="__nav_5_4">
+<nav aria-expanded="false" aria-labelledby="__nav_5_5_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_5">
 <span class="md-nav__icon md-icon"></span>
             Terms of Service
           </label>
@@ -809,6 +943,20 @@
 <article class="md-content__inner md-typeset">
 <h1 id="justlend-dao-api">JustLend DAO API<a class="headerlink" href="#justlend-dao-api" title="Permanent link">¶</a></h1>
 <p>Public REST endpoints for querying JustLend DAO protocol state: lending markets, user positions, liquidation risk, USDD supply‑mining rewards, sTRX staking, and Energy Rental.</p>
+<h2 id="contents">Contents<a class="headerlink" href="#contents" title="Permanent link">¶</a></h2>
+<p>This page is the human-readable reference. The <a href="justlend_apis.yaml">OpenAPI 3.1 YAML</a> is the machine-readable contract — treat the YAML as authoritative if they ever diverge.</p>
+<ul>
+<li><a href="#quick-start">Quick start</a> — connectivity check + minimal response example.</li>
+<li><a href="#1-conventions">§1 Conventions</a> — response envelope, address format, numeric formats, rate / APY semantics, pagination, error responses, rate limits, versioning.</li>
+<li><a href="#2-jtoken-address-reference">§2 jToken Address Reference</a> — the 23-market table with <code>status: active|legacy</code> and the programmatic-filter tip.</li>
+<li><a href="#3-supply-borrow-market">§3 Supply &amp; Borrow Market endpoints</a> — <code>/lend/jtoken</code>, <code>/lend/account</code>, <code>/justlend/liquidate/highRiskAccountList</code>.</li>
+<li><a href="#4-usdd-supply-mining">§4 USDD Supply Mining</a> — <code>/mining/reward</code>, <code>/mining/apy</code>, <code>/mining/distributions</code>.</li>
+<li><a href="#5-staked-trx-energy-rental">§5 Staked TRX &amp; Energy Rental</a> — <code>/lend/strx</code>, <code>/lend/strxStake/account</code>, <code>/lend/rentResource/account</code>.</li>
+<li><a href="#6-quick-reference-for-ai-agents">§6 Quick reference for AI agents</a> — common end-to-end recipes.</li>
+<li><a href="#7-interactive-api-explorer">§7 Interactive API Explorer</a> — embedded Swagger UI.</li>
+<li><a href="#8-event-stream-and-indexing-options">§8 Event-stream and indexing options</a> — how to query historical Mint / Borrow / Repay events on TRON.</li>
+</ul>
+<p>For gotchas while using these endpoints (USDT-style approve race, decimals mismatch, close-factor cap, etc.), see <a href="../common_pitfalls/">Common Pitfalls</a>. For precise term definitions, see the <a href="../../resources/glossary/">Glossary</a>.</p>
 <ul>
 <li><strong>Base URL:</strong> <code>https://openapi.just.network</code></li>
 <li><strong>Method:</strong> All endpoints are <code>GET</code>. No authentication.</li>
@@ -820,17 +968,43 @@
 <p>Run this read-only request to verify connectivity and inspect the current JustLend market list:</p>
 <div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-sS<span class="w"> </span>https://openapi.just.network/lend/jtoken
 </code></pre></div>
-<p>Expected result:</p>
+<p>Expected result (one token shown in full; real response has ~23 entries with the same shape):</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
 <span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
 <span class="w">  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SUCCESS"</span><span class="p">,</span>
 <span class="w">  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nt">"tokenList"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">      </span><span class="p">{</span><span class="w"> </span><span class="nt">"symbol"</span><span class="p">:</span><span class="w"> </span><span class="s2">"jTRX"</span><span class="p">,</span><span class="w"> </span><span class="nt">"underlyingSymbol"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TRX"</span><span class="w"> </span><span class="p">}</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"address"</span><span class="p">:</span><span class="w">              </span><span class="s2">"TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"symbol"</span><span class="p">:</span><span class="w">               </span><span class="s2">"jTRX"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"underlyingAddress"</span><span class="p">:</span><span class="w">    </span><span class="s2">"T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"underlyingSymbol"</span><span class="p">:</span><span class="w">     </span><span class="s2">"TRX"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"underlyingDecimal"</span><span class="p">:</span><span class="w">    </span><span class="mi">6</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"underlyingPriceInTrx"</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"underlyingPriceInUsd"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.21</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"borrowIndex"</span><span class="p">:</span><span class="w">          </span><span class="mi">1224530412174750380</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"borrowRate"</span><span class="p">:</span><span class="w">           </span><span class="mf">0.064673716541040000</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"supplyRate"</span><span class="p">:</span><span class="w">           </span><span class="mf">0.009044500002192000</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"apy"</span><span class="p">:</span><span class="w">                  </span><span class="mf">0.000000000000000000</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"cash"</span><span class="p">:</span><span class="w">                 </span><span class="mf">349909392.537020000000000000</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"totalSupply"</span><span class="p">:</span><span class="w">          </span><span class="mi">12345678901234</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"totalBorrows"</span><span class="p">:</span><span class="w">         </span><span class="mf">123456789.012345</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"reserveFactor"</span><span class="p">:</span><span class="w">        </span><span class="mf">0.20</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"collateralFactor"</span><span class="p">:</span><span class="w">     </span><span class="mf">0.75</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"exchangeRate"</span><span class="p">:</span><span class="w">         </span><span class="mi">200345678901234567890000000</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">      </span><span class="cm">/* ... 22 more entries ... */</span>
 <span class="w">    </span><span class="p">]</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
+<p><strong>Units cheat-sheet for the response above</strong> (see <a href="#13-numeric-formats">§1.3</a> and <a href="#14-rate-apy-semantics">§1.4</a> for the full table):</p>
+<ul>
+<li><code>borrowRate</code>, <code>supplyRate</code>, <code>apy</code>, <code>collateralFactor</code>, <code>reserveFactor</code> — annualized / fractional <strong>decimals</strong>. Multiply by 100 for percent. See <a href="#14-rate-apy-semantics">§1.4 Rate / APY semantics</a> for the full table.</li>
+<li><code>cash</code>, <code>totalBorrows</code> — already de-scaled by the underlying's decimals. Use as-is.</li>
+<li><code>totalSupply</code> — <strong>jToken</strong> units (always 8 decimals).</li>
+<li><code>borrowIndex</code>, <code>exchangeRate</code> — mantissa-scaled by <code>1e18</code> (see <a href="../../resources/glossary/#mantissa">Glossary → mantissa</a>).</li>
+</ul>
 <p>For integrations, import the OpenAPI schema from <a href="justlend_apis.yaml"><code>apis/justlend_apis.yaml</code></a>, then start with <code>GET /lend/jtoken</code> for market metadata and <code>GET /lend/account?addresses={wallet}</code> for a user's positions.</p>
 <hr/>
 <h2 id="1-conventions">1. Conventions<a class="headerlink" href="#1-conventions" title="Permanent link">¶</a></h2>
@@ -1001,12 +1175,53 @@
 </table>
 <h3 id="17-rate-limits-and-retry">1.7 Rate limits and retry<a class="headerlink" href="#17-rate-limits-and-retry" title="Permanent link">¶</a></h3>
 <p>The public API is designed for read-only integrations and AI agents. It is not a bulk export interface.</p>
+<p><strong>Soft limits (observed; not contractual):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Limit</th>
+<th>Approximate value</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sustained rate</td>
+<td><strong>~10 req/s per source IP</strong></td>
+<td>Steady traffic above this is silently throttled to <code>429</code>.</td>
+</tr>
+<tr>
+<td>Burst rate</td>
+<td><strong>~30 req/s for ≤ 3 s</strong></td>
+<td>OK for occasional batches; do not chain bursts.</td>
+</tr>
+<tr>
+<td>Concurrent connections</td>
+<td><strong>≤ 4 per source IP</strong></td>
+<td>Above this, new connections are queued or refused.</td>
+</tr>
+<tr>
+<td><code>pageSize</code> cap</td>
+<td><strong><code>1000</code></strong></td>
+<td>Documented hard maximum on paginated endpoints.</td>
+</tr>
+</tbody>
+</table>
+<p>These numbers are conservative estimates suitable for sizing client-side backoff. They are not a contract — the operator may tighten them under load or relax them after coordination.</p>
+<p><strong>Retry policy (recommended):</strong></p>
+<div class="highlight"><pre><span></span><code>on 429 or 5xx:
+    sleep = base * (2 ** attempt) + random(0, jitter_ms)
+    base = 1000 ms, max attempt = 5, max sleep = 30 s
+on persistent 429:
+    cut request rate in half; reset attempt counter
+</code></pre></div>
+<p><strong>General hygiene:</strong></p>
 <ul>
 <li>Use <code>pageSize &lt;= 1000</code>; this is the documented maximum for paginated endpoints.</li>
-<li>Cache stable reference data such as jToken addresses, symbols, decimals, and collateral factors.</li>
-<li>Avoid tight polling loops. Market dashboards normally do not need sub-second refreshes.</li>
-<li>On <code>429</code> or transient <code>5xx</code>, retry with exponential backoff and jitter. Start around 1 second and cap retries to avoid request storms.</li>
-<li>If you need sustained high-volume access, contact the JustLend team before production launch.</li>
+<li>Cache stable reference data such as jToken addresses, symbols, decimals, and collateral factors (TTL ≥ 5 min is safe; these change only via governance).</li>
+<li>Avoid tight polling loops. Market dashboards normally do not need sub-second refreshes; a 30-second refresh is plenty.</li>
+<li>For per-account health monitoring across many addresses, batch via the high-risk endpoint (<code>/justlend/liquidate/highRiskAccountList</code>) rather than polling <code>/lend/account</code> per address.</li>
+<li>If you need sustained traffic above the soft limit, contact the JustLend team before production launch (the public service is unauthenticated and has no per-key tier).</li>
 </ul>
 <h3 id="18-versioning-and-compatibility">1.8 Versioning and compatibility<a class="headerlink" href="#18-versioning-and-compatibility" title="Permanent link">¶</a></h3>
 <p>The OpenAPI <code>info.version</code> is the documentation schema version. The HTTP API is read-only and backward-compatible unless an endpoint or field is explicitly marked otherwise.</p>
@@ -1020,6 +1235,10 @@
 <h2 id="2-jtoken-address-reference">2. jToken Address Reference<a class="headerlink" href="#2-jtoken-address-reference" title="Permanent link">¶</a></h2>
 <p>Several endpoints key their payloads by jToken address (e.g. <code>data["TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf"]</code>). Use this table to translate.</p>
 <p>The protocol currently exposes <strong>17 active + 6 legacy = 23 markets</strong>. Legacy markets are closed to new supply and borrow — existing positions remain queryable so they can be unwound, but do not direct new deposits to them.</p>
+<div class="admonition tip">
+<p class="admonition-title">Programmatic filter</p>
+<p>For agents that prefer not to parse prose: each entry in <a href="../contracts.json"><code>/developers/contracts.json</code> → <code>networks.mainnet.jtokens.&lt;symbol&gt;</code></a> carries an explicit <code>status</code> field with value <code>"active"</code> or <code>"legacy"</code>. Filter <code>status == "active"</code> to get the 17 active markets, <code>status == "legacy"</code> to get the 6 legacy ones. The schema and enum are documented in <a href="../contracts.schema.json"><code>contracts.schema.json</code></a>.</p>
+</div>
 <table>
 <thead>
 <tr>
@@ -2398,12 +2617,96 @@
 <h2 id="7-interactive-api-explorer">7. Interactive API Explorer<a class="headerlink" href="#7-interactive-api-explorer" title="Permanent link">¶</a></h2>
 <p>Use the embedded Swagger UI below to call endpoints directly from this page. Same OpenAPI spec as the YAML link above.</p>
 <p><iframe class="swagger-ui-iframe" frameborder="0" id="18aefa6b" onload="this.style.display = 'block'; this.style.overflow = 'hidden'; this.style.width = '100%';" src="swagger-18aefa6b.html" style="display:none;" width="100%"></iframe></p>
+<hr/>
+<h2 id="8-event-stream-and-indexing-options">8. Event-stream and indexing options<a class="headerlink" href="#8-event-stream-and-indexing-options" title="Permanent link">¶</a></h2>
+<p>The HTTP API exposes <strong>current state</strong>. For <strong>historical events</strong> (every <code>Mint</code>, <code>Borrow</code>, <code>RepayBorrow</code>, <code>Redeem</code>, <code>LiquidateBorrow</code>, <code>enterMarkets</code>, governance <code>ProposalCreated</code>/<code>VoteCast</code>/<code>ProposalExecuted</code>, sTRX <code>Deposit</code>/<code>Withdrawal</code>, EnergyRental <code>RentResource</code>/<code>ReturnResource</code>) you need an event source.</p>
+<p><strong>There is currently no official JustLend subgraph or hosted indexer.</strong> Use one of these patterns instead:</p>
+<h3 id="81-trongrid-event-filter-recommended-for-low-volume-queries">8.1 TronGrid event filter (recommended for low-volume queries)<a class="headerlink" href="#81-trongrid-event-filter-recommended-for-low-volume-queries" title="Permanent link">¶</a></h3>
+<p><a href="https://www.trongrid.io/">TronGrid</a> exposes <code>GET /v1/contracts/{address}/events</code> for any contract. Filter by <code>event_name</code> and time range. Free tier covers most ad-hoc analytics; paid tiers raise the rate limit.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># All Mint events on jUSDT for the last hour</span>
+curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">"TRON-PRO-API-KEY: </span><span class="nv">$TRONGRID_API_KEY</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s2">"https://api.trongrid.io/v1/contracts/TXJgMdjVX5dKiQaUi9QobwNxtSQaFqccvd/events?event_name=Mint&amp;min_block_timestamp=</span><span class="k">$(($(</span>date<span class="w"> </span>+%s%3N<span class="k">)</span><span class="o">-</span><span class="m">3600000</span><span class="k">))</span><span class="s2">"</span>
+</code></pre></div>
+<p>Pros: zero setup, well-documented, works for any JustLend contract. Cons: cursored pagination only, ~30-day retention on the free tier, not great for full historical backfills.</p>
+<h3 id="82-self-hosted-indexer-recommended-for-production-analytics">8.2 Self-hosted indexer (recommended for production analytics)<a class="headerlink" href="#82-self-hosted-indexer-recommended-for-production-analytics" title="Permanent link">¶</a></h3>
+<p>Stand up a TRON-aware indexer that consumes block ranges and writes typed event tables. Options:</p>
+<ul>
+<li><strong>DipDup</strong> (<a href="https://dipdup.io">dipdup.io</a>) — Python-based, has TRON support via the EVM-compatible adapter. Define handlers for <code>Mint</code>, <code>Borrow</code>, etc. and DipDup catches up from any block height into Postgres.</li>
+<li><strong>Substreams</strong> — Streaming-based; works against TRON via the EVM bridge. Larger setup cost, but ideal for high-throughput pipelines.</li>
+<li><strong>Custom node + The Graph–style schema</strong> — Run a TRON full node (<code>java-tron</code>) or use a TronGrid full-archive endpoint, decode events with the ABIs at <a href="../abis/jtoken.json"><code>/developers/abis/</code></a>, and write your own schema. Most flexible, most operational overhead.</li>
+</ul>
+<h3 id="83-mcp-server-read_events-when-integrating-with-an-ai-agent">8.3 MCP server <code>read_events</code> (when integrating with an AI agent)<a class="headerlink" href="#83-mcp-server-read_events-when-integrating-with-an-ai-agent" title="Permanent link">¶</a></h3>
+<p>For low-volume agent-driven queries, the <a href="../../ai_support/mcp_server/">full MCP server</a> exposes contract read primitives that can be composed into event lookups (<code>get_account_summary</code>, <code>get_market_data</code>, etc.). For raw event log access, fall back to TronGrid via your own tooling — MCP is not optimized for historical-event sweeps.</p>
+<h3 id="84-quick-reference-event-signatures-by-contract">8.4 Quick reference: event signatures by contract<a class="headerlink" href="#84-quick-reference-event-signatures-by-contract" title="Permanent link">¶</a></h3>
+<p>ABIs at <a href="../abis/jtoken.json"><code>/developers/abis/</code></a> carry the canonical event signatures. The most commonly indexed:</p>
+<table>
+<thead>
+<tr>
+<th>Contract</th>
+<th>Event</th>
+<th>Topic 0 (keccak256 signature hash)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>jToken (<code>jtoken.json</code>)</td>
+<td><code>Mint(address minter, uint mintAmount, uint mintTokens)</code></td>
+<td>derived from ABI</td>
+</tr>
+<tr>
+<td>jToken</td>
+<td><code>Borrow(address borrower, uint borrowAmount, uint accountBorrows, uint totalBorrows)</code></td>
+<td>derived from ABI</td>
+</tr>
+<tr>
+<td>jToken</td>
+<td><code>RepayBorrow(address payer, address borrower, uint repayAmount, uint accountBorrows, uint totalBorrows)</code></td>
+<td>derived from ABI</td>
+</tr>
+<tr>
+<td>jToken</td>
+<td><code>Redeem(address redeemer, uint redeemAmount, uint redeemTokens)</code></td>
+<td>derived from ABI</td>
+</tr>
+<tr>
+<td>jToken</td>
+<td><code>LiquidateBorrow(address liquidator, address borrower, uint repayAmount, address cTokenCollateral, uint seizeTokens)</code></td>
+<td>derived from ABI</td>
+</tr>
+<tr>
+<td>Comptroller (<code>comptroller.json</code>)</td>
+<td><code>MarketEntered(CToken cToken, address account)</code></td>
+<td>derived from ABI</td>
+</tr>
+<tr>
+<td>Comptroller</td>
+<td><code>MarketExited(CToken cToken, address account)</code></td>
+<td>derived from ABI</td>
+</tr>
+<tr>
+<td>GovernorBravo (<code>governor-alpha.json</code>)</td>
+<td><code>ProposalCreated</code>, <code>VoteCast</code>, <code>ProposalExecuted</code>, <code>ProposalCanceled</code></td>
+<td>derived from ABI</td>
+</tr>
+<tr>
+<td>sTRX (<code>strx.json</code>)</td>
+<td><code>Deposit(address user, uint trxAmount, uint sTRXAmount)</code>, <code>WithdrawRequested</code>, <code>Claim</code></td>
+<td>derived from ABI</td>
+</tr>
+<tr>
+<td>EnergyRental (<code>energy-market.json</code>)</td>
+<td><code>RentResource(address renter, address receiver, uint amount, uint resourceType)</code>, <code>ReturnResource</code>, <code>Liquidate</code></td>
+<td>derived from ABI</td>
+</tr>
+</tbody>
+</table>
+<p>Compute the topic 0 with any standard tool: <code>web3.utils.sha3('Mint(address,uint256,uint256)')</code>. Avoid hard-coding topic hashes in source — derive from the JSON ABIs at runtime, since event signatures could change in a future upgrade.</p>
 <aside class="md-source-file">
 <span class="md-source-file__fact">
 <span class="md-icon" title="Last update">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"></path></svg>
 </span>
-<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 20, 2026 10:04:33 UTC">2026-05-20</span>
+<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 21, 2026 10:42:00 UTC">2026-05-21</span>
 </span>
 </aside>
 <hr class="content-footer-divider"/> <!-- 添加的水平线 -->

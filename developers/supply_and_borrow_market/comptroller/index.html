@@ -6,6 +6,10 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
+        <meta name="description" content="JustLend DAO Comptroller contract reference — enterMarkets, exitMarket, getAccountLiquidity, markets, closeFactor, liquidationIncentive. The Unitroller proxy is the entrypoint; the Comptroller impl is rotated by governance.">
+      
+      
+        <meta name="author" content="JustLend DAO">
       
       
         <link rel="canonical" href="https://docs.justlend.org/developers/supply_and_borrow_market/comptroller/">
@@ -22,7 +26,7 @@
     
     
       
-        <title>Comptroller - JustLend DAO Documentation</title>
+        <title>Comptroller — risk management module - JustLend DAO Documentation</title>
       
     
     
@@ -64,6 +68,80 @@
     <link rel="alternate" type="text/plain" title="llms.txt — site index for LLMs" href="/llms.txt">
     <link rel="alternate" type="text/plain" title="llms-full.txt — full-text snapshot for LLMs" href="/llms-full.txt">
     <meta name="ai-content-declaration" content="llms.txt,llms-full.txt">
+    
+    
+    
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://justlend.org/#org",
+          "name": "JustLend DAO",
+          "url": "https://justlend.org",
+          "sameAs": [
+            "https://app.justlend.org",
+            "https://forum.justlend.org",
+            "https://github.com/justlend",
+            "https://t.me/officialjustlend"
+          ]
+        },
+        {
+          "@type": ["SoftwareApplication", "FinancialProduct"],
+          "@id": "https://docs.justlend.org/#protocol",
+          "name": "JustLend DAO Protocol",
+          "alternateName": ["JustLend", "JustLend DAO"],
+          "applicationCategory": "DecentralizedFinance",
+          "applicationSubCategory": "Lending",
+          "operatingSystem": "TRON",
+          "softwareVersion": "compound-v2-fork",
+          "url": "https://docs.justlend.org/",
+          "sameAs": [
+            "https://github.com/justlend/justlend-protocol",
+            "https://github.com/justlend/mcp-server-justlend",
+            "https://github.com/justlend/justlend-skills"
+          ],
+          "provider": { "@id": "https://justlend.org/#org" },
+          "documentation": "https://docs.justlend.org/llms.txt",
+          "potentialAction": [
+            {
+              "@type": "ConsumeAction",
+              "name": "Read full-text snapshot for LLMs",
+              "target": "https://docs.justlend.org/llms-full.txt"
+            },
+            {
+              "@type": "ConsumeAction",
+              "name": "Fetch machine-readable contract directory",
+              "target": "https://docs.justlend.org/developers/contracts.json"
+            },
+            {
+              "@type": "ConsumeAction",
+              "name": "Fetch OpenAPI 3.1 specification",
+              "target": "https://docs.justlend.org/developers/apis/justlend_apis.yaml"
+            }
+          ]
+        },
+        {
+          "@type": "TechArticle",
+          "@id": "https://docs.justlend.org/developers/supply_and_borrow_market/comptroller/#article",
+          "headline": "Comptroller",
+          "url": "https://docs.justlend.org/developers/supply_and_borrow_market/comptroller/",
+          "inLanguage": "en",
+          "isPartOf": {
+            "@type": "WebSite",
+            "@id": "https://docs.justlend.org/#site",
+            "name": "JustLend DAO Documentation",
+            "url": "https://docs.justlend.org/",
+            "publisher": { "@id": "https://justlend.org/#org" }
+          },
+          "about": { "@id": "https://docs.justlend.org/#protocol" },
+          "description": "JustLend DAO Comptroller contract reference \u2014 enterMarkets, exitMarket, getAccountLiquidity, markets, closeFactor, liquidationIncentive. The Unitroller proxy is the entrypoint; the Comptroller impl is rotated by governance."
+        }
+      ]
+    }
+    </script>
     
   </head>
   
@@ -113,7 +191,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Comptroller
+              Comptroller — risk management module
             
           </span>
         </div>
@@ -1224,6 +1302,28 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../common_pitfalls/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Common Pitfalls
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1504,6 +1604,28 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../../../resources/glossary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Glossary
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
     
@@ -1514,10 +1636,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4" >
         
           
-          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_5_4" id="__nav_5_4_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -1529,8 +1651,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5_3">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_4">
             <span class="md-nav__icon md-icon"></span>
             Audits
           </label>
@@ -1604,10 +1726,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_5" >
         
           
-          <label class="md-nav__link" for="__nav_5_4" id="__nav_5_4_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_5_5" id="__nav_5_5_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -1619,8 +1741,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5_4">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_5">
             <span class="md-nav__icon md-icon"></span>
             Terms of Service
           </label>
@@ -1702,6 +1824,10 @@
 
 
 <h1 id="comptroller">Comptroller<a class="headerlink" href="#comptroller" title="Permanent link">&para;</a></h1>
+<div class="admonition info">
+<p class="admonition-title">About this page</p>
+<p><strong>Protocol:</strong> JustLend DAO (Compound V2 fork on TRON) · <strong>Network:</strong> TRON Mainnet · <strong>Pattern:</strong> <code>Unitroller</code> (proxy / entrypoint, <code>TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7</code>) → <code>Comptroller</code> (impl, <code>TB23wYojvAsSx6gR8ebHiBqwSeABiBMPAr</code>). Implementation pointer is rotated via Governance proposals (<code>_setPendingImplementation</code> + <code>_acceptImplementation</code>). <strong>Always call <code>Unitroller</code></strong> — calling the impl address directly does not route through governance state. · <strong>Units:</strong> <code>closeFactorMantissa</code>, <code>liquidationIncentiveMantissa</code>, <code>collateralFactorMantissa</code> are scaled by <code>1e18</code> (so <code>0.5e18</code> = 50%). <code>getAccountLiquidity</code> returns <code>(error, liquidity, shortfall)</code> where at most one of <code>liquidity</code> and <code>shortfall</code> is non-zero. · <strong>ABI:</strong> <a href="../../abis/comptroller.json"><code>abis/comptroller.json</code></a> · <strong>User-side overview:</strong> <a href="../../../getting_started/concepts/borrow/">Borrow concept</a>, <a href="../../../getting_started/concepts/liquidations/">Liquidation concept</a>.</p>
+</div>
 <p>The Comptroller is the risk management module of the JustLend DAO protocol. It determines how much collateral should users keep to avoid liquidation.
 The Comptroller is implemented as an upgradable contract. The entrance is <a href="https://tronscan.org/#/contract/TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7/code">Unitroller</a>; the implementation is <a href="https://tronscan.org/#/contract/TJZi9eWzCLGBi9tuwvPxnaZTGa2iUpRc8v/code">Comptroller</a>.</p>
 <p><code>Comptroller.sol:</code> allows users to:</p>
@@ -1816,7 +1942,7 @@ The Comptroller is implemented as an upgradable contract. The entrance is <a hre
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 20, 2026 08:32:13 UTC">2026-05-20</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 21, 2026 10:22:46 UTC">2026-05-21</span>
   </span>
 
     
