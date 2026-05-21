@@ -56,6 +56,15 @@
     
     
     
+    
+    
+    
+    <link rel="llms" href="/llms.txt" type="text/plain">
+    <link rel="llms-full" href="/llms-full.txt" type="text/plain">
+    <link rel="alternate" type="text/plain" title="llms.txt — site index for LLMs" href="/llms.txt">
+    <link rel="alternate" type="text/plain" title="llms-full.txt — full-text snapshot for LLMs" href="/llms-full.txt">
+    <meta name="ai-content-declaration" content="llms.txt,llms-full.txt">
+    
   </head>
   
   
@@ -830,6 +839,32 @@
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        
+
+
+
+<li class="md-nav__item ">
+  <a href="#architecture-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      Architecture summary
+    </span>
+  </a>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item ">
+  <a href="#contract-summary-table-machine-readable" class="md-nav__link">
+    <span class="md-ellipsis">
+      Contract summary table (machine-readable)
+    </span>
+  </a>
+  
+</li>
       
         
 
@@ -1672,19 +1707,205 @@
 
 
 <h1 id="contracts-overview">Contracts Overview<a class="headerlink" href="#contracts-overview" title="Permanent link">&para;</a></h1>
+<div class="admonition info">
+<p class="admonition-title">About this page</p>
+<p><strong>Protocol:</strong> JustLend DAO · <strong>Network:</strong> TRON Mainnet (Base58 addresses; see <a href="../contracts.json"><code>/developers/contracts.json</code></a> for Mainnet + Nile addresses in Base58, EVM <code>0x</code> hex, and TRON-internal <code>41</code> hex) · <strong>Architecture:</strong> Compound V2 fork · <strong>Markets:</strong> 17 active + 6 legacy = 23 jToken markets (authoritative list: <a href="../apis/#2-jtoken-address-reference">APIs §2</a>) · <strong>Upgrade pattern:</strong> every contract listed below is either <code>Delegator → Delegate</code> (proxy + implementation, <strong>upgradeable</strong> by Governance) or <strong>immutable</strong>, explicitly tagged in the table. The page first gives a one-screen machine-readable summary table; deeper per-component prose follows.</p>
+</div>
+<h2 id="architecture-summary">Architecture summary<a class="headerlink" href="#architecture-summary" title="Permanent link">&para;</a></h2>
 <p>JustLend DAO Protocol contracts are divided in these repositories:</p>
 <ul>
-<li><strong>Supply and Borrow Market:</strong> contains core contracts for JustLend DAO, including logic for supply and borrow market (SBM), interest rate model, governance, price oracle and comptroller.</li>
+<li><strong>Supply and Borrow Market:</strong> contains core contracts for JustLend DAO, including logic for supply and borrow market (SBM), interest rate model, governance, price oracle and comptroller.<ul>
 <li><strong>SBM:</strong> enables supplying of crypto assets as collateral in order to borrow the base asset. Accounts can also earn interest by supplying the base asset to the protocol.</li>
 <li><strong>Interest Rate Model:</strong> users with a positive balance of the base asset earn interest, denominated in the base asset, based on a supply rate model.</li>
 <li><strong>Price-Oracle:</strong> contains the price oracle contracts we support, along with the logic validation for prices returned by these oracles.</li>
 <li><strong>Governance:</strong> contracts used for proposing, voting and executing proposals.</li>
 <li><strong>Comptroller:</strong> the risk management layer of the protocol. It determines how much collateral a user is required to maintain, and whether user can be liquidated.</li>
+</ul>
+</li>
 <li><strong>Staked TRX:</strong> the contracts utilized for staking TRX to earn high rewards.</li>
 <li><strong>Energy Rental:</strong> contracts enable users to rent energy anytime with a low price.</li>
 </ul>
+<h2 id="contract-summary-table-machine-readable">Contract summary table (machine-readable)<a class="headerlink" href="#contract-summary-table-machine-readable" title="Permanent link">&para;</a></h2>
+<p>Single row per contract. Use this when integrating; treat the prose sections below as commentary.</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Contract</th>
+<th>Mainnet address (Base58)</th>
+<th>Upgradeable?</th>
+<th>Proxy mode</th>
+<th>Key functions</th>
+<th>ABI</th>
+<th>Doc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Comptroller</td>
+<td><code>Unitroller</code> (entrypoint)</td>
+<td><a href="https://tronscan.org/#/contract/TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7"><code>TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7</code></a></td>
+<td><strong>Yes</strong> (impl behind proxy)</td>
+<td>Compound <code>Unitroller</code> (<code>_setPendingImplementation</code> + <code>_acceptImplementation</code>)</td>
+<td><code>enterMarkets</code>, <code>exitMarket</code>, <code>getAccountLiquidity</code>, <code>markets</code>, <code>closeFactorMantissa</code>, <code>liquidationIncentiveMantissa</code></td>
+<td><a href="../abis/comptroller.json"><code>comptroller.json</code></a></td>
+<td><a href="../supply_and_borrow_market/comptroller/">Comptroller</a></td>
+</tr>
+<tr>
+<td>Comptroller</td>
+<td><code>Comptroller</code> (implementation)</td>
+<td><a href="https://tronscan.org/#/contract/TB23wYojvAsSx6gR8ebHiBqwSeABiBMPAr"><code>TB23wYojvAsSx6gR8ebHiBqwSeABiBMPAr</code></a></td>
+<td>Replaced via <code>Unitroller</code></td>
+<td>Implementation only</td>
+<td>— (delegated through <code>Unitroller</code>)</td>
+<td><a href="../abis/comptroller.json"><code>comptroller.json</code></a></td>
+<td><a href="../supply_and_borrow_market/comptroller/">Comptroller</a></td>
+</tr>
+<tr>
+<td>SBM (TRX market)</td>
+<td><code>CErc20Delegator</code> (jTRX)</td>
+<td><a href="https://tronscan.org/#/contract/TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP"><code>TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP</code></a></td>
+<td><strong>Yes</strong> (impl behind delegator)</td>
+<td>Compound <code>CErc20Delegator</code> (<code>_setImplementation</code>)</td>
+<td><code>mint()</code> (payable, TRX), <code>borrow</code>, <code>repayBorrow</code> (payable), <code>redeem</code>, <code>redeemUnderlying</code>, <code>liquidateBorrow</code> (payable)</td>
+<td><a href="../abis/jtoken.json"><code>jtoken.json</code></a> (plus <a href="../abis/jtrx-mint.json"><code>jtrx-mint.json</code></a>, <a href="../abis/jtrx-repay.json"><code>jtrx-repay.json</code></a> for TRX-specific payable variants)</td>
+<td><a href="../supply_and_borrow_market/sbm/">SBM</a></td>
+</tr>
+<tr>
+<td>SBM (TRC20 markets)</td>
+<td><code>CErc20Delegator</code> (per market, 22 instances)</td>
+<td>See <a href="../apis/#2-jtoken-address-reference"><code>apis.md §2</code></a></td>
+<td><strong>Yes</strong> per market</td>
+<td>Compound <code>CErc20Delegator</code> (<code>_setImplementation</code>)</td>
+<td><code>mint(uint)</code>, <code>borrow</code>, <code>repayBorrow(uint)</code>, <code>redeem</code>, <code>redeemUnderlying</code>, <code>liquidateBorrow(address, uint, address)</code></td>
+<td><a href="../abis/jtoken.json"><code>jtoken.json</code></a></td>
+<td><a href="../supply_and_borrow_market/sbm/">SBM</a>, <a href="../deployed_contracts/">Deployed Contracts</a></td>
+</tr>
+<tr>
+<td>Interest Rate Model</td>
+<td><code>WhitePaperInterestRateModel</code> (linear)</td>
+<td>Per market — see <a href="../deployed_contracts/">Deployed Contracts</a></td>
+<td><strong>No</strong> (immutable per deployment; new model contract per parameter change)</td>
+<td>None</td>
+<td><code>getBorrowRate(cash, borrows, reserves)</code>, <code>getSupplyRate(cash, borrows, reserves, reserveFactorMantissa)</code></td>
+<td><a href="../abis/interest-rate-model.json"><code>interest-rate-model.json</code></a></td>
+<td><a href="../supply_and_borrow_market/interest_rate_model/">Interest Rate Model</a></td>
+</tr>
+<tr>
+<td>Interest Rate Model</td>
+<td><code>JumpRateModelV2</code> (kinked)</td>
+<td>Per market — see <a href="../deployed_contracts/">Deployed Contracts</a></td>
+<td><strong>No</strong> (immutable per deployment; new model contract per parameter change)</td>
+<td>None</td>
+<td><code>getBorrowRate</code>, <code>getSupplyRate</code>, <code>multiplierPerBlock</code>, <code>jumpMultiplierPerBlock</code>, <code>kink</code>, <code>baseRatePerBlock</code></td>
+<td><a href="../abis/interest-rate-model.json"><code>interest-rate-model.json</code></a></td>
+<td><a href="../supply_and_borrow_market/interest_rate_model/">Interest Rate Model</a></td>
+</tr>
+<tr>
+<td>Price Oracle</td>
+<td><code>PriceOracleProxy</code> (entrypoint)</td>
+<td><a href="https://tronscan.org/#/contract/TCKp2AzuhzV4B4Ahx1ej4mvQgHZ1kH7F7k"><code>TCKp2AzuhzV4B4Ahx1ej4mvQgHZ1kH7F7k</code></a></td>
+<td><strong>Yes</strong> (impl behind proxy)</td>
+<td>Address-only proxy (governance updates implementation pointer)</td>
+<td><code>getUnderlyingPrice(cToken)</code></td>
+<td><a href="../abis/price-oracle.json"><code>price-oracle.json</code></a></td>
+<td><a href="../supply_and_borrow_market/price_oracle/">Price Oracle</a></td>
+</tr>
+<tr>
+<td>Price Oracle</td>
+<td><code>SimplePriceOracle</code> (implementation)</td>
+<td><a href="https://tronscan.org/#/contract/TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV"><code>TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV</code></a></td>
+<td>Replaced via proxy</td>
+<td>Implementation only</td>
+<td><code>getPrice</code>, <code>assetPrices</code>, <code>setPrice</code> (poster-only)</td>
+<td><a href="../abis/price-oracle.json"><code>price-oracle.json</code></a></td>
+<td><a href="../supply_and_borrow_market/price_oracle/">Price Oracle</a></td>
+</tr>
+<tr>
+<td>Governance</td>
+<td><code>GovernorBravoDelegator</code> (entrypoint)</td>
+<td><a href="https://tronscan.org/#/contract/TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD"><code>TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD</code></a></td>
+<td><strong>Yes</strong> (impl behind delegator)</td>
+<td>Compound <code>GovernorBravoDelegator</code> (<code>_setImplementation</code>)</td>
+<td><code>propose</code>, <code>queue</code>, <code>execute</code>, <code>cancel</code>, <code>castVote</code>, <code>castVoteWithReason</code>, <code>state</code>, <code>deposit</code></td>
+<td><a href="../abis/governor-alpha.json"><code>governor-alpha.json</code></a> (Governor ABI; the WJST escrow is <code>wjst.json</code>)</td>
+<td><a href="../supply_and_borrow_market/governance/">Governance</a></td>
+</tr>
+<tr>
+<td>Governance</td>
+<td><code>GovernorBravoDelegate</code> (implementation)</td>
+<td><a href="https://tronscan.org/#/contract/TCiQTkxhzwSeXhRsNdHCvrxHRAvpjQn5Dt"><code>TCiQTkxhzwSeXhRsNdHCvrxHRAvpjQn5Dt</code></a></td>
+<td>Replaced via delegator</td>
+<td>Implementation only</td>
+<td>— (delegated)</td>
+<td><a href="../abis/governor-alpha.json"><code>governor-alpha.json</code></a></td>
+<td><a href="../supply_and_borrow_market/governance/">Governance</a></td>
+</tr>
+<tr>
+<td>Governance</td>
+<td><code>Timelock</code> (executor)</td>
+<td><a href="https://tronscan.org/#/contract/TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x"><code>TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x</code></a></td>
+<td><strong>No</strong> (constructor-fixed admin and delay)</td>
+<td>None</td>
+<td><code>queueTransaction</code>, <code>executeTransaction</code>, <code>cancelTransaction</code></td>
+<td>—</td>
+<td><a href="../supply_and_borrow_market/governance/">Governance</a></td>
+</tr>
+<tr>
+<td>Governance</td>
+<td><code>JST</code> (TRC20 governance token)</td>
+<td><a href="https://tronscan.org/#/contract/TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9"><code>TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9</code></a></td>
+<td><strong>No</strong> (standard TRC20)</td>
+<td>None</td>
+<td><code>transfer</code>, <code>approve</code>, <code>balanceOf</code></td>
+<td><a href="../abis/trc20.json"><code>trc20.json</code></a></td>
+<td><a href="../../governance/tokenomics/">Tokenomics</a></td>
+</tr>
+<tr>
+<td>Governance</td>
+<td><code>WJST</code> (voting-power escrow)</td>
+<td>See <a href="../deployed_contracts/">Deployed Contracts</a></td>
+<td><strong>No</strong></td>
+<td>None</td>
+<td><code>deposit</code>, <code>withdraw</code>, vote-power tracking</td>
+<td><a href="../abis/wjst.json"><code>wjst.json</code></a></td>
+<td><a href="../supply_and_borrow_market/governance/">Governance</a></td>
+</tr>
+<tr>
+<td>Staked TRX</td>
+<td><code>sTRX</code> (liquid-staking contract)</td>
+<td><a href="https://tronscan.org/#/contract/TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5"><code>TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5</code></a></td>
+<td><strong>No</strong> (constructor-fixed; new contract on protocol upgrade)</td>
+<td>None</td>
+<td><code>deposit()</code> (payable), <code>withdraw</code>, <code>withdrawExact</code>, <code>claim</code>, <code>claimAll</code>, <code>exchangeRate</code>, <code>balanceInTrx</code></td>
+<td><a href="../abis/strx.json"><code>strx.json</code></a></td>
+<td><a href="../staked_trx/">Staked TRX</a></td>
+</tr>
+<tr>
+<td>Energy Rental</td>
+<td><code>EnergyRental</code> market contract</td>
+<td><a href="https://tronscan.org/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd"><code>TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd</code></a></td>
+<td><strong>No</strong></td>
+<td>None</td>
+<td><code>rentResource</code> (payable), <code>returnResource</code>, <code>returnResourceByReceiver</code>, <code>liquidate</code>, <code>getRentInfo</code>, <code>_rentalRate</code></td>
+<td><a href="../abis/energy-market.json"><code>energy-market.json</code></a>, rate model in <a href="../abis/energy-rate-model.json"><code>energy-rate-model.json</code></a></td>
+<td><a href="../energy_rental/">Energy Rental</a></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Inter-contract call flow (most common write path — supply + borrow):</strong></p>
+<div class="highlight"><pre><span></span><code>User EOA
+  └─► CErc20Delegator (jToken)
+        ├─ delegatecall ► CErc20Delegate (mint/borrow logic)
+        ├─ staticcall   ► PriceOracleProxy.getUnderlyingPrice()
+        ├─ call         ► InterestRateModel.getBorrowRate() / getSupplyRate()
+        └─ call         ► Unitroller (Comptroller proxy)
+                            └─ delegatecall ► Comptroller.mintAllowed / borrowAllowed
+</code></pre></div>
+<p><code>enterMarkets</code> is a precondition for any supplied asset to count as collateral — it is called directly on the <code>Unitroller</code> entrypoint, not on the jToken.</p>
+<p><strong>Version evolution (<code>JumpRateModelV2</code>):</strong> each market's rate model is its own deployed contract instance (immutable). Updating parameters (kink, multipliers, baseRate) means deploying a fresh <code>JumpRateModelV2</code> contract and calling <code>_setInterestRateModel</code> on the jToken via Governance. Past instances remain on chain but unused.</p>
 <h2 id="core-contracts"><strong>Core Contracts</strong><a class="headerlink" href="#core-contracts" title="Permanent link">&para;</a></h2>
-<p>There are 5 categories of core repository contracts:</p>
+<p>There are 5 categories of core repository contracts (the prose below mirrors the summary table — refer to the table for addresses, function signatures, and ABI links):</p>
 <ul>
 <li>JTokens Contract</li>
 <li>Interest Rate Model Contract</li>
@@ -1700,11 +1921,13 @@
 <h3 id="price-oracle-contract">Price Oracle Contract<a class="headerlink" href="#price-oracle-contract" title="Permanent link">&para;</a></h3>
 <p><code>Price Oracle:</code> the JustLend Protocol use Chainlink's price service to fetch the token price. The PriceOracle contract is responsible for setting and display token prices.</p>
 <h3 id="governance-contract">Governance Contract<a class="headerlink" href="#governance-contract" title="Permanent link">&para;</a></h3>
-<p><code>GovernorBravo:</code> The main JustLend Governance Contract. Users interact with it to:
-- Submit new proposal
-- Vote on a proposal
-- Cancel a proposal
-- Queue a proposal for execution with a time lock executor contract</p>
+<p><code>GovernorBravo:</code> The main JustLend Governance Contract. Users interact with it to:</p>
+<ul>
+<li>Submit new proposal</li>
+<li>Vote on a proposal</li>
+<li>Cancel a proposal</li>
+<li>Queue a proposal for execution with a time lock executor contract</li>
+</ul>
 <p><code>Timelock:</code> the contract used to execute or cancel a queued transaction.</p>
 <h3 id="comptroller-contract">Comptroller Contract<a class="headerlink" href="#comptroller-contract" title="Permanent link">&para;</a></h3>
 <p><code>Comptroller:</code> the Comptroller contract is the central contract for each lending pool. It contains functionality central to borrowing activity in the pool like supplying and borrowing assets and liquidations.</p>
@@ -1732,7 +1955,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="August 29, 2025 02:43:52 UTC">2025-08-29</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 21, 2026 06:33:25 UTC">2026-05-21</span>
   </span>
 
     

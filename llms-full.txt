@@ -2,6 +2,17 @@
 
 > A condensed, single-document snapshot of the JustLend DAO documentation, intended for LLMs that prefer one-shot ingestion over per-page crawling. Authoritative source is the live site at <https://docs.justlend.org>; the OpenAPI spec at <https://docs.justlend.org/developers/apis/justlend_apis.yaml> is the machine-readable contract.
 
+## 0. Snapshot metadata
+
+| Field | Value |
+|-------|-------|
+| `last_generated` | **2026-05-21** (ISO 8601, UTC date) |
+| `docs_commit` | [`718ae87`](https://github.com/justlend/justlend-docs/commit/718ae87) (latest commit on `main` when this snapshot was generated) |
+| `contracts_json_source` | [`/developers/contracts.json`](https://docs.justlend.org/developers/contracts.json) — see its `_meta.last_generated` for the address-data snapshot date |
+| `mcp_server_version` | `@justlend/mcp-server-justlend` **v1.0.7** (sync date 2026-05-20) |
+| `changelog` | [`CHANGELOG.md`](https://github.com/justlend/justlend-docs/blob/main/CHANGELOG.md) |
+| `regenerate` | This file is updated each time the docs change materially. If you fetched it more than ~30 days ago, refresh it before answering address / market / version questions. |
+
 This document covers: protocol overview, core concepts (supply / borrow / withdraw / repay / liquidation / risks / sTRX / energy rental), governance, developer contract reference, deployed addresses (TRON mainnet + Nile), the HTTP API surface, and the AI integration story (Skills + MCP). For exhaustive function signatures, field-by-field response schemas, JSON ABIs, and machine-readable address formats, see the individual reference pages and the OpenAPI YAML.
 
 ---
@@ -300,7 +311,9 @@ The rendered tables below summarize **TRON Mainnet** Base58 addresses. For machi
 
 ### 5.2 jToken delegators (the addresses users interact with)
 
-The protocol currently exposes **17 active** + **6 legacy** = 23 markets. Rows tagged `(legacy)` are **closed to new supply and borrow** — existing positions can still be unwound but do not direct new deposits to them. Always cross-check with `apis.md §2` for the latest status.
+**Protocol-wide market count: 17 active + 6 legacy = 23 jToken markets total** (TRON Mainnet, as of the `last_generated` date in §0 above). Rows tagged `(legacy)` are **closed to new supply and borrow** — existing positions can still be unwound but do not direct new deposits to them.
+
+Single source of truth (in order of preference): (1) live `GET https://openapi.just.network/lend/jtoken`, (2) `/developers/contracts.json`, (3) `apis.md §2`. Any other page that quotes a smaller count (e.g. the 9-market "featured" table in `ai_support/justlend_skills.md`) is showing a CLI-convenience subset, not the full protocol roster.
 
 Note: the dApp UI has renamed two markets — `jETH` is displayed as "ETH" (formerly "ETHOLD"), and `jETHB` is displayed as "ETHB" (formerly "ETH"). On-chain addresses are unchanged.
 
