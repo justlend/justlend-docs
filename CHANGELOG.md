@@ -10,6 +10,22 @@ For the JustLend protocol itself, see governance proposals on [forum.justlend.or
 
 ## [Unreleased]
 
+### Added — 2026-05-21 AI-readability v7 content-layer pass
+
+- **`docs/resources/glossary.md`** (new) — a single-page reference for every protocol-specific term used elsewhere: `mantissa`, `kink`, `utilization`, `sun`, `borrow index`, `collateral / close / reserve factor`, `liquidation incentive`, jToken vs underlying decimals, exchange rate, Risk Value, market `status: active|legacy`. Each entry calls out units, on-chain encoding, and which function returns the value. Added to `Resources` nav.
+- **`docs/developers/common_pitfalls.md`** (new) — the 10 most common foot-guns when integrating with JustLend: USDT-style `approve()` race condition, `enterMarkets` requirement, `mint()` overload between jTRX (payable) and jTRC20 (uint arg), `redeem` vs `redeemUnderlying` confusion, jToken-8-decimals vs underlying mismatch, `liquidateBorrow` 50% close-factor cap, `uint256(-1)` repay sentinel, TRON energy/bandwidth model (not Ethereum gas), oracle-freshness caveat, legacy-market policy filter. Added to `Developers` nav.
+- **USDT-style approve race warning admonition** in `developers/supply_and_borrow_market/sbm.md` — explicit safe pattern (`approve(0)` before `approve(N)` when current allowance is non-zero) for jUSDT / jUSDCOLD / jTUSD / jUSDDOLD / jBUSDOLD-style markets. Previously this foot-gun was undocumented despite being the #1 integration failure on TRON.
+- **Concrete rate-limit numbers** in `developers/apis.md §1.7` — replaced fluffy "throttle abusive traffic" with explicit soft limits (~10 req/s sustained, ~30 req/s burst, ≤ 4 concurrent connections per IP, `pageSize` ≤ 1000) and a recommended exponential-backoff retry policy with concrete `base = 1000ms`, `max sleep = 30s`, `max attempt = 5`. Agents can now size backoff without guessing.
+- **§8 Event-stream and indexing options** (new section in `apis.md`) — explicitly answers "how do I query historical Mint/Borrow/Repay events". Documents that no official subgraph exists, then enumerates three real paths: TronGrid event filter (low-volume), self-hosted indexer via DipDup or Substreams (production), and MCP server read primitives. Includes the per-contract event signature reference, with a note to derive `topic0` from the JSON ABIs at runtime rather than hard-coding. Mirrored summary in `/llms-full.txt §6`.
+- **Hand-written TOCs** at the top of `apis.md` (753 lines) and `ai_support/mcp_server.md` (535 lines) so raw-Markdown RAG loaders, which don't render Material's sidebar TOC, see the structure of the page in the first 30 lines.
+- **Expanded `apis.md` quick-start response example** — now shows the realistic ~15-field per-token shape (`borrowIndex`, `cash`, `totalSupply`, `reserveFactor`, `collateralFactor`, `exchangeRate`, etc.) with a units cheat-sheet, instead of just `{symbol, underlyingSymbol}`. Agents calling `/lend/jtoken` for the first time now see what they're going to get.
+- **`sun` unit definition** linked into user concept pages — `staked_trx.md` and `energy_rental.md` admonitions now point at [`Glossary → sun`](resources/glossary.md#sun) so users crossing into the developer flow have a single reference for `1 TRX = 10⁶ sun`.
+- **Legacy-market support-window policy** explicit on `developers/deployed_contracts.md` — what `(legacy)` actually means (closed at policy layer, contracts queryable indefinitely, no announced sunset, addresses never reused), what still works (`repayBorrow`, `redeem`, reads), and what filter to apply programmatically (`status == "active"` from `contracts.json`).
+
+### Fixed — 2026-05-21 AI-readability v7 content-layer pass
+
+- **`Reapy` typo** in `developers/supply_and_borrow_market/sbm.md:23` (long-standing — present from the initial repo state through every prior audit) → `Repay`. AI agents reading the SBM section's bullet list no longer see a fictitious function name.
+
 ### Added — 2026-05-21 AI-readability v6 follow-up
 
 - **Snapshot metadata auto-substitution** in `hooks/copy_dotfiles.py` — `llms-full.txt §0` now ships `{{LAST_GENERATED}}` / `{{DOCS_COMMIT}}` / `{{DOCS_COMMIT_SHORT}}` placeholders that the post-build hook replaces with the current UTC date and `git rev-parse HEAD` (with `GITHUB_SHA` fallback for CI). Previously hand-edited and drifted whenever a commit landed without someone remembering to bump §0.

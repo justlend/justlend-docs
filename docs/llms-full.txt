@@ -396,6 +396,16 @@ Base URL: `https://openapi.just.network`. Authoritative schema: <https://docs.ju
 
 Status codes follow standard HTTP (`200` OK, `400` Bad Request). Field types and units (jToken units = 8 decimals, APY as annualized decimal, USD values pre-scaled where indicated) are spelled out in the OpenAPI components schemas — **prefer the YAML to free-text interpretation**.
 
+### Event-stream / historical-event indexing
+
+The HTTP API returns **current state**. For historical events (`Mint`, `Borrow`, `RepayBorrow`, `LiquidateBorrow`, governance `VoteCast`, sTRX `Deposit`, EnergyRental `RentResource`, etc.) there is **no official JustLend subgraph or hosted indexer**. Use one of:
+
+1. **TronGrid event filter** — `GET /v1/contracts/{address}/events?event_name=Mint&...`. Free tier suffices for ad-hoc analytics; ~30-day retention. Best for low-volume agent queries.
+2. **Self-hosted indexer** — DipDup (TRON support via the EVM adapter), Substreams via the EVM bridge, or a custom decoder against a `java-tron` archive node + the JSON ABIs at <https://docs.justlend.org/developers/abis/>. Best for production analytics, full historical backfills.
+3. **Compose MCP server read primitives** — for low-volume agent-driven lookups via `@justlend/mcp-server-justlend`. Not optimized for historical-event sweeps.
+
+ABIs at `/developers/abis/` carry the canonical event signatures — derive `topic0` at runtime via `keccak256("Mint(address,uint256,uint256)")` rather than hard-coding. See [APIs §8](https://docs.justlend.org/developers/apis#8-event-stream-and-indexing-options) for the full table.
+
 ---
 
 ## 7. AI Agent Integration

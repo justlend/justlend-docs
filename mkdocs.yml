@@ -51,6 +51,7 @@ nav:
         - Energy Rental: developers/energy_rental.md
         - Deployed Contracts: developers/deployed_contracts.md
         - APIs: developers/apis.md
+        - Common Pitfalls: developers/common_pitfalls.md
     - AI SUPPORT:
         - AI / LLMs: ai_support/ai_llms.md
         - MCP Server: ai_support/mcp_server.md
@@ -60,6 +61,7 @@ nav:
             - Links: resources/community/links.md
             - Wallet Integration Cooperation: resources/community/wallet_integration_cooperation.md
         - Risk Warning: resources/risk_warning.md
+        - Glossary: resources/glossary.md
         - Audits:
             - Supply & Borrow: https://justlend.org/docs/justlend_audit_en.pdf
             - Staked TRX: https://justlend.org/docs/justlend_strx_audit_en.pdf

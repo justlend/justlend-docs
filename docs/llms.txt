@@ -65,6 +65,8 @@ Refer to the OpenAPI spec for the full endpoint list, request parameters, respon
 
 ## Resources
 
+- [Common Pitfalls (developer reference)](https://docs.justlend.org/developers/common_pitfalls): The 10 most common foot-guns when integrating with JustLend — USDT-style `approve()` race, `enterMarkets` requirement, `mint()` overload between jTRX and jTRC20, `redeem` vs `redeemUnderlying`, 8-decimal jToken vs underlying decimals, `liquidateBorrow` close-factor cap, `uint256(-1)` repay sentinel, TRON energy/bandwidth model, oracle freshness, legacy-market policy.
+- [Glossary](https://docs.justlend.org/resources/glossary): Precise definitions and on-chain encoding of mantissa, kink, utilization, sun, borrow index, collateral / close / reserve factor, exchange rate, liquidation incentive, and other JustLend / Compound V2 terms.
 - [Audits — Supply & Borrow (PDF)](https://justlend.org/docs/justlend_audit_en.pdf)
 - [Audits — Staked TRX (PDF)](https://justlend.org/docs/justlend_strx_audit_en.pdf)
 - [Risk Warning](https://docs.justlend.org/resources/risk_warning)
