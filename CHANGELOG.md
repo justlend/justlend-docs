@@ -10,6 +10,20 @@ For the JustLend protocol itself, see governance proposals on [forum.justlend.or
 
 ## [Unreleased]
 
+### Added — 2026-05-21 AI-readability v6 follow-up
+
+- **Snapshot metadata auto-substitution** in `hooks/copy_dotfiles.py` — `llms-full.txt §0` now ships `{{LAST_GENERATED}}` / `{{DOCS_COMMIT}}` / `{{DOCS_COMMIT_SHORT}}` placeholders that the post-build hook replaces with the current UTC date and `git rev-parse HEAD` (with `GITHUB_SHA` fallback for CI). Previously hand-edited and drifted whenever a commit landed without someone remembering to bump §0.
+- **"About this page" admonitions + frontmatter** on the 4 SBM sub-pages that were still missing them: `comptroller.md`, `supply_and_borrow_market/governance.md` (170 lines of GovernorBravo reference — high-value for AI agents writing governance flows), `price_oracle.md`, `interest_rate_model.md`.
+- **Frontmatter + H1** on the 6 remaining leaf pages: `governance/jips.md`, `resources/risk_warning.md`, `resources/community/links.md`, `resources/community/wallet_integration_cooperation.md`, and both FAQ pages (`wallet_connection_questions.md`, `spending_cap_issue.md`).
+- **`status_values` documentation in `contracts.json` `_meta`** plus a corresponding tip block in `developers/apis.md §2` — the per-jToken `status: "active" | "legacy"` field was undocumented despite being the cleanest programmatic way to filter the 17 active markets from the 6 legacy ones.
+- **`contracts.schema.json` advertised** in `llms.txt`, `robots.txt`, and `ai_support/ai_llms.md` (both the tip block and the "which file should I use" table). The schema file was deployed in v5 but no entry-point page mentioned it.
+- **`/.well-known/security.txt` explicit `Allow:`** in `robots.txt` (the URL was advertised in `llms.txt` but not whitelisted; some strict crawlers skip URLs without an explicit allow rule).
+
+### Fixed — 2026-05-21 AI-readability v6 follow-up
+
+- **`contracts.schema.json` did not actually validate `contracts.json`** (the v5 schema described a generic `contract_record` shape but the real `jtokens` use a richer wrapper with `symbol` / `status` / `decimals` / `delegator` / `underlying` / `delegate` sub-records, and the `nile` block has a free-text `note` string). Rewrote the schema to match real data; `jsonschema` Draft 2020-12 validation now passes with 0 errors. New `jtoken_record` and `underlying_record` `$defs` capture the actual structure; `network` definition allows the per-network `note` string.
+- **Three dead `tronscan.io` links** → `tronscan.org`. `tronscan.io` does not resolve; the typo was in `developers/energy_rental.md` (2 occurrences) and `developers/deployed_contracts.md` (1 occurrence, Energy Rental row).
+
 ### Added — 2026-05-21 AI-readability v5 pass
 
 - **`site_description` and `site_author`** in `mkdocs.yml` so every page renders a non-empty `<meta name="description">` and `<meta name="author">` (previously omitted on every page because both meta keys were missing).

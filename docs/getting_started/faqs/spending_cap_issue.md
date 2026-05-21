@@ -1,3 +1,10 @@
+---
+title: Spending Cap Issue During Transactions
+description: Why the dApp may show "Insufficient Spending Cap" — TRC20 approve() allowances are overwritten, not added, and exhausted allowances must be re-authorized for a value ≥ the next transaction amount.
+---
+
+# Spending Cap Issue During Transactions
+
 #### **Why Is the Available Spending Cap Insufficient?**
 
 * If you previously set a custom Spending Cap during the approve transaction, and that Spending Cap has been partially used, you may encounter an **"Insufficient Spending Cap"** hint when the remaining Spending Cap is less than the amount of your current transaction.

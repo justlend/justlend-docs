@@ -1,3 +1,10 @@
+---
+title: Wallet Connection FAQs
+description: Troubleshooting wallet-extension detection, network switching, and reconnection issues on the JustLend DAO dApp.
+---
+
+# Wallet Connection FAQs
+
 ### **What should I do if JustLend DAO doesn't recognize my newly installed wallet extension?**
 Refresh the JustLend DAO page after downloading a new wallet extension, as this would help the platform detect your new extension.
 

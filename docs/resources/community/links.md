@@ -1,3 +1,10 @@
+---
+title: Community Links
+description: JustLend DAO official sites, Telegram groups, forum, X/Twitter, GitHub organization, and the Immunefi bug bounty portal.
+---
+
+# Community Links
+
 ### **Websites**
 * [Main JUST Network](https://just.network/)
 * [Main JustLend Network](https://justlend.org/)

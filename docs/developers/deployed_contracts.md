@@ -159,7 +159,7 @@ See [Staked TRX](staked_trx.md) for the contract reference.
 
 | Component | Contract | Address | Tronscan |
 |-----------|----------|---------|----------|
-| EnergyRental | `EnergyRental` | `TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd` | [Contract](https://tronscan.io/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd) |
+| EnergyRental | `EnergyRental` | `TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd` | [Contract](https://tronscan.org/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd) |
 
 See [Energy Rental](energy_rental.md) for the contract reference.
 

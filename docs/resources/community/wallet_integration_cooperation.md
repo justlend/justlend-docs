@@ -1,3 +1,8 @@
+---
+title: Wallet Integration Cooperation
+description: How wallet projects can apply to integrate with JustLend DAO. Existing partners include TronLink, WalletConnect, and imToken.
+---
+
 # Wallet Integration Cooperation
 
 

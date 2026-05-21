@@ -40,7 +40,8 @@
 - [Staked TRX contracts](https://docs.justlend.org/developers/staked_trx)
 - [Energy Rental contracts](https://docs.justlend.org/developers/energy_rental)
 - [Deployed Contracts](https://docs.justlend.org/developers/deployed_contracts): Mainnet and Nile addresses for jTokens, interest rate models, oracle, governance, comptroller, sTRX, and Energy Rental.
-- [Machine-readable contract directory](https://docs.justlend.org/developers/contracts.json): JSON address book with `base58`, `hex_evm`, `hex_tron`, and Tronscan links for Mainnet and Nile.
+- [Machine-readable contract directory](https://docs.justlend.org/developers/contracts.json): JSON address book with `base58`, `hex_evm`, `hex_tron`, and Tronscan links for Mainnet and Nile. Each jToken entry includes a `status: "active" | "legacy"` field, so consumers can filter the 17 active markets from the 6 legacy ones without parsing prose.
+- [JSON Schema for the contract directory](https://docs.justlend.org/developers/contracts.schema.json): Draft 2020-12 schema (`$id` = its own URL). Validates `contracts.json` end-to-end, including TRON Base58 / EVM `0x` / TRON `41`-hex address regexes and the per-network category enum.
 - [Machine-readable ABIs](https://docs.justlend.org/developers/abis/jtoken.json): JSON ABI files under `/developers/abis/` for jToken, Comptroller, PriceOracle, TRC20, governance, WJST, sTRX, Energy Rental, and rate models.
 
 ## AI Agent integration

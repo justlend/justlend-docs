@@ -1,4 +1,12 @@
+---
+title: Price Oracle — Chainlink-backed
+description: JustLend DAO PriceOracle reference — getUnderlyingPrice, assetPrices, setPrice (poster-only). Backed by Chainlink Data Feeds. Prices are scaled by 10^(tokenDecimal − 6) in sun (10⁻⁶ TRX).
+---
+
 # Price Oracle
+
+!!! info "About this page"
+    **Protocol:** JustLend DAO (Compound V2 fork on TRON) · **Network:** TRON Mainnet · **Pattern:** `PriceOracleProxy` (entrypoint, `TCKp2AzuhzV4B4Ahx1ej4mvQgHZ1kH7F7k`) → `SimplePriceOracle` (impl, `TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV`). · **Data source:** [Chainlink](https://chain.link/) Data Feeds. The `poster` address relays Chainlink prices on-chain via `setPrice(asset, price)`. · **Units:** Prices are denominated in **sun** (10⁻⁶ TRX), scaled by `10^(tokenDecimal − 6)`. For an 18-decimal token like USDD, the raw price encodes an extra `10^12` factor relative to an 8-decimal token. · **ABI:** [`abis/price-oracle.json`](../abis/price-oracle.json).
 
 Blockchain-powered smart contracts, by design, cannot access external market data directly. To ensure accurate and tamper-resistant pricing, the JustLend DAO protocol relies on a multi-source data aggregation system that draws from reputable and decentralized sources.
 

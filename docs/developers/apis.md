@@ -148,6 +148,9 @@ Several endpoints key their payloads by jToken address (e.g. `data["TKFRELGGoRgi
 
 The protocol currently exposes **17 active + 6 legacy = 23 markets**. Legacy markets are closed to new supply and borrow — existing positions remain queryable so they can be unwound, but do not direct new deposits to them.
 
+!!! tip "Programmatic filter"
+    For agents that prefer not to parse prose: each entry in [`/developers/contracts.json` → `networks.mainnet.jtokens.<symbol>`](contracts.json) carries an explicit `status` field with value `"active"` or `"legacy"`. Filter `status == "active"` to get the 17 active markets, `status == "legacy"` to get the 6 legacy ones. The schema and enum are documented in [`contracts.schema.json`](contracts.schema.json).
+
 | jToken      | Address                                | Underlying | Notes                                       |
 |-------------|----------------------------------------|------------|---------------------------------------------|
 | `jTRX`      | `TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP`   | TRX        | Native TRON token                           |
