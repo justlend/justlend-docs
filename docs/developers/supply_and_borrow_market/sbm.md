@@ -1,3 +1,8 @@
+---
+title: SBM — Supply & Borrow Market contracts
+description: JustLend DAO core lending contract reference — jToken (`CErc20Delegator`) function signatures for mint, borrow, repayBorrow, redeem, liquidateBorrow, with TronWeb examples and error codes.
+---
+
 # SBM
 
 !!! info "Units & precision"

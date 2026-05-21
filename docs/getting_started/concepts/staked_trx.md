@@ -1,3 +1,13 @@
+---
+title: Staked TRX (sTRX) on JustLend DAO
+description: Liquid staking for TRX under TRON Stake 2.0 — deposit TRX, receive sTRX (TRC20), earn voting + energy-rental yield, exit via the 14-day unbonding queue or an instant DEX swap.
+---
+
+# Staked TRX
+
+!!! info "About this page"
+    **Protocol:** JustLend DAO sTRX (one-click liquid staking on TRON Stake 2.0) · **Network:** TRON Mainnet · **sTRX contract:** `TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5` (see [Deployed Contracts](../../developers/deployed_contracts.md#staked-trx)) · **Yield sources:** Super Representative voting rewards + Energy Rental revenue · **Units:** exchange rate `sTRX → TRX` is scaled by `1e18`, always ≥ 1, grows over time as rewards accrue. TRX uses 6 decimals; sTRX is a standard TRC20 (also displayed with 18-decimal math by some clients — check the live exchange rate). · **Exit:** 14-day unbonding queue on JustLend, or instant swap on SunSwap / HTX.
+
 Staked TRX is a feature launched by JustLend DAO that enables one-click TRX staking in accordance with Stake 2.0 rules. Once you have staked your TRX, JustLend DAO will take care of the cumbersome procedures, such as Super Representative (SR) voting and reward claiming, and rent out the Energy obtained from TRX staking automatically to generate more yields for you.
 
 The SRs receiving your TRON Power obtained from staking TRX will be decided via voting by sTRX Governance. The whole process will be open, transparent, and fully decentralized.

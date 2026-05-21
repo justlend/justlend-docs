@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://docs.justlend.org/developers/contracts.schema.json",
+  "title": "JustLend DAO contracts.json",
+  "description": "Machine-readable contract directory for the JustLend DAO protocol on TRON. Records every JustLend contract on TRON Mainnet and Nile testnet in three equivalent address formats (Base58, EVM 0x-hex, TRON 41-hex) so consumers can use whichever their tooling expects without round-tripping through encoders.",
+  "type": "object",
+  "required": ["_meta", "networks"],
+  "properties": {
+    "$schema": { "type": "string", "format": "uri" },
+    "_meta": {
+      "type": "object",
+      "required": ["source_of_truth", "last_generated", "schema_version", "address_formats"],
+      "properties": {
+        "generated_by": { "type": "string" },
+        "source_of_truth": { "type": "string", "format": "uri" },
+        "last_generated": { "type": "string", "format": "date" },
+        "schema_version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "description": "Semantic version of this document's shape. Pin a MAJOR."
+        },
+        "schema_version_policy": { "type": "string" },
+        "address_formats": {
+          "type": "object",
+          "required": ["base58", "hex_evm", "hex_tron"],
+          "properties": {
+            "base58":   { "type": "string" },
+            "hex_evm":  { "type": "string" },
+            "hex_tron": { "type": "string" }
+          }
+        },
+        "comment": { "type": "string" }
+      }
+    },
+    "networks": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/network" }
+    }
+  },
+  "$defs": {
+    "address": {
+      "type": "object",
+      "required": ["base58", "hex_evm", "hex_tron"],
+      "properties": {
+        "base58":   { "type": "string", "pattern": "^T[1-9A-HJ-NP-Za-km-z]{33}$" },
+        "hex_evm":  { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" },
+        "hex_tron": { "type": "string", "pattern": "^0x41[a-fA-F0-9]{40}$" }
+      },
+      "additionalProperties": false
+    },
+    "contract_record": {
+      "type": "object",
+      "required": ["address"],
+      "properties": {
+        "label":    { "type": "string" },
+        "address":  { "$ref": "#/$defs/address" },
+        "network":  { "type": "string", "enum": ["mainnet", "nile"] },
+        "tronscan": { "type": "string", "format": "uri" },
+        "role":     { "type": "string", "examples": ["entrypoint", "implementation", "executor", "token", "model"] },
+        "underlying": { "$ref": "#/$defs/contract_record" },
+        "implementation": { "$ref": "#/$defs/contract_record" }
+      }
+    },
+    "network": {
+      "type": "object",
+      "description": "Map of category (comptroller, governance, price_oracle, jtokens, interest_rate_models, strx, energy_rental, …) to either a single contract_record or a map of named records.",
+      "additionalProperties": {
+        "oneOf": [
+          { "$ref": "#/$defs/contract_record" },
+          {
+            "type": "object",
+            "additionalProperties": { "$ref": "#/$defs/contract_record" }
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,7 +1,12 @@
+---
+title: Staked TRX (sTRX) — contract reference
+description: JustLend DAO sTRX liquid-staking contract reference — exchangeRate, deposit, withdraw, withdrawExact, claim, claimAll, plus TronWeb examples. Backs the user-facing sTRX feature on TRON.
+---
+
 # Staked TRX
 
-!!! info "Network & precision"
-    The contract address below is **TRON Mainnet**. TRX amounts are in **sun** (1 TRX = 10⁶ sun). sTRX is an 18-decimal TRC20. The `exchangeRate()` is scaled by `1e18`.
+!!! info "About this page"
+    **Protocol:** JustLend DAO sTRX (one-click liquid staking under TRON Stake 2.0) · **Network:** TRON Mainnet · **Contract:** [`TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5`](https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5) (immutable, replaced on protocol upgrade) · **Units:** TRX amounts are in **sun** (1 TRX = 10⁶ sun); sTRX is an 18-decimal TRC20; `exchangeRate()` is scaled by `1e18`, always ≥ 1, grows monotonically as rewards accrue · **Unbonding:** 14-day queue on JustLend, or instant exit via SunSwap / HTX · **User-side overview:** [Staked TRX concept](../getting_started/concepts/staked_trx.md) · **ABI:** [`abis/strx.json`](abis/strx.json).
 
 Based on Stake 2.0, with TRX Liquid Staking, users can stake TRX to get sTRX tokens and gain high rewards. Compared to traditional staking, TRX Liquid Staking is easier to use and more profitable. Staked TRX will be used automatically for voting and governance, and gain rewards via Energy Rental.
 The contract [StakedTRX](https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5) used to set up the staked TRX service.

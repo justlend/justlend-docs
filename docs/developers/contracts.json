@@ -1,10 +1,17 @@
 {
+  "$schema": "https://docs.justlend.org/developers/contracts.schema.json",
   "_meta": {
     "generated_by": "scripts/generate_contracts_json.py",
     "source_of_truth": "https://github.com/justlend/mcp-server-justlend/blob/main/src/core/chains.ts",
-    "last_generated": "2026-05-20",
-    "schema_version": "1",
-    "comment": "All addresses are returned in three formats: TRON Base58 (T-prefixed, 34 chars), EVM-style 0x-prefixed Hex (20 bytes), TRON-internal 41-prefixed Hex (21 bytes = 0x41 + EVM addr). Cross-chain bridges, EVM-side tooling, and Etherscan-like indexers want the 0x form; native TronWeb / TronGrid often want the 41 form; Tronscan / wallet UIs show Base58."
+    "last_generated": "2026-05-21",
+    "schema_version": "1.1.0",
+    "schema_version_policy": "Semantic versioning. MAJOR = breaking field rename or removal. MINOR = additive field (e.g. new role keys, new networks). PATCH = address corrections within an existing structure. Consumers should pin a MAJOR.",
+    "address_formats": {
+      "base58": "TRON Base58Check, T-prefixed, 34 chars — for wallets, Tronscan, TronWeb display, and end-user prompts.",
+      "hex_evm": "EVM-style 0x-prefixed hex of the 20-byte address body — for cross-chain bridges, EVM-side tooling, Etherscan-like indexers, and byte-address comparison.",
+      "hex_tron": "TRON-internal 41-prefixed hex (21 bytes = 0x41 + EVM addr) — for TronGrid / TronWeb low-level APIs that expect TRON-internal hex."
+    },
+    "comment": "All addresses are returned in three equivalent formats (see address_formats above). Network is recorded per record so consumers can mix Mainnet + Nile in one pass without context loss."
   },
   "networks": {
     "mainnet": {

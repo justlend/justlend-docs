@@ -455,7 +455,7 @@ Guided prompts ship with the server (10 total): `getting_started`, `supply_asset
 
 - **jToken balances**: scaled by `1e8` (8 decimals).
 - **Underlying TRC20 amounts**: each token's own decimals — TRX = 6, USDT = 6, USDC = 6, USDD = 18, BTC/WBTC = 8, ETH = 18, etc. Always call `decimals()` on the underlying before constructing a `mint` / `borrow` / `repayBorrow` amount.
-- **Rates** (`borrowRatePerBlock`, `supplyRatePerBlock`): scaled by `1e18`, per-block. To convert to APY, multiply by blocks-per-year (~10,512,000 on TRON at 3 s/block) and compound; or use the API's pre-computed APY fields.
+- **Rates** (`borrowRatePerBlock`, `supplyRatePerBlock`): scaled by `1e18`, per-block. To convert to APY, multiply by blocks-per-year and compound; on TRON at the current ~3 s/block this is approximately **10,512,000** (`365 × 86400 / 3`) for a 365-day year or **10,517,760** (`365.25 × 86400 / 3`) when accounting for the leap-year average. Both are approximations — the on-chain block cadence drifts. **Prefer the API's pre-computed `apy` / `supplyRate` / `borrowRate` fields** when you need precision; only do the conversion yourself when the API is unreachable.
 - **Prices** from the oracle: in sun (10⁻⁶ TRX), scaled by `10^(tokenDecimal − 6)`.
 - **Collateral factor, reserve factor, exchange rate, liquidation incentive**: all mantissa-scaled by `1e18`.
 

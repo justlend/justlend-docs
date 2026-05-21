@@ -1,3 +1,13 @@
+---
+title: Risks on JustLend DAO
+description: Smart-contract, oracle, and collateral risks for JustLend users, plus the protocol's mitigations — audits, Chainlink oracles, governance-controlled risk parameters, and the risk-alert email service.
+---
+
+# Risks
+
+!!! info "About this page"
+    **Protocol:** JustLend DAO (Compound V2 fork on TRON) · **Network:** TRON Mainnet · **Scope:** non-exhaustive enumeration of the three primary user-relevant risk categories (smart-contract, oracle, collateral) and how the protocol mitigates each. · **Audits referenced:** Supply & Borrow ([PDF](https://justlend.org/docs/justlend_audit_en.pdf)) and Staked TRX ([PDF](https://justlend.org/docs/justlend_strx_audit_en.pdf)). · **Oracle provider:** Chainlink (see [Price Oracle](../../developers/supply_and_borrow_market/price_oracle.md)).
+
 The JustLend  DAO Protocol provides decentralized and efficient access to liquidity, empowering users across the TRON ecosystem. However, as with any decentralized finance (DeFi) protocol, there are inherent risks involved. To address these, JustLend has implemented robust risk management measures, ensuring user confidence and protocol resilience. Below, we outline the key risks and the steps taken to mitigate them.
 
 ### **Smart Contract Risk**

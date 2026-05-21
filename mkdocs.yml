@@ -1,5 +1,11 @@
 site_name: JustLend DAO Documentation
 site_url: https://docs.justlend.org/
+site_description: >-
+    Official documentation for JustLend DAO — the largest lending protocol on TRON.
+    Compound V2 architecture. Covers supply / borrow / liquidation, sTRX liquid
+    staking, Energy Rental, governance, deployed contracts (Mainnet + Nile), public
+    OpenAPI, and AI agent integration (llms.txt, contracts.json, JSON ABIs, MCP).
+site_author: JustLend DAO
 
 # AI-readability entry files served at the site root.
 # They are static (non-Markdown), so MkDocs copies them as-is.
@@ -9,6 +15,7 @@ not_in_nav: |
     /robots.txt
     /.well-known/security.txt
     /developers/contracts.json
+    /developers/contracts.schema.json
     /developers/abis/*.json
 
 nav:
@@ -75,6 +82,12 @@ theme:
 extra_css:
         - stylesheets/extra.css
         - stylesheets/hide_elements.css
+
+# Build-time hooks. `copy_dotfiles` mirrors `docs/.well-known/` and any other
+# dotfile-rooted directory into the site output — MkDocs's default file walker
+# skips dotfile directories, which would otherwise 404 /.well-known/security.txt.
+hooks:
+      - hooks/copy_dotfiles.py
 
 plugins:
       - search

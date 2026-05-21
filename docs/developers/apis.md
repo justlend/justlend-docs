@@ -1,3 +1,8 @@
+---
+title: JustLend DAO API Reference
+description: Public read-only REST API at openapi.just.network — markets, account positions, liquidation risk, USDD supply-mining rewards, sTRX staking, Energy Rental. Authoritative schema is the OpenAPI 3.1 YAML.
+---
+
 # JustLend DAO API
 
 Public REST endpoints for querying JustLend DAO protocol state: lending markets, user positions, liquidation risk, USDD supply‑mining rewards, sTRX staking, and Energy Rental.

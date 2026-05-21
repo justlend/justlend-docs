@@ -1,3 +1,8 @@
+---
+title: Contracts Overview
+description: Architecture summary of every JustLend DAO contract on TRON — SBM jTokens, Comptroller, interest rate models, price oracle, governance, sTRX, Energy Rental — with proxy mode, ABI links, and key functions in one table.
+---
+
 # Contracts Overview
 
 !!! info "About this page"

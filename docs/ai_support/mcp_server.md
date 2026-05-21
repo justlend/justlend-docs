@@ -1,3 +1,8 @@
+---
+title: JustLend MCP Server (full, read + write)
+description: "@justlend/mcp-server-justlend v1.0.7 — 59 MCP tools for supply, borrow, repay, sTRX staking, energy rental, governance voting, mining rewards, transfers, plus general TRON utilities. Dual-mode signing (browser TronLink or encrypted agent-wallet)."
+---
+
 # MCP Server
 
 **GitHub**: [https://github.com/justlend/mcp-server-justlend](https://github.com/justlend/mcp-server-justlend)

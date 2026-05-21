@@ -10,6 +10,27 @@ For the JustLend protocol itself, see governance proposals on [forum.justlend.or
 
 ## [Unreleased]
 
+### Added — 2026-05-21 AI-readability v5 pass
+
+- **`site_description` and `site_author`** in `mkdocs.yml` so every page renders a non-empty `<meta name="description">` and `<meta name="author">` (previously omitted on every page because both meta keys were missing).
+- **Per-page YAML frontmatter** (`title` + `description`) on the 17 highest-value pages: all 8 user concept pages, `overview.md`, `tokenomics.md`, `apis.md`, `deployed_contracts.md`, `contracts_overview.md`, `sbm.md`, `ai_llms.md`, `mcp_server.md`, `justlend_skills.md`, plus `staked_trx.md` and `energy_rental.md` developer pages and the site root `index.md`. MkDocs / Material picks up `description` automatically into `<meta description>` and the JSON-LD `TechArticle.description`.
+- **Explicit `# H1` headings** in the source Markdown of the 10 files that previously had none (`supply.md`, `borrow.md`, `withdraw.md`, `repay.md`, `risks.md`, `staked_trx.md`, `energy_rental.md`, `liquidations.md`, `overview.md`, `tokenomics.md`). HTML rendering was unaffected (Material synthesized the heading from nav), but raw-Markdown RAG loaders (which fetch `raw.githubusercontent.com/.../foo.md`) now see a heading anchor on every page.
+- **"About this page" admonitions** on the 6 concept pages that lacked them (`supply.md`, `borrow.md`, `withdraw.md`, `repay.md`, `risks.md`, `staked_trx.md` (user), `energy_rental.md` (user)) plus upgraded admonitions on the two developer pages (`developers/staked_trx.md`, `developers/energy_rental.md`). Each banner restates protocol / network / units / cross-refs so any RAG chunk retrieved in isolation carries identity.
+- **JSON-LD (`application/ld+json`)** in `docs/overrides/base.html` `<head>`, emitted on every page. Three nodes: an `Organization` for JustLend DAO, a `SoftwareApplication + FinancialProduct` for the protocol with `potentialAction` pointers to `/llms-full.txt`, `/developers/contracts.json`, and the OpenAPI YAML, and a per-page `TechArticle` carrying the page's description.
+- **MkDocs `on_post_build` hook (`hooks/copy_dotfiles.py`)** that copies `docs/.well-known/` (and any future dotfile-rooted directory) into `site/.well-known/`. MkDocs's default file walker skips dotfile directories, so `/.well-known/security.txt` was returning 404 in production even though the file existed in the repo and was referenced from `llms.txt` / `robots.txt`.
+- **`contracts.schema.json`** (JSON Schema 2020-12) — the `$schema` URL embedded in `contracts.json` now resolves to a real document. Schema enforces TRON Base58 / EVM 0x / TRON 41-hex address regexes and the per-record `network` enum.
+- **Real landing content in `docs/index.md`** — previously a one-line meta-refresh tag with no body. AI crawlers landing on the site root now get protocol summary + curated entry points for users, developers, AI agents, governance, plus external links; browsers still 0-second redirect via meta-refresh + canonical.
+- **Snapshot warning admonition** on the USD cost tables in `getting_started/concepts/energy_rental.md` (`§Cost Estimation`) — the example transactions and `$X.XX` numbers are historical and should not be fed into live pricing decisions.
+- **Copy-pastable MCP install snippet** in `ai_support/justlend_skills.md` — a single `jq` one-liner that resolves `$(pwd)` and patches Claude Desktop's config in place, so AI agents that auto-execute the docs don't get stuck on `/ABSOLUTE_PATH_TO/` placeholders.
+
+### Fixed — 2026-05-21 AI-readability v5 pass
+
+- **`/.well-known/security.txt` 404 in production (P0).** The file was in `docs/.well-known/` and referenced by `llms.txt` and `robots.txt`, but MkDocs's default file walker skipped the dotfile directory. Fixed by the new `copy_dotfiles.py` hook.
+- **Blocks-per-year math in `/llms-full.txt §7.4`.** Was `~10,512,000` (`365 × 86400 / 3`), which is off from the leap-year-averaged `10,517,760` (`365.25 × 86400 / 3`). Both numbers are now spelled out as approximations, with an explicit recommendation to prefer the API's pre-computed `apy` fields when precision matters.
+- **`contracts.json` `_meta` block (P1).** `schema_version` bumped from `"1"` to semantic `"1.1.0"` with a `schema_version_policy` field explaining MAJOR / MINOR / PATCH semantics. Added `$schema` pointer to the new `contracts.schema.json`. Added an `address_formats` sub-block documenting each format's intended use case (Base58 for UI, hex_evm for cross-chain, hex_tron for TronGrid).
+- **Backtick-colon parameter labels (P2).** `` `Supply APY:` `` (inline-code-then-colon) was tokenizing as one opaque code span; replaced with standard `**Supply APY:**` Markdown bold on `supply.md`, `borrow.md`, and `liquidations.md`. Also added a Borrow-Limit definition that was previously missing on `borrow.md`.
+- **Broken link in `getting_started/concepts/liquidations.md` developer-reference footer** — `../../developers/apis/#3-supply-borrow-market` (which MkDocs flagged as unrecognized) → `../../developers/apis.md#3-supply-borrow-market`.
+
 ### Added — 2026-05-21 AI-data-consistency pass
 
 - **`/llms-full.txt` snapshot metadata header** (`§0`): `last_generated`, `docs_commit`, `contracts_json_source`, `mcp_server_version` so consumers can detect staleness without diffing the body.

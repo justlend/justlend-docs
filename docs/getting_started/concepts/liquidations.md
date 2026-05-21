@@ -1,3 +1,10 @@
+---
+title: Liquidations on JustLend DAO
+description: How JustLend SBM liquidations work — Risk Value formula, observation (>95) and execution (≥100) thresholds, 50% close factor, 8% liquidation reward, and the permissionless `liquidateBorrow` workflow.
+---
+
+# Liquidations
+
 !!! info "About this page"
     **Protocol:** JustLend DAO (Compound V2 fork on TRON) · **Network:** TRON Mainnet · **Page scope:** how liquidation works for **SBM (Supply & Borrow Market)** positions on JustLend — risk-value formula, thresholds, on-chain mechanics, and the manual liquidation workflow. · **Unit conventions used here:** `Collateral Factor` ∈ [0, 1] (decimal, e.g. `0.80` = 80%); `Risk Value` is a percentage scalar (`100` means at the liquidation threshold, **not** `1.0`); USD amounts are de-scaled human numbers. · **Related contracts:** `Comptroller` (sets `closeFactorMantissa`, `liquidationIncentiveMantissa`, and per-market `collateralFactorMantissa`; see [Comptroller](../../developers/supply_and_borrow_market/comptroller.md)) and `CErc20Delegator` jTokens (expose `liquidateBorrow`; see [SBM](../../developers/supply_and_borrow_market/sbm.md)). · **Key terms defined inline below:** Risk Value, Borrow Limit, Total Borrow, Collateral Factor, Observation Threshold, Liquidation Threshold, Liquidation Reward.
 
@@ -7,8 +14,8 @@ $$
 \mathrm{Risk\ Value} = \frac{\mathrm{Total\ Borrow}}{\mathrm{Borrow\ Limit}} \times 100
 $$
 
-* `Total Borrow:` sum of all assets borrowed by the user;
-* `Borrow Limit:` $\sum_i \mathrm{Supply\ Value}_i \times \mathrm{Collateral\ Factor}_i$.
+* **Total Borrow:** sum of all assets borrowed by the user.
+* **Borrow Limit:** $\sum_i \mathrm{Supply\ Value}_i \times \mathrm{Collateral\ Factor}_i$.
 
 The **Risk Value** measures a borrow position’s stability. The Borrow Limit, set by JustLend DAO Governance for each asset, determines the maximum percentage of value that can be borrowed against the asset. For example, if a user supplies $100 in TRX with an collateral factor 80% and $200 in SUN with an collateral factor 75%. Then, borrows $90 worth of USDD and $50 worth of JST tokens from SBM. we can see:
 
@@ -86,4 +93,4 @@ Before starting, ensure you have met the following requirements:
 - Liquidation reward: [`liquidationIncentiveMantissa()`](../../developers/supply_and_borrow_market/sbm.md#liquidation-incentive) — scaled by `1e18`.
 - Liquidate a jTRC20 position: [`liquidateBorrow(borrower, repayAmount, jTokenCollateral)`](../../developers/supply_and_borrow_market/sbm.md#liquidate-borrowjtrc20).
 - Liquidate a jTRX position: [`liquidateBorrow(borrower, jTokenCollateral)`](../../developers/supply_and_borrow_market/sbm.md#liquidate-borrowjtrx) — `payable`, send TRX via `msg.value`.
-- For bots: poll [`/justlend/liquidate/highRiskAccountList`](../../developers/apis/#3-supply-borrow-market) to discover candidates.
+- For bots: poll [`/justlend/liquidate/highRiskAccountList`](../../developers/apis.md#3-supply-borrow-market) to discover candidates.
