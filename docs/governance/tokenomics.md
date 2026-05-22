@@ -33,6 +33,25 @@ The latest round of JustLend DAO deposit supply mining started on February 16, 2
 #### Buyback & Burning
 The JST ecosystem burn plan implemented by GrantsDAO aims to use protocol base income and donations from partner projects to provide liquidity to SunSwap V2 for JST trading pairs and burn the resulting liquidity tokens (e.g., [SUNSWAP-JST-TRX V2 Token](https://tronscan.org/#/token20/TUDo1PuMG6j4aDSg6rsCNiz5gR5cnQaNTT)), thus accumulating JST liquidity in DEX. Compared to directly burning tokens, the ecosystem burn plan's approach reduces supply while maintaining liquidity in DEX, stabilizing the price of JST.
 
+#### Querying live JST supply
+
+This documentation deliberately does not hard-code a current `totalSupply` or `circulatingSupply` number — both move as the buyback-and-burn program executes, and any baked-in figure would drift. To read the live values, query the JST TRC20 contract directly:
+
+- **JST contract:** `TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9` (see [Deployed Contracts → Governance](../developers/deployed_contracts.md#governance))
+- **TRC20 standard functions:**
+    - `totalSupply()` → current total JST issued, in sun units (18 decimals).
+    - `balanceOf(<dead-address>)` → cumulative JST sent to a burn / dead address, if a specific dead address is being used.
+
+TronWeb example (any TRC20 ABI works — use [`abis/trc20.json`](../developers/abis/trc20.json)):
+
+```javascript
+const jst = await tronWeb.contract().at('TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9');
+const total = BigInt((await jst.totalSupply().call()).toString());
+console.log('JST totalSupply (human):', total / 10n**18n);
+```
+
+For aggregate circulation and burn metrics across the buyback program, the JustLend team and third-party aggregators publish dashboards; treat this on-chain query as the authoritative source for `totalSupply` itself, and the buyback dashboard as the authoritative source for "how much has been retired via the SunSwap LP burn".
+
 ### **Revenue Distribution from Protocol Reserves**
 The protocol reserves mainly consist of accumulated borrow fees. The revenue allocation model divides income from these reserves into four key segments:
 

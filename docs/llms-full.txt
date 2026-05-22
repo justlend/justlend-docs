@@ -104,11 +104,11 @@ One-click TRX liquid staking under Stake 2.0:
 
 ### 2.8 Energy Rental
 
-Rent TRON Energy at 50–80% below the cost of burning TRX:
+Rent TRON Energy at ~50–80% below the cost of burning TRX (worked example in [Energy Rental concept page §Cost Estimation](https://docs.justlend.org/getting_started/concepts/energy_rental#cost-estimation) shows 71% savings for a USDT-holding receiver and 84% for a receiver without USDT at one specific past snapshot; actual savings move with the TRON energy unit price and contract usage):
 
 - Specify: **Rental Amount** (energy units), **Rental Duration** (hourly or daily, max 30 days), **Receiving Address** (must be a regular account, not a contract).
 - Prepayment includes: Energy Fee (proportional to duration; unused portion refunded) + Security Deposit (~1 day's energy fee) + Liquidation Penalty (`max(20 TRX, 0.008% × delegated TRX)`).
-- One USDT transfer ≈ 120,000 energy (varies with contract usage).
+- One USDT transfer: ~64,000 energy if the receiver already holds USDT (warm storage), ~130,000 energy if the receiver is creating a fresh USDT balance (cold storage). 120,000 is a common midpoint estimate but it under-rents in the cold-storage case.
 - Energy is fully restored after 24h and reusable.
 - For short rentals (< 3 hours), return immediately after use to avoid early liquidation from price fluctuations.
 
@@ -116,15 +116,17 @@ Rent TRON Energy at 50–80% below the cost of burning TRX:
 
 ## 3. Governance
 
-### Process
+### Process (on-chain — verified against `GovernorBravoDelegator` at `TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD`)
 
-1. JST holders with ≥ 200M JST call `propose()` on `GovernorBravoDelegator`.
-2. 2-day review period; voting rights snapshot.
-3. 3-day voting period. 1 JST = 1 Vote (after depositing JST → WJST via `deposit()`).
-4. Approval requires (a) For votes > Against votes AND (b) For votes > 600M.
-5. Approved proposals enter a 48-hour Timelock, then can be `execute()`d.
+1. JST holders with ≥ **200,000,000 JST** (verified: `proposalThreshold() = 2e26`) call `propose()` on `GovernorBravoDelegator`.
+2. After `votingDelay() = 1 block ≈ 3 sec`, proposal transitions Pending → Active. **There is no protocol-enforced review period** — voting is essentially immediate. The "~2-day off-chain review" is a community / forum norm, not enforced by the contracts; do not write bots that assume any gap between `propose()` and Active.
+3. Voting runs for `votingPeriod() = 86,400 blocks ≈ 3 days`. 1 JST = 1 Vote (after depositing JST → WJST via `deposit()`).
+4. Approval requires (a) For votes > Against votes AND (b) For votes > **600,000,000** (verified: `quorumVotes() = 6e26`).
+5. Approved proposals enter a Timelock with `delay() = 172,800 sec = 48 hours` (verified on-chain), then can be `execute()`d.
 
-Full cycle ≥ ~1 week. Discussion happens at <https://forum.justlend.org> before on-chain submission.
+Full on-chain cycle: ~3 days voting + ~48 hours Timelock ≈ **5 days minimum**. Community typically adds ~2 days of forum discussion before `propose()` is called, for a total wall-clock of ~1 week — but again, that pre-propose discussion is not enforced anywhere.
+
+Discussion: <https://forum.justlend.org>.
 
 ### Tokenomics (JST)
 
@@ -401,7 +403,7 @@ Status codes follow standard HTTP (`200` OK, `400` Bad Request). Field types and
 The HTTP API returns **current state**. For historical events (`Mint`, `Borrow`, `RepayBorrow`, `LiquidateBorrow`, governance `VoteCast`, sTRX `Deposit`, EnergyRental `RentResource`, etc.) there is **no official JustLend subgraph or hosted indexer**. Use one of:
 
 1. **TronGrid event filter** — `GET /v1/contracts/{address}/events?event_name=Mint&...`. Free tier suffices for ad-hoc analytics; ~30-day retention. Best for low-volume agent queries.
-2. **Self-hosted indexer** — DipDup (TRON support via the EVM adapter), Substreams via the EVM bridge, or a custom decoder against a `java-tron` archive node + the JSON ABIs at <https://docs.justlend.org/developers/abis/>. Best for production analytics, full historical backfills.
+2. **Self-hosted indexer** — most robust path is a custom decoder against a `java-tron` archive node (or TronGrid archive plan) + the JSON ABIs at <https://docs.justlend.org/developers/abis/>. Generic EVM indexers (DipDup, Subsquid, Substreams, Goldsky, …) have evolving TRON support and should be evaluated case-by-case; do not adopt one based on a "supports TRON" claim without a proof-of-concept run against your specific events first. Best for production analytics, full historical backfills.
 3. **Compose MCP server read primitives** — for low-volume agent-driven lookups via `@justlend/mcp-server-justlend`. Not optimized for historical-event sweeps.
 
 ABIs at `/developers/abis/` carry the canonical event signatures — derive `topic0` at runtime via `keccak256("Mint(address,uint256,uint256)")` rather than hard-coding. See [APIs §8](https://docs.justlend.org/developers/apis#8-event-stream-and-indexing-options) for the full table.
@@ -440,7 +442,7 @@ Capability domains:
 
 - **Wallet & Network** (10 tools) — dual-mode signing: `browser` (TronLink via `tronlink-signer` SDK, TIP-6963; **recommended** — private keys never leave the wallet) or `agent` (encrypted local wallet under `~/.agent-wallet/`, managed by `@bankofai/agent-wallet`). Importing an existing key is intentionally CLI-only (`npx agent-wallet add`) — not exposed as an MCP tool, since MCP arguments can be logged by clients. Tools: `get_wallet_address`, `connect_browser_wallet`, `set_wallet_mode`, `get_wallet_mode`, `list_wallets`, `set_active_wallet`, `get_supported_networks`, `get_supported_markets`, `set_network`, `get_network`.
 - **Market Data** (3 tools) — contract queries first with API fallback; TTL caching (30–60s). `get_market_data`, `get_all_markets`, `get_protocol_summary`.
-- **Account & Balances** (5 tools) — Multicall3 batch queries (~2.5s vs ~8s legacy). `get_account_summary`, `check_allowance`, `get_trx_balance`, `get_token_balance`, `get_wallet_balances`.
+- **Account & Balances** (5 tools) — Multicall3 batch queries (~2.5s vs ~8s legacy). Multicall3 on TRON Mainnet: `TX56WKxtja91Dybf2FdN4hZbDLyKVxxhAu` (verified on-chain — name = `Multicall3`, `getCurrentBlockTimestamp()` returns valid epoch). `get_account_summary`, `check_allowance`, `get_trx_balance`, `get_token_balance`, `get_wallet_balances`.
 - **Lending Operations** (10 tools) — `supply`, `withdraw`, `withdraw_all`, `borrow`, `repay`, `enter_market`, `exit_market`, `approve_underlying`, `claim_rewards`, `estimate_lending_energy`. Write tools marked with `destructiveHint: true`.
 - **Mining & Rewards** (3 tools) — `get_mining_rewards`, `get_usdd_mining_config`, `get_wbtc_mining_config`.
 - **JST Voting / Governance** (10 tools) — `get_proposal_list`, `get_user_vote_status`, `get_vote_info`, `get_locked_votes`, `check_jst_allowance_for_voting`, `approve_jst_for_voting`, `deposit_jst_for_votes`, `withdraw_votes_to_jst`, `cast_vote`, `withdraw_votes_from_proposal`.

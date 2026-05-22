@@ -1,3 +1,18 @@
+# MkDocs 1.5+ link / anchor validation. Surfaces broken cross-page anchors as
+# warnings so `mkdocs build --strict` catches them in CI. `unrecognized_links`
+# stays at INFO because the absolute `/llms.txt` links in `ai_support/ai_llms.md`
+# are intentional (they're root-served static files MkDocs can't see in the
+# nav graph).
+validation:
+    links:
+        anchors: warn
+        absolute_links: info
+        unrecognized_links: info
+    nav:
+        omitted_files: info
+        not_found: warn
+        absolute_links: info
+
 site_name: JustLend DAO Documentation
 site_url: https://docs.justlend.org/
 site_description: >-

@@ -21,6 +21,10 @@ Borrowers can repay their loans using the same tokens they borrowed or through j
 2. Navigate to the "SBM" and choose the borrowed asset you want to withdraw, click 「Repay」.
 3. Specify the amount you want to repay and confirm the transaction.
 
+### Try it
+
+Open the JustLend dApp on the **Repay** action: <https://app.justlend.org/homeNew?lang=en-US> → pick the borrowed asset → click 「Repay」.
+
 ### Developer reference
 
 - Contract function: [`repayBorrow(amount)`](../../developers/supply_and_borrow_market/sbm.md#repayborrow) — pass `uint256(-1)` (i.e. `2^256 - 1`) to repay the full outstanding balance.

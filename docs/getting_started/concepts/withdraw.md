@@ -22,6 +22,10 @@ When withdrawing with an active borrow position, it’s essential to carefully m
 2. Navigate to the "SBM" and choose the supplied asset you want to withdraw, click 「Withdraw」.
 3. Specify the amount you want to withdraw and confirm the transaction.
 
+### Try it
+
+Open the JustLend dApp on the **Withdraw** action: <https://app.justlend.org/homeNew?lang=en-US> → pick the supplied asset → click 「Withdraw」.
+
 ### Developer reference
 
 - Contract function (by jToken units): [`redeem(redeemTokens)`](../../developers/supply_and_borrow_market/sbm.md#redeem) — burns the specified jToken amount and returns the equivalent underlying.

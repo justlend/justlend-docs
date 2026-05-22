@@ -174,6 +174,14 @@ Open for new supply and borrow. The default state. 17 of 23 jToken markets are c
 
 ---
 
+## External primitives
+
+### Multicall3
+
+A widely-deployed contract that lets callers bundle many read-only EVM/TVM calls into a single transaction-less RPC request, dramatically reducing round-trip overhead when fetching state across N markets / accounts. On TRON Mainnet, Multicall3 is deployed at **`TX56WKxtja91Dybf2FdN4hZbDLyKVxxhAu`** (verified on-chain — contract name is literally `Multicall3`). The JustLend MCP server uses it to query all jToken markets in a single round trip; see [MCP Server → Account & Balances](../ai_support/mcp_server.md). For your own integrations, the canonical Multicall3 ABI works as-is; no protocol-specific wrapper needed.
+
+---
+
 ## Where to look next
 
 - [APIs §1](../developers/apis.md#1-conventions) — concrete API field semantics referencing the same terms.

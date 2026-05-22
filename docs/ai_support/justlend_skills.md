@@ -14,6 +14,9 @@ It also works as a standalone **CLI tool** for quick market checks directly from
 !!! note
     This is a **read-only** query package. No write operations or transaction signing are supported. For write operations (supply, borrow, repay, withdraw, sTRX staking, energy rental, governance voting), use the full MCP server: [@justlend/mcp-server-justlend](mcp_server.md).
 
+!!! tip "Companion references for agents using these tools"
+    The tool outputs use protocol-specific terminology — `mantissa`, `borrowIndex`, `exchangeRate`, `collateralFactor`, `closeFactor`, `liquidationIncentive`, `status: active|legacy`. Each is defined in the [Glossary](../resources/glossary.md) with units and on-chain encoding. When asking the agent to *act* on a market (e.g. supply, repay), point it at [Common Pitfalls](../developers/common_pitfalls.md) first — the same gotchas (USDT `approve()` race, decimals mismatch, etc.) apply whether the agent uses Skills, the full MCP server, or raw TronWeb.
+
 ## Overview
 
 [JustLend DAO](https://justlend.org) is the largest lending protocol on TRON, based on the Compound V2 architecture. JustLend Skills wraps the core query functionality into MCP tools and structured skill instructions that AI agents can use.
