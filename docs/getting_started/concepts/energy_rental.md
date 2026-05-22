@@ -15,7 +15,7 @@ When renting energy, you need to specify three key parameters based on your requ
 * **Rental Amount:** the amount of energy you need.
     * The actual energy rented is calculated based on the corresponding proxy TRX amount. Due to market fluctuations, the rented energy amount may experience slight changes during the transaction;
     * **Note:** the energy used will be fully restored after 24 hours and can be used again;
-    * If you are not sure about the amount of energy you need, please refer to: One USDT transfer transaction ≈ 120,000 energy. (may fluctuate according to market trading conditions).
+    * If you are not sure about the amount of energy you need, the rule of thumb for a USDT transfer is **~64,000 energy when the receiving address already holds USDT** (warm storage slot) and **~130,000 energy when the receiver is creating a fresh USDT balance** (cold storage slot — the extra ~66K covers the new storage write). Other contracts vary widely; use the dApp's per-transaction estimator or the [`estimate_lending_energy` MCP tool](../../ai_support/mcp_server.md) for non-USDT flows. The historical "120,000 energy per USDT transfer" approximation is a midpoint that under-rents in the cold-storage case.
 
 * **Rental Duration:** this is the time you need to use the energy.
     * Supports renting by the hour or by the day, with a maximum single rental period of **30** days；

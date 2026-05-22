@@ -167,34 +167,36 @@ Endpoints that accept `pageNo` and `pageSize` return:
 
 The public API is designed for read-only integrations and AI agents. It is not a bulk export interface.
 
-**Soft limits (observed; not contractual):**
+!!! warning "No published numeric rate limit"
+    JustLend has not published a contractual req/sec ceiling for `https://openapi.just.network`. The service silently throttles abusive clients with `429` and may queue or refuse excess concurrent connections — but the exact thresholds are not documented and may change without notice. **Do not hard-code a specific req/sec number from this page or anywhere else; discover the limit empirically with an adaptive policy.**
 
-| Limit | Approximate value | Notes |
-|---|---|---|
-| Sustained rate | **~10 req/s per source IP** | Steady traffic above this is silently throttled to `429`. |
-| Burst rate | **~30 req/s for ≤ 3 s** | OK for occasional batches; do not chain bursts. |
-| Concurrent connections | **≤ 4 per source IP** | Above this, new connections are queued or refused. |
-| `pageSize` cap | **`1000`** | Documented hard maximum on paginated endpoints. |
+**Adaptive client policy (recommended starting point):**
 
-These numbers are conservative estimates suitable for sizing client-side backoff. They are not a contract — the operator may tighten them under load or relax them after coordination.
-
-**Retry policy (recommended):**
+Start conservative and let the server tell you when to back off:
 
 ```text
-on 429 or 5xx:
+initial_rate         = 1 req/s
+concurrent_max       = 2          # connections in flight
+on each clean window (60 s, no 429): double initial_rate, cap at 20 req/s
+on 429:
     sleep = base * (2 ** attempt) + random(0, jitter_ms)
     base = 1000 ms, max attempt = 5, max sleep = 30 s
-on persistent 429:
-    cut request rate in half; reset attempt counter
+    after 5 failed attempts in a row: halve initial_rate, reset attempt counter
+on 5xx (transient):
+    same exponential backoff as 429
+on persistent 429 across multiple windows:
+    treat the current rate as the operator's ceiling and stay below it
 ```
 
-**General hygiene:**
+This policy converges to the real ceiling without ever guessing it. The 20 req/s cap is an arbitrary safety net so a buggy client doesn't spin to 1000 req/s on its own; adjust based on whatever you observe in production.
+
+**General hygiene (works regardless of the actual limit):**
 
 - Use `pageSize <= 1000`; this is the documented maximum for paginated endpoints.
 - Cache stable reference data such as jToken addresses, symbols, decimals, and collateral factors (TTL ≥ 5 min is safe; these change only via governance).
 - Avoid tight polling loops. Market dashboards normally do not need sub-second refreshes; a 30-second refresh is plenty.
 - For per-account health monitoring across many addresses, batch via the high-risk endpoint (`/justlend/liquidate/highRiskAccountList`) rather than polling `/lend/account` per address.
-- If you need sustained traffic above the soft limit, contact the JustLend team before production launch (the public service is unauthenticated and has no per-key tier).
+- If you need sustained high-volume traffic, contact the JustLend team before production launch (the public service is unauthenticated and has no per-key tier).
 
 ### 1.8 Versioning and compatibility
 
@@ -847,11 +849,11 @@ Pros: zero setup, well-documented, works for any JustLend contract. Cons: cursor
 
 ### 8.2 Self-hosted indexer (recommended for production analytics)
 
-Stand up a TRON-aware indexer that consumes block ranges and writes typed event tables. Options:
+Stand up an indexer that consumes block ranges and writes typed event tables. TRON's EVM compatibility is partial (different signature scheme, different fee model, different address encoding) so most "EVM-indexer" tooling needs a TRON-specific datasource — verify support before adopting.
 
-- **DipDup** ([dipdup.io](https://dipdup.io)) — Python-based, has TRON support via the EVM-compatible adapter. Define handlers for `Mint`, `Borrow`, etc. and DipDup catches up from any block height into Postgres.
-- **Substreams** — Streaming-based; works against TRON via the EVM bridge. Larger setup cost, but ideal for high-throughput pipelines.
-- **Custom node + The Graph–style schema** — Run a TRON full node (`java-tron`) or use a TronGrid full-archive endpoint, decode events with the ABIs at [`/developers/abis/`](abis/jtoken.json), and write your own schema. Most flexible, most operational overhead.
+- **Custom decoder against a TRON archive endpoint (most robust path).** Run `java-tron` in archive mode, or use a TronGrid full-archive plan, and decode events with the JSON ABIs at [`/developers/abis/`](abis/jtoken.json). Write your own schema; commit indices on `(market, block_number)` for the per-market views you need. Most operational overhead, most flexibility, no third-party dependency.
+- **Generic EVM indexers (DipDup, Subsquid, Substreams, Goldsky, etc.).** These have evolving TRON support — some via official adapters, some via community forks, some not at all. Treat any "DipDup/Subsquid supports TRON" claim as needing verification against the project's current docs and your specific event-decoding needs. None of these are recommended without a proof-of-concept run against a TRON archive endpoint first.
+- **Tron-native option: TronGrid event API.** §8.1 covers this; for low-to-mid volume it removes the need for a self-hosted indexer entirely.
 
 ### 8.3 MCP server `read_events` (when integrating with an AI agent)
 
