@@ -137,7 +137,9 @@
             "publisher": { "@id": "https://justlend.org/#org" }
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
-          "description": "JST is the governance and incentive token of JustLend DAO \u2014 distribution, voting power via WJST escrow, and the GrantsDAO buyback-and-burn program funded by protocol reserves."
+          "description": "JST is the governance and incentive token of JustLend DAO \u2014 distribution, voting power via WJST escrow, and the GrantsDAO buyback-and-burn program funded by protocol reserves.",
+          "dateModified": "2026-05-22",
+          "datePublished": "2026-05-22"
         }
       ]
     }
@@ -1739,6 +1741,22 @@
 <p>The latest round of JustLend DAO deposit supply mining started on February 16, 2024, and has already completed 36 rounds. The mining activity is community-driven and funded by the subDAO of JustLend DAO - GrantsDAO, which empowers community developers, contributors, participants, and any projects that contribute to the ecosystem, while providing positive incentives to ecosystem participants.</p>
 <h4 id="buyback-burning">Buyback &amp; Burning<a class="headerlink" href="#buyback-burning" title="Permanent link">&para;</a></h4>
 <p>The JST ecosystem burn plan implemented by GrantsDAO aims to use protocol base income and donations from partner projects to provide liquidity to SunSwap V2 for JST trading pairs and burn the resulting liquidity tokens (e.g., <a href="https://tronscan.org/#/token20/TUDo1PuMG6j4aDSg6rsCNiz5gR5cnQaNTT">SUNSWAP-JST-TRX V2 Token</a>), thus accumulating JST liquidity in DEX. Compared to directly burning tokens, the ecosystem burn plan's approach reduces supply while maintaining liquidity in DEX, stabilizing the price of JST.</p>
+<h4 id="querying-live-jst-supply">Querying live JST supply<a class="headerlink" href="#querying-live-jst-supply" title="Permanent link">&para;</a></h4>
+<p>This documentation deliberately does not hard-code a current <code>totalSupply</code> or <code>circulatingSupply</code> number — both move as the buyback-and-burn program executes, and any baked-in figure would drift. To read the live values, query the JST TRC20 contract directly:</p>
+<ul>
+<li><strong>JST contract:</strong> <code>TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9</code> (see <a href="../../developers/deployed_contracts/#governance">Deployed Contracts → Governance</a>)</li>
+<li><strong>TRC20 standard functions:</strong><ul>
+<li><code>totalSupply()</code> → current total JST issued, in sun units (18 decimals).</li>
+<li><code>balanceOf(&lt;dead-address&gt;)</code> → cumulative JST sent to a burn / dead address, if a specific dead address is being used.</li>
+</ul>
+</li>
+</ul>
+<p>TronWeb example (any TRC20 ABI works — use <a href="../../developers/abis/trc20.json"><code>abis/trc20.json</code></a>):</p>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">jst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">tronWeb</span><span class="p">.</span><span class="nx">contract</span><span class="p">().</span><span class="nx">at</span><span class="p">(</span><span class="s1">&#39;TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9&#39;</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">total</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">BigInt</span><span class="p">((</span><span class="k">await</span><span class="w"> </span><span class="nx">jst</span><span class="p">.</span><span class="nx">totalSupply</span><span class="p">().</span><span class="nx">call</span><span class="p">()).</span><span class="nx">toString</span><span class="p">());</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;JST totalSupply (human):&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">total</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">10n</span><span class="o">**</span><span class="mi">18n</span><span class="p">);</span>
+</code></pre></div>
+<p>For aggregate circulation and burn metrics across the buyback program, the JustLend team and third-party aggregators publish dashboards; treat this on-chain query as the authoritative source for <code>totalSupply</code> itself, and the buyback dashboard as the authoritative source for "how much has been retired via the SunSwap LP burn".</p>
 <h3 id="revenue-distribution-from-protocol-reserves"><strong>Revenue Distribution from Protocol Reserves</strong><a class="headerlink" href="#revenue-distribution-from-protocol-reserves" title="Permanent link">&para;</a></h3>
 <p>The protocol reserves mainly consist of accumulated borrow fees. The revenue allocation model divides income from these reserves into four key segments:</p>
 <ul>
@@ -1768,7 +1786,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 21, 2026 08:33:32 UTC">2026-05-21</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 22, 2026 06:51:42 UTC">2026-05-22</span>
   </span>
 
     

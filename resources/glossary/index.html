@@ -135,7 +135,9 @@
             "publisher": { "@id": "https://justlend.org/#org" }
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
-          "description": "Single-page reference for the precise meaning, units, and on-chain encoding of JustLend DAO and Compound V2 terms \u2014 mantissa, kink, utilization, sun, borrow index, collateral / close / reserve factor, exchange rate, liquidation incentive, and more."
+          "description": "Single-page reference for the precise meaning, units, and on-chain encoding of JustLend DAO and Compound V2 terms \u2014 mantissa, kink, utilization, sun, borrow index, collateral / close / reserve factor, exchange rate, liquidation incentive, and more.",
+          "dateModified": "2026-05-22",
+          "datePublished": "2026-05-22"
         }
       ]
     }
@@ -1908,6 +1910,38 @@
 
 
 
+<li class="md-nav__item has-children">
+  <a href="#external-primitives" class="md-nav__link" aria-expanded="true">
+    <span class="md-ellipsis">
+      External primitives
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="External primitives">
+      <ul class="md-nav__list">
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#multicall3" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multicall3
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        
+
+
+
 <li class="md-nav__item ">
   <a href="#where-to-look-next" class="md-nav__link">
     <span class="md-ellipsis">
@@ -2247,6 +2281,10 @@ blocksPerYear ≈ 10,517,760 on TRON at ~3 s/block (365.25 × 86400 / 3)
 <h3 id="legacy-jtoken-status">legacy (jToken status)<a class="headerlink" href="#legacy-jtoken-status" title="Permanent link">&para;</a></h3>
 <p><strong>Closed to new supply and borrow.</strong> Existing positions can still be unwound (<code>repayBorrow</code>, <code>redeem</code>, <code>redeemUnderlying</code>). The contract remains queryable indefinitely; addresses do not get reused. 6 of 23 jToken markets are currently <code>legacy</code>. The canonical list and per-market <code>status</code> field are in <a href="../../developers/contracts.json"><code>contracts.json</code></a> and the <a href="../../developers/apis/#2-jtoken-address-reference">APIs §2 reference table</a>. See also: <a href="../../developers/common_pitfalls/#10-legacy-markets">Developer common pitfalls — legacy markets</a>.</p>
 <hr />
+<h2 id="external-primitives">External primitives<a class="headerlink" href="#external-primitives" title="Permanent link">&para;</a></h2>
+<h3 id="multicall3">Multicall3<a class="headerlink" href="#multicall3" title="Permanent link">&para;</a></h3>
+<p>A widely-deployed contract that lets callers bundle many read-only EVM/TVM calls into a single transaction-less RPC request, dramatically reducing round-trip overhead when fetching state across N markets / accounts. On TRON Mainnet, Multicall3 is deployed at <strong><code>TX56WKxtja91Dybf2FdN4hZbDLyKVxxhAu</code></strong> (verified on-chain — contract name is literally <code>Multicall3</code>). The JustLend MCP server uses it to query all jToken markets in a single round trip; see <a href="../../ai_support/mcp_server/">MCP Server → Account &amp; Balances</a>. For your own integrations, the canonical Multicall3 ABI works as-is; no protocol-specific wrapper needed.</p>
+<hr />
 <h2 id="where-to-look-next">Where to look next<a class="headerlink" href="#where-to-look-next" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../../developers/apis/#1-conventions">APIs §1</a> — concrete API field semantics referencing the same terms.</li>
@@ -2274,7 +2312,7 @@ blocksPerYear ≈ 10,517,760 on TRON at ~3 s/block (365.25 × 86400 / 3)
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 21, 2026 10:42:00 UTC">2026-05-21</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 22, 2026 06:51:42 UTC">2026-05-22</span>
   </span>
 
     

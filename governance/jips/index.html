@@ -137,7 +137,9 @@
             "publisher": { "@id": "https://justlend.org/#org" }
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
-          "description": "How the JustLend DAO proposal lifecycle works \u2014 discussion on the forum, on-chain submission via GovernorBravo, 3-day voting period, 48-hour Timelock, then execution. JST holders with \u2265 200M JST can propose."
+          "description": "How the JustLend DAO proposal lifecycle works \u2014 discussion on the forum, on-chain submission via GovernorBravo, 3-day voting period, 48-hour Timelock, then execution. JST holders with \u2265 200M JST can propose.",
+          "dateModified": "2026-05-22",
+          "datePublished": "2026-05-22"
         }
       ]
     }
@@ -1708,7 +1710,7 @@
 <h1 id="justlend-improvement-proposals">JustLend Improvement Proposals<a class="headerlink" href="#justlend-improvement-proposals" title="Permanent link">&para;</a></h1>
 <div class="admonition info">
 <p class="admonition-title">About this page</p>
-<p><strong>Protocol:</strong> JustLend DAO · <strong>Network:</strong> TRON Mainnet · <strong>Scope:</strong> the user-facing proposal lifecycle — how anyone with enough JST can introduce, debate, and pass changes to the protocol. · <strong>Lifecycle:</strong> off-chain discussion at <a href="https://forum.justlend.org">https://forum.justlend.org</a> → on-chain <code>propose()</code> on <code>GovernorBravoDelegator</code> (<code>TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD</code>) → 2-day review → 3-day voting (1 JST = 1 Vote after <code>deposit()</code>-ing into WJST) → 48-hour Timelock → <code>execute()</code>. <strong>Approval threshold:</strong> For votes &gt; Against votes <strong>AND</strong> For votes &gt; 600,000,000. <strong>Proposal threshold:</strong> ≥ 200,000,000 JST. · <strong>Developer reference:</strong> <a href="../../developers/supply_and_borrow_market/governance/">Governance contract reference</a>.</p>
+<p><strong>Protocol:</strong> JustLend DAO · <strong>Network:</strong> TRON Mainnet · <strong>Scope:</strong> the user-facing proposal lifecycle — how anyone with enough JST can introduce, debate, and pass changes to the protocol. · <strong>Lifecycle (on-chain):</strong> <code>propose()</code> on <code>GovernorBravoDelegator</code> (<code>TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD</code>) → voting begins after <code>votingDelay</code> (currently <code>1 block ≈ 3 seconds</code>, effectively instant) → <code>votingPeriod</code> of <code>86,400 blocks ≈ 3 days</code> (1 JST = 1 Vote after <code>deposit()</code>-ing into WJST) → <code>queue()</code> → 48-hour Timelock → <code>execute()</code>. <strong>Off-chain norm (not protocol-enforced):</strong> community typically discusses for ~2 days on <a href="https://forum.justlend.org">https://forum.justlend.org</a> <strong>before</strong> calling <code>propose()</code> — but the protocol does not enforce any delay between <code>propose()</code> and <code>Active</code> state. <strong>Approval threshold:</strong> For votes &gt; Against votes <strong>AND</strong> For votes &gt; 600,000,000. <strong>Proposal threshold:</strong> ≥ 200,000,000 JST. · <strong>Developer reference:</strong> <a href="../../developers/supply_and_borrow_market/governance/">Governance contract reference</a>.</p>
 </div>
 <p>The JustLend DAO introduces a structured approach to decentralizing the JustLend protocol and empowering community autonomy. JustLend DAO fosters consensus among all participants in the JustLend ecosystem through governance mechanisms and economic incentives. The protocol's functions and the JST token serve as core security elements of the JustLend protocol.</p>
 <p>Governance mechanisms in decentralized protocols are driven by participation, incentives, self-regulation, and policy management within the community, adapting to and coexisting with the market dynamics. JustLend DAO manages on-chain operations through proposals, enabling the protocol to achieve self-operation, self-governance, and self-evolution based on predefined rules through intelligent management and token economic incentives, without third-party intervention, ultimately maximizing efficiency and value transfer.</p>
@@ -1745,7 +1747,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 21, 2026 10:22:46 UTC">2026-05-21</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 22, 2026 06:32:12 UTC">2026-05-22</span>
   </span>
 
     

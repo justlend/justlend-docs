@@ -137,7 +137,9 @@
             "publisher": { "@id": "https://justlend.org/#org" }
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
-          "description": "Rent TRON Energy 50\u201380% cheaper than burning TRX \u2014 rental amount, duration (hourly or daily, max 30 days), receiving address, prepayment formula (Energy Fee + Security Deposit + Liquidation Penalty)."
+          "description": "Rent TRON Energy 50\u201380% cheaper than burning TRX \u2014 rental amount, duration (hourly or daily, max 30 days), receiving address, prepayment formula (Energy Fee + Security Deposit + Liquidation Penalty).",
+          "dateModified": "2026-05-22",
+          "datePublished": "2026-05-22"
         }
       ]
     }
@@ -615,6 +617,19 @@
   <a href="#cost-estimation" class="md-nav__link">
     <span class="md-ellipsis">
       Cost Estimation
+    </span>
+  </a>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item ">
+  <a href="#try-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      Try it
     </span>
   </a>
   
@@ -1738,7 +1753,7 @@
 <p class="admonition-title">About this page</p>
 <p><strong>Protocol:</strong> JustLend DAO Energy Rental (one-to-many TRON Energy marketplace) · <strong>Network:</strong> TRON Mainnet · <strong>Energy Rental contract:</strong> <code>TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd</code> (see <a href="../../../developers/deployed_contracts/#energy-rental">Deployed Contracts</a>) · <strong>Receiving address constraint:</strong> must be a regular account, <strong>not</strong> a contract · <strong>Units:</strong> prepayment is denominated in TRX (6 decimals); on-chain amounts use <strong>sun</strong> (1 TRX = 10⁶ sun; see <a href="../../../resources/glossary/#sun">Glossary → sun</a>); rental duration is in seconds, capped at 30 days. · <strong>Refund:</strong> unused Energy Fee + (conditionally) the Security Deposit and Liquidation Penalty are refunded on timely return. · <strong>Snapshot caveat:</strong> the USD cost tables further down were captured at a single past moment — see the <a href="#cost-estimation">snapshot warning</a> below.</p>
 </div>
-<p>JustLend DAO integrates the energy rental protocol, which aims to provide users with a more convenient and cheaper way to obtain energy. The energy rental protocol is open to all TRON network users and supports one-to-many renting, enabling users to rent energy not only for themselves but also for others. The user-friendly interface is designed to accommodate users managing multiple orders seamlessly.</p>
+<p>JustLend DAO integrates the energy rental protocol, which aims to provide users with a more convenient and cheaper way to obtain energy. The savings vs. burning TRX directly are large but <strong>vary with TRON's energy unit price and the receiver's USDT-holding state</strong> — the worked example in <a href="#cost-estimation">§Cost Estimation</a> below shows ~71% savings (a USDT-holding receiver) and ~84% savings (a receiver without USDT) for one specific snapshot, which is where the "~50–80% cheaper" headline figure used elsewhere in this site comes from. Numbers move; treat the worked example as the source of the claim, not a forecast. The energy rental protocol is open to all TRON network users and supports one-to-many renting, enabling users to rent energy not only for themselves but also for others. The user-friendly interface is designed to accommodate users managing multiple orders seamlessly.</p>
 <p>When renting energy, you need to specify three key parameters based on your requirements, which are <strong>Rental Amount</strong>, <strong>Rental Duration</strong> and <strong>Receiving Address</strong>.</p>
 <ul>
 <li>
@@ -1746,7 +1761,7 @@
 <ul>
 <li>The actual energy rented is calculated based on the corresponding proxy TRX amount. Due to market fluctuations, the rented energy amount may experience slight changes during the transaction;</li>
 <li><strong>Note:</strong> the energy used will be fully restored after 24 hours and can be used again;</li>
-<li>If you are not sure about the amount of energy you need, please refer to: One USDT transfer transaction ≈ 120,000 energy. (may fluctuate according to market trading conditions).</li>
+<li>If you are not sure about the amount of energy you need, the rule of thumb for a USDT transfer is <strong>~64,000 energy when the receiving address already holds USDT</strong> (warm storage slot) and <strong>~130,000 energy when the receiver is creating a fresh USDT balance</strong> (cold storage slot — the extra ~66K covers the new storage write). Other contracts vary widely; use the dApp's per-transaction estimator or the <a href="../../../ai_support/mcp_server/"><code>estimate_lending_energy</code> MCP tool</a> for non-USDT flows. The historical "120,000 energy per USDT transfer" approximation is a midpoint that under-rents in the cold-storage case.</li>
 </ul>
 </li>
 <li>
@@ -1929,6 +1944,8 @@
 </tr>
 </tbody>
 </table>
+<h3 id="try-it">Try it<a class="headerlink" href="#try-it" title="Permanent link">&para;</a></h3>
+<p>Open the JustLend dApp Energy Rental page: <a href="https://app.justlend.org/energy?lang=en-US">https://app.justlend.org/energy?lang=en-US</a> → connect wallet → set <strong>Rental Amount</strong>, <strong>Rental Duration</strong>, and <strong>Receiving Address</strong>.</p>
 <h3 id="developer-reference">Developer reference<a class="headerlink" href="#developer-reference" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Rent resources: <a href="../../../developers/energy_rental/#rent-resources"><code>rentResource(receiver, amount, resourceType)</code></a> — <code>amount</code> is the <strong>delegated TRX in sun</strong> (not energy units); divide target energy by <code>energyStakePerTrx</code> from the <code>/strx/dashboard</code> API.</li>
@@ -1959,7 +1976,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 21, 2026 10:42:00 UTC">2026-05-21</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 22, 2026 06:51:42 UTC">2026-05-22</span>
   </span>
 
     

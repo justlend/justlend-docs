@@ -137,7 +137,9 @@
             "publisher": { "@id": "https://justlend.org/#org" }
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
-          "description": "JustLend DAO governance contract reference \u2014 propose, vote, queue, execute through GovernorBravo. JST \u2192 WJST 1:1 wrapping gives voting power; a 48-hour Timelock executes successful proposals."
+          "description": "JustLend DAO governance contract reference \u2014 propose, vote, queue, execute through GovernorBravo. JST \u2192 WJST 1:1 wrapping gives voting power; a 48-hour Timelock executes successful proposals.",
+          "dateModified": "2026-05-22",
+          "datePublished": "2026-05-22"
         }
       ]
     }
@@ -1878,7 +1880,7 @@
 <h1 id="governance">Governance<a class="headerlink" href="#governance" title="Permanent link">&para;</a></h1>
 <div class="admonition info">
 <p class="admonition-title">About this page</p>
-<p><strong>Protocol:</strong> JustLend DAO (Compound V2 fork on TRON) · <strong>Network:</strong> TRON Mainnet · <strong>Components:</strong> <code>JST</code> (TRC20, <code>TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9</code>) → <code>WJST</code> (voting wrapper, deposit JST → receive WJST 1:1) → <code>GovernorBravoDelegator</code> (entrypoint, <code>TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD</code>) → <code>GovernorBravoDelegate</code> (impl, <code>TCiQTkxhzwSeXhRsNdHCvrxHRAvpjQn5Dt</code>) → <code>Timelock</code> (executor, <code>TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x</code>, 48-hour delay). <strong>Always call the Delegator</strong>, not the Delegate. · <strong>Voting power:</strong> 1 JST = 1 Vote, snapshotted at proposal creation. Threshold: For votes &gt; Against votes AND For votes &gt; 600,000,000. · <strong>Lifecycle states:</strong> <code>Pending → Active → (Canceled | Defeated | Succeeded) → Queued → Executed | Expired</code>. · <strong>Timing:</strong> 2-day review + 3-day voting + 48-hour Timelock = ≥ ~1 week end-to-end. · <strong>ABI:</strong> <a href="../../abis/governor-alpha.json"><code>abis/governor-alpha.json</code></a> (Governor) + <a href="../../abis/wjst.json"><code>abis/wjst.json</code></a> (voting wrapper) · <strong>Discussion forum</strong> (off-chain, pre-proposal): <a href="https://forum.justlend.org">https://forum.justlend.org</a>.</p>
+<p><strong>Protocol:</strong> JustLend DAO (Compound V2 fork on TRON) · <strong>Network:</strong> TRON Mainnet · <strong>Components:</strong> <code>JST</code> (TRC20, <code>TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9</code>) → <code>WJST</code> (voting wrapper, deposit JST → receive WJST 1:1) → <code>GovernorBravoDelegator</code> (entrypoint, <code>TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD</code>) → <code>GovernorBravoDelegate</code> (impl, <code>TCiQTkxhzwSeXhRsNdHCvrxHRAvpjQn5Dt</code>) → <code>Timelock</code> (executor, <code>TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x</code>, <strong><code>delay() = 172,800 sec = 48 hours</code></strong> verified on-chain). <strong>Always call the Delegator</strong>, not the Delegate. · <strong>Voting power:</strong> 1 JST = 1 Vote, snapshotted at proposal creation. Threshold: For votes &gt; Against votes AND For votes &gt; 600,000,000 (<code>quorumVotes()</code>). Proposal threshold: ≥ 200,000,000 JST (<code>proposalThreshold()</code>). · <strong>Lifecycle states:</strong> <code>Pending → Active → (Canceled | Defeated | Succeeded) → Queued → Executed | Expired</code>. · <strong>On-chain timing (verified):</strong> <code>votingDelay() = 1 block ≈ 3 sec</code> (Pending → Active is effectively instant), <code>votingPeriod() = 86,400 blocks ≈ 3 days</code>, Timelock <code>delay() = 48 hours</code>. <strong>Off-chain ~2-day forum review</strong> is a community norm, <strong>not enforced by the contracts</strong> — any agent that programmatically calls <code>propose()</code> will see <code>Active</code> state on the very next block. · <strong>ABI:</strong> <a href="../../abis/governor-alpha.json"><code>abis/governor-alpha.json</code></a> (Governor) + <a href="../../abis/wjst.json"><code>abis/wjst.json</code></a> (voting wrapper) · <strong>Discussion forum</strong> (off-chain, pre-proposal): <a href="https://forum.justlend.org">https://forum.justlend.org</a>.</p>
 </div>
 <p>JustLend DAO protocol is governed and upgraded by JST holders. There are three components included in the governance system: <a href="https://tronscan.org/#/token20/TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9">JST</a>(<a href="https://tronscan.org/#/contract/TXk9LnTnLN7oH96H3sKxJayMxLxR9M4ZD6/code">WJST</a>) token,
 governance module(<a href="https://tronscan.org/#/contract/TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD/code">GovernorBravo</a>) and <a href="https://tronscan.org/#/contract/TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x">Timelock</a>. The governance of the JustLend DAO protocol is through proposals, whose process can be summarized as proposal posting-voting-taking effect.</p>
@@ -2070,7 +2072,7 @@ governance module(<a href="https://tronscan.org/#/contract/TEqiF5JbhDPD77yjEfnEM
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 21, 2026 10:22:46 UTC">2026-05-21</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 22, 2026 06:32:12 UTC">2026-05-22</span>
   </span>
 
     

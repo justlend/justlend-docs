@@ -137,7 +137,9 @@
             "publisher": { "@id": "https://justlend.org/#org" }
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
-          "description": "JustLend DAO core lending contract reference \u2014 jToken (`CErc20Delegator`) function signatures for mint, borrow, repayBorrow, redeem, liquidateBorrow, with TronWeb examples and error codes."
+          "description": "JustLend DAO core lending contract reference \u2014 jToken (`CErc20Delegator`) function signatures for mint, borrow, repayBorrow, redeem, liquidateBorrow, with TronWeb examples and error codes.",
+          "dateModified": "2026-05-22",
+          "datePublished": "2026-05-22"
         }
       ]
     }
@@ -1342,7 +1344,7 @@
 
 
 <li class="md-nav__item ">
-  <a href="#1-supply-usdt-approve-mint" class="md-nav__link">
+  <a href="#1-supply-usdt-safeapprove-mint" class="md-nav__link">
     <span class="md-ellipsis">
       1. Supply USDT
     </span>
@@ -1394,7 +1396,7 @@
 
 
 <li class="md-nav__item ">
-  <a href="#5-repay-usdt-approve-repayborrow" class="md-nav__link">
+  <a href="#5-repay-usdt-safeapprove-repayborrow" class="md-nav__link">
     <span class="md-ellipsis">
       5. Repay USDT
     </span>
@@ -2198,22 +2200,24 @@
 <ul>
 <li>Amounts passed to <code>mint</code>/<code>borrow</code>/<code>repayBorrow</code>/<code>redeemUnderlying</code> are in the <strong>underlying's smallest unit</strong> — always read <code>decimals()</code> on the underlying TRC20 first. TRX = 6, USDT = 6, USDC = 6, USDD = 18, BTC/WBTC = 8, ETH = 18.</li>
 <li>jToken amounts (<code>redeem</code>, <code>transfer</code>, <code>balanceOf</code>) are in <strong>8 decimals</strong> regardless of the underlying.</li>
-<li>Rates (<code>borrowRatePerBlock</code>, <code>supplyRatePerBlock</code>) and the exchange rate are scaled by <strong><code>1e18</code></strong>, per-block.</li>
+<li>Rates (<code>borrowRatePerBlock</code>, <code>supplyRatePerBlock</code>) and the exchange rate are scaled by <strong><code>1e18</code></strong> (<a href="../../../resources/glossary/#mantissa">mantissa</a>), per-block.</li>
 <li>Network in all examples below is <strong>TRON Mainnet</strong>. Test on Nile first.</li>
+<li><strong>Before writing integration code:</strong> read <a href="../../common_pitfalls/">Common Pitfalls</a> for the 10 most frequent foot-guns (USDT approve race, <code>enterMarkets</code> requirement, <code>mint()</code> overload, decimals mismatch, etc.). Term definitions: <a href="../../../resources/glossary/">Glossary</a>.</li>
 </ul>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">TRC20 <code>approve()</code> race condition (USDT-style underlyings)</p>
 <p>Several TRC20s used as JustLend underlyings — notably <strong>TRON USDT</strong> (<code>TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t</code>) — are non-standard implementations that <strong>reject <code>approve(spender, newAmount)</code> if the current allowance is non-zero</strong>. If a previous <code>approve()</code> left a residual allowance, the next call will revert with <code>SafeERC20: approve from non-zero to non-zero allowance</code> (or its TRC20 equivalent), and the subsequent <code>mint</code>/<code>repayBorrow</code> will fail to pull funds.</p>
-<p><strong>Safe pattern</strong> before every <code>mint(uint)</code> / <code>repayBorrow(uint)</code> / <code>liquidateBorrow(...)</code> on jUSDT / jUSDCOLD / jTUSD / jUSDDOLD / jBUSDOLD-style markets:</p>
+<p><strong>Safe pattern</strong> before every <code>mint(uint)</code> / <code>repayBorrow(uint)</code> / <code>liquidateBorrow(...)</code> on jUSDT / jUSDCOLD / jTUSD / jUSDDOLD / jBUSDOLD-style markets (TronWeb 5.x; the sender is taken from <code>tronWeb.defaultAddress</code>):</p>
 <div class="highlight"><pre><span></span><code><span class="c1">// 1. Read the current allowance</span>
-<span class="kd">const</span><span class="w"> </span><span class="nx">current</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">usdt</span><span class="p">.</span><span class="nx">methods</span><span class="p">.</span><span class="nx">allowance</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span><span class="w"> </span><span class="nx">jUSDT</span><span class="p">).</span><span class="nx">call</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">owner</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">tronWeb</span><span class="p">.</span><span class="nx">defaultAddress</span><span class="p">.</span><span class="nx">base58</span><span class="p">;</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">current</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">usdt</span><span class="p">.</span><span class="nx">allowance</span><span class="p">(</span><span class="nx">owner</span><span class="p">,</span><span class="w"> </span><span class="nx">jUSDT</span><span class="p">).</span><span class="nx">call</span><span class="p">()).</span><span class="nx">toString</span><span class="p">();</span>
 <span class="c1">// 2. If non-zero AND different from the target, zero it first</span>
-<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">current</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="s1">&#39;0&#39;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">current</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="nx">targetAmount</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="nx">usdt</span><span class="p">.</span><span class="nx">methods</span><span class="p">.</span><span class="nx">approve</span><span class="p">(</span><span class="nx">jUSDT</span><span class="p">,</span><span class="w"> </span><span class="mf">0</span><span class="p">).</span><span class="nx">send</span><span class="p">({</span><span class="w"> </span><span class="kr">from</span><span class="o">:</span><span class="w"> </span><span class="nx">user</span><span class="w"> </span><span class="p">});</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">current</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="s1">&#39;0&#39;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">current</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="nb">String</span><span class="p">(</span><span class="nx">targetAmount</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="nx">usdt</span><span class="p">.</span><span class="nx">approve</span><span class="p">(</span><span class="nx">jUSDT</span><span class="p">,</span><span class="w"> </span><span class="mf">0</span><span class="p">).</span><span class="nx">send</span><span class="p">();</span>
 <span class="p">}</span>
 <span class="c1">// 3. Set the actual allowance</span>
-<span class="k">await</span><span class="w"> </span><span class="nx">usdt</span><span class="p">.</span><span class="nx">methods</span><span class="p">.</span><span class="nx">approve</span><span class="p">(</span><span class="nx">jUSDT</span><span class="p">,</span><span class="w"> </span><span class="nx">targetAmount</span><span class="p">).</span><span class="nx">send</span><span class="p">({</span><span class="w"> </span><span class="kr">from</span><span class="o">:</span><span class="w"> </span><span class="nx">user</span><span class="w"> </span><span class="p">});</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">usdt</span><span class="p">.</span><span class="nx">approve</span><span class="p">(</span><span class="nx">jUSDT</span><span class="p">,</span><span class="w"> </span><span class="nx">targetAmount</span><span class="p">).</span><span class="nx">send</span><span class="p">();</span>
 </code></pre></div>
 <p>Standard-compliant TRC20s (e.g. USDD, BTC, WBTC, sTRX) do not have this constraint, but using the safe pattern unconditionally costs only one extra <code>approve(0)</code> when an actual change is needed — cheap insurance.</p>
 </div>
@@ -2578,22 +2582,43 @@
 <span class="kd">const</span><span class="w"> </span><span class="nx">JTRX</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP&#39;</span><span class="p">;</span><span class="w"> </span><span class="c1">// jTRX</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">USDT</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t&#39;</span><span class="p">;</span><span class="w"> </span><span class="c1">// USDT underlying</span>
 </code></pre></div>
-<h3 id="1-supply-usdt-approve-mint">1. Supply USDT — <code>approve</code> → <code>mint</code><a class="headerlink" href="#1-supply-usdt-approve-mint" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">supplyUSDT</span><span class="p">(</span><span class="nx">amountWithDecimals</span><span class="w"> </span><span class="cm">/* e.g. &quot;1000000000&quot; for 1,000 USDT */</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<h3 id="1-supply-usdt-safeapprove-mint">1. Supply USDT — <code>safeApprove</code> → <code>mint</code><a class="headerlink" href="#1-supply-usdt-safeapprove-mint" title="Permanent link">&para;</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Why this example uses <code>safeApprove</code> instead of a direct <code>approve</code></p>
+<p>TRON USDT's <code>approve()</code> reverts when the current allowance is non-zero (see the "TRC20 <code>approve()</code> race condition" admonition at the top of this page). The pattern below first reads the existing allowance and zeros it if needed. Skipping this step works the first time but breaks on the second <code>mint</code>.</p>
+</div>
+<div class="highlight"><pre><span></span><code><span class="c1">// Reusable: handles TRON USDT&#39;s &quot;non-zero → non-zero approve reverts&quot; semantics.</span>
+<span class="c1">// Requires tronWeb.defaultAddress.base58 to be set (via setAddress, privateKey,</span>
+<span class="c1">// or TronLink injection).</span>
+<span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">safeApprove</span><span class="p">(</span><span class="nx">token</span><span class="p">,</span><span class="w"> </span><span class="nx">spender</span><span class="p">,</span><span class="w"> </span><span class="nx">amount</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">owner</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">tronWeb</span><span class="p">.</span><span class="nx">defaultAddress</span><span class="p">.</span><span class="nx">base58</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">owner</span><span class="p">)</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="s1">&#39;tronWeb.defaultAddress not set&#39;</span><span class="p">);</span>
+
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">current</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">token</span><span class="p">.</span><span class="nx">allowance</span><span class="p">(</span><span class="nx">owner</span><span class="p">,</span><span class="w"> </span><span class="nx">spender</span><span class="p">).</span><span class="nx">call</span><span class="p">()).</span><span class="nx">toString</span><span class="p">();</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">current</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="s1">&#39;0&#39;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">current</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="nb">String</span><span class="p">(</span><span class="nx">amount</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="nx">token</span><span class="p">.</span><span class="nx">approve</span><span class="p">(</span><span class="nx">spender</span><span class="p">,</span><span class="w"> </span><span class="mf">0</span><span class="p">).</span><span class="nx">send</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">token</span><span class="p">.</span><span class="nx">approve</span><span class="p">(</span><span class="nx">spender</span><span class="p">,</span><span class="w"> </span><span class="nx">amount</span><span class="p">).</span><span class="nx">send</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">supplyUSDT</span><span class="p">(</span><span class="nx">amountWithDecimals</span><span class="w"> </span><span class="cm">/* e.g. &quot;1000000000&quot; for 1,000 USDT */</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">usdt</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">tronWeb</span><span class="p">.</span><span class="nx">contract</span><span class="p">().</span><span class="nx">at</span><span class="p">(</span><span class="nx">USDT</span><span class="p">);</span>
 <span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">jusdt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">tronWeb</span><span class="p">.</span><span class="nx">contract</span><span class="p">().</span><span class="nx">at</span><span class="p">(</span><span class="nx">JUSDT</span><span class="p">);</span>
 
 <span class="w">  </span><span class="c1">// 1. Approve the jUSDT contract to pull USDT from this wallet.</span>
-<span class="w">  </span><span class="c1">//    Skip if you&#39;ve already approved a sufficient amount.</span>
-<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">usdt</span><span class="p">.</span><span class="nx">approve</span><span class="p">(</span><span class="nx">JUSDT</span><span class="p">,</span><span class="w"> </span><span class="nx">amountWithDecimals</span><span class="p">).</span><span class="nx">send</span><span class="p">();</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">safeApprove</span><span class="p">(</span><span class="nx">usdt</span><span class="p">,</span><span class="w"> </span><span class="nx">JUSDT</span><span class="p">,</span><span class="w"> </span><span class="nx">amountWithDecimals</span><span class="p">);</span>
 
 <span class="w">  </span><span class="c1">// 2. Mint jUSDT (supply USDT). Returns 0 on success.</span>
+<span class="w">  </span><span class="c1">//    feeLimit is the *upper bound* on TRX burned for energy + bandwidth, NOT</span>
+<span class="w">  </span><span class="c1">//    the actual cost. Actual cost for a Compound V2 mint is typically</span>
+<span class="w">  </span><span class="c1">//    &lt; 40 TRX worth of energy at current network prices.</span>
 <span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">txId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">jusdt</span><span class="p">.</span><span class="nx">mint</span><span class="p">(</span><span class="nx">amountWithDecimals</span><span class="p">).</span><span class="nx">send</span><span class="p">({</span>
-<span class="w">    </span><span class="nx">feeLimit</span><span class="o">:</span><span class="w"> </span><span class="mf">200</span><span class="nx">_000_000</span><span class="p">,</span><span class="w"> </span><span class="c1">// 200 TRX feeLimit</span>
+<span class="w">    </span><span class="nx">feeLimit</span><span class="o">:</span><span class="w"> </span><span class="mf">200</span><span class="nx">_000_000</span><span class="p">,</span><span class="w"> </span><span class="c1">// 200 TRX cap</span>
 <span class="w">  </span><span class="p">});</span>
 <span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;mint tx:&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">txId</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>
+<p>Standard-compliant TRC20s (USDD, BTC, WBTC, sTRX, …) tolerate non-zero → non-zero, but running <code>safeApprove</code> unconditionally costs only one extra <code>approve(0)</code> when an actual change is needed — cheap insurance.</p>
 <h3 id="2-supply-trx-mint-payable-no-approval-needed">2. Supply TRX — <code>mint()</code> (payable, no approval needed)<a class="headerlink" href="#2-supply-trx-mint-payable-no-approval-needed" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">supplyTRX</span><span class="p">(</span><span class="nx">amountInSun</span><span class="w"> </span><span class="cm">/* 1 TRX = 1_000_000 sun */</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">jtrx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">tronWeb</span><span class="p">.</span><span class="nx">contract</span><span class="p">().</span><span class="nx">at</span><span class="p">(</span><span class="nx">JTRX</span><span class="p">);</span>
@@ -2633,15 +2658,20 @@
 <span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;borrow tx:&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">txId</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>
-<h3 id="5-repay-usdt-approve-repayborrow">5. Repay USDT — <code>approve</code> → <code>repayBorrow</code><a class="headerlink" href="#5-repay-usdt-approve-repayborrow" title="Permanent link">&para;</a></h3>
+<h3 id="5-repay-usdt-safeapprove-repayborrow">5. Repay USDT — <code>safeApprove</code> → <code>repayBorrow</code><a class="headerlink" href="#5-repay-usdt-safeapprove-repayborrow" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">repayUSDT</span><span class="p">(</span><span class="nx">amountWithDecimals</span><span class="w"> </span><span class="cm">/* underlying smallest unit */</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">usdt</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">tronWeb</span><span class="p">.</span><span class="nx">contract</span><span class="p">().</span><span class="nx">at</span><span class="p">(</span><span class="nx">USDT</span><span class="p">);</span>
 <span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">jusdt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">tronWeb</span><span class="p">.</span><span class="nx">contract</span><span class="p">().</span><span class="nx">at</span><span class="p">(</span><span class="nx">JUSDT</span><span class="p">);</span>
 
-<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">usdt</span><span class="p">.</span><span class="nx">approve</span><span class="p">(</span><span class="nx">JUSDT</span><span class="p">,</span><span class="w"> </span><span class="nx">amountWithDecimals</span><span class="p">).</span><span class="nx">send</span><span class="p">();</span>
+<span class="w">  </span><span class="c1">// Use the `safeApprove` defined in example 1 — TRON USDT requires</span>
+<span class="w">  </span><span class="c1">// approve(0) before changing a non-zero allowance.</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">safeApprove</span><span class="p">(</span><span class="nx">usdt</span><span class="p">,</span><span class="w"> </span><span class="nx">JUSDT</span><span class="p">,</span><span class="w"> </span><span class="nx">amountWithDecimals</span><span class="p">);</span>
 
-<span class="w">  </span><span class="c1">// Pass uint256(-1) for a full repayment</span>
-<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">txId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">jusdt</span><span class="p">.</span><span class="nx">repayBorrow</span><span class="p">(</span><span class="nx">amountWithDecimals</span><span class="p">).</span><span class="nx">send</span><span class="p">({</span><span class="w"> </span><span class="nx">feeLimit</span><span class="o">:</span><span class="w"> </span><span class="mf">200</span><span class="nx">_000_000</span><span class="w"> </span><span class="p">});</span>
+<span class="w">  </span><span class="c1">// Pass uint256(-1) (i.e. &quot;0xff&quot; * 32 — the all-ones sentinel) to repay the</span>
+<span class="w">  </span><span class="c1">// full outstanding balance and avoid leaving dust from interest accrual</span>
+<span class="w">  </span><span class="c1">// between read and send. Make sure your `approve` allowance covers it.</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">MAX_UINT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">2n</span><span class="w"> </span><span class="o">**</span><span class="w"> </span><span class="mi">256n</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1n</span><span class="p">).</span><span class="nx">toString</span><span class="p">();</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">txId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">jusdt</span><span class="p">.</span><span class="nx">repayBorrow</span><span class="p">(</span><span class="nx">MAX_UINT</span><span class="p">).</span><span class="nx">send</span><span class="p">({</span><span class="w"> </span><span class="nx">feeLimit</span><span class="o">:</span><span class="w"> </span><span class="mf">200</span><span class="nx">_000_000</span><span class="w"> </span><span class="p">});</span>
 <span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;repay tx:&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">txId</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>
@@ -3117,7 +3147,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 21, 2026 10:42:00 UTC">2026-05-21</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 22, 2026 06:51:42 UTC">2026-05-22</span>
   </span>
 
     

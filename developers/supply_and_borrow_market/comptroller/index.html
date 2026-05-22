@@ -137,7 +137,9 @@
             "publisher": { "@id": "https://justlend.org/#org" }
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
-          "description": "JustLend DAO Comptroller contract reference \u2014 enterMarkets, exitMarket, getAccountLiquidity, markets, closeFactor, liquidationIncentive. The Unitroller proxy is the entrypoint; the Comptroller impl is rotated by governance."
+          "description": "JustLend DAO Comptroller contract reference \u2014 enterMarkets, exitMarket, getAccountLiquidity, markets, closeFactor, liquidationIncentive. The Unitroller proxy is the entrypoint; the Comptroller impl is rotated by governance.",
+          "dateModified": "2026-05-22",
+          "datePublished": "2026-05-22"
         }
       ]
     }
@@ -1826,7 +1828,7 @@
 <h1 id="comptroller">Comptroller<a class="headerlink" href="#comptroller" title="Permanent link">&para;</a></h1>
 <div class="admonition info">
 <p class="admonition-title">About this page</p>
-<p><strong>Protocol:</strong> JustLend DAO (Compound V2 fork on TRON) · <strong>Network:</strong> TRON Mainnet · <strong>Pattern:</strong> <code>Unitroller</code> (proxy / entrypoint, <code>TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7</code>) → <code>Comptroller</code> (impl, <code>TB23wYojvAsSx6gR8ebHiBqwSeABiBMPAr</code>). Implementation pointer is rotated via Governance proposals (<code>_setPendingImplementation</code> + <code>_acceptImplementation</code>). <strong>Always call <code>Unitroller</code></strong> — calling the impl address directly does not route through governance state. · <strong>Units:</strong> <code>closeFactorMantissa</code>, <code>liquidationIncentiveMantissa</code>, <code>collateralFactorMantissa</code> are scaled by <code>1e18</code> (so <code>0.5e18</code> = 50%). <code>getAccountLiquidity</code> returns <code>(error, liquidity, shortfall)</code> where at most one of <code>liquidity</code> and <code>shortfall</code> is non-zero. · <strong>ABI:</strong> <a href="../../abis/comptroller.json"><code>abis/comptroller.json</code></a> · <strong>User-side overview:</strong> <a href="../../../getting_started/concepts/borrow/">Borrow concept</a>, <a href="../../../getting_started/concepts/liquidations/">Liquidation concept</a>.</p>
+<p><strong>Protocol:</strong> JustLend DAO (Compound V2 fork on TRON) · <strong>Network:</strong> TRON Mainnet · <strong>Pattern:</strong> <code>Unitroller</code> (proxy / entrypoint, <code>TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7</code>) → <code>Comptroller</code> (impl, <code>TB23wYojvAsSx6gR8ebHiBqwSeABiBMPAr</code>). Implementation pointer is rotated via Governance proposals (<code>_setPendingImplementation</code> + <code>_acceptImplementation</code>). <strong>Always call <code>Unitroller</code></strong> — calling the impl address directly does not route through governance state. · <strong>Units:</strong> <code>closeFactorMantissa</code>, <code>liquidationIncentiveMantissa</code>, <code>collateralFactorMantissa</code> are scaled by <code>1e18</code> (<a href="../../../resources/glossary/#mantissa">mantissa</a>; so <code>0.5e18</code> = 50%). Verified on-chain at the snapshot date: <code>closeFactorMantissa = 0.5e18</code> (50%), <code>liquidationIncentiveMantissa = 1.08e18</code> (8% liquidator bonus). <code>getAccountLiquidity</code> returns <code>(error, liquidity, shortfall)</code> where at most one of <code>liquidity</code> and <code>shortfall</code> is non-zero. · <strong>ABI:</strong> <a href="../../abis/comptroller.json"><code>abis/comptroller.json</code></a> · <strong>User-side overview:</strong> <a href="../../../getting_started/concepts/borrow/">Borrow concept</a>, <a href="../../../getting_started/concepts/liquidations/">Liquidation concept</a>. · <strong>Before integrating:</strong> <a href="../../common_pitfalls/">Common Pitfalls — <code>enterMarkets</code> requirement, decimals mismatch, close-factor cap</a>. Term definitions: <a href="../../../resources/glossary/">Glossary</a>.</p>
 </div>
 <p>The Comptroller is the risk management module of the JustLend DAO protocol. It determines how much collateral should users keep to avoid liquidation.
 The Comptroller is implemented as an upgradable contract. The entrance is <a href="https://tronscan.org/#/contract/TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7/code">Unitroller</a>; the implementation is <a href="https://tronscan.org/#/contract/TJZi9eWzCLGBi9tuwvPxnaZTGa2iUpRc8v/code">Comptroller</a>.</p>
@@ -1942,7 +1944,7 @@ The Comptroller is implemented as an upgradable contract. The entrance is <a hre
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 21, 2026 10:22:46 UTC">2026-05-21</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 22, 2026 06:32:12 UTC">2026-05-22</span>
   </span>
 
     
