@@ -6,7 +6,7 @@ description: The 10 most common foot-guns when integrating with JustLend DAO on 
 # Common Pitfalls
 
 !!! info "About this page"
-    **Protocol:** JustLend DAO (Compound V2 fork on TRON) · **Network:** TRON Mainnet (same patterns apply on Nile testnet) · **Scope:** the gotchas that bite even when the [contract reference](supply_and_borrow_market/sbm.md), [APIs](apis.md), and [glossary](../resources/glossary.md) are all open. Each entry is a one-liner symptom → root cause → safe pattern. · **Convention:** examples use TronWeb; Solidity / Web3.js patterns translate directly. · **Companion pages:** [Glossary](../resources/glossary.md), [SBM reference](supply_and_borrow_market/sbm.md), [Comptroller reference](supply_and_borrow_market/comptroller.md), [Deployed Contracts](deployed_contracts.md).
+    **Protocol:** JustLend DAO (Compound V2 fork on TRON) · **Network:** TRON Mainnet (same patterns apply on Nile testnet) · **Scope:** the gotchas that bite even when the [contract reference](supply_and_borrow_market/sbm.md), [APIs](apis.md), and [glossary](../resources/glossary.md) are all open. Each entry is a one-liner symptom → root cause → safe pattern. · **TronWeb convention:** examples use TronWeb 5.x direct style — `contract.method(args).call()` for reads, `contract.method(args).send()` for writes. Set the sender once with `tronWeb.setAddress(address)` or by constructing TronWeb with `privateKey` / `headers`; do not pass `{ from: ... }` to `.send()`. Solidity / Web3.js patterns translate directly with the obvious renames. · **Companion pages:** [Glossary](../resources/glossary.md), [SBM reference](supply_and_borrow_market/sbm.md), [Comptroller reference](supply_and_borrow_market/comptroller.md), [Deployed Contracts](deployed_contracts.md).
 
 ## TL;DR for AI agents
 
@@ -34,12 +34,18 @@ description: The 10 most common foot-guns when integrating with JustLend DAO on 
 **Safe pattern.**
 
 ```javascript
-async function safeApprove(token, spender, amount, sender) {
-  const current = await token.methods.allowance(sender, spender).call();
+// Requires tronWeb.defaultAddress.base58 to be set (via setAddress, privateKey,
+// or TronLink injection). Throws early if not — silent "no sender" failures
+// are the most common source of confusion in TronWeb.
+async function safeApprove(token, spender, amount) {
+  const owner = tronWeb.defaultAddress.base58;
+  if (!owner) throw new Error('tronWeb.defaultAddress not set');
+
+  const current = (await token.allowance(owner, spender).call()).toString();
   if (current !== '0' && current !== String(amount)) {
-    await token.methods.approve(spender, 0).send({ from: sender });
+    await token.approve(spender, 0).send();
   }
-  return token.methods.approve(spender, amount).send({ from: sender });
+  return token.approve(spender, amount).send();
 }
 ```
 
@@ -57,16 +63,19 @@ Standard-compliant TRC20s (USDD, BTC, WBTC, sTRX, …) tolerate non-zero → non
 
 ```javascript
 // 1. Make sure we're in every market we want as collateral
-const inMarkets = await comptroller.methods.getAssetsIn(user).call();
+const user = tronWeb.defaultAddress.base58;
+const inMarkets = await comptroller.getAssetsIn(user).call();
 const need = [jUSDT, jTRX].filter(jt => !inMarkets.includes(jt));
 if (need.length > 0) {
-  await comptroller.methods.enterMarkets(need).send({ from: user });
+  await comptroller.enterMarkets(need).send();
 }
 // 2. Now borrow
 const { error, liquidity, shortfall } =
-  await comptroller.methods.getAccountLiquidity(user).call();
-if (error !== '0' || shortfall !== '0') throw new Error('not enough collateral');
-await jSUN.methods.borrow(amount).send({ from: user });
+  await comptroller.getAccountLiquidity(user).call();
+if (error.toString() !== '0' || shortfall.toString() !== '0') {
+  throw new Error('not enough collateral');
+}
+await jSUN.borrow(amount).send();
 ```
 
 `exitMarket(jToken)` is the inverse; it reverts if exiting would put the account below the borrow limit.
@@ -89,10 +98,10 @@ Calling `mint(amount)` on jTRX reverts; calling `mint()` on jUSDT reverts. This 
 
 ```javascript
 if (jTokenSymbol === 'jTRX') {
-  await jTRX.methods.mint().send({ from: user, callValue: amount });
+  await jTRX.mint().send({ callValue: amount });
 } else {
-  await safeApprove(underlying, jToken.address, amount, user);
-  await jToken.methods.mint(amount).send({ from: user });
+  await safeApprove(underlying, jToken.address, amount);
+  await jToken.mint(amount).send();
 }
 ```
 
@@ -120,9 +129,9 @@ The arguments are not interchangeable. `redeem(100e6)` on jUSDT redeems `100e6 /
 ```javascript
 // jUSDT (jToken 8 dec) ↔ USDT (underlying 6 dec)
 // exchange rate is scaled by 1e18 and encodes both the price *and* the decimal diff
-const er = BigInt(await jUSDT.methods.exchangeRateCurrent().call());
-const jUSDTBalance = BigInt(await jUSDT.methods.balanceOf(user).call());   // 8 decimals
-const underlyingBalance = jUSDTBalance * er / 10n**18n;                     // 6 decimals
+const er = BigInt((await jUSDT.exchangeRateCurrent().call()).toString());
+const jUSDTBalance = BigInt((await jUSDT.balanceOf(user).call()).toString()); // 8 decimals
+const underlyingBalance = jUSDTBalance * er / 10n**18n;                       // 6 decimals
 ```
 
 The `balanceOfUnderlying(account)` helper does this conversion for you and is the recommended path.
@@ -136,13 +145,12 @@ The `balanceOfUnderlying(account)` helper does this conversion for you and is th
 **Rule.** In a single `liquidateBorrow()` call, you may repay **at most `closeFactorMantissa / 1e18 = 50%`** of the borrower's outstanding debt **on that specific borrowed asset**. To fully liquidate, call repeatedly.
 
 ```javascript
-const debt = BigInt(await jUSDT.methods.borrowBalanceCurrent(borrower).call());
+const debt = BigInt((await jUSDT.borrowBalanceCurrent(borrower).call()).toString());
 const closeFactor = BigInt(
-  await comptroller.methods.closeFactorMantissa().call()
+  (await comptroller.closeFactorMantissa().call()).toString()
 );  // 5e17 = 0.5 = 50%
 const maxRepay = debt * closeFactor / 10n**18n;
-await jUSDT.methods.liquidateBorrow(borrower, maxRepay, jCollateral)
-  .send({ from: liquidator });
+await jUSDT.liquidateBorrow(borrower, maxRepay.toString(), jCollateral).send();
 ```
 
 The liquidator receives `repayAmount × liquidationIncentiveMantissa / 1e18` worth of `jCollateral` — for JustLend, `1.08` → 8% bonus over the debt value.
@@ -159,7 +167,7 @@ The liquidator receives `repayAmount × liquidationIncentiveMantissa / 1e18` wor
 
 ```javascript
 const MAX_UINT = 2n ** 256n - 1n;
-await jUSDT.methods.repayBorrow(MAX_UINT.toString()).send({ from: borrower });
+await jUSDT.repayBorrow(MAX_UINT.toString()).send();
 ```
 
 Same sentinel works for `repayBorrowBehalf(borrower, MAX_UINT)`. Make sure your `approve()` allowance is at least equal to the current debt (or use `MAX_UINT` for the approval too — but mind pitfall #1 for USDT-style underlyings).

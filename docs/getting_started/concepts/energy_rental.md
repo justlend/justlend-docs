@@ -8,7 +8,7 @@ description: Rent TRON Energy 50–80% cheaper than burning TRX — rental amoun
 !!! info "About this page"
     **Protocol:** JustLend DAO Energy Rental (one-to-many TRON Energy marketplace) · **Network:** TRON Mainnet · **Energy Rental contract:** `TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd` (see [Deployed Contracts](../../developers/deployed_contracts.md#energy-rental)) · **Receiving address constraint:** must be a regular account, **not** a contract · **Units:** prepayment is denominated in TRX (6 decimals); on-chain amounts use **sun** (1 TRX = 10⁶ sun; see [Glossary → sun](../../resources/glossary.md#sun)); rental duration is in seconds, capped at 30 days. · **Refund:** unused Energy Fee + (conditionally) the Security Deposit and Liquidation Penalty are refunded on timely return. · **Snapshot caveat:** the USD cost tables further down were captured at a single past moment — see the [snapshot warning](#cost-estimation) below.
 
-JustLend DAO integrates the energy rental protocol, which aims to provide users with a more convenient and cheaper way to obtain energy. The energy rental protocol is open to all TRON network users and supports one-to-many renting, enabling users to rent energy not only for themselves but also for others. The user-friendly interface is designed to accommodate users managing multiple orders seamlessly.
+JustLend DAO integrates the energy rental protocol, which aims to provide users with a more convenient and cheaper way to obtain energy. The savings vs. burning TRX directly are large but **vary with TRON's energy unit price and the receiver's USDT-holding state** — the worked example in [§Cost Estimation](#cost-estimation) below shows ~71% savings (a USDT-holding receiver) and ~84% savings (a receiver without USDT) for one specific snapshot, which is where the "~50–80% cheaper" headline figure used elsewhere in this site comes from. Numbers move; treat the worked example as the source of the claim, not a forecast. The energy rental protocol is open to all TRON network users and supports one-to-many renting, enabling users to rent energy not only for themselves but also for others. The user-friendly interface is designed to accommodate users managing multiple orders seamlessly.
 
 When renting energy, you need to specify three key parameters based on your requirements, which are **Rental Amount**, **Rental Duration** and **Receiving Address**.
 
@@ -95,6 +95,10 @@ By comparing these two scenarios, it becomes evident that the cost of using rent
 | rent energy cost | $1.57                 | $1.80                 |
 | burn TRX cost    | $5.4689               | $ 11.0129             |
 | save             | - $3.8989             | - $9.2129             |
+
+### Try it
+
+Open the JustLend dApp Energy Rental page: <https://app.justlend.org/energy?lang=en-US> → connect wallet → set **Rental Amount**, **Rental Duration**, and **Receiving Address**.
 
 ### Developer reference
 

@@ -10,6 +10,27 @@ For the JustLend protocol itself, see governance proposals on [forum.justlend.or
 
 ## [Unreleased]
 
+### Added — 2026-05-22 API-style + reference-gap pass
+
+- **TronWeb call style unified across all developer pages.** Removed every `.methods.X()` (Web3.js-style) call from `developers/common_pitfalls.md` (10 occurrences) and `developers/supply_and_borrow_market/sbm.md` (admonition snippet) — now consistently using TronWeb 5.x direct style (`contract.method(args).call()` / `.send()`). Also dropped `.send({ from: addr })` (8 in common_pitfalls + 4 in sbm) in favor of the canonical TronWeb pattern of setting `tronWeb.defaultAddress` once. Both styles were technically supported, but the same file used both inconsistently. The `safeApprove` helper now throws early if `tronWeb.defaultAddress.base58` is unset (silent "no sender" failure was the most common confusion).
+- **Multicall3 address documented.** On TRON Mainnet: `TX56WKxtja91Dybf2FdN4hZbDLyKVxxhAu`. Sourced from the MCP server's `src/core/chains.ts` and **independently verified on-chain** via TronGrid `triggerconstantcontract` (contract name on-chain is literally `Multicall3`; `getCurrentBlockTimestamp()` returns a valid epoch). Added to `mcp_server.md`, `llms-full.txt`, and the new `glossary.md` Multicall3 entry.
+- **Cross-links from `ai_support/mcp_server.md` and `ai_support/justlend_skills.md`** to `Common Pitfalls` and `Glossary`. These two AI-Support pages are the entry point for agent integrators but previously had no inbound links to the v7-introduced reference pages.
+- **JST supply: on-chain query example in `tokenomics.md`.** Replaced the implicit "current supply is X" lack-of-info with a TronWeb snippet that reads `totalSupply()` from the JST TRC20 (`TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9`). Decimals = 18 (verified on-chain). Avoids baking in a hard-coded number that drifts as the buyback-and-burn program executes.
+- **Energy rental `~50–80% cheaper` claim now anchored to the worked example** (`getting_started/concepts/energy_rental.md` § Cost Estimation). The Cost Estimation table shows 71% savings for a USDT-holding receiver and 84% for a receiver without USDT in one specific past snapshot — that's where the "~50–80%" headline came from. Both `concepts/energy_rental.md` (intro paragraph) and `llms-full.txt §2.8` now explicitly link to / restate the worked example rather than treating the range as a forecast.
+- **dApp URLs added** to user concept pages that previously had no "Try it" link: `repay.md`, `withdraw.md`, `risks.md` (positions / liquidation monitor), `energy_rental.md` (user-side), `overview.md` (consolidated entry-point list).
+- **`feeLimit: 200_000_000` (200 TRX) in TronWeb examples** annotated as "cap, not cost" — actual energy + bandwidth cost for a Compound V2 `mint` is typically well under 40 TRX worth at current network prices.
+
+### Verified on-chain (or against authoritative source) — no fabricated numbers introduced this round
+
+| Claim | Source / verification | Confidence |
+|---|---|---|
+| Multicall3 on TRON Mainnet = `TX56WKxtja91Dybf2FdN4hZbDLyKVxxhAu` | MCP server `chains.ts` + TronGrid `getcontract` returned `name: "Multicall3"` + live `getCurrentBlockTimestamp()` call | ✅ verified |
+| JST decimals = 18 | TronGrid `triggerconstantcontract` `decimals()` returned 18 | ✅ verified |
+| MCP server v1.0.7 | npm registry `@justlend/mcp-server-justlend` `latest` = 1.0.7 | ✅ verified |
+| TRON USDT (`TR7NHq…`) is a `TetherToken` contract subject to the dual-zero approve constraint | TronGrid `getcontract` returned `name: "TetherToken"` (same family as ETH USDT, which famously enforces the dual-zero check) | ✅ strongly supported (not directly tx-tested but contract identity confirmed) |
+| Multicall3 `~2.5s vs ~8s legacy` benchmark | Quoted directly from upstream MCP server README; not independently benchmarked | 📝 upstream claim, not fabricated |
+| `app.justlend.org/energy?lang=en-US` | URL pattern matches existing documented routes (`/strx`, `/liquidate`, `/homeNew`, `/marketNew`); HTTP 200 returns SPA shell — actual client-side route handler not independently verified | ⚠️ pattern-matched, low risk |
+
 ### Fixed — 2026-05-22 content-accuracy pass
 
 - **Governance lifecycle: removed the "2-day review period" claim.** A direct on-chain read of `GovernorBravoDelegator.votingDelay()` (TronGrid `triggerconstantcontract`) returned `1 block ≈ 3 seconds`. The docs (`jips.md`, `developers/supply_and_borrow_market/governance.md`, `llms-full.txt §3`) previously described a "2-day review period" between `propose()` and `Active` state as if it were protocol-enforced. It is **not** — it's a community / forum convention. Rewrote all three locations to (a) cite the verified on-chain timings (`votingDelay = 1 block`, `votingPeriod = 86,400 blocks ≈ 3 days`, `Timelock.delay() = 172,800 sec = 48 hours`) and (b) explicitly call out that the off-chain forum discussion is **not** enforced by the contracts. Governance-bot authors should not assume any gap between `propose()` and `Active`.

@@ -31,5 +31,13 @@ Each money market on JustLend DAO represents a specific TRON asset, including TR
 
 * **Liquidation:** if the value of a borrower's collateralized assets falls below the liquidation threshold, JustLend DAO smart contracts will trigger liquidation automatically.
 
+### **Where to interact**
+
+- **Main dApp:** <https://app.justlend.org/homeNew?lang=en-US> — supply, borrow, repay, withdraw.
+- **sTRX (liquid staking):** <https://app.justlend.org/strx?lang=en-US>.
+- **Energy Rental:** <https://app.justlend.org/energy?lang=en-US>.
+- **Liquidation tool:** <https://app.justlend.org/liquidate?lang=en-US>.
+- **Governance proposals:** <https://forum.justlend.org> (off-chain discussion) → on-chain `GovernorBravoDelegator` (see [Governance contracts](../developers/supply_and_borrow_market/governance.md)).
+
 
 

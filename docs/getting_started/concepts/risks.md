@@ -33,6 +33,14 @@ The assets used as collateral within the JustLend DAO Protocol are subject to ma
 * **Risk Parameters:** JustLend DAO has set key risk parameters, such as, which are borrow limit, designed to protect the protocol from sudden market changes. These parameters help ensure that collateral remains sufficient to secure the borrows, reducing the likelihood of under-collateralization;
 * **Governance Oversight:** The JustLend DAO community and governance framework play a crucial role in adjusting these risk parameters based on market conditions. This allows the protocol to remain adaptable and respond to fluctuations in the market, ensuring a balanced and secure lending environment.
 
+### **Where to monitor your positions**
+
+The JustLend dApp surfaces every account-level risk metric in one place:
+
+- Live Risk Value and borrow limit: <https://app.justlend.org/homeNew?lang=en-US> → connect wallet.
+- Liquidation page (third-party borrowers within reach of liquidation): <https://app.justlend.org/liquidate?lang=en-US>.
+- Risk-alert email subscription (see below): manage from the same dApp profile menu.
+
 ### **Risk Alert**
 
 #### Why can't I receive email notifications?

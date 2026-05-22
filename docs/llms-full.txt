@@ -104,7 +104,7 @@ One-click TRX liquid staking under Stake 2.0:
 
 ### 2.8 Energy Rental
 
-Rent TRON Energy at 50–80% below the cost of burning TRX:
+Rent TRON Energy at ~50–80% below the cost of burning TRX (worked example in [Energy Rental concept page §Cost Estimation](https://docs.justlend.org/getting_started/concepts/energy_rental#cost-estimation) shows 71% savings for a USDT-holding receiver and 84% for a receiver without USDT at one specific past snapshot; actual savings move with the TRON energy unit price and contract usage):
 
 - Specify: **Rental Amount** (energy units), **Rental Duration** (hourly or daily, max 30 days), **Receiving Address** (must be a regular account, not a contract).
 - Prepayment includes: Energy Fee (proportional to duration; unused portion refunded) + Security Deposit (~1 day's energy fee) + Liquidation Penalty (`max(20 TRX, 0.008% × delegated TRX)`).
@@ -442,7 +442,7 @@ Capability domains:
 
 - **Wallet & Network** (10 tools) — dual-mode signing: `browser` (TronLink via `tronlink-signer` SDK, TIP-6963; **recommended** — private keys never leave the wallet) or `agent` (encrypted local wallet under `~/.agent-wallet/`, managed by `@bankofai/agent-wallet`). Importing an existing key is intentionally CLI-only (`npx agent-wallet add`) — not exposed as an MCP tool, since MCP arguments can be logged by clients. Tools: `get_wallet_address`, `connect_browser_wallet`, `set_wallet_mode`, `get_wallet_mode`, `list_wallets`, `set_active_wallet`, `get_supported_networks`, `get_supported_markets`, `set_network`, `get_network`.
 - **Market Data** (3 tools) — contract queries first with API fallback; TTL caching (30–60s). `get_market_data`, `get_all_markets`, `get_protocol_summary`.
-- **Account & Balances** (5 tools) — Multicall3 batch queries (~2.5s vs ~8s legacy). `get_account_summary`, `check_allowance`, `get_trx_balance`, `get_token_balance`, `get_wallet_balances`.
+- **Account & Balances** (5 tools) — Multicall3 batch queries (~2.5s vs ~8s legacy). Multicall3 on TRON Mainnet: `TX56WKxtja91Dybf2FdN4hZbDLyKVxxhAu` (verified on-chain — name = `Multicall3`, `getCurrentBlockTimestamp()` returns valid epoch). `get_account_summary`, `check_allowance`, `get_trx_balance`, `get_token_balance`, `get_wallet_balances`.
 - **Lending Operations** (10 tools) — `supply`, `withdraw`, `withdraw_all`, `borrow`, `repay`, `enter_market`, `exit_market`, `approve_underlying`, `claim_rewards`, `estimate_lending_energy`. Write tools marked with `destructiveHint: true`.
 - **Mining & Rewards** (3 tools) — `get_mining_rewards`, `get_usdd_mining_config`, `get_wbtc_mining_config`.
 - **JST Voting / Governance** (10 tools) — `get_proposal_list`, `get_user_vote_status`, `get_vote_info`, `get_locked_votes`, `check_jst_allowance_for_voting`, `approve_jst_for_voting`, `deposit_jst_for_votes`, `withdraw_votes_to_jst`, `cast_vote`, `withdraw_votes_from_proposal`.

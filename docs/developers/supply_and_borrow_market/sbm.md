@@ -15,17 +15,18 @@ description: JustLend DAO core lending contract reference — jToken (`CErc20Del
 !!! warning "TRC20 `approve()` race condition (USDT-style underlyings)"
     Several TRC20s used as JustLend underlyings — notably **TRON USDT** (`TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t`) — are non-standard implementations that **reject `approve(spender, newAmount)` if the current allowance is non-zero**. If a previous `approve()` left a residual allowance, the next call will revert with `SafeERC20: approve from non-zero to non-zero allowance` (or its TRC20 equivalent), and the subsequent `mint`/`repayBorrow` will fail to pull funds.
 
-    **Safe pattern** before every `mint(uint)` / `repayBorrow(uint)` / `liquidateBorrow(...)` on jUSDT / jUSDCOLD / jTUSD / jUSDDOLD / jBUSDOLD-style markets:
+    **Safe pattern** before every `mint(uint)` / `repayBorrow(uint)` / `liquidateBorrow(...)` on jUSDT / jUSDCOLD / jTUSD / jUSDDOLD / jBUSDOLD-style markets (TronWeb 5.x; the sender is taken from `tronWeb.defaultAddress`):
 
     ```javascript
     // 1. Read the current allowance
-    const current = await usdt.methods.allowance(user, jUSDT).call();
+    const owner = tronWeb.defaultAddress.base58;
+    const current = (await usdt.allowance(owner, jUSDT).call()).toString();
     // 2. If non-zero AND different from the target, zero it first
-    if (current !== '0' && current !== targetAmount) {
-        await usdt.methods.approve(jUSDT, 0).send({ from: user });
+    if (current !== '0' && current !== String(targetAmount)) {
+        await usdt.approve(jUSDT, 0).send();
     }
     // 3. Set the actual allowance
-    await usdt.methods.approve(jUSDT, targetAmount).send({ from: user });
+    await usdt.approve(jUSDT, targetAmount).send();
     ```
 
     Standard-compliant TRC20s (e.g. USDD, BTC, WBTC, sTRX) do not have this constraint, but using the safe pattern unconditionally costs only one extra `approve(0)` when an actual change is needed — cheap insurance.
@@ -430,26 +431,33 @@ const USDT       = 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t'; // USDT underlying
     TRON USDT's `approve()` reverts when the current allowance is non-zero (see the "TRC20 `approve()` race condition" admonition at the top of this page). The pattern below first reads the existing allowance and zeros it if needed. Skipping this step works the first time but breaks on the second `mint`.
 
 ```javascript
-async function safeApprove(token, spender, amount, sender) {
-  const current = await token.allowance(sender, spender).call();
-  if (current.toString() !== '0' && current.toString() !== String(amount)) {
-    await token.approve(spender, 0).send({ from: sender });
+// Reusable: handles TRON USDT's "non-zero → non-zero approve reverts" semantics.
+// Requires tronWeb.defaultAddress.base58 to be set (via setAddress, privateKey,
+// or TronLink injection).
+async function safeApprove(token, spender, amount) {
+  const owner = tronWeb.defaultAddress.base58;
+  if (!owner) throw new Error('tronWeb.defaultAddress not set');
+
+  const current = (await token.allowance(owner, spender).call()).toString();
+  if (current !== '0' && current !== String(amount)) {
+    await token.approve(spender, 0).send();
   }
-  return token.approve(spender, amount).send({ from: sender });
+  return token.approve(spender, amount).send();
 }
 
 async function supplyUSDT(amountWithDecimals /* e.g. "1000000000" for 1,000 USDT */) {
-  const usdt   = await tronWeb.contract().at(USDT);
-  const jusdt  = await tronWeb.contract().at(JUSDT);
-  const sender = tronWeb.defaultAddress.base58;
+  const usdt  = await tronWeb.contract().at(USDT);
+  const jusdt = await tronWeb.contract().at(JUSDT);
 
   // 1. Approve the jUSDT contract to pull USDT from this wallet.
-  //    `safeApprove` handles TRON USDT's "non-zero → non-zero approve reverts" semantics.
-  await safeApprove(usdt, JUSDT, amountWithDecimals, sender);
+  await safeApprove(usdt, JUSDT, amountWithDecimals);
 
   // 2. Mint jUSDT (supply USDT). Returns 0 on success.
+  //    feeLimit is the *upper bound* on TRX burned for energy + bandwidth, NOT
+  //    the actual cost. Actual cost for a Compound V2 mint is typically
+  //    < 40 TRX worth of energy at current network prices.
   const txId = await jusdt.mint(amountWithDecimals).send({
-    feeLimit: 200_000_000, // 200 TRX feeLimit
+    feeLimit: 200_000_000, // 200 TRX cap
   });
   console.log('mint tx:', txId);
 }
@@ -508,18 +516,17 @@ async function borrowTRX(amountInSun) {
 
 ```javascript
 async function repayUSDT(amountWithDecimals /* underlying smallest unit */) {
-  const usdt   = await tronWeb.contract().at(USDT);
-  const jusdt  = await tronWeb.contract().at(JUSDT);
-  const sender = tronWeb.defaultAddress.base58;
+  const usdt  = await tronWeb.contract().at(USDT);
+  const jusdt = await tronWeb.contract().at(JUSDT);
 
-  // Use the same `safeApprove` defined in example 1 — TRON USDT requires
+  // Use the `safeApprove` defined in example 1 — TRON USDT requires
   // approve(0) before changing a non-zero allowance.
-  await safeApprove(usdt, JUSDT, amountWithDecimals, sender);
+  await safeApprove(usdt, JUSDT, amountWithDecimals);
 
   // Pass uint256(-1) (i.e. "0xff" * 32 — the all-ones sentinel) to repay the
   // full outstanding balance and avoid leaving dust from interest accrual
   // between read and send. Make sure your `approve` allowance covers it.
-  const MAX_UINT = '115792089237316195423570985008687907853269984665640564039457584007913129639935';
+  const MAX_UINT = (2n ** 256n - 1n).toString();
   const txId = await jusdt.repayBorrow(MAX_UINT).send({ feeLimit: 200_000_000 });
   console.log('repay tx:', txId);
 }

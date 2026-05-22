@@ -19,6 +19,9 @@ This page is the human-readable reference for the full MCP server. For agent use
 - [Guided prompts](#prompts-ai-guided-workflows) — the 10 shipped MCP prompts (`supply_assets`, `analyze_portfolio`, `cast_vote`, …).
 - [Security considerations](#security-considerations) — `destructiveHint`, dry-run mode, source-of-truth priority, HTTP-mode `MCP_API_KEY`.
 
+!!! tip "Before integrating"
+    Read [Common Pitfalls](../developers/common_pitfalls.md) for the 10 most frequent JustLend-integration foot-guns (USDT `approve()` race condition, `enterMarkets()` requirement, `mint()` overload between jTRX and jTRC20, jToken vs underlying decimals, `liquidateBorrow` 50% close-factor cap, `uint256(-1)` repay sentinel, …). For precise term definitions used throughout the MCP tool descriptions (mantissa, kink, utilization, collateral / close / reserve factor, exchange rate, market `status`), see the [Glossary](../resources/glossary.md). The MCP server enforces several of these patterns internally (e.g. it runs TRC20 allowance checks before supply/repay), but understanding them helps you debug failed transactions and write callers that don't fight the server.
+
 The JustLend MCP Server (`@justlend/mcp-server-justlend`) is a [Model Context Protocol](https://modelcontextprotocol.io/) server that enables AI agents to interact with the **JustLend DAO** protocol on TRON. Supply assets, borrow against collateral, manage positions, rent energy, stake TRX for sTRX, and analyze DeFi portfolios — all through a unified AI interface.
 
 Beyond JustLend-specific operations, the server also exposes a full set of **general-purpose TRON chain utilities** — balance queries, block/transaction data, token metadata, TRX transfers, smart contract reads/writes, staking (Stake 2.0), multicall, and more.
@@ -40,7 +43,7 @@ Beyond JustLend-specific operations, the server also exposes a full set of **gen
 - **Market Data**: Real-time APYs, TVL, utilization rates, prices for all markets
     - Smart fallback: contract queries first, API fallback for reliability
     - TTL caching (30–60s) to reduce RPC calls
-- **Account Data**: Full position analysis via Multicall3 batch queries (~2.5s vs ~8s legacy)
+- **Account Data**: Full position analysis via Multicall3 batch queries on TRON Mainnet (`TX56WKxtja91Dybf2FdN4hZbDLyKVxxhAu`, ~2.5s vs ~8s legacy)
     - Health factor, collateral, borrow positions
     - On-chain Oracle prices with API fallback
 - **Batch Wallet Balances**: Query all TRC20 token balances in a single Multicall3 RPC call
