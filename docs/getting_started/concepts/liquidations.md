@@ -1,3 +1,13 @@
+---
+title: Liquidations on JustLend DAO
+description: How JustLend SBM liquidations work — Risk Value formula, observation (>95) and execution (≥100) thresholds, 50% close factor, 8% liquidation reward, and the permissionless `liquidateBorrow` workflow.
+---
+
+# Liquidations
+
+!!! info "About this page"
+    **Protocol:** JustLend DAO (Compound V2 fork on TRON) · **Network:** TRON Mainnet · **Page scope:** how liquidation works for **SBM (Supply & Borrow Market)** positions on JustLend — risk-value formula, thresholds, on-chain mechanics, and the manual liquidation workflow. · **Unit conventions used here:** [Collateral Factor](../../resources/glossary.md#collateral-factor) ∈ [0, 1] (decimal, e.g. `0.80` = 80%); [Risk Value](../../resources/glossary.md#risk-value) is a percentage scalar (`100` means at the liquidation threshold, **not** `1.0`); USD amounts are de-scaled human numbers. · **Related contracts:** `Comptroller` (sets [`closeFactorMantissa`](../../resources/glossary.md#close-factor), [`liquidationIncentiveMantissa`](../../resources/glossary.md#liquidation-incentive), and per-market `collateralFactorMantissa`; see [Comptroller](../../developers/supply_and_borrow_market/comptroller.md)) and `CErc20Delegator` jTokens (expose `liquidateBorrow`; see [SBM](../../developers/supply_and_borrow_market/sbm.md)). · **Key terms defined inline below:** Risk Value, Borrow Limit, Total Borrow, Collateral Factor, Observation Threshold, Liquidation Threshold, Liquidation Reward — fuller definitions in [Glossary](../../resources/glossary.md). · **For liquidator-bot developers:** [Common Pitfalls #6 (50% close-factor cap) + #9 (oracle freshness)](../../developers/common_pitfalls.md).
+
 Liquidation is determined by **Risk Value**, which is a critical metric within the JustLend DAO Protocol that measures the safety of a borrow position. It is calculated as:
 
 <div style="text-align: center; font-size: 20px;">
