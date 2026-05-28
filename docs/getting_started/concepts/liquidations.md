@@ -1,31 +1,17 @@
----
-title: Liquidations on JustLend DAO
-description: How JustLend SBM liquidations work — Risk Value formula, observation (>95) and execution (≥100) thresholds, 50% close factor, 8% liquidation reward, and the permissionless `liquidateBorrow` workflow.
----
-
-# Liquidations
-
-!!! info "About this page"
-    **Protocol:** JustLend DAO (Compound V2 fork on TRON) · **Network:** TRON Mainnet · **Page scope:** how liquidation works for **SBM (Supply & Borrow Market)** positions on JustLend — risk-value formula, thresholds, on-chain mechanics, and the manual liquidation workflow. · **Unit conventions used here:** [Collateral Factor](../../resources/glossary.md#collateral-factor) ∈ [0, 1] (decimal, e.g. `0.80` = 80%); [Risk Value](../../resources/glossary.md#risk-value) is a percentage scalar (`100` means at the liquidation threshold, **not** `1.0`); USD amounts are de-scaled human numbers. · **Related contracts:** `Comptroller` (sets [`closeFactorMantissa`](../../resources/glossary.md#close-factor), [`liquidationIncentiveMantissa`](../../resources/glossary.md#liquidation-incentive), and per-market `collateralFactorMantissa`; see [Comptroller](../../developers/supply_and_borrow_market/comptroller.md)) and `CErc20Delegator` jTokens (expose `liquidateBorrow`; see [SBM](../../developers/supply_and_borrow_market/sbm.md)). · **Key terms defined inline below:** Risk Value, Borrow Limit, Total Borrow, Collateral Factor, Observation Threshold, Liquidation Threshold, Liquidation Reward — fuller definitions in [Glossary](../../resources/glossary.md). · **For liquidator-bot developers:** [Common Pitfalls #6 (50% close-factor cap) + #9 (oracle freshness)](../../developers/common_pitfalls.md).
-
 Liquidation is determined by **Risk Value**, which is a critical metric within the JustLend DAO Protocol that measures the safety of a borrow position. It is calculated as:
 
-$$
-\mathrm{Risk\ Value} = \frac{\mathrm{Total\ Borrow}}{\mathrm{Borrow\ Limit}} \times 100
-$$
+<div style="text-align: center; font-size: 20px;">
+    Risk Value = Total Borrow / Borrow Limit * 100
+</div>
 
-* **Total Borrow:** sum of all assets borrowed by the user.
-* **Borrow Limit:** $\sum_i \mathrm{Supply\ Value}_i \times \mathrm{Collateral\ Factor}_i$.
+* `Total Borrow:` sum of all assets borrowed by the user;
+* `Borrow Limit:` ∑ (Asset supplied by the user * Collateral Factor of the asset).
 
 The **Risk Value** measures a borrow position’s stability. The Borrow Limit, set by JustLend DAO Governance for each asset, determines the maximum percentage of value that can be borrowed against the asset. For example, if a user supplies $100 in TRX with an collateral factor 80% and $200 in SUN with an collateral factor 75%. Then, borrows $90 worth of USDD and $50 worth of JST tokens from SBM. we can see:
 
-$$
-\mathrm{Borrow\ Limit} = (100 \times 80\%) + (200 \times 75\%) = 230
-$$
+**Borrow Limit**  =  ∑ (Asset supplied * Collateral Factor) = 100 * 80% + 200 * 75% = 230
 
-$$
-\mathrm{Risk\ Value} = \frac{90 + 50}{230} \times 100 = 60.87
-$$
+**Risk Value**  =  Total Borrow / Borrow Limit * 100 = (90 + 50) / 230 * 100 = 60.87
 
 A risk value above 100 represents a position that is above the liquidation threshold. Regular monitoring is essential, as the risk value fluctuates based on both the value of collateral factor and borrowed assets. To reduce the risk value , users can either supply more collateral or repay part of the borrow position. The risk value is directly tied to collateral value. If the collateral value increases, the risk value  decrease; if it falls, the risk value increases, increasing the risk of liquidation.
 
