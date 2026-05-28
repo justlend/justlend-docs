@@ -33,7 +33,7 @@ description: Base58 addresses for every JustLend DAO contract on TRON Mainnet, p
     Everything in the main tables below is deployed on **TRON Mainnet** (Chain ID `0x2b6653dc`). For **Nile testnet** addresses see the [Nile Testnet](#nile-testnet) section at the bottom of this page or the `nile` block of `contracts.json`.
 
 !!! warning "Decimals / precision"
-    The Compound V2 architecture treats every token amount in **its underlying's smallest unit**. Always read `decimals()` on the underlying TRC20 before constructing `mint`, `borrow`, `repayBorrow`, or `redeemUnderlying` amounts. Common cases: TRX/USDT/USDC = 6, USDD/ETH = 18, BTC/WBTC = 8. jToken amounts (`redeem`, `transfer`) use **8 decimals** regardless of the underlying. For the full enumeration and the units rationale, see [Glossary → jToken decimals](../resources/glossary.md#jtoken-decimals) and [Common Pitfalls #5](common_pitfalls.md#5-jtoken-8-underlying-varies-decimals).
+    The JustLend DAO architecture treats every token amount in **its underlying's smallest unit**. Always read `decimals()` on the underlying TRC20 before constructing `mint`, `borrow`, `repayBorrow`, or `redeemUnderlying` amounts. Common cases: TRX/USDT/USDC = 6, USDD/ETH = 18, BTC/WBTC = 8. jToken amounts (`redeem`, `transfer`) use **8 decimals** regardless of the underlying. For the full enumeration and the units rationale, see [Glossary → jToken decimals](../resources/glossary.md#jtoken-decimals) and [Common Pitfalls #5](common_pitfalls.md#5-jtoken-8-underlying-varies-decimals).
 
 ## Address formats
 
