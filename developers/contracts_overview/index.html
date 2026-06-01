@@ -138,8 +138,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "Architecture summary of every JustLend DAO contract on TRON \u2014 SBM jTokens, Comptroller, interest rate models, price oracle, governance, sTRX, Energy Rental \u2014 with proxy mode, ABI links, and key functions in one table.",
-          "dateModified": "2026-05-21",
-          "datePublished": "2026-05-21"
+          "dateModified": "2026-05-28",
+          "datePublished": "2026-05-28"
         }
       ]
     }
@@ -937,19 +937,6 @@
 
 
 
-<li class="md-nav__item ">
-  <a href="#contract-summary-table-machine-readable" class="md-nav__link">
-    <span class="md-ellipsis">
-      Contract summary table (machine-readable)
-    </span>
-  </a>
-  
-</li>
-      
-        
-
-
-
 <li class="md-nav__item has-children">
   <a href="#core-contracts" class="md-nav__link" aria-expanded="true">
     <span class="md-ellipsis">
@@ -1051,6 +1038,19 @@
   <a href="#energy-rental" class="md-nav__link">
     <span class="md-ellipsis">
       Energy Rental
+    </span>
+  </a>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item ">
+  <a href="#contract-summary-table-machine-readable" class="md-nav__link">
+    <span class="md-ellipsis">
+      Contract summary table (machine-readable)
     </span>
   </a>
   
@@ -1849,6 +1849,37 @@
 <li><strong>Staked TRX:</strong> the contracts utilized for staking TRX to earn high rewards.</li>
 <li><strong>Energy Rental:</strong> contracts enable users to rent energy anytime with a low price.</li>
 </ul>
+<h2 id="core-contracts"><strong>Core Contracts</strong><a class="headerlink" href="#core-contracts" title="Permanent link">&para;</a></h2>
+<p>There are 5 categories of core repository contracts (the prose below mirrors the summary table — refer to the table for addresses, function signatures, and ABI links):</p>
+<ul>
+<li>JTokens Contract</li>
+<li>Interest Rate Model Contract</li>
+<li>Price Oracle Contract</li>
+<li>Governance Contract</li>
+<li>Comptroller Contract</li>
+</ul>
+<h3 id="jtokens-contract">JTokens Contract<a class="headerlink" href="#jtokens-contract" title="Permanent link">&para;</a></h3>
+<p><code>JToken:</code> the contract used to support all assets by JustLend DAO, such as the jTRX, jUSDT, jSUN and jBTC you receive after supplying the corresponding assets.</p>
+<h3 id="interest-rate-model-contract">Interest Rate Model Contract<a class="headerlink" href="#interest-rate-model-contract" title="Permanent link">&para;</a></h3>
+<p><code>WhitePaperInterestRateModel:</code> the contract used to set up a straightforward interest rate model, which the borrowing rate is directly proportional to the utilization.</p>
+<p><code>JumpRateModelV2:</code> the Contract used to set up a complex interest rate model, which the interest rate jumps to a higher tier when the utilization rate exceeds u optimal.</p>
+<h3 id="price-oracle-contract">Price Oracle Contract<a class="headerlink" href="#price-oracle-contract" title="Permanent link">&para;</a></h3>
+<p><code>Price Oracle:</code> the JustLend Protocol use Chainlink's price service to fetch the token price. The PriceOracle contract is responsible for setting and display token prices.</p>
+<h3 id="governance-contract">Governance Contract<a class="headerlink" href="#governance-contract" title="Permanent link">&para;</a></h3>
+<p><code>GovernorBravo:</code> The main JustLend Governance Contract. Users interact with it to:</p>
+<ul>
+<li>Submit new proposal</li>
+<li>Vote on a proposal</li>
+<li>Cancel a proposal</li>
+<li>Queue a proposal for execution with a time lock executor contract</li>
+</ul>
+<p><code>Timelock:</code> the contract used to execute or cancel a queued transaction.</p>
+<h3 id="comptroller-contract">Comptroller Contract<a class="headerlink" href="#comptroller-contract" title="Permanent link">&para;</a></h3>
+<p><code>Comptroller:</code> the Comptroller contract is the central contract for each lending pool. It contains functionality central to borrowing activity in the pool like supplying and borrowing assets and liquidations.</p>
+<h2 id="staked-trx-contracts"><strong>Staked TRX Contracts</strong><a class="headerlink" href="#staked-trx-contracts" title="Permanent link">&para;</a></h2>
+<p><code>Staked TRX(sTRX):</code> the contract utilized for staking TRX to earn high rewards.</p>
+<h2 id="energy-rental"><strong>Energy Rental</strong><a class="headerlink" href="#energy-rental" title="Permanent link">&para;</a></h2>
+<p><code>Energy Rental:</code> contracts enable users to rent energy anytime with a low price.</p>
 <h2 id="contract-summary-table-machine-readable">Contract summary table (machine-readable)<a class="headerlink" href="#contract-summary-table-machine-readable" title="Permanent link">&para;</a></h2>
 <p>Single row per contract. Use this when integrating; treat the prose sections below as commentary.</p>
 <table>
@@ -2028,37 +2059,6 @@
 </code></pre></div>
 <p><code>enterMarkets</code> is a precondition for any supplied asset to count as collateral — it is called directly on the <code>Unitroller</code> entrypoint, not on the jToken.</p>
 <p><strong>Version evolution (<code>JumpRateModelV2</code>):</strong> each market's rate model is its own deployed contract instance (immutable). Updating parameters (kink, multipliers, baseRate) means deploying a fresh <code>JumpRateModelV2</code> contract and calling <code>_setInterestRateModel</code> on the jToken via Governance. Past instances remain on chain but unused.</p>
-<h2 id="core-contracts"><strong>Core Contracts</strong><a class="headerlink" href="#core-contracts" title="Permanent link">&para;</a></h2>
-<p>There are 5 categories of core repository contracts (the prose below mirrors the summary table — refer to the table for addresses, function signatures, and ABI links):</p>
-<ul>
-<li>JTokens Contract</li>
-<li>Interest Rate Model Contract</li>
-<li>Price Oracle Contract</li>
-<li>Governance Contract</li>
-<li>Comptroller Contract</li>
-</ul>
-<h3 id="jtokens-contract">JTokens Contract<a class="headerlink" href="#jtokens-contract" title="Permanent link">&para;</a></h3>
-<p><code>JToken:</code> the contract used to support all assets by JustLend DAO, such as the jTRX, jUSDT, jSUN and jBTC you receive after supplying the corresponding assets.</p>
-<h3 id="interest-rate-model-contract">Interest Rate Model Contract<a class="headerlink" href="#interest-rate-model-contract" title="Permanent link">&para;</a></h3>
-<p><code>WhitePaperInterestRateModel:</code> the contract used to set up a straightforward interest rate model, which the borrowing rate is directly proportional to the utilization.</p>
-<p><code>JumpRateModelV2:</code> the Contract used to set up a complex interest rate model, which the interest rate jumps to a higher tier when the utilization rate exceeds u optimal.</p>
-<h3 id="price-oracle-contract">Price Oracle Contract<a class="headerlink" href="#price-oracle-contract" title="Permanent link">&para;</a></h3>
-<p><code>Price Oracle:</code> the JustLend Protocol use Chainlink's price service to fetch the token price. The PriceOracle contract is responsible for setting and display token prices.</p>
-<h3 id="governance-contract">Governance Contract<a class="headerlink" href="#governance-contract" title="Permanent link">&para;</a></h3>
-<p><code>GovernorBravo:</code> The main JustLend Governance Contract. Users interact with it to:</p>
-<ul>
-<li>Submit new proposal</li>
-<li>Vote on a proposal</li>
-<li>Cancel a proposal</li>
-<li>Queue a proposal for execution with a time lock executor contract</li>
-</ul>
-<p><code>Timelock:</code> the contract used to execute or cancel a queued transaction.</p>
-<h3 id="comptroller-contract">Comptroller Contract<a class="headerlink" href="#comptroller-contract" title="Permanent link">&para;</a></h3>
-<p><code>Comptroller:</code> the Comptroller contract is the central contract for each lending pool. It contains functionality central to borrowing activity in the pool like supplying and borrowing assets and liquidations.</p>
-<h2 id="staked-trx-contracts"><strong>Staked TRX Contracts</strong><a class="headerlink" href="#staked-trx-contracts" title="Permanent link">&para;</a></h2>
-<p><code>Staked TRX(sTRX):</code> the contract utilized for staking TRX to earn high rewards.</p>
-<h2 id="energy-rental"><strong>Energy Rental</strong><a class="headerlink" href="#energy-rental" title="Permanent link">&para;</a></h2>
-<p><code>Energy Rental:</code> contracts enable users to rent energy anytime with a low price.</p>
 
 
 
@@ -2079,7 +2079,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 21, 2026 08:33:32 UTC">2026-05-21</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 28, 2026 09:01:48 UTC">2026-05-28</span>
   </span>
 
     
