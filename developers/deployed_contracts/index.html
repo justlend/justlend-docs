@@ -138,8 +138,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "Base58 addresses for every JustLend DAO contract on TRON Mainnet, plus the Nile testnet subset. For machine consumers, the same data is available with Base58 / 0x / 41-hex formats in /developers/contracts.json.",
-          "dateModified": "2026-05-22",
-          "datePublished": "2026-05-22"
+          "dateModified": "2026-05-28",
+          "datePublished": "2026-05-28"
         }
       ]
     }
@@ -1908,7 +1908,7 @@
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Decimals / precision</p>
-<p>The Compound V2 architecture treats every token amount in <strong>its underlying's smallest unit</strong>. Always read <code>decimals()</code> on the underlying TRC20 before constructing <code>mint</code>, <code>borrow</code>, <code>repayBorrow</code>, or <code>redeemUnderlying</code> amounts. Common cases: TRX/USDT/USDC = 6, USDD/ETH = 18, BTC/WBTC = 8. jToken amounts (<code>redeem</code>, <code>transfer</code>) use <strong>8 decimals</strong> regardless of the underlying. For the full enumeration and the units rationale, see <a href="../../resources/glossary/#jtoken-decimals">Glossary → jToken decimals</a> and <a href="../common_pitfalls/#5-jtoken-8-underlying-varies-decimals">Common Pitfalls #5</a>.</p>
+<p>The JustLend DAO architecture treats every token amount in <strong>its underlying's smallest unit</strong>. Always read <code>decimals()</code> on the underlying TRC20 before constructing <code>mint</code>, <code>borrow</code>, <code>repayBorrow</code>, or <code>redeemUnderlying</code> amounts. Common cases: TRX/USDT/USDC = 6, USDD/ETH = 18, BTC/WBTC = 8. jToken amounts (<code>redeem</code>, <code>transfer</code>) use <strong>8 decimals</strong> regardless of the underlying. For the full enumeration and the units rationale, see <a href="../../resources/glossary/#jtoken-decimals">Glossary → jToken decimals</a> and <a href="../common_pitfalls/#5-jtoken-8-underlying-varies-decimals">Common Pitfalls #5</a>.</p>
 </div>
 <h2 id="address-formats">Address formats<a class="headerlink" href="#address-formats" title="Permanent link">&para;</a></h2>
 <p>TRON addresses appear in three equivalent formats. Human-facing tables on this page use Base58; machine consumers should use <a href="../contracts.json"><code>contracts.json</code></a> for all three forms.</p>
@@ -2473,7 +2473,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 22, 2026 06:32:12 UTC">2026-05-22</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 28, 2026 09:31:22 UTC">2026-05-28</span>
   </span>
 
     
