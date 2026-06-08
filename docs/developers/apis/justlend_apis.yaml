@@ -36,7 +36,7 @@ info:
         * **Mining APY** — paid on top of `supplyRate`. Effective supply APY = `supplyRate + apy`.
         * **Pagination** — `pageNo` is 1‑based, default `1`. `pageSize` default `10`, max `1000`.
         * **Rate limits** — public unauthenticated traffic may be throttled. Cache stable metadata and retry `429` / transient `5xx` with exponential backoff and jitter.
-        * **Errors** — non‑zero `code` plus an RFC 7807 body. See the `Error` schema.
+        * **Errors** — returned with **HTTP `200`** and the standard `{ code, message }` envelope (business errors set a non‑zero `code`, e.g. `404` or `1`; `data` is omitted). The API is **not** RFC 7807 and does **not** use HTTP status codes for business/validation errors — branch on the body `code`. Invalid/unknown query params may be silently ignored (`200 SUCCESS`), so validate inputs client‑side. Only `429` (throttle) and `5xx` (server fault) appear as non‑`200` HTTP statuses. See the `Error` schema.
         * **Compatibility** — clients should ignore unknown fields. Field removals,
           type changes, or semantic changes require a documentation version update
           and deprecation note.
@@ -81,8 +81,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/MarketListResponse'
-                '400':
-                    $ref: '#/components/responses/BadRequest'
                 '429':
                     $ref: '#/components/responses/TooManyRequests'
 
@@ -107,8 +105,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/AccountListResponse'
-                '400':
-                    $ref: '#/components/responses/BadRequest'
                 '429':
                     $ref: '#/components/responses/TooManyRequests'
 
@@ -128,8 +124,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/HighRiskAccountListResponse'
-                '400':
-                    $ref: '#/components/responses/BadRequest'
                 '429':
                     $ref: '#/components/responses/TooManyRequests'
 
@@ -162,8 +156,6 @@ paths:
                                 data:
                                     TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf:
                                         USDD: 0.09175706
-                '400':
-                    $ref: '#/components/responses/BadRequest'
                 '429':
                     $ref: '#/components/responses/TooManyRequests'
 
@@ -197,8 +189,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/MiningRewardResponse'
-                '400':
-                    $ref: '#/components/responses/BadRequest'
                 '429':
                     $ref: '#/components/responses/TooManyRequests'
 
@@ -227,8 +217,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/MiningDistributionsResponse'
-                '400':
-                    $ref: '#/components/responses/BadRequest'
                 '429':
                     $ref: '#/components/responses/TooManyRequests'
 
@@ -247,8 +235,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/StrxSnapshotResponse'
-                '400':
-                    $ref: '#/components/responses/BadRequest'
                 '429':
                     $ref: '#/components/responses/TooManyRequests'
 
@@ -272,8 +258,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/StrxStakeAccountResponse'
-                '400':
-                    $ref: '#/components/responses/BadRequest'
                 '429':
                     $ref: '#/components/responses/TooManyRequests'
 
@@ -298,8 +282,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/RentAccountResponse'
-                '400':
-                    $ref: '#/components/responses/BadRequest'
                 '429':
                     $ref: '#/components/responses/TooManyRequests'
 
@@ -361,12 +343,6 @@ components:
             schema: { type: number, format: double }
 
     responses:
-        BadRequest:
-            description: Bad Request — missing or malformed parameters.
-            content:
-                application/json:
-                    schema:
-                        $ref: '#/components/schemas/Error'
         TooManyRequests:
             description: Too Many Requests — slow down and retry with exponential backoff and jitter.
             headers:
@@ -409,12 +385,15 @@ components:
 
         Error:
             type: object
-            description: RFC 7807 problem document.
+            description: >-
+                Error response. Returned with HTTP 200 and the same envelope as success — a
+                non-zero `code` plus a human-readable `message` (`data` is omitted). The API is
+                NOT RFC 7807 and does NOT use HTTP status codes for business/validation errors;
+                branch on `code`. Invalid params may be silently ignored (200 SUCCESS).
             properties:
-                type:   { type: string, example: 'https://docs.justlend.org/errors/bad-request' }
-                title:  { type: string, example: 'Bad Request' }
-                status: { type: integer, format: int32, example: 400 }
-                detail: { type: string, example: 'Parameter `addresses` is required.' }
+                code:    { type: integer, format: int32, example: 404, description: 'Non-zero error code (e.g. 404 "interface non exist", 1 "illegal pageNo or pageSize").' }
+                message: { type: string, example: 'interface [/lend/nonExistentXYZ] non exist', description: 'Human-readable error description.' }
+            required: [code, message]
 
         # ------------------------------------------------------------------
         # /lend/jtoken

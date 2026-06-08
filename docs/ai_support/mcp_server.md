@@ -1,6 +1,6 @@
 ---
 title: JustLend MCP Server (full, read + write)
-description: "@justlend/mcp-server-justlend v1.0.7 — 59 MCP tools for supply, borrow, repay, sTRX staking, energy rental, governance voting, mining rewards, transfers, plus general TRON utilities. Dual-mode signing (browser TronLink or encrypted agent-wallet)."
+description: "@justlend/mcp-server-justlend v1.0.8 — 59 MCP tools for supply, borrow, repay, sTRX staking, energy rental, governance voting, mining rewards, transfers, plus general TRON utilities. Dual-mode signing (browser TronLink or encrypted agent-wallet)."
 ---
 
 # MCP Server
@@ -27,10 +27,10 @@ The JustLend MCP Server (`@justlend/mcp-server-justlend`) is a [Model Context Pr
 Beyond JustLend-specific operations, the server also exposes a full set of **general-purpose TRON chain utilities** — balance queries, block/transaction data, token metadata, TRX transfers, smart contract reads/writes, staking (Stake 2.0), multicall, and more.
 
 !!! note
-    Current version (**v1.0.7**) supports **JustLend V1** protocol. All contract addresses, ABIs, calculation functions, and lending operations are for V1.
+    Current version (**v1.0.8**) supports **JustLend V1** protocol. All contract addresses, ABIs, calculation functions, and lending operations are for V1.
 
-!!! tip "v1.0.7 Update"
-    This release keeps the **59-tool** surface and focuses on dependency/runtime freshness plus precision-safe staking. It uses `@modelcontextprotocol/sdk` `1.29.0`, `tronweb` `6.2.2`, `@bankofai/agent-wallet` `2.3.0`, and `tronlink-signer` `0.1.1`; sTRX staking paths use string/BigInt parsing for TRX Sun conversion and 18-decimal sTRX balances/exchange-rate display. The v1.0.6 safety work remains in place: TRC20 allowance checks before supply/repay, explicit approval amounts, typed broadcast handling, governance failed-proposal filtering, and Nile mining fallback.
+!!! tip "v1.0.8 Update"
+    This release keeps the **59-tool** surface and is a **security-hardening release** addressing the 2026-06-03 full-audit findings, plus dependency advisory cleanup. Transitive `npm audit` advisories are cleared by pinning `qs` `6.15.2` and `ws` `8.20.1` (alongside the existing `fast-uri` `3.1.2` override). Runtime deps are unchanged from v1.0.7: `@modelcontextprotocol/sdk` `1.29.0`, `tronweb` `6.2.2`, `@bankofai/agent-wallet` `2.3.0`, `tronlink-signer` `0.1.1`. A machine-readable tool catalog (`mcp-api-list.md`, generated from source) now ships in the repo for offline agent routing. All prior safety work remains in place: TRC20 allowance checks before supply/repay, explicit approval amounts (unlimited `max` is opt-in only, with a revoke hint), typed broadcast handling, `toSafeCallValueNumber` guards on every broadcast/simulation path, mainnet fail-closed on pre-flight `REVERT`, constant-time `MCP_API_KEY` comparison, governance failed-proposal filtering, and Nile mining fallback.
 
 ## Overview
 

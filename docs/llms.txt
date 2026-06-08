@@ -48,7 +48,8 @@
 
 - [AI / LLMs](https://docs.justlend.org/ai_support/ai_llms): Human-readable directory for `llms.txt`, `llms-full.txt`, OpenAPI, contract JSON, and ABI JSON endpoints.
 - [JustLend Skills](https://docs.justlend.org/ai_support/justlend_skills) (`@justlend/justlend-skills`): Read-only skills package + lightweight MCP server (**9 query tools**). Source: <https://github.com/justlend/justlend-skills>.
-- [Full MCP Server](https://docs.justlend.org/ai_support/mcp_server) (`@justlend/mcp-server-justlend`, v1.0.7, **59 tools**): Full read/write MCP server for supply, borrow, repay, withdraw, sTRX staking, energy rental, governance voting, mining rewards, transfers, and general TRON utilities. Source: <https://github.com/justlend/mcp-server-justlend>.
+- [Full MCP Server](https://docs.justlend.org/ai_support/mcp_server) (`@justlend/mcp-server-justlend`, v1.0.8, **59 tools**): Full read/write MCP server for supply, borrow, repay, withdraw, sTRX staking, energy rental, governance voting, mining rewards, transfers, and general TRON utilities. Source: <https://github.com/justlend/mcp-server-justlend>.
+- [MCP machine-readable tool catalog](https://github.com/justlend/mcp-server-justlend/blob/main/mcp-api-list.md) (`mcp-api-list.md`): Offline-loadable list of all 59 tools with input schemas (param/type/required/default), side-effect class (read-only vs on-chain write/destructive) and HITL guidance. Generated from source, so it never drifts from the tool definitions.
 - [MCP source ABIs and network config](https://github.com/justlend/mcp-server-justlend): Upstream TypeScript definitions used to generate the docs JSON ABI and address files.
 
 ## API endpoints (read-only HTTP API)
