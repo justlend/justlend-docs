@@ -6,10 +6,10 @@
 
 | Field | Value |
 |-------|-------|
-| `last_generated` | **2026-06-01** (ISO 8601, UTC date — substituted at build time) |
-| `docs_commit` | [`7f52261`](https://github.com/justlend/justlend-docs/commit/7f52261f2d5669b3069f20f175ad67881c4d72d0) (the commit SHA this snapshot was built from — substituted at build time) |
+| `last_generated` | **2026-06-08** (ISO 8601, UTC date — substituted at build time) |
+| `docs_commit` | [`1974f8a`](https://github.com/justlend/justlend-docs/commit/1974f8ae65a7974206a86c5df57cc99358915a83) (the commit SHA this snapshot was built from — substituted at build time) |
 | `contracts_json_source` | [`/developers/contracts.json`](https://docs.justlend.org/developers/contracts.json) — see its `_meta.last_generated` for the address-data snapshot date |
-| `mcp_server_version` | `@justlend/mcp-server-justlend` **v1.0.7** (sync date 2026-05-20) |
+| `mcp_server_version` | `@justlend/mcp-server-justlend` **v1.0.8** (sync date 2026-06-08) |
 | `changelog` | [`CHANGELOG.md`](https://github.com/justlend/justlend-docs/blob/main/CHANGELOG.md) |
 | `regenerate` | This file is updated each time the docs change materially. If you fetched it more than ~30 days ago, refresh it before answering address / market / version questions. |
 
@@ -436,7 +436,7 @@ Built-in MCP tools (all read-only): `get_all_markets`, `get_dashboard`, `get_sup
 
 ### 7.2 Full MCP Server — `@justlend/mcp-server-justlend`
 
-Read + write MCP server, **59 tools**, version **v1.0.7**. Repo: <https://github.com/justlend/mcp-server-justlend>. Targets **JustLend V1**.
+Read + write MCP server, **59 tools**, version **v1.0.8**. Repo: <https://github.com/justlend/mcp-server-justlend>. Targets **JustLend V1**. A machine-readable tool catalog ([`mcp-api-list.md`](https://github.com/justlend/mcp-server-justlend/blob/main/mcp-api-list.md)) lists every tool's input schema and side-effect class for offline agent routing.
 
 Capability domains:
 

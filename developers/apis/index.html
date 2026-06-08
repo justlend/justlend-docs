@@ -91,8 +91,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "Public read-only REST API at openapi.just.network \u2014 markets, account positions, liquidation risk, USDD supply-mining rewards, sTRX staking, Energy Rental. Authoritative schema is the OpenAPI 3.1 YAML.",
-          "dateModified": "2026-05-22",
-          "datePublished": "2026-05-22"
+          "dateModified": "2026-06-08",
+          "datePublished": "2026-06-08"
         }
       ]
     }
@@ -1131,50 +1131,59 @@
 <ul>
 <li><code>pageNo</code> is 1‑based. Default = <code>1</code>.</li>
 <li><code>pageSize</code> default = <code>10</code>, <strong>max = <code>1000</code></strong>.</li>
+<li>Invalid or out-of-range <code>pageNo</code>/<code>pageSize</code> are often <strong>silently ignored</strong> (defaults applied, <code>200 SUCCESS</code>) rather than rejected — validate client-side. See <a href="#16-error-responses">§1.6 Error responses</a>.</li>
 </ul>
 <h3 id="16-error-responses">1.6 Error responses<a class="headerlink" href="#16-error-responses" title="Permanent link">¶</a></h3>
-<p><code>code</code> is non‑zero and a payload conforming to <a href="https://datatracker.ietf.org/doc/html/rfc7807">RFC 7807</a> is returned:</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-<span class="w">  </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://example.com/errors/generic-error"</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Something went wrong here."</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="mi">400</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">"detail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Unfortunately, we can't provide further information."</span>
-<span class="p">}</span>
+<blockquote>
+<p><strong>Important for clients and AI agents:</strong> business and validation outcomes are returned with <strong>HTTP <code>200</code></strong> and the same <code>{ code, message, data }</code> envelope — <strong>not</strong> signalled through HTTP status codes, and <strong>not</strong> in RFC 7807 form. <strong>Branch on the body <code>code</code>, not the HTTP status.</strong> Only transport-level conditions (rate limiting, server faults) surface as non-<code>200</code> HTTP statuses.</p>
+</blockquote>
+<p><strong>Business / validation errors — HTTP <code>200</code>, <code>code</code> ≠ 0, <code>data</code> omitted:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"> </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">404</span><span class="p">,</span><span class="w"> </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"interface [/lend/nonExistentXYZ] non exist"</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Signal</th>
+<th>How to detect failure</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Body <code>code</code></td>
+<td><code>0</code> = success. Any non-zero value (e.g. <code>1</code>, <code>404</code>) is an error — read <code>message</code>; <code>data</code> is typically absent or <code>null</code>.</td>
+</tr>
+<tr>
+<td>HTTP status</td>
+<td><code>200</code> for virtually all business/validation outcomes, <strong>including "not found" and invalid parameters</strong>. Do <strong>not</strong> use the HTTP status to detect business errors.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Transport-level statuses (the only non-<code>200</code> HTTP codes to expect):</strong></p>
 <table>
 <thead>
 <tr>
 <th>HTTP status</th>
 <th>Meaning</th>
+<th>Retry</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>400</code></td>
-<td>Bad Request — missing or malformed parameters.</td>
-</tr>
-<tr>
-<td><code>401</code></td>
-<td>Unauthorized.</td>
-</tr>
-<tr>
-<td><code>403</code></td>
-<td>Forbidden.</td>
-</tr>
-<tr>
-<td><code>404</code></td>
-<td>Not Found.</td>
-</tr>
-<tr>
 <td><code>429</code></td>
-<td>Too Many Requests — slow down and retry with exponential backoff.</td>
+<td>Too Many Requests — throttled.</td>
+<td>Yes — exponential backoff (see §1.7).</td>
 </tr>
 <tr>
 <td><code>5xx</code></td>
-<td>Server error. Safe to retry with backoff.</td>
+<td>Server error.</td>
+<td>Yes — with backoff.</td>
 </tr>
 </tbody>
 </table>
+<p><strong>Silent parameter handling (must-know):</strong> unknown or out-of-range query parameters (e.g. <code>pageSize=invalid</code>, <code>pageNo=-1</code>) are commonly <strong>silently ignored</strong> — the service returns <code>200 SUCCESS</code> with default data rather than rejecting the request. Some endpoints do return a non-zero <code>code</code> (e.g. <code>{"code":1,"message":"illegal pageNo or pageSize"}</code>), but <strong>this is not guaranteed</strong>. The API does <strong>not</strong> reliably validate inputs for you: <strong>validate parameters client-side</strong> and never assume a malformed request will fail.</p>
+<blockquote>
+<p>This error contract reflects the live service as of 2026-06-08. A future API revision may adopt HTTP status codes and/or a structured error body; until then, treat HTTP <code>200</code> + body <code>code</code> as authoritative and validate inputs client-side.</p>
+</blockquote>
 <h3 id="17-rate-limits-and-retry">1.7 Rate limits and retry<a class="headerlink" href="#17-rate-limits-and-retry" title="Permanent link">¶</a></h3>
 <p>The public API is designed for read-only integrations and AI agents. It is not a bulk export interface.</p>
 <div class="admonition warning">
@@ -2687,7 +2696,7 @@ curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">"TRON-PRO
 <span class="md-icon" title="Last update">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"></path></svg>
 </span>
-<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 22, 2026 06:32:12 UTC">2026-05-22</span>
+<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 8, 2026 08:14:27 UTC">2026-06-08</span>
 </span>
 </aside>
 <hr class="content-footer-divider"/> <!-- 添加的水平线 -->
