@@ -140,28 +140,33 @@ Endpoints that accept `pageNo` and `pageSize` return:
 
 - `pageNo` is 1‑based. Default = `1`.
 - `pageSize` default = `10`, **max = `1000`**.
+- Invalid or out-of-range `pageNo`/`pageSize` are often **silently ignored** (defaults applied, `200 SUCCESS`) rather than rejected — validate client-side. See [§1.6 Error responses](#16-error-responses).
 
 ### 1.6 Error responses
 
-`code` is non‑zero and a payload conforming to [RFC 7807](https://datatracker.ietf.org/doc/html/rfc7807) is returned:
+> **Important for clients and AI agents:** business and validation outcomes are returned with **HTTP `200`** and the same `{ code, message, data }` envelope — **not** signalled through HTTP status codes, and **not** in RFC 7807 form. **Branch on the body `code`, not the HTTP status.** Only transport-level conditions (rate limiting, server faults) surface as non-`200` HTTP statuses.
+
+**Business / validation errors — HTTP `200`, `code` ≠ 0, `data` omitted:**
 
 ```json
-{
-  "type": "https://example.com/errors/generic-error",
-  "title": "Something went wrong here.",
-  "status": 400,
-  "detail": "Unfortunately, we can't provide further information."
-}
+{ "code": 404, "message": "interface [/lend/nonExistentXYZ] non exist" }
 ```
 
-| HTTP status | Meaning                                          |
-|-------------|--------------------------------------------------|
-| `400`       | Bad Request — missing or malformed parameters.   |
-| `401`       | Unauthorized.                                    |
-| `403`       | Forbidden.                                       |
-| `404`       | Not Found.                                       |
-| `429`       | Too Many Requests — slow down and retry with exponential backoff. |
-| `5xx`       | Server error. Safe to retry with backoff.        |
+| Signal | How to detect failure |
+|--------|------------------------|
+| Body `code` | `0` = success. Any non-zero value (e.g. `1`, `404`) is an error — read `message`; `data` is typically absent or `null`. |
+| HTTP status | `200` for virtually all business/validation outcomes, **including "not found" and invalid parameters**. Do **not** use the HTTP status to detect business errors. |
+
+**Transport-level statuses (the only non-`200` HTTP codes to expect):**
+
+| HTTP status | Meaning | Retry |
+|-------------|---------|-------|
+| `429` | Too Many Requests — throttled. | Yes — exponential backoff (see §1.7). |
+| `5xx` | Server error. | Yes — with backoff. |
+
+**Silent parameter handling (must-know):** unknown or out-of-range query parameters (e.g. `pageSize=invalid`, `pageNo=-1`) are commonly **silently ignored** — the service returns `200 SUCCESS` with default data rather than rejecting the request. Some endpoints do return a non-zero `code` (e.g. `{"code":1,"message":"illegal pageNo or pageSize"}`), but **this is not guaranteed**. The API does **not** reliably validate inputs for you: **validate parameters client-side** and never assume a malformed request will fail.
+
+> This error contract reflects the live service as of 2026-06-08. A future API revision may adopt HTTP status codes and/or a structured error body; until then, treat HTTP `200` + body `code` as authoritative and validate inputs client-side.
 
 ### 1.7 Rate limits and retry
 
