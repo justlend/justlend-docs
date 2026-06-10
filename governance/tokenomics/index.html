@@ -138,8 +138,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "JST is the governance and incentive token of JustLend DAO \u2014 distribution, voting power via WJST escrow, and the GrantsDAO buyback-and-burn program funded by protocol reserves.",
-          "dateModified": "2026-05-22",
-          "datePublished": "2026-05-22"
+          "dateModified": "2026-06-10",
+          "datePublished": "2026-06-10"
         }
       ]
     }
@@ -833,9 +833,9 @@
 
 
 <li class="md-nav__item ">
-  <a href="#the-justlend-dao-economy" class="md-nav__link">
+  <a href="#jst-overview" class="md-nav__link">
     <span class="md-ellipsis">
-      The JustLend DAO Economy
+      JST Overview
     </span>
   </a>
   
@@ -846,9 +846,35 @@
 
 
 <li class="md-nav__item ">
-  <a href="#revenue-distribution-from-protocol-reserves" class="md-nav__link">
+  <a href="#token-utility" class="md-nav__link">
     <span class="md-ellipsis">
-      Revenue Distribution from Protocol Reserves
+      Token Utility
+    </span>
+  </a>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item ">
+  <a href="#buyback-and-burn-program" class="md-nav__link">
+    <span class="md-ellipsis">
+      Buyback and Burn Program
+    </span>
+  </a>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item ">
+  <a href="#transparency-and-buyback-burn-records" class="md-nav__link">
+    <span class="md-ellipsis">
+      Transparency and Buyback &amp; Burn Records
     </span>
   </a>
   
@@ -1723,49 +1749,85 @@
 <h1 id="tokenomics">Tokenomics<a class="headerlink" href="#tokenomics" title="Permanent link">&para;</a></h1>
 <p>The term tokenomics encompasses a wide range of concepts that defines the science and behavior of blockchain economies. In simple terms, tokenomics are the financial foundation of blockchains. Each protocol has its unique economic model, and for the protocol's healthy and enduring development, the economic model should include design, distribution, and management of tokens, as well as the incentives and mechanisms that drive their value and utilization.</p>
 <p>The JustLend tokenomics  is designed to promote a healthy, long term self-sustaining economy with participant incentives aligned to the security and decentralization of the network. The main participants in this economy are suppliers, borrowers and clients who stakes TRX or USDT. The protocol revenue from users will be used to optimize income distribution and cater to the protocol's present and future needs.</p>
-<h3 id="the-justlend-dao-economy"><strong>The JustLend DAO Economy</strong><a class="headerlink" href="#the-justlend-dao-economy" title="Permanent link">&para;</a></h3>
-<p>JustLend DAO is a decentralized governance protocol, where users can participate in governance using the platform token JUST (Symbol: JST) to make decisions about the development of JustLend DAO.  The platform has integrated multiple independent DeFi protocols and plans to incorporate more to form the JustLend economy. There are four integrated protocols characterize the JustLend economy:</p>
+<p><br></p>
+<h3 id="jst-overview">JST Overview<a class="headerlink" href="#jst-overview" title="Permanent link">&para;</a></h3>
+<p>JST is the core governance token of <strong>JUST</strong> and <strong>JustLend DAO</strong>. It empowers holders to participate in protocol governance, including parameter adjustments and other key protocol decisions.</p>
+<p>Issued on the TRON network, JST is a <strong>TRC-20</strong> token with a maximum supply of <strong>9,900,000,000 JST</strong>. As the buyback and burn program continues, the actual circulating supply will decrease in proportion to the cumulative amount of JST burned.</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Token Ticker</strong></td>
+<td>JST</td>
+</tr>
+<tr>
+<td><strong>Network</strong></td>
+<td>TRON</td>
+</tr>
+<tr>
+<td><strong>Token Standard</strong></td>
+<td>TRC-20</td>
+</tr>
+<tr>
+<td><strong>Initial Maximum Supply</strong></td>
+<td>9,900,000,000 JST</td>
+</tr>
+<tr>
+<td><strong>Token Contract</strong></td>
+<td><code>TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9</code></td>
+</tr>
+</tbody>
+</table>
+<p><img alt="revenue distribution" src="https://raw.githubusercontent.com/justlend/justlend-docs/main/images/unlock_process.png" /></p>
+<p><img alt="revenue distribution" src="https://raw.githubusercontent.com/justlend/justlend-docs/main/images/token_allocation.png" /></p>
+<p><br></p>
+<h3 id="token-utility">Token Utility<a class="headerlink" href="#token-utility" title="Permanent link">&para;</a></h3>
+<p>JustLend DAO grants governance rights to JST holders. As detailed in the Governance section, holders can lock JST to obtain voting rights and participate in the submission, discussion, and voting process for <strong>JustLend Improvement Proposals (JIPs)</strong>.</p>
+<p>JST governance covers key matters affecting the operation and long-term development of JustLend DAO, including but not limited to:</p>
 <ul>
-<li><strong>SBM (Supply and Borrow Market):</strong>  A supply and borrow market protocol launched in December 2020.</li>
-<li><strong>sTRX (Staked TRX):</strong>  A high-efficiency and yield TRON network staking pool launched in April 2023.</li>
-<li><strong>Energy Rental:</strong> A platform for flexible and low-cost energy rental on the TRON network launched in April 2023, significantly reducing transaction costs.</li>
+<li><strong>Protocol Deployment:</strong> Supported assets and asset listings.</li>
+<li><strong>Core Parameters:</strong> Collateral factor, reserve factor, and interest rate models.</li>
+<li><strong>Risk Management:</strong> Oracle configuration, risk parameters, and the use of protocol reserves.</li>
+<li><strong>Ecosystem Growth:</strong> Incentives, buyback and burn rules, and other major protocol matters.</li>
 </ul>
-<h4 id="sbm-supply-and-borrow-market">SBM - Supply and Borrow Market<a class="headerlink" href="#sbm-supply-and-borrow-market" title="Permanent link">&para;</a></h4>
-<p>SBM is a TRON-powered money market protocol designed to create fund pools with interest rates determined by an algorithm based on the supply and demand of TRON assets. The protocol involves two key roles: suppliers and borrowers, who directly engage with the protocol to earn or pay a floating interest rate. SBM serves as the core protocol of JustLend DAO.</p>
-<p>Within SBM, each money market corresponds to a unique TRON asset, such as TRX, TRC20 stablecoins (e.g., USDT), or other TRC20-based tokens. The protocol features an open and transparent ledger that records all transactions and historical interest rates.</p>
-<h4 id="staked-trx">Staked TRX<a class="headerlink" href="#staked-trx" title="Permanent link">&para;</a></h4>
-<p>TRX holders have the opportunity to receive the receipt token sTRX by staking TRX, allowing them to earn double yields from voting and Energy rental. In contrast to participating in Stake 2.0, sTRX offers higher returns and can be utilized in DeFi applications, including decentralized exchanges (DEXs). This token eliminates liquidity constraints associated with the unstaking period in Stake 2.0.</p>
-<h4 id="energy-rental">Energy Rental<a class="headerlink" href="#energy-rental" title="Permanent link">&para;</a></h4>
-<p>An innovative protocol for flexible and cost-effective energy rental on the TRON network. The energy obtained through this protocol is significantly cheaper than that obtained through burning or staking TRX, enabling the cost of most transactions to be reduced to below 1 TRX.</p>
-<h4 id="supply-mining">Supply Mining<a class="headerlink" href="#supply-mining" title="Permanent link">&para;</a></h4>
-<p>The latest round of JustLend DAO deposit supply mining started on February 16, 2024, and has already completed 36 rounds. The mining activity is community-driven and funded by the subDAO of JustLend DAO - GrantsDAO, which empowers community developers, contributors, participants, and any projects that contribute to the ecosystem, while providing positive incentives to ecosystem participants.</p>
-<h4 id="buyback-burning">Buyback &amp; Burning<a class="headerlink" href="#buyback-burning" title="Permanent link">&para;</a></h4>
-<p>The JST ecosystem burn plan implemented by GrantsDAO aims to use protocol base income and donations from partner projects to provide liquidity to SunSwap V2 for JST trading pairs and burn the resulting liquidity tokens (e.g., <a href="https://tronscan.org/#/token20/TUDo1PuMG6j4aDSg6rsCNiz5gR5cnQaNTT">SUNSWAP-JST-TRX V2 Token</a>), thus accumulating JST liquidity in DEX. Compared to directly burning tokens, the ecosystem burn plan's approach reduces supply while maintaining liquidity in DEX, stabilizing the price of JST.</p>
-<h4 id="querying-live-jst-supply">Querying live JST supply<a class="headerlink" href="#querying-live-jst-supply" title="Permanent link">&para;</a></h4>
-<p>This documentation deliberately does not hard-code a current <code>totalSupply</code> or <code>circulatingSupply</code> number — both move as the buyback-and-burn program executes, and any baked-in figure would drift. To read the live values, query the JST TRC20 contract directly:</p>
-<ul>
-<li><strong>JST contract:</strong> <code>TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9</code> (see <a href="../../developers/deployed_contracts/#governance">Deployed Contracts → Governance</a>)</li>
-<li><strong>TRC20 standard functions:</strong><ul>
-<li><code>totalSupply()</code> → current total JST issued, in sun units (18 decimals).</li>
-<li><code>balanceOf(&lt;dead-address&gt;)</code> → cumulative JST sent to a burn / dead address, if a specific dead address is being used.</li>
-</ul>
-</li>
-</ul>
-<p>TronWeb example (any TRC20 ABI works — use <a href="../../developers/abis/trc20.json"><code>abis/trc20.json</code></a>):</p>
-<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">jst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">tronWeb</span><span class="p">.</span><span class="nx">contract</span><span class="p">().</span><span class="nx">at</span><span class="p">(</span><span class="s1">&#39;TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9&#39;</span><span class="p">);</span>
-<span class="kd">const</span><span class="w"> </span><span class="nx">total</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">BigInt</span><span class="p">((</span><span class="k">await</span><span class="w"> </span><span class="nx">jst</span><span class="p">.</span><span class="nx">totalSupply</span><span class="p">().</span><span class="nx">call</span><span class="p">()).</span><span class="nx">toString</span><span class="p">());</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;JST totalSupply (human):&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">total</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">10n</span><span class="o">**</span><span class="mi">18n</span><span class="p">);</span>
-</code></pre></div>
-<p>For aggregate circulation and burn metrics across the buyback program, the JustLend team and third-party aggregators publish dashboards; treat this on-chain query as the authoritative source for <code>totalSupply</code> itself, and the buyback dashboard as the authoritative source for "how much has been retired via the SunSwap LP burn".</p>
-<h3 id="revenue-distribution-from-protocol-reserves"><strong>Revenue Distribution from Protocol Reserves</strong><a class="headerlink" href="#revenue-distribution-from-protocol-reserves" title="Permanent link">&para;</a></h3>
-<p>The protocol reserves mainly consist of accumulated borrow fees. The revenue allocation model divides income from these reserves into four key segments:</p>
-<ul>
-<li><strong>Risk Fund(40%):</strong> This fund is set up to mitigate potential deficiencies in the protocol, especially during instances of ineffective or delayed liquidations. The allocation to the risk fund remains constant to uphold a robust financial buffer;</li>
-<li><strong>DAO Reserve(30%):</strong> The reserve strengthens the protocol's resilience and serves as a robust safety net for its continuous operations;</li>
-<li><strong>Incentives(20%):</strong> This part is emmitted as incentives for suppliers and borrowers;</li>
-<li><strong>Supply Mining Rewards(10%):</strong> This rewards utilized a portion of the reserve revenue to incentivize  developers, contributors, participants, and any projects that contribute to the ecosystem.</li>
-</ul>
-<p><img alt="revenue distribution" src="https://raw.githubusercontent.com/justlend/justlend-docs/main/images/revenue_distribution.png" /></p>
+<p><br></p>
+<h3 id="buyback-and-burn-program">Buyback and Burn Program<a class="headerlink" href="#buyback-and-burn-program" title="Permanent link">&para;</a></h3>
+<p>The JST buyback and burn program is an integral part of the updated JST tokenomics. Eligible protocol revenue and JUST ecosystem revenue will be used to buy back JST from the open market, which will then be sent to a burn address, permanently removing it from circulation. Instead of directly distributing protocol revenue to JST holders, JustLend DAO uses the buyback and burn mechanism to connect sustainable revenue from the protocol and ecosystem with the long-term management of JST's supply.</p>
+<p>Token buybacks are primarily funded by the net revenue of the JustLend DAO protocol. 30% of the platform's accrued revenue was allocated to the initial buyback and burn, while the remaining 70% will be released and executed quarterly throughout 2026. Funds not immediately deployed for buybacks will be temporarily deposited into JustLend DAO SBM's USDT market to generate yield, which will then be funneled into future JST buybacks. Beyond the accumulated revenue, the program also captures newly generated net revenue from JustLend DAO. New net revenue generated each quarter will be used for JST buybacks at the beginning of the following quarter. Consequently, the quarterly buyback pool typically consists of the previous quarter's new net revenue combined with the accumulated reserves released for that period.</p>
+<p>As the JUST ecosystem expands its revenue streams, multi-chain revenue from USDD will also be used to back the program; specifically, any USDD ecosystem revenue exceeding $10 million—after covering TRON DAO mining subsidies—will be funneled into JST buybacks. Looking ahead, other eligible revenues from JustLend DAO and the broader JUST ecosystem will also be integrated into the program. All updates to funding sources, inclusion criteria, and reserve allocations must be approved via governance proposals and executed in accordance with official disclosures and on-chain records.</p>
+<p><br></p>
+<h3 id="transparency-and-buyback-burn-records">Transparency and Buyback &amp; Burn Records<a class="headerlink" href="#transparency-and-buyback-burn-records" title="Permanent link">&para;</a></h3>
+<p>The JST buyback and burn program is executed by the <strong>JustLend Grants DAO</strong>. Operating as a community-driven incentive within the JustLend DAO ecosystem, the Grants DAO focuses on accelerating ecosystem growth, expanding token utility, and ensuring healthy market dynamics.</p>
+<p>All buyback and burn records are disclosed through official channels and on-chain logs. Users can track progress in real time via the <a href="https://justlend.org/transparency?lang=en-US">Transparency</a> dashboard.</p>
+<p>The officially disclosed JST buyback and burn data is detailed below:</p>
+<table>
+<thead>
+<tr>
+<th>Round</th>
+<th>Amount Burned</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Round 1</strong></td>
+<td>559,890,753 JST</td>
+</tr>
+<tr>
+<td><strong>Round 2</strong></td>
+<td>525,000,000 JST</td>
+</tr>
+<tr>
+<td><strong>Round 3</strong></td>
+<td>271,337,579 JST</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="revenue distribution" src="https://raw.githubusercontent.com/justlend/justlend-docs/main/images/JST_buyback_and_burn_data.png" /></p>
 
 
 
@@ -1786,7 +1848,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 22, 2026 06:51:42 UTC">2026-05-22</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 10, 2026 13:35:04 UTC">2026-06-10</span>
   </span>
 
     
