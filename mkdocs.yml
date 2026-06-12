@@ -71,6 +71,19 @@ nav:
         - AI / LLMs: ai_support/ai_llms.md
         - MCP Server: ai_support/mcp_server.md
         - JustLend Skills: ai_support/justlend_skills.md
+        - AI Docs for Agents:
+            - Index: documents/aidocs/index.md
+            - Source of Truth: documents/aidocs/source_of_truth.md
+            - Quickstart: documents/aidocs/quickstart.md
+            - Market Data: documents/aidocs/market_data.md
+            - Account Positions: documents/aidocs/account_position.md
+            - Lending Workflows: documents/aidocs/supply_borrow_repay_withdraw.md
+            - sTRX Staking: documents/aidocs/strx_staking.md
+            - Energy Rental: documents/aidocs/energy_rental.md
+            - MCP Safety: documents/aidocs/mcp_safety.md
+            - Common Questions: documents/aidocs/common_questions.md
+            - AI Glossary: documents/aidocs/glossary.md
+            - MCP Tool Catalog: documents/aidocs/mcp_tools.md
     - RESOURCES:
         - Community:
             - Links: resources/community/links.md

@@ -9,7 +9,7 @@ description: "@justlend/mcp-server-justlend v1.0.8 — 59 MCP tools for supply, 
 
 ## Contents
 
-This page is the human-readable reference for the full MCP server. For agent users who want quick lookups, [`/llms.txt`](../llms.txt) summarizes the same surface in 50 lines.
+This page is the human-readable reference for the full MCP server. For agent users who want quick lookups, [`/llms.txt`](../llms.txt) summarizes the same surface in 50 lines. For offline routing and RAG scoring, use the site-local [MCP Tool Catalog](../documents/aidocs/mcp_tools.md), which mirrors the generated `mcp-api-list.md` from the MCP repository.
 
 - [Overview](#overview) — what this server is and how it differs from [Skills](justlend_skills.md).
 - [Installation](#installation) — npm, source, and Claude Desktop config.
@@ -18,6 +18,9 @@ This page is the human-readable reference for the full MCP server. For agent use
 - [Tool catalog (59 tools across 10 categories)](#tools-59-total) — Wallet & Network · Market Data · Account & Balances · Lending Operations · Mining & Rewards · JST Voting / Governance · Energy Rental · sTRX Staking · Transfers · General TRON.
 - [Guided prompts](#prompts-ai-guided-workflows) — the 10 shipped MCP prompts (`supply_assets`, `analyze_portfolio`, `cast_vote`, …).
 - [Security considerations](#security-considerations) — `destructiveHint`, dry-run mode, source-of-truth priority, HTTP-mode `MCP_API_KEY`.
+
+!!! tip "AI-agent companion pages"
+    For retrieval-optimized answers, start from [AI Docs Index](../documents/aidocs/index.md), [MCP Safety Policy](../documents/aidocs/mcp_safety.md), [Common Questions](../documents/aidocs/common_questions.md), and the [MCP Tool Catalog](../documents/aidocs/mcp_tools.md).
 
 !!! tip "Before integrating"
     Read [Common Pitfalls](../developers/common_pitfalls.md) for the 10 most frequent JustLend-integration foot-guns (USDT `approve()` race condition, `enterMarkets()` requirement, `mint()` overload between jTRX and jTRC20, jToken vs underlying decimals, `liquidateBorrow` 50% close-factor cap, `uint256(-1)` repay sentinel, …). For precise term definitions used throughout the MCP tool descriptions (mantissa, kink, utilization, collateral / close / reserve factor, exchange rate, market `status`), see the [Glossary](../resources/glossary.md). The MCP server enforces several of these patterns internally (e.g. it runs TRC20 allowance checks before supply/repay), but understanding them helps you debug failed transactions and write callers that don't fight the server.
