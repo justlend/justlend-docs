@@ -259,17 +259,40 @@ Participate in JustLend DAO governance proposals. Deposit JST for voting power (
 
 ### Tools (9 total, all read-only)
 
-| Tool | Inputs | Description |
-|------|--------|-------------|
-| `get_all_markets` | — | All markets with supply/borrow APY, mining rewards, and TVL |
-| `get_dashboard` | — | Protocol overview: total supply, borrow, TVL, user count |
-| `get_supported_markets` | — | List all supported markets with jToken/underlying addresses |
-| `get_jtoken_details` | `jtokenAddr` | Detailed jToken info: interest rate model, reserves, mining rewards |
-| `get_account_summary` | `address` | Health factor, liquidity, liquidation risk |
-| `get_account_data_from_api` | `address` | Comprehensive account data from API (positions, rewards) |
-| `get_trx_balance` | `address` | Native TRX balance |
-| `get_token_balance` | `address`, `token` | TRC20 token balance (USDT, USDD, etc.) |
-| `check_allowance` | `address`, `asset` | Check TRC20 approval status for JustLend contracts |
+Every tool returns its result as JSON text (`content[0].text`). Input types and required flags are taken from each tool's `inputSchema`; all inputs are strings.
+
+| Tool | Input (· required) | Output (key fields) |
+|------|--------------------|---------------------|
+| `get_all_markets` | _(none)_ | Array of markets — `symbol`, `supplyAPY`, `borrowAPY`, `miningAPY`, `tvl`, `totalSupply`, `totalBorrow` |
+| `get_dashboard` | _(none)_ | Protocol overview — `totalSupplyUSD`, `totalBorrowUSD`, `tvlUSD`, `userCount` |
+| `get_supported_markets` | _(none)_ | Array — `symbol`, `jtokenAddress`, `underlyingAddress`, `decimals`, `isNative` |
+| `get_jtoken_details` | `jtokenAddr` · **required** | jToken detail — interest-rate-model params, `reserves`, `utilization`, mining rewards |
+| `get_account_summary` | `address` · **required** | `healthFactor`, `liquidityUSD`, `shortfallUSD`, `totalSupplyUSD`, `totalBorrowUSD`, `positions[]` |
+| `get_account_data_from_api` | `address` · **required** | Comprehensive account data — `positions[]`, accrued `rewards`, per-market balances |
+| `get_trx_balance` | `address` · **required** | `{ address, balance }` — `balance` human-readable, e.g. `"123.456789 TRX"` |
+| `get_token_balance` | `address` · **required**, `token` · **required** | `{ address, token, balance }` — `token` is a symbol (USDT, USDD, …); `balance` in token units |
+| `check_allowance` | `address` · **required**, `asset` · **required** | `{ asset, allowance, needsApproval, note }`; native TRX → `allowance: "Infinity", needsApproval: false` |
+
+> Inputs validate as JSON-Schema `string`. `address` must be a Base58 TRON address (`T…`, 34 chars); `token`/`asset` are symbols resolved to contract addresses internally; `jtokenAddr` is a jToken contract address.
+
+### Error Handling
+
+Tool failures return a structured error result rather than throwing — the client sees `isError: true`:
+
+```json
+{ "content": [{ "type": "text", "text": "Error: <message>" }], "isError": true }
+```
+
+Common messages and how to recover:
+
+| Message | Cause | Fix |
+|---------|-------|-----|
+| `API Error: <code>` | JustLend API returned a non-zero `code` | Retry; if it persists, verify the address/market exists |
+| `Unknown asset: <symbol>` | `asset` / `token` symbol not recognized | Use a supported symbol (see `get_supported_markets`) |
+| `Failed to read token balance` / `Failed to read allowance` | On-chain read returned empty (bad address or RPC hiccup) | Check the address format; retry on transient RPC errors |
+| `TronGrid` 4xx / `429` | Missing or rate-limited `TRONGRID_API_KEY` | Set a valid key; back off on `429` |
+
+All tools are read-only, so a failure never leaves partial on-chain state — errors are safe to retry.
 
 ## Security
 

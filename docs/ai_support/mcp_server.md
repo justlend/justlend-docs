@@ -470,18 +470,32 @@ npm run dev
 
 ### Prompts (AI-Guided Workflows)
 
-| Prompt | Description |
-|--------|-------------|
-| `getting_started` | First-time onboarding: wallet setup, connection, feature tour |
-| `supply_assets` | Step-by-step supply with balance checks and approval |
-| `borrow_assets` | Safe borrowing with risk assessment and health factor checks |
-| `repay_borrow` | Guided repayment with verification |
-| `analyze_portfolio` | Comprehensive portfolio analysis with risk scoring |
-| `compare_markets` | Find best supply/borrow opportunities |
-| `rent_energy` | Guided energy rental with price estimation and balance checks |
-| `stake_trx` | Guided TRX staking to sTRX with APY info and verification |
-| `query_proposals` | Browse and query governance proposals, check voting requirements |
-| `cast_vote` | Guided governance voting with vote verification |
+The server exposes **10 MCP prompts**. Required arguments are marked **bold**; the rest are optional. Every prompt accepts an optional `network` (`mainnet` default, or `nile`).
+
+| Prompt | Arguments | Description |
+|--------|-----------|-------------|
+| `getting_started` | _(none)_ | First-time onboarding: wallet setup, connection, feature tour |
+| `supply_assets` | **`market`**, **`amount`**, `network` | Step-by-step supply with balance checks and approval |
+| `borrow_assets` | **`market`**, **`amount`**, `network` | Safe borrowing with risk assessment and health factor checks |
+| `repay_borrow` | **`market`**, **`amount`** (or `'max'`), `network` | Guided repayment with verification |
+| `analyze_portfolio` | `address`, `network` | Comprehensive portfolio analysis with risk scoring |
+| `compare_markets` | **`action`** (`supply` \| `borrow`), `network` | Find best supply/borrow opportunities |
+| `rent_energy` | **`receiverAddress`**, **`energyAmount`**, **`durationDays`**, `network` | Guided energy rental with price estimation and balance checks |
+| `stake_trx` | **`amount`**, `network` | Guided TRX staking to sTRX with APY info and verification |
+| `query_proposals` | `network` | Browse and query governance proposals, check voting requirements |
+| `cast_vote` | **`proposalId`**, **`support`** (`for` \| `against`), **`amount`** (WJST), `network` | Guided governance voting with vote verification |
+
+> All prompt arguments are strings (the `enum` ones accept only the listed values). Prompts return a templated message that drives the agent through the workflow using the read/write tools above — they do **not** sign transactions themselves.
+
+### Resources
+
+The server registers one MCP **resource** for static protocol context an agent can read once and cache:
+
+| URI | MIME type | Contents |
+|-----|-----------|----------|
+| `justlend://protocol-info` | `application/json` | Protocol summary (name, description, website, docs) **plus the live market list** — each entry with jToken symbol, jToken address, and underlying token (or `"native TRX"`). Generated from `chains.ts`, so addresses stay in sync with the deployed contracts. |
+
+Use the resource for a one-shot "what is JustLend / which markets exist / what are the addresses" lookup; use the tools for live balances, rates, and positions.
 
 ### Machine-Readable ABIs
 

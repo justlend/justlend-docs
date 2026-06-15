@@ -408,6 +408,7 @@ components:
         Market:
             type: object
             description: One Supply & Borrow market.
+            required: [address, symbol, underlyingAddress, underlyingSymbol, underlyingDecimal, underlyingPriceInTrx, borrowIndex, borrowRate, supplyRate, cash, reserves, totalBorrows, totalSupply, exchangeRate, collateralFactor, reserveFactor]
             properties:
                 address:
                     type: string
@@ -529,6 +530,7 @@ components:
         UserTokenPosition:
             type: object
             description: One jToken position for one user.
+            required: [address, underlyingSymbol, entered, supplyBalanceJtoken, supplyBalanceUnderlying, borrowBalanceUnderlying]
             properties:
                 address:
                     type: string
@@ -570,6 +572,7 @@ components:
         UserAccount:
             type: object
             description: One wallet's aggregated SBM position.
+            required: [addresses, health, totalCollateralValueInTrx, totalBorrowValueInTrx, liquidateStatusStartTime, tokens]
             properties:
                 addresses:
                     type: string
@@ -853,6 +856,7 @@ components:
         StakeInfo:
             type: object
             description: sTRX liquid‑staking pool snapshot.
+            required: [strxAddress, symbol, decimal, underlyingDecimal, exchangeRate, supplyRate, totalSupply, totalUnderlying, totalSupplyUsd, trxPrice, reserse, rentReserveFactor, rewardReserveFactor]
             properties:
                 strxAddress:         { type: string, description: sTRX token contract address., example: TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5 }
                 symbol:              { type: string, description: Token symbol., example: sTRX }
@@ -871,6 +875,7 @@ components:
         RentInfo:
             type: object
             description: Energy Rental market snapshot.
+            required: [rentMarketAddress, priceFor10KEnergByRent, priceFor10KEnergByStake, priceFor10KEnergByBurn, totalDelegatedEnergyTrx, totalDelegatedEnergyRate]
             properties:
                 rentMarketAddress:        { type: string, description: Energy Rental contract address., example: TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd }
                 priceFor10KEnergByRent:   { type: number, format: double, description: TRX cost to obtain 10 000 Energy via **rental**., example: 0.65530713, x-unit: TRX, x-descaled: true }
@@ -896,6 +901,7 @@ components:
         StrxStakePosition:
             type: object
             description: One wallet's sTRX position.
+            required: [addresses, sTRXBalance, unstakingAmount, availableWithdrawAmount]
             properties:
                 addresses:               { type: string, description: User wallet., example: TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5 }
                 sTRXBalance:             { type: number, format: double, description: Current sTRX balance., example: 1.0, x-unit: sTRX, x-decimals: 18, x-descaled: true }
@@ -922,6 +928,7 @@ components:
         RentOrder:
             type: object
             description: One Energy Rental order.
+            required: [rentType, renter, receiver, delegatedAmount, rentRemainAmount, rentAmountPerDay]
             properties:
                 rentType:         { type: string, description: 'Resource type. Only `"Energy"` is exposed for now.', enum: ['Energy'], example: Energy }
                 renter:           { type: string, description: Account paying the rent., example: TWdWEHRLPBVGsXhwjSUv45XwnsfUHXydJa }
