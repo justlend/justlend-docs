@@ -66,8 +66,10 @@ nav:
         - Energy Rental: developers/energy_rental.md
         - Deployed Contracts: developers/deployed_contracts.md
         - APIs: developers/apis.md
+        - ABI Files: developers/abis/index.md
         - Common Pitfalls: developers/common_pitfalls.md
     - AI SUPPORT:
+        - Overview: ai_support/index.md
         - AI / LLMs: ai_support/ai_llms.md
         - MCP Server: ai_support/mcp_server.md
         - JustLend Skills: ai_support/justlend_skills.md
