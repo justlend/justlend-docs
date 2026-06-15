@@ -32,6 +32,13 @@ info:
             * `*Factor` fields are decimals in `[0, 1]` (`0.75` = 75 %).
             * Amounts in `cash` / `reserves` / `totalBorrows` / `supplyBalanceUnderlying` etc. are already in underlying units.
             * jToken amounts (`totalSupply` of `/lend/jtoken`, `supplyBalanceJtoken`) are in jToken units (8 decimals).
+        * **Self-describing unit extensions** — every amount field carries machine-readable OpenAPI
+          extensions so an agent never has to infer scale:
+            * `x-unit` — denomination (e.g. an asset symbol, `jToken`, `underlying`, `TRX`, `USD`,
+              `APY-annualized-decimal`, `fraction-0to1`, `underlying-per-jToken`, `mantissa`).
+            * `x-decimals` — native decimals of that denomination (informational; `jToken` = 8).
+            * `x-descaled` — `true` = value is **already** in human-readable display units, do **not**
+              re-apply decimals; `false` = value is in smallest/raw units, apply `x-decimals` to display.
         * **Hex numbers** — `amount`, `index`, `merkleIndex`, `merkleRoot`, `proof` returned by `/mining/distributions` are bare `0x…` hex `uint256`. Pass directly to the on‑chain claim contract; decode the amount with `parseInt(hex, 16) / 1e6` for USDD.
         * **Mining APY** — paid on top of `supplyRate`. Effective supply APY = `supplyRate + apy`.
         * **Pagination** — `pageNo` is 1‑based, default `1`. `pageSize` default `10`, max `1000`.
@@ -428,56 +435,80 @@ components:
                     format: double
                     description: Oracle price of 1 unit of underlying, denominated in TRX.
                     example: 1.0
+                    x-unit: TRX
+                    x-descaled: true
                 borrowIndex:
                     type: integer
                     format: int64
                     description: Cumulative borrow interest index (scaled `1e18`).
                     example: 1224530412174750380
+                    x-unit: mantissa
+                    x-decimals: 18
+                    x-descaled: false
                 borrowRate:
                     type: number
                     format: double
                     description: Borrow APY as annualized decimal. `0.0647` = 6.47 %.
                     example: 0.06467371
+                    x-unit: APY-annualized-decimal
+                    x-descaled: true
                 supplyRate:
                     type: number
                     format: double
                     description: Supply APY as annualized decimal (does **not** include mining rewards).
                     example: 0.00904450
+                    x-unit: APY-annualized-decimal
+                    x-descaled: true
                 cash:
                     type: number
                     format: double
                     description: Available underlying liquidity in the market.
                     example: 349909392.537020
+                    x-unit: underlying
+                    x-descaled: true
                 reserves:
                     type: number
                     format: double
                     description: Protocol reserves in the market (underlying units).
                     example: 2300647.881336
+                    x-unit: underlying
+                    x-descaled: true
                 totalBorrows:
                     type: number
                     format: double
                     description: Total outstanding debt (underlying units).
                     example: 63951044.565948
+                    x-unit: underlying
+                    x-descaled: true
                 totalSupply:
                     type: number
                     format: double
                     description: Total minted jTokens (jToken units, 8 decimals).
                     example: 39391010299.49149122
+                    x-unit: jToken
+                    x-decimals: 8
+                    x-descaled: true
                 exchangeRate:
                     type: number
                     format: double
                     description: Current jToken → underlying conversion ratio.
                     example: 0.010448063811832339
+                    x-unit: underlying-per-jToken
+                    x-descaled: true
                 collateralFactor:
                     type: number
                     format: double
                     description: Loan‑to‑value cap when used as collateral. `0.75` = 75 %.
                     example: 0.75
+                    x-unit: fraction-0to1
+                    x-descaled: true
                 reserveFactor:
                     type: number
                     format: double
                     description: Share of borrow interest taken as protocol reserve.
                     example: 0.10
+                    x-unit: fraction-0to1
+                    x-descaled: true
 
         MarketListResponse:
             allOf:
@@ -518,16 +549,23 @@ components:
                     format: double
                     description: Supplied balance in jTokens (8 decimals).
                     example: 1.09062037
+                    x-unit: jToken
+                    x-decimals: 8
+                    x-descaled: true
                 supplyBalanceUnderlying:
                     type: number
                     format: double
                     description: Supplied balance in underlying units.
                     example: 0.01148891329334797
+                    x-unit: underlying
+                    x-descaled: true
                 borrowBalanceUnderlying:
                     type: number
                     format: double
                     description: Outstanding borrow in underlying units.
                     example: 0.704372293431166
+                    x-unit: underlying
+                    x-descaled: true
 
         UserAccount:
             type: object
@@ -547,11 +585,15 @@ components:
                     format: double
                     description: Sum of collateral value in TRX (after `collateralFactor`).
                     example: 24.126681
+                    x-unit: TRX
+                    x-descaled: true
                 totalBorrowValueInTrx:
                     type: number
                     format: double
                     description: Sum of outstanding borrow value in TRX.
                     example: 11.277370
+                    x-unit: TRX
+                    x-descaled: true
                 liquidateStatusStartTime:
                     type: string
                     format: date-time
@@ -584,11 +626,11 @@ components:
             properties:
                 jtokenAddress:    { type: string, description: jToken contract address., example: TR7BUFRQeq1w5jAZf1FKx85SHuX6PfMqsV }
                 symbol:           { type: string, description: jToken symbol., example: jETH }
-                amount:           { type: string, description: Collateral held, in jToken units (8 decimals)., example: '11.03049909' }
-                price:            { type: string, description: jToken price in USD (already multiplied by `exchangeRate`)., example: '21.090028146702653201' }
-                valueUsd:         { type: string, description: '`amount × price`.', example: '232.633536' }
-                exchangeRate:     { type: string, description: jToken → underlying conversion ratio., example: '0.010021847796289808' }
-                collateralFactor: { type: string, description: Collateral factor applied for risk calculation., example: '0.750000000000000000' }
+                amount:           { type: string, description: Collateral held, in jToken units (8 decimals)., example: '11.03049909', x-unit: jToken, x-decimals: 8, x-descaled: true }
+                price:            { type: string, description: jToken price in USD (already multiplied by `exchangeRate`)., example: '21.090028146702653201', x-unit: USD, x-descaled: true }
+                valueUsd:         { type: string, description: '`amount × price`.', example: '232.633536', x-unit: USD, x-descaled: true }
+                exchangeRate:     { type: string, description: jToken → underlying conversion ratio., example: '0.010021847796289808', x-unit: underlying-per-jToken, x-descaled: true }
+                collateralFactor: { type: string, description: Collateral factor applied for risk calculation., example: '0.750000000000000000', x-unit: fraction-0to1, x-descaled: true }
 
         BorrowToken:
             type: object
@@ -596,11 +638,11 @@ components:
             properties:
                 tokenAddress:     { type: string, description: '**Underlying** asset address (note — keyed by underlying, not jToken).', example: TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9 }
                 symbol:           { type: string, description: Underlying asset symbol., example: JST }
-                amount:           { type: string, description: Outstanding borrowed amount in underlying units., example: '19.357667866419444238' }
-                price:            { type: string, description: Underlying asset price in USD., example: '0.040802750477000000' }
-                valueUsd:         { type: string, description: '`amount × price`.', example: '0.789846' }
-                exchangeRate:     { type: string, description: jToken → underlying conversion ratio for this market., example: '0.010481635809265784' }
-                collateralFactor: { type: string, description: Collateral factor of the corresponding jToken market., example: '0.600000000000000000' }
+                amount:           { type: string, description: Outstanding borrowed amount in underlying units., example: '19.357667866419444238', x-unit: underlying, x-descaled: true }
+                price:            { type: string, description: Underlying asset price in USD., example: '0.040802750477000000', x-unit: USD, x-descaled: true }
+                valueUsd:         { type: string, description: '`amount × price`.', example: '0.789846', x-unit: USD, x-descaled: true }
+                exchangeRate:     { type: string, description: jToken → underlying conversion ratio for this market., example: '0.010481635809265784', x-unit: underlying-per-jToken, x-descaled: true }
+                collateralFactor: { type: string, description: Collateral factor of the corresponding jToken market., example: '0.600000000000000000', x-unit: fraction-0to1, x-descaled: true }
 
         HighRiskAccount:
             type: object
@@ -608,8 +650,8 @@ components:
             properties:
                 borrower:                 { type: string, description: Borrower wallet., example: TLc34aTvy1vBFzLvM9oz36ihhb7sVpQmgQ }
                 risk:                     { type: string, description: 'Risk coefficient. `> 1` ⇒ liquidatable now. Higher = riskier.', example: '1.105684' }
-                totalCollateralUsd:       { type: string, description: Total collateral value in USD., example: '234.063780' }
-                totalBorrowUsd:           { type: string, description: Total borrow value in USD., example: '193.705172' }
+                totalCollateralUsd:       { type: string, description: Total collateral value in USD., example: '234.063780', x-unit: USD, x-descaled: true }
+                totalBorrowUsd:           { type: string, description: Total borrow value in USD., example: '193.705172', x-unit: USD, x-descaled: true }
                 liquidateStatusStartTime: { type: integer, format: int64, description: Epoch ms when the account first became liquidatable., example: 1770089973150 }
                 collateralTokenList:
                     type: array
@@ -664,6 +706,8 @@ components:
                         USDD mining APY as annualized decimal. `0.09175706` =
                         9.18 %. Paid on top of the market's `supplyRate`.
                     example: 0.09175706
+                    x-unit: APY-annualized-decimal
+                    x-descaled: true
 
         MiningApyResponse:
             allOf:
@@ -713,6 +757,8 @@ components:
                     format: double
                     description: User's accrued reward in the current phase (USDD). Updates over time.
                     example: 0.0
+                    x-unit: USDD
+                    x-descaled: true
                 currRewardStatus: { $ref: '#/components/schemas/PhaseStatus' }
                 lastStartTime: { type: string, format: date-time, description: Start of the previous (most recently finalized) phase. }
                 lastEndTime:   { type: string, format: date-time, description: End of the previous phase. }
@@ -721,12 +767,16 @@ components:
                     format: double
                     description: User's finalized reward in the previous phase (USDD). Use `/mining/distributions` for the on‑chain claim proof.
                     example: 0.0
+                    x-unit: USDD
+                    x-descaled: true
                 lastRewardStatus: { $ref: '#/components/schemas/PhaseStatus' }
                 price:
                     type: number
                     format: double
                     description: Current price of the reward token in USD (USDD ≈ 1).
                     example: 1.0
+                    x-unit: USD
+                    x-descaled: true
 
         MiningRewardResponse:
             allOf:
@@ -770,6 +820,9 @@ components:
                     pattern: '^0x[0-9a-fA-F]+$'
                     description: 'Claimable reward in **underlying smallest units** (USDD: 6 decimals). Decode: `parseInt(amount, 16) / 1e6`.'
                     example: '0x6933158b3c05'
+                    x-unit: USDD
+                    x-decimals: 6
+                    x-descaled: false
                 merkleRoot:
                     type: string
                     pattern: '^0x[0-9a-fA-F]{64}$'
@@ -805,26 +858,26 @@ components:
                 symbol:              { type: string, description: Token symbol., example: sTRX }
                 decimal:             { type: integer, format: int32, description: sTRX decimals., example: 18 }
                 underlyingDecimal:   { type: integer, format: int32, description: TRX decimals., example: 6 }
-                exchangeRate:        { type: number, format: double, description: 'TRX per sTRX. `1.18` means 1 sTRX = 1.18 TRX.', example: 1.181813870419231 }
-                supplyRate:          { type: number, format: double, description: sTRX staking APY as annualized decimal., example: 0.03937302 }
-                totalSupply:         { type: number, format: double, description: Total sTRX issued., example: 6553955254.250488 }
-                totalUnderlying:     { type: number, format: double, description: Total TRX held by the pool., example: 7745555225.580224 }
-                totalSupplyUsd:      { type: number, format: double, description: TVL in USD., example: 1729932328.7582867 }
-                trxPrice:            { type: number, format: double, description: Current TRX price in USD., example: 0.22334516743810272 }
-                reserse:             { type: number, format: double, description: Protocol reserves in TRX. (Field name is a legacy typo — read as `reserves`.), example: 71933070.32142 }
-                rentReserveFactor:   { type: number, format: double, description: Share of rental revenue taken as reserve., example: 0.20 }
-                rewardReserveFactor: { type: number, format: double, description: Share of staking reward taken as reserve., example: 0.20 }
+                exchangeRate:        { type: number, format: double, description: 'TRX per sTRX. `1.18` means 1 sTRX = 1.18 TRX.', example: 1.181813870419231, x-unit: TRX-per-sTRX, x-descaled: true }
+                supplyRate:          { type: number, format: double, description: sTRX staking APY as annualized decimal., example: 0.03937302, x-unit: APY-annualized-decimal, x-descaled: true }
+                totalSupply:         { type: number, format: double, description: Total sTRX issued., example: 6553955254.250488, x-unit: sTRX, x-decimals: 18, x-descaled: true }
+                totalUnderlying:     { type: number, format: double, description: Total TRX held by the pool., example: 7745555225.580224, x-unit: TRX, x-descaled: true }
+                totalSupplyUsd:      { type: number, format: double, description: TVL in USD., example: 1729932328.7582867, x-unit: USD, x-descaled: true }
+                trxPrice:            { type: number, format: double, description: Current TRX price in USD., example: 0.22334516743810272, x-unit: USD, x-descaled: true }
+                reserse:             { type: number, format: double, description: Protocol reserves in TRX. (Field name is a legacy typo — read as `reserves`.), example: 71933070.32142, x-unit: TRX, x-descaled: true }
+                rentReserveFactor:   { type: number, format: double, description: Share of rental revenue taken as reserve., example: 0.20, x-unit: fraction-0to1, x-descaled: true }
+                rewardReserveFactor: { type: number, format: double, description: Share of staking reward taken as reserve., example: 0.20, x-unit: fraction-0to1, x-descaled: true }
 
         RentInfo:
             type: object
             description: Energy Rental market snapshot.
             properties:
                 rentMarketAddress:        { type: string, description: Energy Rental contract address., example: TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd }
-                priceFor10KEnergByRent:   { type: number, format: double, description: TRX cost to obtain 10 000 Energy via **rental**., example: 0.65530713 }
-                priceFor10KEnergByStake:  { type: number, format: double, description: TRX **stake** needed to produce 10 000 Energy yourself., example: 885.28697646 }
-                priceFor10KEnergByBurn:   { type: number, format: double, description: TRX cost to obtain 10 000 Energy by **burning** TRX in a transaction., example: 4.20 }
-                totalDelegatedEnergyTrx:  { type: number, format: double, description: Total TRX delegated through the rental market., example: 162748507.90893 }
-                totalDelegatedEnergyRate: { type: number, format: double, description: Utilization rate of the rental pool., example: 0.0325497 }
+                priceFor10KEnergByRent:   { type: number, format: double, description: TRX cost to obtain 10 000 Energy via **rental**., example: 0.65530713, x-unit: TRX, x-descaled: true }
+                priceFor10KEnergByStake:  { type: number, format: double, description: TRX **stake** needed to produce 10 000 Energy yourself., example: 885.28697646, x-unit: TRX, x-descaled: true }
+                priceFor10KEnergByBurn:   { type: number, format: double, description: TRX cost to obtain 10 000 Energy by **burning** TRX in a transaction., example: 4.20, x-unit: TRX, x-descaled: true }
+                totalDelegatedEnergyTrx:  { type: number, format: double, description: Total TRX delegated through the rental market., example: 162748507.90893, x-unit: TRX, x-descaled: true }
+                totalDelegatedEnergyRate: { type: number, format: double, description: Utilization rate of the rental pool., example: 0.0325497, x-unit: fraction-0to1, x-descaled: true }
 
         StrxSnapshotResponse:
             allOf:
@@ -845,9 +898,9 @@ components:
             description: One wallet's sTRX position.
             properties:
                 addresses:               { type: string, description: User wallet., example: TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5 }
-                sTRXBalance:             { type: number, format: double, description: Current sTRX balance., example: 1.0 }
-                unstakingAmount:         { type: number, format: double, description: TRX currently in the un‑staking cooldown., example: 24120999.583032 }
-                availableWithdrawAmount: { type: number, format: double, description: TRX past cooldown and ready to withdraw., example: 150865439.643028 }
+                sTRXBalance:             { type: number, format: double, description: Current sTRX balance., example: 1.0, x-unit: sTRX, x-decimals: 18, x-descaled: true }
+                unstakingAmount:         { type: number, format: double, description: TRX currently in the un‑staking cooldown., example: 24120999.583032, x-unit: TRX, x-descaled: true }
+                availableWithdrawAmount: { type: number, format: double, description: TRX past cooldown and ready to withdraw., example: 150865439.643028, x-unit: TRX, x-descaled: true }
 
         StrxStakeAccountResponse:
             allOf:
@@ -873,9 +926,9 @@ components:
                 rentType:         { type: string, description: 'Resource type. Only `"Energy"` is exposed for now.', enum: ['Energy'], example: Energy }
                 renter:           { type: string, description: Account paying the rent., example: TWdWEHRLPBVGsXhwjSUv45XwnsfUHXydJa }
                 receiver:         { type: string, description: Account receiving the delegated Energy., example: TWdWEHRLPBVGsXhwjSUv45XwnsfUHXydJa }
-                delegatedAmount:  { type: number, format: double, description: TRX equivalent of the energy currently delegated., example: 10000.0 }
-                rentRemainAmount: { type: number, format: double, description: TRX prepayment still remaining for this order., example: 8500.0 }
-                rentAmountPerDay: { type: number, format: double, description: Daily TRX cost of the rental order., example: 1500.0 }
+                delegatedAmount:  { type: number, format: double, description: TRX equivalent of the energy currently delegated., example: 10000.0, x-unit: TRX, x-descaled: true }
+                rentRemainAmount: { type: number, format: double, description: TRX prepayment still remaining for this order., example: 8500.0, x-unit: TRX, x-descaled: true }
+                rentAmountPerDay: { type: number, format: double, description: Daily TRX cost of the rental order., example: 1500.0, x-unit: TRX, x-descaled: true }
 
         RentAccountResponse:
             allOf:

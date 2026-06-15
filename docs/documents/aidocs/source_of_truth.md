@@ -46,6 +46,14 @@ Use this page to decide which JustLend documentation or runtime source an AI age
 - Do not assume Mainnet when the user is testing. Ask for or default to `nile` only when the workflow is explicitly a testnet workflow.
 - Do not use rendered HTML tables as the primary source for programmatic integrations; prefer YAML/JSON/tool output.
 
+## Units and amounts — where to get self-describing values
+
+The public HTTP API returns numbers in their on-chain form (e.g. base units, mantissa-scaled, annualized decimals) **without** an inline `_unit`/`decimals` envelope, by design. To interpret amounts correctly:
+
+- **Need a ready-to-use amount?** Prefer **MCP tools** — balance/amount fields return a self-describing object `{ raw, _unit, decimals, display }` (e.g. `get_token_balance`, `get_trx_balance`), so you never re-apply decimals.
+- **Using the HTTP API directly?** Read the unit and precision from the **OpenAPI spec**: each amount field carries structured `x-unit` / `x-decimals` extensions (and a prose description). Do not infer decimals from the symbol.
+- **Quick reference:** jTokens always use **8** decimals; each underlying TRC20 uses its own `decimals`; `*Rate` / `apy` are annualized decimals (×100 for %); `exchangeRate` / `borrowIndex` and other mantissa fields are scaled by `1e18`. See [APIs §1.3–1.4](../../developers/apis.md#13-numeric-formats).
+
 ## Common source mapping
 
 | User asks for | Use first | Fallback |
