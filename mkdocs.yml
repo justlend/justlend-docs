@@ -45,6 +45,7 @@ nav:
             - Risks: getting_started/concepts/risks.md
             - Staked TRX: getting_started/concepts/staked_trx.md
             - Energy Rental: getting_started/concepts/energy_rental.md
+            - SBM V2: getting_started/concepts/SBMV2.md
         - Whitepaper: https://justlend.org/docs/justlend_whitepaper_en.pdf
         - FAQs:
             - Wallet Connection Questions: getting_started/faqs/wallet_connection_questions.md
