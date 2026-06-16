@@ -59,6 +59,7 @@ nav:
         - Contracts Overview: developers/contracts_overview.md
         - Supply and Borrow Market:
             - SBM: developers/supply_and_borrow_market/sbm.md
+            - SBM V2: developers/supply_and_borrow_market/sbmV2.md
             - Interest Rate Model: developers/supply_and_borrow_market/interest_rate_model.md
             - Governance: developers/supply_and_borrow_market/governance.md
             - Price Oracle: developers/supply_and_borrow_market/price_oracle.md
