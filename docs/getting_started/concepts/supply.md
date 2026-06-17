@@ -27,9 +27,9 @@ In return, users receive jTokens, TRC-20 tokens representing their supplied asse
 **Dynamic Rate Updates:** As tokens are supplied, borrowed, repaid, or withdrawn from the liquidity pool, interest rates are updated in real time. These adjustments are guided by on-chain data, including token balances, oracle-determined prices, and the borrow utilization ratio.
 
 ### **How Do I Supply Assets**
-Supplying can be done with a user interface [JustLend SBM](https://app.justlend.org/homeNew?lang=en-US) or SBM V2. Before we walk through the steps of a supplying sequence, let’s cover some key parameters:
+Supplying can be done with a user interface [JustLend SBM V1](https://app.justlend.org/homeV1) or [SBM V2](https://app.justlend.org/homeNew?lang=en-US). Before we walk through the steps of a supplying sequence, let’s cover some key parameters:
 
-**SBM:**
+**SBM V1:**
 
 * `Supply APY:` the annual rewards from the jTokens users receive by supplying assets, which influenced by the borrow utilization rate and fluctuated by the time;
 * `Total Supply:` the total supply in the market. As the total supply changes, the Supply APY will also change accordingly;
