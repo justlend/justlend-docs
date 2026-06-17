@@ -138,8 +138,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "How users redeem supplied assets on JustLend \u2014 by jToken amount (`redeem`) or by exact underlying amount (`redeemUnderlying`), subject to market liquidity and collateral constraints.",
-          "dateModified": "2026-05-22",
-          "datePublished": "2026-05-22"
+          "dateModified": "2026-06-16",
+          "datePublished": "2026-06-16"
         }
       ]
     }
@@ -494,19 +494,6 @@
   <a href="#how-do-i-withdraw-assets" class="md-nav__link">
     <span class="md-ellipsis">
       How Do I Withdraw Assets
-    </span>
-  </a>
-  
-</li>
-      
-        
-
-
-
-<li class="md-nav__item ">
-  <a href="#try-it" class="md-nav__link">
-    <span class="md-ellipsis">
-      Try it
     </span>
   </a>
   
@@ -1738,7 +1725,13 @@
 <h1 id="withdraw">Withdraw<a class="headerlink" href="#withdraw" title="Permanent link">&para;</a></h1>
 <div class="admonition info">
 <p class="admonition-title">About this page</p>
-<p><strong>Protocol:</strong> JustLend DAO (Compound V2 fork on TRON) · <strong>Network:</strong> TRON Mainnet · <strong>Scope:</strong> user-facing withdraw / redeem flow — liquidity and collateral preconditions, two redeem variants (by jToken units vs. by exact underlying). · <strong>Units:</strong> jToken amounts use <strong>8 decimals</strong> regardless of underlying; underlying amounts use the token's own decimals. · <strong>Related contracts:</strong> <a href="../../../developers/supply_and_borrow_market/sbm/">SBM <code>redeem</code> / <code>redeemUnderlying</code></a> and the <a href="../../../developers/supply_and_borrow_market/comptroller/#get-account-liquidity">Comptroller liquidity check</a>.</p>
+<ul>
+<li><strong>Protocol:</strong> JustLend DAO (Compound V2 fork on TRON) </li>
+<li><strong>Network:</strong> TRON Mainnet </li>
+<li><strong>Scope:</strong> user-facing withdraw / redeem flow — liquidity and collateral preconditions, two redeem variants (by jToken units vs. by exact underlying). </li>
+<li><strong>Units:</strong> jToken amounts use <strong>8 decimals</strong> regardless of underlying; underlying amounts use the token's own decimals. </li>
+<li><strong>Related contracts:</strong> <a href="../../../developers/supply_and_borrow_market/sbm/">SBM <code>redeem</code> / <code>redeemUnderlying</code></a> and the <a href="../../../developers/supply_and_borrow_market/comptroller/#get-account-liquidity">Comptroller liquidity check</a>.</li>
+</ul>
 </div>
 <p>JustLend DAO empowers users to manage their assets effectively by enabling the withdrawal of supplied tokens. Suppliers can withdraw their tokens as long as there is sufficient liquidity in the reserve. The withdrawal amount is determined by the availability of underlying assets and the user’s ability to maintain a sufficient collateral ratio for any active borrow positions.</p>
 <p>When withdrawing with an active borrow position, it’s essential to carefully manage your collateralisation ratio to avoid liquidation. Reducing collateral will decrease the health status and increasing the risk of liquidation.</p>
@@ -1749,13 +1742,19 @@
 <li><strong>Plan Withdrawals Carefully:</strong> Assess the impact of each withdrawal on your overall borrow position to prevent unintentional liquidation risks.</li>
 </ul>
 <h3 id="how-do-i-withdraw-assets"><strong>How Do I Withdraw Assets</strong><a class="headerlink" href="#how-do-i-withdraw-assets" title="Permanent link">&para;</a></h3>
-<ol>
+<ul>
 <li>Connect your Web3 wallet on TronLink or other supported wallet app to the JustLend DAO (<a href="https://justlend.org">https://justlend.org</a>).</li>
-<li>Navigate to the "SBM" and choose the supplied asset you want to withdraw, click 「Withdraw」.</li>
-<li>Specify the amount you want to withdraw and confirm the transaction.</li>
-</ol>
-<h3 id="try-it">Try it<a class="headerlink" href="#try-it" title="Permanent link">&para;</a></h3>
-<p>Open the JustLend dApp on the <strong>Withdraw</strong> action: <a href="https://app.justlend.org/homeNew?lang=en-US">https://app.justlend.org/homeNew?lang=en-US</a> → pick the supplied asset → click 「Withdraw」.</p>
+<li>To Withdraw Asset on SBM V1:<ul>
+<li>Navigate to <strong>“SBM V1”</strong>, choose the asset you wish to withdraw, then click <strong>「Withdraw」</strong> under supplied assets.</li>
+<li>Enter the amount you want to withdraw, then click <strong>「Withdraw」</strong> and confirm the transaction.</li>
+</ul>
+</li>
+<li>To Withdraw Asset on SBM V2:<ul>
+<li>Navigate to <strong>“SBM V2”</strong>, select the withdrawal asset under <strong>All Supply Vaults</strong>, then click <strong>「Details」</strong>.</li>
+<li>Choose <strong>Withdraw</strong>, enter the withdrawal amount, then click <strong>「Withdraw」</strong>.</li>
+</ul>
+</li>
+</ul>
 <h3 id="developer-reference">Developer reference<a class="headerlink" href="#developer-reference" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Contract function (by jToken units): <a href="../../../developers/supply_and_borrow_market/sbm/#redeem"><code>redeem(redeemTokens)</code></a> — burns the specified jToken amount and returns the equivalent underlying.</li>
@@ -1783,7 +1782,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 22, 2026 06:51:42 UTC">2026-05-22</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 16, 2026 07:32:19 UTC">2026-06-16</span>
   </span>
 
     
