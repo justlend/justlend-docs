@@ -138,8 +138,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "Architecture summary of every JustLend DAO contract on TRON \u2014 SBM jTokens, Comptroller, interest rate models, price oracle, governance, sTRX, Energy Rental \u2014 with proxy mode, ABI links, and key functions in one table.",
-          "dateModified": "2026-05-28",
-          "datePublished": "2026-05-28"
+          "dateModified": "2026-06-17",
+          "datePublished": "2026-06-17"
         }
       ]
     }
@@ -974,9 +974,9 @@
 
 
 <li class="md-nav__item ">
-  <a href="#jtokens-contract" class="md-nav__link">
+  <a href="#there-are-5-categories-of-core-repository-contracts-in-sbm" class="md-nav__link">
     <span class="md-ellipsis">
-      JTokens Contract
+      There are 5 categories of core repository contracts in SBM:
     </span>
   </a>
   
@@ -987,48 +987,9 @@
 
 
 <li class="md-nav__item ">
-  <a href="#interest-rate-model-contract" class="md-nav__link">
+  <a href="#there-are-5-categories-of-core-repository-contracts-in-sbm-v2" class="md-nav__link">
     <span class="md-ellipsis">
-      Interest Rate Model Contract
-    </span>
-  </a>
-  
-</li>
-        
-          
-
-
-
-<li class="md-nav__item ">
-  <a href="#price-oracle-contract" class="md-nav__link">
-    <span class="md-ellipsis">
-      Price Oracle Contract
-    </span>
-  </a>
-  
-</li>
-        
-          
-
-
-
-<li class="md-nav__item ">
-  <a href="#governance-contract" class="md-nav__link">
-    <span class="md-ellipsis">
-      Governance Contract
-    </span>
-  </a>
-  
-</li>
-        
-          
-
-
-
-<li class="md-nav__item ">
-  <a href="#comptroller-contract" class="md-nav__link">
-    <span class="md-ellipsis">
-      Comptroller Contract
+      There are 5 categories of core repository contracts in SBM V2:
     </span>
   </a>
   
@@ -1877,24 +1838,29 @@
 <h1 id="contracts-overview">Contracts Overview<a class="headerlink" href="#contracts-overview" title="Permanent link">&para;</a></h1>
 <div class="admonition info">
 <p class="admonition-title">About this page</p>
-<p><strong>Protocol:</strong> JustLend DAO · <strong>Network:</strong> TRON Mainnet (Base58 addresses; see <a href="../contracts.json"><code>/developers/contracts.json</code></a> for Mainnet + Nile addresses in Base58, EVM <code>0x</code> hex, and TRON-internal <code>41</code> hex) · <strong>Architecture:</strong> Compound V2 fork · <strong>Markets:</strong> 17 active + 6 legacy = 23 jToken markets (authoritative list: <a href="../apis/#2-jtoken-address-reference">APIs §2</a>) · <strong>Upgrade pattern:</strong> every contract listed below is either <code>Delegator → Delegate</code> (proxy + implementation, <strong>upgradeable</strong> by Governance) or <strong>immutable</strong>, explicitly tagged in the table. The page first gives a one-screen machine-readable summary table; deeper per-component prose follows.</p>
+<ul>
+<li><strong>Protocol:</strong> JustLend DAO</li>
+<li><strong>Network:</strong> TRON Mainnet (Base58 addresses; see <a href="../contracts.json"><code>/developers/contracts.json</code></a> for Mainnet + Nile addresses in Base58, EVM <code>0x</code> hex, and TRON-internal <code>41</code> hex) </li>
+<li><strong>Architecture:</strong> Compound V2 fork</li>
+<li><strong>Markets:</strong> 17 active + 6 legacy = 23 jToken markets (authoritative list: <a href="../apis/#2-jtoken-address-reference">APIs §2</a>) </li>
+<li><strong>Upgrade pattern:</strong> every contract listed below is either <code>Delegator → Delegate</code> (proxy + implementation, <strong>upgradeable</strong> by Governance) or <strong>immutable</strong>, explicitly tagged in the table. The page first gives a one-screen machine-readable summary table; deeper per-component prose follows.</li>
+</ul>
 </div>
 <h2 id="architecture-summary">Architecture summary<a class="headerlink" href="#architecture-summary" title="Permanent link">&para;</a></h2>
 <p>JustLend DAO Protocol contracts are divided in these repositories:</p>
 <ul>
-<li><strong>Supply and Borrow Market:</strong> contains core contracts for JustLend DAO, including logic for supply and borrow market (SBM), interest rate model, governance, price oracle and comptroller.<ul>
+<li><strong>Supply and Borrow Market:</strong> contains core contracts for JustLend DAO, including logic for supply and borrow market (SBM), supply and borrow market V2 (SBM V2)，interest rate model, governance, price oracle and comptroller.</li>
 <li><strong>SBM:</strong> enables supplying of crypto assets as collateral in order to borrow the base asset. Accounts can also earn interest by supplying the base asset to the protocol.</li>
+<li><strong>SBM V2:</strong> an isolated-collateral lending protocol with a dual-layer structure of Vaults and Markets, along with an Adaptive Curve Interest Rate Model (IRM) for dynamic rate adjustment.</li>
 <li><strong>Interest Rate Model:</strong> users with a positive balance of the base asset earn interest, denominated in the base asset, based on a supply rate model.</li>
 <li><strong>Price-Oracle:</strong> contains the price oracle contracts we support, along with the logic validation for prices returned by these oracles.</li>
 <li><strong>Governance:</strong> contracts used for proposing, voting and executing proposals.</li>
 <li><strong>Comptroller:</strong> the risk management layer of the protocol. It determines how much collateral a user is required to maintain, and whether user can be liquidated.</li>
-</ul>
-</li>
 <li><strong>Staked TRX:</strong> the contracts utilized for staking TRX to earn high rewards.</li>
 <li><strong>Energy Rental:</strong> contracts enable users to rent energy anytime with a low price.</li>
 </ul>
 <h2 id="core-contracts"><strong>Core Contracts</strong><a class="headerlink" href="#core-contracts" title="Permanent link">&para;</a></h2>
-<p>There are 5 categories of core repository contracts (the prose below mirrors the summary table — refer to the table for addresses, function signatures, and ABI links):</p>
+<h3 id="there-are-5-categories-of-core-repository-contracts-in-sbm">There are 5 categories of core repository contracts in SBM:<a class="headerlink" href="#there-are-5-categories-of-core-repository-contracts-in-sbm" title="Permanent link">&para;</a></h3>
 <ul>
 <li>JTokens Contract</li>
 <li>Interest Rate Model Contract</li>
@@ -1902,24 +1868,40 @@
 <li>Governance Contract</li>
 <li>Comptroller Contract</li>
 </ul>
-<h3 id="jtokens-contract">JTokens Contract<a class="headerlink" href="#jtokens-contract" title="Permanent link">&para;</a></h3>
+<h4 id="jtokens-contract">JTokens Contract<a class="headerlink" href="#jtokens-contract" title="Permanent link">&para;</a></h4>
 <p><code>JToken:</code> the contract used to support all assets by JustLend DAO, such as the jTRX, jUSDT, jSUN and jBTC you receive after supplying the corresponding assets.</p>
-<h3 id="interest-rate-model-contract">Interest Rate Model Contract<a class="headerlink" href="#interest-rate-model-contract" title="Permanent link">&para;</a></h3>
+<h4 id="interest-rate-model-contract">Interest Rate Model Contract<a class="headerlink" href="#interest-rate-model-contract" title="Permanent link">&para;</a></h4>
 <p><code>WhitePaperInterestRateModel:</code> the contract used to set up a straightforward interest rate model, which the borrowing rate is directly proportional to the utilization.</p>
 <p><code>JumpRateModelV2:</code> the Contract used to set up a complex interest rate model, which the interest rate jumps to a higher tier when the utilization rate exceeds u optimal.</p>
-<h3 id="price-oracle-contract">Price Oracle Contract<a class="headerlink" href="#price-oracle-contract" title="Permanent link">&para;</a></h3>
+<h4 id="price-oracle-contract">Price Oracle Contract<a class="headerlink" href="#price-oracle-contract" title="Permanent link">&para;</a></h4>
 <p><code>Price Oracle:</code> the JustLend Protocol use Chainlink's price service to fetch the token price. The PriceOracle contract is responsible for setting and display token prices.</p>
-<h3 id="governance-contract">Governance Contract<a class="headerlink" href="#governance-contract" title="Permanent link">&para;</a></h3>
-<p><code>GovernorBravo:</code> The main JustLend Governance Contract. Users interact with it to:</p>
-<ul>
-<li>Submit new proposal</li>
-<li>Vote on a proposal</li>
-<li>Cancel a proposal</li>
-<li>Queue a proposal for execution with a time lock executor contract</li>
-</ul>
+<h4 id="governance-contract">Governance Contract<a class="headerlink" href="#governance-contract" title="Permanent link">&para;</a></h4>
+<p><code>GovernorBravo:</code> The main JustLend Governance Contract. Users interact with it to:
+- Submit new proposal
+- Vote on a proposal
+- Cancel a proposal
+- Queue a proposal for execution with a time lock executor contract</p>
 <p><code>Timelock:</code> the contract used to execute or cancel a queued transaction.</p>
-<h3 id="comptroller-contract">Comptroller Contract<a class="headerlink" href="#comptroller-contract" title="Permanent link">&para;</a></h3>
+<h4 id="comptroller-contract">Comptroller Contract<a class="headerlink" href="#comptroller-contract" title="Permanent link">&para;</a></h4>
 <p><code>Comptroller:</code> the Comptroller contract is the central contract for each lending pool. It contains functionality central to borrowing activity in the pool like supplying and borrowing assets and liquidations.</p>
+<h3 id="there-are-5-categories-of-core-repository-contracts-in-sbm-v2">There are 5 categories of core repository contracts in SBM V2:<a class="headerlink" href="#there-are-5-categories-of-core-repository-contracts-in-sbm-v2" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Moolah Market</li>
+<li>Moolah Vault</li>
+<li>TRX Provider</li>
+<li>Resilient Oracle</li>
+<li>Interest Rate Model</li>
+</ul>
+<h4 id="moolah-market">Moolah Market<a class="headerlink" href="#moolah-market" title="Permanent link">&para;</a></h4>
+<p><code>Moolah Market:</code> the Moolah Lending Market adopts an isolated-collateral lending protocol, where each market supports a single collateral asset paired with a single borrowable asset.</p>
+<h4 id="moolah-vault">Moolah Vault<a class="headerlink" href="#moolah-vault" title="Permanent link">&para;</a></h4>
+<p><code>Moolah Vault:</code> each Vault serves as a single-asset management contract that provides liquidity to various lending markets.</p>
+<h4 id="trx-provider">TRX Provider<a class="headerlink" href="#trx-provider" title="Permanent link">&para;</a></h4>
+<p><code>TRX Provider:</code> users can directly interact with the system using TRX through the TRXProvider module. The TRXProvider internally handles the conversion between TRX and WTRX, allowing seamless user operations such as deposits and withdrawals.</p>
+<h4 id="resilient-oracle">Resilient Oracle<a class="headerlink" href="#resilient-oracle" title="Permanent link">&para;</a></h4>
+<p><code>Resilient Oracle:</code> an aggregated price feed contract that supports up to three price sources for each token. It provides reliable on-chain price data with 18-decimal precision and allows users or protocols to query the latest price of any supported token. </p>
+<h4 id="interest-rate-model">Interest Rate Model<a class="headerlink" href="#interest-rate-model" title="Permanent link">&para;</a></h4>
+<p><code>IRM:</code> the Adaptive Curve Interest Rate Model. It builds upon the Jump Curve model used in JustLend DAO V1, but adds dynamic adaptability, allowing real-time rate adjustments to keep market utilization near an optimal level.</p>
 <h2 id="staked-trx-contracts"><strong>Staked TRX Contracts</strong><a class="headerlink" href="#staked-trx-contracts" title="Permanent link">&para;</a></h2>
 <p><code>Staked TRX(sTRX):</code> the contract utilized for staking TRX to earn high rewards.</p>
 <h2 id="energy-rental"><strong>Energy Rental</strong><a class="headerlink" href="#energy-rental" title="Permanent link">&para;</a></h2>
@@ -2123,7 +2105,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 28, 2026 09:01:48 UTC">2026-05-28</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 17, 2026 05:09:43 UTC">2026-06-17</span>
   </span>
 
     
