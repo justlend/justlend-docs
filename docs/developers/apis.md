@@ -103,6 +103,8 @@ Every successful response uses the same envelope:
 | `message` | string  | `"SUCCESS"` on success, otherwise a short error description.     |
 | `data`    | object  | Endpoint payload. Shape is documented per endpoint below.        |
 
+> **Field necessity (必返性).** Every field documented for a `data` schema is **always returned** (required) unless it is explicitly marked `nullable` — a `nullable` field is still always present but its value may be `null` (e.g. `liquidateStatusStartTime`). The machine-readable `required` arrays in [`justlend_apis.yaml`](apis/justlend_apis.yaml) enumerate these per schema, so an agent can distinguish "field missing = bug/unexpected" from "value null = documented empty state" and validate responses programmatically.
+
 ### 1.2 Address format
 
 All addresses are TRON **Base58** addresses (start with `T`, 34 chars). Examples: `TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf`.

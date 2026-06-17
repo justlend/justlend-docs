@@ -9,7 +9,7 @@
 | `last_generated` | **{{LAST_GENERATED}}** (ISO 8601, UTC date — substituted at build time) |
 | `docs_commit` | [`{{DOCS_COMMIT_SHORT}}`](https://github.com/justlend/justlend-docs/commit/{{DOCS_COMMIT}}) (the commit SHA this snapshot was built from — substituted at build time) |
 | `contracts_json_source` | [`/developers/contracts.json`](https://docs.justlend.org/developers/contracts.json) — see its `_meta.last_generated` for the address-data snapshot date |
-| `mcp_server_version` | `@justlend/mcp-server-justlend` **v1.0.8** (sync date 2026-06-08) |
+| `mcp_server_version` | `@justlend/mcp-server-justlend` **v1.1.0** (sync date 2026-06-17) |
 | `changelog` | [`CHANGELOG.md`](https://github.com/justlend/justlend-docs/blob/main/CHANGELOG.md) |
 | `regenerate` | This file is updated each time the docs change materially. If you fetched it more than ~30 days ago, refresh it before answering address / market / version questions. |
 
@@ -436,7 +436,7 @@ Built-in MCP tools (all read-only): `get_all_markets`, `get_dashboard`, `get_sup
 
 ### 7.2 Full MCP Server — `@justlend/mcp-server-justlend`
 
-Read + write MCP server, **59 tools**, version **v1.0.8**. Repo: <https://github.com/justlend/mcp-server-justlend>. Targets **JustLend V1**. A machine-readable tool catalog ([`mcp-api-list.md`](https://github.com/justlend/mcp-server-justlend/blob/main/mcp-api-list.md)) lists every tool's input schema and side-effect class for offline agent routing.
+Read + write MCP server, **96 tools**, version **v1.1.0**. Repo: <https://github.com/justlend/mcp-server-justlend>. Covers **JustLend V1 and V2** — the V1 tools plus `moolah_*` / `get_moolah_*` for V2 vaults, isolated markets, liquidation, dashboard/history, and mining. A machine-readable tool catalog ([`mcp-api-list.md`](https://github.com/justlend/mcp-server-justlend/blob/main/mcp-api-list.md)) lists every tool's input schema and side-effect class for offline agent routing.
 
 Capability domains:
 
@@ -450,8 +450,13 @@ Capability domains:
 - **sTRX Staking** (7 tools) — dashboard, account, balance, withdrawal-eligibility check, `stake_trx_to_strx`, `unstake_strx`, `claim_strx_rewards`. Staking paths use precision-safe string/BigInt math for TRX Sun conversion and 18-decimal sTRX balances/exchange-rate display.
 - **Transfers** (2 tools) — `transfer_trx`, `transfer_trc20`.
 - **General TRON utilities** (via the same tool set) — balances, blocks, transactions, contract read/write, multicall, TRC20/TRC721/TRC1155 metadata, transfers, Stake 2.0 freeze/unfreeze, address conversion, wallet management, message signing.
+- **JustLend V2 — Vaults** (6 tools) — ERC4626 vaults: `get_moolah_vaults`, `get_moolah_vault`, `approve_moolah_vault`, `moolah_vault_deposit`, `moolah_vault_withdraw`, `moolah_vault_redeem`.
+- **JustLend V2 — Markets** (8 tools) — isolated markets defined by `(loanToken, collateralToken, oracle, irm, lltv)`: `get_moolah_markets`, `get_moolah_market`, `get_moolah_user_position`, `approve_moolah_proxy`, `moolah_supply_collateral`, `moolah_withdraw_collateral`, `moolah_borrow`, `moolah_repay`.
+- **JustLend V2 — Liquidation** (5 tools) — public liquidator at the market LLTV: `get_moolah_pending_liquidations`, `get_moolah_liquidation_quote`, `get_moolah_liquidation_records`, `approve_liquidator_token`, `moolah_liquidate`.
+- **JustLend V2 — Dashboard, History & Mining** (11 tools) — `get_moolah_dashboard`, `get_moolah_history`, `get_moolah_records`, `get_moolah_vault_history`, `get_moolah_market_history`, `estimate_moolah_energy`, `get_moolah_vault_mining_apy`, `get_moolah_mining_resolver`, `get_moolah_mining_accruing`, `get_moolah_pending_mining_periods`, `claim_moolah_mining_period`.
+- **Historical Records** (7 tools) — V1 + cross-cutting paginated history: `get_lending_records`, `get_strx_records`, `get_vote_records`, `get_energy_rental_records`, `get_liquidation_records`, `get_claimable_rewards`, `claim_v1_mining_period`.
 
-Guided prompts ship with the server (10 total): `getting_started`, `supply_assets`, `borrow_assets`, `repay_borrow`, `analyze_portfolio`, `compare_markets`, `rent_energy`, `stake_trx`, `query_proposals`, `cast_vote`.
+Guided prompts ship with the server (14 total): `getting_started`, `supply_assets`, `borrow_assets`, `repay_borrow`, `analyze_portfolio`, `compare_markets`, `rent_energy`, `stake_trx`, `query_proposals`, `cast_vote`, `moolah_supply`, `moolah_borrow`, `moolah_liquidate`, `moolah_portfolio`.
 
 **Transport modes**: `stdio` (local clients — Claude Desktop, Codex, Claude Code, Cursor) or `HTTP/SSE` (remote/multi-client). HTTP mode is **fail-closed**: `MCP_API_KEY` is required, binds to `127.0.0.1` by default, CORS disabled unless `MCP_CORS_ORIGIN` is set.
 

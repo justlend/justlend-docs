@@ -57,6 +57,7 @@ nav:
         - Community Forum: https://forum.justlend.org
     - DEVELOPERS:
         - Contracts Overview: developers/contracts_overview.md
+        - JustLend V2: developers/justlend_v2.md
         - Supply and Borrow Market:
             - SBM: developers/supply_and_borrow_market/sbm.md
             - SBM V2: developers/supply_and_borrow_market/sbmV2.md
@@ -68,11 +69,26 @@ nav:
         - Energy Rental: developers/energy_rental.md
         - Deployed Contracts: developers/deployed_contracts.md
         - APIs: developers/apis.md
+        - ABI Files: developers/abis/index.md
         - Common Pitfalls: developers/common_pitfalls.md
     - AI SUPPORT:
+        - Overview: ai_support/index.md
         - AI / LLMs: ai_support/ai_llms.md
         - MCP Server: ai_support/mcp_server.md
         - JustLend Skills: ai_support/justlend_skills.md
+        - AI Docs for Agents:
+            - Index: documents/aidocs/index.md
+            - Source of Truth: documents/aidocs/source_of_truth.md
+            - Quickstart: documents/aidocs/quickstart.md
+            - Market Data: documents/aidocs/market_data.md
+            - Account Positions: documents/aidocs/account_position.md
+            - Lending Workflows: documents/aidocs/supply_borrow_repay_withdraw.md
+            - sTRX Staking: documents/aidocs/strx_staking.md
+            - Energy Rental: documents/aidocs/energy_rental.md
+            - MCP Safety: documents/aidocs/mcp_safety.md
+            - Common Questions: documents/aidocs/common_questions.md
+            - AI Glossary: documents/aidocs/glossary.md
+            - MCP Tool Catalog: documents/aidocs/mcp_tools.md
     - RESOURCES:
         - Community:
             - Links: resources/community/links.md
