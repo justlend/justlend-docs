@@ -1,14 +1,17 @@
 ---
-title: JustLend V2 (Moolah)
-description: "JustLend V2 (Moolah) — isolated-market lending plus ERC4626 vaults on TRON: protocol model (markets, shares, vaults, liquidation), how it differs from V1, and deployed mainnet/nile contract addresses."
+title: JustLend V2
+description: "JustLend V2 — isolated-market lending plus ERC4626 vaults on TRON: protocol model (markets, shares, vaults, liquidation), how it differs from V1, and deployed mainnet/nile contract addresses."
 ---
 
-# JustLend V2 (Moolah)
+# JustLend V2
 
-**JustLend V2**, codenamed **Moolah**, is an isolated-market lending protocol on TRON, paired with **ERC4626 vaults** for passive supply-side yield. It runs alongside — not instead of — [JustLend V1](contracts_overview.md): V1 remains the Compound-V2-style pooled `jToken` market, while V2 adds an isolated-market model.
+**JustLend V2** is an isolated-market lending protocol on TRON, paired with **ERC4626 vaults** for passive supply-side yield. It runs alongside — not instead of — [JustLend V1](contracts_overview.md): V1 remains the Compound-V2-style pooled `jToken` market, while V2 adds an isolated-market model.
+
+!!! note "Naming"
+    V2's on-chain contracts and MCP tools carry the `Moolah` / `moolah_*` identifiers (e.g. `MoolahProxy`, `get_moolah_vault`, `MOOLAH_CORE_ABI`). That is the technical name of the V2 system; this page refers to the product as **JustLend V2** and uses those identifiers only where they match the actual contract/tool/ABI surface.
 
 !!! note "V1 vs V2 at a glance"
-    | | **V1 (jToken market)** | **V2 (Moolah)** |
+    | | **V1 (jToken market)** | **V2 (isolated)** |
     |---|---|---|
     | Model | Compound V2 — one shared pool per asset | Isolated markets (à la Morpho Blue) |
     | Risk | Cross-collateral within the Comptroller | Contained per market (one collateral, one loan asset) |
@@ -20,7 +23,7 @@ description: "JustLend V2 (Moolah) — isolated-market lending plus ERC4626 vaul
 
 ### Markets (isolated)
 
-A Moolah market is fully described by an immutable **`MarketParams`** tuple and addressed by its **`marketId`** (a bytes32 hash of those params):
+A V2 market is fully described by an immutable **`MarketParams`** tuple and addressed by its **`marketId`** (a bytes32 hash of those params):
 
 | Field | Meaning |
 |-------|---------|
@@ -36,7 +39,7 @@ A position's **risk** is reported as a `0–1+` ratio against `lltv` (the MCP se
 
 ### Vaults (ERC4626)
 
-Moolah **vaults** are ERC4626 tokenized vaults that aggregate supply-side liquidity and allocate it across markets. Users `deposit` an underlying asset and receive vault **shares**; `withdraw` (by asset amount) or `redeem` (by share amount) to exit. Vaults also accrue **mining** rewards (USDD / TRX splits).
+V2 **vaults** are ERC4626 tokenized vaults that aggregate supply-side liquidity and allocate it across markets. Users `deposit` an underlying asset and receive vault **shares**; `withdraw` (by asset amount) or `redeem` (by share amount) to exit. Vaults also accrue **mining** rewards (USDD / TRX splits).
 
 ### Liquidation
 
@@ -81,10 +84,14 @@ Addresses are the source-of-truth deployment config tracked in the MCP server's 
 | IRM | `TQYeFiTVNfJ6jfqjyfL2s93VLG1huaMEzC` |
 
 !!! warning "Nile vaults not deployed"
-    The Moolah **core** contracts are live on Nile, but the **vaults are not yet deployed** there. Vault-level calls on Nile will fail at the chain layer. The V2 REST backend (dashboards/history) is **mainnet-only**.
+    The V2 **core** contracts are live on Nile, but the **vaults are not yet deployed** there. Vault-level calls on Nile will fail at the chain layer. The V2 REST backend (dashboards/history) is **mainnet-only**.
 
-## Using Moolah via the MCP server
+## Using V2 via the MCP server
 
 The [JustLend MCP Server](../ai_support/mcp_server.md) (v1.1.0+) exposes the full V2 surface under `moolah_*` / `get_moolah_*` tools — vaults, markets, liquidation, dashboard/history, and mining — plus four guided prompts (`moolah_supply`, `moolah_borrow`, `moolah_liquidate`, `moolah_portfolio`). See the [V2 tool groups](../ai_support/mcp_server.md#tools-96-total) and the [MCP Tool Catalog](../documents/aidocs/mcp_tools.md).
 
 Contract ABIs (`MOOLAH_CORE_ABI`, `TRX_PROVIDER_ABI`, `MOOLAH_VAULT_ABI`, `PUBLIC_LIQUIDATOR_ABI`) are bundled in the MCP repo's [`src/core/abis.ts`](https://github.com/justlend/mcp-server-justlend/blob/main/src/core/abis.ts).
+
+## REST API
+
+Read-only V2 protocol data (vaults, markets, positions, liquidations, records) is also available over HTTP — see the **JustLend V2** tag in the [API reference](apis.md) and the [OpenAPI spec](apis/justlend_apis.yaml). These endpoints are mainnet-only and paginate with `page` / `pageSize`.

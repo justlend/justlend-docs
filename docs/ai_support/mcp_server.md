@@ -1,6 +1,6 @@
 ---
 title: JustLend MCP Server (full, read + write)
-description: "@justlend/mcp-server-justlend v1.1.0 — 96 MCP tools across JustLend V1 (supply, borrow, repay, sTRX staking, energy rental, governance, mining) and V2 (Moolah) vaults/markets/liquidation, plus historical records and general TRON utilities. Dual-mode signing (browser TronLink or encrypted agent-wallet)."
+description: "@justlend/mcp-server-justlend v1.1.0 — 96 MCP tools across JustLend V1 (supply, borrow, repay, sTRX staking, energy rental, governance, mining) and V2 vaults/markets/liquidation, plus historical records and general TRON utilities. Dual-mode signing (browser TronLink or encrypted agent-wallet)."
 ---
 
 # MCP Server
@@ -15,7 +15,7 @@ This page is the human-readable reference for the full MCP server. For agent use
 - [Installation](#installation) — npm, source, and Claude Desktop config.
 - [Wallet setup (browser vs agent-wallet)](#wallet-setup-first-use-choice) — browser (TronLink TIP-6963) vs agent-wallet (encrypted local).
 - [HTTP-mode authentication (`MCP_API_KEY`)](#http-mode-authentication-mcp_api_key) — stdio (local clients) is open; HTTP/SSE is fail-closed.
-- [Tool catalog (96 tools)](#tools-96-total) — **V1**: Wallet & Network · Market Data · Account & Balances · Lending Operations · Mining & Rewards · JST Voting / Governance · Energy Rental · sTRX Staking · Transfers · General TRON. **V2 (Moolah)**: Vaults · Markets · Liquidation · Dashboard/History · Mining. Plus Historical Records.
+- [Tool catalog (96 tools)](#tools-96-total) — **V1**: Wallet & Network · Market Data · Account & Balances · Lending Operations · Mining & Rewards · JST Voting / Governance · Energy Rental · sTRX Staking · Transfers · General TRON. **V2**: Vaults · Markets · Liquidation · Dashboard/History · Mining. Plus Historical Records.
 - [Guided prompts](#prompts-ai-guided-workflows) — the 14 shipped MCP prompts (`supply_assets`, `analyze_portfolio`, `cast_vote`, `moolah_supply`, `moolah_borrow`, …).
 - [Security considerations](#security-considerations) — `destructiveHint`, dry-run mode, source-of-truth priority, HTTP-mode `MCP_API_KEY`.
 
@@ -30,10 +30,10 @@ The JustLend MCP Server (`@justlend/mcp-server-justlend`) is a [Model Context Pr
 Beyond JustLend-specific operations, the server also exposes a full set of **general-purpose TRON chain utilities** — balance queries, block/transaction data, token metadata, TRX transfers, smart contract reads/writes, staking (Stake 2.0), multicall, and more.
 
 !!! note
-    Current version (**v1.1.0**) covers **JustLend V1** *and* **JustLend V2 (Moolah)**. V1 is the Compound-V2-style pooled supply/borrow market (jTokens); V2 (Moolah) is an isolated-market + ERC4626-vault protocol. The two surfaces are namespaced — V1 tools like `get_market_data` / `supply`, V2 tools prefixed `moolah_*` / `get_moolah_*`. See the [JustLend V2 (Moolah)](../developers/justlend_v2_moolah.md) developer page for the protocol model and deployed contracts.
+    Current version (**v1.1.0**) covers **JustLend V1** *and* **JustLend V2**. V1 is the Compound-V2-style pooled supply/borrow market (jTokens); V2 is an isolated-market + ERC4626-vault protocol. The two surfaces are namespaced — V1 tools like `get_market_data` / `supply`, V2 tools prefixed `moolah_*` / `get_moolah_*` (the `moolah` identifier is V2's on-chain/tool naming). See the [JustLend V2](../developers/justlend_v2.md) developer page for the protocol model and deployed contracts.
 
 !!! tip "v1.1.0 Update"
-    This release adds **JustLend V2 (Moolah)** support and grows the surface to **96 tools** (from 59): 30 Moolah tools (vaults, markets, liquidation, dashboard/history, mining) + 7 historical-records tools, plus 4 Moolah AI prompts (**14** total) and a Moolah gas estimator. It also ships **AI-agent ergonomics** — structured self-healing tool errors (`{ error, errorCode, hint }`), self-describing amounts (`{ raw, decimals, _unit, display }`) on core reads, and hardened input schemas (Base58-address + decimal-amount validation). The machine-readable `mcp-api-list.md` catalog is regenerated from source (now 96 tools). All prior V1 safety work remains in place: TRC20 allowance checks before supply/repay, opt-in `max` approvals with revoke hints, typed broadcast handling, `toSafeCallValueNumber` guards on every broadcast/simulation path, mainnet fail-closed on pre-flight `REVERT`, constant-time `MCP_API_KEY` comparison, and governance failed-proposal filtering.
+    This release adds **JustLend V2** support and grows the surface to **96 tools** (from 59): 30 V2 tools (vaults, markets, liquidation, dashboard/history, mining) + 7 historical-records tools, plus 4 V2 AI prompts (**14** total) and a V2 gas estimator. It also ships **AI-agent ergonomics** — structured self-healing tool errors (`{ error, errorCode, hint }`), self-describing amounts (`{ raw, decimals, _unit, display }`) on core reads, and hardened input schemas (Base58-address + decimal-amount validation). The machine-readable `mcp-api-list.md` catalog is regenerated from source (now 96 tools). All prior V1 safety work remains in place: TRC20 allowance checks before supply/repay, opt-in `max` approvals with revoke hints, typed broadcast handling, `toSafeCallValueNumber` guards on every broadcast/simulation path, mainnet fail-closed on pre-flight `REVERT`, constant-time `MCP_API_KEY` comparison, and governance failed-proposal filtering.
 
 ## Overview
 
@@ -364,8 +364,8 @@ npm run dev
 
 ### Tools (96 total)
 
-!!! info "V1 + V2 (Moolah)"
-    The first ten groups below are **JustLend V1** (pooled jToken market). The **JustLend V2 (Moolah)** groups (vaults / markets / liquidation / dashboard / mining) and **Historical Records** follow. V2 tools are namespaced `moolah_*` / `get_moolah_*`.
+!!! info "V1 + V2"
+    The first ten groups below are **JustLend V1** (pooled jToken market). The **JustLend V2** groups (vaults / markets / liquidation / dashboard / mining) and **Historical Records** follow. V2 tools are namespaced `moolah_*` / `get_moolah_*`.
 
 #### Wallet & Network
 
@@ -471,41 +471,41 @@ npm run dev
 | `transfer_trx` | Transfer TRX to another address (with balance check) | **Yes** |
 | `transfer_trc20` | Transfer TRC20 tokens by symbol or contract address | **Yes** |
 
-#### JustLend V2 (Moolah) — Vaults
+#### JustLend V2 — Vaults
 
 | Tool | Description | Write? |
 |------|-------------|--------|
-| `get_moolah_vaults` | List all Moolah ERC4626 vaults with APY, TVL, and underlying token | No |
+| `get_moolah_vaults` | List all V2 ERC4626 vaults with APY, TVL, and underlying token | No |
 | `get_moolah_vault` | Single vault detail: APY, TVL, allocation, and the user's share balance | No |
 | `approve_moolah_vault` | Approve TRC20 for a vault before depositing (not needed for TRX) | **Yes** |
 | `moolah_vault_deposit` | Deposit assets into an ERC4626 vault to earn yield | **Yes** |
 | `moolah_vault_withdraw` | Withdraw underlying by asset amount (or `max`) | **Yes** |
 | `moolah_vault_redeem` | Redeem shares for underlying (or `max`) | **Yes** |
 
-#### JustLend V2 (Moolah) — Markets
+#### JustLend V2 — Markets
 
 | Tool | Description | Write? |
 |------|-------------|--------|
-| `get_moolah_markets` | List Moolah markets: borrow/supply APY, LLTV, utilization, liquidity | No |
+| `get_moolah_markets` | List V2 markets: borrow/supply APY, LLTV, utilization, liquidity | No |
 | `get_moolah_market` | Single market detail by `marketId` (bytes32 hex) | No |
 | `get_moolah_user_position` | User position in a market: collateral, borrow, lltv, risk | No |
-| `approve_moolah_proxy` | Approve TRC20 for the Moolah core before supply-collateral / repay | **Yes** |
+| `approve_moolah_proxy` | Approve TRC20 for the V2 core before supply-collateral / repay | **Yes** |
 | `moolah_supply_collateral` | Supply collateral into a market to enable borrowing | **Yes** |
 | `moolah_withdraw_collateral` | Withdraw collateral (or `max`, only when no active borrow) | **Yes** |
 | `moolah_borrow` | Borrow loan asset (optionally supply collateral in one call) | **Yes** |
 | `moolah_repay` | Repay a market loan (or `max` for full shares-based settlement) | **Yes** |
 
-#### JustLend V2 (Moolah) — Liquidation
+#### JustLend V2 — Liquidation
 
 | Tool | Description | Write? |
 |------|-------------|--------|
 | `get_moolah_pending_liquidations` | Positions eligible/approaching liquidation (`riskLevel > 1.0`) | No |
 | `get_moolah_liquidation_quote` | Estimate loan-token cost to liquidate a position | No |
-| `get_moolah_liquidation_records` | Historical Moolah liquidation events | No |
+| `get_moolah_liquidation_records` | Historical V2 liquidation events | No |
 | `approve_liquidator_token` | Approve loan token for the public liquidator contract | **Yes** |
-| `moolah_liquidate` | Liquidate an undercollateralized Moolah position | **Yes** |
+| `moolah_liquidate` | Liquidate an undercollateralized V2 position | **Yes** |
 
-#### JustLend V2 (Moolah) — Dashboard, History & Mining
+#### JustLend V2 — Dashboard, History & Mining
 
 | Tool | Description | Write? |
 |------|-------------|--------|
@@ -549,10 +549,10 @@ The server exposes **14 MCP prompts**. Required arguments are marked **bold**; t
 | `stake_trx` | **`amount`**, `network` | Guided TRX staking to sTRX with APY info and verification |
 | `query_proposals` | `network` | Browse and query governance proposals, check voting requirements |
 | `cast_vote` | **`proposalId`**, **`support`** (`for` \| `against`), **`amount`** (WJST), `network` | Guided governance voting with vote verification |
-| `moolah_supply` | `vaultSymbol`, `amount`, `network` | Deposit into a Moolah V2 ERC4626 vault (compares vaults if `vaultSymbol` omitted) |
-| `moolah_borrow` | `marketId`, `collateralAmount`, `borrowAmount`, `network` | Supply collateral and/or borrow in a Moolah V2 market (browses markets if `marketId` omitted) |
-| `moolah_liquidate` | `network` | Find and execute a Moolah V2 liquidation opportunity |
-| `moolah_portfolio` | `address`, `network` | Analyze a user's full V2 (Moolah) position across vaults and markets |
+| `moolah_supply` | `vaultSymbol`, `amount`, `network` | Deposit into a V2 ERC4626 vault (compares vaults if `vaultSymbol` omitted) |
+| `moolah_borrow` | `marketId`, `collateralAmount`, `borrowAmount`, `network` | Supply collateral and/or borrow in a V2 market (browses markets if `marketId` omitted) |
+| `moolah_liquidate` | `network` | Find and execute a V2 liquidation opportunity |
+| `moolah_portfolio` | `address`, `network` | Analyze a user's full V2 position across vaults and markets |
 
 > All prompt arguments are strings (the `enum` ones accept only the listed values). Prompts return a templated message that drives the agent through the workflow using the read/write tools above — they do **not** sign transactions themselves.
 

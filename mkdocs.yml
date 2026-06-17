@@ -56,7 +56,7 @@ nav:
         - Community Forum: https://forum.justlend.org
     - DEVELOPERS:
         - Contracts Overview: developers/contracts_overview.md
-        - JustLend V2 (Moolah): developers/justlend_v2_moolah.md
+        - JustLend V2: developers/justlend_v2.md
         - Supply and Borrow Market:
             - SBM: developers/supply_and_borrow_market/sbm.md
             - Interest Rate Model: developers/supply_and_borrow_market/interest_rate_model.md

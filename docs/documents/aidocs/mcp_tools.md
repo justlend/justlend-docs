@@ -766,14 +766,14 @@ Chinese query aliases: “查询市场/APY/TVL” maps to market read tools; “
 |-------|------|:--------:|---------|-------------|
 | `network` | string | — |  | Network. Default: mainnet |
 
-## JustLend V2 (Moolah) — Vaults (6)
+## JustLend V2 — Vaults (6)
 
 ### `get_moolah_vaults`
 
-**Get Moolah Vaults**  
+**Get V2 Vaults**  
 - **Side effect**: 🟢 Read-only (Safe / Network Read)
 - **annotations**: idempotent: true · openWorld: true
-- **Description**: List all JustLend V2 (Moolah) vaults with APY, TVL, and underlying token. Vaults are ERC4626 — deposit tokens to earn auto-compounding yield allocated across Moolah markets.
+- **Description**: List all JustLend V2 vaults with APY, TVL, and underlying token. Vaults are ERC4626 — deposit tokens to earn auto-compounding yield allocated across V2 markets.
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
@@ -782,10 +782,10 @@ Chinese query aliases: “查询市场/APY/TVL” maps to market read tools; “
 
 ### `get_moolah_vault`
 
-**Get Moolah Vault**  
+**Get V2 Vault**  
 - **Side effect**: 🟢 Read-only (Safe / Network Read)
 - **annotations**: idempotent: true · openWorld: true
-- **Description**: Get detailed info for a single Moolah vault: APY, TVL, allocation, and the user's share balance if address is provided. vaultSymbol is 'TRX', 'USDT', or 'USDD'.
+- **Description**: Get detailed info for a single V2 vault: APY, TVL, allocation, and the user's share balance if address is provided. vaultSymbol is 'TRX', 'USDT', or 'USDD'.
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
@@ -795,10 +795,10 @@ Chinese query aliases: “查询市场/APY/TVL” maps to market read tools; “
 
 ### `approve_moolah_vault`
 
-**Approve Moolah Vault**  
+**Approve V2 Vault**  
 - **Side effect**: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
 - **annotations**: idempotent: true · openWorld: true
-- **Description**: Approve TRC20 token spending for a Moolah vault before depositing. Not needed for TRX vaults. Pass the EXACT amount you intend to deposit (recommended). Pass amount='max' for unlimited approval ONLY when the user explicitly opts in — it lets the vault contract spend the user's entire balance, present and future, until revoked (amount='0').
+- **Description**: Approve TRC20 token spending for a V2 vault before depositing. Not needed for TRX vaults. Pass the EXACT amount you intend to deposit (recommended). Pass amount='max' for unlimited approval ONLY when the user explicitly opts in — it lets the vault contract spend the user's entire balance, present and future, until revoked (amount='0').
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
@@ -808,10 +808,10 @@ Chinese query aliases: “查询市场/APY/TVL” maps to market read tools; “
 
 ### `moolah_vault_deposit`
 
-**Moolah Vault Deposit**  
+**V2 Vault Deposit**  
 - **Side effect**: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
 - **annotations**: idempotent: false · openWorld: true
-- **Description**: Deposit assets into a Moolah ERC4626 vault to earn yield. For TRC20 vaults (USDT, USDD), call approve_moolah_vault first. Returns vault shares representing your deposit.
+- **Description**: Deposit assets into a V2 ERC4626 vault to earn yield. For TRC20 vaults (USDT, USDD), call approve_moolah_vault first. Returns vault shares representing your deposit.
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
@@ -821,10 +821,10 @@ Chinese query aliases: “查询市场/APY/TVL” maps to market read tools; “
 
 ### `moolah_vault_withdraw`
 
-**Moolah Vault Withdraw**  
+**V2 Vault Withdraw**  
 - **Side effect**: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
 - **annotations**: idempotent: false · openWorld: true
-- **Description**: Withdraw underlying assets from a Moolah vault by specifying the asset amount. Use amount='max' to withdraw everything. No approval needed.
+- **Description**: Withdraw underlying assets from a V2 vault by specifying the asset amount. Use amount='max' to withdraw everything. No approval needed.
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
@@ -834,7 +834,7 @@ Chinese query aliases: “查询市场/APY/TVL” maps to market read tools; “
 
 ### `moolah_vault_redeem`
 
-**Moolah Vault Redeem**  
+**V2 Vault Redeem**  
 - **Side effect**: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
 - **annotations**: idempotent: false · openWorld: true
 - **Description**: Redeem vault shares to receive underlying assets. Use shares='max' to redeem all shares. No approval needed.
@@ -845,14 +845,14 @@ Chinese query aliases: “查询市场/APY/TVL” maps to market read tools; “
 | `shares` | string | ✅ |  | Number of shares to redeem, or 'max' for all shares |
 | `network` | string | — |  | Network. Default: mainnet |
 
-## JustLend V2 (Moolah) — Markets (8)
+## JustLend V2 — Markets (8)
 
 ### `get_moolah_markets`
 
-**Get Moolah Markets**  
+**Get V2 Markets**  
 - **Side effect**: 🟢 Read-only (Safe / Network Read)
 - **annotations**: idempotent: true · openWorld: true
-- **Description**: List JustLend V2 (Moolah) markets with borrow/supply APY, LLTV, utilization, and liquidity. Markets are isolated — each has its own loan token, collateral token, oracle, and LLTV.
+- **Description**: List JustLend V2 markets with borrow/supply APY, LLTV, utilization, and liquidity. Markets are isolated — each has its own loan token, collateral token, oracle, and LLTV.
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
@@ -863,10 +863,10 @@ Chinese query aliases: “查询市场/APY/TVL” maps to market read tools; “
 
 ### `get_moolah_market`
 
-**Get Moolah Market**  
+**Get V2 Market**  
 - **Side effect**: 🟢 Read-only (Safe / Network Read)
 - **annotations**: idempotent: true · openWorld: true
-- **Description**: Get full details for a single Moolah market by its marketId (bytes32 hex). Includes APY, LLTV, utilization, total supply/borrow, and vaults supplying to this market. Use get_moolah_markets to find marketIds.
+- **Description**: Get full details for a single V2 market by its marketId (bytes32 hex). Includes APY, LLTV, utilization, total supply/borrow, and vaults supplying to this market. Use get_moolah_markets to find marketIds.
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
@@ -875,10 +875,10 @@ Chinese query aliases: “查询市场/APY/TVL” maps to market read tools; “
 
 ### `get_moolah_user_position`
 
-**Get Moolah User Position**  
+**Get V2 User Position**  
 - **Side effect**: 🟢 Read-only (Safe / Network Read)
 - **annotations**: idempotent: true · openWorld: true
-- **Description**: Get a user's position in a specific Moolah market: collateral, borrow amount, lltv, and risk ratio. risk close to 1.0 means the position is near liquidation — consider repaying or adding collateral.
+- **Description**: Get a user's position in a specific V2 market: collateral, borrow amount, lltv, and risk ratio. risk close to 1.0 means the position is near liquidation — consider repaying or adding collateral.
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
@@ -888,10 +888,10 @@ Chinese query aliases: “查询市场/APY/TVL” maps to market read tools; “
 
 ### `approve_moolah_proxy`
 
-**Approve Moolah Proxy**  
+**Approve V2 Proxy**  
 - **Side effect**: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
 - **annotations**: idempotent: true · openWorld: true
-- **Description**: Approve TRC20 token spending for the Moolah core contract before supplying collateral or repaying. Not needed for TRX operations. Pass the EXACT amount you intend to use (recommended). Pass amount='max' for unlimited approval ONLY when the user explicitly opts in — it lets the Moolah proxy spend the user's entire balance, present and future, until revoked (amount='0').
+- **Description**: Approve TRC20 token spending for the V2 core contract before supplying collateral or repaying. Not needed for TRX operations. Pass the EXACT amount you intend to use (recommended). Pass amount='max' for unlimited approval ONLY when the user explicitly opts in — it lets the V2 proxy spend the user's entire balance, present and future, until revoked (amount='0').
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
@@ -903,10 +903,10 @@ Chinese query aliases: “查询市场/APY/TVL” maps to market read tools; “
 
 ### `moolah_supply_collateral`
 
-**Moolah Supply Collateral**  
+**V2 Supply Collateral**  
 - **Side effect**: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
 - **annotations**: idempotent: false · openWorld: true
-- **Description**: Supply collateral into a Moolah market to enable borrowing. For TRC20 collateral, call approve_moolah_proxy first. For TRX collateral, TRX is sent directly with no prior approval.
+- **Description**: Supply collateral into a V2 market to enable borrowing. For TRC20 collateral, call approve_moolah_proxy first. For TRX collateral, TRX is sent directly with no prior approval.
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
@@ -916,10 +916,10 @@ Chinese query aliases: “查询市场/APY/TVL” maps to market read tools; “
 
 ### `moolah_withdraw_collateral`
 
-**Moolah Withdraw Collateral**  
+**V2 Withdraw Collateral**  
 - **Side effect**: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
 - **annotations**: idempotent: false · openWorld: true
-- **Description**: Withdraw collateral from a Moolah market. Use amount='max' to withdraw all collateral (only allowed when no active borrows). Withdrawing too much while borrowing will revert — check health factor first.
+- **Description**: Withdraw collateral from a V2 market. Use amount='max' to withdraw all collateral (only allowed when no active borrows). Withdrawing too much while borrowing will revert — check health factor first.
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
@@ -929,10 +929,10 @@ Chinese query aliases: “查询市场/APY/TVL” maps to market read tools; “
 
 ### `moolah_borrow`
 
-**Moolah Borrow**  
+**V2 Borrow**  
 - **Side effect**: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
 - **annotations**: idempotent: false · openWorld: true
-- **Description**: Flexible Moolah borrow entry point. Provide collateralAmount only → supply collateral without borrowing. Provide borrowAmount only → borrow against existing collateral. Provide both → supply collateral then borrow in two sequential transactions. Collateral must cover the borrow at the market's LLTV or the borrow tx reverts.
+- **Description**: Flexible V2 borrow entry point. Provide collateralAmount only → supply collateral without borrowing. Provide borrowAmount only → borrow against existing collateral. Provide both → supply collateral then borrow in two sequential transactions. Collateral must cover the borrow at the market's LLTV or the borrow tx reverts.
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
@@ -943,10 +943,10 @@ Chinese query aliases: “查询市场/APY/TVL” maps to market read tools; “
 
 ### `moolah_repay`
 
-**Moolah Repay**  
+**V2 Repay**  
 - **Side effect**: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
 - **annotations**: idempotent: false · openWorld: true
-- **Description**: Repay a Moolah market loan. Use amount='max' to repay the full outstanding borrow (uses shares math for exact settlement). For TRC20 loan tokens, call approve_moolah_proxy first. For TRX loans, TRX is sent directly.
+- **Description**: Repay a V2 market loan. Use amount='max' to repay the full outstanding borrow (uses shares math for exact settlement). For TRC20 loan tokens, call approve_moolah_proxy first. For TRX loans, TRX is sent directly.
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
@@ -954,14 +954,14 @@ Chinese query aliases: “查询市场/APY/TVL” maps to market read tools; “
 | `amount` | string | ✅ |  | Loan amount to repay, or 'max' for full repayment |
 | `network` | string | — |  | Network. Default: mainnet |
 
-## JustLend V2 (Moolah) — Liquidation (5)
+## JustLend V2 — Liquidation (5)
 
 ### `get_moolah_pending_liquidations`
 
 **Get Pending Liquidations**  
 - **Side effect**: 🟢 Read-only (Safe / Network Read)
 - **annotations**: idempotent: true · openWorld: true
-- **Description**: List Moolah positions eligible or approaching liquidation. riskLevel > 1.0 means the position is liquidatable right now. Use minRiskLevel=0.9 to find positions near the threshold.
+- **Description**: List V2 positions eligible or approaching liquidation. riskLevel > 1.0 means the position is liquidatable right now. Use minRiskLevel=0.9 to find positions near the threshold.
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
@@ -992,7 +992,7 @@ Chinese query aliases: “查询市场/APY/TVL” maps to market read tools; “
 **Get Liquidation Records**  
 - **Side effect**: 🟢 Read-only (Safe / Network Read)
 - **annotations**: idempotent: true · openWorld: true
-- **Description**: Historical liquidation events on Moolah — both bot-executed and public liquidations.
+- **Description**: Historical liquidation events on V2 — both bot-executed and public liquidations.
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
@@ -1005,10 +1005,10 @@ Chinese query aliases: “查询市场/APY/TVL” maps to market read tools; “
 
 ### `moolah_liquidate`
 
-**Moolah Liquidate**  
+**V2 Liquidate**  
 - **Side effect**: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
 - **annotations**: idempotent: false · openWorld: true
-- **Description**: Liquidate an undercollateralized Moolah position. You must hold the loan token and have approved it via approve_liquidator_token. Provide EITHER seizedAssets (collateral to seize) OR repaidShares (borrow shares to repay), not both. Use get_moolah_liquidation_quote first to estimate the required loan token amount.
+- **Description**: Liquidate an undercollateralized V2 position. You must hold the loan token and have approved it via approve_liquidator_token. Provide EITHER seizedAssets (collateral to seize) OR repaidShares (borrow shares to repay), not both. Use get_moolah_liquidation_quote first to estimate the required loan token amount.
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
@@ -1023,7 +1023,7 @@ Chinese query aliases: “查询市场/APY/TVL” maps to market read tools; “
 **Approve Liquidator Token**  
 - **Side effect**: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
 - **annotations**: idempotent: true · openWorld: true
-- **Description**: Approve loan token spending for the Moolah public liquidator contract. Required before calling moolah_liquidate. Pass the EXACT amount you intend to use (recommended). Pass amount='max' for unlimited approval ONLY when the user explicitly opts in — it lets the liquidator contract spend the user's entire balance, present and future, until revoked (amount='0').
+- **Description**: Approve loan token spending for the V2 public liquidator contract. Required before calling moolah_liquidate. Pass the EXACT amount you intend to use (recommended). Pass amount='max' for unlimited approval ONLY when the user explicitly opts in — it lets the liquidator contract spend the user's entire balance, present and future, until revoked (amount='0').
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
@@ -1033,14 +1033,14 @@ Chinese query aliases: “查询市场/APY/TVL” maps to market read tools; “
 | `amount` | string (pattern /^(\d+(\.\d+)?|max)$/) | ✅ |  | Exact amount to approve (e.g. '100'), or 'max' for unlimited (NOT recommended; user must opt in). |
 | `network` | string | — |  | Network. Default: mainnet |
 
-## JustLend V2 (Moolah) — Dashboard & History (6)
+## JustLend V2 — Dashboard & History (6)
 
 ### `get_moolah_dashboard`
 
-**Get Moolah Dashboard**  
+**Get V2 Dashboard**  
 - **Side effect**: 🟢 Read-only (Safe / Network Read)
 - **annotations**: idempotent: true · openWorld: true
-- **Description**: JustLend V2 (Moolah) protocol overview: top vaults (APY, TVL) and top markets (borrow/supply rates). If address is provided, also includes the user's aggregated V2 position (total supply, borrow, health factor).
+- **Description**: JustLend V2 protocol overview: top vaults (APY, TVL) and top markets (borrow/supply rates). If address is provided, also includes the user's aggregated V2 position (total supply, borrow, health factor).
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
@@ -1051,7 +1051,7 @@ Chinese query aliases: “查询市场/APY/TVL” maps to market read tools; “
 
 ### `get_moolah_history`
 
-**Get Moolah History**  
+**Get V2 History**  
 - **Side effect**: 🟢 Read-only (Safe / Network Read)
 - **annotations**: idempotent: true · openWorld: true
 - **Description**: Get a user's JustLend V2 position history (net worth, supply, borrow over time) and recent transaction records (supply, borrow, repay, etc.).
@@ -1064,10 +1064,10 @@ Chinese query aliases: “查询市场/APY/TVL” maps to market read tools; “
 
 ### `get_moolah_records`
 
-**Get Moolah Records**  
+**Get V2 Records**  
 - **Side effect**: 🟢 Read-only (Safe / Network Read)
 - **annotations**: idempotent: true · openWorld: true
-- **Description**: Get a user's paginated V2 (Moolah) transaction history — supply, withdraw, borrow, repay, liquidate events. Distinct from get_moolah_history (which returns position curves + a small recent-txs preview) — this one is the full paginated record list. Works on both mainnet and nile.
+- **Description**: Get a user's paginated V2 transaction history — supply, withdraw, borrow, repay, liquidate events. Distinct from get_moolah_history (which returns position curves + a small recent-txs preview) — this one is the full paginated record list. Works on both mainnet and nile.
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
@@ -1078,10 +1078,10 @@ Chinese query aliases: “查询市场/APY/TVL” maps to market read tools; “
 
 ### `get_moolah_vault_history`
 
-**Get Moolah Vault History**  
+**Get V2 Vault History**  
 - **Side effect**: 🟢 Read-only (Safe / Network Read)
 - **annotations**: idempotent: true · openWorld: true
-- **Description**: Time series of a V2 Moolah vault's APY, TVL, and supply mining data. Returns currentSupplyUsd, supplyBaseApy, supplyMiningApy, and a historyRecords array. Use vaultAddress from get_moolah_vaults or chains.ts vault map.
+- **Description**: Time series of a V2 vault's APY, TVL, and supply mining data. Returns currentSupplyUsd, supplyBaseApy, supplyMiningApy, and a historyRecords array. Use vaultAddress from get_moolah_vaults or chains.ts vault map.
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
@@ -1090,38 +1090,38 @@ Chinese query aliases: “查询市场/APY/TVL” maps to market read tools; “
 
 ### `estimate_moolah_energy`
 
-**Estimate Moolah Energy**  
+**Estimate V2 Energy**  
 - **Side effect**: 🟢 Read-only (Safe / Network Read)
 - **annotations**: idempotent: true · openWorld: true
-- **Description**: Estimate energy, bandwidth, and TRX cost for a JustLend V2 (Moolah) write operation BEFORE executing it. Returns historical typical values (on-chain simulation for Moolah's tuple-args ops is not yet wired). Set isTRX=true when the underlying / loan / collateral token is native TRX (TrxProviderProxy route). Covers: vault_deposit, vault_withdraw, vault_redeem, approve_vault, supply_collateral, withdraw_collateral, borrow, repay, approve_proxy, liquidate, approve_liquidator.
+- **Description**: Estimate energy, bandwidth, and TRX cost for a JustLend V2 write operation BEFORE executing it. Returns historical typical values (on-chain simulation for V2's tuple-args ops is not yet wired). Set isTRX=true when the underlying / loan / collateral token is native TRX (TrxProviderProxy route). Covers: vault_deposit, vault_withdraw, vault_redeem, approve_vault, supply_collateral, withdraw_collateral, borrow, repay, approve_proxy, liquidate, approve_liquidator.
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `operation` | enum(vault_deposit | vault_withdraw | vault_redeem | approve_vault | supply_collateral | withdraw_collateral | borrow | repay | approve_proxy | liquidate | approve_liquidator) | ✅ |  | Moolah operation to estimate |
+| `operation` | enum(vault_deposit | vault_withdraw | vault_redeem | approve_vault | supply_collateral | withdraw_collateral | borrow | repay | approve_proxy | liquidate | approve_liquidator) | ✅ |  | V2 operation to estimate |
 | `isTRX` | boolean | — |  | Whether the route uses native TRX (via TrxProviderProxy). Default: false |
 | `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | Owner address for resource-sufficiency check. Default: configured wallet |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `get_moolah_market_history`
 
-**Get Moolah Market History**  
+**Get V2 Market History**  
 - **Side effect**: 🟢 Read-only (Safe / Network Read)
 - **annotations**: idempotent: true · openWorld: true
-- **Description**: Time series of a V2 Moolah market's borrow/supply APY, utilization, and totals. Returns current totalBorrow/totalCollateral + borrowApy/supplyApy + list[] of historical points. Use marketId (bytes32 hex) from get_moolah_markets.
+- **Description**: Time series of a V2 market's borrow/supply APY, utilization, and totals. Returns current totalBorrow/totalCollateral + borrowApy/supplyApy + list[] of historical points. Use marketId (bytes32 hex) from get_moolah_markets.
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
 | `marketId` | string | ✅ |  | Market ID (bytes32 hex, e.g. '0xabc...') |
 | `network` | string | — |  | Network. Default: mainnet |
 
-## JustLend V2 (Moolah) — Mining, Rewards & Estimator (5)
+## JustLend V2 — Mining, Rewards & Estimator (5)
 
 ### `get_moolah_vault_mining_apy`
 
-**Get Moolah Vault Mining APY**  
+**Get V2 Vault Mining APY**  
 - **Side effect**: 🟢 Read-only (Safe / Network Read)
 - **annotations**: idempotent: true · openWorld: true
-- **Description**: Get V2 mining APY for a single Moolah vault. Returns the USDD / TRX APY split and total (encoded as a fraction, e.g. 0.123 = 12.3%). enabled=true means the vault is active in mining and qualifies for the fire-icon UI hint.
+- **Description**: Get V2 mining APY for a single V2 vault. Returns the USDD / TRX APY split and total (encoded as a fraction, e.g. 0.123 = 12.3%). enabled=true means the vault is active in mining and qualifies for the fire-icon UI hint.
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
@@ -1130,10 +1130,10 @@ Chinese query aliases: “查询市场/APY/TVL” maps to market read tools; “
 
 ### `get_moolah_mining_resolver`
 
-**Get Moolah Mining Resolver**  
+**Get V2 Mining Resolver**  
 - **Side effect**: 🟢 Read-only (Safe / Network Read)
 - **annotations**: idempotent: true · openWorld: true
-- **Description**: Map every Moolah vault with active mining to its USDD / TRX APY split. Used by the dashboard to prefetch fire-icon eligibility in one round-trip. Vaults with zero mining APY are excluded from the response.
+- **Description**: Map every V2 vault with active mining to its USDD / TRX APY split. Used by the dashboard to prefetch fire-icon eligibility in one round-trip. Vaults with zero mining APY are excluded from the response.
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
@@ -1141,7 +1141,7 @@ Chinese query aliases: “查询市场/APY/TVL” maps to market read tools; “
 
 ### `get_moolah_mining_accruing`
 
-**Get Moolah Mining Accruing**  
+**Get V2 Mining Accruing**  
 - **Side effect**: 🟢 Read-only (Safe / Network Read)
 - **annotations**: idempotent: true · openWorld: true
 - **Description**: Get a user's accruing & settling V2 mining rewards across vaults. accruingUsd = current round still emitting; settlingUsd = previous round in the brief settlement window (miningStatus=2, currRewardStatus=1) — excluded otherwise so it doesn't double-count with already-published merkle airdrops. globalSettlementStatus=true means the backend reports any token in flux; treat per-token amounts as provisional.
@@ -1153,7 +1153,7 @@ Chinese query aliases: “查询市场/APY/TVL” maps to market read tools; “
 
 ### `get_moolah_pending_mining_periods`
 
-**Get Moolah Pending Mining Periods**  
+**Get V2 Pending Mining Periods**  
 - **Side effect**: 🟢 Read-only (Safe / Network Read)
 - **annotations**: idempotent: true · openWorld: true
 - **Description**: Get a user's claimable V2 mining airdrop rounds (already settled and merkle-published). Each period includes merkleIndex, index, per-token amounts (raw + decimal-shifted), the merkle proof, and a USD total. Feed a periodKey directly into claim_moolah_mining_period to submit the on-chain multiClaim. Set includeClaimed=true to also return rounds the indexer marks as already claimed (default false matches the rewards card behaviour).
@@ -1166,10 +1166,10 @@ Chinese query aliases: “查询市场/APY/TVL” maps to market read tools; “
 
 ### `claim_moolah_mining_period`
 
-**Claim Moolah Mining Period**  
+**Claim V2 Mining Period**  
 - **Side effect**: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
 - **annotations**: idempotent: false · openWorld: true
-- **Description**: Claim a single V2 mining airdrop round via multiClaim() on the Moolah merkle distributor. Pass periodKey from get_moolah_pending_mining_periods (preferred) or supply merkleIndex / index / amounts / proof directly. Pre-checks isClaimed() and merkleRoots() on-chain so the wallet does not pay gas for a guaranteed-revert tx. Mainnet currently errors with 'distributor not configured' until the V2 contract ships — nile testnet works.
+- **Description**: Claim a single V2 mining airdrop round via multiClaim() on the V2 merkle distributor. Pass periodKey from get_moolah_pending_mining_periods (preferred) or supply merkleIndex / index / amounts / proof directly. Pre-checks isClaimed() and merkleRoots() on-chain so the wallet does not pay gas for a guaranteed-revert tx. Mainnet currently errors with 'distributor not configured' until the V2 contract ships — nile testnet works.
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
@@ -1277,7 +1277,7 @@ Chinese query aliases: “查询市场/APY/TVL” maps to market read tools; “
 **Get V1 Liquidation Records**  
 - **Side effect**: 🟢 Read-only (Safe / Network Read)
 - **annotations**: idempotent: true · openWorld: true
-- **Description**: Get a user's V1 JustLend liquidation history — both positions the user liquidated and positions where the user was liquidated. Distinct from get_moolah_liquidation_records which covers V2 Moolah liquidations. Paginated. Mainnet-only.
+- **Description**: Get a user's V1 JustLend liquidation history — both positions the user liquidated and positions where the user was liquidated. Distinct from get_moolah_liquidation_records which covers V2 liquidations. Paginated. Mainnet-only.
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
