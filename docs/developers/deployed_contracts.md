@@ -86,6 +86,8 @@ The address users interact with for `mint`/`borrow`/`repayBorrow`/`redeem`/`liqu
     
     The on-chain addresses are unchanged — only the dApp display names swapped.
 
+## Supply and Borrow Market V1
+
 | Market | Underlying TRC20 | CErc20Delegator (entrypoint) | CErc20Delegate (impl) |
 |--------|------------------|------------------------------|------------------------|
 | jTRX | _native_ | [`TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP`](https://tronscan.org/#/token20/TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP) | NA |
@@ -112,7 +114,7 @@ The address users interact with for `mint`/`borrow`/`repayBorrow`/`redeem`/`liqu
 | jUSDDOLD (legacy) | [`TPYmHEhy5n8TCEfYGqW2rPxsghSfzghPDn`](https://tronscan.org/#/token20/TPYmHEhy5n8TCEfYGqW2rPxsghSfzghPDn) | [`TX7kybeP6UwTBRHLNPYmswFESHfyjm9bAS`](https://tronscan.org/#/contract/TX7kybeP6UwTBRHLNPYmswFESHfyjm9bAS) | [`TFdTqrMyb6PMMqTa9vnhmQHDFDU2oUhw9W`](https://tronscan.org/#/contract/TFdTqrMyb6PMMqTa9vnhmQHDFDU2oUhw9W) |
 | jSUNOLD (legacy) | [`TKkeiboTkxXKJpbmVFbv4a8ov5rAfRDMf9`](https://tronscan.org/#/token20/TKkeiboTkxXKJpbmVFbv4a8ov5rAfRDMf9) | [`TGBr8uh9jBVHJhhkwSJvQN2ZAKzVkxDmno`](https://tronscan.org/#/contract/TGBr8uh9jBVHJhhkwSJvQN2ZAKzVkxDmno) | [`TSCpzKvJfXHj1HW5jKg9dZA8z9aMxxGLd8`](https://tronscan.org/#/contract/TSCpzKvJfXHj1HW5jKg9dZA8z9aMxxGLd8) |
 
-## Interest Rate Models
+### Interest Rate Models
 
 | Model | Type | Address | Tronscan |
 |-------|------|---------|----------|
@@ -141,7 +143,7 @@ The address users interact with for `mint`/`borrow`/`repayBorrow`/`redeem`/`liqu
 
 See [Interest Rate Model](supply_and_borrow_market/interest_rate_model.md) for the formulas backing these contracts.
 
-## Price Oracle
+### Price Oracle
 
 | Component | Contract | Address | Tronscan |
 |-----------|----------|---------|----------|
@@ -150,17 +152,95 @@ See [Interest Rate Model](supply_and_borrow_market/interest_rate_model.md) for t
 
 Prices are denominated in sun (10⁻⁶ TRX), scaled by `10^(tokenDecimal − 6)`. See [Price Oracle](supply_and_borrow_market/price_oracle.md).
 
-## Governance
+### Governance
 
 | Component | Contract | Address | Tronscan |
 |-----------|----------|---------|----------|
 | Governor (proxy / entrypoint) | `GovernorBravoDelegator` | `TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD` | [Contract](https://tronscan.org/#/contract/TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD) |
 | Governor (impl) | `GovernorBravoDelegate` | `TCiQTkxhzwSeXhRsNdHCvrxHRAvpjQn5Dt` | [Contract](https://tronscan.org/#/contract/TCiQTkxhzwSeXhRsNdHCvrxHRAvpjQn5Dt) |
 | Time-lock | `Timelock` | `TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x` | [Contract](https://tronscan.org/#/contract/TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x) |
-| JST token | `JST` | `TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9` | [Token20](https://tronscan.org/#/token20/TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9) |
-| WJST (voting) | `WJST` | `TXk9LnTnLN7oH96H3sKxJayMxLxR9M4ZD6` | [Contract / Code](https://tronscan.org/#/contract/TXk9LnTnLN7oH96H3sKxJayMxLxR9M4ZD6/code) |
 
 See [Governance](supply_and_borrow_market/governance.md) for the proposal lifecycle and voting flow.
+
+### Comptroller
+
+| Component | Contract | Address | Tronscan |
+|-----------|----------|---------|----------|
+| Comptroller | `Comptroller` | `TB23wYojvAsSx6gR8ebHiBqwSeABiBMPAr` | [Contract](https://tronscan.org/contract/TB23wYojvAsSx6gR8ebHiBqwSeABiBMPAr/code) |
+
+See [Comptroller](supply_and_borrow_market/comptroller.md) for Comptroller details.
+
+
+## Supply and Borrow Market V2
+
+### Moolah Market
+
+| Component | Contract | Address | Tronscan |
+| --- | --- | --- | --- |
+| Market Entrypoint | `MoolahProxy` | `TDH4dhmVQQNc1ZNudJwWzBcs2h6ahhWrpp` | [Contract](https://tronscan.org/#/contract/TDH4dhmVQQNc1ZNudJwWzBcs2h6ahhWrpp) |
+| Market Implementation | `Moolah` | `TKEiKtSaqUboeBmZxcSp8Z2CJUDGk4BT3a` | [Contract](https://tronscan.org/#/contract/TKEiKtSaqUboeBmZxcSp8Z2CJUDGk4BT3a) |
+
+### Moolah Vault
+
+| Component / Vault | Contract | Address | Tronscan |
+| --- | --- | --- | --- |
+| Vault Factory Proxy | `MoolahVaultFactoryProxy` | `TYoUEF2jB5WdTSVKRTmbUtC9iieVUPY1XK` | [Contract](https://tronscan.org/#/contract/TYoUEF2jB5WdTSVKRTmbUtC9iieVUPY1XK) |
+| Vault Factory (impl) | `MoolahVaultFactory` | `TTt6eWpEPZPBE5HiCRsgrjFfAh21kmFRcT` | [Contract](https://tronscan.org/#/contract/TTt6eWpEPZPBE5HiCRsgrjFfAh21kmFRcT) |
+| Vault Template | `MoolahVaultV1` | `TVE5y9aSf1f7CiRjPJM4MgYXgCqBoJGE9z` | [Contract](https://tronscan.org/#/contract/TVE5y9aSf1f7CiRjPJM4MgYXgCqBoJGE9z) |
+| **USDT** Vault | `usdtVault` | `TXejU9jmd1ooQyY3Zmpo15yN7MjSFYUESg` | [Contract](https://tronscan.org/#/contract/TXejU9jmd1ooQyY3Zmpo15yN7MjSFYUESg) |
+| **USDD** Vault | `usddVault` | `TA3q7XjdBQWb4qFxaPULUsnjvVZGgC9Brz` | [Contract](https://tronscan.org/#/contract/TA3q7XjdBQWb4qFxaPULUsnjvVZGgC9Brz) |
+| **TRX** Vault | `trxVault` | `THpxp8RpCUGk55dV7oL1LfxDeP9QvouxmM` | [Contract](https://tronscan.org/#/contract/THpxp8RpCUGk55dV7oL1LfxDeP9QvouxmM) |
+
+### TRX Provider
+
+| Component | Contract | Address | Tronscan |
+| --- | --- | --- | --- |
+| TRX Provider Proxy | `TrxProviderProxy` | `TMDENHFSiRzmJNSEBAFmrDbLkQ672iPN8H` | [Contract](https://tronscan.org/#/contract/TMDENHFSiRzmJNSEBAFmrDbLkQ672iPN8H) |
+| TRX Provider (impl) | `TrxProvider` | `TDsc5u5h9AjYfnH3zh92SH5dJouHSxiim2` | [Contract](https://tronscan.org/#/contract/TDsc5u5h9AjYfnH3zh92SH5dJouHSxiim2) |
+
+### Interest Rate Model
+
+| Model | Type | Address | Tronscan |
+| --- | --- | --- | --- |
+| IrmProxy | `IrmProxy` | `TSsuwbvUKAVgRmSghXT7i38PgHWpW12wQ1` | [Contract](https://tronscan.org/#/contract/TSsuwbvUKAVgRmSghXT7i38PgHWpW12wQ1) |
+| InterestRateModel (impl) | `InterestRateModel` | `TM96c8n7FrF9rGVg6h4MatA1ghY6tjneWD` | [Contract](https://tronscan.org/#/contract/TM96c8n7FrF9rGVg6h4MatA1ghY6tjneWD) |
+
+### Resilient Oracle
+
+| Component / Asset | Contract | Address | Tronscan |
+| --- | --- | --- | --- |
+| Resilient Oracle Proxy | `ResilientOracleProxy` | `TUDXEUA6hNiWPm54cMifoxCZU28zRu6bPc` | [Contract](https://tronscan.org/#/contract/TUDXEUA6hNiWPm54cMifoxCZU28zRu6bPc) |
+| Resilient Oracle (impl) | `ResilientOracl` | `TN6B7nsKYySF7sqD9xzZPiPmXyoX3ZpbGD` | [Contract](https://tronscan.org/#/contract/TN6B7nsKYySF7sqD9xzZPiPmXyoX3ZpbGD) |
+| Bound Validator Proxy | `BoundValidatorProxy` | `TEfEgB5LjkQJXYhrKp4j14xUGLGD1NK4zC` | [Contract](https://tronscan.org/#/contract/TEfEgB5LjkQJXYhrKp4j14xUGLGD1NK4zC) |
+| Bound Validator (impl) | `BoundValidator` | `TUQJWn72TV5NuAy7oCV95mRcJgrrFjxhdc` | [Contract](https://tronscan.org/#/contract/TUQJWn72TV5NuAy7oCV95mRcJgrrFjxhdc) |
+| **USDD** Price Oracle | `UsddPriceOracle` | `TJt3mT8MrzxShunorzLbq3otzv1DK6Na34` | [Contract](https://tronscan.org/#/contract/TJt3mT8MrzxShunorzLbq3otzv1DK6Na34) |
+| **USDT** Price Oracle | `UsdtPriceOracle` | `THj72uK3LdAXAGyE4fVuAWx7HwQy4RvEhb` | [Contract](https://tronscan.org/#/contract/THj72uK3LdAXAGyE4fVuAWx7HwQy4RvEhb) |
+| **TRX** Price Oracle | `TrxPriceOracle` | `TMEGS6D356KWRSW3fDKmARpQS8AoXi5uCG` | [Contract](https://tronscan.org/#/contract/TMEGS6D356KWRSW3fDKmARpQS8AoXi5uCG) |
+| **BTC** Price Oracle | `BtcPriceOracle` | `TBcM6vym7Y2PDuaeCY7hmCsY5V3DrXENaV` | [Contract](https://tronscan.org/#/contract/TBcM6vym7Y2PDuaeCY7hmCsY5V3DrXENaV) |
+| **sTRX** Price Oracle | `StrxOracle` | `TYEeXbju2oC4NiBbSzMvwG59nS8QCsWZZg` | [Contract](https://tronscan.org/#/contract/TYEeXbju2oC4NiBbSzMvwG59nS8QCsWZZg) |
+| **BTT** Price Oracle | `BttPriceOracle` | `TBByEevGPinzpVvF2dLK7WvXkE8qmrC3NH` | [Contract](https://tronscan.org/#/contract/TBByEevGPinzpVvF2dLK7WvXkE8qmrC3NH) |
+| **ETH** Price Oracle | `EthPriceOracle` | `TAPioY4J4t9gRt31ioTZiHu3m5mLdH38w2` | [Contract](https://tronscan.org/#/contract/TAPioY4J4t9gRt31ioTZiHu3m5mLdH38w2) |
+| **JST** Price Oracle | `JstPriceOracle` | `TQxH2UdxKizxbHTTgtmfJzgwKL1ToQ53B8` | [Contract](https://tronscan.org/#/contract/TQxH2UdxKizxbHTTgtmfJzgwKL1ToQ53B8) |
+| **NFT** Price Oracle | `NftPriceOracle` | `TN9n41jPVfZcyEfHp69DmUsJtyy96QNRXc` | [Contract](https://tronscan.org/#/contract/TN9n41jPVfZcyEfHp69DmUsJtyy96QNRXc) |
+| **SUN** Price Oracle | `SunPriceOracle` | `TTDb7ghCjH9n9x7kGvni6Gvdt4DLRNaQwr` | [Contract](https://tronscan.org/#/contract/TTDb7ghCjH9n9x7kGvni6Gvdt4DLRNaQwr) |
+| **TUSD** Price Oracle | `TusdPriceOracle` | `TXnMhh4vLsP6HxvhviKH3Tkhr55fLS9h52` | [Contract](https://tronscan.org/#/contract/TXnMhh4vLsP6HxvhviKH3Tkhr55fLS9h52) |
+| **USD1** Price Oracle | `Usd1PriceOracle` | `TQB7BcxFpqDTs9jC3ohBAf24ZGxGwrmSDg` | [Contract](https://tronscan.org/#/contract/TQB7BcxFpqDTs9jC3ohBAf24ZGxGwrmSDg) |
+| **WIN** Price Oracle | `WinPriceOracle` | `TXE1wGnzMayc2QSkgycz1uu6fu2yUpPNbL` | [Contract](https://tronscan.org/#/contract/TXE1wGnzMayc2QSkgycz1uu6fu2yUpPNbL) |
+| **wstUSDT** Price Oracle | `WstusdtOracle` | `TW3Yf5mshdR2uBDuQCoyW1rsaQdnoPppub` | [Contract](https://tronscan.org/#/contract/TW3Yf5mshdR2uBDuQCoyW1rsaQdnoPppub) |
+
+### Liquidation
+
+| Component | Contract | Address | Tronscan |
+| --- | --- | --- | --- |
+| Liquidator Proxy | `LiquidatorProxy` | `TKX8nUY8otA4d9qV1tDuN5BLSrxkr9pWa6` | [Contract](https://tronscan.org/#/contract/TKX8nUY8otA4d9qV1tDuN5BLSrxkr9pWa6) |
+| Liquidator (impl) | `Liquidator` | `TJHdh4LG9eLiGq5qW7NnyczuFU48YUCyhh` | [Contract](https://tronscan.org/#/contract/TJHdh4LG9eLiGq5qW7NnyczuFU48YUCyhh) |
+| Public Liquidator Proxy | `PublicLiquidatorProxy` | `TGDuQaHtvadVL5z9PMM874CaehQnwf3qJi` | [Contract](https://tronscan.org/#/contract/TGDuQaHtvadVL5z9PMM874CaehQnwf3qJi) |
+| Public Liquidator (impl) | `PublicLiquidator` | `TUM8vMhR3MN5jmqYPxvwEV3erwJy374f6c` | [Contract](https://tronscan.org/#/contract/TUM8vMhR3MN5jmqYPxvwEV3erwJy374f6c) |
+| Lending Fee Recipient Proxy | `LendingFeeRecipientProxy` | `TMzGb5Ma85oYMcnmVFjhvS1HYr6MRSspmE` | [Contract](https://tronscan.org/#/contract/TMzGb5Ma85oYMcnmVFjhvS1HYr6MRSspmE) |
+| Lending Fee Recipient (impl) | `LendingFeeRecipient` | `TAqxyXczXXFpQQiycoSDVopgBCMDmgKrK2` | [Contract](https://tronscan.org/#/contract/TAqxyXczXXFpQQiycoSDVopgBCMDmgKrK2) |
+
+See [SBMV2](supply_and_borrow_market/sbmV2.md) for more details.
+
 
 ## Staked TRX
 
