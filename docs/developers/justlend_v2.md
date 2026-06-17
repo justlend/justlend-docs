@@ -90,8 +90,12 @@ Addresses are the source-of-truth deployment config tracked in the MCP server's 
 
 The [JustLend MCP Server](../ai_support/mcp_server.md) (v1.1.0+) exposes the full V2 surface under `moolah_*` / `get_moolah_*` tools — vaults, markets, liquidation, dashboard/history, and mining — plus four guided prompts (`moolah_supply`, `moolah_borrow`, `moolah_liquidate`, `moolah_portfolio`). See the [V2 tool groups](../ai_support/mcp_server.md#tools-96-total) and the [MCP Tool Catalog](../documents/aidocs/mcp_tools.md).
 
-Contract ABIs (`MOOLAH_CORE_ABI`, `TRX_PROVIDER_ABI`, `MOOLAH_VAULT_ABI`, `PUBLIC_LIQUIDATOR_ABI`) are bundled in the MCP repo's [`src/core/abis.ts`](https://github.com/justlend/mcp-server-justlend/blob/main/src/core/abis.ts).
+Contract ABIs (`MOOLAH_CORE_ABI`, `TRX_PROVIDER_ABI`, `MOOLAH_VAULT_ABI`, `PUBLIC_LIQUIDATOR_ABI`) are bundled in the MCP repo's [`src/core/abis.ts`](https://github.com/justlend/mcp-server-justlend/blob/main/src/core/abis.ts). For the full on-chain ABIs and contract data structures (`Position`, `MarketParams`, `MarketConfig`, `MarketAllocation`, …), see the [SBM V2 contract reference](supply_and_borrow_market/sbmV2.md).
 
 ## REST API
 
-Read-only V2 protocol data (vaults, markets, positions, liquidations, records) is also available over HTTP — see the **JustLend V2** tag in the [API reference](apis.md) and the [OpenAPI spec](apis/justlend_apis.yaml). These endpoints are mainnet-only and paginate with `page` / `pageSize`.
+The public [`openapi.just.network`](apis.md) gateway currently serves **V1 only**; V2 protocol data
+is **not yet published** there. For read-only V2 data today, use the
+[MCP server](../ai_support/mcp_server.md) `get_moolah_*` tools or read the contracts on-chain. The
+V2 REST endpoints will be added to the [OpenAPI spec](apis/justlend_apis.yaml) once they are live on
+the public gateway and their paths are verified.
