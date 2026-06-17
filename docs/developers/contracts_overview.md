@@ -47,7 +47,7 @@ JustLend DAO Protocol contracts are divided in these repositories:
 `JumpRateModelV2:` the Contract used to set up a complex interest rate model, which the interest rate jumps to a higher tier when the utilization rate exceeds u optimal.
 
 #### Price Oracle Contract
-`Price Oracle:` the JustLend Protocol use WinkLink's price service to fetch the token price. The PriceOracle contract is responsible for setting and display token prices.
+`Price Oracle:` the JustLend Protocol use Chainlink's price service to fetch the token price. The PriceOracle contract is responsible for setting and display token prices.
 
 #### Governance Contract
 `GovernorBravo:` The main JustLend Governance Contract. Users interact with it to:
