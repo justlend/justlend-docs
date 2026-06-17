@@ -29,6 +29,9 @@ JustLend DAO SBM V2 is a fully upgraded decentralized lending protocol built on 
 
 The source code is available on [Github](https://github.com/justlend).
 
+!!! note "Naming & related pages"
+    The V2 contracts use the `Moolah` name on-chain (`MoolahMarket.sol`, `MoolahVault.sol`, `MoolahProxy`, …) — that is the technical identifier for **JustLend V2**. This page is the **low-level contract & ABI reference**. For the high-level protocol model, deployed mainnet/Nile contract & vault addresses, and AI/MCP integration, see **[JustLend V2](../justlend_v2.md)**.
+
 <br>
 
 ## **Configuration**
@@ -555,7 +558,7 @@ function borrowRateFullView(Id id) public view returns (uint256 avgBorrowRate, i
 
 <br> 
 
-### **Moolah Valut**
+### **Moolah Vault**
 A Vault is a single-asset management contract that provides borrowable assets to the market and can be created by anyone. Each vault operates as an independent contract managed by a designated fund manager, who can configure which markets to supply liquidity to. When users deposit assets into the vault, the funds are automatically allocated to the configured markets. The fund manager also has the ability to reallocate funds across markets. The vault follows the ERC-4626 standard (an extension of ERC-20 for tokenized vaults), allowing users to mint transferable shares upon depositing assets.
 
 #### **1. Create Moolah Vault**
