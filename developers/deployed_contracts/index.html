@@ -138,8 +138,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "Base58 addresses for every JustLend DAO contract on TRON Mainnet, plus the Nile testnet subset. For machine consumers, the same data is available with Base58 / 0x / 41-hex formats in /developers/contracts.json.",
-          "dateModified": "2026-05-28",
-          "datePublished": "2026-05-28"
+          "dateModified": "2026-06-16",
+          "datePublished": "2026-06-16"
         }
       ]
     }
@@ -1229,6 +1229,20 @@
 
 
 
+<li class="md-nav__item has-children">
+  <a href="#supply-and-borrow-market-v1" class="md-nav__link" aria-expanded="true">
+    <span class="md-ellipsis">
+      Supply and Borrow Market V1
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Supply and Borrow Market V1">
+      <ul class="md-nav__list">
+        
+          
+
+
+
 <li class="md-nav__item ">
   <a href="#interest-rate-models" class="md-nav__link">
     <span class="md-ellipsis">
@@ -1237,8 +1251,8 @@
   </a>
   
 </li>
-      
         
+          
 
 
 
@@ -1250,8 +1264,8 @@
   </a>
   
 </li>
-      
         
+          
 
 
 
@@ -1261,6 +1275,121 @@
       Governance
     </span>
   </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#comptroller" class="md-nav__link">
+    <span class="md-ellipsis">
+      Comptroller
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item has-children">
+  <a href="#supply-and-borrow-market-v2" class="md-nav__link" aria-expanded="true">
+    <span class="md-ellipsis">
+      Supply and Borrow Market V2
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Supply and Borrow Market V2">
+      <ul class="md-nav__list">
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#moolah-market" class="md-nav__link">
+    <span class="md-ellipsis">
+      Moolah Market
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#moolah-vault" class="md-nav__link">
+    <span class="md-ellipsis">
+      Moolah Vault
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#trx-provider" class="md-nav__link">
+    <span class="md-ellipsis">
+      TRX Provider
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#interest-rate-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      Interest Rate Model
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#resilient-oracle" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resilient Oracle
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#liquidation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Liquidation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2037,6 +2166,7 @@
 </ul>
 <p>The on-chain addresses are unchanged — only the dApp display names swapped.</p>
 </div>
+<h2 id="supply-and-borrow-market-v1">Supply and Borrow Market V1<a class="headerlink" href="#supply-and-borrow-market-v1" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -2187,7 +2317,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="interest-rate-models">Interest Rate Models<a class="headerlink" href="#interest-rate-models" title="Permanent link">&para;</a></h2>
+<h3 id="interest-rate-models">Interest Rate Models<a class="headerlink" href="#interest-rate-models" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -2333,7 +2463,7 @@
 </tbody>
 </table>
 <p>See <a href="../supply_and_borrow_market/interest_rate_model/">Interest Rate Model</a> for the formulas backing these contracts.</p>
-<h2 id="price-oracle">Price Oracle<a class="headerlink" href="#price-oracle" title="Permanent link">&para;</a></h2>
+<h3 id="price-oracle">Price Oracle<a class="headerlink" href="#price-oracle" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -2359,7 +2489,7 @@
 </tbody>
 </table>
 <p>Prices are denominated in sun (10⁻⁶ TRX), scaled by <code>10^(tokenDecimal − 6)</code>. See <a href="../supply_and_borrow_market/price_oracle/">Price Oracle</a>.</p>
-<h2 id="governance">Governance<a class="headerlink" href="#governance" title="Permanent link">&para;</a></h2>
+<h3 id="governance">Governance<a class="headerlink" href="#governance" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -2388,21 +2518,325 @@
 <td><code>TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x</code></td>
 <td><a href="https://tronscan.org/#/contract/TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x">Contract</a></td>
 </tr>
-<tr>
-<td>JST token</td>
-<td><code>JST</code></td>
-<td><code>TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9</code></td>
-<td><a href="https://tronscan.org/#/token20/TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9">Token20</a></td>
-</tr>
-<tr>
-<td>WJST (voting)</td>
-<td><code>WJST</code></td>
-<td><code>TXk9LnTnLN7oH96H3sKxJayMxLxR9M4ZD6</code></td>
-<td><a href="https://tronscan.org/#/contract/TXk9LnTnLN7oH96H3sKxJayMxLxR9M4ZD6/code">Contract / Code</a></td>
-</tr>
 </tbody>
 </table>
 <p>See <a href="../supply_and_borrow_market/governance/">Governance</a> for the proposal lifecycle and voting flow.</p>
+<h3 id="comptroller">Comptroller<a class="headerlink" href="#comptroller" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Contract</th>
+<th>Address</th>
+<th>Tronscan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Comptroller</td>
+<td><code>Comptroller</code></td>
+<td><code>TB23wYojvAsSx6gR8ebHiBqwSeABiBMPAr</code></td>
+<td><a href="https://tronscan.org/contract/TB23wYojvAsSx6gR8ebHiBqwSeABiBMPAr/code">Contract</a></td>
+</tr>
+</tbody>
+</table>
+<p>See <a href="../supply_and_borrow_market/comptroller/">Comptroller</a> for Comptroller details.</p>
+<h2 id="supply-and-borrow-market-v2">Supply and Borrow Market V2<a class="headerlink" href="#supply-and-borrow-market-v2" title="Permanent link">&para;</a></h2>
+<h3 id="moolah-market">Moolah Market<a class="headerlink" href="#moolah-market" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Contract</th>
+<th>Address</th>
+<th>Tronscan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Market Entrypoint</td>
+<td><code>MoolahProxy</code></td>
+<td><code>TDH4dhmVQQNc1ZNudJwWzBcs2h6ahhWrpp</code></td>
+<td><a href="https://tronscan.org/#/contract/TDH4dhmVQQNc1ZNudJwWzBcs2h6ahhWrpp">Contract</a></td>
+</tr>
+<tr>
+<td>Market Implementation</td>
+<td><code>Moolah</code></td>
+<td><code>TKEiKtSaqUboeBmZxcSp8Z2CJUDGk4BT3a</code></td>
+<td><a href="https://tronscan.org/#/contract/TKEiKtSaqUboeBmZxcSp8Z2CJUDGk4BT3a">Contract</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="moolah-vault">Moolah Vault<a class="headerlink" href="#moolah-vault" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Component / Vault</th>
+<th>Contract</th>
+<th>Address</th>
+<th>Tronscan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Vault Factory Proxy</td>
+<td><code>MoolahVaultFactoryProxy</code></td>
+<td><code>TYoUEF2jB5WdTSVKRTmbUtC9iieVUPY1XK</code></td>
+<td><a href="https://tronscan.org/#/contract/TYoUEF2jB5WdTSVKRTmbUtC9iieVUPY1XK">Contract</a></td>
+</tr>
+<tr>
+<td>Vault Factory (impl)</td>
+<td><code>MoolahVaultFactory</code></td>
+<td><code>TTt6eWpEPZPBE5HiCRsgrjFfAh21kmFRcT</code></td>
+<td><a href="https://tronscan.org/#/contract/TTt6eWpEPZPBE5HiCRsgrjFfAh21kmFRcT">Contract</a></td>
+</tr>
+<tr>
+<td>Vault Template</td>
+<td><code>MoolahVaultV1</code></td>
+<td><code>TVE5y9aSf1f7CiRjPJM4MgYXgCqBoJGE9z</code></td>
+<td><a href="https://tronscan.org/#/contract/TVE5y9aSf1f7CiRjPJM4MgYXgCqBoJGE9z">Contract</a></td>
+</tr>
+<tr>
+<td><strong>USDT</strong> Vault</td>
+<td><code>usdtVault</code></td>
+<td><code>TXejU9jmd1ooQyY3Zmpo15yN7MjSFYUESg</code></td>
+<td><a href="https://tronscan.org/#/contract/TXejU9jmd1ooQyY3Zmpo15yN7MjSFYUESg">Contract</a></td>
+</tr>
+<tr>
+<td><strong>USDD</strong> Vault</td>
+<td><code>usddVault</code></td>
+<td><code>TA3q7XjdBQWb4qFxaPULUsnjvVZGgC9Brz</code></td>
+<td><a href="https://tronscan.org/#/contract/TA3q7XjdBQWb4qFxaPULUsnjvVZGgC9Brz">Contract</a></td>
+</tr>
+<tr>
+<td><strong>TRX</strong> Vault</td>
+<td><code>trxVault</code></td>
+<td><code>THpxp8RpCUGk55dV7oL1LfxDeP9QvouxmM</code></td>
+<td><a href="https://tronscan.org/#/contract/THpxp8RpCUGk55dV7oL1LfxDeP9QvouxmM">Contract</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="trx-provider">TRX Provider<a class="headerlink" href="#trx-provider" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Contract</th>
+<th>Address</th>
+<th>Tronscan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TRX Provider Proxy</td>
+<td><code>TrxProviderProxy</code></td>
+<td><code>TMDENHFSiRzmJNSEBAFmrDbLkQ672iPN8H</code></td>
+<td><a href="https://tronscan.org/#/contract/TMDENHFSiRzmJNSEBAFmrDbLkQ672iPN8H">Contract</a></td>
+</tr>
+<tr>
+<td>TRX Provider (impl)</td>
+<td><code>TrxProvider</code></td>
+<td><code>TDsc5u5h9AjYfnH3zh92SH5dJouHSxiim2</code></td>
+<td><a href="https://tronscan.org/#/contract/TDsc5u5h9AjYfnH3zh92SH5dJouHSxiim2">Contract</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="interest-rate-model">Interest Rate Model<a class="headerlink" href="#interest-rate-model" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Type</th>
+<th>Address</th>
+<th>Tronscan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IrmProxy</td>
+<td><code>IrmProxy</code></td>
+<td><code>TSsuwbvUKAVgRmSghXT7i38PgHWpW12wQ1</code></td>
+<td><a href="https://tronscan.org/#/contract/TSsuwbvUKAVgRmSghXT7i38PgHWpW12wQ1">Contract</a></td>
+</tr>
+<tr>
+<td>InterestRateModel (impl)</td>
+<td><code>InterestRateModel</code></td>
+<td><code>TM96c8n7FrF9rGVg6h4MatA1ghY6tjneWD</code></td>
+<td><a href="https://tronscan.org/#/contract/TM96c8n7FrF9rGVg6h4MatA1ghY6tjneWD">Contract</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="resilient-oracle">Resilient Oracle<a class="headerlink" href="#resilient-oracle" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Component / Asset</th>
+<th>Contract</th>
+<th>Address</th>
+<th>Tronscan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Resilient Oracle Proxy</td>
+<td><code>ResilientOracleProxy</code></td>
+<td><code>TUDXEUA6hNiWPm54cMifoxCZU28zRu6bPc</code></td>
+<td><a href="https://tronscan.org/#/contract/TUDXEUA6hNiWPm54cMifoxCZU28zRu6bPc">Contract</a></td>
+</tr>
+<tr>
+<td>Resilient Oracle (impl)</td>
+<td><code>ResilientOracl</code></td>
+<td><code>TN6B7nsKYySF7sqD9xzZPiPmXyoX3ZpbGD</code></td>
+<td><a href="https://tronscan.org/#/contract/TN6B7nsKYySF7sqD9xzZPiPmXyoX3ZpbGD">Contract</a></td>
+</tr>
+<tr>
+<td>Bound Validator Proxy</td>
+<td><code>BoundValidatorProxy</code></td>
+<td><code>TEfEgB5LjkQJXYhrKp4j14xUGLGD1NK4zC</code></td>
+<td><a href="https://tronscan.org/#/contract/TEfEgB5LjkQJXYhrKp4j14xUGLGD1NK4zC">Contract</a></td>
+</tr>
+<tr>
+<td>Bound Validator (impl)</td>
+<td><code>BoundValidator</code></td>
+<td><code>TUQJWn72TV5NuAy7oCV95mRcJgrrFjxhdc</code></td>
+<td><a href="https://tronscan.org/#/contract/TUQJWn72TV5NuAy7oCV95mRcJgrrFjxhdc">Contract</a></td>
+</tr>
+<tr>
+<td><strong>USDD</strong> Price Oracle</td>
+<td><code>UsddPriceOracle</code></td>
+<td><code>TJt3mT8MrzxShunorzLbq3otzv1DK6Na34</code></td>
+<td><a href="https://tronscan.org/#/contract/TJt3mT8MrzxShunorzLbq3otzv1DK6Na34">Contract</a></td>
+</tr>
+<tr>
+<td><strong>USDT</strong> Price Oracle</td>
+<td><code>UsdtPriceOracle</code></td>
+<td><code>THj72uK3LdAXAGyE4fVuAWx7HwQy4RvEhb</code></td>
+<td><a href="https://tronscan.org/#/contract/THj72uK3LdAXAGyE4fVuAWx7HwQy4RvEhb">Contract</a></td>
+</tr>
+<tr>
+<td><strong>TRX</strong> Price Oracle</td>
+<td><code>TrxPriceOracle</code></td>
+<td><code>TMEGS6D356KWRSW3fDKmARpQS8AoXi5uCG</code></td>
+<td><a href="https://tronscan.org/#/contract/TMEGS6D356KWRSW3fDKmARpQS8AoXi5uCG">Contract</a></td>
+</tr>
+<tr>
+<td><strong>BTC</strong> Price Oracle</td>
+<td><code>BtcPriceOracle</code></td>
+<td><code>TBcM6vym7Y2PDuaeCY7hmCsY5V3DrXENaV</code></td>
+<td><a href="https://tronscan.org/#/contract/TBcM6vym7Y2PDuaeCY7hmCsY5V3DrXENaV">Contract</a></td>
+</tr>
+<tr>
+<td><strong>sTRX</strong> Price Oracle</td>
+<td><code>StrxOracle</code></td>
+<td><code>TYEeXbju2oC4NiBbSzMvwG59nS8QCsWZZg</code></td>
+<td><a href="https://tronscan.org/#/contract/TYEeXbju2oC4NiBbSzMvwG59nS8QCsWZZg">Contract</a></td>
+</tr>
+<tr>
+<td><strong>BTT</strong> Price Oracle</td>
+<td><code>BttPriceOracle</code></td>
+<td><code>TBByEevGPinzpVvF2dLK7WvXkE8qmrC3NH</code></td>
+<td><a href="https://tronscan.org/#/contract/TBByEevGPinzpVvF2dLK7WvXkE8qmrC3NH">Contract</a></td>
+</tr>
+<tr>
+<td><strong>ETH</strong> Price Oracle</td>
+<td><code>EthPriceOracle</code></td>
+<td><code>TAPioY4J4t9gRt31ioTZiHu3m5mLdH38w2</code></td>
+<td><a href="https://tronscan.org/#/contract/TAPioY4J4t9gRt31ioTZiHu3m5mLdH38w2">Contract</a></td>
+</tr>
+<tr>
+<td><strong>JST</strong> Price Oracle</td>
+<td><code>JstPriceOracle</code></td>
+<td><code>TQxH2UdxKizxbHTTgtmfJzgwKL1ToQ53B8</code></td>
+<td><a href="https://tronscan.org/#/contract/TQxH2UdxKizxbHTTgtmfJzgwKL1ToQ53B8">Contract</a></td>
+</tr>
+<tr>
+<td><strong>NFT</strong> Price Oracle</td>
+<td><code>NftPriceOracle</code></td>
+<td><code>TN9n41jPVfZcyEfHp69DmUsJtyy96QNRXc</code></td>
+<td><a href="https://tronscan.org/#/contract/TN9n41jPVfZcyEfHp69DmUsJtyy96QNRXc">Contract</a></td>
+</tr>
+<tr>
+<td><strong>SUN</strong> Price Oracle</td>
+<td><code>SunPriceOracle</code></td>
+<td><code>TTDb7ghCjH9n9x7kGvni6Gvdt4DLRNaQwr</code></td>
+<td><a href="https://tronscan.org/#/contract/TTDb7ghCjH9n9x7kGvni6Gvdt4DLRNaQwr">Contract</a></td>
+</tr>
+<tr>
+<td><strong>TUSD</strong> Price Oracle</td>
+<td><code>TusdPriceOracle</code></td>
+<td><code>TXnMhh4vLsP6HxvhviKH3Tkhr55fLS9h52</code></td>
+<td><a href="https://tronscan.org/#/contract/TXnMhh4vLsP6HxvhviKH3Tkhr55fLS9h52">Contract</a></td>
+</tr>
+<tr>
+<td><strong>USD1</strong> Price Oracle</td>
+<td><code>Usd1PriceOracle</code></td>
+<td><code>TQB7BcxFpqDTs9jC3ohBAf24ZGxGwrmSDg</code></td>
+<td><a href="https://tronscan.org/#/contract/TQB7BcxFpqDTs9jC3ohBAf24ZGxGwrmSDg">Contract</a></td>
+</tr>
+<tr>
+<td><strong>WIN</strong> Price Oracle</td>
+<td><code>WinPriceOracle</code></td>
+<td><code>TXE1wGnzMayc2QSkgycz1uu6fu2yUpPNbL</code></td>
+<td><a href="https://tronscan.org/#/contract/TXE1wGnzMayc2QSkgycz1uu6fu2yUpPNbL">Contract</a></td>
+</tr>
+<tr>
+<td><strong>wstUSDT</strong> Price Oracle</td>
+<td><code>WstusdtOracle</code></td>
+<td><code>TW3Yf5mshdR2uBDuQCoyW1rsaQdnoPppub</code></td>
+<td><a href="https://tronscan.org/#/contract/TW3Yf5mshdR2uBDuQCoyW1rsaQdnoPppub">Contract</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="liquidation">Liquidation<a class="headerlink" href="#liquidation" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Contract</th>
+<th>Address</th>
+<th>Tronscan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Liquidator Proxy</td>
+<td><code>LiquidatorProxy</code></td>
+<td><code>TKX8nUY8otA4d9qV1tDuN5BLSrxkr9pWa6</code></td>
+<td><a href="https://tronscan.org/#/contract/TKX8nUY8otA4d9qV1tDuN5BLSrxkr9pWa6">Contract</a></td>
+</tr>
+<tr>
+<td>Liquidator (impl)</td>
+<td><code>Liquidator</code></td>
+<td><code>TJHdh4LG9eLiGq5qW7NnyczuFU48YUCyhh</code></td>
+<td><a href="https://tronscan.org/#/contract/TJHdh4LG9eLiGq5qW7NnyczuFU48YUCyhh">Contract</a></td>
+</tr>
+<tr>
+<td>Public Liquidator Proxy</td>
+<td><code>PublicLiquidatorProxy</code></td>
+<td><code>TGDuQaHtvadVL5z9PMM874CaehQnwf3qJi</code></td>
+<td><a href="https://tronscan.org/#/contract/TGDuQaHtvadVL5z9PMM874CaehQnwf3qJi">Contract</a></td>
+</tr>
+<tr>
+<td>Public Liquidator (impl)</td>
+<td><code>PublicLiquidator</code></td>
+<td><code>TUM8vMhR3MN5jmqYPxvwEV3erwJy374f6c</code></td>
+<td><a href="https://tronscan.org/#/contract/TUM8vMhR3MN5jmqYPxvwEV3erwJy374f6c">Contract</a></td>
+</tr>
+<tr>
+<td>Lending Fee Recipient Proxy</td>
+<td><code>LendingFeeRecipientProxy</code></td>
+<td><code>TMzGb5Ma85oYMcnmVFjhvS1HYr6MRSspmE</code></td>
+<td><a href="https://tronscan.org/#/contract/TMzGb5Ma85oYMcnmVFjhvS1HYr6MRSspmE">Contract</a></td>
+</tr>
+<tr>
+<td>Lending Fee Recipient (impl)</td>
+<td><code>LendingFeeRecipient</code></td>
+<td><code>TAqxyXczXXFpQQiycoSDVopgBCMDmgKrK2</code></td>
+<td><a href="https://tronscan.org/#/contract/TAqxyXczXXFpQQiycoSDVopgBCMDmgKrK2">Contract</a></td>
+</tr>
+</tbody>
+</table>
+<p>See <a href="supply_and_borrow_market/sbmV2.md">SBMV2</a> for more details.</p>
 <h2 id="staked-trx">Staked TRX<a class="headerlink" href="#staked-trx" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -2517,7 +2951,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 28, 2026 09:31:22 UTC">2026-05-28</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 16, 2026 08:39:07 UTC">2026-06-16</span>
   </span>
 
     
