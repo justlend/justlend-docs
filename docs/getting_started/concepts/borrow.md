@@ -28,9 +28,9 @@ Borrowing on JustLend DAO is simple and dynamic. Users can leverage their deposi
 
 
 ### **How Do I Borrow Assets**
-Borrowing can be done with a user interface [JustLend SBM](https://app.justlend.org/homeNew?lang=en-US) or SBM V2. Before we walk through the steps of a borrowing sequence, let’s cover some key parameters:
+Borrowing can be done with a user interface [JustLend SBM V1](https://app.justlend.org/homeV1) or [SBM V2](https://app.justlend.org/homeNew?lang=en-US). Before we walk through the steps of a borrowing sequence, let’s cover some key parameters:
 
-**SBM:**
+**SBM V1:**
 
 * `Borrow APY:` the cost of borrowing assets in the JustLend DAO Protocol, which can vary based on the overall utilization of the liquidity pool;
 * `Total Borrow:` the total borrow amount in the market. As the total borrow changes, the borrow APY will also change accordingly;
