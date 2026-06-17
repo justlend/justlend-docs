@@ -138,8 +138,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "JustLend DAO EnergyRental contract reference \u2014 rentResource, returnResource, returnResourceByReceiver, liquidate, getRentInfo, plus TronWeb examples. Powers the one-to-many TRON Energy marketplace.",
-          "dateModified": "2026-05-21",
-          "datePublished": "2026-05-21"
+          "dateModified": "2026-06-17",
+          "datePublished": "2026-06-17"
         }
       ]
     }
@@ -2428,7 +2428,7 @@ on the <strong>Rental Amount</strong> and <strong>Rental Duration</strong>. The 
 <ul>
 <li>To determine the value of <code>trxAmount</code>, use the following formula:<ul>
 <li><code>energyAmount:</code> is the amount of energy you are renting <strong>(Rental Amount)</strong>.</li>
-<li><code>energyStakePerTrx:</code> is the energy staked per in Trx, which can be retrieved by calling the <a href="https://labc.ablesdxd.link/strx/dashboard">/strx/dashboard</a> API.</li>
+<li><code>energyStakePerTrx:</code> is the energy staked per TRX, derived from the <a href="https://openapi.just.network/lend/strx">/lend/strx</a> API as <code>10000 / rentInfo.priceFor10KEnergByStake</code>.</li>
 </ul>
 </li>
 </ul>
@@ -2441,7 +2441,7 @@ on the <strong>Rental Amount</strong> and <strong>Rental Duration</strong>. The 
 <li><code>rentalRate:</code> the borrowing interest rate, which is the rate paid per second by the borrower to the staker, scaled by 10^18.</li>
 <li><code>stableRate:</code> the weighted average interest rate for borrowings, which is a constantly updating six-hour rolling average, scaled by 10^18.</li>
 <li><code>liquidateThreshold:</code> the liquidation threshold, which is the remaining rental duration of the user's prepayment, initialized to 0.</li>
-<li><code>fee:</code> the penalty reserve for liquidation. Users who execute liquidation can receive a liquidation reward calculated as <code>Max(20 TRX, 0.01% * energyAmount / energyRentPerTrx)</code>, which can be retrieved by calling the <a href="https://labc.ablesdxd.link/strx/dashboard">/strx/dashboard</a> API. The minimum fee is 20 TRX.</li>
+<li><code>fee:</code> the penalty reserve for liquidation. Users who execute liquidation can receive a liquidation reward calculated as <code>Max(20 TRX, 0.01% * energyAmount / energyRentPerTrx)</code>, where <code>energyRentPerTrx</code> is derived from the <a href="https://openapi.just.network/lend/strx">/lend/strx</a> API as <code>10000 / rentInfo.priceFor10KEnergByRent</code>. The minimum fee is 20 TRX.</li>
 </ul>
 <p><strong>Note:</strong> the parameters of <code>rentalRate</code>, <code>stableRate</code> and <code>liquidateThreshold</code> can be obtained by calling the <a href="https://tronscan.org/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd">EnergyRental</a> contract.</p>
 <h2 id="query-interface"><strong>Query Interface</strong><a class="headerlink" href="#query-interface" title="Permanent link">&para;</a></h2>
@@ -2672,10 +2672,11 @@ on the <strong>Rental Amount</strong> and <strong>Rental Duration</strong>. The 
 <h3 id="1-convert-i-want-n-energy-required-delegated-trx">1. Convert "I want N energy" → required delegated TRX<a class="headerlink" href="#1-convert-i-want-n-energy-required-delegated-trx" title="Permanent link">&para;</a></h3>
 <p>The contract takes <strong>delegated TRX in sun</strong>, not energy units. First query the current ratio:</p>
 <div class="highlight"><pre><span></span><code><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">energyToDelegatedSun</span><span class="p">(</span><span class="nx">targetEnergy</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="c1">// GET https://openapi.just.network/strx/dashboard → energyStakePerTrx</span>
-<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">fetch</span><span class="p">(</span><span class="s1">&#39;https://openapi.just.network/strx/dashboard&#39;</span><span class="p">);</span>
+<span class="w">  </span><span class="c1">// GET https://openapi.just.network/lend/strx → rentInfo.priceFor10KEnergByStake</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">fetch</span><span class="p">(</span><span class="s1">&#39;https://openapi.just.network/lend/strx&#39;</span><span class="p">);</span>
 <span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span>
-<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">energyPerTrx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Number</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">energyStakePerTrx</span><span class="p">);</span><span class="w"> </span><span class="c1">// energy per 1 TRX</span>
+<span class="w">  </span><span class="c1">// energy staked per 1 TRX = 10000 / (TRX to self-stake for 10k energy)</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">energyPerTrx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">10000</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nb">Number</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">rentInfo</span><span class="p">.</span><span class="nx">priceFor10KEnergByStake</span><span class="p">);</span>
 <span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">trxNeeded</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="nx">targetEnergy</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nx">energyPerTrx</span><span class="p">;</span><span class="w">    </span><span class="c1">// in TRX</span>
 <span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nb">BigInt</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">ceil</span><span class="p">(</span><span class="nx">trxNeeded</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1</span><span class="nx">_000_000</span><span class="p">));</span><span class="w">     </span><span class="c1">// sun</span>
 <span class="p">}</span>
@@ -2757,7 +2758,7 @@ on the <strong>Rental Amount</strong> and <strong>Rental Duration</strong>. The 
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 21, 2026 10:22:46 UTC">2026-05-21</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 17, 2026 11:49:58 UTC">2026-06-17</span>
   </span>
 
     
