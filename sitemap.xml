@@ -5,6 +5,10 @@
          <lastmod>2026-06-17</lastmod>
     </url>
     <url>
+         <loc>https://docs.justlend.org/ai_support/</loc>
+         <lastmod>2026-06-17</lastmod>
+    </url>
+    <url>
          <loc>https://docs.justlend.org/ai_support/ai_llms/</loc>
          <lastmod>2026-06-17</lastmod>
     </url>
@@ -37,7 +41,15 @@
          <lastmod>2026-06-17</lastmod>
     </url>
     <url>
+         <loc>https://docs.justlend.org/developers/justlend_v2/</loc>
+         <lastmod>2026-06-17</lastmod>
+    </url>
+    <url>
          <loc>https://docs.justlend.org/developers/staked_trx/</loc>
+         <lastmod>2026-06-17</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.justlend.org/developers/abis/</loc>
          <lastmod>2026-06-17</lastmod>
     </url>
     <url>
@@ -62,6 +74,54 @@
     </url>
     <url>
          <loc>https://docs.justlend.org/developers/supply_and_borrow_market/sbmV2/</loc>
+         <lastmod>2026-06-17</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.justlend.org/documents/aidocs/</loc>
+         <lastmod>2026-06-17</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.justlend.org/documents/aidocs/account_position/</loc>
+         <lastmod>2026-06-17</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.justlend.org/documents/aidocs/common_questions/</loc>
+         <lastmod>2026-06-17</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.justlend.org/documents/aidocs/energy_rental/</loc>
+         <lastmod>2026-06-17</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.justlend.org/documents/aidocs/glossary/</loc>
+         <lastmod>2026-06-17</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.justlend.org/documents/aidocs/market_data/</loc>
+         <lastmod>2026-06-17</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.justlend.org/documents/aidocs/mcp_safety/</loc>
+         <lastmod>2026-06-17</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.justlend.org/documents/aidocs/mcp_tools/</loc>
+         <lastmod>2026-06-17</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.justlend.org/documents/aidocs/quickstart/</loc>
+         <lastmod>2026-06-17</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.justlend.org/documents/aidocs/source_of_truth/</loc>
+         <lastmod>2026-06-17</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.justlend.org/documents/aidocs/strx_staking/</loc>
+         <lastmod>2026-06-17</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.justlend.org/documents/aidocs/supply_borrow_repay_withdraw/</loc>
          <lastmod>2026-06-17</lastmod>
     </url>
     <url>

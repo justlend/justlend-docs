@@ -1,0 +1,7272 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Generated JustLend MCP tool catalog with routing guidance, side-effect classes, safety annotations, wallet requirements, and source links for AI agents.">
+      
+      
+        <meta name="author" content="JustLend DAO">
+      
+      
+        <link rel="canonical" href="https://docs.justlend.org/documents/aidocs/mcp_tools/">
+      
+      
+        <link rel="prev" href="../glossary/">
+      
+      
+        <link rel="next" href="../../../resources/community/links/">
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.8">
+    
+    
+      
+        <title>JustLend MCP Tool Catalog for AI Agents - JustLend DAO Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.8608ea7d.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../../../stylesheets/hide_elements.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+    
+    
+    
+    <link rel="llms" href="/llms.txt" type="text/plain">
+    <link rel="llms-full" href="/llms-full.txt" type="text/plain">
+    <link rel="alternate" type="text/plain" title="llms.txt — site index for LLMs" href="/llms.txt">
+    <link rel="alternate" type="text/plain" title="llms-full.txt — full-text snapshot for LLMs" href="/llms-full.txt">
+    <meta name="ai-content-declaration" content="llms.txt,llms-full.txt">
+    
+    
+    
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://justlend.org/#org",
+          "name": "JustLend DAO",
+          "url": "https://justlend.org",
+          "sameAs": [
+            "https://app.justlend.org",
+            "https://forum.justlend.org",
+            "https://github.com/justlend",
+            "https://t.me/officialjustlend"
+          ]
+        },
+        {
+          "@type": ["SoftwareApplication", "FinancialProduct"],
+          "@id": "https://docs.justlend.org/#protocol",
+          "name": "JustLend DAO Protocol",
+          "alternateName": ["JustLend", "JustLend DAO"],
+          "applicationCategory": "DecentralizedFinance",
+          "applicationSubCategory": "Lending",
+          "operatingSystem": "TRON",
+          "softwareVersion": "compound-v2-fork",
+          "url": "https://docs.justlend.org/",
+          "sameAs": [
+            "https://github.com/justlend/justlend-protocol",
+            "https://github.com/justlend/mcp-server-justlend",
+            "https://github.com/justlend/justlend-skills"
+          ],
+          "provider": { "@id": "https://justlend.org/#org" },
+          "documentation": "https://docs.justlend.org/llms.txt",
+          "potentialAction": [
+            {
+              "@type": "ConsumeAction",
+              "name": "Read full-text snapshot for LLMs",
+              "target": "https://docs.justlend.org/llms-full.txt"
+            },
+            {
+              "@type": "ConsumeAction",
+              "name": "Fetch machine-readable contract directory",
+              "target": "https://docs.justlend.org/developers/contracts.json"
+            },
+            {
+              "@type": "ConsumeAction",
+              "name": "Fetch OpenAPI 3.1 specification",
+              "target": "https://docs.justlend.org/developers/apis/justlend_apis.yaml"
+            }
+          ]
+        },
+        {
+          "@type": "TechArticle",
+          "@id": "https://docs.justlend.org/documents/aidocs/mcp_tools/#article",
+          "headline": "MCP Tool Catalog",
+          "url": "https://docs.justlend.org/documents/aidocs/mcp_tools/",
+          "inLanguage": "en",
+          "isPartOf": {
+            "@type": "WebSite",
+            "@id": "https://docs.justlend.org/#site",
+            "name": "JustLend DAO Documentation",
+            "url": "https://docs.justlend.org/",
+            "publisher": { "@id": "https://justlend.org/#org" }
+          },
+          "about": { "@id": "https://docs.justlend.org/#protocol" },
+          "description": "Generated JustLend MCP tool catalog with routing guidance, side-effect classes, safety annotations, wallet requirements, and source links for AI agents.",
+          "dateModified": "2026-06-17",
+          "datePublished": "2026-06-17"
+        }
+      ]
+    }
+    </script>
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#justlend-mcp-tool-catalog-for-ai-agents" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="JustLend DAO Documentation" class="md-header__button md-logo" aria-label="JustLend DAO Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            JustLend DAO Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              JustLend MCP Tool Catalog for AI Agents
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="JustLend DAO Documentation" class="md-nav__button md-logo" aria-label="JustLend DAO Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    JustLend DAO Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    GETTING STARTED
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            GETTING STARTED
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting_started/overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_2" id="__nav_1_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Concepts
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_2">
+            <span class="md-nav__icon md-icon"></span>
+            Concepts
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting_started/concepts/supply/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Supply
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting_started/concepts/borrow/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Borrow
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting_started/concepts/withdraw/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Withdraw
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting_started/concepts/repay/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Repay
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting_started/concepts/liquidations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Liquidations
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting_started/concepts/risks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Risks
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting_started/concepts/staked_trx/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Staked TRX
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting_started/concepts/energy_rental/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Energy Rental
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting_started/concepts/SBMV2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SBM V2
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://justlend.org/docs/justlend_whitepaper_en.pdf" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Whitepaper
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_4" id="__nav_1_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    FAQs
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_4">
+            <span class="md-nav__icon md-icon"></span>
+            FAQs
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting_started/faqs/wallet_connection_questions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Wallet Connection Questions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting_started/faqs/spending_cap_issue/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Spending Cap Issue During Transactions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://support.justlend.org/hc/en-us/sections/360011389611-Questions" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    More Questions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    GOVERNANCE
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            GOVERNANCE
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../governance/jips/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    JIPs
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../governance/tokenomics/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Tokenomics
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://forum.justlend.org" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Community Forum
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    DEVELOPERS
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            DEVELOPERS
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../developers/contracts_overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contracts Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../developers/justlend_v2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    JustLend V2
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Supply and Borrow Market
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            Supply and Borrow Market
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../developers/supply_and_borrow_market/sbm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SBM
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../developers/supply_and_borrow_market/sbmV2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SBM V2
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../developers/supply_and_borrow_market/interest_rate_model/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Interest Rate Model
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../developers/supply_and_borrow_market/governance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Governance
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../developers/supply_and_borrow_market/price_oracle/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Price Oracle
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../developers/supply_and_borrow_market/comptroller/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Comptroller
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../developers/staked_trx/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Staked TRX
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../developers/energy_rental/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Energy Rental
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../developers/deployed_contracts/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Deployed Contracts
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../developers/apis/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    APIs
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../developers/abis/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ABI Files
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../developers/common_pitfalls/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Common Pitfalls
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    AI SUPPORT
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            AI SUPPORT
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai_support/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai_support/ai_llms/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AI / LLMs
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai_support/mcp_server/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MCP Server
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai_support/justlend_skills/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    JustLend Skills
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    AI Docs for Agents
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            AI Docs for Agents
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Index
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source_of_truth/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Source of Truth
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quickstart
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../market_data/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Market Data
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../account_position/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Account Positions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../supply_borrow_repay_withdraw/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Lending Workflows
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../strx_staking/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    sTRX Staking
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../energy_rental/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Energy Rental
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mcp_safety/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MCP Safety
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../common_questions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Common Questions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../glossary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AI Glossary
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    MCP Tool Catalog
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    MCP Tool Catalog
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        
+
+
+
+<li class="md-nav__item ">
+  <a href="#source-links-and-routing-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Source links and routing rules
+    </span>
+  </a>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item ">
+  <a href="#high-value-tool-groups" class="md-nav__link">
+    <span class="md-ellipsis">
+      High-value tool groups
+    </span>
+  </a>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item ">
+  <a href="#generated-mcp-api-list-justlendmcp-server-justlend-v110" class="md-nav__link">
+    <span class="md-ellipsis">
+      Generated MCP API List
+    </span>
+  </a>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item has-children">
+  <a href="#wallet-network-10" class="md-nav__link" aria-expanded="true">
+    <span class="md-ellipsis">
+      Wallet &amp; Network (10)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Wallet &amp; Network (10)">
+      <ul class="md-nav__list">
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_wallet_address" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_wallet_address
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#list_wallets" class="md-nav__link">
+    <span class="md-ellipsis">
+      list_wallets
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#set_active_wallet" class="md-nav__link">
+    <span class="md-ellipsis">
+      set_active_wallet
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#connect_browser_wallet" class="md-nav__link">
+    <span class="md-ellipsis">
+      connect_browser_wallet
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#set_wallet_mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      set_wallet_mode
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_wallet_mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_wallet_mode
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#set_network" class="md-nav__link">
+    <span class="md-ellipsis">
+      set_network
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_network" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_network
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#transfer_trx" class="md-nav__link">
+    <span class="md-ellipsis">
+      transfer_trx
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#transfer_trc20" class="md-nav__link">
+    <span class="md-ellipsis">
+      transfer_trc20
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item has-children">
+  <a href="#market-data-13" class="md-nav__link" aria-expanded="true">
+    <span class="md-ellipsis">
+      Market Data (13)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Market Data (13)">
+      <ul class="md-nav__list">
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_supported_networks" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_supported_networks
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_supported_markets" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_supported_markets
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_market_data" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_market_data
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_all_markets" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_all_markets
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_protocol_summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_protocol_summary
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_account_summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_account_summary
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#check_allowance" class="md-nav__link">
+    <span class="md-ellipsis">
+      check_allowance
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_trx_balance" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_trx_balance
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_token_balance" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_token_balance
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_wallet_balances" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_wallet_balances
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_mining_rewards" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_mining_rewards
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_usdd_mining_config" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_usdd_mining_config
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_wbtc_mining_config" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_wbtc_mining_config
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item has-children">
+  <a href="#lending-operations-10" class="md-nav__link" aria-expanded="true">
+    <span class="md-ellipsis">
+      Lending Operations (10)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Lending Operations (10)">
+      <ul class="md-nav__list">
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#supply" class="md-nav__link">
+    <span class="md-ellipsis">
+      supply
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#withdraw" class="md-nav__link">
+    <span class="md-ellipsis">
+      withdraw
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#withdraw_all" class="md-nav__link">
+    <span class="md-ellipsis">
+      withdraw_all
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#borrow" class="md-nav__link">
+    <span class="md-ellipsis">
+      borrow
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#repay" class="md-nav__link">
+    <span class="md-ellipsis">
+      repay
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#enter_market" class="md-nav__link">
+    <span class="md-ellipsis">
+      enter_market
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#exit_market" class="md-nav__link">
+    <span class="md-ellipsis">
+      exit_market
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#approve_underlying" class="md-nav__link">
+    <span class="md-ellipsis">
+      approve_underlying
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#claim_rewards" class="md-nav__link">
+    <span class="md-ellipsis">
+      claim_rewards
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#estimate_lending_energy" class="md-nav__link">
+    <span class="md-ellipsis">
+      estimate_lending_energy
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item has-children">
+  <a href="#jst-voting-governance-10" class="md-nav__link" aria-expanded="true">
+    <span class="md-ellipsis">
+      JST Voting / Governance (10)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="JST Voting / Governance (10)">
+      <ul class="md-nav__list">
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_proposal_list" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_proposal_list
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_user_vote_status" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_user_vote_status
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_vote_info" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_vote_info
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_locked_votes" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_locked_votes
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#check_jst_allowance_for_voting" class="md-nav__link">
+    <span class="md-ellipsis">
+      check_jst_allowance_for_voting
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#approve_jst_for_voting" class="md-nav__link">
+    <span class="md-ellipsis">
+      approve_jst_for_voting
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#deposit_jst_for_votes" class="md-nav__link">
+    <span class="md-ellipsis">
+      deposit_jst_for_votes
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#withdraw_votes_to_jst" class="md-nav__link">
+    <span class="md-ellipsis">
+      withdraw_votes_to_jst
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#cast_vote" class="md-nav__link">
+    <span class="md-ellipsis">
+      cast_vote
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#withdraw_votes_from_proposal" class="md-nav__link">
+    <span class="md-ellipsis">
+      withdraw_votes_from_proposal
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item has-children">
+  <a href="#energy-rental-9" class="md-nav__link" aria-expanded="true">
+    <span class="md-ellipsis">
+      Energy Rental (9)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Energy Rental (9)">
+      <ul class="md-nav__list">
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_energy_rental_dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_energy_rental_dashboard
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_energy_rental_params" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_energy_rental_params
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#calculate_energy_rental_price" class="md-nav__link">
+    <span class="md-ellipsis">
+      calculate_energy_rental_price
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_energy_rental_rate" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_energy_rental_rate
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_user_energy_rental_orders" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_user_energy_rental_orders
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_energy_rent_info" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_energy_rent_info
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_return_rental_info" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_return_rental_info
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#rent_energy" class="md-nav__link">
+    <span class="md-ellipsis">
+      rent_energy
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#return_energy_rental" class="md-nav__link">
+    <span class="md-ellipsis">
+      return_energy_rental
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item has-children">
+  <a href="#strx-staking-7" class="md-nav__link" aria-expanded="true">
+    <span class="md-ellipsis">
+      sTRX Staking (7)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="sTRX Staking (7)">
+      <ul class="md-nav__list">
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_strx_dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_strx_dashboard
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_strx_account" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_strx_account
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_strx_balance" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_strx_balance
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#check_strx_withdrawal_eligibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      check_strx_withdrawal_eligibility
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#stake_trx_to_strx" class="md-nav__link">
+    <span class="md-ellipsis">
+      stake_trx_to_strx
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#unstake_strx" class="md-nav__link">
+    <span class="md-ellipsis">
+      unstake_strx
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#claim_strx_rewards" class="md-nav__link">
+    <span class="md-ellipsis">
+      claim_strx_rewards
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item has-children">
+  <a href="#justlend-v2-vaults-6" class="md-nav__link" aria-expanded="true">
+    <span class="md-ellipsis">
+      JustLend V2
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="JustLend V2 — Vaults (6)">
+      <ul class="md-nav__list">
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_moolah_vaults" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_moolah_vaults
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_moolah_vault" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_moolah_vault
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#approve_moolah_vault" class="md-nav__link">
+    <span class="md-ellipsis">
+      approve_moolah_vault
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#moolah_vault_deposit" class="md-nav__link">
+    <span class="md-ellipsis">
+      moolah_vault_deposit
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#moolah_vault_withdraw" class="md-nav__link">
+    <span class="md-ellipsis">
+      moolah_vault_withdraw
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#moolah_vault_redeem" class="md-nav__link">
+    <span class="md-ellipsis">
+      moolah_vault_redeem
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item has-children">
+  <a href="#justlend-v2-markets-8" class="md-nav__link" aria-expanded="true">
+    <span class="md-ellipsis">
+      JustLend V2
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="JustLend V2 — Markets (8)">
+      <ul class="md-nav__list">
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_moolah_markets" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_moolah_markets
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_moolah_market" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_moolah_market
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_moolah_user_position" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_moolah_user_position
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#approve_moolah_proxy" class="md-nav__link">
+    <span class="md-ellipsis">
+      approve_moolah_proxy
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#moolah_supply_collateral" class="md-nav__link">
+    <span class="md-ellipsis">
+      moolah_supply_collateral
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#moolah_withdraw_collateral" class="md-nav__link">
+    <span class="md-ellipsis">
+      moolah_withdraw_collateral
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#moolah_borrow" class="md-nav__link">
+    <span class="md-ellipsis">
+      moolah_borrow
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#moolah_repay" class="md-nav__link">
+    <span class="md-ellipsis">
+      moolah_repay
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item has-children">
+  <a href="#justlend-v2-liquidation-5" class="md-nav__link" aria-expanded="true">
+    <span class="md-ellipsis">
+      JustLend V2
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="JustLend V2 — Liquidation (5)">
+      <ul class="md-nav__list">
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_moolah_pending_liquidations" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_moolah_pending_liquidations
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_moolah_liquidation_quote" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_moolah_liquidation_quote
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_moolah_liquidation_records" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_moolah_liquidation_records
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#moolah_liquidate" class="md-nav__link">
+    <span class="md-ellipsis">
+      moolah_liquidate
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#approve_liquidator_token" class="md-nav__link">
+    <span class="md-ellipsis">
+      approve_liquidator_token
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item has-children">
+  <a href="#justlend-v2-dashboard-history-6" class="md-nav__link" aria-expanded="true">
+    <span class="md-ellipsis">
+      JustLend V2
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="JustLend V2 — Dashboard &amp; History (6)">
+      <ul class="md-nav__list">
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_moolah_dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_moolah_dashboard
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_moolah_history" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_moolah_history
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_moolah_records" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_moolah_records
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_moolah_vault_history" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_moolah_vault_history
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#estimate_moolah_energy" class="md-nav__link">
+    <span class="md-ellipsis">
+      estimate_moolah_energy
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_moolah_market_history" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_moolah_market_history
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item has-children">
+  <a href="#justlend-v2-mining-rewards-estimator-5" class="md-nav__link" aria-expanded="true">
+    <span class="md-ellipsis">
+      JustLend V2
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="JustLend V2 — Mining, Rewards &amp; Estimator (5)">
+      <ul class="md-nav__list">
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_moolah_vault_mining_apy" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_moolah_vault_mining_apy
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_moolah_mining_resolver" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_moolah_mining_resolver
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_moolah_mining_accruing" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_moolah_mining_accruing
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_moolah_pending_mining_periods" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_moolah_pending_mining_periods
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#claim_moolah_mining_period" class="md-nav__link">
+    <span class="md-ellipsis">
+      claim_moolah_mining_period
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item has-children">
+  <a href="#historical-records-7" class="md-nav__link" aria-expanded="true">
+    <span class="md-ellipsis">
+      Historical Records (7)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Historical Records (7)">
+      <ul class="md-nav__list">
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_lending_records" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_lending_records
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_strx_records" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_strx_records
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_vote_records" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_vote_records
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_energy_rental_records" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_energy_rental_records
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_claimable_rewards" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_claimable_rewards
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#claim_v1_mining_period" class="md-nav__link">
+    <span class="md-ellipsis">
+      claim_v1_mining_period
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#get_liquidation_records" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_liquidation_records
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    RESOURCES
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            RESOURCES
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1" id="__nav_5_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Community
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1">
+            <span class="md-nav__icon md-icon"></span>
+            Community
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../resources/community/links/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Links
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../resources/community/wallet_integration_cooperation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Wallet Integration Cooperation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../resources/risk_warning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Risk Warning
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../resources/glossary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Glossary
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_4" id="__nav_5_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Audits
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_4">
+            <span class="md-nav__icon md-icon"></span>
+            Audits
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://justlend.org/docs/justlend_audit_en.pdf" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Supply & Borrow
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://justlend.org/docs/justlend_strx_audit_en.pdf" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Staked TRX
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_5" id="__nav_5_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Terms of Service
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_5">
+            <span class="md-nav__icon md-icon"></span>
+            Terms of Service
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://justlend.org/docs/JustLend_Terms_of_Use_en.pdf" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Terms of Service
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://justlend.org/docs/JustLend_Privacy_Policy_en.pdf" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Privacy Policy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="justlend-mcp-tool-catalog-for-ai-agents">JustLend MCP Tool Catalog for AI Agents<a class="headerlink" href="#justlend-mcp-tool-catalog-for-ai-agents" title="Permanent link">&para;</a></h1>
+<p>Use this page when an AI agent must choose a JustLend MCP tool, inspect required parameters, compare read-only tools with write tools, or explain whether a workflow can sign and broadcast a TRON transaction.</p>
+<p>This docs-local page wraps the generated catalog from the MCP repository so RAG systems can retrieve both routing context and the complete tool list in one chunk set.</p>
+<h2 id="source-links-and-routing-rules">Source links and routing rules<a class="headerlink" href="#source-links-and-routing-rules" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Start with the <a href="../">AI Docs Index</a> for task routing.</li>
+<li>Read <a href="../mcp_safety/">MCP Safety Policy</a> before any write action.</li>
+<li>Use <a href="../source_of_truth/">Source of Truth</a> to choose between OpenAPI, MCP, contracts, ABIs, and human docs.</li>
+<li>Use <a href="../common_questions/">Common Questions</a> for English and Chinese user-intent mapping.</li>
+<li>Use the public API spec at <a href="../../../developers/apis/justlend_apis.yaml"><code>justlend_apis.yaml</code></a> for read-only HTTP integrations.</li>
+</ul>
+<h2 id="high-value-tool-groups">High-value tool groups<a class="headerlink" href="#high-value-tool-groups" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>User intent</th>
+<th>Prefer these MCP tools</th>
+<th>Safety class</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Market list, APY, TVL, utilization</td>
+<td><code>get_supported_markets</code>, <code>get_market_data</code>, <code>get_all_markets</code></td>
+<td>Read-only</td>
+</tr>
+<tr>
+<td>Wallet and account risk</td>
+<td><code>get_wallet_address</code>, <code>get_account_summary</code>, <code>get_balances</code></td>
+<td>Read-only / wallet read</td>
+</tr>
+<tr>
+<td>Supply, borrow, repay, withdraw</td>
+<td><code>supply</code>, <code>borrow</code>, <code>repay</code>, <code>withdraw</code>, <code>withdraw_all</code>, <code>estimate_lending_energy</code></td>
+<td>Writes require HITL</td>
+</tr>
+<tr>
+<td>sTRX staking</td>
+<td><code>get_strx_dashboard</code>, <code>get_strx_account</code>, <code>stake_trx_to_strx</code>, <code>unstake_strx</code>, <code>claim_strx_rewards</code></td>
+<td>Writes require HITL</td>
+</tr>
+<tr>
+<td>Energy rental</td>
+<td><code>get_energy_rental_dashboard</code>, <code>calculate_energy_rental_price</code>, <code>rent_energy</code>, <code>return_energy_rental</code></td>
+<td>Writes require HITL</td>
+</tr>
+</tbody>
+</table>
+<p>Chinese query aliases: “查询市场/APY/TVL” maps to market read tools; “查看我的仓位/健康度” maps to account summary; “帮我存款/借款/还款/赎回/质押/租能量” maps to write tools and must require explicit confirmation.</p>
+<hr />
+<h2 id="generated-mcp-api-list-justlendmcp-server-justlend-v110">Generated MCP API List — <code>@justlend/mcp-server-justlend</code> v1.1.0<a class="headerlink" href="#generated-mcp-api-list-justlendmcp-server-justlend-v110" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>Machine-readable tool catalog (for offline routing).</strong> Auto-generated by <code>scripts/gen-mcp-api-list.ts</code> from the <code>registerTool</code> definitions + Zod inputSchema + MCP annotations in the source — do not edit by hand; after changing any tool run <code>npx tsx scripts/gen-mcp-api-list.ts</code> to regenerate.</p>
+<p>Lets an AI agent plan tool routing offline without connecting to the server. Side-effect classes align with the AI-Agent documentation standard baseline (Safe / Network Read / Remote Write / Destructive).</p>
+</blockquote>
+<p><strong>Total tools</strong>: 96  |  <strong>Protocol</strong>: MCP  |  <strong>Transport</strong>: stdio / HTTP(SSE)</p>
+<p><strong>Read-only tools</strong>: 58  |  <strong>Write tools</strong>: 38 (of which marked destructive: 25)</p>
+<blockquote>
+<p>⚠️ Tools marked 🔴 <strong>sign and broadcast TRON transactions that move real assets</strong> — the client MUST require human confirmation (HITL) before executing. 🟡 tools only change local wallet/network config or start an interaction. Private keys are managed encrypted by <code>@bankofai/agent-wallet</code> or signed via the TronLink browser wallet, and are <strong>never passed as tool arguments</strong>.</p>
+</blockquote>
+<hr />
+<h2 id="wallet-network-10">Wallet &amp; Network (10)<a class="headerlink" href="#wallet-network-10" title="Permanent link">&para;</a></h2>
+<h3 id="get_wallet_address"><code>get_wallet_address</code><a class="headerlink" href="#get_wallet_address" title="Permanent link">&para;</a></h3>
+<p><strong>Get Wallet Address</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: false
+- <strong>Description</strong>: Get the active wallet address. Returns browser wallet address if in browser mode, agent-wallet address if agent mode is selected, or a first-use wallet selection guide if no wallet mode has been chosen yet.
+- <strong>Params</strong>: none</p>
+<h3 id="list_wallets"><code>list_wallets</code><a class="headerlink" href="#list_wallets" title="Permanent link">&para;</a></h3>
+<p><strong>List Wallets</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: false
+- <strong>Description</strong>: List all wallets configured in agent-wallet. Shows wallet IDs, types, active status, and addresses.
+- <strong>Params</strong>: none</p>
+<h3 id="set_active_wallet"><code>set_active_wallet</code><a class="headerlink" href="#set_active_wallet" title="Permanent link">&para;</a></h3>
+<p><strong>Set Active Wallet</strong><br />
+- <strong>Side effect</strong>: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- <strong>annotations</strong>: idempotent: true · openWorld: false
+- <strong>Description</strong>: Set the active wallet by wallet ID. Use list_wallets to see available wallet IDs.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>walletId</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>The wallet ID to set as active</td>
+</tr>
+</tbody>
+</table>
+<h3 id="connect_browser_wallet"><code>connect_browser_wallet</code><a class="headerlink" href="#connect_browser_wallet" title="Permanent link">&para;</a></h3>
+<p><strong>Connect Browser Wallet</strong><br />
+- <strong>Side effect</strong>: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Connect to a browser wallet (TronLink, TokenPocket) for signing transactions. RECOMMENDED: More secure than agent-wallet because private keys never leave your browser. This opens a browser window where the user must approve the connection. Tell the user to switch to their browser to approve. Blocks until the user acts or the request times out (5 min). After connecting, all write operations will use the browser wallet for signing.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>address</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Required TRON address (T...). If set, the user must connect this exact address.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="set_wallet_mode"><code>set_wallet_mode</code><a class="headerlink" href="#set_wallet_mode" title="Permanent link">&para;</a></h3>
+<p><strong>Set Wallet Mode</strong><br />
+- <strong>Side effect</strong>: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- <strong>annotations</strong>: idempotent: true · openWorld: false
+- <strong>Description</strong>: Switch wallet signing mode. 'browser' (recommended, more secure): uses TronLink in your browser — private keys never leave the browser. 'agent': uses encrypted key stored in ~/.agent-wallet/. Selecting agent mode for the first time will create an encrypted agent-wallet if needed. Browser mode requires connect_browser_wallet first.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mode</code></td>
+<td>enum(browser</td>
+<td style="text-align: center;">agent)</td>
+<td>✅</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_wallet_mode"><code>get_wallet_mode</code><a class="headerlink" href="#get_wallet_mode" title="Permanent link">&para;</a></h3>
+<p><strong>Get Wallet Mode</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: false
+- <strong>Description</strong>: Get the current wallet signing mode (browser, agent, or unset), connected address, and connection status.
+- <strong>Params</strong>: none</p>
+<h3 id="set_network"><code>set_network</code><a class="headerlink" href="#set_network" title="Permanent link">&para;</a></h3>
+<p><strong>Set Global Network</strong><br />
+- <strong>Side effect</strong>: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- <strong>annotations</strong>: idempotent: true · openWorld: false
+- <strong>Description</strong>: Set the global default network used by all JustLend operations unless explicitly overridden.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Network name (mainnet, nile).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_network"><code>get_network</code><a class="headerlink" href="#get_network" title="Permanent link">&para;</a></h3>
+<p><strong>Get Global Network</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: false
+- <strong>Description</strong>: Get the current global default network used by all JustLend operations.
+- <strong>Params</strong>: none</p>
+<h3 id="transfer_trx"><code>transfer_trx</code><a class="headerlink" href="#transfer_trx" title="Permanent link">&para;</a></h3>
+<p><strong>Transfer TRX</strong><br />
+- <strong>Side effect</strong>: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Transfer TRX to another TRON address. Checks balance sufficiency (including gas) before sending. Typical cost: ~0 energy + ~270 bandwidth.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>to</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Recipient TRON address (Base58 T... format)</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>string (pattern /^\d+(.\d+)?$/)</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Amount of TRX to transfer (e.g. '1', '10.5')</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="transfer_trc20"><code>transfer_trc20</code><a class="headerlink" href="#transfer_trc20" title="Permanent link">&para;</a></h3>
+<p><strong>Transfer TRC20</strong><br />
+- <strong>Side effect</strong>: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Transfer TRC20 tokens to another TRON address. You can pass a token symbol (e.g. 'USDT', 'JST', 'wstUSDT') or a contract address. Symbol resolution uses the server's known TRON token registry and JustLend underlying-token mappings. Amount is in human-readable units (e.g. '100' for 100 USDT). Checks balance sufficiency before sending.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>to</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Recipient TRON address (Base58 T... format)</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>string (pattern /^\d+(.\d+)?$/)</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Amount to transfer in human-readable units (e.g. '100' for 100 USDT)</td>
+</tr>
+<tr>
+<td><code>token</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Token symbol (e.g. 'USDT', 'JST', 'SUN'). Preferred over tokenAddress.</td>
+</tr>
+<tr>
+<td><code>tokenAddress</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>TRC20 token contract address. Use 'token' parameter instead when possible.</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h2 id="market-data-13">Market Data (13)<a class="headerlink" href="#market-data-13" title="Permanent link">&para;</a></h2>
+<h3 id="get_supported_networks"><code>get_supported_networks</code><a class="headerlink" href="#get_supported_networks" title="Permanent link">&para;</a></h3>
+<p><strong>Get Supported Networks</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: false
+- <strong>Description</strong>: List all supported TRON networks for JustLend.
+- <strong>Params</strong>: none</p>
+<h3 id="get_supported_markets"><code>get_supported_markets</code><a class="headerlink" href="#get_supported_markets" title="Permanent link">&para;</a></h3>
+<p><strong>Get Supported Markets</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: false
+- <strong>Description</strong>: List all available JustLend lending markets (jTokens) with their addresses and underlying assets.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network (mainnet, nile). Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_market_data"><code>get_market_data</code><a class="headerlink" href="#get_market_data" title="Permanent link">&para;</a></h3>
+<p><strong>Get Market Data</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Get detailed market data for a specific JustLend market: supply/borrow APY, TVL, utilization, collateral factor, price, and status. Use jToken symbol like 'jUSDT' or 'jTRX'.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>market</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>jToken symbol (e.g. 'jUSDT', 'jTRX') or jToken address</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_all_markets"><code>get_all_markets</code><a class="headerlink" href="#get_all_markets" title="Permanent link">&para;</a></h3>
+<p><strong>Get All Markets</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Get overview data for ALL JustLend markets including supply APY, borrow APY, mining rewards APY, underlying staking yield, total supply APY, and TVL. Mining APY is calculated from on-chain supply mining programs (USDD/TRX dual mining, WBTC mining, etc.). totalSupplyAPY = base supply APY + underlying staking APY + mining APY.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_protocol_summary"><code>get_protocol_summary</code><a class="headerlink" href="#get_protocol_summary" title="Permanent link">&para;</a></h3>
+<p><strong>Get Protocol Summary</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Get JustLend protocol-level info: Comptroller config, close factor, liquidation incentive, total markets.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_account_summary"><code>get_account_summary</code><a class="headerlink" href="#get_account_summary" title="Permanent link">&para;</a></h3>
+<p><strong>Get Account Summary</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Get a comprehensive view of a user's JustLend positions (supply, borrow, health factor). IMPORTANT: Returns a snapshot tied to a specific block. You MUST call this again after any transaction (supply, withdraw, etc.) to get updated balances and health factor.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>address</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>TRON address (Base58 T... format) to check. Leave empty to use configured wallet.</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="check_allowance"><code>check_allowance</code><a class="headerlink" href="#check_allowance" title="Permanent link">&para;</a></h3>
+<p><strong>Check Allowance</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Check if the underlying TRC20 token has been approved for a jToken market. Must be approved before supply() or repay() for TRC20 markets. Not needed for jTRX. The returned 'allowance' is in human-readable token units (e.g. '1' means 1 USDT, not 1 raw unit). Compare it directly with the amount the user wants to supply/repay. 'allowanceUnit' indicates the token symbol.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>market</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>jToken symbol (e.g. 'jUSDT')</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>string (pattern /^\d+(.\d+)?$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Amount to check sufficiency against (human-readable, e.g. '0.5'). If provided, returns whether allowance is sufficient.</td>
+</tr>
+<tr>
+<td><code>address</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Address to check. Default: configured wallet</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_trx_balance"><code>get_trx_balance</code><a class="headerlink" href="#get_trx_balance" title="Permanent link">&para;</a></h3>
+<p><strong>Get TRX Balance</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Get TRX balance for an address.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>address</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>TRON address. Default: configured wallet</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_token_balance"><code>get_token_balance</code><a class="headerlink" href="#get_token_balance" title="Permanent link">&para;</a></h3>
+<p><strong>Get Token Balance</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Get TRC20 token balance for an address. You can pass either a token symbol (e.g. 'USDD', 'USDT', 'ETH') or a contract address. When using a symbol, it resolves to the correct contract address from JustLend markets automatically. IMPORTANT: Always prefer using token symbols over raw addresses to avoid using outdated/wrong contract addresses. For example, use 'USDD' instead of a raw address — the old USDD (TPYmHEhy5n8TCEfYGqW2rPxsghSfzghPDn) is deprecated. The returned balance is already formatted in human-readable token units (decimals already applied). Do NOT divide the balance by decimals again.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>token</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Token symbol (e.g. 'USDD', 'USDT', 'TRX', 'ETH', 'BTC', 'SUN', 'JST', 'WIN', 'BTT', 'NFT', 'TUSD', 'WBTC', 'USD1', 'wstUSDT', 'sTRX'). Preferred over tokenAddress.</td>
+</tr>
+<tr>
+<td><code>tokenAddress</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>TRC20 token contract address. Use 'token' parameter with a symbol name instead when possible.</td>
+</tr>
+<tr>
+<td><code>address</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>TRON address. Default: configured wallet</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_wallet_balances"><code>get_wallet_balances</code><a class="headerlink" href="#get_wallet_balances" title="Permanent link">&para;</a></h3>
+<p><strong>Get Wallet Token Balances (Batch)</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Batch-fetch TRC20 token balances for a wallet across multiple JustLend markets in a single RPC call using the Multicall3 walletTokensBalance method. Returns human-readable balances (decimals already applied) for all specified tokens at once. Use this instead of calling get_token_balance repeatedly when you need balances for several tokens.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tokens</code></td>
+<td>string[]</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>List of token symbols to check (e.g. ['USDT', 'USDD', 'ETH', 'BTC']). Defaults to all TRC20 underlying tokens across all JustLend markets.</td>
+</tr>
+<tr>
+<td><code>address</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>TRON wallet address. Default: configured wallet</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_mining_rewards"><code>get_mining_rewards</code><a class="headerlink" href="#get_mining_rewards" title="Permanent link">&para;</a></h3>
+<p><strong>Get Mining Rewards</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Get mining rewards for supply markets (USDD, WBTC, etc.). Returns unclaimed rewards, mining APY, and reward breakdown from API.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>address</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>TRON address. Leave empty to use configured wallet.</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_usdd_mining_config"><code>get_usdd_mining_config</code><a class="headerlink" href="#get_usdd_mining_config" title="Permanent link">&para;</a></h3>
+<p><strong>Get USDD Mining Config</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: false
+- <strong>Description</strong>: Get USDD mining configuration including mining periods, reward tokens (USDD/TRX dual mining), and schedule.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_wbtc_mining_config"><code>get_wbtc_mining_config</code><a class="headerlink" href="#get_wbtc_mining_config" title="Permanent link">&para;</a></h3>
+<p><strong>Get WBTC Mining Config</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: false
+- <strong>Description</strong>: Get WBTC mining configuration and supply mining activity details.
+- <strong>Params</strong>: none</p>
+<h2 id="lending-operations-10">Lending Operations (10)<a class="headerlink" href="#lending-operations-10" title="Permanent link">&para;</a></h2>
+<h3 id="supply"><code>supply</code><a class="headerlink" href="#supply" title="Permanent link">&para;</a></h3>
+<p><strong>Supply Assets</strong><br />
+- <strong>Side effect</strong>: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Supply (deposit) assets into a JustLend market to earn interest. For TRC20 markets, you must first call approve_underlying. For jTRX, TRX is sent directly. Returns a jToken balance representing your deposit. Typical cost: ~100,000 energy + ~310 bandwidth for TRC20, ~80,000 energy + ~280 bandwidth for TRX. Use estimate_lending_energy tool for precise estimates before executing.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>market</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>jToken symbol (e.g. 'jUSDT', 'jTRX')</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>string (pattern /^\d+(.\d+)?$/)</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Amount of underlying to supply (e.g. '1000' for 1000 USDT)</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="withdraw"><code>withdraw</code><a class="headerlink" href="#withdraw" title="Permanent link">&para;</a></h3>
+<p><strong>Withdraw Assets</strong><br />
+- <strong>Side effect</strong>: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Withdraw (redeem) supplied assets from a JustLend market. Specify the amount in underlying units. May fail if assets are used as collateral for active borrows. Typical cost: ~90,000 energy + ~300 bandwidth.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>market</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>jToken symbol (e.g. 'jUSDT', 'jTRX')</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>string (pattern /^\d+(.\d+)?$/)</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Amount of underlying to withdraw (e.g. '500')</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="withdraw_all"><code>withdraw_all</code><a class="headerlink" href="#withdraw_all" title="Permanent link">&para;</a></h3>
+<p><strong>Withdraw All</strong><br />
+- <strong>Side effect</strong>: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Withdraw ALL supplied assets from a JustLend market by redeeming all jTokens. Typical cost: ~90,000 energy + ~300 bandwidth.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>market</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>jToken symbol (e.g. 'jUSDT')</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="borrow"><code>borrow</code><a class="headerlink" href="#borrow" title="Permanent link">&para;</a></h3>
+<p><strong>Borrow Assets</strong><br />
+- <strong>Side effect</strong>: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Borrow assets from a JustLend market against your collateral. You must have entered a market as collateral (enter_market) and have sufficient liquidity. Check your account_summary and health_factor before borrowing. Typical cost: ~100,000 energy + ~313 bandwidth.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>market</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>jToken symbol (e.g. 'jUSDT', 'jTRX')</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>string (pattern /^\d+(.\d+)?$/)</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Amount of underlying to borrow (e.g. '500')</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="repay"><code>repay</code><a class="headerlink" href="#repay" title="Permanent link">&para;</a></h3>
+<p><strong>Repay Borrow</strong><br />
+- <strong>Side effect</strong>: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Repay borrowed assets to a JustLend market. For TRC20 markets, must have approved underlying first. Use amount='max' to repay the full outstanding borrow. Typical cost: <sub>80,000</sub>90,000 energy + <sub>280</sub>320 bandwidth (TRX costs less than TRC20).</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>market</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>jToken symbol (e.g. 'jUSDT', 'jTRX')</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>string (pattern /^(\d+(.\d+)?</td>
+<td style="text-align: center;">max)$/)</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="enter_market"><code>enter_market</code><a class="headerlink" href="#enter_market" title="Permanent link">&para;</a></h3>
+<p><strong>Enter Market (Enable Collateral)</strong><br />
+- <strong>Side effect</strong>: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Enable a jToken market as collateral. Required before borrowing against supplied assets. Once entered, your supply in this market counts towards your borrowing capacity. Typical cost: ~80,000 energy + ~300 bandwidth.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>market</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>jToken symbol (e.g. 'jUSDT', 'jTRX')</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="exit_market"><code>exit_market</code><a class="headerlink" href="#exit_market" title="Permanent link">&para;</a></h3>
+<p><strong>Exit Market (Disable Collateral)</strong><br />
+- <strong>Side effect</strong>: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Disable a jToken market as collateral. Pre-checks: 1) market must have no outstanding borrows; 2) remaining collateral must still cover all borrows. Typical cost: ~50,000 energy + ~280 bandwidth.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>market</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>jToken symbol (e.g. 'jUSDT')</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="approve_underlying"><code>approve_underlying</code><a class="headerlink" href="#approve_underlying" title="Permanent link">&para;</a></h3>
+<p><strong>Approve Underlying Token</strong><br />
+- <strong>Side effect</strong>: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Approve the jToken contract to spend your underlying TRC20 tokens. Required before supply() or repay() for TRC20-backed markets (not needed for jTRX). Pass the EXACT amount you intend to use (recommended). Pass amount='max' for unlimited approval ONLY when the user explicitly opts in — it lets the jToken contract spend the user's entire balance, present and future, until revoked. Typical cost: ~23,000 energy + ~265 bandwidth.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>market</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>jToken symbol (e.g. 'jUSDT')</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>string (pattern /^(\d+(.\d+)?</td>
+<td style="text-align: center;">max)$/)</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="claim_rewards"><code>claim_rewards</code><a class="headerlink" href="#claim_rewards" title="Permanent link">&para;</a></h3>
+<p><strong>Claim Rewards</strong><br />
+- <strong>Side effect</strong>: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Claim accrued JustLend mining rewards for the configured wallet. Typical cost: ~60,000 energy + ~330 bandwidth.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="estimate_lending_energy"><code>estimate_lending_energy</code><a class="headerlink" href="#estimate_lending_energy" title="Permanent link">&para;</a></h3>
+<p><strong>Estimate Operation Resources</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Estimate energy, bandwidth, and TRX cost for any JustLend operation BEFORE executing it. Covers ALL operations: supply, withdraw, withdraw_all, borrow, repay, approve, enter_market, exit_market, claim_rewards. Tries on-chain simulation first; falls back to historical typical values if simulation fails. Returns per-step breakdown (e.g. approve + mint for supply), total energy, total bandwidth, and estimated TRX cost. For supply/repay: automatically checks current allowance — if sufficient, the approve step is skipped. For approve: supports custom spender address (not just jToken). Use this tool whenever the user asks about gas/energy/cost for any lending operation.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>operation</code></td>
+<td>enum(supply</td>
+<td style="text-align: center;">withdraw</td>
+<td>withdraw_all</td>
+<td>borrow</td>
+</tr>
+<tr>
+<td><code>market</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>jToken symbol (e.g. 'jUSDT', 'jTRX', 'jUSDD'). Required for all operations except claim_rewards.</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>string (pattern /^\d+(.\d+)?$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Amount in underlying token units (e.g. '100'). Default: '1'. Not needed for enter_market, exit_market, approve, withdraw_all, claim_rewards.</td>
+</tr>
+<tr>
+<td><code>spender</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Custom spender address for approve operation. Default: jToken contract address. Only used when operation is 'approve'.</td>
+</tr>
+<tr>
+<td><code>address</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>TRON address for simulation. Default: configured wallet</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h2 id="jst-voting-governance-10">JST Voting / Governance (10)<a class="headerlink" href="#jst-voting-governance-10" title="Permanent link">&para;</a></h2>
+<h3 id="get_proposal_list"><code>get_proposal_list</code><a class="headerlink" href="#get_proposal_list" title="Permanent link">&para;</a></h3>
+<p><strong>Get Proposal List</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Get the list of JustLend DAO governance proposals. Returns proposals with their status (Active, Passed, Defeated, etc.), vote counts, and details. Sorted by newest first.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+<tr>
+<td><code>limit</code></td>
+<td>number</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Max number of proposals to return. Default: 10. Use 0 for all.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_user_vote_status"><code>get_user_vote_status</code><a class="headerlink" href="#get_user_vote_status" title="Permanent link">&para;</a></h3>
+<p><strong>Get User Vote Status</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Get a user's voting status across all governance proposals. Shows which proposals the user has voted on, their vote amounts (for/against/abstain), and which proposals have withdrawable votes.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>address</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>TRON address. Default: configured wallet</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_vote_info"><code>get_vote_info</code><a class="headerlink" href="#get_vote_info" title="Permanent link">&para;</a></h3>
+<p><strong>Get Vote Info</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Get voting power info for a user: JST wallet balance, available (surplus) votes, total deposited votes, and votes currently cast in proposals. This is the key tool to check before voting — it shows how many votes are available to use.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>address</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>TRON address. Default: configured wallet</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_locked_votes"><code>get_locked_votes</code><a class="headerlink" href="#get_locked_votes" title="Permanent link">&para;</a></h3>
+<p><strong>Get Locked Votes</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Get the number of votes a user has locked in a specific proposal.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>proposalId</code></td>
+<td>number</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>The proposal ID to check</td>
+</tr>
+<tr>
+<td><code>address</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>TRON address. Default: configured wallet</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="check_jst_allowance_for_voting"><code>check_jst_allowance_for_voting</code><a class="headerlink" href="#check_jst_allowance_for_voting" title="Permanent link">&para;</a></h3>
+<p><strong>Check JST Voting Allowance</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Check if JST has been approved for the WJST voting contract. Must be approved before depositing JST to get votes.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>address</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>TRON address. Default: configured wallet</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="approve_jst_for_voting"><code>approve_jst_for_voting</code><a class="headerlink" href="#approve_jst_for_voting" title="Permanent link">&para;</a></h3>
+<p><strong>Approve JST for Voting</strong><br />
+- <strong>Side effect</strong>: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Approve JST token for the WJST voting contract. Required before depositing JST to get voting power. Pass the EXACT amount you intend to deposit (recommended). Pass amount='max' for unlimited approval ONLY when the user explicitly opts in — it lets the WJST contract spend the user's entire JST balance, present and future, until revoked.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>amount</code></td>
+<td>string (pattern /^(\d+(.\d+)?</td>
+<td style="text-align: center;">max)$/)</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="deposit_jst_for_votes"><code>deposit_jst_for_votes</code><a class="headerlink" href="#deposit_jst_for_votes" title="Permanent link">&para;</a></h3>
+<p><strong>Deposit JST for Votes</strong><br />
+- <strong>Side effect</strong>: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Deposit JST into the WJST contract to get voting power. Requires prior approval of JST for the WJST contract (use approve_jst_for_voting first). 1 JST = 1 Vote. Deposited JST can be withdrawn back after voting.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>amount</code></td>
+<td>string (pattern /^\d+(.\d+)?$/)</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Amount of JST to deposit (e.g. '1000')</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="withdraw_votes_to_jst"><code>withdraw_votes_to_jst</code><a class="headerlink" href="#withdraw_votes_to_jst" title="Permanent link">&para;</a></h3>
+<p><strong>Withdraw Votes to JST</strong><br />
+- <strong>Side effect</strong>: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Withdraw WJST back to JST. Can only withdraw votes that are not currently locked in active proposals. Use get_vote_info to check your surplus (available) votes before withdrawing.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>amount</code></td>
+<td>string (pattern /^\d+(.\d+)?$/)</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Amount of votes/WJST to withdraw back to JST (e.g. '1000')</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cast_vote"><code>cast_vote</code><a class="headerlink" href="#cast_vote" title="Permanent link">&para;</a></h3>
+<p><strong>Cast Vote</strong><br />
+- <strong>Side effect</strong>: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Cast a vote on a governance proposal. You must have available votes (deposit JST first if needed). Support: true = vote FOR, false = vote AGAINST. You can add more votes to a proposal you already voted on.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>proposalId</code></td>
+<td>number</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>The proposal ID to vote on</td>
+</tr>
+<tr>
+<td><code>support</code></td>
+<td>boolean</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>true = vote FOR the proposal, false = vote AGAINST</td>
+</tr>
+<tr>
+<td><code>votes</code></td>
+<td>string (pattern /^\d+(.\d+)?$/)</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Amount of votes to cast (e.g. '1000')</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="withdraw_votes_from_proposal"><code>withdraw_votes_from_proposal</code><a class="headerlink" href="#withdraw_votes_from_proposal" title="Permanent link">&para;</a></h3>
+<p><strong>Withdraw Votes from Proposal</strong><br />
+- <strong>Side effect</strong>: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Withdraw (reclaim) votes from a completed or canceled proposal. Only works for proposals that are no longer active. After withdrawing, the votes become available again for other proposals or can be converted back to JST.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>proposalId</code></td>
+<td>number</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>The proposal ID to withdraw votes from</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h2 id="energy-rental-9">Energy Rental (9)<a class="headerlink" href="#energy-rental-9" title="Permanent link">&para;</a></h2>
+<h3 id="get_energy_rental_dashboard"><code>get_energy_rental_dashboard</code><a class="headerlink" href="#get_energy_rental_dashboard" title="Permanent link">&para;</a></h3>
+<p><strong>Energy Rental Dashboard</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Get JustLend energy rental market dashboard data including TRX price, exchange rate, total APY, energy per TRX, total supply, and other market parameters.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_energy_rental_params"><code>get_energy_rental_params</code><a class="headerlink" href="#get_energy_rental_params" title="Permanent link">&para;</a></h3>
+<p><strong>Energy Rental Parameters</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Get on-chain energy rental parameters: liquidation threshold, fee ratio, min fee, total delegated/frozen TRX, max rentable amount, rent paused status, usage charge ratio.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="calculate_energy_rental_price"><code>calculate_energy_rental_price</code><a class="headerlink" href="#calculate_energy_rental_price" title="Permanent link">&para;</a></h3>
+<p><strong>Calculate Energy Rental Price</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Calculate the cost to rent a specific amount of energy for a given duration. Returns TRX amount needed, rental rate, fee, total prepayment, security deposit, and daily cost. For NEW rentals: provide energyAmount and durationHours. For RENEWALS: provide energyAmount and receiverAddress. The tool auto-detects existing rentals and calculates the incremental cost (subtracting existing security deposit). durationHours is optional for renewals (defaults to 0 = no additional time).</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>energyAmount</code></td>
+<td>number (min 50000)</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Amount of energy to rent (minimum 300,000 for new rental, minimum 50,000 for renewal)</td>
+</tr>
+<tr>
+<td><code>durationHours</code></td>
+<td>number (min 0)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Rental duration in hours. Required for new rentals (minimum 1). Optional for renewals (default 0 = no additional time).</td>
+</tr>
+<tr>
+<td><code>receiverAddress</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Receiver address. If provided, checks for existing rental to calculate renewal cost.</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_energy_rental_rate"><code>get_energy_rental_rate</code><a class="headerlink" href="#get_energy_rental_rate" title="Permanent link">&para;</a></h3>
+<p><strong>Energy Rental Rate</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Get the current energy rental rate for a given TRX amount. Returns rental rate, stable rate, and effective rate (max of both).</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>trxAmount</code></td>
+<td>number (min 0)</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>TRX amount to check rate for (0 for base rate)</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_user_energy_rental_orders"><code>get_user_energy_rental_orders</code><a class="headerlink" href="#get_user_energy_rental_orders" title="Permanent link">&para;</a></h3>
+<p><strong>User Energy Rental Orders</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Get a user's energy rental orders from JustLend. Can filter by role: 'renter' (orders where user is renting out), 'receiver' (orders where user receives energy), or 'all'.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>address</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Address to query. Default: configured wallet</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td>enum(renter</td>
+<td style="text-align: center;">receiver</td>
+<td>all)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>page</code></td>
+<td>number</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Page number (0-indexed). Default: 0</td>
+</tr>
+<tr>
+<td><code>pageSize</code></td>
+<td>number</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Results per page. Default: 10</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_energy_rent_info"><code>get_energy_rent_info</code><a class="headerlink" href="#get_energy_rent_info" title="Permanent link">&para;</a></h3>
+<p><strong>Energy Rent Info</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Get on-chain energy rental info for a specific renter-receiver pair. Returns security deposit, rent balance, and whether an active rental exists.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>renterAddress</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Renter address. Default: configured wallet</td>
+</tr>
+<tr>
+<td><code>receiverAddress</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Receiver address</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_return_rental_info"><code>get_return_rental_info</code><a class="headerlink" href="#get_return_rental_info" title="Permanent link">&para;</a></h3>
+<p><strong>Return Rental Info</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Get estimated refund info for returning/canceling an energy rental. Shows how much TRX would be refunded (estimatedRefundTrx), remaining rent, security deposit, usage rental cost, unrecovered energy, and daily rent cost.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>renterAddress</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Renter address. Default: configured wallet</td>
+</tr>
+<tr>
+<td><code>receiverAddress</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Receiver address</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="rent_energy"><code>rent_energy</code><a class="headerlink" href="#rent_energy" title="Permanent link">&para;</a></h3>
+<p><strong>Rent Energy</strong><br />
+- <strong>Side effect</strong>: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Rent energy from JustLend for a specified receiver address. Automatically calculates TRX needed based on energy amount. For NEW rentals: durationHours is required (minimum 1 hour), minimum energy is 300,000. For RENEWALS (existing active rental to the same receiver): durationHours is NOT needed — the remaining duration from the existing order is used automatically. Minimum energy for renewal is 50,000. Pre-checks: rental not paused, amount within limits, sufficient TRX balance.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>receiverAddress</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Address that will receive the energy</td>
+</tr>
+<tr>
+<td><code>energyAmount</code></td>
+<td>number (min 50000)</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Amount of energy to rent (minimum 300,000 for new rental, minimum 50,000 for renewal)</td>
+</tr>
+<tr>
+<td><code>durationHours</code></td>
+<td>number (min 1)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Rental duration in hours (minimum 1 hour). Required for new rentals. Ignored for renewals (uses existing order's remaining duration).</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="return_energy_rental"><code>return_energy_rental</code><a class="headerlink" href="#return_energy_rental" title="Permanent link">&para;</a></h3>
+<p><strong>Return Energy Rental</strong><br />
+- <strong>Side effect</strong>: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Return (cancel) an active energy rental. As a renter, provide the receiver address. As a receiver, provide the renter address. Pre-checks: active rental must exist between the two addresses.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>counterpartyAddress</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>The other party's address (receiver if you are renter, renter if you are receiver)</td>
+</tr>
+<tr>
+<td><code>endOrderType</code></td>
+<td>enum(renter</td>
+<td style="text-align: center;">receiver)</td>
+<td>—</td>
+<td></td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h2 id="strx-staking-7">sTRX Staking (7)<a class="headerlink" href="#strx-staking-7" title="Permanent link">&para;</a></h2>
+<h3 id="get_strx_dashboard"><code>get_strx_dashboard</code><a class="headerlink" href="#get_strx_dashboard" title="Permanent link">&para;</a></h3>
+<p><strong>sTRX Dashboard</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Get sTRX staking dashboard data including TRX price, sTRX/TRX exchange rate, total APY, vote APY, total supply, unfreeze delay days, and energy stake per TRX.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_strx_account"><code>get_strx_account</code><a class="headerlink" href="#get_strx_account" title="Permanent link">&para;</a></h3>
+<p><strong>sTRX Account Info</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Get user's sTRX staking account info including staked amount, income, claimable rewards, withdrawn amount, and rental energy amount.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>address</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Address to query. Default: configured wallet</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_strx_balance"><code>get_strx_balance</code><a class="headerlink" href="#get_strx_balance" title="Permanent link">&para;</a></h3>
+<p><strong>sTRX Balance</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Get the sTRX token balance for an address.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>address</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Address to check. Default: configured wallet</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="check_strx_withdrawal_eligibility"><code>check_strx_withdrawal_eligibility</code><a class="headerlink" href="#check_strx_withdrawal_eligibility" title="Permanent link">&para;</a></h3>
+<p><strong>Check sTRX Withdrawal Eligibility</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Check if user has TRX available to withdraw after sTRX unstaking unbonding period. Shows staked amount, claimable rewards, pending/completed unstake rounds, and withdrawal status.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>address</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Address to check. Default: configured wallet</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="stake_trx_to_strx"><code>stake_trx_to_strx</code><a class="headerlink" href="#stake_trx_to_strx" title="Permanent link">&para;</a></h3>
+<p><strong>Stake TRX to sTRX</strong><br />
+- <strong>Side effect</strong>: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Stake TRX via JustLend to receive sTRX tokens. sTRX earns staking rewards (vote APY + energy rental income). Pre-checks: sufficient TRX balance for staking amount + gas.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>amount</code></td>
+<td>string (pattern /^\d+(.\d+)?$/)</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Amount of TRX to stake (human-readable decimal string, e.g. '1' or '10.5')</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="unstake_strx"><code>unstake_strx</code><a class="headerlink" href="#unstake_strx" title="Permanent link">&para;</a></h3>
+<p><strong>Unstake sTRX</strong><br />
+- <strong>Side effect</strong>: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Unstake sTRX to receive TRX back. Note: unstaked TRX has an unbonding period (typically 14 days) before withdrawal. Pre-checks: sufficient sTRX balance.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>amount</code></td>
+<td>string (pattern /^\d+(.\d+)?$/)</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Amount of sTRX to unstake (human-readable decimal string, e.g. '1' or '10.5')</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="claim_strx_rewards"><code>claim_strx_rewards</code><a class="headerlink" href="#claim_strx_rewards" title="Permanent link">&para;</a></h3>
+<p><strong>Claim sTRX Rewards</strong><br />
+- <strong>Side effect</strong>: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Claim all available sTRX staking rewards. Pre-checks: verifies there are claimable rewards before executing.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h2 id="justlend-v2-vaults-6">JustLend V2 — Vaults (6)<a class="headerlink" href="#justlend-v2-vaults-6" title="Permanent link">&para;</a></h2>
+<h3 id="get_moolah_vaults"><code>get_moolah_vaults</code><a class="headerlink" href="#get_moolah_vaults" title="Permanent link">&para;</a></h3>
+<p><strong>Get V2 Vaults</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: List all JustLend V2 vaults with APY, TVL, and underlying token. Vaults are ERC4626 — deposit tokens to earn auto-compounding yield allocated across V2 markets.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>depositToken</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Filter by deposit token symbol (e.g. 'USDT', 'TRX')</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_moolah_vault"><code>get_moolah_vault</code><a class="headerlink" href="#get_moolah_vault" title="Permanent link">&para;</a></h3>
+<p><strong>Get V2 Vault</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Get detailed info for a single V2 vault: APY, TVL, allocation, and the user's share balance if address is provided. vaultSymbol is 'TRX', 'USDT', or 'USDD'.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vaultSymbol</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Vault symbol: 'TRX', 'USDT', or 'USDD'</td>
+</tr>
+<tr>
+<td><code>address</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>User address to include share balance. Default: configured wallet</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="approve_moolah_vault"><code>approve_moolah_vault</code><a class="headerlink" href="#approve_moolah_vault" title="Permanent link">&para;</a></h3>
+<p><strong>Approve V2 Vault</strong><br />
+- <strong>Side effect</strong>: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Approve TRC20 token spending for a V2 vault before depositing. Not needed for TRX vaults. Pass the EXACT amount you intend to deposit (recommended). Pass amount='max' for unlimited approval ONLY when the user explicitly opts in — it lets the vault contract spend the user's entire balance, present and future, until revoked (amount='0').</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vaultSymbol</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Vault symbol: 'USDT' or 'USDD'</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>string (pattern /^(\d+(.\d+)?</td>
+<td style="text-align: center;">max)$/)</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="moolah_vault_deposit"><code>moolah_vault_deposit</code><a class="headerlink" href="#moolah_vault_deposit" title="Permanent link">&para;</a></h3>
+<p><strong>V2 Vault Deposit</strong><br />
+- <strong>Side effect</strong>: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Deposit assets into a V2 ERC4626 vault to earn yield. For TRC20 vaults (USDT, USDD), call approve_moolah_vault first. Returns vault shares representing your deposit.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vaultSymbol</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Vault symbol: 'TRX', 'USDT', or 'USDD'</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Amount of underlying to deposit (e.g. '1000' for 1000 USDT)</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="moolah_vault_withdraw"><code>moolah_vault_withdraw</code><a class="headerlink" href="#moolah_vault_withdraw" title="Permanent link">&para;</a></h3>
+<p><strong>V2 Vault Withdraw</strong><br />
+- <strong>Side effect</strong>: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Withdraw underlying assets from a V2 vault by specifying the asset amount. Use amount='max' to withdraw everything. No approval needed.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vaultSymbol</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Vault symbol: 'TRX', 'USDT', or 'USDD'</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Amount of underlying to withdraw, or 'max' for full withdrawal</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="moolah_vault_redeem"><code>moolah_vault_redeem</code><a class="headerlink" href="#moolah_vault_redeem" title="Permanent link">&para;</a></h3>
+<p><strong>V2 Vault Redeem</strong><br />
+- <strong>Side effect</strong>: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Redeem vault shares to receive underlying assets. Use shares='max' to redeem all shares. No approval needed.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vaultSymbol</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Vault symbol: 'TRX', 'USDT', or 'USDD'</td>
+</tr>
+<tr>
+<td><code>shares</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Number of shares to redeem, or 'max' for all shares</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h2 id="justlend-v2-markets-8">JustLend V2 — Markets (8)<a class="headerlink" href="#justlend-v2-markets-8" title="Permanent link">&para;</a></h2>
+<h3 id="get_moolah_markets"><code>get_moolah_markets</code><a class="headerlink" href="#get_moolah_markets" title="Permanent link">&para;</a></h3>
+<p><strong>Get V2 Markets</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: List JustLend V2 markets with borrow/supply APY, LLTV, utilization, and liquidity. Markets are isolated — each has its own loan token, collateral token, oracle, and LLTV.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>depositToken</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Filter by loan token symbol (e.g. 'USDT')</td>
+</tr>
+<tr>
+<td><code>collateralToken</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Filter by collateral token symbol (e.g. 'TRX')</td>
+</tr>
+<tr>
+<td><code>pageSize</code></td>
+<td>number</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Max results. Default: 20</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_moolah_market"><code>get_moolah_market</code><a class="headerlink" href="#get_moolah_market" title="Permanent link">&para;</a></h3>
+<p><strong>Get V2 Market</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Get full details for a single V2 market by its marketId (bytes32 hex). Includes APY, LLTV, utilization, total supply/borrow, and vaults supplying to this market. Use get_moolah_markets to find marketIds.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>marketId</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Market ID (bytes32 hex, e.g. '0xabc...')</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_moolah_user_position"><code>get_moolah_user_position</code><a class="headerlink" href="#get_moolah_user_position" title="Permanent link">&para;</a></h3>
+<p><strong>Get V2 User Position</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Get a user's position in a specific V2 market: collateral, borrow amount, lltv, and risk ratio. risk close to 1.0 means the position is near liquidation — consider repaying or adding collateral.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>marketId</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Market ID (bytes32 hex)</td>
+</tr>
+<tr>
+<td><code>address</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>User address. Default: configured wallet</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="approve_moolah_proxy"><code>approve_moolah_proxy</code><a class="headerlink" href="#approve_moolah_proxy" title="Permanent link">&para;</a></h3>
+<p><strong>Approve V2 Proxy</strong><br />
+- <strong>Side effect</strong>: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Approve TRC20 token spending for the V2 core contract before supplying collateral or repaying. Not needed for TRX operations. Pass the EXACT amount you intend to use (recommended). Pass amount='max' for unlimited approval ONLY when the user explicitly opts in — it lets the V2 proxy spend the user's entire balance, present and future, until revoked (amount='0').</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tokenAddress</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>TRC20 contract address (Base58)</td>
+</tr>
+<tr>
+<td><code>tokenSymbol</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Token symbol for display (e.g. 'USDT')</td>
+</tr>
+<tr>
+<td><code>tokenDecimals</code></td>
+<td>number</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Token decimals (e.g. 6 for USDT)</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>string (pattern /^(\d+(.\d+)?</td>
+<td style="text-align: center;">max)$/)</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="moolah_supply_collateral"><code>moolah_supply_collateral</code><a class="headerlink" href="#moolah_supply_collateral" title="Permanent link">&para;</a></h3>
+<p><strong>V2 Supply Collateral</strong><br />
+- <strong>Side effect</strong>: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Supply collateral into a V2 market to enable borrowing. For TRC20 collateral, call approve_moolah_proxy first. For TRX collateral, TRX is sent directly with no prior approval.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>marketId</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Market ID (bytes32 hex) — from get_moolah_markets</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Amount of collateral to supply (e.g. '10000' for 10000 TRX)</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="moolah_withdraw_collateral"><code>moolah_withdraw_collateral</code><a class="headerlink" href="#moolah_withdraw_collateral" title="Permanent link">&para;</a></h3>
+<p><strong>V2 Withdraw Collateral</strong><br />
+- <strong>Side effect</strong>: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Withdraw collateral from a V2 market. Use amount='max' to withdraw all collateral (only allowed when no active borrows). Withdrawing too much while borrowing will revert — check health factor first.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>marketId</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Market ID (bytes32 hex)</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Amount of collateral to withdraw, or 'max' for all (requires no active borrows)</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="moolah_borrow"><code>moolah_borrow</code><a class="headerlink" href="#moolah_borrow" title="Permanent link">&para;</a></h3>
+<p><strong>V2 Borrow</strong><br />
+- <strong>Side effect</strong>: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Flexible V2 borrow entry point. Provide collateralAmount only → supply collateral without borrowing. Provide borrowAmount only → borrow against existing collateral. Provide both → supply collateral then borrow in two sequential transactions. Collateral must cover the borrow at the market's LLTV or the borrow tx reverts.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>marketId</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Market ID (bytes32 hex) — from get_moolah_markets</td>
+</tr>
+<tr>
+<td><code>collateralAmount</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Collateral to supply first (e.g. '10000' TRX). Omit to skip.</td>
+</tr>
+<tr>
+<td><code>borrowAmount</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Loan token amount to borrow (e.g. '500' USDT). Omit to skip.</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="moolah_repay"><code>moolah_repay</code><a class="headerlink" href="#moolah_repay" title="Permanent link">&para;</a></h3>
+<p><strong>V2 Repay</strong><br />
+- <strong>Side effect</strong>: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Repay a V2 market loan. Use amount='max' to repay the full outstanding borrow (uses shares math for exact settlement). For TRC20 loan tokens, call approve_moolah_proxy first. For TRX loans, TRX is sent directly.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>marketId</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Market ID (bytes32 hex)</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Loan amount to repay, or 'max' for full repayment</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h2 id="justlend-v2-liquidation-5">JustLend V2 — Liquidation (5)<a class="headerlink" href="#justlend-v2-liquidation-5" title="Permanent link">&para;</a></h2>
+<h3 id="get_moolah_pending_liquidations"><code>get_moolah_pending_liquidations</code><a class="headerlink" href="#get_moolah_pending_liquidations" title="Permanent link">&para;</a></h3>
+<p><strong>Get Pending Liquidations</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: List V2 positions eligible or approaching liquidation. riskLevel &gt; 1.0 means the position is liquidatable right now. Use minRiskLevel=0.9 to find positions near the threshold.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>minRiskLevel</code></td>
+<td>number</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Minimum risk level (e.g. 0.9 for near-liquidatable, 1.0 for liquidatable now)</td>
+</tr>
+<tr>
+<td><code>maxRiskLevel</code></td>
+<td>number</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Maximum risk level filter</td>
+</tr>
+<tr>
+<td><code>debtToken</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Filter by loan token symbol (e.g. 'USDT')</td>
+</tr>
+<tr>
+<td><code>collateralToken</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Filter by collateral token symbol (e.g. 'TRX')</td>
+</tr>
+<tr>
+<td><code>page</code></td>
+<td>number</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Page number (0-indexed). Default: 0</td>
+</tr>
+<tr>
+<td><code>pageSize</code></td>
+<td>number</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Results per page. Default: 20</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_moolah_liquidation_quote"><code>get_moolah_liquidation_quote</code><a class="headerlink" href="#get_moolah_liquidation_quote" title="Permanent link">&para;</a></h3>
+<p><strong>Get Liquidation Quote</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Estimate the loan token cost to liquidate a position. Provide either seizedAssets (collateral to take) OR repaidShares (borrow shares to repay), not both. Returns the exact loan token amount needed. Use this before calling moolah_liquidate.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>marketId</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Market ID (bytes32 hex)</td>
+</tr>
+<tr>
+<td><code>seizedAssets</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Collateral amount to seize (raw units). Provide this OR repaidShares.</td>
+</tr>
+<tr>
+<td><code>repaidShares</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Borrow shares to repay (raw units). Provide this OR seizedAssets.</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_moolah_liquidation_records"><code>get_moolah_liquidation_records</code><a class="headerlink" href="#get_moolah_liquidation_records" title="Permanent link">&para;</a></h3>
+<p><strong>Get Liquidation Records</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Historical liquidation events on V2 — both bot-executed and public liquidations.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>type</code></td>
+<td>enum(bot</td>
+<td style="text-align: center;">public)</td>
+<td>—</td>
+<td></td>
+</tr>
+<tr>
+<td><code>debtToken</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Filter by loan token symbol</td>
+</tr>
+<tr>
+<td><code>collateralToken</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Filter by collateral token symbol</td>
+</tr>
+<tr>
+<td><code>page</code></td>
+<td>number</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Page number (0-indexed). Default: 0</td>
+</tr>
+<tr>
+<td><code>pageSize</code></td>
+<td>number</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Results per page. Default: 20</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="moolah_liquidate"><code>moolah_liquidate</code><a class="headerlink" href="#moolah_liquidate" title="Permanent link">&para;</a></h3>
+<p><strong>V2 Liquidate</strong><br />
+- <strong>Side effect</strong>: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Liquidate an undercollateralized V2 position. You must hold the loan token and have approved it via approve_liquidator_token. Provide EITHER seizedAssets (collateral to seize) OR repaidShares (borrow shares to repay), not both. Use get_moolah_liquidation_quote first to estimate the required loan token amount.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>marketId</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Market ID (bytes32 hex)</td>
+</tr>
+<tr>
+<td><code>borrower</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Address of the borrower to liquidate (Base58)</td>
+</tr>
+<tr>
+<td><code>seizedAssets</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Collateral units to seize (raw). Provide this OR repaidShares.</td>
+</tr>
+<tr>
+<td><code>repaidShares</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Borrow shares to repay (raw). Provide this OR seizedAssets.</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="approve_liquidator_token"><code>approve_liquidator_token</code><a class="headerlink" href="#approve_liquidator_token" title="Permanent link">&para;</a></h3>
+<p><strong>Approve Liquidator Token</strong><br />
+- <strong>Side effect</strong>: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Approve loan token spending for the V2 public liquidator contract. Required before calling moolah_liquidate. Pass the EXACT amount you intend to use (recommended). Pass amount='max' for unlimited approval ONLY when the user explicitly opts in — it lets the liquidator contract spend the user's entire balance, present and future, until revoked (amount='0').</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tokenAddress</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Loan token contract address (Base58)</td>
+</tr>
+<tr>
+<td><code>tokenSymbol</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Token symbol for display (e.g. 'USDT')</td>
+</tr>
+<tr>
+<td><code>tokenDecimals</code></td>
+<td>number</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Token decimals (e.g. 6 for USDT)</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>string (pattern /^(\d+(.\d+)?</td>
+<td style="text-align: center;">max)$/)</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h2 id="justlend-v2-dashboard-history-6">JustLend V2 — Dashboard &amp; History (6)<a class="headerlink" href="#justlend-v2-dashboard-history-6" title="Permanent link">&para;</a></h2>
+<h3 id="get_moolah_dashboard"><code>get_moolah_dashboard</code><a class="headerlink" href="#get_moolah_dashboard" title="Permanent link">&para;</a></h3>
+<p><strong>Get V2 Dashboard</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: JustLend V2 protocol overview: top vaults (APY, TVL) and top markets (borrow/supply rates). If address is provided, also includes the user's aggregated V2 position (total supply, borrow, health factor).</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>address</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>User address to include V2 position summary. Default: configured wallet</td>
+</tr>
+<tr>
+<td><code>depositToken</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Filter vaults and markets by deposit token symbol</td>
+</tr>
+<tr>
+<td><code>collateralToken</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Filter markets by collateral token symbol</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_moolah_history"><code>get_moolah_history</code><a class="headerlink" href="#get_moolah_history" title="Permanent link">&para;</a></h3>
+<p><strong>Get V2 History</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Get a user's JustLend V2 position history (net worth, supply, borrow over time) and recent transaction records (supply, borrow, repay, etc.).</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>address</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>User address. Default: configured wallet</td>
+</tr>
+<tr>
+<td><code>timeFilter</code></td>
+<td>enum(ONE_DAY</td>
+<td style="text-align: center;">ONE_WEEK</td>
+<td>ONE_MONTH)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_moolah_records"><code>get_moolah_records</code><a class="headerlink" href="#get_moolah_records" title="Permanent link">&para;</a></h3>
+<p><strong>Get V2 Records</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Get a user's paginated V2 transaction history — supply, withdraw, borrow, repay, liquidate events. Distinct from get_moolah_history (which returns position curves + a small recent-txs preview) — this one is the full paginated record list. Works on both mainnet and nile.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>address</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>User address. Default: configured wallet</td>
+</tr>
+<tr>
+<td><code>pageNo</code></td>
+<td>number</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Page number, 1-indexed. Default: 1</td>
+</tr>
+<tr>
+<td><code>pageSize</code></td>
+<td>number</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Records per page. Default: 20</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_moolah_vault_history"><code>get_moolah_vault_history</code><a class="headerlink" href="#get_moolah_vault_history" title="Permanent link">&para;</a></h3>
+<p><strong>Get V2 Vault History</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Time series of a V2 vault's APY, TVL, and supply mining data. Returns currentSupplyUsd, supplyBaseApy, supplyMiningApy, and a historyRecords array. Use vaultAddress from get_moolah_vaults or chains.ts vault map.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vaultAddress</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Vault contract address (Base58 T...)</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="estimate_moolah_energy"><code>estimate_moolah_energy</code><a class="headerlink" href="#estimate_moolah_energy" title="Permanent link">&para;</a></h3>
+<p><strong>Estimate V2 Energy</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Estimate energy, bandwidth, and TRX cost for a JustLend V2 write operation BEFORE executing it. Returns historical typical values (on-chain simulation for V2's tuple-args ops is not yet wired). Set isTRX=true when the underlying / loan / collateral token is native TRX (TrxProviderProxy route). Covers: vault_deposit, vault_withdraw, vault_redeem, approve_vault, supply_collateral, withdraw_collateral, borrow, repay, approve_proxy, liquidate, approve_liquidator.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>operation</code></td>
+<td>enum(vault_deposit</td>
+<td style="text-align: center;">vault_withdraw</td>
+<td>vault_redeem</td>
+<td>approve_vault</td>
+</tr>
+<tr>
+<td><code>isTRX</code></td>
+<td>boolean</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Whether the route uses native TRX (via TrxProviderProxy). Default: false</td>
+</tr>
+<tr>
+<td><code>address</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Owner address for resource-sufficiency check. Default: configured wallet</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_moolah_market_history"><code>get_moolah_market_history</code><a class="headerlink" href="#get_moolah_market_history" title="Permanent link">&para;</a></h3>
+<p><strong>Get V2 Market History</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Time series of a V2 market's borrow/supply APY, utilization, and totals. Returns current totalBorrow/totalCollateral + borrowApy/supplyApy + list[] of historical points. Use marketId (bytes32 hex) from get_moolah_markets.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>marketId</code></td>
+<td>string</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Market ID (bytes32 hex, e.g. '0xabc...')</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h2 id="justlend-v2-mining-rewards-estimator-5">JustLend V2 — Mining, Rewards &amp; Estimator (5)<a class="headerlink" href="#justlend-v2-mining-rewards-estimator-5" title="Permanent link">&para;</a></h2>
+<h3 id="get_moolah_vault_mining_apy"><code>get_moolah_vault_mining_apy</code><a class="headerlink" href="#get_moolah_vault_mining_apy" title="Permanent link">&para;</a></h3>
+<p><strong>Get V2 Vault Mining APY</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Get V2 mining APY for a single V2 vault. Returns the USDD / TRX APY split and total (encoded as a fraction, e.g. 0.123 = 12.3%). enabled=true means the vault is active in mining and qualifies for the fire-icon UI hint.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vaultAddress</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Vault contract address (Base58 T...)</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_moolah_mining_resolver"><code>get_moolah_mining_resolver</code><a class="headerlink" href="#get_moolah_mining_resolver" title="Permanent link">&para;</a></h3>
+<p><strong>Get V2 Mining Resolver</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Map every V2 vault with active mining to its USDD / TRX APY split. Used by the dashboard to prefetch fire-icon eligibility in one round-trip. Vaults with zero mining APY are excluded from the response.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_moolah_mining_accruing"><code>get_moolah_mining_accruing</code><a class="headerlink" href="#get_moolah_mining_accruing" title="Permanent link">&para;</a></h3>
+<p><strong>Get V2 Mining Accruing</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Get a user's accruing &amp; settling V2 mining rewards across vaults. accruingUsd = current round still emitting; settlingUsd = previous round in the brief settlement window (miningStatus=2, currRewardStatus=1) — excluded otherwise so it doesn't double-count with already-published merkle airdrops. globalSettlementStatus=true means the backend reports any token in flux; treat per-token amounts as provisional.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>address</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>TRON address. Default: configured wallet</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_moolah_pending_mining_periods"><code>get_moolah_pending_mining_periods</code><a class="headerlink" href="#get_moolah_pending_mining_periods" title="Permanent link">&para;</a></h3>
+<p><strong>Get V2 Pending Mining Periods</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Get a user's claimable V2 mining airdrop rounds (already settled and merkle-published). Each period includes merkleIndex, index, per-token amounts (raw + decimal-shifted), the merkle proof, and a USD total. Feed a periodKey directly into claim_moolah_mining_period to submit the on-chain multiClaim. Set includeClaimed=true to also return rounds the indexer marks as already claimed (default false matches the rewards card behaviour).</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>address</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>TRON address. Default: configured wallet</td>
+</tr>
+<tr>
+<td><code>includeClaimed</code></td>
+<td>boolean</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Include rounds the backend marks as claimed. Default: false</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="claim_moolah_mining_period"><code>claim_moolah_mining_period</code><a class="headerlink" href="#claim_moolah_mining_period" title="Permanent link">&para;</a></h3>
+<p><strong>Claim V2 Mining Period</strong><br />
+- <strong>Side effect</strong>: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Claim a single V2 mining airdrop round via multiClaim() on the V2 merkle distributor. Pass periodKey from get_moolah_pending_mining_periods (preferred) or supply merkleIndex / index / amounts / proof directly. Pre-checks isClaimed() and merkleRoots() on-chain so the wallet does not pay gas for a guaranteed-revert tx. Mainnet currently errors with 'distributor not configured' until the V2 contract ships — nile testnet works.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>periodKey</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Round key from get_moolah_pending_mining_periods (preferred)</td>
+</tr>
+<tr>
+<td><code>merkleIndex</code></td>
+<td>union</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Override: merkle tree index</td>
+</tr>
+<tr>
+<td><code>index</code></td>
+<td>union</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Override: leaf index inside the tree</td>
+</tr>
+<tr>
+<td><code>amounts</code></td>
+<td>union[]</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Override: token amounts in raw units, slot-aligned with the tree's tokenAddress[]</td>
+</tr>
+<tr>
+<td><code>proof</code></td>
+<td>string[]</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Override: merkle proof (bytes32[])</td>
+</tr>
+<tr>
+<td><code>address</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Owner address used to refetch the airdrop entry when periodKey is supplied. Default: signing wallet</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h2 id="historical-records-7">Historical Records (7)<a class="headerlink" href="#historical-records-7" title="Permanent link">&para;</a></h2>
+<h3 id="get_lending_records"><code>get_lending_records</code><a class="headerlink" href="#get_lending_records" title="Permanent link">&para;</a></h3>
+<p><strong>Get V1 Lending Records</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Get a user's V1 JustLend transaction history: supply, withdraw, borrow, repay, and collateral enable/disable. Paginated. Each record includes actionType (1-11), actionName (human-readable), token, amount, USD value, and txId. Mainnet-only.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>address</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>TRON address (T...). Default: configured wallet</td>
+</tr>
+<tr>
+<td><code>page</code></td>
+<td>number</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Page number, 1-indexed. Default: 1</td>
+</tr>
+<tr>
+<td><code>pageSize</code></td>
+<td>number</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Records per page. Default: 20</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Must be 'mainnet'. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_strx_records"><code>get_strx_records</code><a class="headerlink" href="#get_strx_records" title="Permanent link">&para;</a></h3>
+<p><strong>Get sTRX Records</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Get a user's sTRX staking history: stake, unstake, withdraw (after unbonding), and sTRX transfers. Each record has opType (1-6) and a human-readable opName. Paginated. Mainnet-only.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>address</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>TRON address. Default: configured wallet</td>
+</tr>
+<tr>
+<td><code>page</code></td>
+<td>number</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Page number, 1-indexed. Default: 1</td>
+</tr>
+<tr>
+<td><code>pageSize</code></td>
+<td>number</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Records per page. Default: 20</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Must be 'mainnet'. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_vote_records"><code>get_vote_records</code><a class="headerlink" href="#get_vote_records" title="Permanent link">&para;</a></h3>
+<p><strong>Get Vote Records</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Get a user's governance voting history: get_vote (JST → WJST deposits), votes cast for/against proposals, vote withdrawals, and JST conversions back. Each record has opType (1-6), opName, amount, and proposalId (for votes and withdrawals). Use get_user_vote_status for real-time current voting power. Mainnet-only.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>address</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>TRON address. Default: configured wallet</td>
+</tr>
+<tr>
+<td><code>page</code></td>
+<td>number</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Page number, 1-indexed. Default: 1</td>
+</tr>
+<tr>
+<td><code>pageSize</code></td>
+<td>number</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Records per page. Default: 20</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Must be 'mainnet'. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_energy_rental_records"><code>get_energy_rental_records</code><a class="headerlink" href="#get_energy_rental_records" title="Permanent link">&para;</a></h3>
+<p><strong>Get Energy Rental Records</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Get a user's JustLend energy-rental history: rent, extend, rent_more, end, recycle actions. Distinct from get_user_energy_rental_orders which returns current active on-chain orders — this one returns the full historical action log. Paginated. Mainnet-only.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>address</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>TRON address. Default: configured wallet</td>
+</tr>
+<tr>
+<td><code>page</code></td>
+<td>number</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Page number, 1-indexed. Default: 1</td>
+</tr>
+<tr>
+<td><code>pageSize</code></td>
+<td>number</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Records per page. Default: 20</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Must be 'mainnet'. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_claimable_rewards"><code>get_claimable_rewards</code><a class="headerlink" href="#get_claimable_rewards" title="Permanent link">&para;</a></h3>
+<p><strong>Get Claimable Rewards</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Scan all JustLend V1 merkle airdrop distributors for a user's unclaimed rewards. Returns a map keyed by round; each entry includes the merkleIndex, index, amount(s), token symbol/address, and proof. Feed any returned key into claim_v1_mining_period to submit the on-chain multiClaim. Mainnet-only.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>address</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>TRON address. Default: configured wallet</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Must be 'mainnet'. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="claim_v1_mining_period"><code>claim_v1_mining_period</code><a class="headerlink" href="#claim_v1_mining_period" title="Permanent link">&para;</a></h3>
+<p><strong>Claim V1 Mining Period</strong><br />
+- <strong>Side effect</strong>: 🔴 On-chain write · high-risk (Remote Write / Destructive) — signs and broadcasts a TRON transaction moving real assets; the client MUST require human confirmation (HITL) before executing
+- <strong>annotations</strong>: idempotent: false · openWorld: true
+- <strong>Description</strong>: Claim a single V1 mining airdrop round via multiClaim() on the appropriate merkle distributor. Pass <code>key</code> from get_claimable_rewards (preferred) or supply merkleIndex / index / amount / proof directly. Routing matches the front-app: amount[] → multi-merkle distributor (multi-token leaf); single + USDD → USDDNEW distributor; single + other → main distributor. Mainnet-only.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>key</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Round key from get_claimable_rewards (preferred)</td>
+</tr>
+<tr>
+<td><code>merkleIndex</code></td>
+<td>union</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Override: merkle tree index</td>
+</tr>
+<tr>
+<td><code>index</code></td>
+<td>union</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Override: leaf index inside the tree</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>union</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Override: token amount(s) in raw units; pass an array for multi-token leaves</td>
+</tr>
+<tr>
+<td><code>proof</code></td>
+<td>string[]</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Override: merkle proof (bytes32[])</td>
+</tr>
+<tr>
+<td><code>tokenAddress</code></td>
+<td>union</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Override: token address(es) used for routing when the entry is single-token</td>
+</tr>
+<tr>
+<td><code>tokenSymbol</code></td>
+<td>union</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Override: token symbol(s); useful when tokenAddress is missing</td>
+</tr>
+<tr>
+<td><code>distributor</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Force a specific distributor address. Set with <code>selector</code> to bypass routing.</td>
+</tr>
+<tr>
+<td><code>selector</code></td>
+<td>enum(single</td>
+<td style="text-align: center;">multi)</td>
+<td>—</td>
+<td></td>
+</tr>
+<tr>
+<td><code>address</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Owner address used to refetch the airdrop entry when key is supplied. Default: signing wallet</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Network. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_liquidation_records"><code>get_liquidation_records</code><a class="headerlink" href="#get_liquidation_records" title="Permanent link">&para;</a></h3>
+<p><strong>Get V1 Liquidation Records</strong><br />
+- <strong>Side effect</strong>: 🟢 Read-only (Safe / Network Read)
+- <strong>annotations</strong>: idempotent: true · openWorld: true
+- <strong>Description</strong>: Get a user's V1 JustLend liquidation history — both positions the user liquidated and positions where the user was liquidated. Distinct from get_moolah_liquidation_records which covers V2 liquidations. Paginated. Mainnet-only.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>address</code></td>
+<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>TRON address. Default: configured wallet</td>
+</tr>
+<tr>
+<td><code>page</code></td>
+<td>number</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Page number, 1-indexed. Default: 1</td>
+</tr>
+<tr>
+<td><code>pageSize</code></td>
+<td>number</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Records per page. Default: 20</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Must be 'mainnet'. Default: mainnet</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>Auto-generated — do not edit by hand. Generator: <code>scripts/gen-mcp-api-list.ts</code>. Regenerate: <code>npx tsx scripts/gen-mcp-api-list.ts</code>.</em></p>
+
+
+
+
+
+
+
+  
+    
+  
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Last update">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 17, 2026 11:33:26 UTC">2026-06-17</span>
+  </span>
+
+    
+    
+    
+    
+  </aside>
+
+
+
+
+
+		  <hr class="content-footer-divider">  <!-- 添加的水平线 -->
+      	    	  <footer class="md-footer">
+  
+  <!--div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div-->
+</footer>
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.sections", "toc.integrate", "search.highlight", "search.suggest", "content.code.annotate", "content.tooltips"], "search": "../../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.c8b220af.min.js"></script>
+      
+    
+  </body>
+</html>
