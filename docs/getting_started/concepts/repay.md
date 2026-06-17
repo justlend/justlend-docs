@@ -6,7 +6,12 @@ description: How borrowers pay back debt on JustLend — `repayBorrow`, `repayBo
 # Repay
 
 !!! info "About this page"
-    **Protocol:** JustLend DAO (Compound V2 fork on TRON) · **Network:** TRON Mainnet · **Scope:** user-facing repay flow — `repayBorrow` and `repayBorrowBehalf`, full-balance shortcut via `uint256(-1)`, jTRX payable variant. · **Units:** repay amounts use the underlying token's own decimals. · **Related contracts:** [SBM `repayBorrow` / `repayBorrowBehalf`](../../developers/supply_and_borrow_market/sbm.md).
+    * **Protocol:** JustLend DAO
+    * **Network:** TRON Mainnet 
+    * **Scope:** user-facing repay flow — `repayBorrow` and `repayBorrowBehalf`, full-balance shortcut via `uint256(-1)`, jTRX payable variant. 
+    * **Units:** repay amounts use the underlying token's own decimals. 
+    * **Related contracts:** [SBM `repayBorrow` / `repayBorrowBehalf`](../../developers/supply_and_borrow_market/sbm.md).
+    
 
 Repaying borrowed tokens is a critical aspect of managing borrow positions on the JustLend DAO Protocol. With flexible repayment options and user-friendly tools, JustLend DAO makes it easy for borrowers to maintain healthy collateralisation ratios and prevent liquidation risks.
 
@@ -16,14 +21,20 @@ Borrowers can repay their loans using the same tokens they borrowed or through j
 * A higher collateralisation ratio minimizes the risk of liquidation by maintaining a safe margin between the collateral value and the borrowed amount;
 * Repayment allows borrowers to safely withdraw a portion of their collateral, offering greater flexibility in managing their assets.
 
+
 ### **How Do I Repay Assets**
-1. Connect your Web3 wallet on TronLink or other supported wallet app to the JustLend DAO ([https://justlend.org](https://justlend.org)).
-2. Navigate to the "SBM" and choose the borrowed asset you want to withdraw, click 「Repay」.
-3. Specify the amount you want to repay and confirm the transaction.
 
-### Try it
+* Connect your Web3 wallet on TronLink or other supported wallet app to the JustLend DAO ([https://justlend.org](https://justlend.org)).
+* To Repay Asset on SBM V1:
+    * Navigate to **“SBM V1”**, choose the asset you wish to repay, then click **「Repay」** under borrowed assets;
+    * Enter the amount you want to repay, then click **「Repay」** and confirm the transaction.
+* To Repay Asset on SBM V2:
+    * Navigate to **“SBM V2”**, select the repay asset under **All Borrow Markets**, then click **「Details」**.
+    * Choose **Repay/Redeem**, enter the repay amount and redeem amount.
+        * You may choose to complete only the Repay operation first. After entering the amount, then click **「Repay」**.
+        * You may also complete only the Redeem operation, but ensure that your Risk Level remains within a healthy range, then click **「Redeem」**.
+        * Alternatively, you can complete both Repay and Redeem operations simultaneously. In this case, also make sure your Risk Level stays within a healthy range, then click **「Repay & Redeem」**.
 
-Open the JustLend dApp on the **Repay** action: <https://app.justlend.org/homeNew?lang=en-US> → pick the borrowed asset → click 「Repay」.
 
 ### Developer reference
 
