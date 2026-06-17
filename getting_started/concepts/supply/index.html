@@ -138,8 +138,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "How users supply TRX or TRC20 assets to JustLend money markets to earn interest, receive jTokens, and use the supplied assets as collateral.",
-          "dateModified": "2026-05-22",
-          "datePublished": "2026-05-22"
+          "dateModified": "2026-06-17",
+          "datePublished": "2026-06-17"
         }
       ]
     }
@@ -1738,7 +1738,14 @@
 <h1 id="supply">Supply<a class="headerlink" href="#supply" title="Permanent link">&para;</a></h1>
 <div class="admonition info">
 <p class="admonition-title">About this page</p>
-<p><strong>Protocol:</strong> JustLend DAO (Compound V2 fork on TRON) · <strong>Network:</strong> TRON Mainnet · <strong>Scope:</strong> user-facing supply flow — what supplying does, jToken receipts, how interest accrues, and which contract function backs it. · <strong>Units:</strong> supply / underlying amounts use each token's own decimals (TRX = 6, USDT = 6, USDD = 18, BTC = 8, ETH = 18); <a href="../../../resources/glossary/#jtoken-decimals">jToken balances always use <strong>8 decimals</strong></a>; APY values are annualized decimals (multiply by 100 for %). · <strong>Related contracts:</strong> <code>CErc20Delegator</code> jTokens (<code>mint</code>, <code>redeem</code>, <code>redeemUnderlying</code>, see <a href="../../../developers/supply_and_borrow_market/sbm/">SBM</a>). · <strong>For developers:</strong> <a href="../../../developers/common_pitfalls/">Common Pitfalls #1 (USDT approve race) and #5 (decimals mismatch)</a>.</p>
+<ul>
+<li><strong>Protocol:</strong> JustLend DAO</li>
+<li><strong>Network:</strong> TRON Mainnet</li>
+<li><strong>Scope:</strong> user-facing supply flow — what supplying does, jToken receipts, how interest accrues, and which contract function backs it.</li>
+<li><strong>Units:</strong> supply / underlying amounts use each token's own decimals (TRX = 6, USDT = 6, USDD = 18, BTC = 8, ETH = 18); [jToken balances always use <strong>8 decimals</strong>]    (../../resources/glossary.md#jtoken-decimals); APY values are annualized decimals (multiply by 100 for %).</li>
+<li><strong>Related contracts:</strong> <code>CErc20Delegator</code> jTokens (<code>mint</code>, <code>redeem</code>, <code>redeemUnderlying</code>, see <a href="../../../developers/supply_and_borrow_market/sbm/">SBM</a>).</li>
+<li><strong>For developers:</strong> <a href="../../../developers/common_pitfalls/">Common Pitfalls #1 (USDT approve race) and #5 (decimals mismatch)</a>.</li>
+</ul>
 </div>
 <p>Supplying tokens to the JustLend DAO allows users to earn interest on their digital assets while simultaneously using them as collateral for borrowing. When users supply tokens, these assets are deposited into the JustLend DAO liquidity pool, a system of smart contracts designed to facilitate secure, over-collateralized borrowing.</p>
 <p>In return, users receive jTokens, TRC-20 tokens representing their supplied assets. jTokens can be redeemed at any time for the underlying assets. As interest accrues, the exchange rate of jTokens relative to the underlying assets increases over time, reflecting the earned interest. This ensures that users benefit from a seamless and dynamic interest compounding mechanism while maintaining liquidity through redeemable jTokens.</p>
@@ -1747,18 +1754,34 @@
 <p><strong>Determining Interest Rates:</strong> Interest rates for suppliers are primarily influenced by the borrow utilization rate, which reflects the proportion of assets borrowed relative to the total pool supply. Governance parameters, such as the collateral factor and interest rates, can also be adjusted through community decisions.</p>
 <p><strong>Dynamic Rate Updates:</strong> As tokens are supplied, borrowed, repaid, or withdrawn from the liquidity pool, interest rates are updated in real time. These adjustments are guided by on-chain data, including token balances, oracle-determined prices, and the borrow utilization ratio.</p>
 <h3 id="how-do-i-supply-assets"><strong>How Do I Supply Assets</strong><a class="headerlink" href="#how-do-i-supply-assets" title="Permanent link">&para;</a></h3>
-<p>Supplying can be done with a user interface <a href="https://app.justlend.org/homeNew?lang=en-US">JustLend SBM</a>. Before we walk through the steps of a supplying sequence, let’s cover some key parameters:</p>
+<p>Supplying can be done with a user interface <a href="https://app.justlend.org/homeV1">JustLend SBM V1</a> or <a href="https://app.justlend.org/homeNew?lang=en-US">SBM V2</a>. Before we walk through the steps of a supplying sequence, let’s cover some key parameters:</p>
+<p><strong>SBM V1:</strong></p>
 <ul>
-<li><strong>Supply APY:</strong> the annual rewards from the jTokens users receive by supplying assets, influenced by the borrow utilization rate and fluctuating over time.</li>
-<li><strong>Total Supply:</strong> the total supply in the market. As the total supply changes, the Supply APY will also change accordingly.</li>
-<li><strong>Suppliers:</strong> the number of users participating in the supply market.</li>
+<li><code>Supply APY:</code> the annual rewards from the jTokens users receive by supplying assets, which influenced by the borrow utilization rate and fluctuated by the time;</li>
+<li><code>Total Supply:</code> the total supply in the market. As the total supply changes, the Supply APY will also change accordingly;</li>
+<li><code>Suppliers:</code> the amount of users participating in the supply market.</li>
+</ul>
+<p><strong>SBM V2:</strong></p>
+<ul>
+<li><code>Supply APY:</code> the annualized return earned from supplying assets to the Vault. It is influenced by the market’s borrow utilization rate and may fluctuate over time;</li>
+<li><code>Total Supply:</code> the total amount of assets supplied in the market. As the total supply changes, the Supply APY will adjust accordingly;</li>
+<li><code>Collateral Support:</code> refers to the types of assets supported across the underlying Markets connected to this Vault. While you only deposit a single asset into the Vault, your liquidity may be lent out to borrowers who pledge these supported collateral tokens.</li>
 </ul>
 <h4 id="supply-assets">Supply Assets<a class="headerlink" href="#supply-assets" title="Permanent link">&para;</a></h4>
-<ol>
+<ul>
 <li>Connect your Web3 wallet on TronLink or other supported wallet app to the JustLend DAO (<a href="https://justlend.org">https://justlend.org</a>).</li>
-<li>Navigate to the "SBM" and choose the asset you want to supply. For example, if you want to supply TRX, click 「Supply」 on the TRX market.</li>
-<li>Specify the amount you want to supply. The selected assets are transferred directly from your wallet to JustLend DAO protocol, earning interest immediately. This interest will be automatically added to your Supply Balance.</li>
-</ol>
+<li>To Supply Asset on SBM V1：<ul>
+<li>Navigate to <strong>“SBM V1”</strong>, choose the asset you wish to supply, then click <strong>「Supply」</strong> in the corresponding  market.</li>
+<li>Enter the amount you want to supply and click <strong>「Supply」</strong>.</li>
+</ul>
+</li>
+<li>To supply Asset on SBM V2:<ul>
+<li>Navigate to <strong>“SBM V2”</strong>, select the asset under <strong>All Supply Vaults</strong>, then click <strong>「Details」</strong>.</li>
+<li>Choose <strong>Supply</strong>, enter the supply amount, then click <strong>「Supply」</strong>.</li>
+</ul>
+</li>
+</ul>
+<p>After the contract is successfully approved, the assets will be transferred from your wallet to the JustLend DAO protocol. Once they are borrowed by other users, they will begin generating interest. This interest will be automatically added to your Supply Balance.</p>
 <h3 id="developer-reference">Developer reference<a class="headerlink" href="#developer-reference" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Contract function: <a href="../../../developers/supply_and_borrow_market/sbm/#mint"><code>mint()</code> on <code>CToken.sol</code></a> — <code>payable</code> for jTRX, takes a <code>mintAmount</code> for jTRC20 markets.</li>
@@ -1788,7 +1811,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 22, 2026 06:32:12 UTC">2026-05-22</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 17, 2026 04:12:32 UTC">2026-06-17</span>
   </span>
 
     
