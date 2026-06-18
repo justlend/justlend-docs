@@ -7,7 +7,7 @@
 | Field | Value |
 |-------|-------|
 | `last_generated` | **2026-06-18** (ISO 8601, UTC date — substituted at build time) |
-| `docs_commit` | [`57059a7`](https://github.com/justlend/justlend-docs/commit/57059a7254a3445d6347e0b11174964b83796b29) (the commit SHA this snapshot was built from — substituted at build time) |
+| `docs_commit` | [`ebc145a`](https://github.com/justlend/justlend-docs/commit/ebc145a43f815e88ff54a3e26129c2cd58557d6c) (the commit SHA this snapshot was built from — substituted at build time) |
 | `contracts_json_source` | [`/developers/contracts.json`](https://docs.justlend.org/developers/contracts.json) — see its `_meta.last_generated` for the address-data snapshot date |
 | `mcp_server_version` | `@justlend/mcp-server-justlend` **v1.1.0** (sync date 2026-06-17) |
 | `changelog` | [`CHANGELOG.md`](https://github.com/justlend/justlend-docs/blob/main/CHANGELOG.md) |
