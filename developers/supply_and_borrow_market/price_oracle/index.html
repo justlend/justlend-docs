@@ -138,8 +138,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "JustLend DAO PriceOracle reference \u2014 getUnderlyingPrice, assetPrices, setPrice (poster-only). Backed by Chainlink Data Feeds. Prices are scaled by 10^(tokenDecimal \u2212 6) in sun (10\u207b\u2076 TRX).",
-          "dateModified": "2026-06-01",
-          "datePublished": "2026-06-01"
+          "dateModified": "2026-06-23",
+          "datePublished": "2026-06-23"
         }
       ]
     }
@@ -2203,7 +2203,14 @@
 <h1 id="price-oracle">Price Oracle<a class="headerlink" href="#price-oracle" title="Permanent link">&para;</a></h1>
 <div class="admonition info">
 <p class="admonition-title">About this page</p>
-<p><strong>Protocol:</strong> JustLend DAO (Compound V2 fork on TRON) · <strong>Network:</strong> TRON Mainnet · <strong>Pattern:</strong> <code>PriceOracleProxy</code> (entrypoint, <code>TCKp2AzuhzV4B4Ahx1ej4mvQgHZ1kH7F7k</code>) → <code>PriceOracle</code> (impl, <code>TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV</code>). · <strong>Data source:</strong> <a href="https://chain.link/">Chainlink</a> Data Feeds. The <code>poster</code> address relays Chainlink prices on-chain via <code>setPrice(asset, price)</code>. · <strong>Units:</strong> Prices are denominated in <strong>sun</strong> (10⁻⁶ TRX), scaled by <code>10^(tokenDecimal − 6)</code>. For an 18-decimal token like USDD, the raw price encodes an extra <code>10^12</code> factor relative to an 8-decimal token. · <strong>ABI:</strong> <a href="../../abis/price-oracle.json"><code>abis/price-oracle.json</code></a>.</p>
+<ul>
+<li><strong>Protocol:</strong> JustLend DAO</li>
+<li><em>Network:</em>* TRON Mainnet </li>
+<li><strong>Pattern:</strong> <code>PriceOracleProxy</code> (entrypoint, <code>TGnYnSn4G9PgWFj7QQemh4YMZKp3fkympJ</code>) → <code>PriceOracle</code> (impl, <code>TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV</code>)</li>
+<li><strong>Data source:</strong> <a href="https://chain.link/">Chainlink</a> Data Feeds. The <code>poster</code> address relays Chainlink prices on-chain via <code>setPrice(asset, price)</code></li>
+<li><strong>Units:</strong> Prices are denominated in <strong>TRX</strong> , scaled by <code>1e^(33 - tokenDecimal)</code>. For an 18-decimal token like USDD, the value for the price feed is calculated based on the exchange rate of 1 USDD to TRX (assuming a price of 3.0266), Price Feed Value = 3.0266 * 1e^(33 - 18) = 3.0266 * 1e^15</li>
+<li><strong>ABI:</strong> <a href="../../abis/price-oracle.json"><code>abis/price-oracle.json</code></a>.</li>
+</ul>
 </div>
 <p>Blockchain-powered smart contracts, by design, cannot access external market data directly. To ensure accurate and tamper-resistant pricing, the JustLend DAO protocol relies on a multi-source data aggregation system that draws from reputable and decentralized sources.</p>
 <p><a href="https://chain.link/">Chainlink</a> Data Feeds are the key component of this process, helping to strengthen the security and reliability of pricing across markets.</p>
@@ -2290,7 +2297,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 1, 2026 08:59:57 UTC">2026-06-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 23, 2026 09:29:01 UTC">2026-06-23</span>
   </span>
 
     
