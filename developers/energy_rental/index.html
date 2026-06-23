@@ -138,8 +138,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "JustLend DAO EnergyRental contract reference \u2014 rentResource, returnResource, returnResourceByReceiver, liquidate, getRentInfo, plus TronWeb examples. Powers the one-to-many TRON Energy marketplace.",
-          "dateModified": "2026-06-17",
-          "datePublished": "2026-06-17"
+          "dateModified": "2026-06-23",
+          "datePublished": "2026-06-23"
         }
       ]
     }
@@ -2408,7 +2408,16 @@
 <h1 id="energy-rental">Energy Rental<a class="headerlink" href="#energy-rental" title="Permanent link">&para;</a></h1>
 <div class="admonition info">
 <p class="admonition-title">About this page</p>
-<p><strong>Protocol:</strong> JustLend DAO Energy Rental (one-to-many TRON Energy marketplace) · <strong>Network:</strong> TRON Mainnet · <strong>Contract:</strong> <a href="https://tronscan.org/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd"><code>TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd</code></a> (immutable) · <strong>Units:</strong> <code>amount</code> parameters refer to the <strong>delegated TRX amount in sun</strong> (1 TRX = 10⁶ sun), <strong>not</strong> the energy amount — divide your target energy by <code>energyStakePerTrx</code> from the dashboard API to get TRX. · <strong><code>resourceType</code>:</strong> <code>0 = bandwidth</code>, <code>1 = energy</code>. · <strong>Constraint:</strong> receiver must be a regular account, not a contract. · <strong>User-side overview:</strong> <a href="../../getting_started/concepts/energy_rental/">Energy Rental concept</a> · <strong>ABI:</strong> <a href="../abis/energy-market.json"><code>abis/energy-market.json</code></a>, rate model in <a href="../abis/energy-rate-model.json"><code>abis/energy-rate-model.json</code></a>.</p>
+<ul>
+<li><strong>Protocol:</strong> JustLend DAO Energy Rental (one-to-many TRON Energy marketplace)</li>
+<li><strong>Network:</strong> TRON Mainnet</li>
+<li><strong>Contract:</strong> <a href="https://tronscan.org/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd"><code>TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd</code></a> (immutable)</li>
+<li><strong>Units:</strong> <code>amount</code> parameters refer to the <strong>delegated TRX amount in TRX</strong>, <strong>not</strong> the energy amount — divide your target energy by <code>energyStakePerTrx</code> from the dashboard API to get TRX.</li>
+<li><strong><code>resourceType</code>:</strong> <code>0 = bandwidth</code>, <code>1 = energy</code>.</li>
+<li><strong>Constraint:</strong> receiver must be a regular account, not a contract.</li>
+<li><strong>User-side overview:</strong> <a href="../../getting_started/concepts/energy_rental/">Energy Rental concept</a> </li>
+<li><strong>ABI:</strong> <a href="../abis/energy-market.json"><code>abis/energy-market.json</code></a>, rate model in <a href="../abis/energy-rate-model.json"><code>abis/energy-rate-model.json</code></a>.</li>
+</ul>
 </div>
 <p>All transactions on JustLend DAO require Energy, which can only be acquired through staking or burning TRX. This process involves high costs and lengthy procedures. In response, JustLend DAO introduces the Energy Rental service, allowing users to rent Energy at a significantly reduced price compared to staking or burning TRX.
 The contract <a href="https://tronscan.org/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd">EnergyRental</a> used to set up the Energy Rental service.</p>
@@ -2758,7 +2767,7 @@ on the <strong>Rental Amount</strong> and <strong>Rental Duration</strong>. The 
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 17, 2026 11:49:58 UTC">2026-06-17</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 23, 2026 09:56:14 UTC">2026-06-23</span>
   </span>
 
     
