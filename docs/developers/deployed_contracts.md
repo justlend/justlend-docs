@@ -150,7 +150,8 @@ See [Interest Rate Model](supply_and_borrow_market/interest_rate_model.md) for t
 | Oracle Proxy | `PriceOracleProxy` | `TGnYnSn4G9PgWFj7QQemh4YMZKp3fkympJ` | [Contract](https://tronscan.org/contract/TGnYnSn4G9PgWFj7QQemh4YMZKp3fkympJ/code) |
 | Oracle (impl) | `PriceOracle` | `TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV` | [Contract](https://tronscan.org/#/contract/TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV/code) |
 
-Prices are denominated in sun (10⁻⁶ TRX), scaled by `10^(tokenDecimal − 6)`. See [Price Oracle](supply_and_borrow_market/price_oracle.md).
+Prices are denominated in **TRX** , scaled by `1e^(33 - tokenDecimal)`. See [Price Oracle](supply_and_borrow_market/price_oracle.md).
+
 
 ### Governance
 
