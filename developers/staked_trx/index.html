@@ -138,8 +138,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "JustLend DAO sTRX liquid-staking contract reference \u2014 exchangeRate, deposit, withdraw, withdrawExact, claim, claimAll, plus TronWeb examples. Backs the user-facing sTRX feature on TRON.",
-          "dateModified": "2026-05-21",
-          "datePublished": "2026-05-21"
+          "dateModified": "2026-06-23",
+          "datePublished": "2026-06-23"
         }
       ]
     }
@@ -2395,7 +2395,15 @@
 <h1 id="staked-trx">Staked TRX<a class="headerlink" href="#staked-trx" title="Permanent link">&para;</a></h1>
 <div class="admonition info">
 <p class="admonition-title">About this page</p>
-<p><strong>Protocol:</strong> JustLend DAO sTRX (one-click liquid staking under TRON Stake 2.0) · <strong>Network:</strong> TRON Mainnet · <strong>Contract:</strong> <a href="https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5"><code>TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5</code></a> (immutable, replaced on protocol upgrade) · <strong>Units:</strong> TRX amounts are in <strong>sun</strong> (1 TRX = 10⁶ sun); sTRX is an 18-decimal TRC20; <code>exchangeRate()</code> is scaled by <code>1e18</code>, always ≥ 1, grows monotonically as rewards accrue · <strong>Unbonding:</strong> 14-day queue on JustLend, or instant exit via SunSwap / HTX · <strong>User-side overview:</strong> <a href="../../getting_started/concepts/staked_trx/">Staked TRX concept</a> · <strong>ABI:</strong> <a href="../abis/strx.json"><code>abis/strx.json</code></a>.</p>
+<ul>
+<li><strong>Protocol:</strong> JustLend DAO sTRX (one-click liquid staking under TRON Stake 2.0)</li>
+<li><strong>Network:</strong> TRON Mainnet</li>
+<li><strong>Contract:</strong> <a href="https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5"><code>TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5</code></a> (immutable, replaced on protocol upgrade)</li>
+<li><strong>Units:</strong> Prices are denominated in <strong>TRX</strong> , scaled by <code>1e^(33 - tokenDecimal)</code>; sTRX is an 18-decimal TRC20; <code>exchangeRate()</code> is scaled by <code>1e18</code>, always ≥ 1, grows monotonically as rewards accrue.</li>
+<li><strong>Unbonding:</strong> 14-day queue on JustLend, or instant exit via SunSwap / HTX</li>
+<li><strong>User-side overview:</strong> <a href="../../getting_started/concepts/staked_trx/">Staked TRX concept</a></li>
+<li><strong>ABI:</strong> <a href="../abis/strx.json"><code>abis/strx.json</code></a>.</li>
+</ul>
 </div>
 <p>Based on Stake 2.0, with TRX Liquid Staking, users can stake TRX to get sTRX tokens and gain high rewards. Compared to traditional staking, TRX Liquid Staking is easier to use and more profitable. Staked TRX will be used automatically for voting and governance, and gain rewards via Energy Rental.
 The contract <a href="https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5">StakedTRX</a> used to set up the staked TRX service.</p>
@@ -2635,7 +2643,7 @@ The contract <a href="https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZxoqQ
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 21, 2026 08:33:32 UTC">2026-05-21</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 23, 2026 09:53:19 UTC">2026-06-23</span>
   </span>
 
     
