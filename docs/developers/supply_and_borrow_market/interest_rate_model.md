@@ -6,7 +6,14 @@ description: JustLend DAO interest-rate model reference — WhitePaperInterestRa
 # Interest Rate Model
 
 !!! info "About this page"
-    **Protocol:** JustLend DAO (Compound V2 fork on TRON) · **Network:** TRON Mainnet · **Models in use:** `WhitePaperInterestRateModel` (linear: `borrowRate(u) = a × u + b`) and `JumpRateModelV2` (kinked: linear below `kink`, steeper above). · **Immutability:** each market's rate model is its own deployed contract; parameter changes require deploying a fresh contract and routing `_setInterestRateModel(newModel)` through Governance. Past instances remain on chain but unused. · **Units:** `multiplierPerBlock`, `jumpMultiplierPerBlock`, `baseRatePerBlock`, `kink` all scaled by `1e18`. Rates are **per-block** (≈ 3 s/block on TRON). For APY conversion guidance see `llms-full.txt §7.4`. · **Addresses:** one row per market in [Deployed Contracts → Interest Rate Models](../deployed_contracts.md#interest-rate-models). · **ABI:** [`abis/interest-rate-model.json`](../abis/interest-rate-model.json).
+    * **Protocol:** JustLend DAO
+    * **Network:** TRON Mainnet
+    * **Models in use:** `WhitePaperInterestRateModel` (linear: `borrowRate(u) = a × u + b`) and `JumpRateModelV2` (kinked: linear below `kink`, steeper above).
+    * **Immutability:** each market's rate model is its own deployed contract; parameter changes require deploying a fresh contract and routing `_setInterestRateModel(newModel)` through Governance. Past instances remain on chain but unused.
+    * **Units:** `multiplierPerBlock`, `jumpMultiplierPerBlock`, `baseRatePerBlock`, `kink` all scaled by `1e18`. Rates are **per-block** (≈ 3 s/block on TRON). For APY conversion guidance see `llms-full.txt §7.4`.
+    * **Addresses:** one row per market in [Deployed Contracts → Interest Rate Models](../deployed_contracts.md#interest-rate-models).
+    * **ABI:** [`abis/interest-rate-model.json`](../abis/interest-rate-model.json).
+
 
 JustLend DAO's interest rate model aims to maximize the utilization of assets while effectively managing liquidity risks. Therefore, the parameter utilization rate U of each market is particularly important, as it reflects the true situation of the available assets in each market. As the utilization rate approaches 100%, assets become scarce, making borrowing impossible.  Meanwhile, suppliers may be unable to withdraw their liquidity due to the lack of available assets. The formula of the utilization U is defined as:
 
