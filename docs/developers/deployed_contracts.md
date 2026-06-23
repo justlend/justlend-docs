@@ -147,8 +147,8 @@ See [Interest Rate Model](supply_and_borrow_market/interest_rate_model.md) for t
 
 | Component | Contract | Address | Tronscan |
 |-----------|----------|---------|----------|
-| Oracle Proxy | `PriceOracleProxy` | `TCKp2AzuhzV4B4Ahx1ej4mvQgHZ1kH7F7k` | [Contract](https://tronscan.org/#/contract/TCKp2AzuhzV4B4Ahx1ej4mvQgHZ1kH7F7k) |
-| Oracle (impl) | `PriceOracle` | `TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV` | [Contract / Code](https://tronscan.org/#/contract/TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV/code) |
+| Oracle Proxy | `PriceOracleProxy` | `TGnYnSn4G9PgWFj7QQemh4YMZKp3fkympJ` | [Contract](https://tronscan.org/contract/TGnYnSn4G9PgWFj7QQemh4YMZKp3fkympJ/code) |
+| Oracle (impl) | `PriceOracle` | `TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV` | [Contract](https://tronscan.org/#/contract/TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV/code) |
 
 Prices are denominated in sun (10⁻⁶ TRX), scaled by `10^(tokenDecimal − 6)`. See [Price Oracle](supply_and_borrow_market/price_oracle.md).
 
@@ -156,7 +156,7 @@ Prices are denominated in sun (10⁻⁶ TRX), scaled by `10^(tokenDecimal − 6)
 
 | Component | Contract | Address | Tronscan |
 |-----------|----------|---------|----------|
-| Governor (proxy / entrypoint) | `GovernorBravoDelegator` | `TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD` | [Contract](https://tronscan.org/#/contract/TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD) |
+| Governor Proxy | `GovernorBravoDelegator` | `TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD` | [Contract](https://tronscan.org/#/contract/TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD) |
 | Governor (impl) | `GovernorBravoDelegate` | `TCiQTkxhzwSeXhRsNdHCvrxHRAvpjQn5Dt` | [Contract](https://tronscan.org/#/contract/TCiQTkxhzwSeXhRsNdHCvrxHRAvpjQn5Dt) |
 | Time-lock | `Timelock` | `TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x` | [Contract](https://tronscan.org/#/contract/TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x) |
 
@@ -166,7 +166,8 @@ See [Governance](supply_and_borrow_market/governance.md) for the proposal lifecy
 
 | Component | Contract | Address | Tronscan |
 |-----------|----------|---------|----------|
-| Comptroller | `Comptroller` | `TB23wYojvAsSx6gR8ebHiBqwSeABiBMPAr` | [Contract](https://tronscan.org/contract/TB23wYojvAsSx6gR8ebHiBqwSeABiBMPAr/code) |
+| Comptroller Proxy | `Unitroller` | `TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7` | [Contract](https://tronscan.org/contract/TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7/code) |
+| Comptroller (impl) | `Comptroller` | `TB23wYojvAsSx6gR8ebHiBqwSeABiBMPAr` | [Contract](https://tronscan.org/contract/TB23wYojvAsSx6gR8ebHiBqwSeABiBMPAr/code) |
 
 See [Comptroller](supply_and_borrow_market/comptroller.md) for Comptroller details.
 
