@@ -6,7 +6,12 @@ description: JustLend DAO PriceOracle reference — getUnderlyingPrice, assetPri
 # Price Oracle
 
 !!! info "About this page"
-    **Protocol:** JustLend DAO (Compound V2 fork on TRON) · **Network:** TRON Mainnet · **Pattern:** `PriceOracleProxy` (entrypoint, `TCKp2AzuhzV4B4Ahx1ej4mvQgHZ1kH7F7k`) → `PriceOracle` (impl, `TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV`). · **Data source:** [Chainlink](https://chain.link/) Data Feeds. The `poster` address relays Chainlink prices on-chain via `setPrice(asset, price)`. · **Units:** Prices are denominated in **sun** (10⁻⁶ TRX), scaled by `10^(tokenDecimal − 6)`. For an 18-decimal token like USDD, the raw price encodes an extra `10^12` factor relative to an 8-decimal token. · **ABI:** [`abis/price-oracle.json`](../abis/price-oracle.json).
+    * **Protocol:** JustLend DAO
+    * *Network:** TRON Mainnet 
+    * **Pattern:** `PriceOracleProxy` (entrypoint, `TGnYnSn4G9PgWFj7QQemh4YMZKp3fkympJ`) → `PriceOracle` (impl, `TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV`)
+    * **Data source:** [Chainlink](https://chain.link/) Data Feeds. The `poster` address relays Chainlink prices on-chain via `setPrice(asset, price)`
+    * **Units:** Prices are denominated in **TRX** , scaled by `1e^(33 - tokenDecimal)`. For an 18-decimal token like USDD, the value for the price feed is calculated based on the exchange rate of 1 USDD to TRX (assuming a price of 3.0266), Price Feed Value = 3.0266 * 1e^(33 - 18) = 3.0266 * 1e^15
+    * **ABI:** [`abis/price-oracle.json`](../abis/price-oracle.json).
 
 Blockchain-powered smart contracts, by design, cannot access external market data directly. To ensure accurate and tamper-resistant pricing, the JustLend DAO protocol relies on a multi-source data aggregation system that draws from reputable and decentralized sources.
 
