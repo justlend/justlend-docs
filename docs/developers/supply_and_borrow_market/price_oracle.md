@@ -39,7 +39,7 @@ function anchors(address) view returns(uint256, uint256)
     * `token:` the address of the underlying token(e.g. TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t for USDT).
 * **Returns:**
     * `period:` the current time period. Calculated as: current block height/ 600 (the TRON network produces approx. 600 blocks per 30 mins);
-    * `priceMantissa:` token prices in sun(10^-6 TRX), scaled by 10^(tokenDecimal - 6).
+    * `priceMantissa:` the current price of the token in TRX, scaled by 1e^(33 - tokenDecimal).
 
 
 ### **Price Poster**
@@ -60,7 +60,7 @@ function assetPrices(address asset) public view returns (uint)
 
 * **Parameter description:**
     * `asset:` the address of the token to query.
-* **Returns:** the current price of the token in sun(10^-6 TRX), scaled by 10^(tokenDecimal - 6).
+* **Returns:** the current price of the token in TRX, scaled by 1e^(33 - tokenDecimal).
 
 
 ### **Get Price**
@@ -71,7 +71,7 @@ function getPrice(address asset) public view returns (uint)
 
 * **Parameter description:**
     * `asset:` the address of the token to query.
-* **Returns:** the current price of the token in sun(10^-6 TRX), scaled by 10^(tokenDecimal - 6).
+* **Returns:** the current price of the token in in TRX, scaled by 1e^(33 - tokenDecimal).
 
 
 ### **Set Price (poster-only)**
