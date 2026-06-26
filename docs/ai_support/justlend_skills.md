@@ -14,6 +14,9 @@ It also works as a standalone **CLI tool** for quick market checks directly from
 !!! note
     This is a **read-only** query package. No write operations or transaction signing are supported. For write operations (supply, borrow, repay, withdraw, sTRX staking, energy rental, governance voting), use the full MCP server: [@justlend/mcp-server-justlend](mcp_server.md).
 
+!!! note "Scope: JustLend V1 only"
+    The tools and skill modules in this package cover **JustLend V1** (the Compound V2-style pooled markets) plus sTRX, energy rental, and governance. They do **not** cover **JustLend V2 (Moolah)** isolated markets and ERC4626 vaults. To *query* V2 read-only (vault APY/TVL, market parameters, user positions, liquidation candidates), use the full MCP server's read-only `get_moolah_*` tools — e.g. `get_moolah_vaults`, `get_moolah_markets`, `get_moolah_user_position`, `get_moolah_dashboard` — documented in [MCP Server → JustLend V2 (Moolah)](mcp_server.md). Those read tools require no wallet; only the V2 *write* tools do.
+
 !!! tip "Companion references for agents using these tools"
     The tool outputs use protocol-specific terminology — `mantissa`, `borrowIndex`, `exchangeRate`, `collateralFactor`, `closeFactor`, `liquidationIncentive`, `status: active|legacy`. Each is defined in the [Glossary](../resources/glossary.md) with units and on-chain encoding. When asking the agent to *act* on a market (e.g. supply, repay), point it at [Common Pitfalls](../developers/common_pitfalls.md) first — the same gotchas (USDT `approve()` race, decimals mismatch, etc.) apply whether the agent uses Skills, the full MCP server, or raw TronWeb.
 
