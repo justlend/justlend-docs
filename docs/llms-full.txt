@@ -313,7 +313,7 @@ The rendered tables below summarize **TRON Mainnet** Base58 addresses. For machi
 
 ### 5.2 jToken delegators (the addresses users interact with)
 
-**Protocol-wide market count: 17 active + 6 legacy = 23 jToken markets total** (TRON Mainnet, as of the `last_generated` date in §0 above). Rows tagged `(legacy)` are **closed to new supply and borrow** — existing positions can still be unwound but do not direct new deposits to them.
+**Protocol-wide market count: 18 active + 6 legacy = 24 jToken markets total** (TRON Mainnet, as of the `last_generated` date in §0 above). Rows tagged `(legacy)` are **closed to new supply and borrow** — existing positions can still be unwound but do not direct new deposits to them.
 
 Single source of truth (in order of preference): (1) live `GET https://openapi.just.network/lend/jtoken`, (2) `/developers/contracts.json`, (3) `apis.md §2`. Any other page that quotes a smaller count (e.g. the 9-market "featured" table in `ai_support/justlend_skills.md`) is showing a CLI-convenience subset, not the full protocol roster.
 
