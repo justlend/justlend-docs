@@ -3,7 +3,7 @@
   "_meta": {
     "generated_by": "scripts/generate_contracts_json.py",
     "source_of_truth": "https://github.com/justlend/mcp-server-justlend/blob/main/src/core/chains.ts",
-    "last_generated": "2026-05-21",
+    "last_generated": "2026-06-26",
     "schema_version": "1.1.0",
     "schema_version_policy": "Semantic versioning. MAJOR = breaking field rename or removal. MINOR = additive field (e.g. new role keys, new networks). PATCH = address corrections within an existing structure. Consumers should pin a MAJOR.",
     "address_formats": {
@@ -803,6 +803,46 @@
             },
             "network": "mainnet",
             "tronscan": "https://tronscan.org/#/contract/TUPM7K8REVzD2UdV4R5fe5M8XbnR2DdoJ6",
+            "role": "underlying"
+          }
+        },
+        "jU": {
+          "symbol": "jU",
+          "status": "active",
+          "underlying_symbol": "U",
+          "decimals": 8,
+          "underlying_decimals": 18,
+          "delegator": {
+            "label": "jU CErc20Delegator",
+            "address": {
+              "base58": "TMz7vmyqoq4WKDiztrZpjAZPnzE9XgXaK4",
+              "hex_evm": "0x83cdb09fe143998ab7fe4ad59075443a3fdac1f9",
+              "hex_tron": "0x4183cdb09fe143998ab7fe4ad59075443a3fdac1f9"
+            },
+            "network": "mainnet",
+            "tronscan": "https://tronscan.org/#/contract/TMz7vmyqoq4WKDiztrZpjAZPnzE9XgXaK4",
+            "role": "entrypoint"
+          },
+          "delegate": {
+            "label": "jU CErc20Delegate",
+            "address": {
+              "base58": "TTb3TxobUaSHpPBa4J98Wtg71mN9qJuFm4",
+              "hex_evm": "0xc141270f886f14621dcde7bd74ae228713be7e77",
+              "hex_tron": "0x41c141270f886f14621dcde7bd74ae228713be7e77"
+            },
+            "network": "mainnet",
+            "tronscan": "https://tronscan.org/#/contract/TTb3TxobUaSHpPBa4J98Wtg71mN9qJuFm4",
+            "role": "implementation"
+          },
+          "underlying": {
+            "label": "U TRC20",
+            "address": {
+              "base58": "TFNirp6PbqYE1ZTtWuCMUKJWLNZkoCoeFJ",
+              "hex_evm": "0x3b4b1ebe9bb36d199f06305235e15f4f505c472b",
+              "hex_tron": "0x413b4b1ebe9bb36d199f06305235e15f4f505c472b"
+            },
+            "network": "mainnet",
+            "tronscan": "https://tronscan.org/#/contract/TFNirp6PbqYE1ZTtWuCMUKJWLNZkoCoeFJ",
             "role": "underlying"
           }
         },

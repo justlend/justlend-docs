@@ -13,7 +13,7 @@ This page is the human-readable reference. The [OpenAPI 3.1 YAML](apis/justlend_
 
 - [Quick start](#quick-start) — connectivity check + minimal response example.
 - [§1 Conventions](#1-conventions) — response envelope, address format, numeric formats, rate / APY semantics, pagination, error responses, rate limits, versioning.
-- [§2 jToken Address Reference](#2-jtoken-address-reference) — the 23-market table with `status: active|legacy` and the programmatic-filter tip.
+- [§2 jToken Address Reference](#2-jtoken-address-reference) — the 24-market table with `status: active|legacy` and the programmatic-filter tip.
 - [§3 Supply & Borrow Market endpoints](#3-supply-borrow-market) — `/lend/jtoken`, `/lend/account`, `/justlend/liquidate/highRiskAccountList`.
 - [§4 USDD Supply Mining](#4-usdd-supply-mining) — `/mining/reward`, `/mining/apy`, `/mining/distributions`.
 - [§5 Staked TRX & Energy Rental](#5-staked-trx-energy-rental) — `/lend/strx`, `/lend/strxStake/account`, `/lend/rentResource/account`.
@@ -220,10 +220,10 @@ The OpenAPI `info.version` is the documentation schema version. The HTTP API is 
 
 Several endpoints key their payloads by jToken address (e.g. `data["TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf"]`). Use this table to translate.
 
-The protocol currently exposes **17 active + 6 legacy = 23 markets**. Legacy markets are closed to new supply and borrow — existing positions remain queryable so they can be unwound, but do not direct new deposits to them.
+The protocol currently exposes **18 active + 6 legacy = 24 markets**. Legacy markets are closed to new supply and borrow — existing positions remain queryable so they can be unwound, but do not direct new deposits to them.
 
 !!! tip "Programmatic filter"
-    For agents that prefer not to parse prose: each entry in [`/developers/contracts.json` → `networks.mainnet.jtokens.<symbol>`](contracts.json) carries an explicit `status` field with value `"active"` or `"legacy"`. Filter `status == "active"` to get the 17 active markets, `status == "legacy"` to get the 6 legacy ones. The schema and enum are documented in [`contracts.schema.json`](contracts.schema.json).
+    For agents that prefer not to parse prose: each entry in [`/developers/contracts.json` → `networks.mainnet.jtokens.<symbol>`](contracts.json) carries an explicit `status` field with value `"active"` or `"legacy"`. Filter `status == "active"` to get the 18 active markets, `status == "legacy"` to get the 6 legacy ones. The schema and enum are documented in [`contracts.schema.json`](contracts.schema.json).
 
 | jToken      | Address                                | Underlying | Notes                                       |
 |-------------|----------------------------------------|------------|---------------------------------------------|
@@ -244,6 +244,7 @@ The protocol currently exposes **17 active + 6 legacy = 23 markets**. Legacy mar
 | `jBTT`      | `TUaUHU9Dy8x5yNi1pKnFYqHWojot61Jfto`   | BTT        |                                             |
 | `jSUN`      | `TPXDpkg9e3eZzxqxAUyke9S4z4pGJBJw9e`   | SUN        |                                             |
 | `jHTX`      | `TDA1mWPyAjTRATMGA55UTswGAHhV2itEXR`   | HTX        | HTX token (underlying `TUPM7K8REVzD2UdV4R5fe5M8XbnR2DdoJ6`) |
+| `jU`        | `TMz7vmyqoq4WKDiztrZpjAZPnzE9XgXaK4`   | U          | U token (underlying `TFNirp6PbqYE1ZTtWuCMUKJWLNZkoCoeFJ`, 18 decimals) |
 | `jSUNOLD`   | `TGBr8uh9jBVHJhhkwSJvQN2ZAKzVkxDmno`   | SUN (old)  | Legacy, do not deposit new funds            |
 | `jBUSDOLD`  | `TLHASseQymmpGQdfAyNjkMXFTJh8nzR2x2`   | BUSD (old) | Legacy                                      |
 | `jUSDCOLD`  | `TNSBA6KvSvMoTqQcEgpVK7VhHT3z7wifxy`   | USDC (old) | Legacy                                      |

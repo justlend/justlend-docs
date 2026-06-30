@@ -1,6 +1,6 @@
 ---
 title: JustLend Skills (read-only)
-description: "@justlend/justlend-skills — 9 read-only MCP tools and 4 skill modules for AI agents to query JustLend market data, account health, and balances. CLI also available."
+description: "@justlend/justlend-skills — 9 read-only MCP tools and 5 skill modules for AI agents to query JustLend market data, account health, and balances. CLI also available."
 ---
 
 # JustLend Skills
@@ -13,6 +13,9 @@ It also works as a standalone **CLI tool** for quick market checks directly from
 
 !!! note
     This is a **read-only** query package. No write operations or transaction signing are supported. For write operations (supply, borrow, repay, withdraw, sTRX staking, energy rental, governance voting), use the full MCP server: [@justlend/mcp-server-justlend](mcp_server.md).
+
+!!! note "Bundled server is read-only V1; V2 (Moolah) needs the full server"
+    The **bundled lite MCP server** (the 9 query tools) is **read-only JustLend V1** (the Compound V2-style pooled markets). The package also ships a `justlend-lending-v2` skill module with V2 instructions, but **V2 tool execution is not part of the lite server** — the `justlend-lending-v2`, `justlend-trx-staking`, `justlend-energy-rental`, and `justlend-governance-v1` modules require the [full MCP server](mcp_server.md). To *query* V2 (Moolah) read-only (vault APY/TVL, market parameters, user positions, liquidation candidates), use the full server's read-only `get_moolah_*` tools — e.g. `get_moolah_vaults`, `get_moolah_markets`, `get_moolah_user_position`, `get_moolah_dashboard` — documented in [MCP Server → JustLend V2 (Moolah)](mcp_server.md). Those read tools require no wallet; only the V2 *write* tools do.
 
 !!! tip "Companion references for agents using these tools"
     The tool outputs use protocol-specific terminology — `mantissa`, `borrowIndex`, `exchangeRate`, `collateralFactor`, `closeFactor`, `liquidationIncentive`, `status: active|legacy`. Each is defined in the [Glossary](../resources/glossary.md) with units and on-chain encoding. When asking the agent to *act* on a market (e.g. supply, repay), point it at [Common Pitfalls](../developers/common_pitfalls.md) first — the same gotchas (USDT `approve()` race, decimals mismatch, etc.) apply whether the agent uses Skills, the full MCP server, or raw TronWeb.
@@ -31,27 +34,28 @@ It also works as a standalone **CLI tool** for quick market checks directly from
 
 ### Skill Modules
 
-The project includes 4 structured skill modules in the `/skills` directory that provide AI agents with domain-specific instructions and workflows:
+The project includes 5 structured skill modules in the `/skills` directory that provide AI agents with domain-specific instructions and workflows:
 
 | Skill | Description | MCP Server Required |
 |-------|-------------|---------------------|
 | **justlend-lending-v1** | Market queries, account analysis, health factor monitoring | JustLend Skills (built-in) |
+| **justlend-lending-v2** | JustLend V2 (Moolah) isolated markets + ERC4626 vaults: supply/borrow/liquidate | Full MCP Server |
 | **justlend-trx-staking** | Stake TRX for sTRX liquid staking tokens | Full MCP Server |
 | **justlend-energy-rental** | Rent TRON Energy at discounted rates (50-80% cheaper) | Full MCP Server |
 | **justlend-governance-v1** | View proposals, deposit JST for voting power, cast votes | Full MCP Server |
 
-The lending skill works with the built-in 9 query tools. The other three skills provide instructional guidance and require the [full MCP server](mcp_server.md) for write operations.
+The `justlend-lending-v1` skill works with the built-in 9 query tools. The other four skills provide instructional guidance and require the [full MCP server](mcp_server.md) for tool execution (and write operations).
 
 ## Featured Markets (CLI Quick Reference)
 
 !!! warning "Not an exhaustive market list"
-    The table below lists the **9 markets the bundled CLI examples target by symbol shortcut**. It is **not** the protocol's full market roster. The JustLend DAO protocol currently exposes **17 active + 6 legacy = 23 markets total** (see the single source of truth below). All 23 are queryable through the Skills MCP server via `get_supported_markets` / `get_all_markets` — the CLI shortcuts are just a convenience subset for human terminal use.
+    The table below lists the **9 markets the bundled CLI examples target by symbol shortcut**. It is **not** the protocol's full market roster. The JustLend DAO protocol currently exposes **18 active + 6 legacy = 24 markets total** (see the single source of truth below). All 24 are queryable through the Skills MCP server via `get_supported_markets` / `get_all_markets` — the CLI shortcuts are just a convenience subset for human terminal use.
 
 **Single source of truth for the live market list (in order of preference):**
 
 1. **Live API** — `GET https://openapi.just.network/lend/jtoken` returns the authoritative jToken list with addresses, APYs, and TVL.
 2. **Machine-readable address book** — [`/developers/contracts.json`](../developers/contracts.json) (regenerated from the MCP server's `chains.ts`).
-3. **Rendered table** — [APIs §2 — jToken Address Reference](../developers/apis.md#2-jtoken-address-reference) (all 23 markets, legacy rows tagged).
+3. **Rendered table** — [APIs §2 — jToken Address Reference](../developers/apis.md#2-jtoken-address-reference) (all 24 markets, legacy rows tagged).
 
 | jToken | Underlying | Description |
 |--------|-----------|-------------|
