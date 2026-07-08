@@ -138,8 +138,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "High-frequency English and Chinese JustLend questions mapped to the recommended MCP tools, OpenAPI endpoints, and documentation pages.",
-          "dateModified": "2026-06-12",
-          "datePublished": "2026-06-12"
+          "dateModified": "2026-07-08",
+          "datePublished": "2026-07-08"
         }
       ]
     }
@@ -2427,11 +2427,11 @@
 <p>Answer with network, jToken symbol, underlying symbol, address, and active/legacy status.</p>
 <p>Chinese: “JustLend 有哪些市场？”、“支持哪些币种？”</p>
 <h3 id="what-is-the-apy-for-jusdt-jtrx-another-market">What is the APY for jUSDT / jTRX / another market?<a class="headerlink" href="#what-is-the-apy-for-jusdt-jtrx-another-market" title="Permanent link">&para;</a></h3>
-<p>Use MCP <code>get_market_data</code> for one market or <code>get_all_markets</code> for all markets. For HTTP integration, use OpenAPI <code>GET /lend/jtoken</code> or <code>GET /lend/jtoken/{address}</code>.</p>
+<p>Use MCP <code>get_market_data</code> for one market or <code>get_all_markets</code> for all markets. For HTTP integration, use OpenAPI <code>GET /lend/jtoken</code> or <code>GET /lend/jtoken?address={jToken}</code>.</p>
 <p>Chinese: “USDT 存款年化多少？”、“TRX 借款 APY 多少？”</p>
 <h2 id="account-questions">Account questions<a class="headerlink" href="#account-questions" title="Permanent link">&para;</a></h2>
 <h3 id="how-do-i-check-a-justlend-account-position">How do I check a JustLend account position?<a class="headerlink" href="#how-do-i-check-a-justlend-account-position" title="Permanent link">&para;</a></h3>
-<p>Use MCP <code>get_account_summary</code> with the user's TRON address and network. For HTTP integration, use <code>GET /lend/account/{address}</code>.</p>
+<p>Use MCP <code>get_account_summary</code> with the user's TRON address and network. For HTTP integration, use <code>GET /lend/account?address={address}</code>.</p>
 <p>Chinese: “查一下这个地址的 JustLend 仓位”、“这个地址健康因子是多少？”</p>
 <h3 id="can-this-account-be-liquidated">Can this account be liquidated?<a class="headerlink" href="#can-this-account-be-liquidated" title="Permanent link">&para;</a></h3>
 <p>Use MCP <code>get_account_summary</code>. Explain liquidation risk using health factor, borrow limit, total borrow, collateral value, and current prices. State that it is a snapshot and should be refreshed before action.</p>
@@ -2488,7 +2488,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 12, 2026 10:48:42 UTC">2026-06-12</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="July 8, 2026 06:56:49 UTC">2026-07-08</span>
   </span>
 
     
