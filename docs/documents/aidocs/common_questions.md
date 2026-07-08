@@ -29,7 +29,7 @@ Chinese: “JustLend 有哪些市场？”、“支持哪些币种？”
 
 ### What is the APY for jUSDT / jTRX / another market?
 
-Use MCP `get_market_data` for one market or `get_all_markets` for all markets. For HTTP integration, use OpenAPI `GET /lend/jtoken` or `GET /lend/jtoken/{address}`.
+Use MCP `get_market_data` for one market or `get_all_markets` for all markets. For HTTP integration, use OpenAPI `GET /lend/jtoken` or `GET /lend/jtoken?address={jToken}`.
 
 Chinese: “USDT 存款年化多少？”、“TRX 借款 APY 多少？”
 
@@ -37,7 +37,7 @@ Chinese: “USDT 存款年化多少？”、“TRX 借款 APY 多少？”
 
 ### How do I check a JustLend account position?
 
-Use MCP `get_account_summary` with the user's TRON address and network. For HTTP integration, use `GET /lend/account/{address}`.
+Use MCP `get_account_summary` with the user's TRON address and network. For HTTP integration, use `GET /lend/account?address={address}`.
 
 Chinese: “查一下这个地址的 JustLend 仓位”、“这个地址健康因子是多少？”
 

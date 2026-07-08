@@ -35,7 +35,7 @@ JustLend DAO is a decentralized lending protocol on TRON based on the Compound V
 ## Minimal decision tree
 
 1. **Question only needs public data**: use OpenAPI or read-only MCP tools.
-2. **Question needs portfolio analysis for an address**: use MCP `get_account_summary` or OpenAPI `/lend/account/{address}`.
+2. **Question needs portfolio analysis for an address**: use MCP `get_account_summary` or OpenAPI `/lend/account?address={address}`.
 3. **Question asks to execute an action**: use MCP only, read [`mcp_safety.md`](mcp_safety.md), require human confirmation, and never ask for private keys in chat.
 4. **Question asks for contract addresses**: use `contracts.json` and specify network.
 5. **Question asks for terms such as collateral factor, exchange rate, or mantissa**: use [`glossary.md`](glossary.md) and the full glossary page.

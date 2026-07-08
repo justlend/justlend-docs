@@ -27,8 +27,8 @@ Use this page when the user asks about supported markets, APY, TVL, utilization,
 ### OpenAPI
 
 - `GET /lend/jtoken`: all jToken markets and live market data.
-- `GET /lend/jtoken/{address}`: details for a specific jToken.
-- `GET /lend/dashboard`: protocol-level totals.
+- `GET /lend/jtoken?address={jToken}`: details for a specific jToken.
+- Protocol-level totals: aggregate `GET /lend/jtoken` (no dedicated dashboard endpoint).
 
 Schema: [`/developers/apis/justlend_apis.yaml`](../../developers/apis/justlend_apis.yaml)
 
@@ -65,7 +65,7 @@ Do not hard-code APY, TVL, utilization, liquidity, price, reward APY, or paused 
 | User question | Best source |
 |---------------|-------------|
 | “JustLend supports which markets?” | MCP `get_supported_markets` |
-| “What is jUSDT supply APY?” | MCP `get_market_data` or OpenAPI `/lend/jtoken/{address}` |
+| “What is jUSDT supply APY?” | MCP `get_market_data` or OpenAPI `/lend/jtoken?address={jToken}` |
 | “Show all market TVL and utilization.” | MCP `get_all_markets` or OpenAPI `/lend/jtoken` |
 | “What is the jUSDT contract address?” | `contracts.json` or MCP `get_supported_markets` |
 | “Is jWBTT still active?” | `contracts.json` status + MCP market data |

@@ -37,7 +37,7 @@ The answer should summarize:
 
 ## OpenAPI fallback
 
-Use `GET /lend/account/{address}` from `https://openapi.just.network` for read-only integrations.
+Use `GET /lend/account?address={address}` from `https://openapi.just.network` for read-only integrations.
 
 Schema: [`/developers/apis/justlend_apis.yaml`](../../developers/apis/justlend_apis.yaml)
 

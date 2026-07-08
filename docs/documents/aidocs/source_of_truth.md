@@ -60,7 +60,7 @@ The public HTTP API returns numbers in their on-chain form (e.g. base units, man
 |---------------|-----------|----------|
 | “What markets does JustLend support?” | MCP `get_supported_markets` or OpenAPI `/lend/jtoken` | `contracts.json` |
 | “What is the APY / TVL / utilization?” | MCP `get_market_data` / `get_all_markets` | OpenAPI `/lend/jtoken` |
-| “What is this address's health factor?” | MCP `get_account_summary` | OpenAPI `/lend/account/{address}` |
+| “What is this address's health factor?” | MCP `get_account_summary` | OpenAPI `/lend/account?address={address}` |
 | “Supply / borrow / repay / withdraw for me” | MCP guided prompt + tool | Human docs for explanation only |
 | “What contract address should I use?” | `contracts.json` | MCP `get_supported_markets` / `chains.ts` |
 | “How do I decode events?” | ABI JSON files | developer pages |
