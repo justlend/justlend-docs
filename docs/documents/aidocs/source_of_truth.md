@@ -48,11 +48,11 @@ Use this page to decide which JustLend documentation or runtime source an AI age
 
 ## Units and amounts — where to get self-describing values
 
-The public HTTP API returns numbers in their on-chain form (e.g. base units, mantissa-scaled, annualized decimals) **without** an inline `_unit`/`decimals` envelope, by design. To interpret amounts correctly:
+The public HTTP API returns decimal quantities as **JSON strings** (mostly de-scaled human units; `borrowIndex` and the V2 share amounts are raw integer strings) **without** an inline `_unit`/`decimals` envelope, by design. Parse them with big-decimal/BigInt tooling — several values exceed IEEE-754 double precision. To interpret amounts correctly:
 
 - **Need a ready-to-use amount?** Prefer **MCP tools** — balance/amount fields return a self-describing object `{ raw, _unit, decimals, display }` (e.g. `get_token_balance`, `get_trx_balance`), so you never re-apply decimals.
-- **Using the HTTP API directly?** Read the unit and precision from the **OpenAPI spec**: each amount field carries structured `x-unit` / `x-decimals` extensions (and a prose description). Do not infer decimals from the symbol.
-- **Quick reference:** jTokens always use **8** decimals; each underlying TRC20 uses its own `decimals`; `*Rate` / `apy` are annualized decimals (×100 for %); `exchangeRate` / `borrowIndex` and other mantissa fields are scaled by `1e18`. See [APIs §1.3–1.4](../../developers/apis.md#13-numeric-formats).
+- **Using the HTTP API directly?** Read the unit and precision from the **OpenAPI spec**: amount / rate / price / time fields carry a structured `x-unit` extension, plus `x-decimals` where the scale is fixed and `x-format` for hex / non-RFC time strings (and a prose description). Do not infer decimals from the symbol.
+- **Quick reference:** jTokens always use **8** decimals; each underlying TRC20 uses its own `decimals`; `*Rate` / `apy` are annualized decimals (×100 for %); `borrowIndex` is scaled by `1e18`, while the API's `exchangeRate` fields are already **de-scaled** ratios (underlying per jToken; TRX per sTRX). See [APIs §1.3–1.4](../../developers/apis.md#13-numeric-formats).
 
 ## Common source mapping
 
@@ -60,7 +60,7 @@ The public HTTP API returns numbers in their on-chain form (e.g. base units, man
 |---------------|-----------|----------|
 | “What markets does JustLend support?” | MCP `get_supported_markets` or OpenAPI `/lend/jtoken` | `contracts.json` |
 | “What is the APY / TVL / utilization?” | MCP `get_market_data` / `get_all_markets` | OpenAPI `/lend/jtoken` |
-| “What is this address's health factor?” | MCP `get_account_summary` | OpenAPI `/lend/account?address={address}` |
+| “What is this address's health factor?” | MCP `get_account_summary` | OpenAPI `/lend/account?addresses={address}` |
 | “Supply / borrow / repay / withdraw for me” | MCP guided prompt + tool | Human docs for explanation only |
 | “What contract address should I use?” | `contracts.json` | MCP `get_supported_markets` / `chains.ts` |
 | “How do I decode events?” | ABI JSON files | developer pages |

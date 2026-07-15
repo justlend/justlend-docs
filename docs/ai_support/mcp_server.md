@@ -1,6 +1,6 @@
 ---
 title: JustLend MCP Server (full, read + write)
-description: "@justlend/mcp-server-justlend v1.1.0 — 96 MCP tools across JustLend V1 (supply, borrow, repay, sTRX staking, energy rental, governance, mining) and V2 vaults/markets/liquidation, plus historical records and general TRON utilities. Dual-mode signing (browser TronLink or encrypted agent-wallet)."
+description: "@justlend/mcp-server-justlend v1.1.2 — 98 MCP tools across JustLend V1 (supply, borrow, repay, sTRX staking, energy rental, governance, mining) and V2 vaults/markets/liquidation, plus historical records and general TRON utilities. Dual-mode signing (browser TronLink or encrypted agent-wallet)."
 ---
 
 # MCP Server
@@ -15,7 +15,7 @@ This page is the human-readable reference for the full MCP server. For agent use
 - [Installation](#installation) — npm, source, and Claude Desktop config.
 - [Wallet setup (browser vs agent-wallet)](#wallet-setup-first-use-choice) — browser (TronLink TIP-6963) vs agent-wallet (encrypted local).
 - [HTTP-mode authentication (`MCP_API_KEY`)](#http-mode-authentication-mcp_api_key) — stdio (local clients) is open; HTTP/SSE is fail-closed.
-- [Tool catalog (96 tools)](#tools-96-total) — **V1**: Wallet & Network · Market Data · Account & Balances · Lending Operations · Mining & Rewards · JST Voting / Governance · Energy Rental · sTRX Staking · Transfers · General TRON. **V2**: Vaults · Markets · Liquidation · Dashboard/History · Mining. Plus Historical Records.
+- [Tool catalog (98 tools)](#tools-98-total) — **V1**: Wallet & Network · Market Data · Account & Balances · Lending Operations · Mining & Rewards · JST Voting / Governance · Energy Rental · sTRX Staking · Transfers · General TRON. **V2**: Vaults · Markets · Liquidation · Dashboard/History · Mining. Plus Historical Records.
 - [Guided prompts](#prompts-ai-guided-workflows) — the 14 shipped MCP prompts (`supply_assets`, `analyze_portfolio`, `cast_vote`, `moolah_supply`, `moolah_borrow`, …).
 - [Security considerations](#security-considerations) — `destructiveHint`, dry-run mode, source-of-truth priority, HTTP-mode `MCP_API_KEY`.
 
@@ -30,10 +30,10 @@ The JustLend MCP Server (`@justlend/mcp-server-justlend`) is a [Model Context Pr
 Beyond JustLend-specific operations, the server also exposes a full set of **general-purpose TRON chain utilities** — balance queries, block/transaction data, token metadata, TRX transfers, smart contract reads/writes, staking (Stake 2.0), multicall, and more.
 
 !!! note
-    Current version (**v1.1.0**) covers **JustLend V1** *and* **JustLend V2**. V1 is the Compound-V2-style pooled supply/borrow market (jTokens); V2 is an isolated-market + ERC4626-vault protocol. The two surfaces are namespaced — V1 tools like `get_market_data` / `supply`, V2 tools prefixed `moolah_*` / `get_moolah_*` (the `moolah` identifier is V2's on-chain/tool naming). See the [JustLend V2](../developers/justlend_v2.md) developer page for the protocol model and deployed contracts.
+    Current version (**v1.1.2**) covers **JustLend V1** *and* **JustLend V2**. V1 is the Compound-V2-style pooled supply/borrow market (jTokens); V2 is an isolated-market + ERC4626-vault protocol. The two surfaces are namespaced — V1 tools like `get_market_data` / `supply`, V2 tools prefixed `moolah_*` / `get_moolah_*` (the `moolah` identifier is V2's on-chain/tool naming). See the [JustLend V2](../developers/justlend_v2.md) developer page for the protocol model and deployed contracts.
 
-!!! tip "v1.1.0 Update"
-    This release adds **JustLend V2** support and grows the surface to **96 tools** (from 59): 30 V2 tools (vaults, markets, liquidation, dashboard/history, mining) + 7 historical-records tools, plus 4 V2 AI prompts (**14** total) and a V2 gas estimator. It also ships **AI-agent ergonomics** — structured self-healing tool errors (`{ error, errorCode, hint }`), self-describing amounts (`{ raw, decimals, _unit, display }`) on core reads, and hardened input schemas (Base58-address + decimal-amount validation). The machine-readable `mcp-api-list.md` catalog is regenerated from source (now 96 tools). All prior V1 safety work remains in place: TRC20 allowance checks before supply/repay, opt-in `max` approvals with revoke hints, typed broadcast handling, `toSafeCallValueNumber` guards on every broadcast/simulation path, mainnet fail-closed on pre-flight `REVERT`, constant-time `MCP_API_KEY` comparison, and governance failed-proposal filtering.
+!!! tip "v1.1.2 Update"
+    **v1.1.2** adds native **TRX ↔ WTRX** wrap/unwrap (`wrap_trx` / `unwrap_trx`) and hardens TRC20 approvals — USDT/USDC/USDJ defensively reset the allowance to `0` before a new non-zero `approve` (matching the official front-end; the reset tx is confirmed on-chain before re-approving), and `amount='0'` reliably revokes. Tool errors now also carry a **`retryable`** flag with a `transient` class (see the error contract below), so agents can distinguish safe-to-retry RPC hiccups from errors needing corrective action. The surface is now **98 tools**. **v1.1.0** introduced **JustLend V2** support (from 59): 30 V2 tools (vaults, markets, liquidation, dashboard/history, mining) + 7 historical-records tools, plus 4 V2 AI prompts (**14** total) and a V2 gas estimator. It also ships **AI-agent ergonomics** — structured self-healing tool errors (`{ error, errorCode, hint }`), self-describing amounts (`{ raw, decimals, _unit, display }`) on core reads, and hardened input schemas (Base58-address + decimal-amount validation). The machine-readable `mcp-api-list.md` catalog is regenerated from source (now 98 tools). All prior V1 safety work remains in place: TRC20 allowance checks before supply/repay, opt-in `max` approvals with revoke hints, typed broadcast handling, `toSafeCallValueNumber` guards on every broadcast/simulation path, mainnet fail-closed on pre-flight `REVERT`, constant-time `MCP_API_KEY` comparison, and governance failed-proposal filtering.
 
 ## Overview
 
@@ -183,10 +183,11 @@ npx agent-wallet import
 # Strongly recommended — avoids TronGrid 429 rate limiting on mainnet
 export TRONGRID_API_KEY="your_trongrid_api_key"
 
-# Optional: HTTP/SSE transport mode
-export MCP_TRANSPORT="http"       # Use HTTP/SSE instead of stdio
-export MCP_HTTP_PORT="3000"       # HTTP server port (default: 3000)
-export MCP_HTTP_HOST="127.0.0.1"  # HTTP server host (default: 127.0.0.1)
+# Optional: HTTP/SSE transport mode — start it with `npm run start:http`
+# (entrypoint is src/server/http-server.ts; there is no transport env toggle)
+export PORT="3001"                 # HTTP server port (default: 3001)
+export MCP_HOST="127.0.0.1"        # HTTP server host / bind address (default: 127.0.0.1)
+export MCP_CORS_ORIGIN=""          # required allow-list if you bind to a non-loopback host
 
 # Required in HTTP mode — see "HTTP Mode Authentication" below for how to generate one
 export MCP_API_KEY="your_strong_random_secret"
@@ -194,7 +195,7 @@ export MCP_API_KEY="your_strong_random_secret"
 
 ### HTTP Mode Authentication (`MCP_API_KEY`)
 
-**Most users do not need this.** Claude Desktop, Claude Code, and Cursor connect over **stdio** by default, which has no network surface and no auth. `MCP_API_KEY` only applies when you run the server in **HTTP/SSE mode** (`npm run start:http` or `MCP_TRANSPORT=http`).
+**Most users do not need this.** Claude Desktop, Claude Code, and Cursor connect over **stdio** by default, which has no network surface and no auth. `MCP_API_KEY` only applies when you run the server in **HTTP/SSE mode** (`npm run start:http`).
 
 #### What it is
 
@@ -362,7 +363,7 @@ npm run dev
 
 ## API Reference
 
-### Tools (96 total)
+### Tools (98 total)
 
 !!! info "V1 + V2"
     The first ten groups below are **JustLend V1** (pooled jToken market). The **JustLend V2** groups (vaults / markets / liquidation / dashboard / mining) and **Historical Records** follow. V2 tools are namespaced `moolah_*` / `get_moolah_*`.
@@ -572,6 +573,28 @@ For programmatic contract calls without re-fetching from Tronscan, the MCP serve
 
 - **Source**: [`src/core/abis.ts`](https://github.com/justlend/mcp-server-justlend/blob/main/src/core/abis.ts) (jToken, Comptroller, Oracle, TRC20)
 - **Chain configs (Mainnet / Nile testnet)**: [`src/core/chains.ts`](https://github.com/justlend/mcp-server-justlend/blob/main/src/core/chains.ts)
+
+## Error contract
+
+Every tool returns errors as structured JSON with `isError: true`, so an agent can branch without parsing prose:
+
+```json
+{ "error": "<sanitized message>", "errorCode": "<code>", "retryable": true, "hint": "<how to fix>" }
+```
+
+`errorCode`, `retryable`, and `hint` are present when the error is recognized; unrecognized errors return just `error`. Recognized codes:
+
+| errorCode | retryable | Meaning / agent action |
+|-----------|:---------:|------------------------|
+| `transient` | ✅ true | Network/RPC timeout, `SERVER_BUSY`, 429/5xx — retry read-only calls after a short backoff; **never** blindly re-broadcast a write (re-query state first). |
+| `insufficient_allowance` | ❌ false | Approve the spender first (`approve_underlying` / `approve_for_votes` / `approve_moolah_*`), then retry. |
+| `insufficient_balance` | ❌ false | Lower the amount or fund the wallet; verify with `get_trx_balance` / `get_token_balance`. |
+| `wallet_not_configured` | ❌ false | Configure a wallet (`import_wallet` / `connect_browser_wallet`), then `set_active_wallet`. |
+| `execution_reverted` | ❌ false | Contract precondition failed (allowance / health / paused market) — simulate before broadcasting. |
+| `market_not_found` | ❌ false | Verify the market symbol/address against `get_supported_markets`. |
+| `invalid_address` | ❌ false | Use a Base58 TRON address (`T…`, 34 chars). |
+
+Only `transient` is safe to auto-retry; every other code requires a corrective action first.
 
 ## Security Considerations
 
