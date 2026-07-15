@@ -376,27 +376,45 @@ Base URL: `https://openapi.just.network`. Authoritative schema: <https://docs.ju
 
 | Method | Path | Purpose |
 |--------|------|---------|
-| GET | `/lend/jtoken` | All SBM markets — supply/borrow APY, mining rewards, TVL, decimals, prices |
-| GET | `/lend/account` | Per-address SBM positions, health, with pagination & filters |
+| GET | `/lend/jtoken` | All SBM V1 markets — supply/borrow APY, TVL, decimals, prices |
+| GET | `/lend/account?addresses={a,b}` | Per-address SBM V1 positions, health, with pagination & filters |
 | GET | `/justlend/liquidate/highRiskAccountList` | Accounts with Risk Value > observation threshold, useful for liquidator bots |
-| GET | `/mining/reward` | Mining reward configuration per market |
-| GET | `/mining/apy` | Per-market mining APY |
-| GET | `/mining/distributions` | Reward distribution snapshots |
-| GET | `/lend/strx` | sTRX market dashboard |
-| GET | `/lend/strxStake/account` | Per-address sTRX staking state |
-| GET | `/lend/rentResource/account` | Per-address energy rental orders |
+| GET | `/mining/reward?address={a}` | Per-user mining phase status (keyed by market address → reward-token symbol) |
+| GET | `/mining/apy` | Per-market USDD mining APY (all markets returned; `"0.00000000"` = inactive) |
+| GET | `/mining/distributions?addr={a}` | Per-user Merkle claim proofs per phase — ⚠️ parameter is `addr`, not `address` |
+| GET | `/lend/strx` | sTRX market + Energy Rental dashboard |
+| GET | `/lend/strxStake/account?addresses={a,b}` | Per-address sTRX staking state |
+| GET | `/lend/rentResource/account?addresses={a,b}` | Per-address energy rental orders |
+| GET | `/v2/index/vault/list` | All JustLend V2 (Moolah) vaults — TVL, APY, allocations; user vaults with `address` |
+| GET | `/v2/index/market/list` | All V2 isolated markets — LLTV, liquidity, borrow rate; user markets with `address` |
+| GET | `/v2/index/position?address={a}` | Aggregated V2 portfolio for one wallet |
+| GET | `/v2/vault/position?vaultAddress={v}&address={a}` | User position in one V2 vault |
+| GET | `/v2/market/position?market={0x…id}&address={a}` | User position in one V2 isolated market |
 
-### Response envelope
+### Response envelope and error contract
+
+V1 endpoints (`/lend/...`, `/mining/...`, `/justlend/...`):
 
 ```json
 {
-  "code": 0,             // 0 = success
+  "code": 0,             // 0 = success (V1)
   "message": "SUCCESS",
   "data": { ... }
 }
 ```
 
-Status codes follow standard HTTP (`200` OK, `400` Bad Request). Field types and units (jToken units = 8 decimals, APY as annualized decimal, USD values pre-scaled where indicated) are spelled out in the OpenAPI components schemas — **prefer the YAML to free-text interpretation**.
+V2 endpoints (`/v2/...`):
+
+```json
+{
+  "code": 200,           // 200 = success (V2)
+  "message": "Success",
+  "data": { ... },
+  "timestamp": 1784101532272
+}
+```
+
+**Business and validation errors are returned with HTTP `200`** and the same envelope — `code ≠ 0` (V1, `data` absent) or `code ≠ 200` (V2, e.g. `202` invalid parameters, `data: null`). Branch on the body `code`, never on the HTTP status; only transport-level `429` / `5xx` surface as non-200. All decimal quantities (amounts, rates, prices, indexes) are JSON **strings** — parse with big-decimal/BigInt (values like `borrowIndex` and V2 share amounts exceed 2^53). Field types, `required` arrays, and units (`x-unit` / `x-decimals` / `x-format` extensions; jToken units = 8 decimals, APY as annualized decimal, USD values pre-scaled) are spelled out in the OpenAPI components schemas — **prefer the YAML to free-text interpretation**.
 
 ### Event-stream / historical-event indexing
 

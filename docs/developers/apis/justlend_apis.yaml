@@ -1,20 +1,28 @@
 openapi: 3.1.2
 info:
   title: JustLend DAO
-  description: JustLend Doc API
-  version: 1.0.0
+  description: >-
+    Public read-only REST API for JustLend DAO (markets, account positions, liquidation
+    risk, USDD supply-mining rewards, sTRX staking, Energy Rental — V1 and V2/Moolah).
+
+    Conventions: success and business/validation errors are BOTH returned with HTTP 200
+    and a `{code, message, data}` envelope. V1 endpoints signal success with `code: 0`
+    ("SUCCESS"); V2 (`/v2/...`) endpoints signal success with `code: 200` ("Success") and
+    also return a top-level `timestamp`. Only transport-level conditions (429 throttling,
+    5xx faults) surface as non-200 HTTP statuses.
+
+    All decimal quantities (amounts, rates, prices, indexes) are serialized as JSON
+    strings — parse them with arbitrary-precision decimal/BigInt tooling, never IEEE-754
+    floats. Vendor extensions used by this spec: `x-unit` (what the value denominates),
+    `x-decimals` (fixed decimal scale, where one exists), `x-format` (non-RFC string
+    layouts such as hex-uint256 or `YYYY-MM-DD HH:mm`).
+  version: 1.1.0
 
 servers:
   - url: https://openapi.just.network
-  - url: '{protocol}://openapi.just.network/{path}'
-    description: Responds with your request data.
-    variables:
-      protocol:
-        enum:
-          - https
-        default: https
-      path:
-        default: ''
+
+# The public API is anonymous — no authentication scheme applies to any operation.
+security: []
 
 tags:
   - name: Supply and Borrow Market V1
@@ -31,6 +39,7 @@ paths:
         - Supply and Borrow Market V2
       summary: Get SBM V2 vault Information
       description: Query to get all the supply and borrow market V2 vault information, which includes token information of each market.
+      operationId: getV2VaultList
       parameters:
         - '$ref': '#/components/parameters/addressV2'
         - '$ref': '#/components/parameters/sort'
@@ -44,79 +53,102 @@ paths:
         - '$ref': '#/components/parameters/allPageSize'
       responses:
         '200':
-          description: Return the list of vault information.
+          description: >-
+            Return the list of vault information. Business/validation errors are also
+            returned with HTTP 200 — check the body `code` (200 = success).
           content:
             application/json:
               schema:
                 type: object
+                required:
+                  - code
+                  - message
+                  - timestamp
                 properties:
                   code:
                     type: integer
-                    description: Status code of the response, 200 means success.
+                    description: >-
+                      Business status code. V2 endpoints return `200` for success (unlike V1,
+                      which uses `0`). Any other value (e.g. `202` = invalid parameters) is a
+                      business/validation error delivered with HTTP 200 — read `message`;
+                      `data` is then `null`.
                     examples:
-                      - 0
+                      - 200
                   message:
                     type: string
-                    description: Response message, eg.SUCCESS.
+                    description: '`Success` on success, otherwise a short error description.'
                     examples:
-                      - SUCCESS
+                      - Success
                   data:
                     type: object
-                    description: Token information of each vault.
+                    description: Vault directory. `null` when `code` is not `200`.
+                    required:
+                      - userVaults
+                      - allVaults
+                      - depositTokens
+                      - collateralTokens
                     properties:
                       userVaults:
                         type: object
-                        description: Vaults the user has participated in.
+                        description: Vaults the user has participated in (empty when no `address` is supplied).
+                        required:
+                          - totalCount
+                          - list
                         properties:
                           totalCount:
                             type: integer
                             description: Total number of vaults the user has participated in.
                             examples:
-                              - 8
+                              - 0
                           list:
                             type: array
                             description: List of vaults the user has participated in.
                             items:
-                              '$ref': '#/components/schemas/vaultsList'
+                              '$ref': '#/components/schemas/vaultInfo'
                       allVaults:
                         type: object
                         description: All the vaults.
+                        required:
+                          - totalCount
+                          - list
                         properties:
                           totalCount:
                             type: integer
                             description: Total number of vaults.
                             examples:
-                              - 6
+                              - 3
                           list:
                             type: array
                             description: List of vaults.
                             items:
-                              '$ref': '#/components/schemas/vaultsList'
+                              '$ref': '#/components/schemas/vaultInfo'
                       depositTokens:
                         type: array
+                        description: Tokens that can be deposited into vaults (for filter UIs).
                         items:
-                          '$ref': '#/components/schemas/depositTokens'
+                          '$ref': '#/components/schemas/v2TokenInfo'
                       collateralTokens:
                         type: array
+                        description: Tokens eligible as collateral (for filter UIs).
                         items:
-                          '$ref': '#/components/schemas/collateralTokens'
+                          '$ref': '#/components/schemas/v2TokenInfo'
                   timestamp:
                     type: integer
-                    description: timestamp.
+                    description: Server timestamp of the response.
+                    x-unit: epoch milliseconds
                     examples:
-                      - 1761818673076
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                '$ref': '#/components/responses/BadRequest'
+                      - 1784101532272
+        '429':
+          '$ref': '#/components/responses/TooManyRequests'
+        '5XX':
+          '$ref': '#/components/responses/ServerError'
   '/v2/index/market/list':
     get:
       tags:
         - Supply and Borrow Market V2
       summary: Get SBM V2 market Information
       description: Query to get all the supply and borrow market V2 market information, which includes token information of each market.
+      operationId: getV2MarketList
       parameters:
         - '$ref': '#/components/parameters/addressV2'
         - '$ref': '#/components/parameters/sort'
@@ -130,117 +162,182 @@ paths:
         - '$ref': '#/components/parameters/allPageSize'
       responses:
         '200':
-          description: Return the list of vault information.
+          description: >-
+            Return the list of market information. Business/validation errors are also
+            returned with HTTP 200 — check the body `code` (200 = success).
           content:
             application/json:
               schema:
                 type: object
+                required:
+                  - code
+                  - message
+                  - timestamp
                 properties:
                   code:
                     type: integer
-                    description: Status code of the response, 200 means success.
+                    description: >-
+                      Business status code. V2 endpoints return `200` for success (unlike V1,
+                      which uses `0`). Any other value (e.g. `202` = invalid parameters) is a
+                      business/validation error delivered with HTTP 200 — read `message`;
+                      `data` is then `null`.
                     examples:
-                      - 0
+                      - 200
                   message:
                     type: string
-                    description: Response message, eg.SUCCESS.
+                    description: '`Success` on success, otherwise a short error description.'
                     examples:
-                      - SUCCESS
+                      - Success
                   data:
                     type: object
-                    description: Token information of each market.
+                    description: Market directory. `null` when `code` is not `200`.
+                    required:
+                      - userMarkets
+                      - allMarkets
+                      - userMarketsCount
+                      - allMarketsCount
                     properties:
                       userMarkets:
                         type: array
-                        description: Markets the user has participated in.
+                        description: Markets the user has participated in (empty when no `address` is supplied).
                         items:
-                          '$ref': '#/components/schemas/v2marketsList'
-                      allMarket:
+                          '$ref': '#/components/schemas/v2MarketInfo'
+                      allMarkets:
                         type: array
                         description: All the markets.
                         items:
-                          '$ref': '#/components/schemas/v2marketsList'
+                          '$ref': '#/components/schemas/v2MarketInfo'
                       userMarketsCount:
                         type: integer
-                        description: the number of markets user has participated in.
+                        description: The number of markets the user has participated in.
                         examples:
-                          - 8
+                          - 0
                       allMarketsCount:
                         type: integer
-                        description: the number of all the market.
+                        description: The number of all the markets.
                         examples:
-                          - 6
+                          - 9
                   timestamp:
                     type: integer
-                    description: timestamp.
+                    description: Server timestamp of the response.
+                    x-unit: epoch milliseconds
                     examples:
-                      - 1761818673076
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                '$ref': '#/components/responses/BadRequest'
+                      - 1784101532797
+        '429':
+          '$ref': '#/components/responses/TooManyRequests'
+        '5XX':
+          '$ref': '#/components/responses/ServerError'
   '/v2/index/position':
     get:
       tags:
         - Supply and Borrow Market V2
       summary: Get user SBM V2 vault and market Information
       description: Query to get user's the supply and borrow market V2 vault and market information.
+      operationId: getV2IndexPosition
       parameters:
         - '$ref': '#/components/parameters/address1'
       responses:
         '200':
-          description: Return the list of vault and market information.
+          description: >-
+            Return the user's aggregated V2 position. Business/validation errors are also
+            returned with HTTP 200 — check the body `code` (200 = success).
           content:
             application/json:
               schema:
                 type: object
+                required:
+                  - code
+                  - message
+                  - timestamp
                 properties:
                   code:
                     type: integer
-                    description: Status code of the response, 200 means success.
+                    description: >-
+                      Business status code. V2 endpoints return `200` for success (unlike V1,
+                      which uses `0`). Any other value (e.g. `202` = invalid parameters) is a
+                      business/validation error delivered with HTTP 200 — read `message`;
+                      `data` is then `null`.
                     examples:
-                      - 0
+                      - 200
                   message:
                     type: string
-                    description: Response message, eg.SUCCESS.
+                    description: '`Success` on success, otherwise a short error description.'
                     examples:
-                      - SUCCESS
+                      - Success
                   data:
                     type: object
-                    description: User position information.
+                    description: User position information. `null` when `code` is not `200`.
+                    required:
+                      - totalBorrowUsd
+                      - totalCollateralUsd
+                      - totalSupplyUsd
+                      - netEarnApy
+                      - netBorrowRate
+                      - dailyRevenue
+                      - dailyMiningReward
+                      - dailyMiningRewardUsdd
+                      - dailyMiningRewardTrx
+                      - collateralCount
+                      - markets
+                      - vaults
+                      - borrowNew
+                      - vaultNew
                     properties:
                       totalBorrowUsd:
-                        type: integer
-                        description: Total borrowed value in USD across all markets.
+                        type: string
+                        description: Total borrowed value in USD across all markets. Decimal string.
+                        x-unit: USD
                         examples:
-                          - 586329496.024834777954885608
+                          - '586329496.024834777954885608'
                       totalCollateralUsd:
-                        type: integer
-                        description: Total collateral value in USD across all markets.
+                        type: string
+                        description: Total collateral value in USD across all markets. Decimal string.
+                        x-unit: USD
                         examples:
-                          - 915902433.287186268898300512
+                          - '915902433.287186268898300512'
                       totalSupplyUsd:
-                        type: integer
-                        description: Total supplied value in USD across all vaults.
+                        type: string
+                        description: Total supplied value in USD across all vaults. Decimal string.
+                        x-unit: USD
                         examples:
-                          - 719891232.071536779403686523
+                          - '719891232.071536779403686523'
                       dailyRevenue:
-                        type: integer
-                        description: Daily earnings generated from the user’s supplied assets.
+                        type: string
+                        description: Daily earnings generated from the user's supplied assets. Decimal string.
+                        x-unit: USD
                         examples:
-                          - 6.27
+                          - '6.27'
+                      dailyMiningReward:
+                        type: string
+                        description: Daily mining reward accruing to the user (USD value). Decimal string.
+                        x-unit: USD
+                        examples:
+                          - '0.000000000000000000'
+                      dailyMiningRewardUsdd:
+                        type: string
+                        description: Daily mining reward accruing to the user, denominated in USDD. Decimal string.
+                        x-unit: USDD (de-scaled)
+                        examples:
+                          - '0.000000000000000000'
+                      dailyMiningRewardTrx:
+                        type: string
+                        description: Daily mining reward accruing to the user, denominated in TRX. Decimal string.
+                        x-unit: TRX (de-scaled)
+                        x-decimals: 6
+                        examples:
+                          - '0.000000'
                       netEarnApy:
-                        type: integer
-                        description: Net APY from supplied assets, calculated as the weighted average APY of all vaults where the user has deposits.
+                        type: string
+                        description: Net APY from supplied assets, calculated as the weighted average APY of all vaults where the user has deposits. Decimal string.
+                        x-unit: annualized decimal rate (multiply by 100 for %)
                         examples:
-                          - 0.0792
+                          - '0.0792'
                       netBorrowRate:
-                        type: integer
-                        description: Net borrow rate, calculated as the weighted average borrow rate across all markets where the user has outstanding loans.
+                        type: string
+                        description: Net borrow rate, calculated as the weighted average borrow rate across all markets where the user has outstanding loans. Decimal string.
+                        x-unit: annualized decimal rate (multiply by 100 for %)
                         examples:
-                          - 0.0668
+                          - '0.0668'
                       collateralCount:
                         type: integer
                         description: Number of markets where the user has collateral greater than zero.
@@ -260,231 +357,324 @@ paths:
                         type: array
                         description: Markets the user has participated in.
                         items:
-                          '$ref': '#/components/schemas/myMarketList'
+                          '$ref': '#/components/schemas/myMarketInfo'
                       vaults:
                         type: array
                         description: Vaults the user has participated in.
                         items:
-                          '$ref': '#/components/schemas/myVaultList'
+                          '$ref': '#/components/schemas/myVaultInfo'
                   timestamp:
                     type: integer
-                    description: timestamp.
+                    description: Server timestamp of the response.
+                    x-unit: epoch milliseconds
                     examples:
-                      - 1761818673076
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                '$ref': '#/components/responses/BadRequest'
+                      - 1784101588616
+        '429':
+          '$ref': '#/components/responses/TooManyRequests'
+        '5XX':
+          '$ref': '#/components/responses/ServerError'
   '/v2/vault/position':
     get:
       tags:
         - Supply and Borrow Market V2
       summary: Get user SBM V2 vault Information
       description: Query to get user's vault information.
+      operationId: getV2VaultPosition
       parameters:
         - '$ref': '#/components/parameters/vaultAddress'
         - '$ref': '#/components/parameters/address1'
       responses:
         '200':
-          description: Return the list of user's vault information.
+          description: >-
+            Return the user's position in one vault. Business/validation errors are also
+            returned with HTTP 200 — check the body `code` (200 = success).
           content:
             application/json:
               schema:
                 type: object
+                required:
+                  - code
+                  - message
+                  - timestamp
                 properties:
                   code:
                     type: integer
-                    description: Status code of the response, 200 means success.
+                    description: >-
+                      Business status code. V2 endpoints return `200` for success (unlike V1,
+                      which uses `0`). Any other value (e.g. `202` = invalid parameters) is a
+                      business/validation error delivered with HTTP 200 — read `message`;
+                      `data` is then `null`.
                     examples:
-                      - 0
+                      - 200
                   message:
                     type: string
-                    description: Response message, eg.SUCCESS.
+                    description: '`Success` on success, otherwise a short error description.'
                     examples:
-                      - SUCCESS
+                      - Success
                   data:
                     type: object
-                    description: User vault information.
+                    description: User vault position. `null` when `code` is not `200`.
+                    required:
+                      - shareAmount
+                      - depositAmount
+                      - depositUsd
+                      - apy
+                      - dailyInterest
+                      - dailyInterestAmount
+                      - farmRewardUsddAmount24h
+                      - farmRewardTrxAmount24h
                     properties:
                       shareAmount:
-                        type: integer
-                        description: The number of vault shares held by the user.
+                        type: string
+                        description: >-
+                          The number of vault shares held by the user, in raw base units.
+                          Big-integer serialized as a string — may exceed 2^53; parse with BigInt.
+                        x-unit: vault share (raw base units)
                         examples:
-                          - 1901904999104896240974
+                          - '1901904999104896240974'
                       depositAmount:
-                        type: integer
-                        description: The user’s deposited asset amount in the vault.
+                        type: string
+                        description: The user's deposited asset amount in the vault. Decimal string, de-scaled by the asset's decimals.
+                        x-unit: vault asset (de-scaled)
                         examples:
-                          - 1901.905002241447229695
+                          - '1901.905002241447229695'
                       depositUsd:
-                        type: integer
-                        description: The USD value of the user’s deposited assets.
+                        type: string
+                        description: The USD value of the user's deposited assets. Decimal string.
+                        x-unit: USD
                         examples:
-                          - 1901.905002241447229696
+                          - '1901.905002241447229696'
                       apy:
-                        type: integer
-                        description: The annual percentage yield (APY) of the vault.
+                        type: string
+                        description: The annual percentage yield (APY) of the vault. Decimal string.
+                        x-unit: annualized decimal rate (multiply by 100 for %)
                         examples:
-                          - 0.000000000000009026
+                          - '0.000711758741868661'
                       dailyInterest:
-                        type: integer
-                        description: User’s estimated daily interest earnings.
+                        type: string
+                        description: User's estimated daily interest earnings (USD value). Decimal string.
+                        x-unit: USD
                         examples:
-                          - 0.000000000017166595
+                          - '0.000000000017166595'
+                      dailyInterestAmount:
+                        type: string
+                        description: User's estimated daily interest earnings, denominated in the vault asset. Decimal string.
+                        x-unit: vault asset (de-scaled)
+                        examples:
+                          - '0.000000'
+                      farmRewardUsddAmount24h:
+                        type: string
+                        description: Farm rewards accrued over the last 24 h, denominated in USDD. Decimal string.
+                        x-unit: USDD (de-scaled)
+                        examples:
+                          - '0'
+                      farmRewardTrxAmount24h:
+                        type: string
+                        description: Farm rewards accrued over the last 24 h, denominated in TRX. Decimal string.
+                        x-unit: TRX (de-scaled)
+                        x-decimals: 6
+                        examples:
+                          - '0'
                   timestamp:
                     type: integer
-                    description: timestamp.
+                    description: Server timestamp of the response.
+                    x-unit: epoch milliseconds
                     examples:
-                      - 1761818673076
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                '$ref': '#/components/responses/BadRequest'
+                      - 1784101589078
+        '429':
+          '$ref': '#/components/responses/TooManyRequests'
+        '5XX':
+          '$ref': '#/components/responses/ServerError'
   '/v2/market/position':
     get:
       tags:
         - Supply and Borrow Market V2
       summary: Get user SBM V2 market Information
       description: Query to get user's market information.
+      operationId: getV2MarketPosition
       parameters:
         - '$ref': '#/components/parameters/v2marketID'
         - '$ref': '#/components/parameters/address1'
       responses:
         '200':
-          description: Return the list of user's market information.
+          description: >-
+            Return the user's position in one market. Business/validation errors are also
+            returned with HTTP 200 — check the body `code` (200 = success).
           content:
             application/json:
               schema:
                 type: object
+                required:
+                  - code
+                  - message
+                  - timestamp
                 properties:
                   code:
                     type: integer
-                    description: Status code of the response, 200 means success.
+                    description: >-
+                      Business status code. V2 endpoints return `200` for success (unlike V1,
+                      which uses `0`). Any other value (e.g. `202` = invalid parameters) is a
+                      business/validation error delivered with HTTP 200 — read `message`;
+                      `data` is then `null`.
                     examples:
-                      - 0
+                      - 200
                   message:
                     type: string
-                    description: Response message, eg.SUCCESS.
+                    description: '`Success` on success, otherwise a short error description.'
                     examples:
-                      - SUCCESS
+                      - Success
                   data:
                     type: object
-                    description: User vault information.
+                    description: User market position. `null` when `code` is not `200`.
+                    required:
+                      - borrowAddress
+                      - borrowSymbol
+                      - borrowAmount
+                      - borrowShares
+                      - borrowUsd
+                      - collateralAddress
+                      - collateralSymbol
+                      - collateralAmount
+                      - collateralUsd
+                      - ltv
+                      - lltv
+                      - borrowApy
+                      - dailyInterest
+                      - risk
                     properties:
                       borrowAddress:
                         type: string
-                        description: Contract address of the borrowed token.
+                        description: Contract address of the borrowed (loan) token.
                         examples:
-                          - TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz
+                          - TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t
                       borrowSymbol:
                         type: string
                         description: Symbol of the borrowed token.
                         examples:
-                          - USDD
+                          - USDT
                       borrowAmount:
-                        type: integer
-                        description: Amount of the borrowed asset.
+                        type: string
+                        description: Amount of the borrowed asset. Decimal string, de-scaled.
+                        x-unit: loan token (de-scaled)
                         examples:
-                          - 339.08000000
+                          - '339.08000000'
                       borrowShares:
-                        type: integer
-                        description: Borrow shares held by the user.
+                        type: string
+                        description: >-
+                          Borrow shares held by the user, in raw base units. Big-integer
+                          serialized as a string — may exceed 2^53; parse with BigInt.
+                        x-unit: borrow share (raw base units)
                         examples:
-                          - 339080000000000000000
+                          - '339080000000000000000'
                       borrowUsd:
-                        type: integer
-                        description: Borrowed value in USD.
+                        type: string
+                        description: Borrowed value in USD. Decimal string.
+                        x-unit: USD
                         examples:
-                          - 339.08000000
+                          - '339.08000000'
                       collateralAddress:
                         type: string
                         description: Contract address of the collateral token.
                         examples:
-                          - TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT
+                          - TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz
                       collateralSymbol:
                         type: string
                         description: Symbol of the collateral token.
                         examples:
-                          - USDJ
+                          - USDD
                       collateralAmount:
-                        type: integer
-                        description: Quantity of the collateral asset supplied by the user.
+                        type: string
+                        description: Quantity of the collateral asset supplied by the user. Decimal string, de-scaled.
+                        x-unit: collateral token (de-scaled)
                         examples:
-                          - 705.00000000
+                          - '705.00000000'
                       collateralUsd:
-                        type: integer
-                        description: USD value of the collateral.
+                        type: string
+                        description: USD value of the collateral. Decimal string.
+                        x-unit: USD
                         examples:
-                          - 705.00000000
+                          - '705.00000000'
                       ltv:
-                        type: integer
-                        description: Loan-to-Value ratio.
+                        type: string
+                        description: Loan-to-Value ratio. Decimal string.
+                        x-unit: decimal fraction (0-1)
                         examples:
-                          - 0.01
+                          - '0.01'
                       lltv:
-                        type: integer
-                        description: Liquidation threshold.
+                        type: string
+                        description: Liquidation threshold (liquidation LTV). Decimal string.
+                        x-unit: decimal fraction (0-1)
                         examples:
-                          - 0.1
+                          - '0.800000000000000000'
                       borrowApy:
-                        type: integer
-                        description: Annual percentage yield (APY) for borrowing.
+                        type: string
+                        description: Annual percentage yield (APY) for borrowing. Decimal string.
+                        x-unit: annualized decimal rate (multiply by 100 for %)
                         examples:
-                          - 0.0486
+                          - '0.000250508418242629'
                       dailyInterest:
-                        type: integer
-                        description: Daily interest owed by the user.
+                        type: string
+                        description: Daily interest owed by the user. Decimal string.
+                        x-unit: USD
                         examples:
-                          - 1.162284
+                          - '1.162284'
                       risk:
-                        type: integer
-                        description: Risk ratio.
+                        type: string
+                        description: Risk ratio (`ltv / lltv`). Decimal string.
+                        x-unit: ratio
                         examples:
-                          - 0.1
+                          - '0.1'
                       displayDecimal:
                         type: integer
-                        description: Number of decimals used for displaying token amounts.
+                        description: >-
+                          Number of decimals used for displaying token amounts. Optional — not
+                          returned by every deployment/response.
                         examples:
                           - 6
                   timestamp:
                     type: integer
-                    description: timestamp.
+                    description: Server timestamp of the response.
+                    x-unit: epoch milliseconds
                     examples:
-                      - 1761818673076
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                '$ref': '#/components/responses/BadRequest'
+                      - 1784101589588
+        '429':
+          '$ref': '#/components/responses/TooManyRequests'
+        '5XX':
+          '$ref': '#/components/responses/ServerError'
   '/lend/jtoken':
     get:
       tags:
         - Supply and Borrow Market V1
       summary: Get Supply and Borrow Market V1 Information
-      description: Query to get all the supply and borrow market information, which includes token information of each market.
-      parameters:
-        - '$ref': '#/components/parameters/noParameters'
+      description: Query to get all the supply and borrow market information, which includes token information of each market. No parameters.
+      operationId: getJtokenMarkets
       responses:
         '200':
-          description: Return the list of market information.
+          description: >-
+            Return the list of market information. Business/validation errors are also
+            returned with HTTP 200 — check the body `code` (0 = success).
           content:
             application/json:
               schema:
                 type: object
+                required:
+                  - code
+                  - message
                 properties:
                   code:
                     type: integer
-                    description: Status code of the response, 0 means success.
+                    description: >-
+                      Business status code. `0` = success; any non-zero value (e.g. `1`, `404`)
+                      is a business/validation error delivered with HTTP 200 — read `message`;
+                      `data` is then absent. Do not branch on the HTTP status for business
+                      outcomes.
                     examples:
                       - 0
                   data:
                     type: object
-                    description: Token information of each market.
+                    description: Token information of each market. Absent when `code` is non-zero.
+                    required:
+                      - tokenList
                     properties:
                       tokenList:
                         type: array
@@ -492,21 +682,20 @@ paths:
                           '$ref': '#/components/schemas/tokenList'
                   message:
                     type: string
-                    description: Response message, eg.SUCCESS.
+                    description: '`SUCCESS` on success, otherwise a short error description.'
                     examples:
                       - SUCCESS
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                '$ref': '#/components/responses/BadRequest'
+        '429':
+          '$ref': '#/components/responses/TooManyRequests'
+        '5XX':
+          '$ref': '#/components/responses/ServerError'
   '/lend/account':
     get:
       tags:
         - Supply and Borrow Market V1
       summary: Get Account Information on V1
       description: Query to get the SBM user account information. (To pass parameters to obtain specific information, please click 「Test」and fill in the address information in the Query parameters section.)
+      operationId: getLendAccounts
       parameters:
         - '$ref': '#/components/parameters/addresses'
         - '$ref': '#/components/parameters/minBorrowValueInTrx'
@@ -515,192 +704,309 @@ paths:
         - '$ref': '#/components/parameters/pageSize'
       responses:
         '200':
-          description: Return the list of user account information.
+          description: >-
+            Return the list of user account information. Business/validation errors are
+            also returned with HTTP 200 — check the body `code` (0 = success).
           content:
             application/json:
               schema:
                 type: object
+                required:
+                  - code
+                  - message
                 properties:
                   code:
                     type: integer
-                    description: Status code of the response, 0 means success.
+                    description: >-
+                      Business status code. `0` = success; any non-zero value (e.g. `1`, `404`)
+                      is a business/validation error delivered with HTTP 200 — read `message`;
+                      `data` is then absent. Do not branch on the HTTP status for business
+                      outcomes.
                     examples:
                       - 0
                   data:
                     type: object
-                    description: User token information.
+                    description: User token information. Absent when `code` is non-zero.
+                    required:
+                      - totalCount
+                      - totalPage
+                      - list
                     properties:
                       totalPage:
                         type: integer
                         description: Total number of pages.
+                        examples:
+                          - 1
                       list:
                         type: array
                         items:
                           '$ref': '#/components/schemas/list'
                       totalCount:
                         type: integer
-                        description: Total count of user tokens.
+                        description: Total count of matching accounts.
+                        examples:
+                          - 1
                   message:
                     type: string
-                    description: Response message, eg.SUCCESS.
+                    description: '`SUCCESS` on success, otherwise a short error description.'
                     examples:
                       - SUCCESS
-        '400':
-          description: Bad Request
+        '429':
+          '$ref': '#/components/responses/TooManyRequests'
+        '5XX':
+          '$ref': '#/components/responses/ServerError'
+  '/justlend/liquidate/highRiskAccountList':
+    get:
+      tags:
+        - Supply and Borrow Market V1
+      summary: Get High-Risk (Liquidatable) Accounts on V1
+      description: >-
+        Query to get accounts that are currently liquidatable or close to it (risk above the
+        observation threshold), together with each account's collateral and borrow positions.
+        Useful for liquidation bots. No parameters.
+      operationId: getHighRiskAccountList
+      responses:
+        '200':
+          description: >-
+            Return the high-risk account snapshot. Business/validation errors are also
+            returned with HTTP 200 — check the body `code` (0 = success).
           content:
             application/json:
               schema:
-                '$ref': '#/components/responses/BadRequest'
+                type: object
+                required:
+                  - code
+                  - message
+                properties:
+                  code:
+                    type: integer
+                    description: >-
+                      Business status code. `0` = success; any non-zero value (e.g. `1`, `404`)
+                      is a business/validation error delivered with HTTP 200 — read `message`;
+                      `data` is then absent. Do not branch on the HTTP status for business
+                      outcomes.
+                    examples:
+                      - 0
+                  data:
+                    type: object
+                    description: High-risk account snapshot. Absent when `code` is non-zero.
+                    required:
+                      - jtokens
+                      - updateTime
+                      - accounts
+                    properties:
+                      jtokens:
+                        type: object
+                        description: >-
+                          jToken symbol → jToken contract address lookup map (one key per market,
+                          e.g. `"jTRX": "TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP"`).
+                        additionalProperties:
+                          type: string
+                          description: jToken contract address (TRON Base58).
+                      updateTime:
+                        type: integer
+                        format: int64
+                        description: When the snapshot was computed.
+                        x-unit: epoch milliseconds
+                        examples:
+                          - 1784101473987
+                      accounts:
+                        type: array
+                        description: One entry per high-risk account.
+                        items:
+                          '$ref': '#/components/schemas/highRiskAccount'
+                  message:
+                    type: string
+                    description: '`SUCCESS` on success, otherwise a short error description.'
+                    examples:
+                      - SUCCESS
+        '429':
+          '$ref': '#/components/responses/TooManyRequests'
+        '5XX':
+          '$ref': '#/components/responses/ServerError'
   '/mining/reward':
     get:
       tags:
         - Supply and Borrow Market V1
       summary: Get User Supply Mining Reward Information on V1
       description: Query to get user's the latest usdd mining reward information, which includes the current mining phase and its rewards, mining start time and end time. （To pass parameters to obtain specific information, please click 「Test」and fill in the address information in the Query parameters section）
-      operationId: getAddress
-      security:
-        - {}
+      operationId: getMiningReward
       parameters:
-        - '$ref': '#/components/parameters/address'
         - '$ref': '#/components/parameters/address1'
       responses:
         '200':
-          description: Returns the user's supply mining reward information.
+          description: >-
+            Returns the user's supply mining reward information. Business/validation errors
+            are also returned with HTTP 200 — check the body `code` (0 = success).
           content:
             application/json:
               schema:
                 type: object
+                required:
+                  - code
+                  - message
                 properties:
                   code:
                     type: integer
-                    description: Status code of the response, 0 means success.
+                    description: >-
+                      Business status code. `0` = success; any non-zero value (e.g. `1`, `404`)
+                      is a business/validation error delivered with HTTP 200 — read `message`;
+                      `data` is then absent. Do not branch on the HTTP status for business
+                      outcomes.
                     examples:
                       - 0
                   data:
                     type: object
-                    description: Reward information for each pool.
-                    properties:
-                      TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf:
-                        type: object
-                        '$ref': '#/components/schemas/USDD'
+                    description: >-
+                      Reward information keyed by jToken market address (e.g.
+                      `TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf` = jUSDD), then by reward-token symbol
+                      (currently `USDD`). Absent when `code` is non-zero.
+                    additionalProperties:
+                      type: object
+                      description: Rewards for one market, keyed by reward-token symbol (currently `USDD`).
+                      additionalProperties:
+                        '$ref': '#/components/schemas/rewardInfo'
                   message:
                     type: string
-                    description: Response message, eg.SUCCESS.
+                    description: '`SUCCESS` on success, otherwise a short error description.'
                     examples:
                       - SUCCESS
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                '$ref': '#/components/responses/BadRequest'
+        '429':
+          '$ref': '#/components/responses/TooManyRequests'
+        '5XX':
+          '$ref': '#/components/responses/ServerError'
   '/mining/apy':
     get:
       tags:
         - Supply and Borrow Market V1
       summary: Get Market Mining APY Information on V1
-      description: Query to get the mining APY information of each market's USDD rewards. The Mining APY for each market will be adjusted according to market conditions. Currently, the supply mining activities are mainly in the USDD market, and new markets may be added in the future based on market demand.
-      parameters:
-        - '$ref': '#/components/parameters/noParameters'
+      description: Query to get the mining APY information of each market's USDD rewards. The Mining APY for each market will be adjusted according to market conditions. Currently, the supply mining activities are mainly in the USDD market, and new markets may be added in the future based on market demand. No parameters.
+      operationId: getMiningApy
       responses:
         '200':
-          description: Return the mining APY information of each market's USDD rewards.
+          description: >-
+            Return the mining APY information of each market's USDD rewards. Every listed
+            market is returned; `"0.00000000"` means mining is not active there.
+            Business/validation errors are also returned with HTTP 200 — check the body
+            `code` (0 = success).
           content:
             application/json:
               schema:
                 type: object
+                required:
+                  - code
+                  - message
                 properties:
                   code:
                     type: integer
-                    description: Status code of the response, 0 means success.
+                    description: >-
+                      Business status code. `0` = success; any non-zero value (e.g. `1`, `404`)
+                      is a business/validation error delivered with HTTP 200 — read `message`;
+                      `data` is then absent. Do not branch on the HTTP status for business
+                      outcomes.
                     examples:
                       - 0
                   data:
                     type: object
-                    description: Mining APY information of each market.
-                    properties:
-                      TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf:
-                        type: object
-                        '$ref': '#/components/schemas/USDDapy'
+                    description: >-
+                      Mining APY per market, keyed by jToken market address. Absent when `code`
+                      is non-zero.
+                    additionalProperties:
+                      '$ref': '#/components/schemas/USDDapy'
                   message:
                     type: string
-                    description: Response message, eg.SUCCESS.
+                    description: '`SUCCESS` on success, otherwise a short error description.'
                     examples:
                       - SUCCESS
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                '$ref': '#/components/responses/BadRequest'
+        '429':
+          '$ref': '#/components/responses/TooManyRequests'
+        '5XX':
+          '$ref': '#/components/responses/ServerError'
   '/mining/distributions':
     get:
       tags:
         - Supply and Borrow Market V1
       summary: Get User Supply Mining Reward Distributions on V1
       description: Query to get user's all reward distributions, including mining token address, if the mining reward has been claimed or not claimed, and the reward amount in the corresponding cycle. (To pass parameters to obtain specific information, please click 「Test」and fill in the address information in the Query parameters section.)
-      operationId: getAddress
-      security:
-        - {}
+      operationId: getMiningDistributions
       parameters:
-        - '$ref': '#/components/parameters/address'
-        - '$ref': '#/components/parameters/address1'
+        - '$ref': '#/components/parameters/addr'
       responses:
         '200':
-          description: Return the user's all reward cycles, including those that have been claimed and those that have not been claimed. Filter out the cycles where claimed is false, that is, the unclaimed reward cycles.
+          description: >-
+            Return the user's all reward cycles, including those that have been claimed and
+            those that have not been claimed. Filter out the cycles where claimed is false,
+            that is, the unclaimed reward cycles. Business/validation errors are also
+            returned with HTTP 200 — check the body `code` (0 = success).
           content:
             application/json:
               schema:
                 type: object
+                required:
+                  - code
+                  - message
                 properties:
                   code:
                     type: integer
-                    description: Status code of the response, 0 means success.
+                    description: >-
+                      Business status code. `0` = success; any non-zero value (e.g. `1`, `404`)
+                      is a business/validation error delivered with HTTP 200 — read `message`;
+                      `data` is then absent. Do not branch on the HTTP status for business
+                      outcomes.
                     examples:
                       - 0
                   data:
                     type: object
-                    description: Reward information for each mining period.
-                    properties:
-                      Phase 22:
-                        type: object
-                        description: The phase of 22nd supply mining reward information
-                        '$ref': '#/components/schemas/rewardDistribution'
+                    description: >-
+                      Reward information for each mining phase, keyed by the phase number as a
+                      string (e.g. `"22"`). Absent when `code` is non-zero.
+                    additionalProperties:
+                      '$ref': '#/components/schemas/rewardDistribution'
                   message:
                     type: string
-                    description: Response message, eg.SUCCESS.
+                    description: '`SUCCESS` on success, otherwise a short error description.'
                     examples:
                       - SUCCESS
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                '$ref': '#/components/responses/BadRequest'
+        '429':
+          '$ref': '#/components/responses/TooManyRequests'
+        '5XX':
+          '$ref': '#/components/responses/ServerError'
   '/lend/strx':
     get:
       tags:
         - Staked TRX Market and Energy Rental
       summary: Get Staked TRX and Energy Rental Markets Information
-      description: Query to get all the the sTRX staking and energy rental markets information.
-      parameters:
-        - '$ref': '#/components/parameters/noParameters'
+      description: Query to get all the the sTRX staking and energy rental markets information. No parameters.
+      operationId: getStrxMarkets
       responses:
         '200':
-          description: Return  the sTRX staking and energy rental markets information.
+          description: >-
+            Return the sTRX staking and energy rental markets information.
+            Business/validation errors are also returned with HTTP 200 — check the body
+            `code` (0 = success).
           content:
             application/json:
               schema:
                 type: object
+                required:
+                  - code
+                  - message
                 properties:
                   code:
                     type: integer
-                    description: Status code of the response, 0 means success.
+                    description: >-
+                      Business status code. `0` = success; any non-zero value (e.g. `1`, `404`)
+                      is a business/validation error delivered with HTTP 200 — read `message`;
+                      `data` is then absent. Do not branch on the HTTP status for business
+                      outcomes.
                     examples:
                       - 0
                   data:
                     type: object
-                    description: Rent and stake information.
+                    description: Rent and stake information. Absent when `code` is non-zero.
+                    required:
+                      - rentInfo
+                      - stakeInfo
                     properties:
                       rentInfo:
                         '$ref': '#/components/schemas/rentInfo'
@@ -708,21 +1014,20 @@ paths:
                         '$ref': '#/components/schemas/stakeInfo'
                   message:
                     type: string
-                    description: Response message, eg.SUCCESS.
+                    description: '`SUCCESS` on success, otherwise a short error description.'
                     examples:
                       - SUCCESS
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                '$ref': '#/components/responses/BadRequest'
+        '429':
+          '$ref': '#/components/responses/TooManyRequests'
+        '5XX':
+          '$ref': '#/components/responses/ServerError'
   '/lend/strxStake/account':
     get:
       tags:
         - Staked TRX Market and Energy Rental
       summary: Get user data of sTRX liquidity staking
       description: Query to get the list of user sTRX staking information.
+      operationId: getStrxStakeAccounts
       parameters:
         - '$ref': '#/components/parameters/addresses'
         - '$ref': '#/components/parameters/pageNo'
@@ -730,46 +1035,62 @@ paths:
         - '$ref': '#/components/parameters/minStrxBalance'
       responses:
         '200':
-          description: Returns the list of user sTRX staking information.
+          description: >-
+            Returns the list of user sTRX staking information. Business/validation errors
+            are also returned with HTTP 200 — check the body `code` (0 = success).
           content:
             application/json:
               schema:
                 type: object
+                required:
+                  - code
+                  - message
                 properties:
                   code:
                     type: integer
-                    description: Status code of the response, 0 means success.
+                    description: >-
+                      Business status code. `0` = success; any non-zero value (e.g. `1`, `404`)
+                      is a business/validation error delivered with HTTP 200 — read `message`;
+                      `data` is then absent. Do not branch on the HTTP status for business
+                      outcomes.
                     examples:
                       - 0
                   data:
                     type: object
-                    description: User staking sTRX information.
+                    description: User staking sTRX information. Absent when `code` is non-zero.
+                    required:
+                      - totalCount
+                      - totalPage
+                      - list
                     properties:
                       totalPage:
                         type: integer
                         description: Total number of pages.
+                        examples:
+                          - 1
                       list:
                         '$ref': '#/components/schemas/stakeList'
                       totalCount:
                         type: integer
                         description: Total count of records.
+                        examples:
+                          - 1
                   message:
                     type: string
-                    description: Response message, eg.SUCCESS.
+                    description: '`SUCCESS` on success, otherwise a short error description.'
                     examples:
                       - SUCCESS
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                '$ref': '#/components/responses/BadRequest'
+        '429':
+          '$ref': '#/components/responses/TooManyRequests'
+        '5XX':
+          '$ref': '#/components/responses/ServerError'
   '/lend/rentResource/account':
     get:
       tags:
         - Staked TRX Market and Energy Rental
       summary: Get user data of resource rent (only supports Energy Rental currently)
       description: Query to get the list of user energy rental information.
+      operationId: getRentResourceAccounts
       parameters:
         - '$ref': '#/components/parameters/addresses'
         - '$ref': '#/components/parameters/pageNo'
@@ -778,83 +1099,92 @@ paths:
         - '$ref': '#/components/parameters/maxRemainingRentAmount'
       responses:
         '200':
-          description: Returns the list of user energy rental information.
+          description: >-
+            Returns the list of user energy rental information. Business/validation errors
+            are also returned with HTTP 200 — check the body `code` (0 = success).
           content:
             application/json:
               schema:
                 type: object
+                required:
+                  - code
+                  - message
                 properties:
                   code:
                     type: integer
-                    description: Status code of the response, 0 means success.
+                    description: >-
+                      Business status code. `0` = success; any non-zero value (e.g. `1`, `404`)
+                      is a business/validation error delivered with HTTP 200 — read `message`;
+                      `data` is then absent. Do not branch on the HTTP status for business
+                      outcomes.
                     examples:
                       - 0
                   data:
                     type: object
-                    description: User rent information.
+                    description: User rent information. Absent when `code` is non-zero.
+                    required:
+                      - totalCount
+                      - totalPage
+                      - list
                     properties:
                       totalPage:
                         type: integer
                         description: Total number of pages.
+                        examples:
+                          - 1
                       list:
                         '$ref': '#/components/schemas/rentList'
                       totalCount:
                         type: integer
                         description: Total count of records.
+                        examples:
+                          - 1
                   message:
                     type: string
-                    description: Response message, eg.SUCCESS.
+                    description: '`SUCCESS` on success, otherwise a short error description.'
                     examples:
                       - SUCCESS
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                '$ref': '#/components/responses/BadRequest'
+        '429':
+          '$ref': '#/components/responses/TooManyRequests'
+        '5XX':
+          '$ref': '#/components/responses/ServerError'
 
 components:
   parameters:
-    noParameters:
-      name: No Parameters.
-      in: query
     minBorrowValueInTrx:
       name: minBorrowValueInTrx
       in: query
       description: Query the minimum value of borrowed asset in TRX.
       required: false
       schema:
-        type: string
+        type: number
     maxHealth:
       name: maxHealth
       in: query
       description: Query the max health level
       required: false
       schema:
-        type: string
+        type: number
     pageNo:
       name: pageNo
       in: query
-      description: Page number.
+      description: Page number (1-based). Default 1.
       required: false
       schema:
         type: integer
         format: int64
+        default: 1
+        minimum: 1
     pageSize:
       name: pageSize
       in: query
-      description: Page size, maximum 1000.
+      description: Page size, maximum 1000. Default 10.
       required: false
       schema:
         type: integer
         format: int64
-    address:
-      name: address
-      in: path
-      description: Query of the user address.
-      required: true
-      schema:
-        type: string
+        default: 10
+        maximum: 1000
     addresses:
       name: addresses
       in: query
@@ -866,6 +1196,16 @@ components:
       name: address
       in: query
       description: The user’s wallet address.
+      required: true
+      schema:
+        type: string
+    addr:
+      name: addr
+      in: query
+      description: >-
+        The user’s wallet address. Note the parameter name is `addr` on this endpoint
+        (unlike `/mining/reward`, which uses `address`); sending `address` returns a
+        `code: 1` business error.
       required: true
       schema:
         type: string
@@ -893,7 +1233,7 @@ components:
     vaultAddress:
       name: vaultAddress
       in: query
-      description: The user’s vault address.
+      description: The vault contract address (TRON Base58).
       required: true
       schema:
         type: string
@@ -939,6 +1279,7 @@ components:
       required: false
       schema:
         type: integer
+        default: 1
     userPageSize:
       name: userPageSize
       in: query
@@ -946,6 +1287,7 @@ components:
       required: false
       schema:
         type: integer
+        default: 20
     allPage:
       name: allPage
       in: query
@@ -953,6 +1295,7 @@ components:
       required: false
       schema:
         type: integer
+        default: 1
     allPageSize:
       name: allPageSize
       in: query
@@ -960,113 +1303,123 @@ components:
       required: false
       schema:
         type: integer
+        default: 20
     v2marketID:
       name: market
       in: query
-      description: The user's V2 market id.
+      description: The V2 market id (`0x…` 32-byte hex string).
       required: true
       schema:
         type: string
 
   responses:
-    BadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            '$ref': '#/components/schemas/Error'
-    Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            '$ref': '#/components/schemas/Error'
-    NotFound:
-      description: NotFound
-      content:
-        application/json:
-          schema:
-            '$ref': '#/components/schemas/Error'
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            '$ref': '#/components/schemas/Error'
+    TooManyRequests:
+      description: >-
+        Too Many Requests — the public service throttles abusive traffic. Transport-level
+        error (no `{code, message, data}` envelope guaranteed). Retry with exponential
+        backoff and jitter.
+    ServerError:
+      description: >-
+        Server error. Transport-level error (no `{code, message, data}` envelope
+        guaranteed). Retry with exponential backoff.
 
   schemas:
     tokenList:
       type: object
+      required:
+        - address
+        - symbol
+        - underlyingSymbol
+        - underlyingAddress
+        - underlyingPriceInTrx
+        - underlyingDecimal
+        - reserveFactor
+        - collateralFactor
+        - supplyRate
+        - borrowRate
+        - exchangeRate
+        - cash
+        - totalBorrows
+        - totalSupply
+        - reserves
+        - borrowIndex
       properties:
         address:
           type: string
-          description: The address of the market.
+          description: The address of the market (jToken contract).
           examples:
             - TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP
         borrowIndex:
-          type: integer
-          description: The borrow index of the market.
-          format: int64
+          type: string
+          description: >-
+            The cumulative borrow index of the market, scaled by 1e18. Big-integer
+            serialized as a string — may exceed 2^53; parse with BigInt.
+          x-unit: index mantissa (1e18-scaled)
+          x-decimals: 18
           examples:
-            - 1224530412174750380
+            - '1361223278609682980'
         borrowRate:
-          type: integer
-          description: The current borrow rate of the market.
-          format: int64
+          type: string
+          description: The current annualized borrow rate of the market. Decimal string.
+          x-unit: annualized decimal rate (multiply by 100 for %)
           examples:
-            - 0.064673716541040000
+            - '0.047954914361424000'
         cash:
-          type: integer
-          description: The available cash amount.
-          format: int64
+          type: string
+          description: The available underlying liquidity in the market. Decimal string, de-scaled by the underlying's decimals.
+          x-unit: underlying (de-scaled)
           examples:
-            - 349909392.537020000000000000
+            - '2021157853.515481000000000000'
         collateralFactor:
-          type: integer
-          description: The collateral factor for the market.
-          format: int64
+          type: string
+          description: The collateral factor for the market. Decimal string.
+          x-unit: decimal fraction (0-1)
           examples:
-            - 0.750000000000000000
+            - '0.750000000000000000'
         exchangeRate:
-          type: integer
-          description: The current exchange rate.
-          format: int64
+          type: string
+          description: >-
+            Current jToken → underlying conversion ratio, de-scaled (human underlying units
+            per human jToken unit). Decimal string. Not the raw 1e18 on-chain mantissa.
+          x-unit: underlying per jToken (de-scaled ratio)
           examples:
-            - 0.010448063811832339
+            - '0.010582523128618106'
         reserveFactor:
-          type: integer
-          description: The reserve factor for the market.
-          format: int64
+          type: string
+          description: The reserve factor for the market. Decimal string.
+          x-unit: decimal fraction (0-1)
           examples:
-            - 0.100000000000000000
+            - '0.100000000000000000'
         reserves:
-          type: integer
-          description: The total reserves held.
-          format: int64
+          type: string
+          description: The total protocol reserves held in the market. Decimal string, de-scaled.
+          x-unit: underlying (de-scaled)
           examples:
-            - 2300647.881336000000000000
+            - '3680255.247515000000000000'
         supplyRate:
-          type: integer
-          description: The current supply rate.
-          format: int64
+          type: string
+          description: The current annualized supply rate (excluding mining rewards). Decimal string.
+          x-unit: annualized decimal rate (multiply by 100 for %)
           examples:
-            - 0.009044500002192000
+            - '0.004196584241280000'
         symbol:
           type: string
           description: The symbol of the market.
           examples:
             - jTRX
         totalBorrows:
-          type: integer
-          description: The total amount borrowed.
-          format: int64
+          type: string
+          description: The total outstanding debt. Decimal string, de-scaled.
+          x-unit: underlying (de-scaled)
           examples:
-            - 63951044.565948000000000000
+            - '217298348.792278000000000000'
         totalSupply:
-          type: integer
-          description: The total supply of the asset.
+          type: string
+          description: The total minted jTokens. Decimal string (jTokens always have 8 decimals).
+          x-unit: jToken (de-scaled)
+          x-decimals: 8
           examples:
-            - 39391010299.49149122
+            - '211176098544.66409163'
         underlyingAddress:
           type: string
           description: The underlying asset's address.
@@ -1074,353 +1427,655 @@ components:
             - T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb
         underlyingDecimal:
           type: integer
-          description: The decimal places for the underlying market, which is 18.
+          description: Decimals of the underlying asset (e.g. 6 for TRX, 18 for USDD).
           format: int64
           examples:
             - 6
         underlyingPriceInTrx:
-          type: integer
-          description: The price of the underlying market in TRX.
-          format: int64
+          type: string
+          description: Oracle price of 1 unit of underlying, denominated in TRX. Decimal string.
+          x-unit: TRX per underlying (de-scaled)
           examples:
-            - 1.000000000000000000000000
+            - '1.000000000000000000000000000'
         underlyingSymbol:
           type: string
-          description: The symbol of the underlying market.
+          description: The symbol of the underlying asset.
           examples:
             - TRX
     list:
       type: object
+      required:
+        - address
+        - health
+        - liquidateStatusStartTime
+        - tokens
+        - totalBorrowValueInTrx
+        - totalCollateralValueInTrx
       properties:
-        addresses:
+        address:
           type: string
-          description: User's wallet addresses.
+          description: >-
+            User's wallet address. (Earlier documentation showed this key as `addresses`;
+            the service returns `address`.)
           examples:
-            - T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb
+            - TB2e78zyzMnaNG2GRazazmbVVv3J564YHg
         health:
-          type: integer
-          description: Health factor of the account.
-          format: int64
-          examples:
-            - 5.88
-        liquidateStatusStartTime:
           type: string
-          format: date-time
-          nullable: true
-          description: Start time of liquidation status.
+          description: Health factor of the account. Decimal string. `> 1` healthy, `≤ 1` liquidatable.
+          x-unit: ratio
+          examples:
+            - '1.00000595'
+        liquidateStatusStartTime:
+          type:
+            - string
+            - 'null'
+          description: >-
+            Timestamp when this account first entered a liquidatable state, or `null` if it
+            is not currently flagged. Always present.
+          examples:
+            - null
         tokens:
           '$ref': '#/components/schemas/tokens'
         totalBorrowValueInTrx:
-          type: integer
-          description: Total borrowed value in TRX.
-          format: int64
+          type: string
+          description: Total borrowed value in TRX. Decimal string.
+          x-unit: TRX (de-scaled)
+          x-decimals: 6
           examples:
-            - 11.277370
+            - '41630.103606'
         totalCollateralValueInTrx:
-          type: integer
-          description: Total collateral value in TRX.
-          format: int64
+          type: string
+          description: Total collateral value in TRX (after collateral factors). Decimal string.
+          x-unit: TRX (de-scaled)
+          x-decimals: 6
           examples:
-            - 24.126681
+            - '41630.351383'
     tokens:
       type: array
       items:
         type: object
+        required:
+          - address
+          - underlyingSymbol
+          - entered
+          - borrowBalanceUnderlying
+          - supplyBalanceUnderlying
+          - supplyBalanceJtoken
         properties:
           address:
             type: string
-            description: Token contract address.
+            description: jToken contract address of this position.
             examples:
-              - TNSBA6KvSvMoTqQcEgpVK7VhHT3z7wifxy
+              - TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP
           borrowBalanceUnderlying:
-            type: integer
-            description: Borrowed balance of the token in underlying units.
-            format: int64
+            type: string
+            description: Borrowed balance of the token in underlying units. Decimal string, de-scaled.
+            x-unit: underlying (de-scaled)
             examples:
-              - 0.704372293431165977793198
+              - '41630.103606391458272468557875'
           entered:
             type: integer
-            description: Indicates if the token is entered into the market (1 or 0).
+            description: Indicates if the token is entered into the market as collateral (1 or 0).
             format: int64
             examples:
               - 1
           supplyBalanceJtoken:
-            type: integer
-            description: Supplied balance in JToken units.
-            format: int64
+            type: string
+            description: Supplied balance in jToken units (jTokens always have 8 decimals). Decimal string.
+            x-unit: jToken (de-scaled)
+            x-decimals: 8
             examples:
-              - 1.09062037
+              - '5245170.10164455'
           supplyBalanceUnderlying:
-            type: integer
-            description: Supplied balance in underlying units.
-            format: int64
+            type: string
+            description: Supplied balance in underlying units. Decimal string, de-scaled.
+            x-unit: underlying (de-scaled)
             examples:
-              - 0.01148891329334797277745383
+              - '55507.13517729334283172067476560'
           underlyingSymbol:
             type: string
             description: Symbol of the underlying asset.
             examples:
-              - USDD
-    USDD:
+              - TRX
+    highRiskAccount:
       type: object
+      required:
+        - borrower
+        - risk
+        - totalCollateralUsd
+        - totalBorrowUsd
+        - liquidateStatusStartTime
+        - collateralTokenList
+        - borrowTokenList
       properties:
-        currEndTime:
+        borrower:
           type: string
-          format: date-time
-          description: Current phase end time.
-        currPhase:
-          type: integer
-          description: Current phase number.
-          format: int64
+          description: Borrower wallet address.
           examples:
-            - 64
-        currReward:
-          type: integer
-          description: Current phase reward.
-          format: int64
-          examples:
-            - 0.0000
-        currRewardStatus:
-          type: integer
-          description: Current phase reward status.
-          format: int64
-          examples:
-            - 1
-        currStartTime:
+            - TB2e78zyzMnaNG2GRazazmbVVv3J564YHg
+        risk:
           type: string
-          format: date-time
-          description: Current phase start time.
-        lastEndTime:
+          description: 'Risk ratio. Decimal string. Higher = riskier; `> 1` means the account is liquidatable now.'
+          x-unit: ratio
+          examples:
+            - '0.999994'
+        totalCollateralUsd:
           type: string
-          format: date-time
-          description: Last phase end time.
-        lastReward:
+          description: Total collateral value in USD. Decimal string.
+          x-unit: USD
+          examples:
+            - '18024.776240'
+        totalBorrowUsd:
+          type: string
+          description: Total borrow value in USD. Decimal string.
+          x-unit: USD
+          examples:
+            - '13518.499015'
+        liquidateStatusStartTime:
           type: integer
-          description: Last reward amount.
           format: int64
+          description: When the account first became liquidatable. `0` if not yet in liquidatable status.
+          x-unit: epoch milliseconds
           examples:
             - 0
-        lastRewardStatus:
-          type: integer
-          description: Status of the last reward.
-          format: int64
-          examples:
-            - 2
-        lastStartTime:
-          type: string
-          format: date-time
-          description: Last phase start time.
-        price:
-          type: integer
-          description: Price of the asset.
-          format: int64
-          examples:
-            - 1.000000000000000000
-    USDDapy:
+        collateralTokenList:
+          type: array
+          description: One entry per collateral position.
+          items:
+            '$ref': '#/components/schemas/highRiskCollateralPosition'
+        borrowTokenList:
+          type: array
+          description: One entry per borrow position (keyed by underlying token, not jToken).
+          items:
+            '$ref': '#/components/schemas/highRiskBorrowPosition'
+    highRiskCollateralPosition:
       type: object
+      required:
+        - jtokenAddress
+        - symbol
+        - amount
+        - price
+        - valueUsd
+        - exchangeRate
+        - collateralFactor
       properties:
-        USDD:
-          type: integer
-          description: USDD market apy.
-          format: int64
-          example:
-            - 0.09175706
-    rewardDistribution:
+        jtokenAddress:
+          type: string
+          description: jToken contract address of the collateral.
+          examples:
+            - TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP
+        symbol:
+          type: string
+          description: jToken symbol.
+          examples:
+            - jTRX
+        amount:
+          type: string
+          description: Amount of jTokens held as collateral. Decimal string (jTokens always have 8 decimals).
+          x-unit: jToken (de-scaled)
+          x-decimals: 8
+          examples:
+            - '5245170.10164455'
+        price:
+          type: string
+          description: Current price of the jToken in USD (already multiplied by `exchangeRate`). Decimal string.
+          x-unit: USD per jToken
+          examples:
+            - '0.003436452181842813'
+        valueUsd:
+          type: string
+          description: '`amount × price`. Decimal string.'
+          x-unit: USD
+          examples:
+            - '18024.776240'
+        exchangeRate:
+          type: string
+          description: jToken → underlying conversion ratio (de-scaled). Decimal string.
+          x-unit: underlying per jToken (de-scaled ratio)
+          examples:
+            - '0.010582523217337573'
+        collateralFactor:
+          type: string
+          description: Collateral factor applied for risk calculation. Decimal string.
+          x-unit: decimal fraction (0-1)
+          examples:
+            - '0.750000000000000000'
+    highRiskBorrowPosition:
       type: object
+      required:
+        - tokenAddress
+        - symbol
+        - amount
+        - price
+        - valueUsd
+        - exchangeRate
+        - collateralFactor
       properties:
         tokenAddress:
           type: string
-          description: The supply mining market address.
+          description: Underlying asset address (this list keys by underlying, not jToken).
           examples:
-            - TPYmHEhy5n8TCEfYGqW2rPxsghSfzghPDn
+            - T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb
+        symbol:
+          type: string
+          description: Underlying asset symbol.
+          examples:
+            - TRX
         amount:
           type: string
-          description: The amount of mining reward can be claimed in this phase, in hexadecimal format.
+          description: Outstanding borrowed amount of underlying. Decimal string, de-scaled.
+          x-unit: underlying (de-scaled)
           examples:
-            - :0x6933158b3c05
+            - '41630.094680465196950370956875'
+        price:
+          type: string
+          description: Underlying asset price in USD. Decimal string.
+          x-unit: USD per underlying
+          examples:
+            - '0.324729000000000000'
+        valueUsd:
+          type: string
+          description: '`amount × price`. Decimal string.'
+          x-unit: USD
+          examples:
+            - '13518.499015'
+        exchangeRate:
+          type: string
+          description: jToken → underlying conversion ratio of the corresponding market (de-scaled). Decimal string.
+          x-unit: underlying per jToken (de-scaled ratio)
+          examples:
+            - '0.010582523217337573'
+        collateralFactor:
+          type: string
+          description: Collateral factor of the corresponding market. Decimal string.
+          x-unit: decimal fraction (0-1)
+          examples:
+            - '0.750000000000000000'
+    rewardInfo:
+      type: object
+      required:
+        - currPhase
+        - currStartTime
+        - currEndTime
+        - currReward
+        - currRewardStatus
+        - lastStartTime
+        - lastEndTime
+        - lastReward
+        - lastRewardStatus
+        - price
+      properties:
+        currEndTime:
+          type: string
+          description: Current phase end time. Format `YYYY-MM-DD HH:mm` (no timezone designator returned).
+          x-format: 'YYYY-MM-DD HH:mm'
+          examples:
+            - '2026-07-18 20:00'
+        currPhase:
+          type: string
+          description: Current phase number (integer serialized as a string).
+          x-unit: count
+          examples:
+            - '120'
+        currReward:
+          type: string
+          description: Estimated/accrued reward for the user in the current phase. Decimal string.
+          x-unit: reward token (de-scaled)
+          examples:
+            - '0.000000000000000000'
+        currRewardStatus:
+          type: string
+          description: 'Current phase reward status (enum serialized as a string): `0`=not started, `1`=ongoing, `2`=ended (claimable), `3`=paused.'
+          enum:
+            - '0'
+            - '1'
+            - '2'
+            - '3'
+          examples:
+            - '1'
+        currStartTime:
+          type: string
+          description: Current phase start time. Format `YYYY-MM-DD HH:mm` (no timezone designator returned).
+          x-format: 'YYYY-MM-DD HH:mm'
+          examples:
+            - '2026-07-11 20:00'
+        lastEndTime:
+          type: string
+          description: Last phase end time. Format `YYYY-MM-DD HH:mm` (no timezone designator returned).
+          x-format: 'YYYY-MM-DD HH:mm'
+          examples:
+            - '2026-07-11 20:00'
+        lastReward:
+          type: string
+          description: Finalized reward for the user in the previous phase. Decimal string.
+          x-unit: reward token (de-scaled)
+          examples:
+            - '0'
+        lastRewardStatus:
+          type: string
+          description: 'Status of the last reward (same enum as `currRewardStatus`, serialized as a string).'
+          enum:
+            - '0'
+            - '1'
+            - '2'
+            - '3'
+          examples:
+            - '2'
+        lastStartTime:
+          type: string
+          description: Last phase start time. Format `YYYY-MM-DD HH:mm` (no timezone designator returned).
+          x-format: 'YYYY-MM-DD HH:mm'
+          examples:
+            - '2026-07-04 20:00'
+        price:
+          type: string
+          description: Current price of the reward token (USDD ≈ 1 USD). Decimal string.
+          x-unit: USD per reward token
+          examples:
+            - '1.000000000000000000'
+    USDDapy:
+      type: object
+      required:
+        - USDD
+      properties:
+        USDD:
+          type: string
+          description: >-
+            USDD mining APY paid to suppliers of this market. Decimal string.
+            `"0.00000000"` means mining is not active in this market.
+          x-unit: annualized decimal rate (multiply by 100 for %)
+          examples:
+            - '0.04275429'
+    rewardDistribution:
+      type: object
+      required:
+        - tokenAddress
+        - tokenSymbol
+        - amount
+        - claimed
+        - index
+        - merkleIndex
+        - proof
+        - merkleRoot
+        - prices
+      properties:
+        tokenAddress:
+          type: string
+          description: The reward (distribution) token address for this phase.
+          examples:
+            - TPYmHEhy5n8TCEfYGqW2rPxsghSfzghPDn
+        tokenSymbol:
+          type: string
+          description: The reward token symbol for this phase.
+          examples:
+            - USDDOLD
+        amount:
+          type: string
+          description: >-
+            The amount of mining reward that can be claimed in this phase, hex-encoded
+            uint256 in the reward token's smallest units (look up the token's `decimals`;
+            USDD/USDDOLD have 18). Pass directly to the on-chain claim contract.
+          x-format: hex-uint256
+          x-unit: reward token (raw base units)
+          examples:
+            - '0x40086576c6adc75c'
         claimed:
           type: boolean
-          description: Indicates if this phase reward has been claimed. Ture means claimed, false means not yet.
+          description: Indicates if this phase reward has been claimed. True means claimed, false means not yet.
+          examples:
+            - false
         index:
           type: string
-          description: Index in hexadecimal format.
+          description: Leaf index of the user inside the Merkle tree, in hexadecimal format.
+          x-format: hex-uint256
           examples:
-            - :0x0659
+            - '0x04b6'
         merkleIndex:
           type: string
-          description: Merkle index in hexadecimal format.
+          description: Merkle tree index this phase belongs to, in hexadecimal format.
+          x-format: hex-uint256
           examples:
-            - :0x00
+            - '0x00'
         proof:
           type: array
-          description: Merkle proof element in hexadecimal format, which used to proof this phase reward belong to user.
+          description: Merkle proof elements in hexadecimal format, which are used to prove this phase reward belongs to the user.
           items:
-            '$ref': '#/components/schemas/proofs'
+            type: string
+            x-format: hex-bytes32
+            examples:
+              - '0x00ffb450e721c910fc2b305b1184ddc9e8fe6c014cb514ac6753c2bddd3e68c2'
         merkleRoot:
           type: string
-          description: Merkle root in hexadecimal format.
+          description: Merkle root of this phase, in hexadecimal format.
+          x-format: hex-bytes32
           examples:
-            - :0x3fdc21ab4fed9e13714fa852ff2e659f9e32af553f4426810ff75e38ccf17a97
-    proofs:
-      type: array
-      items:
-        type: string
-        example:
-          - :0x6b734d20b9ca2a0dda57b184789dbb6df2d2993049a9365b6eafe932cd435255
+            - '0x3fdc21ab4fed9e13714fa852ff2e659f9e32af553f4426810ff75e38ccf17a97'
+        prices:
+          type: string
+          description: Price of the reward token in USD. Decimal string.
+          x-unit: USD per reward token
+          examples:
+            - '1'
     rentInfo:
       type: object
+      required:
+        - rentMarketAddress
+        - priceFor10KEnergByRent
+        - priceFor10KEnergByStake
+        - priceFor10KEnergByBurn
+        - totalDelegatedEnergyTrx
+        - totalDelegatedEnergyRate
       properties:
         priceFor10KEnergByBurn:
-          type: integer
-          format: int64
+          type: string
+          description: TRX cost to obtain 10,000 Energy by burning TRX. Decimal string.
+          x-unit: TRX per 10,000 Energy
           examples:
-            - 4.20000000
+            - '1.00000000'
         priceFor10KEnergByRent:
-          type: integer
-          format: int64
+          type: string
+          description: TRX cost to obtain 10,000 Energy via rental. Decimal string.
+          x-unit: TRX per 10,000 Energy
           examples:
-            - 0.65530713
+            - '0.44835366'
         priceFor10KEnergByStake:
-          type: integer
-          format: int64
+          type: string
+          description: TRX stake required to produce 10,000 Energy yourself. Decimal string.
+          x-unit: TRX per 10,000 Energy
           examples:
-            - 885.28697646
+            - '1053.43779485'
         rentMarketAddress:
           type: string
+          description: Energy Rental contract address.
           examples:
             - TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd
         totalDelegatedEnergyRate:
-          type: integer
-          format: int64
+          type: string
+          description: Utilization rate of the rental pool. Decimal string.
+          x-unit: decimal fraction (0-1)
           examples:
-            - 0.03254970
+            - '0.10138379'
         totalDelegatedEnergyTrx:
-          type: integer
-          format: int64
+          type: string
+          description: Total TRX delegated through the rental market. Decimal string.
+          x-unit: TRX (de-scaled)
+          x-decimals: 6
           examples:
-            - 162748507.908930
+            - '506918969.020237'
     stakeInfo:
       type: object
+      required:
+        - strxAddress
+        - symbol
+        - decimal
+        - totalSupply
+        - totalSupplyUsd
+        - exchangeRate
+        - totalUnderlying
+        - underlyingDecimal
+        - rentReserveFactor
+        - rewardReserveFactor
+        - reserves
+        - supplyRate
+        - trxPrice
       properties:
         decimal:
-          type: integer
-          format: int64
+          type: string
+          description: sTRX decimals (18). Integer serialized as a string on this endpoint.
+          x-unit: count
           examples:
-            - 18
+            - '18'
         exchangeRate:
-          type: integer
-          format: int64
+          type: string
+          description: Current sTRX → TRX redemption rate. Decimal string.
+          x-unit: TRX per sTRX (de-scaled ratio)
           examples:
-            - 1.181813870419231022
+            - '1.306200515551643308'
         rentReserveFactor:
-          type: integer
-          format: int64
+          type: string
+          description: Share of rental revenue taken as reserve. Decimal string.
+          x-unit: decimal fraction (0-1)
           examples:
-            - 0.200000000000000000
-        reserse:
-          type: integer
-          format: int64
+            - '0.200000000000000000'
+        reserves:
+          type: string
+          description: >-
+            Protocol reserves in TRX. Decimal string. (Historical responses and docs used
+            the misspelled key `reserse`; the service now returns `reserves` — tolerate
+            both when reading old captures.)
+          x-unit: TRX (de-scaled)
+          x-decimals: 6
           examples:
-            - 71933070.321420
+            - '290201700.064348'
         rewardReserveFactor:
-          type: integer
-          format: int64
+          type: string
+          description: Share of staking reward taken as reserve. Decimal string.
+          x-unit: decimal fraction (0-1)
           examples:
-            - 0.200000000000000000
+            - '0.200000000000000000'
         strxAddress:
           type: string
+          description: sTRX token contract address.
           examples:
             - TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5
         supplyRate:
-          type: integer
-          format: int64
+          type: string
+          description: sTRX staking APY. Decimal string.
+          x-unit: annualized decimal rate (multiply by 100 for %)
           examples:
-            - 0.03937302
+            - '0.03162947'
         symbol:
           type: string
+          description: Token symbol.
           examples:
             - sTRX
         totalSupply:
-          type: integer
-          format: int64
+          type: string
+          description: Total sTRX issued. Decimal string (sTRX has 18 decimals).
+          x-unit: sTRX (de-scaled)
+          x-decimals: 18
           examples:
-            - 6553955254.250487546804870562
+            - '7416931940.940514882265682812'
         totalSupplyUsd:
-          type: integer
-          format: int64
+          type: string
+          description: TVL of the sTRX pool in USD. Decimal string.
+          x-unit: USD
           examples:
-            - 1729932328.75828661
+            - '3173929709.88356922'
         totalUnderlying:
-          type: integer
-          format: int64
+          type: string
+          description: Total TRX held by the pool. Decimal string.
+          x-unit: TRX (de-scaled)
+          x-decimals: 6
           examples:
-            - 7745555225.580224
+            - '9688000325.067951'
         trxPrice:
-          type: integer
-          format: int64
+          type: string
+          description: Current TRX price in USD. Decimal string.
+          x-unit: USD per TRX
           examples:
-            - 0.223345167438102719
+            - '0.327614533793000000'
         underlyingDecimal:
-          type: integer
-          format: int64
+          type: string
+          description: TRX decimals (6). Integer serialized as a string on this endpoint.
+          x-unit: count
           examples:
-            - 6
+            - '6'
     stakeList:
       type: array
       items:
         type: object
+        required:
+          - address
+          - availableWithdrawAmount
+          - unstakingAmount
+          - sTRXBalance
         properties:
-          addresses:
+          address:
             type: string
-            description: User's wallet addresses.
+            description: >-
+              User's wallet address. (Earlier documentation showed this key as `addresses`;
+              the service returns `address`.)
             examples:
               - TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5
           availableWithdrawAmount:
-            type: integer
-            format: int64
-            description: Available amount for withdrawal.
+            type: string
+            description: TRX already through the unstaking cooldown and ready to withdraw. Decimal string.
+            x-unit: TRX (de-scaled)
+            x-decimals: 6
             examples:
-              - 150865439.643028
+              - '804814121.102239'
           unstakingAmount:
-            type: integer
-            format: int64
-            description: The amount of unstaking trx.
+            type: string
+            description: The amount of TRX currently in the unstaking cooldown period. Decimal string.
+            x-unit: TRX (de-scaled)
+            x-decimals: 6
             examples:
-              - 24120999.583032
+              - '53899847.795703'
           sTRXBalance:
-            type: integer
-            format: int64
-            description: The amount of sTRXBalance.
+            type: string
+            description: Current sTRX balance. Decimal string (sTRX has 18 decimals).
+            x-unit: sTRX (de-scaled)
+            x-decimals: 18
             examples:
-              - 1.000000000000000000
+              - '1.000000000000000000'
     rentList:
       type: array
       items:
         type: object
+        required:
+          - rentType
+          - renter
+          - receiver
+          - delegatedAmount
+          - rentRemainAmount
+          - rentAmountPerDay
         properties:
           rentRemainAmount:
-            type: integer
-            format: int64
-            description: Remaining amount of rent.
+            type: string
+            description: TRX prepayment still remaining for this order. Decimal string.
+            x-unit: TRX (de-scaled)
+            x-decimals: 6
             examples:
-              - 0.000000
+              - '8500.000000'
           receiver:
             type: string
-            description: Wallet address of the receiver.
+            description: Wallet address receiving the delegated Energy.
             examples:
               - TWdWEHRLPBVGsXhwjSUv45XwnsfUHXydJa
           delegatedAmount:
-            type: integer
-            format: int64
-            description: Amount delegated for rent.
+            type: string
+            description: TRX equivalent of the energy currently delegated. Decimal string.
+            x-unit: TRX (de-scaled)
+            x-decimals: 6
             examples:
-              - 0.000000
+              - '10000.000000'
           rentAmountPerDay:
-            type: integer
-            format: int64
-            description: Rent amount per day.
+            type: string
+            description: Daily TRX cost of the rental order. Decimal string.
+            x-unit: TRX per day
             examples:
-              - 0.000000
+              - '1500.000000'
           rentType:
             type: string
             description: Type of rent (e.g., Energy).
@@ -1428,322 +2083,549 @@ components:
               - Energy
           renter:
             type: string
-            description: Wallet address of the renter.
+            description: Wallet address of the renter (the account paying the rent).
             examples:
               - TWdWEHRLPBVGsXhwjSUv45XwnsfUHXydJa
-    vaultsList:
-      type: array
-      items:
-        type: object
-        properties:
-          vaultAddress:
-            type: string
-            description: Vault contract address.
-            examples:
-              - TR1iqZZMmHeQSUTsAcV3eWNhKFEuuAMYX9
-          vaultName:
-            type: string
-            description: Vault name.
-            examples:
-              - btc
-          vaultSymbol:
-            type: string
-            description: Vault symbol.
-            examples:
-              - btc
-          icon:
-            type: string
-            description: Vault icon URL.
-            examples:
-              - https://static.tronscan.org/production/upload/logo/TPYmHEhy5n8TCEfYGqW2rPxsghSfzghPDn.png
-          tags:
-            type: string
-            description: Vault tags.
-            examples:
-              - []
-          assetAddress:
-            type: string
-            description: Underlying asset contract address.
-            examples:
-              - THfS8gUDH5Cx1FnwvdQ2QfBdCHyeNDaKzs
-          assetSymbol:
-            type: string
-            description: Underlying asset symbol.
-            examples:
-              - BTC
-          assetName:
-            type: string
-            description: Underlying asset name.
-            examples:
-              - Bitcoin
-          assetDecimals:
-            type: integer
-            description: Underlying asset decimal.
-            examples:
-              - 18
-          assetIcon:
-            type: string
-            description: Underlying asset icon URL.
-            examples:
-              - https://static.tronscan.org/production/upload/logo/TPYmHEhy5n8TCEfYGqW2rPxsghSfzghPDn.png
-          totalSupplyAmount:
-            type: string
-            description: Total vault supply.
-            examples:
-              - 21144.052487828023829952
-          tvl:
-            type: string
-            description: Total value locked (USD).
-            examples:
-              - 21144.052487828023829952
-          apy:
-            type: string
-            description: Annual percentage yield.
-            examples:
-              - 0.000000005789097493
-          performanceFee:
-            type: string
-            description: Performance fee.
-            examples:
-              - 5.00
-          collateralTokens:
-            type: array
-            description: List of tokens eligible as collateral.
-            items:
-              '$ref': '#/components/schemas/collateralTokens'
-          userSupplyUsd:
-            type: string
-            description: User supply amount in USD.
-            examples:
-              - 130.119673146389372458
-          userSupplyAmount:
-            type: string
-            description: The amount user supplied.
-            examples:
-              - 100.000057211579670966659075
-          userSupplyYield:
-            type: integer
-            description: User supply earnings.
-            examples:
-              - 87.000057211579670966659075
-    depositTokens:
-      type: array
-      items:
-        type: object
-        description: List of deposit tokens.
-        properties:
-          address:
-            type: string
-            description: Token contract address.
-            examples:
-              - TSkW3KiyHNbS9ozn99PHZz6rz1V2DMBFVa
-          symbol:
-            type: string
-            description: Token symbol
-            examples:
-              - BTC
-          name:
-            type: string
-            description: Token name.
-            examples:
-              - Bitcoin
-          decimals:
-            type: integer
-            description: Token decimal.
-            examples:
-              - 18
-          icon:
-            type: string
-            description: Token icon URL.
-            examples:
-              - https://static.tronscan.org/production/logo/TN3W4H6rK2ce4vX9YnFQHwKENnHjoxb3m9.png
-    collateralTokens:
-      type: array
-      items:
-        type: object
-        description: List of tokens eligible as collateral.
-        properties:
-          address:
-            type: string
-            description: Token contract address.
-            examples:
-              - TSkW3KiyHNbS9ozn99PHZz6rz1V2DMBFVa
-          symbol:
-            type: string
-            description: Token symbol
-            examples:
-              - BTC
-          name:
-            type: string
-            description: Token name.
-            examples:
-              - Bitcoin
-          decimals:
-            type: integer
-            description: Token decimal.
-            examples:
-              - 18
-          icon:
-            type: string
-            description: Token icon URL.
-            examples:
-              - https://static.tronscan.org/production/logo/TN3W4H6rK2ce4vX9YnFQHwKENnHjoxb3m9.png
-    v2marketsList:
-      type: array
-      items:
-        type: object
-        properties:
-          id:
-            type: integer
-            description: Market ID.
-            examples:
-              - 0x42649f561525d32fb1552f39111e1037185ca36f15ca19fe6f31bf2710164bb4
-          ltv:
-            type: integer
-            description: Loan-to-Value ratio, calculated as loanUsd / collateralUsd.
-            examples:
-              - 0.393088159831054713
-          lltv:
-            type: integer
-            description: Liquidation Threshold.
-            examples:
-              - 0.750000000000000000
-          risk:
-            type: integer
-            description: Risk ratio, calculated as ltv / liquidationThreshold.
-            examples:
-              - 0.524117546441406284
-          liquidity:
-            type: integer
-            description: Available liquidity.
-            examples:
-              - 100445.9003098492231424387
-          liquidityUsd:
-            type: integer
-            description: Liquidity in USD.
-            examples:
-              - 100445.9003098492231424387
-          loanSymbol:
-            type: string
-            description: Symbol of the loan token.
-            examples:
-              - USDT
-          loanAddress:
-            type: string
-            description: Contract address of the loan token.
-            examples:
-              - TPYwAC9Y4uUcT2QH3WPPjqxzJSJWymMoMS
-          loanAmount:
-            type: integer
-            description: Borrowed amount.
-            examples:
-              - 106.900309849252994245
-          loanUsd:
-            type: integer
-            description: Borrowed amount in USD.
-            examples:
-              - 106.900309849252994245
-          loanIcon:
-            type: string
-            description: Loan token icon URL.
-            examples:
-              - https://static.tronscan.org/production/logo/usdtlogo.png
-          borrowRate:
-            type: integer
-            description: Borrowed rate.
-            examples:
-              - 0.000384473004624000
-          collateralSymbol:
-            type: string
-            description: Symbol of the collateral token.
-            examples:
-              - WTRX
-          collateralAddress:
-            type: string
-            description: Contract address of the collateral token.
-            examples:
-              - TYsbWxNnyTgsZaTFaue9hqpxkU3Fkco94a
-          collateralAmount:
-            type: integer
-            description: Amount of collateral token.
-            examples:
-              - 209.000000000000000000
-          collateralUsd:
-            type: integer
-            description: Collateral value in USD.
-            examples:
-              - 271.949961289085020370
-          collateralDecimals:
-            type: integer
-            description: Decimals of the collateral token.
-            examples:
-              - 6
-          collateralIcon:
-            type: string
-            description: Collateral token icon URL.
-            examples:
-              - https://static.tronscan.org/production/upload/logo/TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR.png
-    myVaultList:
-      type: array
-      items:
-        type: object
-        description: List of user vaults.
-        properties:
-          vaultAddress:
-            type: string
-            description: user vault address.
-            examples:
-              - TXfQWrF4mkq5XFaoRYv3crdhjiKkhdMEx5
-          supplyUsd:
-            type: string
-            description: Supply value in USD.
-            examples:
-              - 19261471.079885338
-    myMarketList:
-      type: array
-      items:
-        type: object
-        description: List of user markets.
-        properties:
-          marketId:
-            type: integer
-            description: Unique identifier of the market.
-            examples:
-              - 0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c
-          health:
-            type: integer
-            description: Health factor of the user in this market.
-            examples:
-              - 0.6215
-          collateralUsd:
-            type: integer
-            description: Total collateral value in USD that the user has supplied in this market.
-            examples:
-              - 481377121.60471046
-          borrowUsd:
-            type: integer
-            description: Total borrowed value in USD by the user in this market.
-            examples:
-              - 481377121.60471046
-
-    Error:
+    vaultInfo:
       type: object
-      description: RFC 7807
+      required:
+        - chain
+        - vaultAddress
+        - vaultName
+        - vaultSymbol
+        - icon
+        - tags
+        - assetAddress
+        - assetSymbol
+        - assetName
+        - assetDecimals
+        - assetIcon
+        - totalSupplyAmount
+        - tvl
+        - apy
+        - performanceFee
+        - collateralTokens
+        - markets
+        - userSupplyUsd
+        - userSupplyAmount
+        - allocations
       properties:
-        type:
+        chain:
           type: string
+          description: Chain identifier.
           examples:
-            - https://example.com/errors/generic-error
-        title:
+            - tron
+        vaultAddress:
           type: string
+          description: Vault contract address.
           examples:
-            - Something went wrong here.
-        status:
+            - TXejU9jmd1ooQyY3Zmpo15yN7MjSFYUESg
+        vaultName:
+          type: string
+          description: Vault name.
+          examples:
+            - JustLend USDT Vault
+        vaultSymbol:
+          type: string
+          description: Vault symbol.
+          examples:
+            - jUSDTv2
+        icon:
+          type: string
+          description: Vault icon URL.
+          examples:
+            - https://static.tronscan.org/production/logo/usdtlogo.png
+        tags:
+          type: array
+          description: Vault tags.
+          items:
+            type: string
+          examples:
+            - []
+        assetAddress:
+          type: string
+          description: Underlying asset contract address.
+          examples:
+            - TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t
+        assetSymbol:
+          type: string
+          description: Underlying asset symbol.
+          examples:
+            - USDT
+        assetName:
+          type: string
+          description: Underlying asset name.
+          examples:
+            - Tether USD
+        assetDecimals:
           type: integer
-          format: int64
+          description: Underlying asset decimals.
           examples:
-            - 403
-        detail:
+            - 6
+        assetIcon:
           type: string
+          description: Underlying asset icon URL.
           examples:
-            - Unfortunately, we can’t provide further information.
+            - https://static.tronscan.org/production/logo/usdtlogo.png
+        totalSupplyAmount:
+          type: string
+          description: Total vault supply, de-scaled by the asset's decimals. Decimal string.
+          x-unit: vault asset (de-scaled)
+          examples:
+            - '413328.006113'
+        tvl:
+          type: string
+          description: Total value locked (USD). Decimal string.
+          x-unit: USD
+          examples:
+            - '413328.006113000000000000'
+        apy:
+          type: string
+          description: Annual percentage yield. Decimal string.
+          x-unit: annualized decimal rate (multiply by 100 for %)
+          examples:
+            - '0.000711770302729251'
+        performanceFee:
+          type: string
+          description: Performance fee, in percent. Decimal string (`"10.00"` = 10 %).
+          x-unit: percent (0-100)
+          examples:
+            - '10.00'
+        collateralTokens:
+          type: array
+          description: List of tokens eligible as collateral in this vault's markets.
+          items:
+            '$ref': '#/components/schemas/v2TokenInfo'
+        markets:
+          type: array
+          description: The isolated markets this vault allocates into.
+          items:
+            '$ref': '#/components/schemas/vaultMarketInfo'
+        userSupplyUsd:
+          type:
+            - string
+            - 'null'
+          description: User supply amount in USD. Decimal string; `null` when no `address` was supplied or the user has no position.
+          x-unit: USD
+          examples:
+            - null
+        userSupplyAmount:
+          type:
+            - string
+            - 'null'
+          description: The amount the user supplied, de-scaled. Decimal string; `null` when no `address` was supplied or the user has no position.
+          x-unit: vault asset (de-scaled)
+          examples:
+            - null
+        userSupplyYield:
+          type: string
+          description: User supply earnings, de-scaled. Decimal string. Only present in user-scoped responses; may be omitted.
+          x-unit: vault asset (de-scaled)
+          examples:
+            - '87.000057211579670966659075'
+        allocations:
+          type: array
+          description: Current allocation of the vault's supply across its markets.
+          items:
+            '$ref': '#/components/schemas/vaultAllocation'
+    vaultMarketInfo:
+      type: object
+      required:
+        - id
+        - collateralAddress
+        - collateralSymbol
+        - collateralName
+        - collateralDecimals
+        - collateralIcon
+        - totalBorrowAssets
+        - totalBorrowAssetsUSD
+        - totalSupplyAssets
+        - totalSupplyAssetsUSD
+        - totalCollateralAssets
+        - totalCollateralAssetsUSD
+        - borrowAddress
+        - borrowSymbol
+        - borrowName
+        - borrowDecimals
+        - borrowIcon
+      properties:
+        id:
+          type: string
+          description: Market ID (32-byte hex string).
+          x-format: hex-bytes32
+          examples:
+            - '0x8fa76896548f751c9009583976933e6cb355513a180548df5d47b1833d20cb17'
+        collateralAddress:
+          type: string
+          description: Collateral token contract address.
+          examples:
+            - TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz
+        collateralSymbol:
+          type: string
+          description: Collateral token symbol.
+          examples:
+            - USDD
+        collateralName:
+          type: string
+          description: Collateral token name.
+          examples:
+            - Decentralized USD
+        collateralDecimals:
+          type: integer
+          description: Collateral token decimals.
+          examples:
+            - 18
+        collateralIcon:
+          type: string
+          description: Collateral token icon URL.
+          examples:
+            - https://static.tronscan.org/production/upload/logo/new/TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz.png
+        totalBorrowAssets:
+          type: string
+          description: Total borrowed assets in the market, de-scaled. Decimal string.
+          x-unit: loan token (de-scaled)
+          examples:
+            - '69.100787'
+        totalBorrowAssetsUSD:
+          type: string
+          description: Total borrowed assets in USD. Decimal string.
+          x-unit: USD
+          examples:
+            - '69.100787000000000000000000'
+        totalSupplyAssets:
+          type: string
+          description: Total supplied assets in the market, de-scaled. Decimal string.
+          x-unit: loan token (de-scaled)
+          examples:
+            - '113259.328861'
+        totalSupplyAssetsUSD:
+          type: string
+          description: Total supplied assets in USD. Decimal string.
+          x-unit: USD
+          examples:
+            - '113259.328861000000000000000000'
+        totalCollateralAssets:
+          type: string
+          description: Total collateral assets in the market, de-scaled. Decimal string.
+          x-unit: collateral token (de-scaled)
+          examples:
+            - '119.000000000000000000'
+        totalCollateralAssetsUSD:
+          type: string
+          description: Total collateral assets in USD. Decimal string.
+          x-unit: USD
+          examples:
+            - '119.000000000000000000000000000000000000'
+        borrowAddress:
+          type: string
+          description: Loan token contract address.
+          examples:
+            - TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t
+        borrowSymbol:
+          type: string
+          description: Loan token symbol.
+          examples:
+            - USDT
+        borrowName:
+          type: string
+          description: Loan token name.
+          examples:
+            - Tether USD
+        borrowDecimals:
+          type: integer
+          description: Loan token decimals.
+          examples:
+            - 6
+        borrowIcon:
+          type: string
+          description: Loan token icon URL.
+          examples:
+            - https://static.tronscan.org/production/logo/usdtlogo.png
+    vaultAllocation:
+      type: object
+      required:
+        - marketId
+        - collateralSymbol
+        - collateralIcon
+        - amount
+        - amountInUsd
+        - percentage
+        - supplyQueueIndex
+        - isNew
+        - noMoreAllocation
+      properties:
+        marketId:
+          type: string
+          description: Market ID (32-byte hex string) this allocation points to.
+          x-format: hex-bytes32
+          examples:
+            - '0x8fa76896548f751c9009583976933e6cb355513a180548df5d47b1833d20cb17'
+        collateralSymbol:
+          type: string
+          description: Collateral token symbol of the market.
+          examples:
+            - USDD
+        collateralIcon:
+          type: string
+          description: Collateral token icon URL.
+          examples:
+            - https://static.tronscan.org/production/upload/logo/new/TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz.png
+        amount:
+          type: string
+          description: Amount allocated to this market, de-scaled. Decimal string.
+          x-unit: vault asset (de-scaled)
+          examples:
+            - '113259.286496'
+        amountInUsd:
+          type: string
+          description: USD value of the allocation. Decimal string.
+          x-unit: USD
+          examples:
+            - '113259.286496000000000000'
+        percentage:
+          type: string
+          description: Share of the vault's supply allocated to this market, in percent. Decimal string.
+          x-unit: percent (0-100)
+          examples:
+            - '27.401793449548277509'
+        supplyQueueIndex:
+          type: integer
+          description: Position of this market in the vault's supply queue.
+          examples:
+            - 0
+        isNew:
+          type: integer
+          description: Whether this market is newly added (1 or 0).
+          examples:
+            - 0
+        noMoreAllocation:
+          type: boolean
+          description: Whether further allocation to this market is disabled.
+          examples:
+            - false
+    v2TokenInfo:
+      type: object
+      required:
+        - address
+        - symbol
+        - name
+        - decimals
+        - icon
+      properties:
+        address:
+          type: string
+          description: Token contract address.
+          examples:
+            - TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR
+        symbol:
+          type: string
+          description: Token symbol.
+          examples:
+            - WTRX
+        name:
+          type: string
+          description: Token name.
+          examples:
+            - Wrapped TRX
+        decimals:
+          type: integer
+          description: Token decimals.
+          examples:
+            - 6
+        icon:
+          type: string
+          description: Token icon URL.
+          examples:
+            - https://static.tronscan.org/production/upload/logo/TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR.png
+    v2MarketInfo:
+      type: object
+      required:
+        - id
+        - ltv
+        - lltv
+        - risk
+        - liquidity
+        - liquidityUsd
+        - loanSymbol
+        - loanAddress
+        - loanAmount
+        - loanUsd
+        - loanIcon
+        - borrowRate
+        - collateralSymbol
+        - collateralAddress
+        - collateralAmount
+        - collateralUsd
+        - collateralDecimals
+        - collateralIcon
+        - tags
+      properties:
+        id:
+          type: string
+          description: Market ID (32-byte hex string).
+          x-format: hex-bytes32
+          examples:
+            - '0x8fa76896548f751c9009583976933e6cb355513a180548df5d47b1833d20cb17'
+        ltv:
+          type:
+            - string
+            - 'null'
+          description: 'User loan-to-value ratio (`loanUsd / collateralUsd`). Decimal string; `null` when no `address` was supplied or the user has no position.'
+          x-unit: decimal fraction (0-1)
+          examples:
+            - null
+        lltv:
+          type: string
+          description: Liquidation threshold (liquidation LTV). Decimal string.
+          x-unit: decimal fraction (0-1)
+          examples:
+            - '0.800000000000000000'
+        risk:
+          type:
+            - string
+            - 'null'
+          description: 'User risk ratio (`ltv / lltv`). Decimal string; `null` when no `address` was supplied or the user has no position.'
+          x-unit: ratio
+          examples:
+            - null
+        liquidity:
+          type: string
+          description: Available liquidity, de-scaled. Decimal string.
+          x-unit: loan token (de-scaled)
+          examples:
+            - '113190.228074'
+        liquidityUsd:
+          type: string
+          description: Liquidity in USD. Decimal string.
+          x-unit: USD
+          examples:
+            - '113190.228074000000000000'
+        loanSymbol:
+          type: string
+          description: Symbol of the loan token.
+          examples:
+            - USDT
+        loanAddress:
+          type: string
+          description: Contract address of the loan token.
+          examples:
+            - TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t
+        loanAmount:
+          type:
+            - string
+            - 'null'
+          description: 'User borrowed amount, de-scaled. Decimal string; `null` when no `address` was supplied or the user has no position.'
+          x-unit: loan token (de-scaled)
+          examples:
+            - null
+        loanUsd:
+          type:
+            - string
+            - 'null'
+          description: 'User borrowed amount in USD. Decimal string; `null` when no `address` was supplied or the user has no position.'
+          x-unit: USD
+          examples:
+            - null
+        loanIcon:
+          type: string
+          description: Loan token icon URL.
+          examples:
+            - https://static.tronscan.org/production/logo/usdtlogo.png
+        borrowRate:
+          type: string
+          description: Borrow rate. Decimal string.
+          x-unit: annualized decimal rate (multiply by 100 for %)
+          examples:
+            - '0.000250508418242629'
+        collateralSymbol:
+          type: string
+          description: Symbol of the collateral token.
+          examples:
+            - USDD
+        collateralAddress:
+          type: string
+          description: Contract address of the collateral token.
+          examples:
+            - TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz
+        collateralAmount:
+          type:
+            - string
+            - 'null'
+          description: 'User collateral amount, de-scaled. Decimal string; `null` when no `address` was supplied or the user has no position.'
+          x-unit: collateral token (de-scaled)
+          examples:
+            - null
+        collateralUsd:
+          type:
+            - string
+            - 'null'
+          description: 'User collateral value in USD. Decimal string; `null` when no `address` was supplied or the user has no position.'
+          x-unit: USD
+          examples:
+            - null
+        collateralDecimals:
+          type: integer
+          description: Decimals of the collateral token.
+          examples:
+            - 18
+        collateralIcon:
+          type: string
+          description: Collateral token icon URL.
+          examples:
+            - https://static.tronscan.org/production/upload/logo/new/TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz.png
+        tags:
+          type: array
+          description: Market tags.
+          items:
+            type: string
+          examples:
+            - []
+    myVaultInfo:
+      type: object
+      required:
+        - vaultAddress
+        - supplyUsd
+      properties:
+        vaultAddress:
+          type: string
+          description: User vault address.
+          examples:
+            - TXfQWrF4mkq5XFaoRYv3crdhjiKkhdMEx5
+        supplyUsd:
+          type: string
+          description: Supply value in USD. Decimal string.
+          x-unit: USD
+          examples:
+            - '19261471.079885338'
+    myMarketInfo:
+      type: object
+      required:
+        - marketId
+        - health
+        - collateralUsd
+        - borrowUsd
+      properties:
+        marketId:
+          type: string
+          description: Unique identifier of the market (32-byte hex string).
+          x-format: hex-bytes32
+          examples:
+            - '0x8fa76896548f751c9009583976933e6cb355513a180548df5d47b1833d20cb17'
+        health:
+          type: string
+          description: Health factor of the user in this market. Decimal string.
+          x-unit: ratio
+          examples:
+            - '0.6215'
+        collateralUsd:
+          type: string
+          description: Total collateral value in USD that the user has supplied in this market. Decimal string.
+          x-unit: USD
+          examples:
+            - '481377121.60471046'
+        borrowUsd:
+          type: string
+          description: Total borrowed value in USD by the user in this market. Decimal string.
+          x-unit: USD
+          examples:
+            - '481377121.60471046'
