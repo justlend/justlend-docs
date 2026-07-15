@@ -183,10 +183,11 @@ npx agent-wallet import
 # Strongly recommended — avoids TronGrid 429 rate limiting on mainnet
 export TRONGRID_API_KEY="your_trongrid_api_key"
 
-# Optional: HTTP/SSE transport mode
-export MCP_TRANSPORT="http"       # Use HTTP/SSE instead of stdio
-export MCP_HTTP_PORT="3000"       # HTTP server port (default: 3000)
-export MCP_HTTP_HOST="127.0.0.1"  # HTTP server host (default: 127.0.0.1)
+# Optional: HTTP/SSE transport mode — start it with `npm run start:http`
+# (entrypoint is src/server/http-server.ts; there is no transport env toggle)
+export PORT="3001"                 # HTTP server port (default: 3001)
+export MCP_HOST="127.0.0.1"        # HTTP server host / bind address (default: 127.0.0.1)
+export MCP_CORS_ORIGIN=""          # required allow-list if you bind to a non-loopback host
 
 # Required in HTTP mode — see "HTTP Mode Authentication" below for how to generate one
 export MCP_API_KEY="your_strong_random_secret"
@@ -572,6 +573,28 @@ For programmatic contract calls without re-fetching from Tronscan, the MCP serve
 
 - **Source**: [`src/core/abis.ts`](https://github.com/justlend/mcp-server-justlend/blob/main/src/core/abis.ts) (jToken, Comptroller, Oracle, TRC20)
 - **Chain configs (Mainnet / Nile testnet)**: [`src/core/chains.ts`](https://github.com/justlend/mcp-server-justlend/blob/main/src/core/chains.ts)
+
+## Error contract
+
+Every tool returns errors as structured JSON with `isError: true`, so an agent can branch without parsing prose:
+
+```json
+{ "error": "<sanitized message>", "errorCode": "<code>", "retryable": true, "hint": "<how to fix>" }
+```
+
+`errorCode`, `retryable`, and `hint` are present when the error is recognized; unrecognized errors return just `error`. Recognized codes:
+
+| errorCode | retryable | Meaning / agent action |
+|-----------|:---------:|------------------------|
+| `transient` | ✅ true | Network/RPC timeout, `SERVER_BUSY`, 429/5xx — retry read-only calls after a short backoff; **never** blindly re-broadcast a write (re-query state first). |
+| `insufficient_allowance` | ❌ false | Approve the spender first (`approve_underlying` / `approve_for_votes` / `approve_moolah_*`), then retry. |
+| `insufficient_balance` | ❌ false | Lower the amount or fund the wallet; verify with `get_trx_balance` / `get_token_balance`. |
+| `wallet_not_configured` | ❌ false | Configure a wallet (`import_wallet` / `connect_browser_wallet`), then `set_active_wallet`. |
+| `execution_reverted` | ❌ false | Contract precondition failed (allowance / health / paused market) — simulate before broadcasting. |
+| `market_not_found` | ❌ false | Verify the market symbol/address against `get_supported_markets`. |
+| `invalid_address` | ❌ false | Use a Base58 TRON address (`T…`, 34 chars). |
+
+Only `transient` is safe to auto-retry; every other code requires a corrective action first.
 
 ## Security Considerations
 
