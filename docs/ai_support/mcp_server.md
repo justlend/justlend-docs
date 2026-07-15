@@ -195,7 +195,7 @@ export MCP_API_KEY="your_strong_random_secret"
 
 ### HTTP Mode Authentication (`MCP_API_KEY`)
 
-**Most users do not need this.** Claude Desktop, Claude Code, and Cursor connect over **stdio** by default, which has no network surface and no auth. `MCP_API_KEY` only applies when you run the server in **HTTP/SSE mode** (`npm run start:http` or `MCP_TRANSPORT=http`).
+**Most users do not need this.** Claude Desktop, Claude Code, and Cursor connect over **stdio** by default, which has no network surface and no auth. `MCP_API_KEY` only applies when you run the server in **HTTP/SSE mode** (`npm run start:http`).
 
 #### What it is
 
