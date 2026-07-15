@@ -9,7 +9,7 @@
 | `last_generated` | **{{LAST_GENERATED}}** (ISO 8601, UTC date — substituted at build time) |
 | `docs_commit` | [`{{DOCS_COMMIT_SHORT}}`](https://github.com/justlend/justlend-docs/commit/{{DOCS_COMMIT}}) (the commit SHA this snapshot was built from — substituted at build time) |
 | `contracts_json_source` | [`/developers/contracts.json`](https://docs.justlend.org/developers/contracts.json) — see its `_meta.last_generated` for the address-data snapshot date |
-| `mcp_server_version` | `@justlend/mcp-server-justlend` **v1.1.0** (sync date 2026-06-17) |
+| `mcp_server_version` | `@justlend/mcp-server-justlend` **v1.1.2** (sync date 2026-07-15) |
 | `changelog` | [`CHANGELOG.md`](https://github.com/justlend/justlend-docs/blob/main/CHANGELOG.md) |
 | `regenerate` | This file is updated each time the docs change materially. If you fetched it more than ~30 days ago, refresh it before answering address / market / version questions. |
 
@@ -436,7 +436,7 @@ Built-in MCP tools (all read-only): `get_all_markets`, `get_dashboard`, `get_sup
 
 ### 7.2 Full MCP Server — `@justlend/mcp-server-justlend`
 
-Read + write MCP server, **96 tools**, version **v1.1.0**. Repo: <https://github.com/justlend/mcp-server-justlend>. Covers **JustLend V1 and V2** — the V1 tools plus `moolah_*` / `get_moolah_*` for V2 vaults, isolated markets, liquidation, dashboard/history, and mining. A machine-readable tool catalog ([`mcp-api-list.md`](https://github.com/justlend/mcp-server-justlend/blob/main/mcp-api-list.md)) lists every tool's input schema and side-effect class for offline agent routing.
+Read + write MCP server, **98 tools**, version **v1.1.2**. Repo: <https://github.com/justlend/mcp-server-justlend>. Covers **JustLend V1 and V2** — the V1 tools plus `moolah_*` / `get_moolah_*` for V2 vaults, isolated markets, liquidation, dashboard/history, and mining. A machine-readable tool catalog ([`mcp-api-list.md`](https://github.com/justlend/mcp-server-justlend/blob/main/mcp-api-list.md)) lists every tool's input schema and side-effect class for offline agent routing.
 
 Capability domains:
 

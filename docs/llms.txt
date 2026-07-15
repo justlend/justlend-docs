@@ -57,14 +57,14 @@
 - [MCP Safety Policy](https://docs.justlend.org/documents/aidocs/mcp_safety): Read-only vs write tools, wallet modes, private-key handling, and HITL confirmation.
 - [Common Questions](https://docs.justlend.org/documents/aidocs/common_questions): English and Chinese user questions mapped to tools and API sources.
 - [AI Glossary](https://docs.justlend.org/documents/aidocs/glossary): Compact definitions for JustLend / Compound V2 terms.
-- [MCP Tool Catalog](https://docs.justlend.org/documents/aidocs/mcp_tools): Full generated catalog of all 96 MCP tools with schemas and safety annotations.
+- [MCP Tool Catalog](https://docs.justlend.org/documents/aidocs/mcp_tools): Full generated catalog of all 98 MCP tools with schemas and safety annotations.
 
 ## AI Agent integration
 
 - [AI / LLMs](https://docs.justlend.org/ai_support/ai_llms): Human-readable directory for `llms.txt`, `llms-full.txt`, OpenAPI, contract JSON, and ABI JSON endpoints.
 - [JustLend Skills](https://docs.justlend.org/ai_support/justlend_skills) (`@justlend/justlend-skills`): Read-only skills package + lightweight MCP server (**9 query tools**). Source: <https://github.com/justlend/justlend-skills>.
-- [Full MCP Server](https://docs.justlend.org/ai_support/mcp_server) (`@justlend/mcp-server-justlend`, v1.1.0, **96 tools**): Full read/write MCP server for JustLend V1 (supply, borrow, repay, withdraw, sTRX staking, energy rental, governance voting, mining rewards, transfers) and V2 vaults/markets/liquidation, plus historical records and general TRON utilities. Source: <https://github.com/justlend/mcp-server-justlend>.
-- [MCP machine-readable tool catalog](https://github.com/justlend/mcp-server-justlend/blob/main/mcp-api-list.md) (`mcp-api-list.md`): Offline-loadable list of all 96 tools with input schemas (param/type/required/default), side-effect class (read-only vs on-chain write/destructive) and HITL guidance. Generated from source, so it never drifts from the tool definitions.
+- [Full MCP Server](https://docs.justlend.org/ai_support/mcp_server) (`@justlend/mcp-server-justlend`, v1.1.2, **98 tools**): Full read/write MCP server for JustLend V1 (supply, borrow, repay, withdraw, sTRX staking, energy rental, governance voting, mining rewards, transfers) and V2 vaults/markets/liquidation, plus historical records and general TRON utilities. Source: <https://github.com/justlend/mcp-server-justlend>.
+- [MCP machine-readable tool catalog](https://github.com/justlend/mcp-server-justlend/blob/main/mcp-api-list.md) (`mcp-api-list.md`): Offline-loadable list of all 98 tools with input schemas (param/type/required/default), side-effect class (read-only vs on-chain write/destructive) and HITL guidance. Generated from source, so it never drifts from the tool definitions.
 - [MCP source ABIs and network config](https://github.com/justlend/mcp-server-justlend): Upstream TypeScript definitions used to generate the docs JSON ABI and address files.
 
 ## API endpoints (read-only HTTP API)

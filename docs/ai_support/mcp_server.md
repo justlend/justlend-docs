@@ -1,6 +1,6 @@
 ---
 title: JustLend MCP Server (full, read + write)
-description: "@justlend/mcp-server-justlend v1.1.0 — 96 MCP tools across JustLend V1 (supply, borrow, repay, sTRX staking, energy rental, governance, mining) and V2 vaults/markets/liquidation, plus historical records and general TRON utilities. Dual-mode signing (browser TronLink or encrypted agent-wallet)."
+description: "@justlend/mcp-server-justlend v1.1.2 — 98 MCP tools across JustLend V1 (supply, borrow, repay, sTRX staking, energy rental, governance, mining) and V2 vaults/markets/liquidation, plus historical records and general TRON utilities. Dual-mode signing (browser TronLink or encrypted agent-wallet)."
 ---
 
 # MCP Server
@@ -15,7 +15,7 @@ This page is the human-readable reference for the full MCP server. For agent use
 - [Installation](#installation) — npm, source, and Claude Desktop config.
 - [Wallet setup (browser vs agent-wallet)](#wallet-setup-first-use-choice) — browser (TronLink TIP-6963) vs agent-wallet (encrypted local).
 - [HTTP-mode authentication (`MCP_API_KEY`)](#http-mode-authentication-mcp_api_key) — stdio (local clients) is open; HTTP/SSE is fail-closed.
-- [Tool catalog (96 tools)](#tools-96-total) — **V1**: Wallet & Network · Market Data · Account & Balances · Lending Operations · Mining & Rewards · JST Voting / Governance · Energy Rental · sTRX Staking · Transfers · General TRON. **V2**: Vaults · Markets · Liquidation · Dashboard/History · Mining. Plus Historical Records.
+- [Tool catalog (98 tools)](#tools-98-total) — **V1**: Wallet & Network · Market Data · Account & Balances · Lending Operations · Mining & Rewards · JST Voting / Governance · Energy Rental · sTRX Staking · Transfers · General TRON. **V2**: Vaults · Markets · Liquidation · Dashboard/History · Mining. Plus Historical Records.
 - [Guided prompts](#prompts-ai-guided-workflows) — the 14 shipped MCP prompts (`supply_assets`, `analyze_portfolio`, `cast_vote`, `moolah_supply`, `moolah_borrow`, …).
 - [Security considerations](#security-considerations) — `destructiveHint`, dry-run mode, source-of-truth priority, HTTP-mode `MCP_API_KEY`.
 
@@ -30,10 +30,10 @@ The JustLend MCP Server (`@justlend/mcp-server-justlend`) is a [Model Context Pr
 Beyond JustLend-specific operations, the server also exposes a full set of **general-purpose TRON chain utilities** — balance queries, block/transaction data, token metadata, TRX transfers, smart contract reads/writes, staking (Stake 2.0), multicall, and more.
 
 !!! note
-    Current version (**v1.1.0**) covers **JustLend V1** *and* **JustLend V2**. V1 is the Compound-V2-style pooled supply/borrow market (jTokens); V2 is an isolated-market + ERC4626-vault protocol. The two surfaces are namespaced — V1 tools like `get_market_data` / `supply`, V2 tools prefixed `moolah_*` / `get_moolah_*` (the `moolah` identifier is V2's on-chain/tool naming). See the [JustLend V2](../developers/justlend_v2.md) developer page for the protocol model and deployed contracts.
+    Current version (**v1.1.2**) covers **JustLend V1** *and* **JustLend V2**. V1 is the Compound-V2-style pooled supply/borrow market (jTokens); V2 is an isolated-market + ERC4626-vault protocol. The two surfaces are namespaced — V1 tools like `get_market_data` / `supply`, V2 tools prefixed `moolah_*` / `get_moolah_*` (the `moolah` identifier is V2's on-chain/tool naming). See the [JustLend V2](../developers/justlend_v2.md) developer page for the protocol model and deployed contracts.
 
-!!! tip "v1.1.0 Update"
-    This release adds **JustLend V2** support and grows the surface to **96 tools** (from 59): 30 V2 tools (vaults, markets, liquidation, dashboard/history, mining) + 7 historical-records tools, plus 4 V2 AI prompts (**14** total) and a V2 gas estimator. It also ships **AI-agent ergonomics** — structured self-healing tool errors (`{ error, errorCode, hint }`), self-describing amounts (`{ raw, decimals, _unit, display }`) on core reads, and hardened input schemas (Base58-address + decimal-amount validation). The machine-readable `mcp-api-list.md` catalog is regenerated from source (now 96 tools). All prior V1 safety work remains in place: TRC20 allowance checks before supply/repay, opt-in `max` approvals with revoke hints, typed broadcast handling, `toSafeCallValueNumber` guards on every broadcast/simulation path, mainnet fail-closed on pre-flight `REVERT`, constant-time `MCP_API_KEY` comparison, and governance failed-proposal filtering.
+!!! tip "v1.1.2 Update"
+    **v1.1.2** adds native **TRX ↔ WTRX** wrap/unwrap (`wrap_trx` / `unwrap_trx`) and hardens TRC20 approvals — USDT/USDC/USDJ reset the allowance to `0` before a new non-zero `approve`, and `amount='0'` reliably revokes. The surface is now **98 tools**. **v1.1.0** introduced **JustLend V2** support (from 59): 30 V2 tools (vaults, markets, liquidation, dashboard/history, mining) + 7 historical-records tools, plus 4 V2 AI prompts (**14** total) and a V2 gas estimator. It also ships **AI-agent ergonomics** — structured self-healing tool errors (`{ error, errorCode, hint }`), self-describing amounts (`{ raw, decimals, _unit, display }`) on core reads, and hardened input schemas (Base58-address + decimal-amount validation). The machine-readable `mcp-api-list.md` catalog is regenerated from source (now 98 tools). All prior V1 safety work remains in place: TRC20 allowance checks before supply/repay, opt-in `max` approvals with revoke hints, typed broadcast handling, `toSafeCallValueNumber` guards on every broadcast/simulation path, mainnet fail-closed on pre-flight `REVERT`, constant-time `MCP_API_KEY` comparison, and governance failed-proposal filtering.
 
 ## Overview
 
@@ -362,7 +362,7 @@ npm run dev
 
 ## API Reference
 
-### Tools (96 total)
+### Tools (98 total)
 
 !!! info "V1 + V2"
     The first ten groups below are **JustLend V1** (pooled jToken market). The **JustLend V2** groups (vaults / markets / liquidation / dashboard / mining) and **Historical Records** follow. V2 tools are namespaced `moolah_*` / `get_moolah_*`.
