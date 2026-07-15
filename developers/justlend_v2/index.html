@@ -138,8 +138,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "JustLend V2 \u2014 isolated-market lending plus ERC4626 vaults on TRON: protocol model (markets, shares, vaults, liquidation), how it differs from V1, and deployed mainnet/nile contract addresses.",
-          "dateModified": "2026-06-17",
-          "datePublished": "2026-06-17"
+          "dateModified": "2026-07-15",
+          "datePublished": "2026-07-15"
         }
       ]
     }
@@ -2339,7 +2339,7 @@
 <h3 id="vaults-erc4626">Vaults (ERC4626)<a class="headerlink" href="#vaults-erc4626" title="Permanent link">&para;</a></h3>
 <p>V2 <strong>vaults</strong> are ERC4626 tokenized vaults that aggregate supply-side liquidity and allocate it across markets. Users <code>deposit</code> an underlying asset and receive vault <strong>shares</strong>; <code>withdraw</code> (by asset amount) or <code>redeem</code> (by share amount) to exit. Vaults also accrue <strong>mining</strong> rewards (USDD / TRX splits).</p>
 <h3 id="liquidation">Liquidation<a class="headerlink" href="#liquidation" title="Permanent link">&para;</a></h3>
-<p>When a borrower's risk reaches the market <code>lltv</code>, anyone may liquidate through the <strong>PublicLiquidatorProxy</strong>: repay part of the debt (in the loan token) and seize the corresponding collateral at a discount. See <code>get_moolah_pending_liquidations</code> / <code>get_moolah_liquidation_quote</code> / <code>moolah_liquidate</code> in the <a href="../../ai_support/mcp_server/#tools-96-total">MCP server tool catalog</a>.</p>
+<p>When a borrower's risk reaches the market <code>lltv</code>, anyone may liquidate through the <strong>PublicLiquidatorProxy</strong>: repay part of the debt (in the loan token) and seize the corresponding collateral at a discount. See <code>get_moolah_pending_liquidations</code> / <code>get_moolah_liquidation_quote</code> / <code>moolah_liquidate</code> in the <a href="../../ai_support/mcp_server/#tools-98-total">MCP server tool catalog</a>.</p>
 <h3 id="native-trx">Native TRX<a class="headerlink" href="#native-trx" title="Permanent link">&para;</a></h3>
 <p>Native TRX is not an ERC20, so TRX operations route through the <strong>TrxProviderProxy</strong>, which wraps/unwraps <strong>WTRX</strong> transparently. Callers pass TRX amounts as <code>callValue</code>; TRC20 markets/vaults use the <strong>MoolahProxy</strong> directly after an <code>approve</code>.</p>
 <h2 id="deployed-contracts">Deployed contracts<a class="headerlink" href="#deployed-contracts" title="Permanent link">&para;</a></h2>
@@ -2446,7 +2446,7 @@
 <p>The V2 <strong>core</strong> contracts are live on Nile, but the <strong>vaults are not yet deployed</strong> there. Vault-level calls on Nile will fail at the chain layer. The V2 REST backend (dashboards/history) is <strong>mainnet-only</strong>.</p>
 </div>
 <h2 id="using-v2-via-the-mcp-server">Using V2 via the MCP server<a class="headerlink" href="#using-v2-via-the-mcp-server" title="Permanent link">&para;</a></h2>
-<p>The <a href="../../ai_support/mcp_server/">JustLend MCP Server</a> (v1.1.0+) exposes the full V2 surface under <code>moolah_*</code> / <code>get_moolah_*</code> tools — vaults, markets, liquidation, dashboard/history, and mining — plus four guided prompts (<code>moolah_supply</code>, <code>moolah_borrow</code>, <code>moolah_liquidate</code>, <code>moolah_portfolio</code>). See the <a href="../../ai_support/mcp_server/#tools-96-total">V2 tool groups</a> and the <a href="../../documents/aidocs/mcp_tools/">MCP Tool Catalog</a>.</p>
+<p>The <a href="../../ai_support/mcp_server/">JustLend MCP Server</a> (v1.1.2+) exposes the full V2 surface under <code>moolah_*</code> / <code>get_moolah_*</code> tools — vaults, markets, liquidation, dashboard/history, and mining — plus four guided prompts (<code>moolah_supply</code>, <code>moolah_borrow</code>, <code>moolah_liquidate</code>, <code>moolah_portfolio</code>). See the <a href="../../ai_support/mcp_server/#tools-98-total">V2 tool groups</a> and the <a href="../../documents/aidocs/mcp_tools/">MCP Tool Catalog</a>.</p>
 <p>Contract ABIs (<code>MOOLAH_CORE_ABI</code>, <code>TRX_PROVIDER_ABI</code>, <code>MOOLAH_VAULT_ABI</code>, <code>PUBLIC_LIQUIDATOR_ABI</code>) are bundled in the MCP repo's <a href="https://github.com/justlend/mcp-server-justlend/blob/main/src/core/abis.ts"><code>src/core/abis.ts</code></a>. For the full on-chain ABIs and contract data structures (<code>Position</code>, <code>MarketParams</code>, <code>MarketConfig</code>, <code>MarketAllocation</code>, …), see the <a href="../supply_and_borrow_market/sbmV2/">SBM V2 contract reference</a>.</p>
 <h2 id="rest-api">REST API<a class="headerlink" href="#rest-api" title="Permanent link">&para;</a></h2>
 <p>The public <a href="../apis/"><code>openapi.just.network</code></a> gateway currently serves <strong>V1 only</strong>; V2 protocol data
@@ -2474,7 +2474,7 @@ the public gateway and their paths are verified.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 17, 2026 12:06:36 UTC">2026-06-17</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="July 15, 2026 03:54:11 UTC">2026-07-15</span>
   </span>
 
     

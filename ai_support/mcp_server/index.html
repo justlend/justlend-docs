@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="@justlend/mcp-server-justlend v1.1.0 — 96 MCP tools across JustLend V1 (supply, borrow, repay, sTRX staking, energy rental, governance, mining) and V2 vaults/markets/liquidation, plus historical records and general TRON utilities. Dual-mode signing (browser TronLink or encrypted agent-wallet).">
+        <meta name="description" content="@justlend/mcp-server-justlend v1.1.2 — 98 MCP tools across JustLend V1 (supply, borrow, repay, sTRX staking, energy rental, governance, mining) and V2 vaults/markets/liquidation, plus historical records and general TRON utilities. Dual-mode signing (browser TronLink or encrypted agent-wallet).">
       
       
         <meta name="author" content="JustLend DAO">
@@ -137,9 +137,9 @@
             "publisher": { "@id": "https://justlend.org/#org" }
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
-          "description": "@justlend/mcp-server-justlend v1.1.0 \u2014 96 MCP tools across JustLend V1 (supply, borrow, repay, sTRX staking, energy rental, governance, mining) and V2 vaults/markets/liquidation, plus historical records and general TRON utilities. Dual-mode signing (browser TronLink or encrypted agent-wallet).",
-          "dateModified": "2026-06-17",
-          "datePublished": "2026-06-17"
+          "description": "@justlend/mcp-server-justlend v1.1.2 \u2014 98 MCP tools across JustLend V1 (supply, borrow, repay, sTRX staking, energy rental, governance, mining) and V2 vaults/markets/liquidation, plus historical records and general TRON utilities. Dual-mode signing (browser TronLink or encrypted agent-wallet).",
+          "dateModified": "2026-07-15",
+          "datePublished": "2026-07-15"
         }
       ]
     }
@@ -1588,9 +1588,9 @@
 
 
 <li class="md-nav__item ">
-  <a href="#tools-96-total" class="md-nav__link">
+  <a href="#tools-98-total" class="md-nav__link">
     <span class="md-ellipsis">
-      Tools (96 total)
+      Tools (98 total)
     </span>
   </a>
   
@@ -1637,6 +1637,19 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item ">
+  <a href="#error-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      Error contract
+    </span>
+  </a>
   
 </li>
       
@@ -2401,7 +2414,7 @@
 <li><a href="#installation">Installation</a> — npm, source, and Claude Desktop config.</li>
 <li><a href="#wallet-setup-first-use-choice">Wallet setup (browser vs agent-wallet)</a> — browser (TronLink TIP-6963) vs agent-wallet (encrypted local).</li>
 <li><a href="#http-mode-authentication-mcp_api_key">HTTP-mode authentication (<code>MCP_API_KEY</code>)</a> — stdio (local clients) is open; HTTP/SSE is fail-closed.</li>
-<li><a href="#tools-96-total">Tool catalog (96 tools)</a> — <strong>V1</strong>: Wallet &amp; Network · Market Data · Account &amp; Balances · Lending Operations · Mining &amp; Rewards · JST Voting / Governance · Energy Rental · sTRX Staking · Transfers · General TRON. <strong>V2</strong>: Vaults · Markets · Liquidation · Dashboard/History · Mining. Plus Historical Records.</li>
+<li><a href="#tools-98-total">Tool catalog (98 tools)</a> — <strong>V1</strong>: Wallet &amp; Network · Market Data · Account &amp; Balances · Lending Operations · Mining &amp; Rewards · JST Voting / Governance · Energy Rental · sTRX Staking · Transfers · General TRON. <strong>V2</strong>: Vaults · Markets · Liquidation · Dashboard/History · Mining. Plus Historical Records.</li>
 <li><a href="#prompts-ai-guided-workflows">Guided prompts</a> — the 14 shipped MCP prompts (<code>supply_assets</code>, <code>analyze_portfolio</code>, <code>cast_vote</code>, <code>moolah_supply</code>, <code>moolah_borrow</code>, …).</li>
 <li><a href="#security-considerations">Security considerations</a> — <code>destructiveHint</code>, dry-run mode, source-of-truth priority, HTTP-mode <code>MCP_API_KEY</code>.</li>
 </ul>
@@ -2417,11 +2430,11 @@
 <p>Beyond JustLend-specific operations, the server also exposes a full set of <strong>general-purpose TRON chain utilities</strong> — balance queries, block/transaction data, token metadata, TRX transfers, smart contract reads/writes, staking (Stake 2.0), multicall, and more.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Current version (<strong>v1.1.0</strong>) covers <strong>JustLend V1</strong> <em>and</em> <strong>JustLend V2</strong>. V1 is the Compound-V2-style pooled supply/borrow market (jTokens); V2 is an isolated-market + ERC4626-vault protocol. The two surfaces are namespaced — V1 tools like <code>get_market_data</code> / <code>supply</code>, V2 tools prefixed <code>moolah_*</code> / <code>get_moolah_*</code> (the <code>moolah</code> identifier is V2's on-chain/tool naming). See the <a href="../../developers/justlend_v2/">JustLend V2</a> developer page for the protocol model and deployed contracts.</p>
+<p>Current version (<strong>v1.1.2</strong>) covers <strong>JustLend V1</strong> <em>and</em> <strong>JustLend V2</strong>. V1 is the Compound-V2-style pooled supply/borrow market (jTokens); V2 is an isolated-market + ERC4626-vault protocol. The two surfaces are namespaced — V1 tools like <code>get_market_data</code> / <code>supply</code>, V2 tools prefixed <code>moolah_*</code> / <code>get_moolah_*</code> (the <code>moolah</code> identifier is V2's on-chain/tool naming). See the <a href="../../developers/justlend_v2/">JustLend V2</a> developer page for the protocol model and deployed contracts.</p>
 </div>
 <div class="admonition tip">
-<p class="admonition-title">v1.1.0 Update</p>
-<p>This release adds <strong>JustLend V2</strong> support and grows the surface to <strong>96 tools</strong> (from 59): 30 V2 tools (vaults, markets, liquidation, dashboard/history, mining) + 7 historical-records tools, plus 4 V2 AI prompts (<strong>14</strong> total) and a V2 gas estimator. It also ships <strong>AI-agent ergonomics</strong> — structured self-healing tool errors (<code>{ error, errorCode, hint }</code>), self-describing amounts (<code>{ raw, decimals, _unit, display }</code>) on core reads, and hardened input schemas (Base58-address + decimal-amount validation). The machine-readable <code>mcp-api-list.md</code> catalog is regenerated from source (now 96 tools). All prior V1 safety work remains in place: TRC20 allowance checks before supply/repay, opt-in <code>max</code> approvals with revoke hints, typed broadcast handling, <code>toSafeCallValueNumber</code> guards on every broadcast/simulation path, mainnet fail-closed on pre-flight <code>REVERT</code>, constant-time <code>MCP_API_KEY</code> comparison, and governance failed-proposal filtering.</p>
+<p class="admonition-title">v1.1.2 Update</p>
+<p><strong>v1.1.2</strong> adds native <strong>TRX ↔ WTRX</strong> wrap/unwrap (<code>wrap_trx</code> / <code>unwrap_trx</code>) and hardens TRC20 approvals — USDT/USDC/USDJ defensively reset the allowance to <code>0</code> before a new non-zero <code>approve</code> (matching the official front-end; the reset tx is confirmed on-chain before re-approving), and <code>amount='0'</code> reliably revokes. Tool errors now also carry a <strong><code>retryable</code></strong> flag with a <code>transient</code> class (see the error contract below), so agents can distinguish safe-to-retry RPC hiccups from errors needing corrective action. The surface is now <strong>98 tools</strong>. <strong>v1.1.0</strong> introduced <strong>JustLend V2</strong> support (from 59): 30 V2 tools (vaults, markets, liquidation, dashboard/history, mining) + 7 historical-records tools, plus 4 V2 AI prompts (<strong>14</strong> total) and a V2 gas estimator. It also ships <strong>AI-agent ergonomics</strong> — structured self-healing tool errors (<code>{ error, errorCode, hint }</code>), self-describing amounts (<code>{ raw, decimals, _unit, display }</code>) on core reads, and hardened input schemas (Base58-address + decimal-amount validation). The machine-readable <code>mcp-api-list.md</code> catalog is regenerated from source (now 98 tools). All prior V1 safety work remains in place: TRC20 allowance checks before supply/repay, opt-in <code>max</code> approvals with revoke hints, typed broadcast handling, <code>toSafeCallValueNumber</code> guards on every broadcast/simulation path, mainnet fail-closed on pre-flight <code>REVERT</code>, constant-time <code>MCP_API_KEY</code> comparison, and governance failed-proposal filtering.</p>
 </div>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
 <p><a href="https://justlend.org">JustLend DAO</a> is the largest lending protocol on TRON, based on the Compound V2 architecture. This MCP server wraps the full protocol functionality into tools and guided prompts that local MCP clients such as Claude Desktop, Codex, Claude Code, and Cursor can use.</p>
@@ -2655,16 +2668,17 @@ npx<span class="w"> </span>agent-wallet<span class="w"> </span>activate<span cla
 <div class="highlight"><pre><span></span><code><span class="c1"># Strongly recommended — avoids TronGrid 429 rate limiting on mainnet</span>
 <span class="nb">export</span><span class="w"> </span><span class="nv">TRONGRID_API_KEY</span><span class="o">=</span><span class="s2">&quot;your_trongrid_api_key&quot;</span>
 
-<span class="c1"># Optional: HTTP/SSE transport mode</span>
-<span class="nb">export</span><span class="w"> </span><span class="nv">MCP_TRANSPORT</span><span class="o">=</span><span class="s2">&quot;http&quot;</span><span class="w">       </span><span class="c1"># Use HTTP/SSE instead of stdio</span>
-<span class="nb">export</span><span class="w"> </span><span class="nv">MCP_HTTP_PORT</span><span class="o">=</span><span class="s2">&quot;3000&quot;</span><span class="w">       </span><span class="c1"># HTTP server port (default: 3000)</span>
-<span class="nb">export</span><span class="w"> </span><span class="nv">MCP_HTTP_HOST</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="w">  </span><span class="c1"># HTTP server host (default: 127.0.0.1)</span>
+<span class="c1"># Optional: HTTP/SSE transport mode — start it with `npm run start:http`</span>
+<span class="c1"># (entrypoint is src/server/http-server.ts; there is no transport env toggle)</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">PORT</span><span class="o">=</span><span class="s2">&quot;3001&quot;</span><span class="w">                 </span><span class="c1"># HTTP server port (default: 3001)</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MCP_HOST</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="w">        </span><span class="c1"># HTTP server host / bind address (default: 127.0.0.1)</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MCP_CORS_ORIGIN</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="w">          </span><span class="c1"># required allow-list if you bind to a non-loopback host</span>
 
 <span class="c1"># Required in HTTP mode — see &quot;HTTP Mode Authentication&quot; below for how to generate one</span>
 <span class="nb">export</span><span class="w"> </span><span class="nv">MCP_API_KEY</span><span class="o">=</span><span class="s2">&quot;your_strong_random_secret&quot;</span>
 </code></pre></div>
 <h3 id="http-mode-authentication-mcp_api_key">HTTP Mode Authentication (<code>MCP_API_KEY</code>)<a class="headerlink" href="#http-mode-authentication-mcp_api_key" title="Permanent link">&para;</a></h3>
-<p><strong>Most users do not need this.</strong> Claude Desktop, Claude Code, and Cursor connect over <strong>stdio</strong> by default, which has no network surface and no auth. <code>MCP_API_KEY</code> only applies when you run the server in <strong>HTTP/SSE mode</strong> (<code>npm run start:http</code> or <code>MCP_TRANSPORT=http</code>).</p>
+<p><strong>Most users do not need this.</strong> Claude Desktop, Claude Code, and Cursor connect over <strong>stdio</strong> by default, which has no network surface and no auth. <code>MCP_API_KEY</code> only applies when you run the server in <strong>HTTP/SSE mode</strong> (<code>npm run start:http</code>).</p>
 <h4 id="what-it-is">What it is<a class="headerlink" href="#what-it-is" title="Permanent link">&para;</a></h4>
 <p><code>MCP_API_KEY</code> is a self-chosen Bearer-token shared secret between the server and its clients. It is <strong>not</strong> issued by Anthropic, JustLend, or any third party — you generate it yourself, set it on the server, and share it with clients you trust.</p>
 <p>The HTTP server reads the variable at startup and <strong>refuses to start without it</strong>. Every incoming request to <code>/sse</code> and <code>/messages</code> must carry an <code>Authorization: Bearer &lt;MCP_API_KEY&gt;</code> header — anything else returns <code>401 Unauthorized</code>. The <code>/health</code> endpoint is the only exception.</p>
@@ -2801,7 +2815,7 @@ npm<span class="w"> </span>run<span class="w"> </span>start:http
 npm<span class="w"> </span>run<span class="w"> </span>dev
 </code></pre></div>
 <h2 id="api-reference">API Reference<a class="headerlink" href="#api-reference" title="Permanent link">&para;</a></h2>
-<h3 id="tools-96-total">Tools (96 total)<a class="headerlink" href="#tools-96-total" title="Permanent link">&para;</a></h3>
+<h3 id="tools-98-total">Tools (98 total)<a class="headerlink" href="#tools-98-total" title="Permanent link">&para;</a></h3>
 <div class="admonition info">
 <p class="admonition-title">V1 + V2</p>
 <p>The first ten groups below are <strong>JustLend V1</strong> (pooled jToken market). The <strong>JustLend V2</strong> groups (vaults / markets / liquidation / dashboard / mining) and <strong>Historical Records</strong> follow. V2 tools are namespaced <code>moolah_*</code> / <code>get_moolah_*</code>.</p>
@@ -3565,6 +3579,58 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 <li><strong>Source</strong>: <a href="https://github.com/justlend/mcp-server-justlend/blob/main/src/core/abis.ts"><code>src/core/abis.ts</code></a> (jToken, Comptroller, Oracle, TRC20)</li>
 <li><strong>Chain configs (Mainnet / Nile testnet)</strong>: <a href="https://github.com/justlend/mcp-server-justlend/blob/main/src/core/chains.ts"><code>src/core/chains.ts</code></a></li>
 </ul>
+<h2 id="error-contract">Error contract<a class="headerlink" href="#error-contract" title="Permanent link">&para;</a></h2>
+<p>Every tool returns errors as structured JSON with <code>isError: true</code>, so an agent can branch without parsing prose:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"> </span><span class="nt">&quot;error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;sanitized message&gt;&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;errorCode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;code&gt;&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;retryable&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;hint&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;how to fix&gt;&quot;</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<p><code>errorCode</code>, <code>retryable</code>, and <code>hint</code> are present when the error is recognized; unrecognized errors return just <code>error</code>. Recognized codes:</p>
+<table>
+<thead>
+<tr>
+<th>errorCode</th>
+<th style="text-align: center;">retryable</th>
+<th>Meaning / agent action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>transient</code></td>
+<td style="text-align: center;">✅ true</td>
+<td>Network/RPC timeout, <code>SERVER_BUSY</code>, 429/5xx — retry read-only calls after a short backoff; <strong>never</strong> blindly re-broadcast a write (re-query state first).</td>
+</tr>
+<tr>
+<td><code>insufficient_allowance</code></td>
+<td style="text-align: center;">❌ false</td>
+<td>Approve the spender first (<code>approve_underlying</code> / <code>approve_for_votes</code> / <code>approve_moolah_*</code>), then retry.</td>
+</tr>
+<tr>
+<td><code>insufficient_balance</code></td>
+<td style="text-align: center;">❌ false</td>
+<td>Lower the amount or fund the wallet; verify with <code>get_trx_balance</code> / <code>get_token_balance</code>.</td>
+</tr>
+<tr>
+<td><code>wallet_not_configured</code></td>
+<td style="text-align: center;">❌ false</td>
+<td>Configure a wallet (<code>import_wallet</code> / <code>connect_browser_wallet</code>), then <code>set_active_wallet</code>.</td>
+</tr>
+<tr>
+<td><code>execution_reverted</code></td>
+<td style="text-align: center;">❌ false</td>
+<td>Contract precondition failed (allowance / health / paused market) — simulate before broadcasting.</td>
+</tr>
+<tr>
+<td><code>market_not_found</code></td>
+<td style="text-align: center;">❌ false</td>
+<td>Verify the market symbol/address against <code>get_supported_markets</code>.</td>
+</tr>
+<tr>
+<td><code>invalid_address</code></td>
+<td style="text-align: center;">❌ false</td>
+<td>Use a Base58 TRON address (<code>T…</code>, 34 chars).</td>
+</tr>
+</tbody>
+</table>
+<p>Only <code>transient</code> is safe to auto-retry; every other code requires a corrective action first.</p>
 <h2 id="security-considerations">Security Considerations<a class="headerlink" href="#security-considerations" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Browser wallet (recommended)</strong>: Private keys never leave TronLink — the <code>tronlink-signer</code> SDK sends unsigned transactions to the browser and receives signed results</li>
@@ -3634,7 +3700,7 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 17, 2026 11:33:26 UTC">2026-06-17</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="July 15, 2026 11:03:22 UTC">2026-07-15</span>
   </span>
 
     

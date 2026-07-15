@@ -5,7 +5,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
-<meta content="Public read-only REST API at openapi.just.network — markets, account positions, liquidation risk, USDD supply-mining rewards, sTRX staking, Energy Rental. Authoritative schema is the OpenAPI 3.1 YAML." name="description"/>
+<meta content="Public read-only REST API at openapi.just.network — V1 markets, account positions, liquidation risk, USDD supply-mining rewards, sTRX staking, Energy Rental, plus JustLend V2 (Moolah) vaults and isolated markets. Authoritative schema is the OpenAPI 3.1 YAML." name="description"/>
 <meta content="JustLend DAO" name="author"/>
 <link href="https://docs.justlend.org/developers/apis/" rel="canonical"/>
 <link href="../deployed_contracts/" rel="prev"/>
@@ -90,9 +90,9 @@
             "publisher": { "@id": "https://justlend.org/#org" }
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
-          "description": "Public read-only REST API at openapi.just.network \u2014 markets, account positions, liquidation risk, USDD supply-mining rewards, sTRX staking, Energy Rental. Authoritative schema is the OpenAPI 3.1 YAML.",
-          "dateModified": "2026-06-26",
-          "datePublished": "2026-06-26"
+          "description": "Public read-only REST API at openapi.just.network \u2014 V1 markets, account positions, liquidation risk, USDD supply-mining rewards, sTRX staking, Energy Rental, plus JustLend V2 (Moolah) vaults and isolated markets. Authoritative schema is the OpenAPI 3.1 YAML.",
+          "dateModified": "2026-07-15",
+          "datePublished": "2026-07-15"
         }
       ]
     }
@@ -648,6 +648,13 @@
     </span>
 </a>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#34-justlend-v2-moolah-read-endpoints">
+<span class="md-ellipsis">
+      3.4 JustLend V2 (Moolah) read endpoints
+    </span>
+</a>
+</li>
 </ul>
 </nav>
 </li>
@@ -1098,14 +1105,14 @@
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
 <h1 id="justlend-dao-api">JustLend DAO API<a class="headerlink" href="#justlend-dao-api" title="Permanent link">¶</a></h1>
-<p>Public REST endpoints for querying JustLend DAO protocol state: lending markets, user positions, liquidation risk, USDD supply‑mining rewards, sTRX staking, and Energy Rental.</p>
+<p>Public REST endpoints for querying JustLend DAO protocol state: lending markets, user positions, liquidation risk, USDD supply‑mining rewards, sTRX staking, Energy Rental, and JustLend V2 (Moolah) vaults / isolated markets.</p>
 <h2 id="contents">Contents<a class="headerlink" href="#contents" title="Permanent link">¶</a></h2>
 <p>This page is the human-readable reference. The <a href="justlend_apis.yaml">OpenAPI 3.1 YAML</a> is the machine-readable contract — treat the YAML as authoritative if they ever diverge.</p>
 <ul>
 <li><a href="#quick-start">Quick start</a> — connectivity check + minimal response example.</li>
 <li><a href="#1-conventions">§1 Conventions</a> — response envelope, address format, numeric formats, rate / APY semantics, pagination, error responses, rate limits, versioning.</li>
 <li><a href="#2-jtoken-address-reference">§2 jToken Address Reference</a> — the 24-market table with <code>status: active|legacy</code> and the programmatic-filter tip.</li>
-<li><a href="#3-supply-borrow-market">§3 Supply &amp; Borrow Market endpoints</a> — <code>/lend/jtoken</code>, <code>/lend/account</code>, <code>/justlend/liquidate/highRiskAccountList</code>.</li>
+<li><a href="#3-supply-borrow-market">§3 Supply &amp; Borrow Market endpoints</a> — <code>/lend/jtoken</code>, <code>/lend/account</code>, <code>/justlend/liquidate/highRiskAccountList</code>, plus the V2 (Moolah) read endpoints <code>/v2/index/vault/list</code>, <code>/v2/index/market/list</code>, <code>/v2/index/position</code>, <code>/v2/vault/position</code>, <code>/v2/market/position</code> (§3.4).</li>
 <li><a href="#4-usdd-supply-mining">§4 USDD Supply Mining</a> — <code>/mining/reward</code>, <code>/mining/apy</code>, <code>/mining/distributions</code>.</li>
 <li><a href="#5-staked-trx-energy-rental">§5 Staked TRX &amp; Energy Rental</a> — <code>/lend/strx</code>, <code>/lend/strxStake/account</code>, <code>/lend/rentResource/account</code>.</li>
 <li><a href="#6-quick-reference-for-ai-agents">§6 Quick reference for AI agents</a> — common end-to-end recipes.</li>
@@ -1117,14 +1124,16 @@
 <li><strong>Base URL:</strong> <code>https://openapi.just.network</code></li>
 <li><strong>Method:</strong> All endpoints are <code>GET</code>. No authentication.</li>
 <li><strong>Content‑Type:</strong> <code>application/json</code></li>
+<li><strong>JSON compliance: Level 2</strong> — uniform <code>{code, message, data}</code> envelope on every endpoint (<a href="#11-response-envelope">§1.1</a>), machine-validatable schemas (typed fields + <code>required</code> arrays + <code>x-unit</code>/<code>x-decimals</code> extensions) in the OpenAPI YAML, and a documented compatibility policy (<a href="#18-versioning-and-compatibility">§1.8</a>).</li>
 <li><strong>Machine‑readable spec:</strong> <a href="justlend_apis.yaml"><code>justlend_apis.yaml</code></a> (OpenAPI 3.1). Importable into Swagger UI, Postman, Insomnia, or any LLM tool.</li>
+<li><strong>Live verification:</strong> the endpoints on this page are exercised end-to-end in the <a href="agent-acceptance/">agent acceptance run</a> (runnable via <code>node scripts/api-acceptance.mjs</code>).</li>
 <li><strong>Rate limits:</strong> The public service is unauthenticated and may throttle abusive traffic. Keep <code>pageSize &lt;= 1000</code>, cache stable metadata such as jToken lists, and retry <code>429</code> / <code>5xx</code> responses with exponential backoff.</li>
 </ul>
 <h2 id="quick-start">Quick start<a class="headerlink" href="#quick-start" title="Permanent link">¶</a></h2>
 <p>Run this read-only request to verify connectivity and inspect the current JustLend market list:</p>
 <div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-sS<span class="w"> </span>https://openapi.just.network/lend/jtoken
 </code></pre></div>
-<p>Expected result (one token shown in full; real response has ~23 entries with the same shape):</p>
+<p>Expected result (one token shown in full — a real response captured 2026-07-15; the live response has 24 entries with the same shape):</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
 <span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
 <span class="w">  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SUCCESS"</span><span class="p">,</span>
@@ -1133,44 +1142,54 @@
 <span class="w">      </span><span class="p">{</span>
 <span class="w">        </span><span class="nt">"address"</span><span class="p">:</span><span class="w">              </span><span class="s2">"TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP"</span><span class="p">,</span>
 <span class="w">        </span><span class="nt">"symbol"</span><span class="p">:</span><span class="w">               </span><span class="s2">"jTRX"</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"underlyingAddress"</span><span class="p">:</span><span class="w">    </span><span class="s2">"T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"</span><span class="p">,</span>
 <span class="w">        </span><span class="nt">"underlyingSymbol"</span><span class="p">:</span><span class="w">     </span><span class="s2">"TRX"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"underlyingAddress"</span><span class="p">:</span><span class="w">    </span><span class="s2">"T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"underlyingPriceInTrx"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.000000000000000000000000000"</span><span class="p">,</span>
 <span class="w">        </span><span class="nt">"underlyingDecimal"</span><span class="p">:</span><span class="w">    </span><span class="mi">6</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"underlyingPriceInTrx"</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"underlyingPriceInUsd"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.21</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"borrowIndex"</span><span class="p">:</span><span class="w">          </span><span class="mi">1224530412174750380</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"borrowRate"</span><span class="p">:</span><span class="w">           </span><span class="mf">0.064673716541040000</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"supplyRate"</span><span class="p">:</span><span class="w">           </span><span class="mf">0.009044500002192000</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"apy"</span><span class="p">:</span><span class="w">                  </span><span class="mf">0.000000000000000000</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"cash"</span><span class="p">:</span><span class="w">                 </span><span class="mf">349909392.537020000000000000</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"totalSupply"</span><span class="p">:</span><span class="w">          </span><span class="mi">12345678901234</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"totalBorrows"</span><span class="p">:</span><span class="w">         </span><span class="mf">123456789.012345</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"reserveFactor"</span><span class="p">:</span><span class="w">        </span><span class="mf">0.20</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"collateralFactor"</span><span class="p">:</span><span class="w">     </span><span class="mf">0.75</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"exchangeRate"</span><span class="p">:</span><span class="w">         </span><span class="mi">200345678901234567890000000</span>
+<span class="w">        </span><span class="nt">"reserveFactor"</span><span class="p">:</span><span class="w">        </span><span class="s2">"0.100000000000000000"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"collateralFactor"</span><span class="p">:</span><span class="w">     </span><span class="s2">"0.750000000000000000"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"supplyRate"</span><span class="p">:</span><span class="w">           </span><span class="s2">"0.004196584241280000"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"borrowRate"</span><span class="p">:</span><span class="w">           </span><span class="s2">"0.047954914361424000"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"exchangeRate"</span><span class="p">:</span><span class="w">         </span><span class="s2">"0.010582523128618106"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"cash"</span><span class="p">:</span><span class="w">                 </span><span class="s2">"2021157853.515481000000000000"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"totalBorrows"</span><span class="p">:</span><span class="w">         </span><span class="s2">"217298348.792278000000000000"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"totalSupply"</span><span class="p">:</span><span class="w">          </span><span class="s2">"211176098544.66409163"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"reserves"</span><span class="p">:</span><span class="w">             </span><span class="s2">"3680255.247515000000000000"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"borrowIndex"</span><span class="p">:</span><span class="w">          </span><span class="s2">"1361223278609682980"</span>
 <span class="w">      </span><span class="p">}</span>
-<span class="w">      </span><span class="cm">/* ... 22 more entries ... */</span>
+<span class="w">      </span><span class="cm">/* ... 23 more entries ... */</span>
 <span class="w">    </span><span class="p">]</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
 <p><strong>Units cheat-sheet for the response above</strong> (see <a href="#13-numeric-formats">§1.3</a> and <a href="#14-rate-apy-semantics">§1.4</a> for the full table):</p>
 <ul>
-<li><code>borrowRate</code>, <code>supplyRate</code>, <code>apy</code>, <code>collateralFactor</code>, <code>reserveFactor</code> — annualized / fractional <strong>decimals</strong>. Multiply by 100 for percent. See <a href="#14-rate-apy-semantics">§1.4 Rate / APY semantics</a> for the full table.</li>
-<li><code>cash</code>, <code>totalBorrows</code> — already de-scaled by the underlying's decimals. Use as-is.</li>
+<li><strong>All decimal quantities are JSON strings</strong> — parse with arbitrary-precision decimal/BigInt tooling, never IEEE-754 floats.</li>
+<li><code>borrowRate</code>, <code>supplyRate</code>, <code>collateralFactor</code>, <code>reserveFactor</code> — annualized / fractional <strong>decimals</strong>. Multiply by 100 for percent. (The USDD mining <code>apy</code> is served separately by <code>/mining/apy</code>, see §4.1.) See <a href="#14-rate-apy-semantics">§1.4 Rate / APY semantics</a> for the full table.</li>
+<li><code>cash</code>, <code>totalBorrows</code>, <code>reserves</code> — already de-scaled by the underlying's decimals. Use as-is.</li>
 <li><code>totalSupply</code> — <strong>jToken</strong> units (always 8 decimals).</li>
-<li><code>borrowIndex</code>, <code>exchangeRate</code> — mantissa-scaled by <code>1e18</code> (see <a href="../../resources/glossary/#mantissa">Glossary → mantissa</a>).</li>
+<li><code>borrowIndex</code> — cumulative interest index, scaled by <code>1e18</code>; exceeds 2^53, so keep it a string/BigInt (see <a href="../../resources/glossary/#mantissa">Glossary → mantissa</a>).</li>
+<li><code>exchangeRate</code> — <strong>de-scaled</strong> jToken → underlying ratio (human underlying per human jToken), <em>not</em> the raw on-chain <code>1e18</code> mantissa.</li>
 </ul>
 <p>For integrations, import the OpenAPI schema from <a href="justlend_apis.yaml"><code>apis/justlend_apis.yaml</code></a>, then start with <code>GET /lend/jtoken</code> for market metadata and <code>GET /lend/account?addresses={wallet}</code> for a user's positions.</p>
 <hr/>
 <h2 id="1-conventions">1. Conventions<a class="headerlink" href="#1-conventions" title="Permanent link">¶</a></h2>
 <p>These conventions apply to <strong>every</strong> response unless an endpoint says otherwise.</p>
 <h3 id="11-response-envelope">1.1 Response envelope<a class="headerlink" href="#11-response-envelope" title="Permanent link">¶</a></h3>
-<p>Every successful response uses the same envelope:</p>
+<p>Every response — success <strong>and</strong> business error — uses the same <code>{code, message, data}</code> envelope. The success <code>code</code> differs between the two API generations:</p>
+<p><strong>V1 endpoints</strong> (<code>/lend/...</code>, <code>/mining/...</code>, <code>/justlend/...</code>):</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
 <span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
 <span class="w">  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SUCCESS"</span><span class="p">,</span>
 <span class="w">  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>V2 endpoints</strong> (<code>/v2/...</code>):</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Success"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1784101532272</span>
 <span class="p">}</span>
 </code></pre></div>
 <table>
@@ -1185,26 +1204,35 @@
 <tr>
 <td><code>code</code></td>
 <td>integer</td>
-<td><code>0</code> means success. Non‑zero values indicate an error.</td>
+<td><strong>V1:</strong> <code>0</code> = success. <strong>V2:</strong> <code>200</code> = success. Any other value is a business/validation error (see <a href="#16-error-responses">§1.6</a>).</td>
 </tr>
 <tr>
 <td><code>message</code></td>
 <td>string</td>
-<td><code>"SUCCESS"</code> on success, otherwise a short error description.</td>
+<td><code>"SUCCESS"</code> (V1) / <code>"Success"</code> (V2) on success, otherwise a short error description.</td>
 </tr>
 <tr>
 <td><code>data</code></td>
 <td>object</td>
-<td>Endpoint payload. Shape is documented per endpoint below.</td>
+<td>Endpoint payload. Shape is documented per endpoint below. On business errors it is <strong>absent</strong> (V1) or <strong><code>null</code></strong> (V2).</td>
+</tr>
+<tr>
+<td><code>timestamp</code></td>
+<td>integer</td>
+<td><strong>V2 only.</strong> Server time of the response, epoch milliseconds. Always present, including on business errors.</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
-<p><strong>Field necessity (必返性).</strong> Every field documented for a <code>data</code> schema is <strong>always returned</strong> (required) unless it is explicitly marked <code>nullable</code> — a <code>nullable</code> field is still always present but its value may be <code>null</code> (e.g. <code>liquidateStatusStartTime</code>). The machine-readable <code>required</code> arrays in <a href="justlend_apis.yaml"><code>justlend_apis.yaml</code></a> enumerate these per schema, so an agent can distinguish "field missing = bug/unexpected" from "value null = documented empty state" and validate responses programmatically.</p>
+<p><strong>JSON compliance: Level 2.</strong> Uniform envelope on every endpoint, machine-validatable response schemas (typed fields, <code>required</code> arrays, <code>x-unit</code> / <code>x-decimals</code> / <code>x-format</code> extensions) in <a href="justlend_apis.yaml"><code>justlend_apis.yaml</code></a>, and a documented compatibility policy (<a href="#18-versioning-and-compatibility">§1.8</a>).</p>
+<p><strong>Field necessity (必返性).</strong> Every field documented for a <code>data</code> schema is <strong>always returned</strong> (required) unless it is explicitly marked <code>nullable</code> or <code>optional</code> — a <code>nullable</code> field is still always present but its value may be <code>null</code> (e.g. <code>liquidateStatusStartTime</code>, or the V2 user-scoped fields when no <code>address</code> is supplied). The machine-readable <code>required</code> arrays in <a href="justlend_apis.yaml"><code>justlend_apis.yaml</code></a> enumerate these per schema, so an agent can distinguish "field missing = bug/unexpected" from "value null = documented empty state" and validate responses programmatically. The per-endpoint tables below carry the same information in their <strong>Required</strong> column.</p>
 </blockquote>
 <h3 id="12-address-format">1.2 Address format<a class="headerlink" href="#12-address-format" title="Permanent link">¶</a></h3>
 <p>All addresses are TRON <strong>Base58</strong> addresses (start with <code>T</code>, 34 chars). Examples: <code>TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf</code>.</p>
 <h3 id="13-numeric-formats">1.3 Numeric formats<a class="headerlink" href="#13-numeric-formats" title="Permanent link">¶</a></h3>
+<blockquote>
+<p><strong>All decimal quantities (amounts, rates, prices, indexes) are serialized as JSON <em>strings</em></strong> — on V1 and V2 alike. Parse them with arbitrary-precision decimal / BigInt tooling, never IEEE-754 floats (many values carry more than 15 significant digits; <code>borrowIndex</code> and V2 share amounts exceed 2^53). Counts, flags and token decimals are plain JSON integers, with two quirks: <code>/lend/strx</code> serializes <code>decimal</code> / <code>underlyingDecimal</code> as strings (<code>"18"</code>, <code>"6"</code>), and <code>/mining/reward</code> serializes <code>currPhase</code> and the status enums as strings.</p>
+</blockquote>
 <table>
 <thead>
 <tr>
@@ -1215,37 +1243,53 @@
 </thead>
 <tbody>
 <tr>
-<td>Decimal string/number</td>
+<td>Decimal string</td>
 <td><code>borrowRate</code>, <code>supplyRate</code>, <code>apy</code>, <code>collateralFactor</code>, <code>health</code>, <code>risk</code>, <code>exchangeRate</code>, etc.</td>
-<td>Already human‑readable. <code>0.064673</code> means <code>6.4673 %</code> for rates, <code>0.75</code> means <code>75 %</code> for factors.</td>
+<td>Already human‑readable. <code>"0.064673"</code> means <code>6.4673 %</code> for rates, <code>"0.75"</code> means <code>75 %</code> for factors.</td>
 </tr>
 <tr>
 <td>Underlying amount</td>
 <td><code>cash</code>, <code>totalBorrows</code>, <code>reserves</code>, <code>supplyBalanceUnderlying</code>, <code>borrowBalanceUnderlying</code></td>
-<td>Already de‑scaled by the asset's decimals. Use as‑is for display.</td>
+<td>Decimal string, already de‑scaled by the asset's decimals. Use as‑is for display.</td>
 </tr>
 <tr>
 <td>jToken amount</td>
 <td><code>totalSupply</code> of <code>/lend/jtoken</code>, <code>supplyBalanceJtoken</code></td>
-<td>jToken units (jTokens always have <strong>8</strong> decimals on TRON).</td>
+<td>Decimal string in jToken units (jTokens always have <strong>8</strong> decimals on TRON).</td>
 </tr>
 <tr>
 <td>TRX value</td>
 <td>Anything ending in <code>InTrx</code></td>
-<td>Already de‑scaled (TRX has 6 decimals). For example <code>totalBorrowValueInTrx: 11.277370</code> means 11.277 TRX.</td>
+<td>Decimal string, already de‑scaled (TRX has 6 decimals). <code>"41630.103606"</code> means 41,630.10 TRX.</td>
 </tr>
 <tr>
 <td>USD value</td>
 <td>Anything ending in <code>Usd</code></td>
-<td>Already de‑scaled US dollars.</td>
+<td>Decimal string, already de‑scaled US dollars.</td>
+</tr>
+<tr>
+<td>Mantissa string</td>
+<td><code>borrowIndex</code> of <code>/lend/jtoken</code></td>
+<td>Integer string scaled by <code>1e18</code>; exceeds 2^53 — parse as BigInt.</td>
+</tr>
+<tr>
+<td>Raw share amount</td>
+<td><code>shareAmount</code>, <code>borrowShares</code> on V2 position endpoints</td>
+<td>Integer string in raw base units; can exceed 2^53 — parse as BigInt.</td>
+</tr>
+<tr>
+<td>Epoch milliseconds</td>
+<td><code>updateTime</code>, <code>liquidateStatusStartTime</code> (high-risk list), V2 <code>timestamp</code></td>
+<td>Plain JSON integer, Unix epoch in milliseconds.</td>
 </tr>
 <tr>
 <td>Hex string</td>
 <td><code>amount</code>, <code>index</code>, <code>merkleIndex</code>, <code>merkleRoot</code>, <code>proof</code> in <code>/mining/distributions</code></td>
-<td>Hex‑encoded <code>uint256</code>. <strong>The leading <code>:</code> shown in some legacy examples is a delimiter and is not part of the value.</strong> Pass directly to the on‑chain claim contract.</td>
+<td>Hex‑encoded <code>uint256</code>, bare <code>0x…</code>. <strong>The leading <code>:</code> shown in some legacy examples is a delimiter and is not part of the value.</strong> Pass directly to the on‑chain claim contract.</td>
 </tr>
 </tbody>
 </table>
+<p>The OpenAPI YAML makes the unit and scale machine-readable: amount / rate / price / time fields carry an <code>x-unit</code> extension (plus <code>x-decimals</code> where the scale is fixed, and <code>x-format</code> for hex or non-RFC time layouts).</p>
 <h3 id="14-rate-apy-semantics">1.4 Rate / APY semantics<a class="headerlink" href="#14-rate-apy-semantics" title="Permanent link">¶</a></h3>
 <blockquote>
 <p><strong>All <code>*Rate</code> and <code>apy</code> values are annualized decimals.</strong> Multiply by 100 to get a percentage.</p>
@@ -1294,8 +1338,11 @@
 <blockquote>
 <p><strong>Important for clients and AI agents:</strong> business and validation outcomes are returned with <strong>HTTP <code>200</code></strong> and the same <code>{ code, message, data }</code> envelope — <strong>not</strong> signalled through HTTP status codes, and <strong>not</strong> in RFC 7807 form. <strong>Branch on the body <code>code</code>, not the HTTP status.</strong> Only transport-level conditions (rate limiting, server faults) surface as non-<code>200</code> HTTP statuses.</p>
 </blockquote>
-<p><strong>Business / validation errors — HTTP <code>200</code>, <code>code</code> ≠ 0, <code>data</code> omitted:</strong></p>
+<p><strong>V1 business / validation errors — HTTP <code>200</code>, <code>code</code> ≠ 0, <code>data</code> omitted</strong> (real response, captured 2026-07-15):</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"> </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">404</span><span class="p">,</span><span class="w"> </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"interface [/lend/nonExistentXYZ] non exist"</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<p><strong>V2 business / validation errors — HTTP <code>200</code>, <code>code</code> ≠ 200, <code>data: null</code></strong> (real response, captured 2026-07-15):</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"> </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">202</span><span class="p">,</span><span class="w"> </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"error: Invalid value for field 'address': Invalid format; error: Invalid value for field 'vaultAddress': Invalid format"</span><span class="p">,</span><span class="w"> </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="nt">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1784101590046</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 <table>
 <thead>
@@ -1307,7 +1354,7 @@
 <tbody>
 <tr>
 <td>Body <code>code</code></td>
-<td><code>0</code> = success. Any non-zero value (e.g. <code>1</code>, <code>404</code>) is an error — read <code>message</code>; <code>data</code> is typically absent or <code>null</code>.</td>
+<td><strong>V1:</strong> <code>0</code> = success; any non-zero value (e.g. <code>1</code>, <code>404</code>) is an error. <strong>V2:</strong> <code>200</code> = success; any other value (e.g. <code>202</code> = invalid parameters) is an error. Read <code>message</code>; <code>data</code> is absent (V1) or <code>null</code> (V2).</td>
 </tr>
 <tr>
 <td>HTTP status</td>
@@ -1337,9 +1384,9 @@
 </tr>
 </tbody>
 </table>
-<p><strong>Silent parameter handling (must-know):</strong> unknown or out-of-range query parameters (e.g. <code>pageSize=invalid</code>, <code>pageNo=-1</code>) are commonly <strong>silently ignored</strong> — the service returns <code>200 SUCCESS</code> with default data rather than rejecting the request. Some endpoints do return a non-zero <code>code</code> (e.g. <code>{"code":1,"message":"illegal pageNo or pageSize"}</code>), but <strong>this is not guaranteed</strong>. The API does <strong>not</strong> reliably validate inputs for you: <strong>validate parameters client-side</strong> and never assume a malformed request will fail.</p>
+<p><strong>Silent parameter handling (must-know):</strong> unknown or out-of-range query parameters (e.g. <code>pageSize=invalid</code>, <code>pageNo=-1</code>) are commonly <strong>silently ignored</strong> — the service returns <code>200 SUCCESS</code> with default data rather than rejecting the request. Some endpoints do return a non-zero <code>code</code> (e.g. <code>{"code":1,"message":"illegal pageNo or pageSize"}</code>, or <code>{"code":1,"message":"Required request parameter 'addr' ... is not present"}</code> when a required parameter is missing), but <strong>this is not guaranteed</strong>. The API does <strong>not</strong> reliably validate inputs for you: <strong>validate parameters client-side</strong> and never assume a malformed request will fail.</p>
 <blockquote>
-<p>This error contract reflects the live service as of 2026-06-08. A future API revision may adopt HTTP status codes and/or a structured error body; until then, treat HTTP <code>200</code> + body <code>code</code> as authoritative and validate inputs client-side.</p>
+<p>This error contract reflects the live service as verified on 2026-07-15 (see the <a href="agent-acceptance/">agent acceptance run</a>). A future API revision may adopt HTTP status codes and/or a structured error body; until then, treat HTTP <code>200</code> + body <code>code</code> as authoritative and validate inputs client-side.</p>
 </blockquote>
 <h3 id="17-rate-limits-and-retry">1.7 Rate limits and retry<a class="headerlink" href="#17-rate-limits-and-retry" title="Permanent link">¶</a></h3>
 <p>The public API is designed for read-only integrations and AI agents. It is not a bulk export interface.</p>
@@ -1375,7 +1422,7 @@ on persistent 429 across multiple windows:
 <ul>
 <li>Existing fields may be extended with new optional fields. Clients should ignore unknown fields.</li>
 <li>Field removals, type changes, or semantic changes require a documentation version update and deprecation note before rollout.</li>
-<li>Legacy fields can remain documented for compatibility. For example, <code>reserse</code> is preserved as returned by the service and should be read as <code>reserves</code>.</li>
+<li>The service itself occasionally renames keys without notice — observed examples: <code>stakeInfo.reserse</code> (typo) became <code>reserves</code>, and the per-account key in <code>/lend/account</code> / <code>/lend/strxStake/account</code> responses is <code>address</code> (older captures showed <code>addresses</code>). Where this happened, this page documents the <strong>current</strong> key and notes the historical one; defensive clients may accept both.</li>
 <li>When the rendered page and OpenAPI YAML differ, treat <a href="justlend_apis.yaml"><code>apis/justlend_apis.yaml</code></a> as the source of truth for request and response shapes.</li>
 </ul>
 <hr/>
@@ -1547,7 +1594,7 @@ on persistent 429 across multiple windows:
 <h3 id="31-get-lendjtoken-list-all-sbm-markets">3.1 <code>GET /lend/jtoken</code> — List all SBM markets<a class="headerlink" href="#31-get-lendjtoken-list-all-sbm-markets" title="Permanent link">¶</a></h3>
 <p>Returns the on‑chain state of every Supply &amp; Borrow market: rates, total supply/borrow, exchange rates, prices, and collateral factor.</p>
 <p><strong>Parameters:</strong> none.</p>
-<p><strong>Response data</strong></p>
+<p><strong>Response data</strong> (real response captured 2026-07-15; one of 24 entries shown)</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
 <span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
 <span class="w">  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SUCCESS"</span><span class="p">,</span>
@@ -1556,20 +1603,20 @@ on persistent 429 across multiple windows:
 <span class="w">      </span><span class="p">{</span>
 <span class="w">        </span><span class="nt">"address"</span><span class="p">:</span><span class="w">              </span><span class="s2">"TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP"</span><span class="p">,</span>
 <span class="w">        </span><span class="nt">"symbol"</span><span class="p">:</span><span class="w">               </span><span class="s2">"jTRX"</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"underlyingAddress"</span><span class="p">:</span><span class="w">    </span><span class="s2">"T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"</span><span class="p">,</span>
 <span class="w">        </span><span class="nt">"underlyingSymbol"</span><span class="p">:</span><span class="w">     </span><span class="s2">"TRX"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"underlyingAddress"</span><span class="p">:</span><span class="w">    </span><span class="s2">"T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"underlyingPriceInTrx"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.000000000000000000000000000"</span><span class="p">,</span>
 <span class="w">        </span><span class="nt">"underlyingDecimal"</span><span class="p">:</span><span class="w">    </span><span class="mi">6</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"underlyingPriceInTrx"</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"borrowIndex"</span><span class="p">:</span><span class="w">          </span><span class="mi">1224530412174750380</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"borrowRate"</span><span class="p">:</span><span class="w">           </span><span class="mf">0.064673716541040000</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"supplyRate"</span><span class="p">:</span><span class="w">           </span><span class="mf">0.009044500002192000</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"cash"</span><span class="p">:</span><span class="w">                 </span><span class="mf">349909392.537020000000000000</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"reserves"</span><span class="p">:</span><span class="w">             </span><span class="mf">2300647.881336000000000000</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"totalBorrows"</span><span class="p">:</span><span class="w">         </span><span class="mf">63951044.565948000000000000</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"totalSupply"</span><span class="p">:</span><span class="w">          </span><span class="mf">39391010299.49149122</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"exchangeRate"</span><span class="p">:</span><span class="w">         </span><span class="mf">0.010448063811832339</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"collateralFactor"</span><span class="p">:</span><span class="w">     </span><span class="mf">0.750000000000000000</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"reserveFactor"</span><span class="p">:</span><span class="w">        </span><span class="mf">0.100000000000000000</span>
+<span class="w">        </span><span class="nt">"reserveFactor"</span><span class="p">:</span><span class="w">        </span><span class="s2">"0.100000000000000000"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"collateralFactor"</span><span class="p">:</span><span class="w">     </span><span class="s2">"0.750000000000000000"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"supplyRate"</span><span class="p">:</span><span class="w">           </span><span class="s2">"0.004196584241280000"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"borrowRate"</span><span class="p">:</span><span class="w">           </span><span class="s2">"0.047954914361424000"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"exchangeRate"</span><span class="p">:</span><span class="w">         </span><span class="s2">"0.010582523128618106"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"cash"</span><span class="p">:</span><span class="w">                 </span><span class="s2">"2021157853.515481000000000000"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"totalBorrows"</span><span class="p">:</span><span class="w">         </span><span class="s2">"217298348.792278000000000000"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"totalSupply"</span><span class="p">:</span><span class="w">          </span><span class="s2">"211176098544.66409163"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"reserves"</span><span class="p">:</span><span class="w">             </span><span class="s2">"3680255.247515000000000000"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"borrowIndex"</span><span class="p">:</span><span class="w">          </span><span class="s2">"1361223278609682980"</span>
 <span class="w">      </span><span class="p">}</span>
 <span class="w">    </span><span class="p">]</span>
 <span class="w">  </span><span class="p">}</span>
@@ -1581,6 +1628,7 @@ on persistent 429 across multiple windows:
 <tr>
 <th>Field</th>
 <th>Type</th>
+<th>Required</th>
 <th>Unit / Format</th>
 <th>Description</th>
 </tr>
@@ -1589,96 +1637,112 @@ on persistent 429 across multiple windows:
 <tr>
 <td><code>address</code></td>
 <td>string</td>
+<td>Yes</td>
 <td>TRON address</td>
 <td>jToken contract address (the market).</td>
 </tr>
 <tr>
 <td><code>symbol</code></td>
 <td>string</td>
+<td>Yes</td>
 <td>text</td>
 <td>jToken symbol, e.g. <code>jTRX</code>, <code>jUSDD</code>.</td>
 </tr>
 <tr>
 <td><code>underlyingAddress</code></td>
 <td>string</td>
+<td>Yes</td>
 <td>TRON address</td>
 <td>Underlying asset contract address.</td>
 </tr>
 <tr>
 <td><code>underlyingSymbol</code></td>
 <td>string</td>
+<td>Yes</td>
 <td>text</td>
 <td>Underlying asset symbol.</td>
 </tr>
 <tr>
 <td><code>underlyingDecimal</code></td>
 <td>integer</td>
+<td>Yes</td>
 <td>count</td>
 <td>Decimals of the underlying asset.</td>
 </tr>
 <tr>
 <td><code>underlyingPriceInTrx</code></td>
-<td>number</td>
-<td>TRX</td>
+<td>string</td>
+<td>Yes</td>
+<td>TRX (decimal string)</td>
 <td>Oracle price of 1 unit of underlying, denominated in TRX.</td>
 </tr>
 <tr>
 <td><code>borrowIndex</code></td>
-<td>integer</td>
-<td>scaled 1e18</td>
-<td>Cumulative borrow interest index. Used for accurate per‑user accounting.</td>
+<td>string</td>
+<td>Yes</td>
+<td>integer string, scaled 1e18</td>
+<td>Cumulative borrow interest index. Exceeds 2^53 — parse as BigInt.</td>
 </tr>
 <tr>
 <td><code>borrowRate</code></td>
-<td>number</td>
-<td>annualized decimal</td>
-<td>Borrow APY. <code>0.0647</code> = <code>6.47 %</code>.</td>
+<td>string</td>
+<td>Yes</td>
+<td>annualized decimal string</td>
+<td>Borrow APY. <code>"0.0479"</code> = <code>4.79 %</code>.</td>
 </tr>
 <tr>
 <td><code>supplyRate</code></td>
-<td>number</td>
-<td>annualized decimal</td>
+<td>string</td>
+<td>Yes</td>
+<td>annualized decimal string</td>
 <td>Supply APY (excluding mining).</td>
 </tr>
 <tr>
 <td><code>cash</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>underlying units</td>
-<td>Available underlying liquidity in the market.</td>
+<td>Available underlying liquidity in the market. Decimal string.</td>
 </tr>
 <tr>
 <td><code>reserves</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>underlying units</td>
-<td>Protocol reserves in the market.</td>
+<td>Protocol reserves in the market. Decimal string.</td>
 </tr>
 <tr>
 <td><code>totalBorrows</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>underlying units</td>
-<td>Total outstanding debt.</td>
+<td>Total outstanding debt. Decimal string.</td>
 </tr>
 <tr>
 <td><code>totalSupply</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>jToken units (8 decimals)</td>
-<td>Total minted jTokens.</td>
+<td>Total minted jTokens. Decimal string.</td>
 </tr>
 <tr>
 <td><code>exchangeRate</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>underlying per jToken</td>
-<td>Current jToken → underlying conversion ratio.</td>
+<td>Current jToken → underlying conversion ratio, de-scaled (not the raw 1e18 mantissa).</td>
 </tr>
 <tr>
 <td><code>collateralFactor</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>decimal (0–1)</td>
-<td>LTV cap when used as collateral. <code>0.75</code> = <code>75 %</code>.</td>
+<td>LTV cap when used as collateral. <code>"0.75"</code> = <code>75 %</code>.</td>
 </tr>
 <tr>
 <td><code>reserveFactor</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>decimal (0–1)</td>
 <td>Share of borrow interest taken as protocol reserve.</td>
 </tr>
@@ -1739,28 +1803,28 @@ on persistent 429 across multiple windows:
 <p><strong>Example request</strong></p>
 <div class="highlight"><pre><span></span><code><span class="err">GET /lend/account?addresses=T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb,TXJgM...&amp;pageNo=1&amp;pageSize=20</span>
 </code></pre></div>
-<p><strong>Response data</strong></p>
+<p><strong>Response data</strong> (real response captured 2026-07-15)</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
 <span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
 <span class="w">  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SUCCESS"</span><span class="p">,</span>
 <span class="w">  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">"totalCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
 <span class="w">    </span><span class="nt">"totalPage"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"totalCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
 <span class="w">    </span><span class="nt">"list"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 <span class="w">      </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">"addresses"</span><span class="p">:</span><span class="w">                 </span><span class="s2">"T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"health"</span><span class="p">:</span><span class="w">                    </span><span class="mf">5.88</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"totalCollateralValueInTrx"</span><span class="p">:</span><span class="w"> </span><span class="mf">24.126681</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"totalBorrowValueInTrx"</span><span class="p">:</span><span class="w">     </span><span class="mf">11.277370</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"address"</span><span class="p">:</span><span class="w">                   </span><span class="s2">"TB2e78zyzMnaNG2GRazazmbVVv3J564YHg"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"health"</span><span class="p">:</span><span class="w">                    </span><span class="s2">"1.00000595"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"totalBorrowValueInTrx"</span><span class="p">:</span><span class="w">     </span><span class="s2">"41630.103606"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"totalCollateralValueInTrx"</span><span class="p">:</span><span class="w"> </span><span class="s2">"41630.351383"</span><span class="p">,</span>
 <span class="w">        </span><span class="nt">"liquidateStatusStartTime"</span><span class="p">:</span><span class="w">  </span><span class="kc">null</span><span class="p">,</span>
 <span class="w">        </span><span class="nt">"tokens"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 <span class="w">          </span><span class="p">{</span>
-<span class="w">            </span><span class="nt">"address"</span><span class="p">:</span><span class="w">                </span><span class="s2">"TNSBA6KvSvMoTqQcEgpVK7VhHT3z7wifxy"</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">"underlyingSymbol"</span><span class="p">:</span><span class="w">       </span><span class="s2">"USDD"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"address"</span><span class="p">:</span><span class="w">                </span><span class="s2">"TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"underlyingSymbol"</span><span class="p">:</span><span class="w">       </span><span class="s2">"TRX"</span><span class="p">,</span>
 <span class="w">            </span><span class="nt">"entered"</span><span class="p">:</span><span class="w">                </span><span class="mi">1</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">"supplyBalanceJtoken"</span><span class="p">:</span><span class="w">    </span><span class="mf">1.09062037</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">"supplyBalanceUnderlying"</span><span class="p">:</span><span class="mf">0.01148891329334797277745383</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">"borrowBalanceUnderlying"</span><span class="p">:</span><span class="mf">0.704372293431165977793198</span>
+<span class="w">            </span><span class="nt">"borrowBalanceUnderlying"</span><span class="p">:</span><span class="s2">"41630.103606391458272468557875"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"supplyBalanceUnderlying"</span><span class="p">:</span><span class="s2">"55507.13517729334283172067476560"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"supplyBalanceJtoken"</span><span class="p">:</span><span class="w">    </span><span class="s2">"5245170.10164455"</span>
 <span class="w">          </span><span class="p">}</span>
 <span class="w">        </span><span class="p">]</span>
 <span class="w">      </span><span class="p">}</span>
@@ -1774,76 +1838,88 @@ on persistent 429 across multiple windows:
 <tr>
 <th>Field</th>
 <th>Type</th>
+<th>Required</th>
 <th>Unit</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>addresses</code></td>
+<td><code>address</code></td>
 <td>string</td>
+<td>Yes</td>
 <td>TRON address</td>
-<td>Wallet address.</td>
+<td>Wallet address. (Earlier versions of this page showed the key as <code>addresses</code>; the service returns <code>address</code>.)</td>
 </tr>
 <tr>
 <td><code>health</code></td>
-<td>number</td>
-<td>ratio</td>
-<td>Health factor. <code>&gt; 1</code> healthy, <code>≤ 1</code> liquidatable. <code>5.88</code> = very safe.</td>
+<td>string</td>
+<td>Yes</td>
+<td>ratio (decimal string)</td>
+<td>Health factor. <code>&gt; 1</code> healthy, <code>≤ 1</code> liquidatable. <code>"5.88"</code> = very safe.</td>
 </tr>
 <tr>
 <td><code>totalCollateralValueInTrx</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>TRX</td>
-<td>Sum of collateral value (after <code>collateralFactor</code>).</td>
+<td>Sum of collateral value (after <code>collateralFactor</code>). Decimal string.</td>
 </tr>
 <tr>
 <td><code>totalBorrowValueInTrx</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>TRX</td>
-<td>Sum of outstanding borrow value.</td>
+<td>Sum of outstanding borrow value. Decimal string.</td>
 </tr>
 <tr>
 <td><code>liquidateStatusStartTime</code></td>
 <td>string|null</td>
-<td>ISO 8601</td>
-<td>Timestamp when this account first entered a liquidatable state, or <code>null</code> if safe.</td>
+<td>Yes (nullable)</td>
+<td>timestamp</td>
+<td>Timestamp when this account first entered a liquidatable state, or <code>null</code> if it is not currently flagged. Always present.</td>
 </tr>
 <tr>
 <td><code>tokens[].address</code></td>
 <td>string</td>
+<td>Yes</td>
 <td>TRON address</td>
 <td>jToken address of this position.</td>
 </tr>
 <tr>
 <td><code>tokens[].underlyingSymbol</code></td>
 <td>string</td>
+<td>Yes</td>
 <td>text</td>
 <td>Underlying symbol, e.g. <code>USDD</code>.</td>
 </tr>
 <tr>
 <td><code>tokens[].entered</code></td>
 <td>integer</td>
+<td>Yes</td>
 <td>0 / 1</td>
 <td><code>1</code> if the user has entered this market as collateral, <code>0</code> otherwise.</td>
 </tr>
 <tr>
 <td><code>tokens[].supplyBalanceJtoken</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>jToken units (8d)</td>
-<td>Supplied balance in jTokens.</td>
+<td>Supplied balance in jTokens. Decimal string.</td>
 </tr>
 <tr>
 <td><code>tokens[].supplyBalanceUnderlying</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>underlying</td>
-<td>Supplied balance in underlying.</td>
+<td>Supplied balance in underlying. Decimal string.</td>
 </tr>
 <tr>
 <td><code>tokens[].borrowBalanceUnderlying</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>underlying</td>
-<td>Outstanding borrow in underlying.</td>
+<td>Outstanding borrow in underlying. Decimal string.</td>
 </tr>
 </tbody>
 </table>
@@ -1851,53 +1927,61 @@ on persistent 429 across multiple windows:
 <h3 id="33-get-justlendliquidatehighriskaccountlist-highrisk-accounts">3.3 <code>GET /justlend/liquidate/highRiskAccountList</code> — High‑risk accounts<a class="headerlink" href="#33-get-justlendliquidatehighriskaccountlist-highrisk-accounts" title="Permanent link">¶</a></h3>
 <p>Returns accounts that are currently liquidatable or close to it. Use this to drive liquidation bots.</p>
 <p><strong>Parameters:</strong> none.</p>
-<p><strong>Response data</strong></p>
+<p><strong>Response data</strong> (real response captured 2026-07-15; <code>jtokens</code> truncated to 2 of 24 keys, <code>accounts</code> to 1 of 85 entries)</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
 <span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
 <span class="w">  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SUCCESS"</span><span class="p">,</span>
 <span class="w">  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">"updateTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1770275708508</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">"jtokens"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"jUSDD"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf"</span><span class="p">,</span><span class="w"> </span><span class="nt">"jTRX"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP"</span><span class="p">,</span><span class="w"> </span><span class="nt">"..."</span><span class="p">:</span><span class="w"> </span><span class="s2">"..."</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">"jtokens"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"jTRX"</span><span class="p">:</span><span class="w">  </span><span class="s2">"TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"jUSDD"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf"</span>
+<span class="w">      </span><span class="cm">/* ... one key per market, 24 total ... */</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">"updateTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1784101473987</span><span class="p">,</span>
 <span class="w">    </span><span class="nt">"accounts"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 <span class="w">      </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">"borrower"</span><span class="p">:</span><span class="w">                </span><span class="s2">"TLc34aTvy1vBFzLvM9oz36ihhb7sVpQmgQ"</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"risk"</span><span class="p">:</span><span class="w">                    </span><span class="s2">"1.105684"</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"totalCollateralUsd"</span><span class="p">:</span><span class="w">      </span><span class="s2">"234.063780"</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"totalBorrowUsd"</span><span class="p">:</span><span class="w">          </span><span class="s2">"193.705172"</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"liquidateStatusStartTime"</span><span class="p">:</span><span class="mi">1770089973150</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"borrower"</span><span class="p">:</span><span class="w">                </span><span class="s2">"TB2e78zyzMnaNG2GRazazmbVVv3J564YHg"</span><span class="p">,</span>
 <span class="w">        </span><span class="nt">"collateralTokenList"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 <span class="w">          </span><span class="p">{</span>
-<span class="w">            </span><span class="nt">"jtokenAddress"</span><span class="p">:</span><span class="w">    </span><span class="s2">"TR7BUFRQeq1w5jAZf1FKx85SHuX6PfMqsV"</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">"symbol"</span><span class="p">:</span><span class="w">           </span><span class="s2">"jETH"</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">"amount"</span><span class="p">:</span><span class="w">           </span><span class="s2">"11.03049909"</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">"price"</span><span class="p">:</span><span class="w">            </span><span class="s2">"21.090028146702653201"</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">"valueUsd"</span><span class="p">:</span><span class="w">         </span><span class="s2">"232.633536"</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">"exchangeRate"</span><span class="p">:</span><span class="w">     </span><span class="s2">"0.010021847796289808"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"jtokenAddress"</span><span class="p">:</span><span class="w">    </span><span class="s2">"TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"amount"</span><span class="p">:</span><span class="w">           </span><span class="s2">"5245170.10164455"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"price"</span><span class="p">:</span><span class="w">            </span><span class="s2">"0.003436452181842813"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"valueUsd"</span><span class="p">:</span><span class="w">         </span><span class="s2">"18024.776240"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"symbol"</span><span class="p">:</span><span class="w">           </span><span class="s2">"jTRX"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"exchangeRate"</span><span class="p">:</span><span class="w">     </span><span class="s2">"0.010582523217337573"</span><span class="p">,</span>
 <span class="w">            </span><span class="nt">"collateralFactor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.750000000000000000"</span>
 <span class="w">          </span><span class="p">}</span>
 <span class="w">        </span><span class="p">],</span>
 <span class="w">        </span><span class="nt">"borrowTokenList"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 <span class="w">          </span><span class="p">{</span>
-<span class="w">            </span><span class="nt">"tokenAddress"</span><span class="p">:</span><span class="w">     </span><span class="s2">"TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9"</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">"symbol"</span><span class="p">:</span><span class="w">           </span><span class="s2">"JST"</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">"amount"</span><span class="p">:</span><span class="w">           </span><span class="s2">"19.357667866419444238"</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">"price"</span><span class="p">:</span><span class="w">            </span><span class="s2">"0.040802750477000000"</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">"valueUsd"</span><span class="p">:</span><span class="w">         </span><span class="s2">"0.789846"</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">"exchangeRate"</span><span class="p">:</span><span class="w">     </span><span class="s2">"0.010481635809265784"</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">"collateralFactor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.600000000000000000"</span>
+<span class="w">            </span><span class="nt">"tokenAddress"</span><span class="p">:</span><span class="w">     </span><span class="s2">"T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"amount"</span><span class="p">:</span><span class="w">           </span><span class="s2">"41630.094680465196950370956875"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"price"</span><span class="p">:</span><span class="w">            </span><span class="s2">"0.324729000000000000"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"valueUsd"</span><span class="p">:</span><span class="w">         </span><span class="s2">"13518.499015"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"symbol"</span><span class="p">:</span><span class="w">           </span><span class="s2">"TRX"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"exchangeRate"</span><span class="p">:</span><span class="w">     </span><span class="s2">"0.010582523217337573"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"collateralFactor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.750000000000000000"</span>
 <span class="w">          </span><span class="p">}</span>
-<span class="w">        </span><span class="p">]</span>
+<span class="w">        </span><span class="p">],</span>
+<span class="w">        </span><span class="nt">"totalCollateralUsd"</span><span class="p">:</span><span class="w">      </span><span class="s2">"18024.776240"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"totalBorrowUsd"</span><span class="p">:</span><span class="w">          </span><span class="s2">"13518.499015"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"risk"</span><span class="p">:</span><span class="w">                    </span><span class="s2">"0.999994"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"liquidateStatusStartTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span>
 <span class="w">      </span><span class="p">}</span>
 <span class="w">    </span><span class="p">]</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
+<blockquote>
+<p><strong>Note:</strong> <code>jtokens</code> is a plain JSON <strong>object</strong> (symbol → address map). Older revisions of this page showed it wrapped in a one-element array — that was a documentation error.</p>
+</blockquote>
 <p><strong>Field reference</strong></p>
 <table>
 <thead>
 <tr>
 <th>Field</th>
 <th>Type</th>
+<th>Required</th>
 <th>Unit</th>
 <th>Description</th>
 </tr>
@@ -1906,116 +1990,1016 @@ on persistent 429 across multiple windows:
 <tr>
 <td><code>updateTime</code></td>
 <td>integer</td>
+<td>Yes</td>
 <td>epoch ms</td>
 <td>When the snapshot was computed.</td>
 </tr>
 <tr>
 <td><code>jtokens</code></td>
 <td>object</td>
+<td>Yes</td>
 <td>symbol → address</td>
-<td>jToken symbol‑to‑address lookup. Same data as §2.</td>
+<td>jToken symbol‑to‑address lookup map. Same data as §2.</td>
 </tr>
 <tr>
 <td><code>accounts[].borrower</code></td>
 <td>string</td>
+<td>Yes</td>
 <td>TRON address</td>
 <td>Borrower wallet.</td>
 </tr>
 <tr>
 <td><code>accounts[].risk</code></td>
 <td>string</td>
+<td>Yes</td>
 <td>ratio</td>
 <td><strong>Higher = riskier.</strong> <code>&gt; 1</code> means the account is liquidatable now.</td>
 </tr>
 <tr>
 <td><code>accounts[].totalCollateralUsd</code></td>
 <td>string</td>
+<td>Yes</td>
 <td>USD</td>
 <td>Total collateral value.</td>
 </tr>
 <tr>
 <td><code>accounts[].totalBorrowUsd</code></td>
 <td>string</td>
+<td>Yes</td>
 <td>USD</td>
 <td>Total borrow value.</td>
 </tr>
 <tr>
 <td><code>accounts[].liquidateStatusStartTime</code></td>
 <td>integer</td>
+<td>Yes</td>
 <td>epoch ms</td>
-<td>When the account first became liquidatable.</td>
+<td>When the account first became liquidatable. <code>0</code> = not yet in liquidatable status.</td>
 </tr>
 <tr>
 <td><code>accounts[].collateralTokenList[]</code></td>
 <td>array</td>
+<td>Yes</td>
 <td>object</td>
 <td>One entry per collateral position (see below).</td>
 </tr>
 <tr>
 <td><code>accounts[].borrowTokenList[]</code></td>
 <td>array</td>
+<td>Yes</td>
 <td>object</td>
 <td>One entry per borrow position (see below).</td>
 </tr>
 <tr>
 <td><code>collateralTokenList[].jtokenAddress</code></td>
 <td>string</td>
+<td>Yes</td>
 <td>TRON address</td>
 <td>jToken address of the collateral.</td>
 </tr>
 <tr>
+<td><code>collateralTokenList[].symbol</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>text</td>
+<td>jToken symbol.</td>
+</tr>
+<tr>
 <td><code>collateralTokenList[].amount</code></td>
 <td>string</td>
+<td>Yes</td>
 <td>jToken units (8d)</td>
 <td>Amount of jTokens held as collateral.</td>
 </tr>
 <tr>
 <td><code>collateralTokenList[].price</code></td>
 <td>string</td>
+<td>Yes</td>
 <td>USD</td>
 <td>Current price of the <strong>jToken</strong> in USD (already multiplied by <code>exchangeRate</code>).</td>
 </tr>
 <tr>
 <td><code>collateralTokenList[].valueUsd</code></td>
 <td>string</td>
+<td>Yes</td>
 <td>USD</td>
 <td><code>amount × price</code>.</td>
 </tr>
 <tr>
 <td><code>collateralTokenList[].exchangeRate</code></td>
 <td>string</td>
+<td>Yes</td>
 <td>underlying / jToken</td>
 <td>jToken → underlying conversion ratio.</td>
 </tr>
 <tr>
 <td><code>collateralTokenList[].collateralFactor</code></td>
 <td>string</td>
+<td>Yes</td>
 <td>decimal (0–1)</td>
 <td>Collateral factor applied for risk calculation.</td>
 </tr>
 <tr>
 <td><code>borrowTokenList[].tokenAddress</code></td>
 <td>string</td>
+<td>Yes</td>
 <td>TRON address</td>
 <td><strong>Underlying</strong> asset address (note: this list keys by underlying, not jToken).</td>
 </tr>
 <tr>
+<td><code>borrowTokenList[].symbol</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>text</td>
+<td>Underlying asset symbol.</td>
+</tr>
+<tr>
 <td><code>borrowTokenList[].amount</code></td>
 <td>string</td>
+<td>Yes</td>
 <td>underlying</td>
 <td>Outstanding borrowed amount of underlying.</td>
 </tr>
 <tr>
 <td><code>borrowTokenList[].price</code></td>
 <td>string</td>
+<td>Yes</td>
 <td>USD</td>
 <td>Underlying asset price.</td>
 </tr>
 <tr>
 <td><code>borrowTokenList[].valueUsd</code></td>
 <td>string</td>
+<td>Yes</td>
 <td>USD</td>
 <td><code>amount × price</code>.</td>
+</tr>
+<tr>
+<td><code>borrowTokenList[].exchangeRate</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>underlying / jToken</td>
+<td>Exchange rate of the corresponding market.</td>
+</tr>
+<tr>
+<td><code>borrowTokenList[].collateralFactor</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>decimal (0–1)</td>
+<td>Collateral factor of the corresponding market.</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h3 id="34-justlend-v2-moolah-read-endpoints">3.4 JustLend V2 (Moolah) read endpoints<a class="headerlink" href="#34-justlend-v2-moolah-read-endpoints" title="Permanent link">¶</a></h3>
+<p>JustLend V2 ("Moolah", Morpho-style architecture — see <a href="../justlend_v2/">JustLend V2</a>) exposes <strong>ERC-4626 vaults</strong> (passive supply, allocated across markets) and <strong>isolated markets</strong> (one collateral / one loan token pair, identified by a 32-byte hex <code>id</code>). Five anonymous read endpoints cover them.</p>
+<p><strong>V2 conventions (differ from V1 — see <a href="#11-response-envelope">§1.1</a> / <a href="#16-error-responses">§1.6</a>):</strong></p>
+<ul>
+<li>Success is <code>code: 200</code> with <code>message: "Success"</code> (V1 uses <code>code: 0</code> / <code>"SUCCESS"</code>).</li>
+<li>Business errors are still HTTP <code>200</code>, with <code>code ≠ 200</code> (e.g. <code>202</code> = invalid parameters) and <code>data: null</code>.</li>
+<li>Every response carries a top-level <code>timestamp</code> (epoch ms).</li>
+<li>All decimal quantities are strings; <code>shareAmount</code> / <code>borrowShares</code> are raw base-unit integer strings that can exceed 2^53 (use BigInt).</li>
+<li>User-scoped fields (<code>ltv</code>, <code>risk</code>, <code>loanAmount</code>, <code>userSupplyUsd</code>, …) are <code>null</code> when no <code>address</code> is supplied or the user has no position.</li>
+</ul>
+<h4 id="341-get-v2indexvaultlist-all-v2-vaults">3.4.1 <code>GET /v2/index/vault/list</code> — All V2 vaults<a class="headerlink" href="#341-get-v2indexvaultlist-all-v2-vaults" title="Permanent link">¶</a></h4>
+<p>Returns every V2 vault (name, asset, TVL, APY, performance fee, eligible collateral, underlying market allocations), plus the user's vaults when <code>address</code> is given.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>In</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>address</code></td>
+<td>query</td>
+<td>string</td>
+<td>no</td>
+<td>Wallet address; adds the user's vault list (<code>userVaults</code>).</td>
+</tr>
+<tr>
+<td><code>sort</code></td>
+<td>query</td>
+<td>string</td>
+<td>no</td>
+<td>Sort field: <code>tvl</code> or <code>apy</code>. Default <code>tvl</code>.</td>
+</tr>
+<tr>
+<td><code>order</code></td>
+<td>query</td>
+<td>string</td>
+<td>no</td>
+<td><code>desc</code> or <code>asc</code>. Default <code>desc</code>.</td>
+</tr>
+<tr>
+<td><code>deposit</code></td>
+<td>query</td>
+<td>string</td>
+<td>no</td>
+<td>Filter by deposit token symbols, comma-separated (OR condition).</td>
+</tr>
+<tr>
+<td><code>collateral</code></td>
+<td>query</td>
+<td>string</td>
+<td>no</td>
+<td>Filter by collateral token symbols, comma-separated (OR condition).</td>
+</tr>
+<tr>
+<td><code>keyword</code></td>
+<td>query</td>
+<td>string</td>
+<td>no</td>
+<td>Partial match against vault names and collateral token symbols.</td>
+</tr>
+<tr>
+<td><code>userPage</code></td>
+<td>query</td>
+<td>integer</td>
+<td>no</td>
+<td>Page number of the user's vault list. Default <code>1</code>.</td>
+</tr>
+<tr>
+<td><code>userPageSize</code></td>
+<td>query</td>
+<td>integer</td>
+<td>no</td>
+<td>Page size of the user's vault list. Default <code>20</code>.</td>
+</tr>
+<tr>
+<td><code>allPage</code></td>
+<td>query</td>
+<td>integer</td>
+<td>no</td>
+<td>Page number of the full vault list. Default <code>1</code>.</td>
+</tr>
+<tr>
+<td><code>allPageSize</code></td>
+<td>query</td>
+<td>integer</td>
+<td>no</td>
+<td>Page size of the full vault list. Default <code>20</code>.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Response data</strong> (real response captured 2026-07-15, heavily truncated — full sub-schemas in the <a href="justlend_apis.yaml">YAML</a>)</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Success"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"userVaults"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"totalCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">"list"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">"allVaults"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"totalCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"list"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"chain"</span><span class="p">:</span><span class="w">             </span><span class="s2">"tron"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"vaultAddress"</span><span class="p">:</span><span class="w">      </span><span class="s2">"TXejU9jmd1ooQyY3Zmpo15yN7MjSFYUESg"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"vaultName"</span><span class="p">:</span><span class="w">         </span><span class="s2">"JustLend USDT Vault"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"vaultSymbol"</span><span class="p">:</span><span class="w">       </span><span class="s2">"jUSDTv2"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"icon"</span><span class="p">:</span><span class="w">              </span><span class="s2">"https://static.tronscan.org/production/logo/usdtlogo.png"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"tags"</span><span class="p">:</span><span class="w">              </span><span class="p">[],</span>
+<span class="w">          </span><span class="nt">"assetAddress"</span><span class="p">:</span><span class="w">      </span><span class="s2">"TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"assetSymbol"</span><span class="p">:</span><span class="w">       </span><span class="s2">"USDT"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"assetName"</span><span class="p">:</span><span class="w">         </span><span class="s2">"Tether USD"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"assetDecimals"</span><span class="p">:</span><span class="w">     </span><span class="mi">6</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"assetIcon"</span><span class="p">:</span><span class="w">         </span><span class="s2">"https://static.tronscan.org/production/logo/usdtlogo.png"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"totalSupplyAmount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"413328.006113"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"tvl"</span><span class="p">:</span><span class="w">               </span><span class="s2">"413328.006113000000000000"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"apy"</span><span class="p">:</span><span class="w">               </span><span class="s2">"0.000711770302729251"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"performanceFee"</span><span class="p">:</span><span class="w">    </span><span class="s2">"10.00"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"collateralTokens"</span><span class="p">:</span><span class="w">  </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR"</span><span class="p">,</span><span class="w"> </span><span class="nt">"symbol"</span><span class="p">:</span><span class="w"> </span><span class="s2">"WTRX"</span><span class="p">,</span><span class="w"> </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Wrapped TRX"</span><span class="p">,</span><span class="w"> </span><span class="nt">"decimals"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="nt">"icon"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="cm">/* ... */</span><span class="w"> </span><span class="p">],</span>
+<span class="w">          </span><span class="nt">"markets"</span><span class="p">:</span><span class="w">           </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x8fa76896548f751c9009583976933e6cb355513a180548df5d47b1833d20cb17"</span><span class="p">,</span><span class="w"> </span><span class="nt">"collateralSymbol"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USDD"</span><span class="p">,</span><span class="w"> </span><span class="nt">"totalSupplyAssets"</span><span class="p">:</span><span class="w"> </span><span class="s2">"113259.328861"</span><span class="p">,</span><span class="w"> </span><span class="nt">"borrowSymbol"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USDT"</span><span class="p">,</span><span class="w"> </span><span class="nt">"..."</span><span class="p">:</span><span class="w"> </span><span class="s2">"..."</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="cm">/* ... */</span><span class="w"> </span><span class="p">],</span>
+<span class="w">          </span><span class="nt">"userSupplyUsd"</span><span class="p">:</span><span class="w">     </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"userSupplyAmount"</span><span class="p">:</span><span class="w">  </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"allocations"</span><span class="p">:</span><span class="w">       </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"marketId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x8fa768…"</span><span class="p">,</span><span class="w"> </span><span class="nt">"collateralSymbol"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USDD"</span><span class="p">,</span><span class="w"> </span><span class="nt">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"113259.286496"</span><span class="p">,</span><span class="w"> </span><span class="nt">"percentage"</span><span class="p">:</span><span class="w"> </span><span class="s2">"27.401793449548277509"</span><span class="p">,</span><span class="w"> </span><span class="nt">"supplyQueueIndex"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">"isNew"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">"noMoreAllocation"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="cm">/* ... */</span><span class="w"> </span><span class="p">]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="cm">/* ... 2 more vaults ... */</span>
+<span class="w">      </span><span class="p">]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">"depositTokens"</span><span class="p">:</span><span class="w">    </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="p">,</span><span class="w"> </span><span class="nt">"symbol"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USDT"</span><span class="p">,</span><span class="w"> </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tether USD"</span><span class="p">,</span><span class="w"> </span><span class="nt">"decimals"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="nt">"icon"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="cm">/* ... */</span><span class="w"> </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">"collateralTokens"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="p">,</span><span class="w"> </span><span class="nt">"symbol"</span><span class="p">:</span><span class="w"> </span><span class="s2">"WTRX"</span><span class="p">,</span><span class="w"> </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Wrapped TRX"</span><span class="p">,</span><span class="w"> </span><span class="nt">"decimals"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="nt">"icon"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="cm">/* ... */</span><span class="w"> </span><span class="p">]</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1784101532272</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>Field reference (vault entry)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Unit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>chain</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>text</td>
+<td>Chain identifier (<code>tron</code>).</td>
+</tr>
+<tr>
+<td><code>vaultAddress</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>TRON address</td>
+<td>Vault contract address.</td>
+</tr>
+<tr>
+<td><code>vaultName</code> / <code>vaultSymbol</code> / <code>icon</code> / <code>tags</code></td>
+<td>string / array</td>
+<td>Yes</td>
+<td>text</td>
+<td>Vault display metadata (<code>tags</code> is an array of strings).</td>
+</tr>
+<tr>
+<td><code>assetAddress</code> / <code>assetSymbol</code> / <code>assetName</code> / <code>assetDecimals</code> / <code>assetIcon</code></td>
+<td>string / integer</td>
+<td>Yes</td>
+<td>token metadata</td>
+<td>The vault's underlying (deposit) asset.</td>
+</tr>
+<tr>
+<td><code>totalSupplyAmount</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>asset units</td>
+<td>Total vault supply, de-scaled. Decimal string.</td>
+</tr>
+<tr>
+<td><code>tvl</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>USD</td>
+<td>Total value locked. Decimal string.</td>
+</tr>
+<tr>
+<td><code>apy</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>annualized decimal</td>
+<td>Vault APY. Decimal string.</td>
+</tr>
+<tr>
+<td><code>performanceFee</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>percent (0–100)</td>
+<td>Performance fee; <code>"10.00"</code> = 10 %.</td>
+</tr>
+<tr>
+<td><code>collateralTokens[]</code></td>
+<td>array</td>
+<td>Yes</td>
+<td>token metadata</td>
+<td>Tokens eligible as collateral in this vault's markets.</td>
+</tr>
+<tr>
+<td><code>markets[]</code></td>
+<td>array</td>
+<td>Yes</td>
+<td>object</td>
+<td>The isolated markets this vault allocates into (ids, per-market supply/borrow totals — full schema in the YAML).</td>
+</tr>
+<tr>
+<td><code>userSupplyUsd</code></td>
+<td>string|null</td>
+<td>Yes (nullable)</td>
+<td>USD</td>
+<td>User supply in USD; <code>null</code> without <code>address</code> / position.</td>
+</tr>
+<tr>
+<td><code>userSupplyAmount</code></td>
+<td>string|null</td>
+<td>Yes (nullable)</td>
+<td>asset units</td>
+<td>User supply, de-scaled; <code>null</code> without <code>address</code> / position.</td>
+</tr>
+<tr>
+<td><code>userSupplyYield</code></td>
+<td>string</td>
+<td>No</td>
+<td>asset units</td>
+<td>User supply earnings. Only present in user-scoped responses.</td>
+</tr>
+<tr>
+<td><code>allocations[]</code></td>
+<td>array</td>
+<td>Yes</td>
+<td>object</td>
+<td>Current allocation per market (<code>amount</code>, <code>amountInUsd</code>, <code>percentage</code>, <code>supplyQueueIndex</code>, <code>isNew</code>, <code>noMoreAllocation</code>).</td>
+</tr>
+</tbody>
+</table>
+<h4 id="342-get-v2indexmarketlist-all-v2-isolated-markets">3.4.2 <code>GET /v2/index/market/list</code> — All V2 isolated markets<a class="headerlink" href="#342-get-v2indexmarketlist-all-v2-isolated-markets" title="Permanent link">¶</a></h4>
+<p>Returns every V2 isolated market (loan/collateral pair, LLTV, liquidity, borrow rate), plus the user's markets when <code>address</code> is given. Accepts the same query parameters as §3.4.1 (<code>address</code>, <code>sort</code>, <code>order</code>, <code>deposit</code>, <code>collateral</code>, <code>keyword</code>, <code>userPage</code>, <code>userPageSize</code>, <code>allPage</code>, <code>allPageSize</code>).</p>
+<p><strong>Response data</strong> (real response captured 2026-07-15, truncated to one of 9 markets)</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Success"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"userMarketsCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"allMarketsCount"</span><span class="p">:</span><span class="w">  </span><span class="mi">9</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"userMarkets"</span><span class="p">:</span><span class="w">      </span><span class="p">[],</span>
+<span class="w">    </span><span class="nt">"allMarkets"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"id"</span><span class="p">:</span><span class="w">                 </span><span class="s2">"0x8fa76896548f751c9009583976933e6cb355513a180548df5d47b1833d20cb17"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"ltv"</span><span class="p">:</span><span class="w">                </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"lltv"</span><span class="p">:</span><span class="w">               </span><span class="s2">"0.800000000000000000"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"risk"</span><span class="p">:</span><span class="w">               </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"liquidity"</span><span class="p">:</span><span class="w">          </span><span class="s2">"113190.228074"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"liquidityUsd"</span><span class="p">:</span><span class="w">       </span><span class="s2">"113190.228074000000000000"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"loanSymbol"</span><span class="p">:</span><span class="w">         </span><span class="s2">"USDT"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"loanAddress"</span><span class="p">:</span><span class="w">        </span><span class="s2">"TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"loanAmount"</span><span class="p">:</span><span class="w">         </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"loanUsd"</span><span class="p">:</span><span class="w">            </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"loanIcon"</span><span class="p">:</span><span class="w">           </span><span class="s2">"https://static.tronscan.org/production/logo/usdtlogo.png"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"borrowRate"</span><span class="p">:</span><span class="w">         </span><span class="s2">"0.000250508418242629"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"collateralSymbol"</span><span class="p">:</span><span class="w">   </span><span class="s2">"USDD"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"collateralAddress"</span><span class="p">:</span><span class="w">  </span><span class="s2">"TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"collateralAmount"</span><span class="p">:</span><span class="w">   </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"collateralUsd"</span><span class="p">:</span><span class="w">      </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"collateralDecimals"</span><span class="p">:</span><span class="w"> </span><span class="mi">18</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"collateralIcon"</span><span class="p">:</span><span class="w">     </span><span class="s2">"https://static.tronscan.org/production/upload/logo/new/TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz.png"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"tags"</span><span class="p">:</span><span class="w">               </span><span class="p">[]</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">      </span><span class="cm">/* ... 8 more markets ... */</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1784101532797</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>Field reference (market entry)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Unit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>hex bytes32</td>
+<td>Market ID. Pass it to <code>/v2/market/position</code> as <code>market</code>.</td>
+</tr>
+<tr>
+<td><code>ltv</code></td>
+<td>string|null</td>
+<td>Yes (nullable)</td>
+<td>decimal (0–1)</td>
+<td>User loan-to-value (<code>loanUsd / collateralUsd</code>); <code>null</code> without position.</td>
+</tr>
+<tr>
+<td><code>lltv</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>decimal (0–1)</td>
+<td>Liquidation threshold (liquidation LTV).</td>
+</tr>
+<tr>
+<td><code>risk</code></td>
+<td>string|null</td>
+<td>Yes (nullable)</td>
+<td>ratio</td>
+<td>User risk (<code>ltv / lltv</code>); <code>null</code> without position.</td>
+</tr>
+<tr>
+<td><code>liquidity</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>loan token units</td>
+<td>Available liquidity, de-scaled. Decimal string.</td>
+</tr>
+<tr>
+<td><code>liquidityUsd</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>USD</td>
+<td>Liquidity in USD. Decimal string.</td>
+</tr>
+<tr>
+<td><code>loanSymbol</code> / <code>loanAddress</code> / <code>loanIcon</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>token metadata</td>
+<td>The loan (borrowable) token.</td>
+</tr>
+<tr>
+<td><code>loanAmount</code></td>
+<td>string|null</td>
+<td>Yes (nullable)</td>
+<td>loan token units</td>
+<td>User borrowed amount; <code>null</code> without position.</td>
+</tr>
+<tr>
+<td><code>loanUsd</code></td>
+<td>string|null</td>
+<td>Yes (nullable)</td>
+<td>USD</td>
+<td>User borrowed value; <code>null</code> without position.</td>
+</tr>
+<tr>
+<td><code>borrowRate</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>annualized decimal</td>
+<td>Borrow rate. Decimal string.</td>
+</tr>
+<tr>
+<td><code>collateralSymbol</code> / <code>collateralAddress</code> / <code>collateralDecimals</code> / <code>collateralIcon</code></td>
+<td>string / integer</td>
+<td>Yes</td>
+<td>token metadata</td>
+<td>The collateral token.</td>
+</tr>
+<tr>
+<td><code>collateralAmount</code></td>
+<td>string|null</td>
+<td>Yes (nullable)</td>
+<td>collateral units</td>
+<td>User collateral amount; <code>null</code> without position.</td>
+</tr>
+<tr>
+<td><code>collateralUsd</code></td>
+<td>string|null</td>
+<td>Yes (nullable)</td>
+<td>USD</td>
+<td>User collateral value; <code>null</code> without position.</td>
+</tr>
+<tr>
+<td><code>tags</code></td>
+<td>array</td>
+<td>Yes</td>
+<td>strings</td>
+<td>Market tags.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="343-get-v2indexposition-user-v2-portfolio-summary">3.4.3 <code>GET /v2/index/position</code> — User V2 portfolio summary<a class="headerlink" href="#343-get-v2indexposition-user-v2-portfolio-summary" title="Permanent link">¶</a></h4>
+<p>Aggregated V2 position for one wallet: totals, net rates, mining rewards, and the per-vault / per-market breakdown.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>In</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>address</code></td>
+<td>query</td>
+<td>string</td>
+<td>yes</td>
+<td>Single TRON wallet address.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example request</strong></p>
+<div class="highlight"><pre><span></span><code><span class="err">GET /v2/index/position?address=TB2e78zyzMnaNG2GRazazmbVVv3J564YHg</span>
+</code></pre></div>
+<p><strong>Response data</strong> (real response captured 2026-07-15 — this wallet has no V2 positions, so totals are zero and the breakdown arrays are empty)</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Success"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"totalBorrowUsd"</span><span class="p">:</span><span class="w">        </span><span class="s2">"0.000000000000000000"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"totalCollateralUsd"</span><span class="p">:</span><span class="w">    </span><span class="s2">"0.000000000000000000"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"totalSupplyUsd"</span><span class="p">:</span><span class="w">        </span><span class="s2">"0"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"netEarnApy"</span><span class="p">:</span><span class="w">            </span><span class="s2">"0"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"netBorrowRate"</span><span class="p">:</span><span class="w">         </span><span class="s2">"0"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"dailyRevenue"</span><span class="p">:</span><span class="w">          </span><span class="s2">"0.000000000000000000"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"dailyMiningReward"</span><span class="p">:</span><span class="w">     </span><span class="s2">"0.000000000000000000"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"dailyMiningRewardUsdd"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.000000000000000000"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"dailyMiningRewardTrx"</span><span class="p">:</span><span class="w">  </span><span class="s2">"0.000000"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"collateralCount"</span><span class="p">:</span><span class="w">       </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"markets"</span><span class="p">:</span><span class="w">               </span><span class="p">[],</span>
+<span class="w">    </span><span class="nt">"vaults"</span><span class="p">:</span><span class="w">                </span><span class="p">[],</span>
+<span class="w">    </span><span class="nt">"borrowNew"</span><span class="p">:</span><span class="w">             </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"vaultNew"</span><span class="p">:</span><span class="w">              </span><span class="kc">true</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1784101588616</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>Field reference</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Unit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>totalBorrowUsd</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>USD</td>
+<td>Total borrowed value across all V2 markets. Decimal string.</td>
+</tr>
+<tr>
+<td><code>totalCollateralUsd</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>USD</td>
+<td>Total collateral value across all V2 markets. Decimal string.</td>
+</tr>
+<tr>
+<td><code>totalSupplyUsd</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>USD</td>
+<td>Total supplied value across all V2 vaults. Decimal string.</td>
+</tr>
+<tr>
+<td><code>netEarnApy</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>annualized decimal</td>
+<td>Weighted-average APY over the user's vault deposits. Decimal string.</td>
+</tr>
+<tr>
+<td><code>netBorrowRate</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>annualized decimal</td>
+<td>Weighted-average borrow rate over the user's loans. Decimal string.</td>
+</tr>
+<tr>
+<td><code>dailyRevenue</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>USD</td>
+<td>Daily earnings from supplied assets. Decimal string.</td>
+</tr>
+<tr>
+<td><code>dailyMiningReward</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>USD</td>
+<td>Daily mining reward (USD value). Decimal string.</td>
+</tr>
+<tr>
+<td><code>dailyMiningRewardUsdd</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>USDD</td>
+<td>Daily mining reward in USDD. Decimal string.</td>
+</tr>
+<tr>
+<td><code>dailyMiningRewardTrx</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>TRX</td>
+<td>Daily mining reward in TRX. Decimal string.</td>
+</tr>
+<tr>
+<td><code>collateralCount</code></td>
+<td>integer</td>
+<td>Yes</td>
+<td>count</td>
+<td>Number of markets where the user has collateral &gt; 0.</td>
+</tr>
+<tr>
+<td><code>markets[]</code></td>
+<td>array</td>
+<td>Yes</td>
+<td>object</td>
+<td>Per-market breakdown: <code>marketId</code> (hex string), <code>health</code>, <code>collateralUsd</code>, <code>borrowUsd</code> (decimal strings).</td>
+</tr>
+<tr>
+<td><code>vaults[]</code></td>
+<td>array</td>
+<td>Yes</td>
+<td>object</td>
+<td>Per-vault breakdown: <code>vaultAddress</code>, <code>supplyUsd</code> (decimal string).</td>
+</tr>
+<tr>
+<td><code>vaultNew</code></td>
+<td>boolean</td>
+<td>Yes</td>
+<td>flag</td>
+<td><code>true</code> if the user is a new V2 vault user.</td>
+</tr>
+<tr>
+<td><code>borrowNew</code></td>
+<td>boolean</td>
+<td>Yes</td>
+<td>flag</td>
+<td><code>true</code> if the user is a new V2 market user.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="344-get-v2vaultposition-user-position-in-one-vault">3.4.4 <code>GET /v2/vault/position</code> — User position in one vault<a class="headerlink" href="#344-get-v2vaultposition-user-position-in-one-vault" title="Permanent link">¶</a></h4>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>In</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vaultAddress</code></td>
+<td>query</td>
+<td>string</td>
+<td>yes</td>
+<td>Vault contract address (see §3.4.1).</td>
+</tr>
+<tr>
+<td><code>address</code></td>
+<td>query</td>
+<td>string</td>
+<td>yes</td>
+<td>Single TRON wallet address.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example request</strong></p>
+<div class="highlight"><pre><span></span><code><span class="err">GET /v2/vault/position?vaultAddress=TXejU9jmd1ooQyY3Zmpo15yN7MjSFYUESg&amp;address=TB2e78zyzMnaNG2GRazazmbVVv3J564YHg</span>
+</code></pre></div>
+<p><strong>Response data</strong> (real response captured 2026-07-15 — wallet without a position in this vault; <code>apy</code> is still the live vault APY)</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Success"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"shareAmount"</span><span class="p">:</span><span class="w">             </span><span class="s2">"0"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"depositAmount"</span><span class="p">:</span><span class="w">           </span><span class="s2">"0.000000"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"depositUsd"</span><span class="p">:</span><span class="w">              </span><span class="s2">"0.000000000000000000"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"apy"</span><span class="p">:</span><span class="w">                     </span><span class="s2">"0.000711758741868661"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"dailyInterest"</span><span class="p">:</span><span class="w">           </span><span class="s2">"0.000000000000000000"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"dailyInterestAmount"</span><span class="p">:</span><span class="w">     </span><span class="s2">"0.000000"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"farmRewardUsddAmount24h"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"farmRewardTrxAmount24h"</span><span class="p">:</span><span class="w">  </span><span class="s2">"0"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1784101589078</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>Field reference</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Unit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>shareAmount</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>raw share units</td>
+<td>Vault shares held by the user. Integer string; can exceed 2^53 — use BigInt.</td>
+</tr>
+<tr>
+<td><code>depositAmount</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>asset units</td>
+<td>Deposited amount, de-scaled. Decimal string.</td>
+</tr>
+<tr>
+<td><code>depositUsd</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>USD</td>
+<td>USD value of the deposit. Decimal string.</td>
+</tr>
+<tr>
+<td><code>apy</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>annualized decimal</td>
+<td>Vault APY. Decimal string.</td>
+</tr>
+<tr>
+<td><code>dailyInterest</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>USD</td>
+<td>Estimated daily interest earnings (USD value). Decimal string.</td>
+</tr>
+<tr>
+<td><code>dailyInterestAmount</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>asset units</td>
+<td>Estimated daily interest earnings in the vault asset. Decimal string.</td>
+</tr>
+<tr>
+<td><code>farmRewardUsddAmount24h</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>USDD</td>
+<td>Farm rewards over the last 24 h in USDD. Decimal string.</td>
+</tr>
+<tr>
+<td><code>farmRewardTrxAmount24h</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>TRX</td>
+<td>Farm rewards over the last 24 h in TRX. Decimal string.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="345-get-v2marketposition-user-position-in-one-market">3.4.5 <code>GET /v2/market/position</code> — User position in one market<a class="headerlink" href="#345-get-v2marketposition-user-position-in-one-market" title="Permanent link">¶</a></h4>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>In</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>market</code></td>
+<td>query</td>
+<td>string</td>
+<td>yes</td>
+<td>V2 market id (<code>0x…</code> 32-byte hex string, see §3.4.2).</td>
+</tr>
+<tr>
+<td><code>address</code></td>
+<td>query</td>
+<td>string</td>
+<td>yes</td>
+<td>Single TRON wallet address.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example request</strong></p>
+<div class="highlight"><pre><span></span><code><span class="err">GET /v2/market/position?market=0x8fa76896548f751c9009583976933e6cb355513a180548df5d47b1833d20cb17&amp;address=TB2e78zyzMnaNG2GRazazmbVVv3J564YHg</span>
+</code></pre></div>
+<p><strong>Response data</strong> (real response captured 2026-07-15 — wallet without a position in this market; token metadata, <code>lltv</code> and <code>borrowApy</code> are live market values)</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Success"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"borrowAddress"</span><span class="p">:</span><span class="w">     </span><span class="s2">"TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"borrowSymbol"</span><span class="p">:</span><span class="w">      </span><span class="s2">"USDT"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"borrowAmount"</span><span class="p">:</span><span class="w">      </span><span class="s2">"0"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"borrowShares"</span><span class="p">:</span><span class="w">      </span><span class="s2">"0"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"borrowUsd"</span><span class="p">:</span><span class="w">         </span><span class="s2">"0.000000000000000000"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"collateralAddress"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"collateralSymbol"</span><span class="p">:</span><span class="w">  </span><span class="s2">"USDD"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"collateralUsd"</span><span class="p">:</span><span class="w">     </span><span class="s2">"0.000000000000000000"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"collateralAmount"</span><span class="p">:</span><span class="w">  </span><span class="s2">"0"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"borrowApy"</span><span class="p">:</span><span class="w">         </span><span class="s2">"0.000250508418242629"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"ltv"</span><span class="p">:</span><span class="w">               </span><span class="s2">"0.000000000000000000"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"lltv"</span><span class="p">:</span><span class="w">              </span><span class="s2">"0.800000000000000000"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"risk"</span><span class="p">:</span><span class="w">              </span><span class="s2">"0.000000000000000000"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"dailyInterest"</span><span class="p">:</span><span class="w">     </span><span class="s2">"0"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1784101589588</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>Field reference</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Unit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>borrowAddress</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>TRON address</td>
+<td>Loan token contract address.</td>
+</tr>
+<tr>
+<td><code>borrowSymbol</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>text</td>
+<td>Loan token symbol.</td>
+</tr>
+<tr>
+<td><code>borrowAmount</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>loan token units</td>
+<td>Borrowed amount, de-scaled. Decimal string.</td>
+</tr>
+<tr>
+<td><code>borrowShares</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>raw share units</td>
+<td>Borrow shares. Integer string; can exceed 2^53 — use BigInt.</td>
+</tr>
+<tr>
+<td><code>borrowUsd</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>USD</td>
+<td>Borrowed value. Decimal string.</td>
+</tr>
+<tr>
+<td><code>collateralAddress</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>TRON address</td>
+<td>Collateral token contract address.</td>
+</tr>
+<tr>
+<td><code>collateralSymbol</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>text</td>
+<td>Collateral token symbol.</td>
+</tr>
+<tr>
+<td><code>collateralAmount</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>collateral units</td>
+<td>Collateral supplied, de-scaled. Decimal string.</td>
+</tr>
+<tr>
+<td><code>collateralUsd</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>USD</td>
+<td>Collateral value. Decimal string.</td>
+</tr>
+<tr>
+<td><code>ltv</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>decimal (0–1)</td>
+<td>Loan-to-value ratio. Decimal string.</td>
+</tr>
+<tr>
+<td><code>lltv</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>decimal (0–1)</td>
+<td>Liquidation threshold. Decimal string.</td>
+</tr>
+<tr>
+<td><code>borrowApy</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>annualized decimal</td>
+<td>Borrow APY. Decimal string.</td>
+</tr>
+<tr>
+<td><code>dailyInterest</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>USD</td>
+<td>Daily interest owed. Decimal string.</td>
+</tr>
+<tr>
+<td><code>risk</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>ratio</td>
+<td>Risk ratio (<code>ltv / lltv</code>). Decimal string.</td>
+</tr>
+<tr>
+<td><code>displayDecimal</code></td>
+<td>integer</td>
+<td>No</td>
+<td>count</td>
+<td>Display decimals for token amounts. Not returned by every response.</td>
 </tr>
 </tbody>
 </table>
@@ -2058,14 +3042,18 @@ on persistent 429 across multiple windows:
 <h3 id="41-get-miningapy-mining-apy-per-market">4.1 <code>GET /mining/apy</code> — Mining APY per market<a class="headerlink" href="#41-get-miningapy-mining-apy-per-market" title="Permanent link">¶</a></h3>
 <p>Returns the current USDD mining APY for every market that has supply‑mining enabled.</p>
 <p><strong>Parameters:</strong> none.</p>
-<p><strong>Response data</strong></p>
+<p><strong>Response data</strong> (real response captured 2026-07-15, truncated to 2 of 24 market keys)</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
 <span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
 <span class="w">  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SUCCESS"</span><span class="p">,</span>
 <span class="w">  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nt">"TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="nt">"USDD"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.09175706</span>
+<span class="w">      </span><span class="nt">"USDD"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.04275429"</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">"TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"USDD"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.00000000"</span>
 <span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="cm">/* ... one key per market, 24 total ... */</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
@@ -2075,6 +3063,7 @@ on persistent 429 across multiple windows:
 <tr>
 <th>Field</th>
 <th>Type</th>
+<th>Required</th>
 <th>Unit</th>
 <th>Description</th>
 </tr>
@@ -2083,19 +3072,21 @@ on persistent 429 across multiple windows:
 <tr>
 <td>key (top‑level)</td>
 <td>string</td>
+<td>—</td>
 <td>jToken address</td>
-<td>The market the reward applies to. Look up in §2 (here <code>TKFREL…</code> is <code>jUSDD</code>).</td>
+<td>The market the reward applies to. Look up in §2 (here <code>TKFREL…</code> is <code>jUSDD</code>). The service currently returns <strong>every</strong> market.</td>
 </tr>
 <tr>
 <td><code>USDD</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>annualized decimal</td>
-<td>USDD mining APY paid to suppliers of this market. <code>0.09175706</code> = <strong>9.18 % APY</strong>, on top of <code>supplyRate</code>.</td>
+<td>USDD mining APY paid to suppliers of this market, on top of <code>supplyRate</code>. Decimal string; <code>"0.04275429"</code> = <strong>4.28 % APY</strong>.</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
-<p>If a market is missing from the response, mining is <strong>not active</strong> there. If <code>USDD</code> is <code>0</code>, mining is paused / waiting for the next phase.</p>
+<p>A market with <code>"0.00000000"</code> (or missing from the response) has <strong>no active mining</strong> — it is paused or waiting for the next phase. Only markets with a non-zero value pay the bonus.</p>
 </blockquote>
 <p><strong>Worked example</strong></p>
 <p>A user supplies <code>1,000</code> USDD into jUSDD. With <code>supplyRate = 0.012</code> and <code>apy = 0.09175706</code>:</p>
@@ -2131,22 +3122,24 @@ on persistent 429 across multiple windows:
 <p><strong>Example request</strong></p>
 <div class="highlight"><pre><span></span><code><span class="err">GET /mining/reward?address=T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb</span>
 </code></pre></div>
-<p><strong>Response data</strong></p>
+<p><strong>Response data</strong> (real response captured 2026-07-15 — note the payload is keyed by <strong>market address</strong>, then by <strong>reward-token symbol</strong>, currently <code>USDD</code>)</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
 <span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
 <span class="w">  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SUCCESS"</span><span class="p">,</span>
 <span class="w">  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nt">"TKFRELGGoRgiayhwJTNNLqCNjFoLBh3Mnf"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="nt">"currPhase"</span><span class="p">:</span><span class="w">         </span><span class="mi">64</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">"currStartTime"</span><span class="p">:</span><span class="w">     </span><span class="s2">"2026-05-12T00:00:00Z"</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">"currEndTime"</span><span class="p">:</span><span class="w">       </span><span class="s2">"2026-05-19T00:00:00Z"</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">"currReward"</span><span class="p">:</span><span class="w">        </span><span class="mf">0.0000</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">"currRewardStatus"</span><span class="p">:</span><span class="w">  </span><span class="mi">1</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">"lastStartTime"</span><span class="p">:</span><span class="w">     </span><span class="s2">"2026-05-05T00:00:00Z"</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">"lastEndTime"</span><span class="p">:</span><span class="w">       </span><span class="s2">"2026-05-12T00:00:00Z"</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">"lastReward"</span><span class="p">:</span><span class="w">        </span><span class="mf">0.0000</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">"lastRewardStatus"</span><span class="p">:</span><span class="w">  </span><span class="mi">2</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">"price"</span><span class="p">:</span><span class="w">             </span><span class="mf">1.000000000000000000</span>
+<span class="w">      </span><span class="nt">"USDD"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"currPhase"</span><span class="p">:</span><span class="w">         </span><span class="s2">"120"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"currStartTime"</span><span class="p">:</span><span class="w">     </span><span class="s2">"2026-07-11 20:00"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"currEndTime"</span><span class="p">:</span><span class="w">       </span><span class="s2">"2026-07-18 20:00"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"currReward"</span><span class="p">:</span><span class="w">        </span><span class="s2">"0.000000000000000000"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"currRewardStatus"</span><span class="p">:</span><span class="w">  </span><span class="s2">"1"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"lastStartTime"</span><span class="p">:</span><span class="w">     </span><span class="s2">"2026-07-04 20:00"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"lastEndTime"</span><span class="p">:</span><span class="w">       </span><span class="s2">"2026-07-11 20:00"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"lastReward"</span><span class="p">:</span><span class="w">        </span><span class="s2">"0"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"lastRewardStatus"</span><span class="p">:</span><span class="w">  </span><span class="s2">"2"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"price"</span><span class="p">:</span><span class="w">             </span><span class="s2">"1.000000000000000000"</span>
+<span class="w">      </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
@@ -2157,6 +3150,7 @@ on persistent 429 across multiple windows:
 <tr>
 <th>Field</th>
 <th>Type</th>
+<th>Required</th>
 <th>Unit</th>
 <th>Description</th>
 </tr>
@@ -2165,68 +3159,86 @@ on persistent 429 across multiple windows:
 <tr>
 <td>key (top‑level)</td>
 <td>string</td>
+<td>—</td>
 <td>jToken address</td>
 <td>Market the rewards refer to (<code>TKFREL…</code> = <code>jUSDD</code>).</td>
 </tr>
 <tr>
+<td>key (2nd level)</td>
+<td>string</td>
+<td>—</td>
+<td>reward token</td>
+<td>Reward-token symbol (currently <code>USDD</code>). The reward object sits under this key.</td>
+</tr>
+<tr>
 <td><code>currPhase</code></td>
-<td>integer</td>
+<td>string</td>
+<td>Yes</td>
 <td>count</td>
-<td>Sequential phase number that is <strong>in progress</strong> now.</td>
+<td>Sequential phase number that is <strong>in progress</strong> now. Integer serialized as string.</td>
 </tr>
 <tr>
 <td><code>currStartTime</code></td>
 <td>string</td>
-<td>ISO 8601 UTC</td>
-<td>Start of current phase.</td>
+<td>Yes</td>
+<td><code>YYYY-MM-DD HH:mm</code></td>
+<td>Start of current phase (no timezone designator returned).</td>
 </tr>
 <tr>
 <td><code>currEndTime</code></td>
 <td>string</td>
-<td>ISO 8601 UTC</td>
+<td>Yes</td>
+<td><code>YYYY-MM-DD HH:mm</code></td>
 <td>End of current phase.</td>
 </tr>
 <tr>
 <td><code>currReward</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>USDD</td>
-<td>Estimated/accrued reward for the user in the current phase. Updates over time.</td>
+<td>Estimated/accrued reward for the user in the current phase. Decimal string.</td>
 </tr>
 <tr>
 <td><code>currRewardStatus</code></td>
-<td>integer</td>
-<td>enum</td>
-<td><code>0</code>=not started, <code>1</code>=ongoing, <code>2</code>=ended (claimable), <code>3</code>=paused.</td>
+<td>string</td>
+<td>Yes</td>
+<td>enum string</td>
+<td><code>"0"</code>=not started, <code>"1"</code>=ongoing, <code>"2"</code>=ended (claimable), <code>"3"</code>=paused.</td>
 </tr>
 <tr>
 <td><code>lastStartTime</code></td>
 <td>string</td>
-<td>ISO 8601 UTC</td>
+<td>Yes</td>
+<td><code>YYYY-MM-DD HH:mm</code></td>
 <td>Start of previous (most recently finalized) phase.</td>
 </tr>
 <tr>
 <td><code>lastEndTime</code></td>
 <td>string</td>
-<td>ISO 8601 UTC</td>
+<td>Yes</td>
+<td><code>YYYY-MM-DD HH:mm</code></td>
 <td>End of previous phase.</td>
 </tr>
 <tr>
 <td><code>lastReward</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>USDD</td>
-<td>Finalized reward for the user in the previous phase. Use <code>/mining/distributions</code> to fetch the claim proof.</td>
+<td>Finalized reward for the user in the previous phase. Use <code>/mining/distributions</code> to fetch the claim proof. Decimal string.</td>
 </tr>
 <tr>
 <td><code>lastRewardStatus</code></td>
-<td>integer</td>
-<td>enum</td>
-<td>Same enum as <code>currRewardStatus</code>. Usually <code>2</code> (ended/claimable).</td>
+<td>string</td>
+<td>Yes</td>
+<td>enum string</td>
+<td>Same enum as <code>currRewardStatus</code>. Usually <code>"2"</code> (ended/claimable).</td>
 </tr>
 <tr>
 <td><code>price</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>USD</td>
-<td>Current price of the <strong>reward token</strong> (USDD ≈ 1 USD).</td>
+<td>Current price of the <strong>reward token</strong> (USDD ≈ 1 USD). Decimal string.</td>
 </tr>
 </tbody>
 </table>
@@ -2246,33 +3258,35 @@ on persistent 429 across multiple windows:
 </thead>
 <tbody>
 <tr>
-<td><code>address</code></td>
+<td><code>addr</code></td>
 <td>query</td>
 <td>string</td>
 <td>yes</td>
-<td>Single TRON wallet address.</td>
+<td>Single TRON wallet address. ⚠️ <strong>The parameter is named <code>addr</code> on this endpoint</strong> (unlike <code>/mining/reward</code>, which uses <code>address</code>). Sending <code>address</code> returns <code>{"code":1,"message":"Required request parameter 'addr' ... is not present"}</code>.</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Example request</strong></p>
-<div class="highlight"><pre><span></span><code><span class="err">GET /mining/distributions?address=T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb</span>
+<div class="highlight"><pre><span></span><code><span class="err">GET /mining/distributions?addr=TB2e78zyzMnaNG2GRazazmbVVv3J564YHg</span>
 </code></pre></div>
-<p><strong>Response data</strong></p>
+<p><strong>Response data</strong> (real response captured 2026-07-15, truncated to 1 of 10 phases and 2 proof elements — note the keys are <strong>bare phase numbers</strong>, e.g. <code>"22"</code>)</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
 <span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
 <span class="w">  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SUCCESS"</span><span class="p">,</span>
 <span class="w">  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">"Phase 22"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"22"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="nt">"tokenAddress"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TPYmHEhy5n8TCEfYGqW2rPxsghSfzghPDn"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"tokenSymbol"</span><span class="p">:</span><span class="w">  </span><span class="s2">"USDDOLD"</span><span class="p">,</span>
 <span class="w">      </span><span class="nt">"claimed"</span><span class="p">:</span><span class="w">      </span><span class="kc">false</span><span class="p">,</span>
 <span class="w">      </span><span class="nt">"merkleIndex"</span><span class="p">:</span><span class="w">  </span><span class="s2">"0x00"</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">"index"</span><span class="p">:</span><span class="w">        </span><span class="s2">"0x0659"</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">"amount"</span><span class="p">:</span><span class="w">       </span><span class="s2">"0x6933158b3c05"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"index"</span><span class="p">:</span><span class="w">        </span><span class="s2">"0x04b6"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"amount"</span><span class="p">:</span><span class="w">       </span><span class="s2">"0x40086576c6adc75c"</span><span class="p">,</span>
 <span class="w">      </span><span class="nt">"merkleRoot"</span><span class="p">:</span><span class="w">   </span><span class="s2">"0x3fdc21ab4fed9e13714fa852ff2e659f9e32af553f4426810ff75e38ccf17a97"</span><span class="p">,</span>
 <span class="w">      </span><span class="nt">"proof"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">        </span><span class="s2">"0x6b734d20b9ca2a0dda57b184789dbb6df2d2993049a9365b6eafe932cd435255"</span><span class="p">,</span>
-<span class="w">        </span><span class="s2">"0xb1c6c5a90e8c2b8e6b1aa9b2ffaef1f0a36c12c3f95dd84d96cd6f8a9b0a0a0a"</span>
-<span class="w">      </span><span class="p">]</span>
+<span class="w">        </span><span class="s2">"0x00ffb450e721c910fc2b305b1184ddc9e8fe6c014cb514ac6753c2bddd3e68c2"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"0x7e31527db07b9a464e5467853ef325426d3d4cae8b180638cb8dfb32e60e7ff5"</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"prices"</span><span class="p">:</span><span class="w">       </span><span class="s2">"1"</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
@@ -2283,58 +3297,81 @@ on persistent 429 across multiple windows:
 <tr>
 <th>Field</th>
 <th>Type</th>
+<th>Required</th>
 <th>Format</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>key (<code>Phase N</code>)</td>
+<td>key (<code>"N"</code>)</td>
 <td>string</td>
-<td>text</td>
-<td>Phase label, e.g. <code>"Phase 22"</code>. Phases are 1‑based and monotonically increasing.</td>
+<td>—</td>
+<td>phase number</td>
+<td>Phase number as a string, e.g. <code>"22"</code>. Phases are 1‑based and monotonically increasing. (Older docs showed the label <code>"Phase 22"</code>; the service returns the bare number.)</td>
 </tr>
 <tr>
 <td><code>tokenAddress</code></td>
 <td>string</td>
+<td>Yes</td>
 <td>TRON address</td>
-<td>Distribution contract address for this phase.</td>
+<td>Reward (distribution) token address for this phase.</td>
+</tr>
+<tr>
+<td><code>tokenSymbol</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>text</td>
+<td>Reward token symbol for this phase (e.g. <code>USDDOLD</code>).</td>
 </tr>
 <tr>
 <td><code>claimed</code></td>
 <td>boolean</td>
+<td>Yes</td>
 <td>true / false</td>
 <td><code>true</code> if the user has already claimed this phase, <code>false</code> if still claimable.</td>
 </tr>
 <tr>
 <td><code>merkleIndex</code></td>
 <td>string</td>
+<td>Yes</td>
 <td>hex <code>uint256</code></td>
 <td>Index of the Merkle tree this phase belongs to (some contracts maintain multiple trees).</td>
 </tr>
 <tr>
 <td><code>index</code></td>
 <td>string</td>
+<td>Yes</td>
 <td>hex <code>uint256</code></td>
 <td>Leaf index of the user inside the Merkle tree.</td>
 </tr>
 <tr>
 <td><code>amount</code></td>
 <td>string</td>
+<td>Yes</td>
 <td>hex <code>uint256</code></td>
-<td>Claimable reward amount in <strong>underlying smallest units</strong> (USDD = 6 decimals).</td>
+<td>Claimable reward amount in the <strong>reward token's smallest units</strong> — look up the token's <code>decimals</code> (USDD / USDDOLD have <strong>18</strong>; see <a href="../contracts.json"><code>contracts.json</code></a>).</td>
 </tr>
 <tr>
 <td><code>merkleRoot</code></td>
 <td>string</td>
+<td>Yes</td>
 <td>hex <code>bytes32</code></td>
 <td>Merkle root of this phase.</td>
 </tr>
 <tr>
 <td><code>proof</code></td>
 <td>array&lt;string&gt;</td>
+<td>Yes</td>
 <td>hex <code>bytes32</code> each</td>
 <td>Merkle proof from the user's leaf to <code>merkleRoot</code>.</td>
+</tr>
+<tr>
+<td><code>prices</code></td>
+<td>string</td>
+<td>Yes</td>
+<td>USD (decimal string)</td>
+<td>Price of the reward token in USD.</td>
 </tr>
 </tbody>
 </table>
@@ -2342,18 +3379,19 @@ on persistent 429 across multiple windows:
 <p><strong>All hex strings are bare <code>0x…</code> values.</strong> Older docs may show a leading <code>:</code> (e.g. <code>:0x6933158b3c05</code>); that colon is a delimiter and is <strong>not</strong> part of the value.</p>
 </blockquote>
 <h4 id="decoding-amount">Decoding <code>amount</code><a class="headerlink" href="#decoding-amount" title="Permanent link">¶</a></h4>
+<p><code>amount</code> is in the reward token's smallest units. Fetch the token's <code>decimals</code> (from <a href="../contracts.json"><code>contracts.json</code></a> or the TRC20 contract) — USDD and USDDOLD both have <strong>18</strong>:</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># Python</span>
-<span class="n">hex_amount</span> <span class="o">=</span> <span class="s2">"0x6933158b3c05"</span>
-<span class="n">raw</span>        <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">hex_amount</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>              <span class="c1"># 115698932195333</span>
-<span class="n">human_usdd</span> <span class="o">=</span> <span class="n">raw</span> <span class="o">/</span> <span class="mi">10</span> <span class="o">**</span> <span class="mi">6</span>                    <span class="c1"># 115698932.195333</span>
+<span class="n">hex_amount</span> <span class="o">=</span> <span class="s2">"0x40086576c6adc75c"</span>
+<span class="n">raw</span>        <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">hex_amount</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>              <span class="c1"># 4614192507070891868</span>
+<span class="n">human_usdd</span> <span class="o">=</span> <span class="n">raw</span> <span class="o">/</span> <span class="mi">10</span> <span class="o">**</span> <span class="mi">18</span>                   <span class="c1"># 4.614192507070892 (USDDOLD has 18 decimals)</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="c1">// JS / TS — use BigInt for safety</span>
-<span class="kd">const</span><span class="w"> </span><span class="nx">raw</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="nb">BigInt</span><span class="p">(</span><span class="s2">"0x6933158b3c05"</span><span class="p">);</span>
-<span class="kd">const</span><span class="w"> </span><span class="nx">humanUsdd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Number</span><span class="p">(</span><span class="nx">raw</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1e6</span><span class="p">;</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">raw</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="nb">BigInt</span><span class="p">(</span><span class="s2">"0x40086576c6adc75c"</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">humanUsdd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Number</span><span class="p">(</span><span class="nx">raw</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1e18</span><span class="p">;</span><span class="w">         </span><span class="c1">// token decimals = 18 for USDD / USDDOLD</span>
 </code></pre></div>
 <h4 id="typical-claim-workflow">Typical claim workflow<a class="headerlink" href="#typical-claim-workflow" title="Permanent link">¶</a></h4>
 <ol>
-<li><code>GET /mining/distributions?address={user}</code></li>
+<li><code>GET /mining/distributions?addr={user}</code></li>
 <li>Filter entries where <code>claimed == false</code>.</li>
 <li>For each unclaimed phase, call the distribution contract's <code>claim</code> function with <code>(merkleIndex, index, amount, proof)</code> (the contract verifies them against the stored <code>merkleRoot</code>).</li>
 <li>After the on‑chain transaction succeeds, the next API call returns <code>claimed: true</code>.</li>
@@ -2363,7 +3401,7 @@ on persistent 429 across multiple windows:
 <h3 id="51-get-lendstrx-strx-market-energy-rental-snapshot">5.1 <code>GET /lend/strx</code> — sTRX market &amp; Energy Rental snapshot<a class="headerlink" href="#51-get-lendstrx-strx-market-energy-rental-snapshot" title="Permanent link">¶</a></h3>
 <p>Returns global state for the sTRX liquid‑staking pool and the Energy Rental market.</p>
 <p><strong>Parameters:</strong> none.</p>
-<p><strong>Response data</strong></p>
+<p><strong>Response data</strong> (real response captured 2026-07-15)</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
 <span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
 <span class="w">  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SUCCESS"</span><span class="p">,</span>
@@ -2371,25 +3409,25 @@ on persistent 429 across multiple windows:
 <span class="w">    </span><span class="nt">"stakeInfo"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="nt">"strxAddress"</span><span class="p">:</span><span class="w">         </span><span class="s2">"TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5"</span><span class="p">,</span>
 <span class="w">      </span><span class="nt">"symbol"</span><span class="p">:</span><span class="w">              </span><span class="s2">"sTRX"</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">"decimal"</span><span class="p">:</span><span class="w">             </span><span class="mi">18</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">"underlyingDecimal"</span><span class="p">:</span><span class="w">   </span><span class="mi">6</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">"exchangeRate"</span><span class="p">:</span><span class="w">        </span><span class="mf">1.181813870419231022</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">"supplyRate"</span><span class="p">:</span><span class="w">          </span><span class="mf">0.03937302</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">"totalSupply"</span><span class="p">:</span><span class="w">         </span><span class="mf">6553955254.250487546804870562</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">"totalUnderlying"</span><span class="p">:</span><span class="w">     </span><span class="mf">7745555225.580224</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">"totalSupplyUsd"</span><span class="p">:</span><span class="w">      </span><span class="mf">1729932328.75828661</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">"trxPrice"</span><span class="p">:</span><span class="w">            </span><span class="mf">0.223345167438102719</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">"reserse"</span><span class="p">:</span><span class="w">             </span><span class="mf">71933070.321420</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">"rentReserveFactor"</span><span class="p">:</span><span class="w">   </span><span class="mf">0.200000000000000000</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">"rewardReserveFactor"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.200000000000000000</span>
+<span class="w">      </span><span class="nt">"decimal"</span><span class="p">:</span><span class="w">             </span><span class="s2">"18"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"totalSupply"</span><span class="p">:</span><span class="w">         </span><span class="s2">"7416931940.940514882265682812"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"totalSupplyUsd"</span><span class="p">:</span><span class="w">      </span><span class="s2">"3173929709.88356922"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"exchangeRate"</span><span class="p">:</span><span class="w">        </span><span class="s2">"1.306200515551643308"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"totalUnderlying"</span><span class="p">:</span><span class="w">     </span><span class="s2">"9688000325.067951"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"underlyingDecimal"</span><span class="p">:</span><span class="w">   </span><span class="s2">"6"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"rentReserveFactor"</span><span class="p">:</span><span class="w">   </span><span class="s2">"0.200000000000000000"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"rewardReserveFactor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.200000000000000000"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"reserves"</span><span class="p">:</span><span class="w">            </span><span class="s2">"290201700.064348"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"supplyRate"</span><span class="p">:</span><span class="w">          </span><span class="s2">"0.03162947"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"trxPrice"</span><span class="p">:</span><span class="w">            </span><span class="s2">"0.327614533793000000"</span>
 <span class="w">    </span><span class="p">},</span>
 <span class="w">    </span><span class="nt">"rentInfo"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="nt">"rentMarketAddress"</span><span class="p">:</span><span class="w">       </span><span class="s2">"TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd"</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">"priceFor10KEnergByRent"</span><span class="p">:</span><span class="w">  </span><span class="mf">0.65530713</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">"priceFor10KEnergByStake"</span><span class="p">:</span><span class="w"> </span><span class="mf">885.28697646</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">"priceFor10KEnergByBurn"</span><span class="p">:</span><span class="w">  </span><span class="mf">4.20000000</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">"totalDelegatedEnergyTrx"</span><span class="p">:</span><span class="w"> </span><span class="mf">162748507.908930</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">"totalDelegatedEnergyRate"</span><span class="p">:</span><span class="mf">0.03254970</span>
+<span class="w">      </span><span class="nt">"priceFor10KEnergByRent"</span><span class="p">:</span><span class="w">  </span><span class="s2">"0.44835366"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"priceFor10KEnergByStake"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1053.43779485"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"priceFor10KEnergByBurn"</span><span class="p">:</span><span class="w">  </span><span class="s2">"1.00000000"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"totalDelegatedEnergyTrx"</span><span class="p">:</span><span class="w"> </span><span class="s2">"506918969.020237"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"totalDelegatedEnergyRate"</span><span class="p">:</span><span class="s2">"0.10138379"</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
@@ -2400,6 +3438,7 @@ on persistent 429 across multiple windows:
 <tr>
 <th>Field</th>
 <th>Type</th>
+<th>Required</th>
 <th>Unit</th>
 <th>Description</th>
 </tr>
@@ -2408,80 +3447,93 @@ on persistent 429 across multiple windows:
 <tr>
 <td><code>strxAddress</code></td>
 <td>string</td>
+<td>Yes</td>
 <td>TRON address</td>
 <td>sTRX token contract.</td>
 </tr>
 <tr>
 <td><code>symbol</code></td>
 <td>string</td>
+<td>Yes</td>
 <td>text</td>
 <td>Token symbol (<code>sTRX</code>).</td>
 </tr>
 <tr>
 <td><code>decimal</code></td>
-<td>integer</td>
+<td>string</td>
+<td>Yes</td>
 <td>count</td>
-<td>sTRX decimals (<code>18</code>).</td>
+<td>sTRX decimals (<code>"18"</code>). ⚠️ Integer serialized as a <strong>string</strong> on this endpoint.</td>
 </tr>
 <tr>
 <td><code>underlyingDecimal</code></td>
-<td>integer</td>
+<td>string</td>
+<td>Yes</td>
 <td>count</td>
-<td>TRX decimals (<code>6</code>).</td>
+<td>TRX decimals (<code>"6"</code>). ⚠️ Integer serialized as a <strong>string</strong> on this endpoint.</td>
 </tr>
 <tr>
 <td><code>exchangeRate</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>TRX per sTRX</td>
-<td>Current redemption rate. <code>1.18</code> means 1 sTRX = 1.18 TRX.</td>
+<td>Current redemption rate. <code>"1.30"</code> means 1 sTRX = 1.30 TRX. Decimal string.</td>
 </tr>
 <tr>
 <td><code>supplyRate</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>annualized decimal</td>
-<td>sTRX staking APY. <code>0.0394</code> = <code>3.94 % APY</code>.</td>
+<td>sTRX staking APY. <code>"0.0316"</code> = <code>3.16 % APY</code>. Decimal string.</td>
 </tr>
 <tr>
 <td><code>totalSupply</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>sTRX units</td>
-<td>Total sTRX issued.</td>
+<td>Total sTRX issued. Decimal string.</td>
 </tr>
 <tr>
 <td><code>totalUnderlying</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>TRX</td>
-<td>Total TRX held by the pool.</td>
+<td>Total TRX held by the pool. Decimal string.</td>
 </tr>
 <tr>
 <td><code>totalSupplyUsd</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>USD</td>
-<td>TVL of the sTRX pool in USD.</td>
+<td>TVL of the sTRX pool in USD. Decimal string.</td>
 </tr>
 <tr>
 <td><code>trxPrice</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>USD</td>
-<td>Current TRX price.</td>
+<td>Current TRX price. Decimal string.</td>
 </tr>
 <tr>
-<td><code>reserse</code></td>
-<td>number</td>
+<td><code>reserves</code></td>
+<td>string</td>
+<td>Yes</td>
 <td>TRX</td>
-<td>Protocol reserves (<strong>typo preserved for backwards compatibility</strong> — read as <code>reserves</code>).</td>
+<td>Protocol reserves. Decimal string. (Historical responses used the misspelled key <code>reserse</code>; the service now returns <code>reserves</code> — tolerate both when reading old captures.)</td>
 </tr>
 <tr>
 <td><code>rentReserveFactor</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>decimal (0–1)</td>
-<td>Share of rental revenue taken as reserve.</td>
+<td>Share of rental revenue taken as reserve. Decimal string.</td>
 </tr>
 <tr>
 <td><code>rewardReserveFactor</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>decimal (0–1)</td>
-<td>Share of staking reward taken as reserve.</td>
+<td>Share of staking reward taken as reserve. Decimal string.</td>
 </tr>
 </tbody>
 </table>
@@ -2491,6 +3543,7 @@ on persistent 429 across multiple windows:
 <tr>
 <th>Field</th>
 <th>Type</th>
+<th>Required</th>
 <th>Unit</th>
 <th>Description</th>
 </tr>
@@ -2499,38 +3552,44 @@ on persistent 429 across multiple windows:
 <tr>
 <td><code>rentMarketAddress</code></td>
 <td>string</td>
+<td>Yes</td>
 <td>TRON address</td>
 <td>Energy Rental contract.</td>
 </tr>
 <tr>
 <td><code>priceFor10KEnergByRent</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>TRX / 10 000 ⚡</td>
-<td>TRX cost to obtain 10 000 Energy via <strong>rental</strong> (cheapest path).</td>
+<td>TRX cost to obtain 10 000 Energy via <strong>rental</strong> (cheapest path). Decimal string.</td>
 </tr>
 <tr>
 <td><code>priceFor10KEnergByStake</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>TRX / 10 000 ⚡</td>
-<td>TRX <strong>stake</strong> required to produce 10 000 Energy yourself.</td>
+<td>TRX <strong>stake</strong> required to produce 10 000 Energy yourself. Decimal string.</td>
 </tr>
 <tr>
 <td><code>priceFor10KEnergByBurn</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>TRX / 10 000 ⚡</td>
-<td>TRX cost to obtain 10 000 Energy by <strong>burning</strong> TRX in a transaction.</td>
+<td>TRX cost to obtain 10 000 Energy by <strong>burning</strong> TRX in a transaction. Decimal string.</td>
 </tr>
 <tr>
 <td><code>totalDelegatedEnergyTrx</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>TRX</td>
-<td>Total TRX delegated through the rental market.</td>
+<td>Total TRX delegated through the rental market. Decimal string.</td>
 </tr>
 <tr>
 <td><code>totalDelegatedEnergyRate</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>decimal (0–1)</td>
-<td>Utilization rate of the rental pool.</td>
+<td>Utilization rate of the rental pool. Decimal string.</td>
 </tr>
 </tbody>
 </table>
@@ -2578,19 +3637,19 @@ on persistent 429 across multiple windows:
 </tr>
 </tbody>
 </table>
-<p><strong>Response data</strong></p>
+<p><strong>Response data</strong> (real response captured 2026-07-15)</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
 <span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
 <span class="w">  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SUCCESS"</span><span class="p">,</span>
 <span class="w">  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">"totalCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
 <span class="w">    </span><span class="nt">"totalPage"</span><span class="p">:</span><span class="w">  </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"totalCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
 <span class="w">    </span><span class="nt">"list"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 <span class="w">      </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">"addresses"</span><span class="p">:</span><span class="w">             </span><span class="s2">"TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5"</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"sTRXBalance"</span><span class="p">:</span><span class="w">           </span><span class="mf">1.000000000000000000</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"availableWithdrawAmount"</span><span class="p">:</span><span class="mf">150865439.643028</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"unstakingAmount"</span><span class="p">:</span><span class="w">       </span><span class="mf">24120999.583032</span>
+<span class="w">        </span><span class="nt">"address"</span><span class="p">:</span><span class="w">                 </span><span class="s2">"TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"availableWithdrawAmount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"804814121.102239"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"unstakingAmount"</span><span class="p">:</span><span class="w">         </span><span class="s2">"53899847.795703"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"sTRXBalance"</span><span class="p">:</span><span class="w">             </span><span class="s2">"1.000000000000000000"</span>
 <span class="w">      </span><span class="p">}</span>
 <span class="w">    </span><span class="p">]</span>
 <span class="w">  </span><span class="p">}</span>
@@ -2601,34 +3660,39 @@ on persistent 429 across multiple windows:
 <tr>
 <th>Field</th>
 <th>Type</th>
+<th>Required</th>
 <th>Unit</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>addresses</code></td>
+<td><code>address</code></td>
 <td>string</td>
+<td>Yes</td>
 <td>—</td>
-<td>User wallet.</td>
+<td>User wallet. (Earlier versions of this page showed the key as <code>addresses</code>; the service returns <code>address</code>.)</td>
 </tr>
 <tr>
 <td><code>sTRXBalance</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>sTRX</td>
-<td>Current sTRX balance.</td>
+<td>Current sTRX balance. Decimal string.</td>
 </tr>
 <tr>
 <td><code>unstakingAmount</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>TRX</td>
-<td>Amount currently in the un‑staking cooldown period.</td>
+<td>Amount currently in the un‑staking cooldown period. Decimal string.</td>
 </tr>
 <tr>
 <td><code>availableWithdrawAmount</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>TRX</td>
-<td>TRX already through the cooldown and ready to withdraw.</td>
+<td>TRX already through the cooldown and ready to withdraw. Decimal string.</td>
 </tr>
 </tbody>
 </table>
@@ -2684,7 +3748,7 @@ on persistent 429 across multiple windows:
 </tr>
 </tbody>
 </table>
-<p><strong>Response data</strong></p>
+<p><strong>Response data</strong> (values illustrative; decimal amounts are returned as strings, like every other endpoint)</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
 <span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
 <span class="w">  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SUCCESS"</span><span class="p">,</span>
@@ -2696,9 +3760,9 @@ on persistent 429 across multiple windows:
 <span class="w">        </span><span class="nt">"rentType"</span><span class="p">:</span><span class="w">         </span><span class="s2">"Energy"</span><span class="p">,</span>
 <span class="w">        </span><span class="nt">"renter"</span><span class="p">:</span><span class="w">           </span><span class="s2">"TWdWEHRLPBVGsXhwjSUv45XwnsfUHXydJa"</span><span class="p">,</span>
 <span class="w">        </span><span class="nt">"receiver"</span><span class="p">:</span><span class="w">         </span><span class="s2">"TWdWEHRLPBVGsXhwjSUv45XwnsfUHXydJa"</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"delegatedAmount"</span><span class="p">:</span><span class="w">  </span><span class="mf">10000.000000</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"rentRemainAmount"</span><span class="p">:</span><span class="w"> </span><span class="mf">8500.000000</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"rentAmountPerDay"</span><span class="p">:</span><span class="w"> </span><span class="mf">1500.000000</span>
+<span class="w">        </span><span class="nt">"delegatedAmount"</span><span class="p">:</span><span class="w">  </span><span class="s2">"10000.000000"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"rentRemainAmount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"8500.000000"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"rentAmountPerDay"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1500.000000"</span>
 <span class="w">      </span><span class="p">}</span>
 <span class="w">    </span><span class="p">]</span>
 <span class="w">  </span><span class="p">}</span>
@@ -2709,6 +3773,7 @@ on persistent 429 across multiple windows:
 <tr>
 <th>Field</th>
 <th>Type</th>
+<th>Required</th>
 <th>Unit</th>
 <th>Description</th>
 </tr>
@@ -2717,38 +3782,44 @@ on persistent 429 across multiple windows:
 <tr>
 <td><code>rentType</code></td>
 <td>string</td>
+<td>Yes</td>
 <td>enum</td>
 <td><code>"Energy"</code>. Bandwidth not exposed yet.</td>
 </tr>
 <tr>
 <td><code>renter</code></td>
 <td>string</td>
+<td>Yes</td>
 <td>TRON address</td>
 <td>The account paying the rent.</td>
 </tr>
 <tr>
 <td><code>receiver</code></td>
 <td>string</td>
+<td>Yes</td>
 <td>TRON address</td>
 <td>The account receiving the delegated Energy.</td>
 </tr>
 <tr>
 <td><code>delegatedAmount</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>TRX</td>
-<td>TRX equivalent of the energy currently delegated.</td>
+<td>TRX equivalent of the energy currently delegated. Decimal string.</td>
 </tr>
 <tr>
 <td><code>rentRemainAmount</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>TRX</td>
-<td>TRX prepayment still remaining for this order.</td>
+<td>TRX prepayment still remaining for this order. Decimal string.</td>
 </tr>
 <tr>
 <td><code>rentAmountPerDay</code></td>
-<td>number</td>
+<td>string</td>
+<td>Yes</td>
 <td>TRX / day</td>
-<td>Daily TRX cost of the rental order.</td>
+<td>Daily TRX cost of the rental order. Decimal string.</td>
 </tr>
 </tbody>
 </table>
@@ -2757,19 +3828,20 @@ on persistent 429 across multiple windows:
 <p>If you are an LLM tool building requests against this API, follow these rules:</p>
 <ol>
 <li><strong>All endpoints are <code>GET</code> against <code>https://openapi.just.network</code>.</strong></li>
-<li><strong>All responses are wrapped in <code>{code, message, data}</code>. Always check <code>code == 0</code> before reading <code>data</code>.</strong></li>
-<li><strong>Numbers are already de‑scaled</strong> — never multiply by <code>1e18</code> / <code>1e6</code> again unless explicitly told (the only exception is <code>amount</code> / <code>index</code> in <code>/mining/distributions</code>, which are hex <code>uint256</code> in raw smallest units).</li>
+<li><strong>All responses are wrapped in <code>{code, message, data}</code>. Check the success code before reading <code>data</code>: <code>code == 0</code> on V1 endpoints, <code>code == 200</code> on <code>/v2/...</code> endpoints</strong> (see §1.1).</li>
+<li><strong>Decimal quantities arrive as JSON strings and are already de‑scaled</strong> — parse with big-decimal/BigInt, and never multiply by <code>1e18</code> / <code>1e6</code> again unless explicitly told (the exceptions: <code>amount</code> / <code>index</code> in <code>/mining/distributions</code> are hex <code>uint256</code> in raw smallest units; <code>borrowIndex</code> and the V2 <code>shareAmount</code> / <code>borrowShares</code> are raw integer strings).</li>
 <li><strong>Rates (<code>*Rate</code>, <code>apy</code>) are annualized decimals.</strong> Multiply by 100 for <code>%</code>.</li>
-<li><strong>A market's effective supply APY</strong> = <code>tokenList[i].supplyRate</code> + (mining apy if <code>tokenList[i].address</code> appears in <code>/mining/apy</code>, else 0).</li>
+<li><strong>A market's effective supply APY</strong> = <code>tokenList[i].supplyRate</code> + (mining apy if <code>tokenList[i].address</code> has a non-zero value in <code>/mining/apy</code>, else 0).</li>
 <li><strong>Address‑keyed objects</strong> — look up the jToken address in §2 to know which market a sub‑object refers to.</li>
 <li><strong>Liquidations</strong> — pull <code>/justlend/liquidate/highRiskAccountList</code> periodically; <code>risk &gt; 1</code> ⇒ liquidatable.</li>
-<li><strong>Mining claims</strong> — every entry of <code>/mining/distributions</code> with <code>claimed == false</code> is a free transaction the user should submit.</li>
+<li><strong>Mining claims</strong> — every entry of <code>/mining/distributions</code> (parameter <code>addr</code>, not <code>address</code>) with <code>claimed == false</code> is a free transaction the user should submit.</li>
+<li><strong>V2 (Moolah)</strong> — discover vaults via <code>/v2/index/vault/list</code> and markets via <code>/v2/index/market/list</code>, then read one user's positions via <code>/v2/index/position</code>, <code>/v2/vault/position</code> (by <code>vaultAddress</code>) and <code>/v2/market/position</code> (by <code>market</code> id). See §3.4.</li>
 </ol>
-<p>The machine‑readable OpenAPI 3.1 spec lives at <a href="justlend_apis.yaml"><code>apis/justlend_apis.yaml</code></a> and stays consistent with this page.</p>
+<p>The machine‑readable OpenAPI 3.1 spec lives at <a href="justlend_apis.yaml"><code>apis/justlend_apis.yaml</code></a>. It is maintained together with this page and verified against the live service (last verified 2026-07-15 — see the <a href="agent-acceptance/">agent acceptance run</a>); <strong>if the two ever diverge, treat the YAML as authoritative</strong> (<a href="#18-versioning-and-compatibility">§1.8</a>) and please report the mismatch.</p>
 <hr/>
 <h2 id="7-interactive-api-explorer">7. Interactive API Explorer<a class="headerlink" href="#7-interactive-api-explorer" title="Permanent link">¶</a></h2>
 <p>Use the embedded Swagger UI below to call endpoints directly from this page. Same OpenAPI spec as the YAML link above.</p>
-<p><iframe class="swagger-ui-iframe" frameborder="0" id="18aefa6b" onload="this.style.display = 'block'; this.style.overflow = 'hidden'; this.style.width = '100%';" src="swagger-18aefa6b.html" style="display:none;" width="100%"></iframe></p>
+<p><iframe class="swagger-ui-iframe" frameborder="0" id="888bc520" onload="this.style.display = 'block'; this.style.overflow = 'hidden'; this.style.width = '100%';" src="swagger-888bc520.html" style="display:none;" width="100%"></iframe></p>
 <hr/>
 <h2 id="8-event-stream-and-indexing-options">8. Event-stream and indexing options<a class="headerlink" href="#8-event-stream-and-indexing-options" title="Permanent link">¶</a></h2>
 <p>The HTTP API exposes <strong>current state</strong>. For <strong>historical events</strong> (every <code>Mint</code>, <code>Borrow</code>, <code>RepayBorrow</code>, <code>Redeem</code>, <code>LiquidateBorrow</code>, <code>enterMarkets</code>, governance <code>ProposalCreated</code>/<code>VoteCast</code>/<code>ProposalExecuted</code>, sTRX <code>Deposit</code>/<code>Withdrawal</code>, EnergyRental <code>RentResource</code>/<code>ReturnResource</code>) you need an event source.</p>
@@ -2859,7 +3931,7 @@ curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">"TRON-PRO
 <span class="md-icon" title="Last update">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"></path></svg>
 </span>
-<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 26, 2026 09:21:43 UTC">2026-06-26</span>
+<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="July 15, 2026 08:14:15 UTC">2026-07-15</span>
 </span>
 </aside>
 <hr class="content-footer-divider"/> <!-- 添加的水平线 -->
@@ -2902,7 +3974,7 @@ curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">"TRON-PRO
         
             let iframe_id_list = []
             var iframes = document.getElementsByClassName("swagger-ui-iframe");
-            for (var i = 0; i < iframes.length; i++) { 
+            for (var i = 0; i < iframes.length; i++) {
                 iframe_id_list.push(iframes[i].getAttribute("id"))
             }
             let ticking = false;
