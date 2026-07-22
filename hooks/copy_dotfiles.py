@@ -2,12 +2,13 @@
 
 This module installs two `on_post_build` actions:
 
-1. **Dotfile mirroring.** MkDocs intentionally skips dotfile directories
+1. **Dotfile publishing.** MkDocs intentionally skips dotfile directories
    (anything starting with `.`) during the build pass. We need
    `docs/.well-known/security.txt` and any future dotfile-rooted resources
    (`/.well-known/ai-plugin.json`, OIDC config, …) to be published verbatim
-   under the site root. This hook walks every `docs/.<dir>/` tree and
-   mirrors it into `site/.<dir>/`.
+   under the site root. This hook walks every `docs/.<dir>/` tree, mirrors it
+   into `site/.<dir>/`, and writes `site/.nojekyll` so GitHub Pages serves
+   those directories instead of dropping them during Jekyll processing.
 
 2. **Snapshot metadata substitution.** `docs/llms-full.txt §0` contains
    `{{LAST_GENERATED}}`, `{{DOCS_COMMIT}}`, and `{{DOCS_COMMIT_SHORT}}`
@@ -36,6 +37,10 @@ def _copy_dotfile_dirs(docs_dir: Path, site_dir: Path) -> None:
             shutil.rmtree(dest)
         shutil.copytree(src, dest)
         print(f"[copy_dotfiles] {src.relative_to(docs_dir)} -> {dest.relative_to(site_dir.parent)}")
+
+    # Without this marker GitHub Pages runs Jekyll and excludes directories
+    # whose names start with a dot, even though they exist on gh-pages.
+    (site_dir / ".nojekyll").touch()
 
 
 def _current_git_sha(repo_root: Path) -> str:

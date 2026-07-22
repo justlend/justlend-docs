@@ -432,9 +432,11 @@ ABIs at `/developers/abis/` carry the canonical event signatures — derive `top
 
 JustLend ships two distinct AI Agent packages:
 
-### 7.1 JustLend Skills — `@justlend/justlend-skills`
+### 7.1 JustLend Skills — GitHub distribution
 
 Read-only skills package. Repo: <https://github.com/justlend/justlend-skills>.
+
+Install by cloning that repository and running `bash install.sh`. The local package identifier `@justlend/justlend-skills` is **not published to npm**; do not use `npm install @justlend/justlend-skills`. An `npm install` run inside the clone only installs the project's dependencies.
 
 - Combines structured **skill instructions** (for any Claude-compatible agent — Claude Code, Claude Desktop, Cursor, Codex) with a lightweight built-in **read-only MCP server** exposing **9 query tools**.
 - Also runs standalone as a **CLI** (`node scripts/justlend_api.mjs markets|dashboard|account ...`).
@@ -446,6 +448,7 @@ Skill modules:
 | Skill | Function | Backend |
 |-------|----------|---------|
 | `justlend-lending-v1`  | Market queries, account analysis, health monitoring | Built-in MCP (read-only) |
+| `justlend-lending-v2`  | V2 isolated markets and ERC4626 vault guidance       | Requires full MCP |
 | `justlend-trx-staking` | sTRX staking guidance                              | Requires full MCP (write) |
 | `justlend-energy-rental` | Energy rental guidance                           | Requires full MCP (write) |
 | `justlend-governance-v1` | JIP voting guidance                              | Requires full MCP (write) |

@@ -19,8 +19,8 @@ This section collects everything an AI agent or LLM tool needs to integrate with
 | Page | Use for |
 |------|---------|
 | [AI / LLMs](ai_llms.md) | Machine-readable entry points — [`llms.txt`](/llms.txt), [`llms-full.txt`](/llms-full.txt), OpenAPI YAML, `contracts.json`, JSON ABIs — and which to use when. |
-| [MCP Server](mcp_server.md) | Install and run the JustLend MCP server (59 tools): account analysis, market queries, transaction pre-flight, and wallet-aware writes with HITL confirmation. |
-| [JustLend Skills](justlend_skills.md) | The JustLend Skills package (9 read-only tools) for agent frameworks. |
+| [MCP Server](mcp_server.md) | Install and run the JustLend MCP server (98 tools): account analysis, market queries, transaction pre-flight, and wallet-aware writes with HITL confirmation. |
+| [JustLend Skills](justlend_skills.md) | The GitHub-distributed JustLend Skills project (9 read-only tools) for agent frameworks. |
 | [AI Docs for Agents](../documents/aidocs/index.md) | Compact, RAG-oriented pages: source-of-truth routing, market/account/workflow guides, MCP safety policy, English/Chinese FAQs, and the full MCP tool catalog. |
 
 ## Machine-readable sources of truth

@@ -1,13 +1,16 @@
 ---
 title: JustLend Skills (read-only)
-description: "@justlend/justlend-skills — 9 read-only MCP tools and 5 skill modules for AI agents to query JustLend market data, account health, and balances. CLI also available."
+description: "GitHub-distributed JustLend Skills — 9 read-only MCP tools and 5 skill modules for AI agents to query JustLend market data, account health, and balances. CLI also available."
 ---
 
 # JustLend Skills
 
 **GitHub**: [https://github.com/justlend/justlend-skills](https://github.com/justlend/justlend-skills)
 
-JustLend Skills (`@justlend/justlend-skills`) is an AI Agent skills package for the **JustLend DAO** protocol on TRON. It provides structured skill instructions and a lightweight **read-only** [MCP server](https://modelcontextprotocol.io/) (9 query tools) that enables AI agents (Claude Code, Claude Desktop, Cursor, Codex, etc.) to query market data, monitor account positions, and analyze DeFi lending information.
+JustLend Skills is a GitHub-distributed AI Agent skills project for the **JustLend DAO** protocol on TRON. Its local package identifier is `@justlend/justlend-skills`. It provides structured skill instructions and a lightweight **read-only** [MCP server](https://modelcontextprotocol.io/) (9 query tools) that enables AI agents (Claude Code, Claude Desktop, Cursor, Codex, etc.) to query market data, monitor account positions, and analyze DeFi lending information.
+
+!!! important "Install from GitHub, not the npm registry"
+    `@justlend/justlend-skills` is **not currently published to npm**. The scoped name identifies the cloned project for local tooling; it is not an installable registry package. Clone the [GitHub repository](https://github.com/justlend/justlend-skills) and run `bash install.sh`. Do **not** run `npm install @justlend/justlend-skills`.
 
 It also works as a standalone **CLI tool** for quick market checks directly from the terminal.
 
@@ -76,7 +79,7 @@ Markets currently **closed** to new supply/borrow (legacy, queryable but do not 
 - [Node.js](https://nodejs.org/) 20.0.0 or higher
 - [TronGrid API key](https://www.trongrid.io/) (required)
 
-## Installation
+## Installation from GitHub
 
 ```bash
 git clone https://github.com/justlend/justlend-skills.git
@@ -84,13 +87,13 @@ cd justlend-skills
 bash install.sh
 ```
 
-Or manually:
+Or install the cloned repository's dependencies manually:
 
 ```bash
 npm install
 ```
 
-The `install.sh` script will create `.env` and prompt for your TronGrid API key.
+The `npm install` command above must be run **inside the cloned repository**; it does not install `@justlend/justlend-skills` from npm. The `install.sh` script installs those dependencies, creates `.env`, and prompts for your TronGrid API key.
 
 ## Configuration
 

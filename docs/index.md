@@ -21,7 +21,7 @@ description: Official documentation for JustLend DAO — the largest lending pro
 
 - **Users:** [Overview](getting_started/overview.md) · [Supply](getting_started/concepts/supply.md) · [Borrow](getting_started/concepts/borrow.md) · [Liquidations](getting_started/concepts/liquidations.md) · [Risks](getting_started/concepts/risks.md)
 - **Developers:** [Contracts Overview](developers/contracts_overview.md) · [SBM reference](developers/supply_and_borrow_market/sbm.md) · [Deployed Contracts](developers/deployed_contracts.md) · [APIs](developers/apis.md)
-- **AI Agents:** [`/llms.txt`](llms.txt) · [`/llms-full.txt`](llms-full.txt) · [`/developers/contracts.json`](developers/contracts.json) · [OpenAPI 3.1 YAML](developers/apis/justlend_apis.yaml) · [JSON ABIs](developers/abis/jtoken.json) · [AI / LLMs page](ai_support/ai_llms.md) · [Full MCP Server (59 tools)](ai_support/mcp_server.md) · [Skills (9 read-only tools)](ai_support/justlend_skills.md)
+- **AI Agents:** [`/llms.txt`](llms.txt) · [`/llms-full.txt`](llms-full.txt) · [`/developers/contracts.json`](developers/contracts.json) · [OpenAPI 3.1 YAML](developers/apis/justlend_apis.yaml) · [JSON ABI catalog](developers/abis/index.md) · [AI / LLMs page](ai_support/ai_llms.md) · [Full MCP Server (98 tools)](ai_support/mcp_server.md) · [Skills (9 read-only tools, GitHub install)](ai_support/justlend_skills.md)
 - **Governance:** [JIPs](governance/jips.md) · [Tokenomics (JST)](governance/tokenomics.md) · [Forum](https://forum.justlend.org)
 
 ## External
