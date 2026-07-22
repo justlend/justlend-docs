@@ -33,6 +33,12 @@ jobs:
     - name: Build the document
       run: mkdocs build  # Build the MkDocs site
 
+    - name: Verify security metadata output
+      run: |
+        test -f site/.nojekyll
+        test -f site/.well-known/security.txt
+        cmp docs/.well-known/security.txt site/.well-known/security.txt
+
     - name: Add CNAME file
       run: echo 'docs.justlend.org' > site/CNAME
 
@@ -42,4 +48,3 @@ jobs:
         token: ${{ secrets.TOKEN}}
         branch: gh-pages # Publish the built site to the gh-pages branch
         folder: site # MkDocs default build output directory
-
