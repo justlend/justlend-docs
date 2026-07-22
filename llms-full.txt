@@ -6,8 +6,8 @@
 
 | Field | Value |
 |-------|-------|
-| `last_generated` | **2026-07-15** (ISO 8601, UTC date — substituted at build time) |
-| `docs_commit` | [`24e2be0`](https://github.com/justlend/justlend-docs/commit/24e2be07f847de34d89f9e158b5136fdaac58b55) (the commit SHA this snapshot was built from — substituted at build time) |
+| `last_generated` | **2026-07-22** (ISO 8601, UTC date — substituted at build time) |
+| `docs_commit` | [`a48d439`](https://github.com/justlend/justlend-docs/commit/a48d4398b3f9a3796b4a898014c2fdf1e2f6bfcd) (the commit SHA this snapshot was built from — substituted at build time) |
 | `contracts_json_source` | [`/developers/contracts.json`](https://docs.justlend.org/developers/contracts.json) — see its `_meta.last_generated` for the address-data snapshot date |
 | `mcp_server_version` | `@justlend/mcp-server-justlend` **v1.1.2** (sync date 2026-07-15) |
 | `changelog` | [`CHANGELOG.md`](https://github.com/justlend/justlend-docs/blob/main/CHANGELOG.md) |
@@ -432,9 +432,11 @@ ABIs at `/developers/abis/` carry the canonical event signatures — derive `top
 
 JustLend ships two distinct AI Agent packages:
 
-### 7.1 JustLend Skills — `@justlend/justlend-skills`
+### 7.1 JustLend Skills — GitHub distribution
 
 Read-only skills package. Repo: <https://github.com/justlend/justlend-skills>.
+
+Install by cloning that repository and running `bash install.sh`. The local package identifier `@justlend/justlend-skills` is **not published to npm**; do not use `npm install @justlend/justlend-skills`. An `npm install` run inside the clone only installs the project's dependencies.
 
 - Combines structured **skill instructions** (for any Claude-compatible agent — Claude Code, Claude Desktop, Cursor, Codex) with a lightweight built-in **read-only MCP server** exposing **9 query tools**.
 - Also runs standalone as a **CLI** (`node scripts/justlend_api.mjs markets|dashboard|account ...`).
@@ -446,6 +448,7 @@ Skill modules:
 | Skill | Function | Backend |
 |-------|----------|---------|
 | `justlend-lending-v1`  | Market queries, account analysis, health monitoring | Built-in MCP (read-only) |
+| `justlend-lending-v2`  | V2 isolated markets and ERC4626 vault guidance       | Requires full MCP |
 | `justlend-trx-staking` | sTRX staking guidance                              | Requires full MCP (write) |
 | `justlend-energy-rental` | Energy rental guidance                           | Requires full MCP (write) |
 | `justlend-governance-v1` | JIP voting guidance                              | Requires full MCP (write) |

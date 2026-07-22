@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="@justlend/justlend-skills — 9 read-only MCP tools and 5 skill modules for AI agents to query JustLend market data, account health, and balances. CLI also available.">
+        <meta name="description" content="GitHub-distributed JustLend Skills — 9 read-only MCP tools and 5 skill modules for AI agents to query JustLend market data, account health, and balances. CLI also available.">
       
       
         <meta name="author" content="JustLend DAO">
@@ -137,9 +137,9 @@
             "publisher": { "@id": "https://justlend.org/#org" }
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
-          "description": "@justlend/justlend-skills \u2014 9 read-only MCP tools and 5 skill modules for AI agents to query JustLend market data, account health, and balances. CLI also available.",
-          "dateModified": "2026-06-26",
-          "datePublished": "2026-06-26"
+          "description": "GitHub-distributed JustLend Skills \u2014 9 read-only MCP tools and 5 skill modules for AI agents to query JustLend market data, account health, and balances. CLI also available.",
+          "dateModified": "2026-07-22",
+          "datePublished": "2026-07-22"
         }
       ]
     }
@@ -1486,9 +1486,9 @@
 
 
 <li class="md-nav__item ">
-  <a href="#installation" class="md-nav__link">
+  <a href="#installation-from-github" class="md-nav__link">
     <span class="md-ellipsis">
-      Installation
+      Installation from GitHub
     </span>
   </a>
   
@@ -2464,7 +2464,11 @@
 
 <h1 id="justlend-skills">JustLend Skills<a class="headerlink" href="#justlend-skills" title="Permanent link">&para;</a></h1>
 <p><strong>GitHub</strong>: <a href="https://github.com/justlend/justlend-skills">https://github.com/justlend/justlend-skills</a></p>
-<p>JustLend Skills (<code>@justlend/justlend-skills</code>) is an AI Agent skills package for the <strong>JustLend DAO</strong> protocol on TRON. It provides structured skill instructions and a lightweight <strong>read-only</strong> <a href="https://modelcontextprotocol.io/">MCP server</a> (9 query tools) that enables AI agents (Claude Code, Claude Desktop, Cursor, Codex, etc.) to query market data, monitor account positions, and analyze DeFi lending information.</p>
+<p>JustLend Skills is a GitHub-distributed AI Agent skills project for the <strong>JustLend DAO</strong> protocol on TRON. Its local package identifier is <code>@justlend/justlend-skills</code>. It provides structured skill instructions and a lightweight <strong>read-only</strong> <a href="https://modelcontextprotocol.io/">MCP server</a> (9 query tools) that enables AI agents (Claude Code, Claude Desktop, Cursor, Codex, etc.) to query market data, monitor account positions, and analyze DeFi lending information.</p>
+<div class="admonition important">
+<p class="admonition-title">Install from GitHub, not the npm registry</p>
+<p><code>@justlend/justlend-skills</code> is <strong>not currently published to npm</strong>. The scoped name identifies the cloned project for local tooling; it is not an installable registry package. Clone the <a href="https://github.com/justlend/justlend-skills">GitHub repository</a> and run <code>bash install.sh</code>. Do <strong>not</strong> run <code>npm install @justlend/justlend-skills</code>.</p>
+</div>
 <p>It also works as a standalone <strong>CLI tool</strong> for quick market checks directly from the terminal.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -2600,15 +2604,15 @@
 <li><a href="https://nodejs.org/">Node.js</a> 20.0.0 or higher</li>
 <li><a href="https://www.trongrid.io/">TronGrid API key</a> (required)</li>
 </ul>
-<h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
+<h2 id="installation-from-github">Installation from GitHub<a class="headerlink" href="#installation-from-github" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/justlend/justlend-skills.git
 <span class="nb">cd</span><span class="w"> </span>justlend-skills
 bash<span class="w"> </span>install.sh
 </code></pre></div>
-<p>Or manually:</p>
+<p>Or install the cloned repository's dependencies manually:</p>
 <div class="highlight"><pre><span></span><code>npm<span class="w"> </span>install
 </code></pre></div>
-<p>The <code>install.sh</code> script will create <code>.env</code> and prompt for your TronGrid API key.</p>
+<p>The <code>npm install</code> command above must be run <strong>inside the cloned repository</strong>; it does not install <code>@justlend/justlend-skills</code> from npm. The <code>install.sh</code> script installs those dependencies, creates <code>.env</code>, and prompts for your TronGrid API key.</p>
 <h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
 <p>Create a <code>.env</code> file (or use <code>install.sh</code>):</p>
 <div class="highlight"><pre><span></span><code># Required — get from https://www.trongrid.io/
@@ -2882,7 +2886,7 @@ node<span class="w"> </span>scripts/justlend_api.mjs<span class="w"> </span>allo
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 26, 2026 09:21:43 UTC">2026-06-26</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="July 22, 2026 03:59:22 UTC">2026-07-22</span>
   </span>
 
     
