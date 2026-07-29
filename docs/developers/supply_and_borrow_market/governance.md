@@ -9,7 +9,7 @@ description: JustLend DAO governance contract reference — propose, vote, queue
     * **Protocol:** JustLend DAO
     * **Network:** TRON Mainnet
     * **Components:** `JST` (TRC20, `TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9`) → `WJST` (voting wrapper, deposit JST → receive WJST 1:1) → `GovernorBravoDelegator` (entrypoint, `TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD`) → `GovernorBravoDelegate` (impl, `TCiQTkxhzwSeXhRsNdHCvrxHRAvpjQn5Dt`) → `Timelock` (executor, `TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x`, **`delay() = 172,800 sec = 48 hours`** verified on-chain). **Always call the Delegator**, not the Delegate.
-    * **Voting power:** 1 JST = 1 Vote, snapshotted at proposal creation. Threshold: For votes > Against votes AND For votes > 600,000,000 (`quorumVotes()`). Proposal threshold: ≥ 200,000,000 JST (`proposalThreshold()`). 
+    * **Voting power:** 1 JST = 1 Vote. Threshold: For votes > Against votes AND For votes > 600,000,000 (`quorumVotes()`). Proposal threshold: ≥ 200,000,000 JST (`proposalThreshold()`). 
     * **Lifecycle states:** `Pending → Active → (Canceled | Defeated | Succeeded) → Queued → Executed | Expired`. 
     * **On-chain timing (verified):** `votingDelay() = 1 block ≈ 3 sec` (Pending → Active is effectively instant), `votingPeriod() = 86,400 blocks ≈ 3 days`, Timelock `delay() = 48 hours`. **Off-chain ~2-day forum review** is a community norm, **not enforced by the contracts** — any agent that programmatically calls `propose()` will see `Active` state on the very next block.
     * **ABI:** [`abis/governor-alpha.json`](../abis/governor-alpha.json) (Governor) + [`abis/wjst.json`](../abis/wjst.json) (voting wrapper) 
