@@ -68,6 +68,7 @@ nav:
         - Staked TRX: developers/staked_trx.md
         - Energy Rental: developers/energy_rental.md
         - Deployed Contracts: developers/deployed_contracts.md
+        - Resolving Contract Addresses: developers/resolving_contract_addresses.md
         - APIs: developers/apis.md
         - ABI Files: developers/abis/index.md
         - Common Pitfalls: developers/common_pitfalls.md
