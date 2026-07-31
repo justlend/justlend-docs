@@ -106,7 +106,6 @@ The protocol exposes 23 jToken markets in total (17 active + 6 paused legacy mar
 | jWIN       | WIN       | WINkLink |
 | jBTT       | BTT       | BitTorrent token |
 | jNFT       | NFT       | APENFT |
-| jHTX       | HTX       | HTX token |
 
 ## Prerequisites
 
