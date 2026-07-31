@@ -70,7 +70,6 @@ The `justlend-lending-v1` skill works with the built-in 9 query tools. The other
 | jETHB  | ETHB      | Ethereum bridged — dApp display name "ETHB" (formerly "ETH") |
 | jSUN   | SUN       | SUN Token |
 | jWIN   | WIN       | WINkLink |
-| jHTX   | HTX       | HTX token |
 
 Markets currently **closed** to new supply/borrow (legacy, queryable but do not direct new deposits to them): `jUSDCOLD`, `jUSDDOLD`, `jUSDJ`, `jWBTT`, `jSUNOLD`, `jBUSDOLD`.
 
