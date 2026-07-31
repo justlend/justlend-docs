@@ -100,7 +100,7 @@ One-click TRX liquid staking under Stake 2.0:
 - Deposit TRX into the sTRX contract → receive sTRX at the current exchange rate (1 sTRX ≥ 1 TRX, the ratio grows over time as rewards accrue).
 - sTRX is a standard TRC20 token and can be used in other TRON DeFi.
 - Yield sources: (1) Super Representative voting rewards, (2) Energy Rental revenue.
-- **Unstaking on JustLend has a 14-day unbonding period** before the underlying TRX can be claimed. Alternatively swap sTRX on a third-party DEX (SunSwap, HTX) for instant exit.
+- **Unstaking on JustLend has a 14-day unbonding period** before the underlying TRX can be claimed.
 
 ### 2.8 Energy Rental
 
