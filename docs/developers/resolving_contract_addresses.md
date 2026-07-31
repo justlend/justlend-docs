@@ -24,14 +24,14 @@ Every deployed-contract address uses the same three fields:
 
 ### jToken records
 
-For a network that exposes SBM markets, jTokens are keyed by symbol at `networks.<network>.jtokens.<symbol>`. A jToken record contains `symbol`, `status`, `underlying_symbol`, decimal metadata, and nested `delegator`, `delegate`, and `underlying` contract records. Native TRX has no TRC20 underlying address, so its `underlying` record contains a note instead.
+For a network that exposes SBM markets, jTokens are keyed by symbol at `networks.<network>.jtokens.<symbol>`. A jToken record contains `symbol`, `status`, `underlying_symbol`, decimal metadata, nested `delegator` and `underlying` records, and, when applicable, a `delegate` contract record. Native TRX has no TRC20 underlying address, so its `underlying` record contains a note instead.
 
 Filter `status === "active"` before directing new supply or borrow positions. Legacy markets remain queryable for unwinding existing positions but are closed to new supply and borrow.
 
 ### Example: resolve a jToken from its underlying symbol
 
 ```javascript
-import contracts from './contracts.json' assert { type: 'json' };
+import contracts from './contracts.json' with { type: 'json' };
 
 function jTokenForUnderlying(underlyingSymbol, network = 'mainnet') {
   const jtokens = contracts.networks?.[network]?.jtokens ?? {};
@@ -56,11 +56,11 @@ function jTokenForUnderlying(underlyingSymbol, network = 'mainnet') {
 console.log(jTokenForUnderlying('USDT'));
 ```
 
-The returned `underlyingAddress` is `null` for native TRX. Use the nested `delegator` address as the jToken address; the `delegate` address is the upgradeable implementation and is not the user-facing market address.
+The returned `underlyingAddress` is `null` for native TRX. Use the nested `delegator` address as the jToken address. When present, the `delegate` address is the upgradeable implementation and is not the user-facing market address.
 
 ## Live market data fallback
 
-Use the public market list (`GET https://openapi.just.network/lend/jtoken`, documented in [APIs §3.1](apis.md#31-get-lendjtoken-list-all-sbm-markets)) when you also need live rates, balances, prices, or collateral factors. Join the response with the registry by `jtokenAddress` or `underlyingAddress`; do not replace the registry's static contract addresses with an unverified API response.
+Use the public market list (`GET https://openapi.just.network/lend/jtoken`, documented in [APIs §3.1](apis.md#31-get-lendjtoken-list-all-sbm-markets)) when you also need live rates, balances, prices, or collateral factors. Join `response.data.tokenList[].address` with `networks.<network>.jtokens.*.delegator.address.base58`. For TRC20 markets, `underlyingAddress` can also be matched with `networks.<network>.jtokens.*.underlying.address.base58`; do not use this fallback for native TRX, whose API response uses the TRON zero address while the registry has no underlying address. Do not replace the registry's static contract addresses with an unverified API response.
 
 ## JustLend V2 (Moolah)
 
