@@ -6,31 +6,31 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="JustLend DAO interest-rate model reference — WhitePaperInterestRateModel (linear) and JumpRateModelV2 (kinked). One model contract instance per market, immutable; parameter changes deploy a new contract and call `_setInterestRateModel`.">
+        <meta name="description" content="How to look up JustLend jToken and deployed-contract addresses from the machine-readable registry on TRON mainnet and Nile testnet.">
       
       
         <meta name="author" content="JustLend DAO">
       
       
-        <link rel="canonical" href="https://docs.justlend.org/developers/supply_and_borrow_market/interest_rate_model/">
+        <link rel="canonical" href="https://docs.justlend.org/developers/resolving_contract_addresses/">
       
       
-        <link rel="prev" href="../sbmV2/">
+        <link rel="prev" href="../deployed_contracts/">
       
       
-        <link rel="next" href="../governance/">
+        <link rel="next" href="../apis/">
       
       
-      <link rel="icon" href="../../../assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.8">
     
     
       
-        <title>Interest Rate Model - JustLend DAO Documentation</title>
+        <title>Resolving Contract Addresses - JustLend DAO Documentation</title>
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.8608ea7d.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.8608ea7d.min.css">
       
       
 
@@ -49,11 +49,11 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
     
-      <link rel="stylesheet" href="../../../stylesheets/hide_elements.css">
+      <link rel="stylesheet" href="../../stylesheets/hide_elements.css">
     
-    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -125,9 +125,9 @@
         },
         {
           "@type": "TechArticle",
-          "@id": "https://docs.justlend.org/developers/supply_and_borrow_market/interest_rate_model/#article",
-          "headline": "Interest Rate Model",
-          "url": "https://docs.justlend.org/developers/supply_and_borrow_market/interest_rate_model/",
+          "@id": "https://docs.justlend.org/developers/resolving_contract_addresses/#article",
+          "headline": "Resolving Contract Addresses",
+          "url": "https://docs.justlend.org/developers/resolving_contract_addresses/",
           "inLanguage": "en",
           "isPartOf": {
             "@type": "WebSite",
@@ -137,9 +137,9 @@
             "publisher": { "@id": "https://justlend.org/#org" }
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
-          "description": "JustLend DAO interest-rate model reference \u2014 WhitePaperInterestRateModel (linear) and JumpRateModelV2 (kinked). One model contract instance per market, immutable; parameter changes deploy a new contract and call `_setInterestRateModel`.",
-          "dateModified": "2026-06-23",
-          "datePublished": "2026-06-23"
+          "description": "How to look up JustLend jToken and deployed-contract addresses from the machine-readable registry on TRON mainnet and Nile testnet.",
+          "dateModified": "2026-07-31",
+          "datePublished": "2026-07-31"
         }
       ]
     }
@@ -157,7 +157,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#interest-rate-model" class="md-skip">
+        <a href="#resolving-contract-addresses" class="md-skip">
           Skip to content
         </a>
       
@@ -173,7 +173,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../../.." title="JustLend DAO Documentation" class="md-header__button md-logo" aria-label="JustLend DAO Documentation" data-md-component="logo">
+    <a href="../.." title="JustLend DAO Documentation" class="md-header__button md-logo" aria-label="JustLend DAO Documentation" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -193,7 +193,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Interest Rate Model
+              Resolving Contract Addresses
             
           </span>
         </div>
@@ -272,7 +272,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../.." title="JustLend DAO Documentation" class="md-nav__button md-logo" aria-label="JustLend DAO Documentation" data-md-component="logo">
+    <a href="../.." title="JustLend DAO Documentation" class="md-nav__button md-logo" aria-label="JustLend DAO Documentation" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -331,7 +331,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../getting_started/overview/" class="md-nav__link">
+      <a href="../../getting_started/overview/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -391,7 +391,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../getting_started/concepts/supply/" class="md-nav__link">
+      <a href="../../getting_started/concepts/supply/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -413,7 +413,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../getting_started/concepts/borrow/" class="md-nav__link">
+      <a href="../../getting_started/concepts/borrow/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -435,7 +435,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../getting_started/concepts/withdraw/" class="md-nav__link">
+      <a href="../../getting_started/concepts/withdraw/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -457,7 +457,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../getting_started/concepts/repay/" class="md-nav__link">
+      <a href="../../getting_started/concepts/repay/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -479,7 +479,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../getting_started/concepts/liquidations/" class="md-nav__link">
+      <a href="../../getting_started/concepts/liquidations/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -501,7 +501,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../getting_started/concepts/risks/" class="md-nav__link">
+      <a href="../../getting_started/concepts/risks/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -523,7 +523,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../getting_started/concepts/staked_trx/" class="md-nav__link">
+      <a href="../../getting_started/concepts/staked_trx/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -545,7 +545,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../getting_started/concepts/energy_rental/" class="md-nav__link">
+      <a href="../../getting_started/concepts/energy_rental/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -567,7 +567,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../getting_started/concepts/SBMV2/" class="md-nav__link">
+      <a href="../../getting_started/concepts/SBMV2/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -657,7 +657,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../getting_started/faqs/wallet_connection_questions/" class="md-nav__link">
+      <a href="../../getting_started/faqs/wallet_connection_questions/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -679,7 +679,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../getting_started/faqs/spending_cap_issue/" class="md-nav__link">
+      <a href="../../getting_started/faqs/spending_cap_issue/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -779,7 +779,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../governance/jips/" class="md-nav__link">
+      <a href="../../governance/jips/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -801,7 +801,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../governance/tokenomics/" class="md-nav__link">
+      <a href="../../governance/tokenomics/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -895,7 +895,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../contracts_overview/" class="md-nav__link">
+      <a href="../contracts_overview/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -917,7 +917,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../justlend_v2/" class="md-nav__link">
+      <a href="../justlend_v2/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -936,8 +936,6 @@
                 
   
   
-    
-  
   
   
     
@@ -946,11 +944,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
         
           
           <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
@@ -965,7 +963,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3_3">
             <span class="md-nav__icon md-icon"></span>
             Supply and Borrow Market
@@ -979,7 +977,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../sbm/" class="md-nav__link">
+      <a href="../supply_and_borrow_market/sbm/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1001,11 +999,173 @@
   
   
     <li class="md-nav__item">
-      <a href="../sbmV2/" class="md-nav__link">
+      <a href="../supply_and_borrow_market/sbmV2/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     SBM V2
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../supply_and_borrow_market/interest_rate_model/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Interest Rate Model
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../supply_and_borrow_market/governance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Governance
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../supply_and_borrow_market/price_oracle/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Price Oracle
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../supply_and_borrow_market/comptroller/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Comptroller
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../staked_trx/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Staked TRX
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../energy_rental/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Energy Rental
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployed_contracts/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Deployed Contracts
     
   </span>
   
@@ -1036,7 +1196,7 @@
           
   
   <span class="md-ellipsis">
-    Interest Rate Model
+    Resolving Contract Addresses
     
   </span>
   
@@ -1048,7 +1208,7 @@
         
   
   <span class="md-ellipsis">
-    Interest Rate Model
+    Resolving Contract Addresses
     
   </span>
   
@@ -1075,13 +1235,13 @@
 
 
 <li class="md-nav__item has-children">
-  <a href="#whitepaper-rate-model" class="md-nav__link" aria-expanded="true">
+  <a href="#machine-readable-registry" class="md-nav__link" aria-expanded="true">
     <span class="md-ellipsis">
-      Whitepaper Rate Model
+      Machine-readable registry
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Whitepaper Rate Model">
+    <nav class="md-nav" aria-label="Machine-readable registry">
       <ul class="md-nav__list">
         
           
@@ -1089,9 +1249,9 @@
 
 
 <li class="md-nav__item ">
-  <a href="#borrow-rate" class="md-nav__link">
+  <a href="#address-formats" class="md-nav__link">
     <span class="md-ellipsis">
-      Borrow Rate:
+      Address formats
     </span>
   </a>
   
@@ -1102,9 +1262,22 @@
 
 
 <li class="md-nav__item ">
-  <a href="#supply-rate" class="md-nav__link">
+  <a href="#jtoken-records" class="md-nav__link">
     <span class="md-ellipsis">
-      Supply Rate:
+      jToken records
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#example-resolve-a-jtoken-from-its-underlying-symbol" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example: resolve a jToken from its underlying symbol
     </span>
   </a>
   
@@ -1119,44 +1292,38 @@
 
 
 
-<li class="md-nav__item has-children">
-  <a href="#jump-rate-model" class="md-nav__link" aria-expanded="true">
-    <span class="md-ellipsis">
-      Jump Rate Model
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Jump Rate Model">
-      <ul class="md-nav__list">
-        
-          
-
-
-
 <li class="md-nav__item ">
-  <a href="#borrow-rate_1" class="md-nav__link">
+  <a href="#live-market-data-fallback" class="md-nav__link">
     <span class="md-ellipsis">
-      Borrow Rate:
+      Live market data fallback
     </span>
   </a>
   
 </li>
+      
         
-          
 
 
 
 <li class="md-nav__item ">
-  <a href="#supply-rate_1" class="md-nav__link">
+  <a href="#justlend-v2-moolah" class="md-nav__link">
     <span class="md-ellipsis">
-      Supply Rate:
+      JustLend V2 (Moolah)
     </span>
   </a>
   
 </li>
+      
         
-      </ul>
-    </nav>
+
+
+
+<li class="md-nav__item ">
+  <a href="#related-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      Related pages
+    </span>
+  </a>
   
 </li>
       
@@ -1176,169 +1343,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../governance/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Governance
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../price_oracle/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Price Oracle
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../comptroller/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Comptroller
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../staked_trx/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Staked TRX
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../energy_rental/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Energy Rental
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../deployed_contracts/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Deployed Contracts
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../resolving_contract_addresses/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Resolving Contract Addresses
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../apis/" class="md-nav__link">
+      <a href="../apis/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1360,7 +1365,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../abis/" class="md-nav__link">
+      <a href="../abis/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1382,7 +1387,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../common_pitfalls/" class="md-nav__link">
+      <a href="../common_pitfalls/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1452,7 +1457,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../ai_support/" class="md-nav__link">
+      <a href="../../ai_support/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1474,7 +1479,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../ai_support/ai_llms/" class="md-nav__link">
+      <a href="../../ai_support/ai_llms/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1496,7 +1501,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../ai_support/mcp_server/" class="md-nav__link">
+      <a href="../../ai_support/mcp_server/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1518,7 +1523,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../ai_support/justlend_skills/" class="md-nav__link">
+      <a href="../../ai_support/justlend_skills/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1578,7 +1583,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../documents/aidocs/" class="md-nav__link">
+      <a href="../../documents/aidocs/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1600,7 +1605,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../documents/aidocs/source_of_truth/" class="md-nav__link">
+      <a href="../../documents/aidocs/source_of_truth/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1622,7 +1627,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../documents/aidocs/quickstart/" class="md-nav__link">
+      <a href="../../documents/aidocs/quickstart/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1644,7 +1649,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../documents/aidocs/market_data/" class="md-nav__link">
+      <a href="../../documents/aidocs/market_data/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1666,7 +1671,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../documents/aidocs/account_position/" class="md-nav__link">
+      <a href="../../documents/aidocs/account_position/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1688,7 +1693,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../documents/aidocs/supply_borrow_repay_withdraw/" class="md-nav__link">
+      <a href="../../documents/aidocs/supply_borrow_repay_withdraw/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1710,7 +1715,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../documents/aidocs/strx_staking/" class="md-nav__link">
+      <a href="../../documents/aidocs/strx_staking/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1732,7 +1737,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../documents/aidocs/energy_rental/" class="md-nav__link">
+      <a href="../../documents/aidocs/energy_rental/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1754,7 +1759,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../documents/aidocs/mcp_safety/" class="md-nav__link">
+      <a href="../../documents/aidocs/mcp_safety/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1776,7 +1781,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../documents/aidocs/common_questions/" class="md-nav__link">
+      <a href="../../documents/aidocs/common_questions/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1798,7 +1803,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../documents/aidocs/glossary/" class="md-nav__link">
+      <a href="../../documents/aidocs/glossary/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1820,7 +1825,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../documents/aidocs/mcp_tools/" class="md-nav__link">
+      <a href="../../documents/aidocs/mcp_tools/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1936,7 +1941,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../resources/community/links/" class="md-nav__link">
+      <a href="../../resources/community/links/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1958,7 +1963,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../resources/community/wallet_integration_cooperation/" class="md-nav__link">
+      <a href="../../resources/community/wallet_integration_cooperation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1988,7 +1993,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../resources/risk_warning/" class="md-nav__link">
+      <a href="../../resources/risk_warning/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2010,7 +2015,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../resources/glossary/" class="md-nav__link">
+      <a href="../../resources/glossary/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2228,93 +2233,75 @@
 
 
 
-<h1 id="interest-rate-model">Interest Rate Model<a class="headerlink" href="#interest-rate-model" title="Permanent link">&para;</a></h1>
+<h1 id="resolving-contract-addresses">Resolving Contract Addresses<a class="headerlink" href="#resolving-contract-addresses" title="Permanent link">&para;</a></h1>
 <div class="admonition info">
 <p class="admonition-title">About this page</p>
+<p><strong>Protocol:</strong> JustLend DAO · <strong>Network:</strong> TRON (Mainnet + Nile) · <strong>Scope:</strong> map human-facing symbols (<code>jUSDT</code>, <code>USDT</code>, and other contract labels) to on-chain Base58 and hexadecimal addresses without hard-coding them in an integration.</p>
+</div>
+<h2 id="machine-readable-registry">Machine-readable registry<a class="headerlink" href="#machine-readable-registry" title="Permanent link">&para;</a></h2>
+<p><a href="../contracts.json"><code>contracts.json</code></a> is the published machine-readable address registry, generated from the MCP server's <a href="https://github.com/justlend/mcp-server-justlend/blob/main/src/core/chains.ts"><code>src/core/chains.ts</code></a>. Before consuming it, check <code>_meta.last_generated</code> and <code>_meta.schema_version</code> for freshness and schema compatibility. The root object contains a <code>networks</code> map, and each network contains optional contract categories such as <code>jtokens</code>, <code>comptroller</code>, <code>governance</code>, <code>strx</code>, and <code>interest_rate_models</code>.</p>
+<h3 id="address-formats">Address formats<a class="headerlink" href="#address-formats" title="Permanent link">&para;</a></h3>
+<p>Every deployed-contract address uses the same three fields:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>address.base58</code></td>
+<td>TRON Base58Check (<code>T…</code>) for wallets, Tronscan, and TronWeb</td>
+</tr>
+<tr>
+<td><code>address.hex_evm</code></td>
+<td>EVM-style <code>0x…</code> address for ABI and cross-chain tooling</td>
+</tr>
+<tr>
+<td><code>address.hex_tron</code></td>
+<td>TRON-internal <code>0x41…</code> address for low-level TronGrid/TronWeb calls</td>
+</tr>
+</tbody>
+</table>
+<h3 id="jtoken-records">jToken records<a class="headerlink" href="#jtoken-records" title="Permanent link">&para;</a></h3>
+<p>For a network that exposes SBM markets, jTokens are keyed by symbol at <code>networks.&lt;network&gt;.jtokens.&lt;symbol&gt;</code>. A jToken record contains <code>symbol</code>, <code>status</code>, <code>underlying_symbol</code>, decimal metadata, nested <code>delegator</code> and <code>underlying</code> records, and, when applicable, a <code>delegate</code> contract record. Native TRX has no TRC20 underlying address, so its <code>underlying</code> record contains a note instead.</p>
+<p>Filter <code>status === "active"</code> before directing new supply or borrow positions. Legacy markets remain queryable for unwinding existing positions but are closed to new supply and borrow.</p>
+<h3 id="example-resolve-a-jtoken-from-its-underlying-symbol">Example: resolve a jToken from its underlying symbol<a class="headerlink" href="#example-resolve-a-jtoken-from-its-underlying-symbol" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nx">contracts</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./contracts.json&#39;</span><span class="w"> </span><span class="kd">with</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;json&#39;</span><span class="w"> </span><span class="p">};</span>
+
+<span class="kd">function</span><span class="w"> </span><span class="nx">jTokenForUnderlying</span><span class="p">(</span><span class="nx">underlyingSymbol</span><span class="p">,</span><span class="w"> </span><span class="nx">network</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;mainnet&#39;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">jtokens</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">contracts</span><span class="p">.</span><span class="nx">networks</span><span class="o">?</span><span class="p">.[</span><span class="nx">network</span><span class="p">]</span><span class="o">?</span><span class="p">.</span><span class="nx">jtokens</span><span class="w"> </span><span class="o">??</span><span class="w"> </span><span class="p">{};</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">jtoken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Object</span><span class="p">.</span><span class="nx">values</span><span class="p">(</span><span class="nx">jtokens</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span>
+<span class="w">    </span><span class="p">(</span><span class="nx">entry</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span>
+<span class="w">      </span><span class="nx">entry</span><span class="p">.</span><span class="nx">underlying_symbol</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="nx">underlyingSymbol</span><span class="w"> </span><span class="o">&amp;&amp;</span>
+<span class="w">      </span><span class="nx">entry</span><span class="p">.</span><span class="nx">status</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s1">&#39;active&#39;</span>
+<span class="w">  </span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">jtoken</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="sb">`No active jToken for </span><span class="si">${</span><span class="nx">underlyingSymbol</span><span class="si">}</span><span class="sb"> on </span><span class="si">${</span><span class="nx">network</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">symbol</span><span class="o">:</span><span class="w"> </span><span class="nx">jtoken</span><span class="p">.</span><span class="nx">symbol</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">jTokenAddress</span><span class="o">:</span><span class="w"> </span><span class="nx">jtoken</span><span class="p">.</span><span class="nx">delegator</span><span class="p">.</span><span class="nx">address</span><span class="p">.</span><span class="nx">base58</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">jTokenHex</span><span class="o">:</span><span class="w"> </span><span class="nx">jtoken</span><span class="p">.</span><span class="nx">delegator</span><span class="p">.</span><span class="nx">address</span><span class="p">.</span><span class="nx">hex_tron</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">underlyingAddress</span><span class="o">:</span><span class="w"> </span><span class="nx">jtoken</span><span class="p">.</span><span class="nx">underlying</span><span class="o">?</span><span class="p">.</span><span class="nx">address</span><span class="o">?</span><span class="p">.</span><span class="nx">base58</span><span class="w"> </span><span class="o">??</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">  </span><span class="p">};</span>
+<span class="p">}</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">jTokenForUnderlying</span><span class="p">(</span><span class="s1">&#39;USDT&#39;</span><span class="p">));</span>
+</code></pre></div>
+<p>The returned <code>underlyingAddress</code> is <code>null</code> for native TRX. Use the nested <code>delegator</code> address as the jToken address. When present, the <code>delegate</code> address is the upgradeable implementation and is not the user-facing market address.</p>
+<h2 id="live-market-data-fallback">Live market data fallback<a class="headerlink" href="#live-market-data-fallback" title="Permanent link">&para;</a></h2>
+<p>Use the public market list (<code>GET https://openapi.just.network/lend/jtoken</code>, documented in <a href="../apis/#31-get-lendjtoken-list-all-sbm-markets">APIs §3.1</a>) when you also need live rates, balances, prices, or collateral factors. Join <code>response.data.tokenList[].address</code> with <code>networks.&lt;network&gt;.jtokens.*.delegator.address.base58</code>. For TRC20 markets, <code>underlyingAddress</code> can also be matched with <code>networks.&lt;network&gt;.jtokens.*.underlying.address.base58</code>; do not use this fallback for native TRX, whose API response uses the TRON zero address while the registry has no underlying address. Do not replace the registry's static contract addresses with an unverified API response.</p>
+<h2 id="justlend-v2-moolah">JustLend V2 (Moolah)<a class="headerlink" href="#justlend-v2-moolah" title="Permanent link">&para;</a></h2>
+<p>The current <code>contracts.json</code> registry is for deployed protocol contracts and SBM jTokens; it does not enumerate the live Moolah vault and isolated-market catalog. Resolve those identifiers through the documented V2 read endpoints in <a href="../apis/#34-justlend-v2-moolah-read-endpoints">APIs §3.4</a>, then use the returned <code>vaultAddress</code> or market <code>id</code> when constructing requests.</p>
+<h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Protocol:</strong> JustLend DAO</li>
-<li><strong>Network:</strong> TRON Mainnet</li>
-<li><strong>Models in use:</strong> <code>WhitePaperInterestRateModel</code> (linear: <code>borrowRate(u) = a × u + b</code>) and <code>JumpRateModelV2</code> (kinked: linear below <code>kink</code>, steeper above).</li>
-<li><strong>Immutability:</strong> each market's rate model is its own deployed contract; parameter changes require deploying a fresh contract and routing <code>_setInterestRateModel(newModel)</code> through Governance. Past instances remain on chain but unused.</li>
-<li><strong>Units:</strong> <code>multiplierPerBlock</code>, <code>jumpMultiplierPerBlock</code>, <code>baseRatePerBlock</code>, <code>kink</code> all scaled by <code>1e18</code>. Rates are <strong>per-block</strong> (≈ 3 s/block on TRON). For APY conversion guidance see <code>llms-full.txt §7.4</code>.</li>
-<li><strong>Addresses:</strong> one row per market in <a href="../../deployed_contracts/#interest-rate-models">Deployed Contracts → Interest Rate Models</a>.</li>
-<li><strong>ABI:</strong> <a href="../../abis/interest-rate-model.json"><code>abis/interest-rate-model.json</code></a>.</li>
-</ul>
-</div>
-<p>JustLend DAO's interest rate model aims to maximize the utilization of assets while effectively managing liquidity risks. Therefore, the parameter utilization rate U of each market is particularly important, as it reflects the true situation of the available assets in each market. As the utilization rate approaches 100%, assets become scarce, making borrowing impossible.  Meanwhile, suppliers may be unable to withdraw their liquidity due to the lack of available assets. The formula of the utilization U is defined as:</p>
-<div style="text-align: center; font-size: 20px;">
-    U = Total Borrows / Total Supply
-</div>
-
-<p>To calibrate the interest rate model around an optimal utilization rate which reflects the real conditions, JustLend DAO provides variable interest rates for markets through two distinct interest models:</p>
-<ul>
-<li><code>WhitePaperInterestRateModel:</code> a simple interest rate model where the borrowing rate is directly tied to the utilization rate;</li>
-<li><code>JumpRateModelV2::</code> operates differently, as the interest rate jumps to a higher tier when the utilization rate surpasses a certain threshold.</li>
-</ul>
-<h2 id="whitepaper-rate-model"><strong>Whitepaper Rate Model</strong><a class="headerlink" href="#whitepaper-rate-model" title="Permanent link">&para;</a></h2>
-<p>The Whitepaper Rate Model is straightforward, as the borrowing rate is directly proportional to the utilization. The interest rate is defined as below.</p>
-<h3 id="borrow-rate"><strong>Borrow Rate:</strong><a class="headerlink" href="#borrow-rate" title="Permanent link">&para;</a></h3>
-<div style="text-align: center; font-size: 20px;">
-    borrow_rate(u) = a ∗ u + b
-</div>
-
-<p>where the borrow utilization rate <code>u</code> is defined as:</p>
-<div style="text-align: center; font-size: 20px;">
-    u = borrows / (cash + borrows − reserves)
-</div>
-
-<ul>
-<li><code>borrows:</code> the total amount borrowed in the market, denominated in the underlying asset, excluding bad debts;</li>
-<li><code>cash:</code> the total amount of the underlying asset held by the market at a specific time;</li>
-<li><code>reserves:</code> the amount of the underlying asset held by the market that is not accessible to borrowers or suppliers, as it is reserved for purposes outlined in the protocol's tokenomics.</li>
-</ul>
-<h3 id="supply-rate"><strong>Supply Rate:</strong><a class="headerlink" href="#supply-rate" title="Permanent link">&para;</a></h3>
-<div style="text-align: center; font-size: 20px;">
-    supply_rate(u) = borrow_rate(u) ∗ u ∗ (1 − reserve_factor)
-</div>
-
-<h4 id="model-parameters"><strong>Model Parameters</strong><a class="headerlink" href="#model-parameters" title="Permanent link">&para;</a></h4>
-<ul>
-<li><code>a:</code> variable interest rate slope;</li>
-<li><code>b:</code> base rate per block (baseRatePerYear / blocksPerYear);</li>
-<li><code>reserve_factor:</code> portion of interest income extracted from the protocol.</li>
-</ul>
-<h2 id="jump-rate-model"><strong>Jump Rate Model</strong><a class="headerlink" href="#jump-rate-model" title="Permanent link">&para;</a></h2>
-<p>The Jump Rate Model is quite different with the Whitepaper Rate Model, where the interest rate jumps to a higher tier when the utilization rate exceeds U_optional
-The interest rate is defined as below.</p>
-<h3 id="borrow-rate_1"><strong>Borrow Rate:</strong><a class="headerlink" href="#borrow-rate_1" title="Permanent link">&para;</a></h3>
-<p><strong>if u &lt; kink:</strong></p>
-<div style="text-align: center; font-size: 20px;">
-    supply_rate(u) = a_1 * u + b
-</div>
-
-<p><strong>if u &gt;= kink:</strong></p>
-<div style="text-align: center; font-size: 20px;">
-    supply_rate(u) = a_1 * kink + a_2 * (u - kink) + b
-</div>
-
-<p>where the borrow utilization rate <code>u</code> is defined as:</p>
-<div style="text-align: center; font-size: 20px;">
-    u = borrows / (cash + borrows − reserves)
-</div>
-
-<ul>
-<li><code>borrows:</code> the total amount borrowed in the market, denominated in the underlying asset, excluding bad debts.</li>
-<li><code>cash:</code> the total amount of the underlying asset held by the market at a specific time.</li>
-<li><code>reserves:</code> the amount of the underlying asset held by the market that is not accessible to borrowers or suppliers, as it is reserved for purposes outlined in the protocol's tokenomics.</li>
-</ul>
-<h3 id="supply-rate_1"><strong>Supply Rate:</strong><a class="headerlink" href="#supply-rate_1" title="Permanent link">&para;</a></h3>
-<div style="text-align: center; font-size: 20px;">
-    supply_rate(u) = borrow_rate(u) ∗ u ∗ (1 − reserve_factor)
-</div>
-
-<h4 id="model-parameters_1"><strong>Model Parameters</strong><a class="headerlink" href="#model-parameters_1" title="Permanent link">&para;</a></h4>
-<ul>
-<li><code>a_1:</code> variable interest rate slope1;</li>
-<li><code>a_2:</code> variable interest rate slope2;</li>
-<li><code>b:</code> base rate per block (baseRatePerYear / blocksPerYear);</li>
-<li><code>kink:</code> the utilization point at which the jump multiplier is applied, and the variable interest rate slope shifts from slope1 to slope2;</li>
-<li><code>reserve_factor:</code> portion of interest income extracted from the protocol.</li>
+<li><a href="../contracts_overview/">Contracts Overview</a></li>
+<li><a href="../common_pitfalls/">Common Pitfalls</a></li>
+<li><a href="../../ai_support/mcp_server/">MCP Server</a></li>
 </ul>
 
 
@@ -2336,7 +2323,7 @@ The interest rate is defined as below.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 23, 2026 09:36:01 UTC">2026-06-23</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="July 31, 2026 09:34:33 UTC">2026-07-31</span>
   </span>
 
     
@@ -2382,10 +2369,10 @@ The interest rate is defined as below.</p>
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.sections", "toc.integrate", "search.highlight", "search.suggest", "content.code.annotate", "content.tooltips"], "search": "../../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.sections", "toc.integrate", "search.highlight", "search.suggest", "content.code.annotate", "content.tooltips"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.c8b220af.min.js"></script>
+      <script src="../../assets/javascripts/bundle.c8b220af.min.js"></script>
       
     
   </body>
