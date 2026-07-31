@@ -10,7 +10,7 @@ description: How to look up JustLend jToken and deployed-contract addresses from
 
 ## Machine-readable registry
 
-[`contracts.json`](contracts.json) is the canonical address registry. The root object contains a `networks` map, and each network contains optional contract categories such as `jtokens`, `comptroller`, `governance`, `strx`, and `interest_rate_models`.
+[`contracts.json`](contracts.json) is the published machine-readable address registry, generated from the MCP server's [`src/core/chains.ts`](https://github.com/justlend/mcp-server-justlend/blob/main/src/core/chains.ts). Before consuming it, check `_meta.last_generated` and `_meta.schema_version` for freshness and schema compatibility. The root object contains a `networks` map, and each network contains optional contract categories such as `jtokens`, `comptroller`, `governance`, `strx`, and `interest_rate_models`.
 
 ### Address formats
 
