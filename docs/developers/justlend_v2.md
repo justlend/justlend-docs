@@ -94,8 +94,4 @@ Contract ABIs (`MOOLAH_CORE_ABI`, `TRX_PROVIDER_ABI`, `MOOLAH_VAULT_ABI`, `PUBLI
 
 ## REST API
 
-The public [`openapi.just.network`](apis.md) gateway currently serves **V1 only**; V2 protocol data
-is **not yet published** there. For read-only V2 data today, use the
-[MCP server](../ai_support/mcp_server.md) `get_moolah_*` tools or read the contracts on-chain. The
-V2 REST endpoints will be added to the [OpenAPI spec](apis/justlend_apis.yaml) once they are live on
-the public gateway and their paths are verified.
+The public [`openapi.just.network`](apis.md) gateway currently serves both V1 and V2 protocol data. You can access data directly via the REST endpoints, as well as through the MCP server tools or by reading the contracts on-chain.
