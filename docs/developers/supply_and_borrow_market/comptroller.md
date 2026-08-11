@@ -8,7 +8,7 @@ description: JustLend DAO Comptroller contract reference — enterMarkets, exitM
 !!! info "About this page"
     * **Protocol:** JustLend DAO
     * **Network:** TRON Mainnet
-    * **Pattern:** `Unitroller` (proxy, `TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7`) → `Comptroller` (impl, `TB23wYojvAsSx6gR8ebHiBqwSeABiBMPAr`). Implementation pointer is rotated via Governance proposals (`_setPendingImplementation` + `_acceptImplementation`)
+    * **Pattern:** `Unitroller` (proxy, `TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7`) → `Comptroller` (impl, `TETm1bMHUm9135d5NmUgfkvqZQ4bk6DgWs`). Implementation pointer is rotated via Governance proposals (`_setPendingImplementation` + `_acceptImplementation`)
     * **Always call `Unitroller`** — calling the impl address directly does not route through governance state.
     * **Units:** `closeFactorMantissa`, `liquidationIncentiveMantissa`, `collateralFactorMantissa` are scaled by `1e18` ([mantissa](../../resources/glossary.md#mantissa); so `0.5e18` = 50%). Verified on-chain at the snapshot date: `closeFactorMantissa = 0.5e18` (50%), `liquidationIncentiveMantissa = 1.08e18` (8% liquidator bonus). `getAccountLiquidity` returns `(error, liquidity, shortfall)` where at most one of `liquidity` and `shortfall` is non-zero.
     * **ABI:** [`abis/comptroller.json`](../abis/comptroller.json).
