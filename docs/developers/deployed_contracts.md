@@ -52,7 +52,7 @@ TRON addresses appear in three equivalent formats. Human-facing tables on this p
 | Component | Contract | Address | Tronscan |
 |-----------|----------|---------|----------|
 | Comptroller (proxy) | `Unitroller` | `TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7` | [Contract](https://tronscan.org/#/contract/TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7) |
-| Comptroller (impl) | `Comptroller` | `TB23wYojvAsSx6gR8ebHiBqwSeABiBMPAr` | [Contract](https://tronscan.org/#/contract/TB23wYojvAsSx6gR8ebHiBqwSeABiBMPAr) |
+| Comptroller (impl) | `Comptroller` | `TETm1bMHUm9135d5NmUgfkvqZQ4bk6DgWs` | [Contract](https://tronscan.org/contract/TETm1bMHUm9135d5NmUgfkvqZQ4bk6DgWs) |
 
 The entrypoint that users and contracts call is **Unitroller** (the proxy). The implementation address rotates with upgrades.
 
@@ -169,7 +169,7 @@ See [Governance](supply_and_borrow_market/governance.md) for the proposal lifecy
 | Component | Contract | Address | Tronscan |
 |-----------|----------|---------|----------|
 | Comptroller Proxy | `Unitroller` | `TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7` | [Contract](https://tronscan.org/contract/TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7/code) |
-| Comptroller (impl) | `Comptroller` | `TB23wYojvAsSx6gR8ebHiBqwSeABiBMPAr` | [Contract](https://tronscan.org/contract/TB23wYojvAsSx6gR8ebHiBqwSeABiBMPAr/code) |
+| Comptroller (impl) | `Comptroller` | `TETm1bMHUm9135d5NmUgfkvqZQ4bk6DgWs` | [Contract](https://tronscan.org/contract/TETm1bMHUm9135d5NmUgfkvqZQ4bk6DgWs) |
 
 See [Comptroller](supply_and_borrow_market/comptroller.md) for Comptroller details.
 
