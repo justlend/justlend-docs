@@ -143,7 +143,7 @@ function deposit(uint256 amount) public
 
 
 ### **Cast Vote**
-Calling this method casts a vote on a proposal. The voting weight will be calculated at the time the proposal's state becomes active.
+Calling this method casts a vote on a proposal. Voting weight is determined based on the voter’s available WJST balance when the vote is cast, and the corresponding WJST is locked for the proposal.
 ``` solidity
 function castVote(uint proposalId, uint votes, bool support) public
 ```
