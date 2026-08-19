@@ -9,6 +9,8 @@ description: "GitHub-distributed JustLend Skills — 9 read-only MCP tools and 5
 
 JustLend Skills is a GitHub-distributed AI Agent skills project for the **JustLend DAO** protocol on TRON. Its local package identifier is `@justlend/justlend-skills`. It provides structured skill instructions and a lightweight **read-only** [MCP server](https://modelcontextprotocol.io/) (9 query tools) that enables AI agents (Claude Code, Claude Desktop, Cursor, Codex, etc.) to query market data, monitor account positions, and analyze DeFi lending information.
 
+**Current version:** `1.1.1` · bundled MCP output schema: `1.0.0`
+
 !!! important "Install from GitHub, not the npm registry"
     `@justlend/justlend-skills` is **not currently published to npm**. The scoped name identifies the cloned project for local tooling; it is not an installable registry package. Clone the [GitHub repository](https://github.com/justlend/justlend-skills) and run `bash install.sh`. Do **not** run `npm install @justlend/justlend-skills`.
 
@@ -49,10 +51,10 @@ The project includes 5 structured skill modules in the `/skills` directory that 
 
 The `justlend-lending-v1` skill works with the built-in 9 query tools. The other four skills provide instructional guidance and require the [full MCP server](mcp_server.md) for tool execution (and write operations).
 
-## Featured Markets (CLI Quick Reference)
+## Bundled Market Shortcuts
 
 !!! warning "Not an exhaustive market list"
-    The table below lists the **9 markets the bundled CLI examples target by symbol shortcut**. It is **not** the protocol's full market roster. The JustLend DAO protocol currently exposes **18 active + 6 legacy = 24 markets total** (see the single source of truth below). All 24 are queryable through the Skills MCP server via `get_supported_markets` / `get_all_markets` — the CLI shortcuts are just a convenience subset for human terminal use.
+    The table below lists the **8 static shortcuts** used by the bundled `get_token_balance` and `check_allowance` implementations. It is **not** the protocol's full market roster. The JustLend DAO protocol exposes **18 active + 6 legacy = 24 markets total**, including active `jU`. `get_all_markets` queries the visible live inventory; `get_supported_markets` returns only these 8 shortcuts. Use the full MCP server or `contracts.json` for the complete static address catalog.
 
 **Single source of truth for the live market list (in order of preference):**
 
@@ -60,17 +62,16 @@ The `justlend-lending-v1` skill works with the built-in 9 query tools. The other
 2. **Machine-readable address book** — [`/developers/contracts.json`](../developers/contracts.json) (regenerated from the MCP server's `chains.ts`).
 3. **Rendered table** — [APIs §2 — jToken Address Reference](../developers/apis.md#2-jtoken-address-reference) (all 24 markets, legacy rows tagged).
 
-| jToken | Underlying | Description |
-|--------|-----------|-------------|
-| jTRX   | TRX       | Native TRON token |
-| jUSDT  | USDT      | Tether USD |
-| jUSDD  | USDD      | Decentralized USD |
-| jBTC   | BTC       | Bitcoin (TRC20) |
-| jETH   | ETH       | Ethereum (TRC20) — dApp display name "ETH" (formerly "ETHOLD") |
-| jETHB  | ETHB      | Ethereum bridged — dApp display name "ETHB" (formerly "ETH") |
-| jSUN   | SUN       | SUN Token |
-| jWIN   | WIN       | WINkLink |
-| jHTX   | HTX       | HTX token |
+| Shortcut | jToken | Underlying | Status / purpose |
+|----------|--------|------------|------------------|
+| `TRX` | jTRX | TRX | Active; native balance, no allowance |
+| `USDT` | jUSDT | USDT | Active shortcut |
+| `USDD` | jUSDD | USDD | Active shortcut |
+| `USDC` | jUSDCOLD | USDCOLD | Legacy compatibility shortcut |
+| `BTC` | jBTC | BTC | Active shortcut |
+| `ETH` | jETH | ETH | Active shortcut |
+| `SUN` | jSUN | SUN | Active shortcut |
+| `WIN` | jWIN | WIN | Active shortcut |
 
 Markets currently **closed** to new supply/borrow (legacy, queryable but do not direct new deposits to them): `jUSDCOLD`, `jUSDDOLD`, `jUSDJ`, `jWBTT`, `jSUNOLD`, `jBUSDOLD`.
 
@@ -91,6 +92,8 @@ Or install the cloned repository's dependencies manually:
 
 ```bash
 npm install
+npm test               # offline MCP schema/version/error-contract checks
+npm run test:smoke     # live 24-market inventory drift check
 ```
 
 The `npm install` command above must be run **inside the cloned repository**; it does not install `@justlend/justlend-skills` from npm. The `install.sh` script installs those dependencies, creates `.env`, and prompts for your TronGrid API key.
@@ -210,7 +213,7 @@ For quick checks directly from the terminal:
 ```bash
 node scripts/justlend_api.mjs markets              # List all markets with APY
 node scripts/justlend_api.mjs dashboard            # Protocol dashboard (TVL, users)
-node scripts/justlend_api.mjs supported-markets    # List supported markets & addresses
+node scripts/justlend_api.mjs supported-markets    # List 8 bundled shortcuts & addresses
 node scripts/justlend_api.mjs balance <addr>       # Check TRX balance
 node scripts/justlend_api.mjs balance <addr> USDT  # Check token balance
 node scripts/justlend_api.mjs account <addr>       # Account health status
@@ -266,13 +269,23 @@ Participate in JustLend DAO governance proposals. Deposit JST for voting power (
 
 ### Tools (9 total, all read-only)
 
-Every tool returns its result as JSON text (`content[0].text`). Input types and required flags are taken from each tool's `inputSchema`; all inputs are strings.
+Every tool declares both `inputSchema` and `outputSchema`. For backward compatibility, successful calls keep the raw result as JSON text in `content[0].text`; schema-aware clients should consume `structuredContent`:
+
+```json
+{
+  "schemaVersion": "1.0.0",
+  "tool": "get_all_markets",
+  "result": []
+}
+```
+
+Pin schema major `1`. Input types and required flags come from each tool's `inputSchema`; all current arguments are strings and unknown properties are rejected.
 
 | Tool | Input (· required) | Output (key fields) |
 |------|--------------------|---------------------|
 | `get_all_markets` | _(none)_ | Array of markets — `symbol`, `supplyAPY`, `borrowAPY`, `miningAPY`, `tvl`, `totalSupply`, `totalBorrow` |
 | `get_dashboard` | _(none)_ | Protocol overview — `totalSupplyUSD`, `totalBorrowUSD`, `tvlUSD`, `userCount` |
-| `get_supported_markets` | _(none)_ | Array — `symbol`, `jtokenAddress`, `underlyingAddress`, `decimals`, `isNative` |
+| `get_supported_markets` | _(none)_ | 8-shortcut array — `symbol`, `jToken`, `underlying`, `decimals`, `isNative` |
 | `get_jtoken_details` | `jtokenAddr` · **required** | jToken detail — interest-rate-model params, `reserves`, `utilization`, mining rewards |
 | `get_account_summary` | `address` · **required** | `healthFactor`, `liquidityUSD`, `shortfallUSD`, `totalSupplyUSD`, `totalBorrowUSD`, `positions[]` |
 | `get_account_data_from_api` | `address` · **required** | Comprehensive account data — `positions[]`, accrued `rewards`, per-market balances |
@@ -280,26 +293,34 @@ Every tool returns its result as JSON text (`content[0].text`). Input types and 
 | `get_token_balance` | `address` · **required**, `token` · **required** | `{ address, token, balance }` — `token` is a symbol (USDT, USDD, …); `balance` in token units |
 | `check_allowance` | `address` · **required**, `asset` · **required** | `{ asset, allowance, needsApproval, note }`; native TRX → `allowance: "Infinity", needsApproval: false` |
 
-> Inputs validate as JSON-Schema `string`. `address` must be a Base58 TRON address (`T…`, 34 chars); `token`/`asset` are symbols resolved to contract addresses internally; `jtokenAddr` is a jToken contract address.
+> The bundled schema currently enforces JSON-string types and required fields, not a Base58 regex. Callers should still supply a valid Base58 TRON address (`T…`, 34 chars). `token`/`asset` are one of the 8 shortcut symbols resolved internally; `jtokenAddr` is a jToken contract address.
 
 ### Error Handling
 
-Tool failures return a structured error result rather than throwing — the client sees `isError: true`:
+Tool failures return a versioned structured error rather than throwing — the client sees `isError: true`, and the same JSON object appears in text and `structuredContent`:
 
 ```json
-{ "content": [{ "type": "text", "text": "Error: <message>" }], "isError": true }
+{
+  "schemaVersion": "1.0.0",
+  "tool": "get_all_markets",
+  "error": "HTTP 429 rate limit",
+  "errorCode": "rate_limit",
+  "retryable": true,
+  "hint": "Retry this read after exponential backoff and respect any Retry-After value."
+}
 ```
 
-Common messages and how to recover:
+Stable codes and how to recover:
 
-| Message | Cause | Fix |
-|---------|-------|-----|
-| `API Error: <code>` | JustLend API returned a non-zero `code` | Retry; if it persists, verify the address/market exists |
-| `Unknown asset: <symbol>` | `asset` / `token` symbol not recognized | Use a supported symbol (see `get_supported_markets`) |
-| `Failed to read token balance` / `Failed to read allowance` | On-chain read returned empty (bad address or RPC hiccup) | Check the address format; retry on transient RPC errors |
-| `TronGrid` 4xx / `429` | Missing or rate-limited `TRONGRID_API_KEY` | Set a valid key; back off on `429` |
+| `errorCode` | Retryable | Agent action |
+|-------------|:---------:|--------------|
+| `invalid_input` | No | Correct the tool name, address, or shortcut symbol before retrying. |
+| `authentication` | No | Set a valid local `TRONGRID_API_KEY`, then retry. |
+| `rate_limit` | Yes | Back off exponentially and respect `Retry-After`. |
+| `transient` | Yes | Retry the read with exponential backoff. |
+| `internal` | No | Inspect server stderr and arguments; do not loop automatically. |
 
-All tools are read-only, so a failure never leaves partial on-chain state — errors are safe to retry.
+All tools are read-only, so a failure never leaves partial on-chain state. Even so, auto-retry only when `retryable: true`; corrective errors should not be repeated unchanged.
 
 ## Security
 

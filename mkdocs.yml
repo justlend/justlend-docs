@@ -31,6 +31,7 @@ not_in_nav: |
     /.well-known/security.txt
     /developers/contracts.json
     /developers/contracts.schema.json
+    /developers/apis/agent-acceptance-latest.json
     /developers/abis/*.json
 
 nav:
@@ -77,6 +78,7 @@ nav:
         - AI / LLMs: ai_support/ai_llms.md
         - MCP Server: ai_support/mcp_server.md
         - JustLend Skills: ai_support/justlend_skills.md
+        - CLI and V2 SDK: ai_support/cli_and_sdk.md
         - AI Docs for Agents:
             - Index: documents/aidocs/index.md
             - Source of Truth: documents/aidocs/source_of_truth.md

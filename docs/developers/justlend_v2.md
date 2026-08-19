@@ -88,7 +88,7 @@ Addresses are the source-of-truth deployment config tracked in the MCP server's 
 
 ## Using V2 via the MCP server
 
-The [JustLend MCP Server](../ai_support/mcp_server.md) (v1.1.2+) exposes the full V2 surface under `moolah_*` / `get_moolah_*` tools — vaults, markets, liquidation, dashboard/history, and mining — plus four guided prompts (`moolah_supply`, `moolah_borrow`, `moolah_liquidate`, `moolah_portfolio`). See the [V2 tool groups](../ai_support/mcp_server.md#tools-98-total) and the [MCP Tool Catalog](../documents/aidocs/mcp_tools.md).
+The [JustLend MCP Server](../ai_support/mcp_server.md) (current: v1.1.3) exposes the full V2 surface under `moolah_*` / `get_moolah_*` tools — vaults, markets, liquidation, dashboard/history, and mining — plus four guided prompts (`moolah_supply`, `moolah_borrow`, `moolah_liquidate`, `moolah_portfolio`). See the [V2 tool groups](../ai_support/mcp_server.md#tools-98-total) and the [MCP Tool Catalog](../documents/aidocs/mcp_tools.md).
 
 Contract ABIs (`MOOLAH_CORE_ABI`, `TRX_PROVIDER_ABI`, `MOOLAH_VAULT_ABI`, `PUBLIC_LIQUIDATOR_ABI`) are bundled in the MCP repo's [`src/core/abis.ts`](https://github.com/justlend/mcp-server-justlend/blob/main/src/core/abis.ts). For the full on-chain ABIs and contract data structures (`Position`, `MarketParams`, `MarketConfig`, `MarketAllocation`, …), see the [SBM V2 contract reference](supply_and_borrow_market/sbmV2.md).
 

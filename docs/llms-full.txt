@@ -9,11 +9,13 @@
 | `last_generated` | **{{LAST_GENERATED}}** (ISO 8601, UTC date — substituted at build time) |
 | `docs_commit` | [`{{DOCS_COMMIT_SHORT}}`](https://github.com/justlend/justlend-docs/commit/{{DOCS_COMMIT}}) (the commit SHA this snapshot was built from — substituted at build time) |
 | `contracts_json_source` | [`/developers/contracts.json`](https://docs.justlend.org/developers/contracts.json) — see its `_meta.last_generated` for the address-data snapshot date |
-| `mcp_server_version` | `@justlend/mcp-server-justlend` **v1.1.2** (sync date 2026-07-15) |
+| `mcp_server_version` | `@justlend/mcp-server-justlend` **v1.1.3** (sync date 2026-08-19) |
+| `skills_version` | `@justlend/justlend-skills` **v1.1.1** (GitHub distribution; not on npm) |
+| `cli_version` | `justlend-cli` **v1.0.1** (GitHub source distribution; not on npm) |
 | `changelog` | [`CHANGELOG.md`](https://github.com/justlend/justlend-docs/blob/main/CHANGELOG.md) |
 | `regenerate` | This file is updated each time the docs change materially. If you fetched it more than ~30 days ago, refresh it before answering address / market / version questions. |
 
-This document covers: protocol overview, core concepts (supply / borrow / withdraw / repay / liquidation / risks / sTRX / energy rental), governance, developer contract reference, deployed addresses (TRON mainnet + Nile), the HTTP API surface, and the AI integration story (Skills + MCP). For exhaustive function signatures, field-by-field response schemas, JSON ABIs, and machine-readable address formats, see the individual reference pages and the OpenAPI YAML.
+This document covers: protocol overview, core concepts (supply / borrow / withdraw / repay / liquidation / risks / sTRX / energy rental), governance, developer contract reference, deployed addresses (TRON mainnet + Nile), the HTTP API surface, and the AI integration story (Skills + MCP + CLI + V2 Utils). For exhaustive function signatures, field-by-field response schemas, JSON ABIs, and machine-readable address formats, see the individual reference pages and the OpenAPI YAML.
 
 ---
 
@@ -430,11 +432,11 @@ ABIs at `/developers/abis/` carry the canonical event signatures — derive `top
 
 ## 7. AI Agent Integration
 
-JustLend ships two distinct AI Agent packages:
+JustLend ships four complementary agent and developer integration surfaces:
 
 ### 7.1 JustLend Skills — GitHub distribution
 
-Read-only skills package. Repo: <https://github.com/justlend/justlend-skills>.
+Read-only skills package, version **v1.1.1**. Repo: <https://github.com/justlend/justlend-skills>.
 
 Install by cloning that repository and running `bash install.sh`. The local package identifier `@justlend/justlend-skills` is **not published to npm**; do not use `npm install @justlend/justlend-skills`. An `npm install` run inside the clone only installs the project's dependencies.
 
@@ -442,6 +444,8 @@ Install by cloning that repository and running `bash install.sh`. The local pack
 - Also runs standalone as a **CLI** (`node scripts/justlend_api.mjs markets|dashboard|account ...`).
 - Requires `TRONGRID_API_KEY` (free at <https://trongrid.io>). Supports `NETWORK=mainnet|nile`.
 - **No wallet, no signing, no write operations** — strictly read-only by design.
+- All 9 tools declare a versioned `outputSchema`. Successes expose `{ schemaVersion: "1.0.0", tool, result }` in `structuredContent` while preserving raw JSON text; failures expose `{ schemaVersion, tool, error, errorCode, retryable, hint }`. Auto-retry only `rate_limit` / `transient` errors.
+- `get_supported_markets` lists only 8 bundled balance/allowance shortcuts. Use `get_all_markets`, the live API, or `contracts.json` for the canonical **24-market (18 active + 6 legacy)** roster.
 
 Skill modules:
 
@@ -457,7 +461,7 @@ Built-in MCP tools (all read-only): `get_all_markets`, `get_dashboard`, `get_sup
 
 ### 7.2 Full MCP Server — `@justlend/mcp-server-justlend`
 
-Read + write MCP server, **98 tools**, version **v1.1.2**. Repo: <https://github.com/justlend/mcp-server-justlend>. Covers **JustLend V1 and V2** — the V1 tools plus `moolah_*` / `get_moolah_*` for V2 vaults, isolated markets, liquidation, dashboard/history, and mining. A machine-readable tool catalog ([`mcp-api-list.md`](https://github.com/justlend/mcp-server-justlend/blob/main/mcp-api-list.md)) lists every tool's input schema and side-effect class for offline agent routing.
+Read + write MCP server, **98 tools**, version **v1.1.3**. Repo: <https://github.com/justlend/mcp-server-justlend>. Covers **JustLend V1 and V2** — the V1 tools plus `moolah_*` / `get_moolah_*` for V2 vaults, isolated markets, liquidation, dashboard/history, and mining. Every tool declares a common success `outputSchema`; successful calls preserve text content and add `{ schemaVersion: "1.0.0", tool, result }` in `structuredContent`. The generated [`mcp-api-list.md`](https://github.com/justlend/mcp-server-justlend/blob/main/mcp-api-list.md) lists input/output contracts and side-effect classes for offline routing.
 
 Capability domains:
 
@@ -483,13 +487,35 @@ Guided prompts ship with the server (14 total): `getting_started`, `supply_asset
 
 **Machine-readable ABIs**: JSON files are available under <https://docs.justlend.org/developers/abis/>. The upstream MCP server keeps the source TypeScript definitions in [`src/core/abis.ts`](https://github.com/justlend/mcp-server-justlend/blob/main/src/core/abis.ts); per-network contract addresses are mirrored in `/developers/contracts.json` from [`src/core/chains.ts`](https://github.com/justlend/mcp-server-justlend/blob/main/src/core/chains.ts).
 
-### 7.3 Recommended source-of-truth priority for AI agents
+### 7.3 JustLend CLI — deterministic terminal automation
 
-1. **OpenAPI spec + the `https://openapi.just.network` HTTP API** — typed, versioned, machine-readable.
-2. **MCP server tools** — structured, schema-defined, side-effects clearly marked.
-3. **Rendered HTML docs** — for concept understanding; do not rely on free-text fields for precise numbers (APYs, TVL, tool counts, addresses) without cross-checking against (1) or (2).
+Source-installable CLI, version **v1.0.1**. Repo: <https://github.com/justlend/justlend-cli>. It is not currently published to npm: clone the official repository, run `npm ci && npm run build`, then `npm link`.
 
-### 7.4 Precision and units (AI must respect)
+- 31 top-level command groups cover V1/V2 reads and writes, staking, energy rental, governance, rewards, history, portfolio, and simulation.
+- Use `--json` and branch on the process exit code for agents and CI. Success is `{ schemaVersion: "1.0.0", success: true, data }`; failure is `{ schemaVersion, success: false, error, code, retryable, hint? }`, including parser/usage failures. Validate with `schemas/output-v1.schema.json`; never scrape human tables.
+- Run `--dry-run --dry-run-owner <address>` before any write; dry-run does not sign or broadcast.
+- `--no-broadcast` signs without sending. Mainnet broadcasts require explicit user intent; never add `--yes` automatically.
+- Prefer Nile for integration tests. Full guidance: <https://docs.justlend.org/ai_support/cli_and_sdk>.
+
+### 7.4 JustLend V2 Utils — embedded browser / Node.js SDK
+
+Source-installable utility library, version **v1.0.0**. Repo: <https://github.com/justlend/justlend-utils-v2>. Install with `npm install github:justlend/justlend-utils-v2`; it is not currently published to npm.
+
+- Covers V2 vaults, lending markets, liquidations, mining rewards, native TRX/WTRX handling, and energy purchase workflows.
+- Inject a ready `TronWeb` instance and set the sender explicitly in Node.js.
+- Preserve amount values as strings or `BigNumber`; never use JavaScript `number` for token quantities.
+- Many helpers sign or broadcast. Resolve addresses from live/canonical sources, use Nile first, and require human confirmation before Mainnet writes.
+- Never expose private keys or signed transaction payloads in prompts, logs, or agent output.
+
+### 7.5 Recommended source-of-truth priority for AI agents
+
+1. **OpenAPI spec + the `https://openapi.just.network` HTTP API** — typed, versioned, machine-readable public data.
+2. **MCP server tools** — schema-discoverable agent workflows with side effects marked.
+3. **JustLend CLI** — deterministic terminal/CI automation through versioned JSON and exit codes.
+4. **JustLend V2 Utils** — embedded browser/Node.js integrations owned by the application.
+5. **Rendered HTML docs** — concept understanding; cross-check dynamic values and exact machine contracts against sources 1–4.
+
+### 7.6 Precision and units (AI must respect)
 
 - **jToken balances**: scaled by `1e8` (8 decimals).
 - **Underlying TRC20 amounts**: each token's own decimals — TRX = 6, USDT = 6, USDC = 6, USDD = 18, BTC/WBTC = 8, ETH = 18, etc. Always call `decimals()` on the underlying before constructing a `mint` / `borrow` / `repayBorrow` amount.
@@ -509,6 +535,8 @@ Guided prompts ship with the server (14 total): `getting_started`, `supply_asset
 - **GitHub (protocol)**: <https://github.com/justlend/justlend-protocol>
 - **GitHub (Skills)**: <https://github.com/justlend/justlend-skills>
 - **GitHub (MCP server)**: <https://github.com/justlend/mcp-server-justlend>
+- **GitHub (CLI)**: <https://github.com/justlend/justlend-cli>
+- **GitHub (V2 Utils)**: <https://github.com/justlend/justlend-utils-v2>
 - **Terms of Service**: <https://justlend.org/docs/JustLend_Terms_of_Use_en.pdf>
 - **Privacy Policy**: <https://justlend.org/docs/JustLend_Privacy_Policy_en.pdf>
 
@@ -521,4 +549,4 @@ Guided prompts ship with the server (14 total): `getting_started`, `supply_asset
 - The public OpenAPI service is unauthenticated and may throttle abusive clients. Keep `pageSize <= 1000`, cache stable market metadata, and retry `429` / transient `5xx` with exponential backoff and jitter.
 - Where this document gives APYs, TVL, or other dynamic numbers as examples (notably in the Energy Rental cost section), they reflect the moment the underlying example transactions were recorded and are not current.
 - Liquidation rules summarized here describe the contract-level mechanism. The official liquidation tool also enforces additional UX-level disclaimers — see <https://docs.justlend.org/resources/risk_warning>.
-- "Read-only" guarantees for the HTTP API and the Skills package are enforced by code paths (no signing keys), not just policy. The full MCP server is the only component that can submit transactions, and only through the encrypted agent-wallet.
+- "Read-only" guarantees for the HTTP API and the bundled Skills MCP server are enforced by code paths (no signing keys), not just policy. The full MCP server, CLI, and V2 Utils can submit transactions through their configured wallet/signer paths; inspect side effects, simulate first, and require explicit human intent before signing or broadcasting.

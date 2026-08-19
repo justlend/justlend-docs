@@ -1,6 +1,6 @@
 ---
 title: JustLend MCP Server (full, read + write)
-description: "@justlend/mcp-server-justlend v1.1.2 — 98 MCP tools across JustLend V1 (supply, borrow, repay, sTRX staking, energy rental, governance, mining) and V2 vaults/markets/liquidation, plus historical records and general TRON utilities. Dual-mode signing (browser TronLink or encrypted agent-wallet)."
+description: "@justlend/mcp-server-justlend v1.1.3 — 98 MCP tools with versioned output schemas across JustLend V1 and V2, plus historical records and general TRON utilities. Dual-mode signing (browser TronLink or encrypted agent-wallet)."
 ---
 
 # MCP Server
@@ -30,10 +30,10 @@ The JustLend MCP Server (`@justlend/mcp-server-justlend`) is a [Model Context Pr
 Beyond JustLend-specific operations, the server also exposes a full set of **general-purpose TRON chain utilities** — balance queries, block/transaction data, token metadata, TRX transfers, smart contract reads/writes, staking (Stake 2.0), multicall, and more.
 
 !!! note
-    Current version (**v1.1.2**) covers **JustLend V1** *and* **JustLend V2**. V1 is the Compound-V2-style pooled supply/borrow market (jTokens); V2 is an isolated-market + ERC4626-vault protocol. The two surfaces are namespaced — V1 tools like `get_market_data` / `supply`, V2 tools prefixed `moolah_*` / `get_moolah_*` (the `moolah` identifier is V2's on-chain/tool naming). See the [JustLend V2](../developers/justlend_v2.md) developer page for the protocol model and deployed contracts.
+    Current version (**v1.1.3**) covers **JustLend V1** *and* **JustLend V2**. V1 is the Compound-V2-style pooled supply/borrow market (jTokens); V2 is an isolated-market + ERC4626-vault protocol. The two surfaces are namespaced — V1 tools like `get_market_data` / `supply`, V2 tools prefixed `moolah_*` / `get_moolah_*` (the `moolah` identifier is V2's on-chain/tool naming). See the [JustLend V2](../developers/justlend_v2.md) developer page for the protocol model and deployed contracts.
 
-!!! tip "v1.1.2 Update"
-    **v1.1.2** adds native **TRX ↔ WTRX** wrap/unwrap (`wrap_trx` / `unwrap_trx`) and hardens TRC20 approvals — USDT/USDC/USDJ defensively reset the allowance to `0` before a new non-zero `approve` (matching the official front-end; the reset tx is confirmed on-chain before re-approving), and `amount='0'` reliably revokes. Tool errors now also carry a **`retryable`** flag with a `transient` class (see the error contract below), so agents can distinguish safe-to-retry RPC hiccups from errors needing corrective action. The surface is now **98 tools**. **v1.1.0** introduced **JustLend V2** support (from 59): 30 V2 tools (vaults, markets, liquidation, dashboard/history, mining) + 7 historical-records tools, plus 4 V2 AI prompts (**14** total) and a V2 gas estimator. It also ships **AI-agent ergonomics** — structured self-healing tool errors (`{ error, errorCode, hint }`), self-describing amounts (`{ raw, decimals, _unit, display }`) on core reads, and hardened input schemas (Base58-address + decimal-amount validation). The machine-readable `mcp-api-list.md` catalog is regenerated from source (now 98 tools). All prior V1 safety work remains in place: TRC20 allowance checks before supply/repay, opt-in `max` approvals with revoke hints, typed broadcast handling, `toSafeCallValueNumber` guards on every broadcast/simulation path, mainnet fail-closed on pre-flight `REVERT`, constant-time `MCP_API_KEY` comparison, and governance failed-proposal filtering.
+!!! tip "v1.1.3 Update"
+    **v1.1.3** makes every one of the **98 tools** declare an MCP `outputSchema`. Successful calls preserve legacy text content and also expose `{ schemaVersion: "1.0.0", tool, result }` in `structuredContent`, so agents no longer need to infer output shape from prose. The generated `mcp-api-list.md` documents this contract for every tool. It also reconciles the V1 inventory to **24 markets (18 active + 6 legacy)** and restores active `jU` to the product table. **v1.1.2** added native **TRX ↔ WTRX** wrap/unwrap (`wrap_trx` / `unwrap_trx`), hardened TRC20 approvals, and added `retryable` error classification. **v1.1.0** introduced the V2 tool and prompt surface. All prior wallet, pre-flight, fail-closed HTTP-authentication, and HITL safeguards remain in place.
 
 ## Overview
 
@@ -86,7 +86,7 @@ Beyond JustLend-specific operations, the server also exposes a full set of **gen
 
 ## Supported Markets
 
-The protocol exposes 23 jToken markets in total (17 active + 6 paused legacy markets). Call `get_supported_markets` for the live list with addresses. The active markets are:
+The protocol exposes **24 jToken markets in total (18 active + 6 legacy markets)**. This count was verified against the expanded market table at [app.justlend.org](https://app.justlend.org/), the live `/lend/jtoken` API, and the canonical contract directory on 2026-08-19. Call `get_supported_markets` for the live list with addresses. The active markets are:
 
 | jToken     | Underlying | Description |
 |------------|-----------|-------------|
@@ -107,6 +107,7 @@ The protocol exposes 23 jToken markets in total (17 active + 6 paused legacy mar
 | jBTT       | BTT       | BitTorrent token |
 | jNFT       | NFT       | APENFT |
 | jHTX       | HTX       | HTX token |
+| jU         | U         | U token |
 
 ## Prerequisites
 
@@ -575,6 +576,16 @@ For programmatic contract calls without re-fetching from Tronscan, the MCP serve
 - **Chain configs (Mainnet / Nile testnet)**: [`src/core/chains.ts`](https://github.com/justlend/mcp-server-justlend/blob/main/src/core/chains.ts)
 
 ## Error contract
+
+Every tool declares a common success `outputSchema`. Schema-aware clients should consume `structuredContent` and pin schema major `1`; older clients may continue reading the first text content item:
+
+```json
+{
+  "schemaVersion": "1.0.0",
+  "tool": "get_supported_markets",
+  "result": {}
+}
+```
 
 Every tool returns errors as structured JSON with `isError: true`, so an agent can branch without parsing prose:
 

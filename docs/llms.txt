@@ -9,6 +9,8 @@
 - [OpenAPI 3.1 specification](https://docs.justlend.org/developers/apis/justlend_apis.yaml): Machine-readable contract for the public read-only HTTP API at `https://openapi.just.network`. Importable into Swagger UI, Postman, or any LLM tool.
 - [API reference (rendered)](https://docs.justlend.org/developers/apis): Swagger UI rendering of the OpenAPI spec.
 - [sitemap.xml](https://docs.justlend.org/sitemap.xml): Full list of indexable documentation pages.
+- [JustLend CLI](https://github.com/justlend/justlend-cli) (v1.0.1): Source-installable terminal automation with versioned JSON output, stable exit codes, dry-run simulation, and explicit write safeguards.
+- [JustLend V2 Utils](https://github.com/justlend/justlend-utils-v2) (v1.0.0): Source-installable browser/Node.js utility library for embedded V2 contract integrations; requires explicit `TronWeb` injection.
 
 ## Getting started
 
@@ -63,9 +65,10 @@
 ## AI Agent integration
 
 - [AI / LLMs](https://docs.justlend.org/ai_support/ai_llms): Human-readable directory for `llms.txt`, `llms-full.txt`, OpenAPI, contract JSON, and ABI JSON endpoints.
-- [JustLend Skills](https://docs.justlend.org/ai_support/justlend_skills): GitHub-distributed read-only skills project + lightweight MCP server (**9 query tools**). Clone <https://github.com/justlend/justlend-skills> and run `bash install.sh`; the local identifier `@justlend/justlend-skills` is **not published to npm**.
-- [Full MCP Server](https://docs.justlend.org/ai_support/mcp_server) (`@justlend/mcp-server-justlend`, v1.1.2, **98 tools**): Full read/write MCP server for JustLend V1 (supply, borrow, repay, withdraw, sTRX staking, energy rental, governance voting, mining rewards, transfers) and V2 vaults/markets/liquidation, plus historical records and general TRON utilities. Source: <https://github.com/justlend/mcp-server-justlend>.
-- [MCP machine-readable tool catalog](https://github.com/justlend/mcp-server-justlend/blob/main/mcp-api-list.md) (`mcp-api-list.md`): Offline-loadable list of all 98 tools with input schemas (param/type/required/default), side-effect class (read-only vs on-chain write/destructive) and HITL guidance. Generated from source, so it never drifts from the tool definitions.
+- [JustLend Skills](https://docs.justlend.org/ai_support/justlend_skills) (v1.1.1): GitHub-distributed read-only skills project + lightweight MCP server (**9 query tools**) with versioned `outputSchema`, `structuredContent`, and machine-readable retry errors. Clone <https://github.com/justlend/justlend-skills> and run `bash install.sh`; the local identifier `@justlend/justlend-skills` is **not published to npm**.
+- [CLI and V2 SDK integration guide](https://docs.justlend.org/ai_support/cli_and_sdk): Choose terminal/CI automation or embedded application integration; includes installation, version, output contract, signing, and broadcast safety rules.
+- [Full MCP Server](https://docs.justlend.org/ai_support/mcp_server) (`@justlend/mcp-server-justlend`, v1.1.3, **98 tools**): Full read/write MCP server for JustLend V1 and V2. Every tool declares `outputSchema`; successful calls expose `{schemaVersion, tool, result}` in `structuredContent` while preserving legacy text. Source: <https://github.com/justlend/mcp-server-justlend>.
+- [MCP machine-readable tool catalog](https://github.com/justlend/mcp-server-justlend/blob/main/mcp-api-list.md) (`mcp-api-list.md`): Offline-loadable list of all 98 tools with input/output schemas, side-effect class (read-only vs on-chain write/destructive), and HITL guidance. Generated from source, so it never drifts from the tool definitions.
 - [MCP source ABIs and network config](https://github.com/justlend/mcp-server-justlend): Upstream TypeScript definitions used to generate the docs JSON ABI and address files.
 
 ## API endpoints (read-only HTTP API)
@@ -74,7 +77,7 @@ Base URL: `https://openapi.just.network`. Schema in [justlend_apis.yaml](https:/
 
 - `GET /lend/jtoken` — All jToken markets with supply/borrow APY, mining rewards, TVL (aggregate for protocol-level totals).
 - `GET /lend/jtoken?address={jToken}` — Single jToken market details.
-- `GET /lend/account?address={address}` — Account SBM positions, health factor, rewards (paginated).
+- `GET /lend/account?addresses={address}` — Account SBM positions, health factor, rewards (paginated).
 - `GET /mining/reward?address={jToken}` · `GET /mining/apy` · `GET /mining/distributions?addr={address}` — Mining reward config / per-market APY / distribution snapshots.
 
 Refer to the OpenAPI spec for the full endpoint list, request parameters, response schemas, units, and error responses.
@@ -97,8 +100,8 @@ Refer to the OpenAPI spec for the full endpoint list, request parameters, respon
 - **Address formats**: `contracts.json` includes Base58, EVM `0x` hex, and TRON-internal `41` hex. Rendered tables may show Base58 only.
 - **Precision**: jToken balances are returned in jToken units (8 decimals). Underlying token amounts use that token's own decimals (TRX = 6, USDT = 6, USDC = 6, BTC = 8, ETH = 18, etc.). Always check the underlying token's `decimals()` before submitting transactions.
 - **Rate limits**: The public OpenAPI service is unauthenticated and may throttle abusive clients. Keep `pageSize <= 1000`, cache market metadata, avoid tight polling loops, and retry `429` / `5xx` with exponential backoff.
-- **Recommended source-of-truth priority**: (1) OpenAPI spec → (2) MCP server tools → (3) rendered docs. The HTML docs are for human reading; for programmatic use prefer the OpenAPI spec and MCP server.
-- **Read-only vs. write**: The HTTP API and the JustLend Skills MCP server are read-only. Only `@justlend/mcp-server-justlend` exposes write tools. Write operations are clearly marked with `destructiveHint: true` and require an encrypted local wallet via `@bankofai/agent-wallet`.
+- **Recommended source-of-truth priority**: (1) OpenAPI/live API for public HTTP data → (2) MCP for schema-discoverable agent workflows → (3) CLI for deterministic terminal automation → (4) V2 Utils for embedded application code → (5) rendered docs for concepts. The HTML docs are for human reading; for programmatic use prefer the OpenAPI spec and MCP server.
+- **Read-only vs. write**: The HTTP API and bundled JustLend Skills MCP server are read-only. The full MCP server, CLI, and V2 Utils expose write paths. Inspect side-effect metadata or command classification, simulate first, and require explicit human intent before signing or broadcasting.
 
 ## Optional
 

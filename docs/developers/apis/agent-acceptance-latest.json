@@ -1,0 +1,73 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-08-19T09:25:24.647Z",
+  "base": "https://openapi.just.network",
+  "passed": 9,
+  "total": 9,
+  "success": true,
+  "results": [
+    {
+      "name": "V1 market list",
+      "path": "/lend/jtoken",
+      "httpStatus": 200,
+      "pass": true,
+      "failures": []
+    },
+    {
+      "name": "V1 global account pagination",
+      "path": "/lend/account",
+      "httpStatus": 200,
+      "pass": true,
+      "failures": []
+    },
+    {
+      "name": "V1 sTRX + Energy Rental dashboard",
+      "path": "/lend/strx",
+      "httpStatus": 200,
+      "pass": true,
+      "failures": []
+    },
+    {
+      "name": "V1 mining APY map",
+      "path": "/mining/apy",
+      "httpStatus": 200,
+      "pass": true,
+      "failures": []
+    },
+    {
+      "name": "V1 high-risk account list",
+      "path": "/justlend/liquidate/highRiskAccountList",
+      "httpStatus": 200,
+      "pass": true,
+      "failures": []
+    },
+    {
+      "name": "V2 vault list",
+      "path": "/v2/index/vault/list",
+      "httpStatus": 200,
+      "pass": true,
+      "failures": []
+    },
+    {
+      "name": "V2 market list",
+      "path": "/v2/index/market/list",
+      "httpStatus": 200,
+      "pass": true,
+      "failures": []
+    },
+    {
+      "name": "V1 error contract (unknown path)",
+      "path": "/lend/nonExistentXYZ",
+      "httpStatus": 200,
+      "pass": true,
+      "failures": []
+    },
+    {
+      "name": "V2 error contract (missing params)",
+      "path": "/v2/vault/position",
+      "httpStatus": 200,
+      "pass": true,
+      "failures": []
+    }
+  ]
+}

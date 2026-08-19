@@ -21,9 +21,10 @@ When multiple sources mention the same JustLend fact, agents should prefer them 
 
 1. **OpenAPI specification**: [`/developers/apis/justlend_apis.yaml`](../../developers/apis/justlend_apis.yaml) for public HTTP API routes, parameters, response schemas, units, and errors.
 2. **MCP tools**: [`mcp_tools.md`](mcp_tools.md) and the live MCP server for tool names, input schemas, safety annotations, wallet mode, and transaction workflows.
-3. **Contract directory**: [`/developers/contracts.json`](../../developers/contracts.json) for deployed contract addresses, network names, and active versus legacy market status.
-4. **JSON ABIs**: [`/developers/abis/`](../../developers/abis/jtoken.json) for contract calls and event decoding.
-5. **Human docs**: concept and developer pages for explanations, examples, and risk context.
+3. **CLI / V2 Utils**: [`CLI and V2 SDK`](../../ai_support/cli_and_sdk.md) for deterministic terminal automation or embedded application integrations; inspect write side effects before signing.
+4. **Contract directory**: [`/developers/contracts.json`](../../developers/contracts.json) for deployed contract addresses, network names, and active versus legacy market status.
+5. **JSON ABIs**: [`/developers/abis/`](../../developers/abis/jtoken.json) for contract calls and event decoding.
+6. **Human docs**: concept and developer pages for explanations, examples, and risk context.
 
 ## AI docs in this directory
 

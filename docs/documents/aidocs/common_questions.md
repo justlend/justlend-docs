@@ -37,7 +37,7 @@ Chinese: “USDT 存款年化多少？”、“TRX 借款 APY 多少？”
 
 ### How do I check a JustLend account position?
 
-Use MCP `get_account_summary` with the user's TRON address and network. For HTTP integration, use `GET /lend/account?address={address}`.
+Use MCP `get_account_summary` with the user's TRON address and network. For HTTP integration, use `GET /lend/account?addresses={address}`.
 
 Chinese: “查一下这个地址的 JustLend 仓位”、“这个地址健康因子是多少？”
 
