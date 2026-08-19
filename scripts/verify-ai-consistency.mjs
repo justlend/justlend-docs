@@ -94,12 +94,12 @@ check(
   'MCP catalog must identify upstream version 1.1.3',
 );
 check(
-  (mcpCatalog.match(/^### `[^`]+`$/gm) ?? []).length === 98,
-  'MCP catalog must contain exactly 98 generated tool headings',
+  (mcpCatalog.match(/^### `[^`]+`$/gm) ?? []).length === 103,
+  'MCP catalog must contain exactly 103 generated tool headings',
 );
 check(
-  (mcpCatalog.match(/^- \*\*Output schema\*\*:/gm) ?? []).length === 98,
-  'MCP catalog must document output schema coverage for all 98 tools',
+  (mcpCatalog.match(/^- \*\*Output schema\*\*:/gm) ?? []).length === 103,
+  'MCP catalog must document output schema coverage for all 103 tools',
 );
 
 const hook = await read('hooks/copy_dotfiles.py');

@@ -107,6 +107,6 @@ Chinese: “怎么解析 Borrow 事件？”、“jToken ABI 在哪？”
 
 ### Should I use browser wallet or agent wallet?
 
-Browser wallet is recommended for most users because private keys stay in TronLink or another browser wallet. Agent wallet is for local encrypted automation. Never paste private keys or seed phrases into chat.
+Use encrypted agent-wallet for the current MCP release. The legacy browser-wallet bridge is disabled because its loopback transport lacks request-level authentication. Never bypass that control or paste private keys or seed phrases into chat; import or generate wallets through the local `agent-wallet` CLI.
 
 Chinese: “要不要导入私钥？”、“TronLink 和 agent wallet 哪个安全？”
