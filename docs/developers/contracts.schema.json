@@ -23,11 +23,13 @@
   "$defs": {
     "meta": {
       "type": "object",
-      "required": ["source_of_truth", "last_generated", "schema_version", "address_formats"],
+      "required": ["source_of_truth", "last_generated", "last_verified", "verification_sources", "schema_version", "address_formats"],
       "properties": {
         "generated_by":     { "type": "string" },
         "source_of_truth":  { "type": "string", "format": "uri" },
         "last_generated":   { "type": "string", "format": "date" },
+        "last_verified":    { "type": "string", "format": "date", "description": "Date when the market count and addresses were last cross-checked against live product/API surfaces." },
+        "verification_sources": { "type": "array", "minItems": 2, "items": { "type": "string", "format": "uri" }, "description": "Independent live or source-code surfaces used for the latest verification." },
         "schema_version":   { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$", "description": "Semantic version of this document's shape. Pin a MAJOR." },
         "schema_version_policy": { "type": "string" },
         "address_formats": {
@@ -129,7 +131,7 @@
         },
         "jtokens": {
           "type": "object",
-          "description": "Per-market jToken records, keyed by jToken symbol. Mainnet exposes 17 active + 6 legacy = 23 markets.",
+          "description": "Per-market jToken records, keyed by jToken symbol. Mainnet exposes 18 active + 6 legacy = 24 markets.",
           "additionalProperties": { "$ref": "#/$defs/jtoken_record" }
         },
         "interest_rate_models": {

@@ -37,7 +37,7 @@ Chinese: “USDT 存款年化多少？”、“TRX 借款 APY 多少？”
 
 ### How do I check a JustLend account position?
 
-Use MCP `get_account_summary` with the user's TRON address and network. For HTTP integration, use `GET /lend/account?address={address}`.
+Use MCP `get_account_summary` with the user's TRON address and network. For HTTP integration, use `GET /lend/account?addresses={address}`.
 
 Chinese: “查一下这个地址的 JustLend 仓位”、“这个地址健康因子是多少？”
 
@@ -107,6 +107,6 @@ Chinese: “怎么解析 Borrow 事件？”、“jToken ABI 在哪？”
 
 ### Should I use browser wallet or agent wallet?
 
-Browser wallet is recommended for most users because private keys stay in TronLink or another browser wallet. Agent wallet is for local encrypted automation. Never paste private keys or seed phrases into chat.
+Use encrypted agent-wallet for the current MCP release. The legacy browser-wallet bridge is disabled because its loopback transport lacks request-level authentication. Never bypass that control or paste private keys or seed phrases into chat; import or generate wallets through the local `agent-wallet` CLI.
 
 Chinese: “要不要导入私钥？”、“TronLink 和 agent wallet 哪个安全？”

@@ -1,6 +1,6 @@
 ---
 title: JustLend MCP Server (full, read + write)
-description: "@justlend/mcp-server-justlend v1.1.2 — 98 MCP tools across JustLend V1 (supply, borrow, repay, sTRX staking, energy rental, governance, mining) and V2 vaults/markets/liquidation, plus historical records and general TRON utilities. Dual-mode signing (browser TronLink or encrypted agent-wallet)."
+description: "@justlend/mcp-server-justlend v1.1.3 — 103 MCP tools with versioned output schemas across JustLend V1 and V2, secure energy direct purchase, historical records, general TRON utilities, and encrypted agent-wallet signing."
 ---
 
 # MCP Server
@@ -13,9 +13,9 @@ This page is the human-readable reference for the full MCP server. For agent use
 
 - [Overview](#overview) — what this server is and how it differs from [Skills](justlend_skills.md).
 - [Installation](#installation) — npm, source, and Claude Desktop config.
-- [Wallet setup (browser vs agent-wallet)](#wallet-setup-first-use-choice) — browser (TronLink TIP-6963) vs agent-wallet (encrypted local).
+- [Wallet setup](#wallet-setup-first-use-choice) — encrypted agent-wallet; the legacy unauthenticated browser bridge is currently disabled.
 - [HTTP-mode authentication (`MCP_API_KEY`)](#http-mode-authentication-mcp_api_key) — stdio (local clients) is open; HTTP/SSE is fail-closed.
-- [Tool catalog (98 tools)](#tools-98-total) — **V1**: Wallet & Network · Market Data · Account & Balances · Lending Operations · Mining & Rewards · JST Voting / Governance · Energy Rental · sTRX Staking · Transfers · General TRON. **V2**: Vaults · Markets · Liquidation · Dashboard/History · Mining. Plus Historical Records.
+- [Tool catalog (103 tools)](#tools-103-total) — **V1**: Wallet & Network · Market Data · Account & Balances · Lending Operations · Mining & Rewards · JST Voting / Governance · Energy Rental / Direct Purchase · sTRX Staking · Transfers · General TRON. **V2**: Vaults · Markets · Liquidation · Dashboard/History · Mining. Plus Historical Records.
 - [Guided prompts](#prompts-ai-guided-workflows) — the 14 shipped MCP prompts (`supply_assets`, `analyze_portfolio`, `cast_vote`, `moolah_supply`, `moolah_borrow`, …).
 - [Security considerations](#security-considerations) — `destructiveHint`, dry-run mode, source-of-truth priority, HTTP-mode `MCP_API_KEY`.
 
@@ -30,10 +30,10 @@ The JustLend MCP Server (`@justlend/mcp-server-justlend`) is a [Model Context Pr
 Beyond JustLend-specific operations, the server also exposes a full set of **general-purpose TRON chain utilities** — balance queries, block/transaction data, token metadata, TRX transfers, smart contract reads/writes, staking (Stake 2.0), multicall, and more.
 
 !!! note
-    Current version (**v1.1.2**) covers **JustLend V1** *and* **JustLend V2**. V1 is the Compound-V2-style pooled supply/borrow market (jTokens); V2 is an isolated-market + ERC4626-vault protocol. The two surfaces are namespaced — V1 tools like `get_market_data` / `supply`, V2 tools prefixed `moolah_*` / `get_moolah_*` (the `moolah` identifier is V2's on-chain/tool naming). See the [JustLend V2](../developers/justlend_v2.md) developer page for the protocol model and deployed contracts.
+    Current version (**v1.1.3**) covers **JustLend V1** *and* **JustLend V2**. V1 is the Compound-V2-style pooled supply/borrow market (jTokens); V2 is an isolated-market + ERC4626-vault protocol. The two surfaces are namespaced — V1 tools like `get_market_data` / `supply`, V2 tools prefixed `moolah_*` / `get_moolah_*` (the `moolah` identifier is V2's on-chain/tool naming). See the [JustLend V2](../developers/justlend_v2.md) developer page for the protocol model and deployed contracts.
 
-!!! tip "v1.1.2 Update"
-    **v1.1.2** adds native **TRX ↔ WTRX** wrap/unwrap (`wrap_trx` / `unwrap_trx`) and hardens TRC20 approvals — USDT/USDC/USDJ defensively reset the allowance to `0` before a new non-zero `approve` (matching the official front-end; the reset tx is confirmed on-chain before re-approving), and `amount='0'` reliably revokes. Tool errors now also carry a **`retryable`** flag with a `transient` class (see the error contract below), so agents can distinguish safe-to-retry RPC hiccups from errors needing corrective action. The surface is now **98 tools**. **v1.1.0** introduced **JustLend V2** support (from 59): 30 V2 tools (vaults, markets, liquidation, dashboard/history, mining) + 7 historical-records tools, plus 4 V2 AI prompts (**14** total) and a V2 gas estimator. It also ships **AI-agent ergonomics** — structured self-healing tool errors (`{ error, errorCode, hint }`), self-describing amounts (`{ raw, decimals, _unit, display }`) on core reads, and hardened input schemas (Base58-address + decimal-amount validation). The machine-readable `mcp-api-list.md` catalog is regenerated from source (now 98 tools). All prior V1 safety work remains in place: TRC20 allowance checks before supply/repay, opt-in `max` approvals with revoke hints, typed broadcast handling, `toSafeCallValueNumber` guards on every broadcast/simulation path, mainnet fail-closed on pre-flight `REVERT`, constant-time `MCP_API_KEY` comparison, and governance failed-proposal filtering.
+!!! tip "v1.1.3 Update"
+    **v1.1.3** makes every one of the **103 tools** declare an MCP `outputSchema`. Successful calls preserve legacy text content and also expose `{ schemaVersion: "1.0.0", tool, result }` in `structuredContent`, so agents no longer need to infer output shape from prose. It also adds five fail-closed energy direct-purchase tools for configuration, quote, order recovery, payment-risk reconciliation, and explicitly confirmed purchase; reconciles the V1 inventory to **24 markets (18 active + 6 legacy)**; and restores active `jU` to the product table. The legacy unauthenticated browser-wallet bridge is disabled, so writes use encrypted agent-wallet signing. **v1.1.2** added native **TRX ↔ WTRX** wrap/unwrap (`wrap_trx` / `unwrap_trx`), hardened TRC20 approvals, and added `retryable` error classification. **v1.1.0** introduced the V2 tool and prompt surface.
 
 ## Overview
 
@@ -62,15 +62,14 @@ Beyond JustLend-specific operations, the server also exposes a full set of **gen
 - **Token Approvals**: Manage TRC20 approvals for jToken contracts
 - **Energy Cost Estimation**: Estimate energy, bandwidth, and TRX cost for any lending operation before executing
 - **JST Voting / Governance**: View proposals, cast votes, deposit/withdraw JST for voting power, reclaim votes
-- **Energy Rental**: Rent energy from JustLend, calculate rental prices, query rental orders, return/cancel rentals
+- **Energy Rental + Direct Purchase**: Rent energy on-chain, or fetch an authoritative quote and explicitly confirm a separately configured service purchase with payer-scoped recovery and duplicate-payment protection
 - **sTRX Staking**: Stake TRX to receive sTRX, unstake sTRX, claim staking rewards, check withdrawal eligibility
     - Precision-safe BigInt/string math for TRX Sun conversion and 18-decimal sTRX balances/exchange-rate display
 
-**Browser Wallet Signing**
+**Wallet Signing**
 
-- **TronLink Integration**: Connect TronLink or other browser wallets via `tronlink-signer` SDK
-- **Sign-only mode**: Server builds transactions, browser only signs — private keys never leave the wallet
-- **Dual wallet mode**: Users choose between `browser` (recommended) or `agent` (encrypted local storage)
+- **Encrypted agent-wallet**: The supported signing mode stores encrypted keys under `~/.agent-wallet/` and reads `AGENT_WALLET_PASSWORD` from the server environment
+- **Browser bridge disabled**: The legacy loopback browser bridge lacks request-level authentication; `connect_browser_wallet` and browser mode fail closed until an authenticated replacement is available
 
 **General TRON Chain**
 
@@ -82,11 +81,11 @@ Beyond JustLend-specific operations, the server also exposes a full set of **gen
 - **Transfers**: Send TRX, transfer TRC20 tokens, approve spenders
 - **Staking (Stake 2.0)**: Freeze/unfreeze TRX for BANDWIDTH or ENERGY, withdraw expired unfreeze
 - **Address Utilities**: Hex ↔ Base58 conversion, address validation, resolution
-- **Wallet**: Sign messages, secure key management via agent-wallet or browser wallet
+- **Wallet**: Sign messages and transactions through encrypted agent-wallet; the unauthenticated browser bridge is disabled
 
 ## Supported Markets
 
-The protocol exposes 23 jToken markets in total (17 active + 6 paused legacy markets). Call `get_supported_markets` for the live list with addresses. The active markets are:
+The protocol exposes **24 jToken markets in total (18 active + 6 legacy markets)**. This count was verified against the expanded market table at [app.justlend.org](https://app.justlend.org/), the live `/lend/jtoken` API, and the canonical contract directory on 2026-08-19. Call `get_supported_markets` for the live list with addresses. The active markets are:
 
 | jToken     | Underlying | Description |
 |------------|-----------|-------------|
@@ -107,6 +106,7 @@ The protocol exposes 23 jToken markets in total (17 active + 6 paused legacy mar
 | jBTT       | BTT       | BitTorrent token |
 | jNFT       | NFT       | APENFT |
 | jHTX       | HTX       | HTX token |
+| jU         | U         | U token |
 
 ## Prerequisites
 
@@ -136,10 +136,9 @@ The script checks Node.js 20+, installs dependencies, builds the project, and ge
 
 ### Wallet Setup (First-Use Choice)
 
-On first use, the server presents a wallet mode selection. Users choose between:
+On first use, select **agent mode** with `set_wallet_mode` and `mode="agent"`. The legacy browser mode is disabled until its local bridge supports request-level authentication.
 
-1. **Browser mode** (recommended): Connect TronLink via `connect_browser_wallet` — private keys never leave the browser
-2. **Agent mode**: Encrypted local wallet via `set_wallet_mode` with `mode="agent"` — keys stored in `~/.agent-wallet/`
+Agent-wallet stores encrypted keys under `~/.agent-wallet/`; set `AGENT_WALLET_PASSWORD` in the server environment.
 
 Private keys are **never** stored in environment variables by default.
 
@@ -165,9 +164,9 @@ npx agent-wallet activate <wallet-id>
 | Tool | Description |
 |------|-------------|
 | `get_wallet_address` | Shows current address, or returns first-use wallet selection guidance |
-| `connect_browser_wallet` | Connect TronLink / browser wallet for signing |
-| `set_wallet_mode` | Switch between `browser` and `agent` signing |
-| `get_wallet_mode` | Show current signing mode and addresses |
+| `connect_browser_wallet` | Return a safety notice while the unauthenticated browser bridge is disabled |
+| `set_wallet_mode` | Select supported `agent` signing; `browser` currently fails closed |
+| `get_wallet_mode` | Show agent-wallet status and report legacy browser mode as disabled |
 | `list_wallets` | List all wallets with IDs, types, addresses |
 | `set_active_wallet` | Switch active wallet by ID |
 
@@ -180,6 +179,9 @@ npx agent-wallet import
 ### Environment Variables
 
 ```bash
+# Required for non-interactive agent-wallet unlock
+export AGENT_WALLET_PASSWORD="your_wallet_password"
+
 # Strongly recommended — avoids TronGrid 429 rate limiting on mainnet
 export TRONGRID_API_KEY="your_trongrid_api_key"
 
@@ -191,7 +193,14 @@ export MCP_CORS_ORIGIN=""          # required allow-list if you bind to a non-lo
 
 # Required in HTTP mode — see "HTTP Mode Authentication" below for how to generate one
 export MCP_API_KEY="your_strong_random_secret"
+
+# Required only for energy direct purchase; there is no built-in production URL
+export JUSTLEND_ENERGY_API_URL="https://energy-api.example"
+# Temporary/custom endpoints also require this explicit trust opt-in
+export JUSTLEND_ALLOW_UNTRUSTED_HOSTS="1"
 ```
+
+Energy direct purchase is fail-closed: load live limits with `get_energy_purchase_config`, obtain an authoritative `quote_energy_purchase`, show the exact payer/receivers/duration/TRX amount, and call `buy_energy_direct` with `confirmPayment=true` only after explicit confirmation. If submission is ambiguous, call `get_energy_payment_risk`; never sign a second payment while the first is unresolved.
 
 ### HTTP Mode Authentication (`MCP_API_KEY`)
 
@@ -328,7 +337,7 @@ Add to `.mcp.json` in the project root:
 ```
 
 !!! tip
-    No `TRON_PRIVATE_KEY` needed — choose browser-wallet signing or encrypted agent-wallet mode at runtime.
+    No `TRON_PRIVATE_KEY` is needed. Configure encrypted agent-wallet and pass `AGENT_WALLET_PASSWORD` through the server environment; browser signing is currently disabled.
 
 #### Cursor
 
@@ -363,7 +372,7 @@ npm run dev
 
 ## API Reference
 
-### Tools (98 total)
+### Tools (103 total)
 
 !!! info "V1 + V2"
     The first ten groups below are **JustLend V1** (pooled jToken market). The **JustLend V2** groups (vaults / markets / liquidation / dashboard / mining) and **Historical Records** follow. V2 tools are namespaced `moolah_*` / `get_moolah_*`.
@@ -373,9 +382,9 @@ npm run dev
 | Tool | Description | Write? |
 |------|-------------|--------|
 | `get_wallet_address` | Show wallet address or first-use wallet selection guidance | No |
-| `connect_browser_wallet` | Connect TronLink / browser wallet for signing | Yes |
-| `set_wallet_mode` | Switch between `browser` and `agent` signing | Yes |
-| `get_wallet_mode` | Show current signing mode and addresses | No |
+| `connect_browser_wallet` | Return a safety notice while the unauthenticated browser bridge is disabled | Yes |
+| `set_wallet_mode` | Select supported `agent` signing; `browser` currently fails closed | Yes |
+| `get_wallet_mode` | Show agent-wallet status and report browser mode as disabled | No |
 | `list_wallets` | List all wallets (IDs, types, addresses) | No |
 | `set_active_wallet` | Switch active wallet by wallet ID | No |
 | `get_supported_networks` | List available networks | No |
@@ -452,6 +461,11 @@ npm run dev
 | `get_return_rental_info` | Return/cancel estimation (refund, remaining rent, daily cost) | No |
 | `rent_energy` | Rent energy for a receiver (with balance, pause, limit checks) | **Yes** |
 | `return_energy_rental` | Cancel an active rental (with active order check) | **Yes** |
+| `get_energy_purchase_config` | Load live direct-purchase limits, durations, prices, and pool capacity | No |
+| `quote_energy_purchase` | Obtain an authoritative quote without creating or paying for an order | No |
+| `get_energy_purchase_order` | Recover an order by order ID or payment transaction ID | No |
+| `get_energy_payment_risk` | Reconcile unresolved payer-scoped payment risks before another purchase | No |
+| `buy_energy_direct` | Sign a quote-bound TRX payment after `confirmPayment=true`; configured backend validates and may broadcast | **Yes** |
 
 #### sTRX Staking
 
@@ -576,6 +590,16 @@ For programmatic contract calls without re-fetching from Tronscan, the MCP serve
 
 ## Error contract
 
+Every tool declares a common success `outputSchema`. Schema-aware clients should consume `structuredContent` and pin schema major `1`; older clients may continue reading the first text content item:
+
+```json
+{
+  "schemaVersion": "1.0.0",
+  "tool": "get_supported_markets",
+  "result": {}
+}
+```
+
 Every tool returns errors as structured JSON with `isError: true`, so an agent can branch without parsing prose:
 
 ```json
@@ -589,7 +613,7 @@ Every tool returns errors as structured JSON with `isError: true`, so an agent c
 | `transient` | ✅ true | Network/RPC timeout, `SERVER_BUSY`, 429/5xx — retry read-only calls after a short backoff; **never** blindly re-broadcast a write (re-query state first). |
 | `insufficient_allowance` | ❌ false | Approve the spender first (`approve_underlying` / `approve_for_votes` / `approve_moolah_*`), then retry. |
 | `insufficient_balance` | ❌ false | Lower the amount or fund the wallet; verify with `get_trx_balance` / `get_token_balance`. |
-| `wallet_not_configured` | ❌ false | Configure a wallet (`import_wallet` / `connect_browser_wallet`), then `set_active_wallet`. |
+| `wallet_not_configured` | ❌ false | Run `npx agent-wallet start` (or import/generate via CLI), set `AGENT_WALLET_PASSWORD`, select `agent` mode, and activate the wallet. |
 | `execution_reverted` | ❌ false | Contract precondition failed (allowance / health / paused market) — simulate before broadcasting. |
 | `market_not_found` | ❌ false | Verify the market symbol/address against `get_supported_markets`. |
 | `invalid_address` | ❌ false | Use a Base58 TRON address (`T…`, 34 chars). |
@@ -598,9 +622,9 @@ Only `transient` is safe to auto-retry; every other code requires a corrective a
 
 ## Security Considerations
 
-- **Browser wallet (recommended)**: Private keys never leave TronLink — the `tronlink-signer` SDK sends unsigned transactions to the browser and receives signed results
 - **Encrypted agent-wallet**: Private keys are encrypted at rest in `~/.agent-wallet/` with file permissions `0600`/`0700` — never stored in environment variables or config files
-- **No key in parameters**: All signing functions use the agent-wallet or browser wallet internally; private keys are never passed as function parameters or exposed via MCP tools
+- **Browser bridge fail-closed**: The legacy unauthenticated loopback bridge is disabled; do not expose it until request-level authentication is available
+- **No key in parameters**: Signing functions use agent-wallet internally; private keys are never passed as function parameters or exposed via MCP tools
 - **Import via CLI**: Use `npx agent-wallet import` from a terminal — private key import is not exposed as an MCP tool to avoid key exposure in AI conversation logs
 - **Explicit approvals**: TRC20/JST approval tools require an exact amount, while `max` remains available only when the user explicitly opts in
 - **Pre-flight checks**: Supply/repay validate allowance first, lending tools report energy/bandwidth sufficiency warnings, and reverted simulations are not broadcast
@@ -648,6 +672,9 @@ Only `transient` is safe to auto-retry; every other code requires a corrective a
 **"Cancel my energy rental to TXxx..."**
 → AI calls `get_energy_rent_info` to verify active rental → calls `return_energy_rental` → confirms refund
 
+**"Buy energy directly for these receiver addresses"**
+→ AI calls `get_energy_purchase_config` → obtains `quote_energy_purchase` → shows payer, receivers, duration, and exact TRX amount → calls `buy_energy_direct` only after explicit confirmation → verifies with `get_energy_purchase_order`; ambiguous results route through `get_energy_payment_risk` before any retry
+
 **"Stake 1000 TRX to earn sTRX rewards"**
 → AI uses `stake_trx` prompt: checks balance → checks exchange rate & APY → stakes TRX → verifies sTRX received
 
@@ -658,7 +685,7 @@ Only `transient` is safe to auto-retry; every other code requires a corrective a
 → AI calls `check_strx_withdrawal_eligibility` to check unbonding status and completed withdrawal rounds
 
 **"Connect my TronLink wallet"**
-→ AI calls `connect_browser_wallet`, opens browser window for user to approve in TronLink
+→ AI explains that the legacy browser bridge is disabled, then guides the user to configure encrypted agent-wallet rather than bypassing the safety control
 
 **"How much energy will supplying 100 USDT cost?"**
 → AI calls `estimate_lending_energy` with operation=supply, market=jUSDT, amount=100, returns energy/bandwidth/TRX breakdown

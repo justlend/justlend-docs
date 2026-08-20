@@ -10,6 +10,20 @@ For the JustLend protocol itself, see governance proposals on [forum.justlend.or
 
 ## [Unreleased]
 
+### Added — 2026-08-19 AI-readability contract pass
+
+- Added first-class CLI and V2 Utils discovery across navigation, `llms.txt`, `llms-full.txt`, AI source routing, JSON-LD, and a dedicated install/safety guide.
+- Synced the agent surfaces to CLI `1.0.1`, full MCP `1.1.3`, and Skills `1.1.1`, including versioned success/error envelopes and published output schemas.
+- Regenerated the site-local 98-tool MCP catalog with `outputSchema` coverage on every tool and documented the bundled Skills server's 9 structured outputs.
+- Published canonical raw Markdown beside every rendered page and advertised it with `rel="alternate" type="text/markdown"` plus a visible source link.
+- Added deterministic AI-consistency checks and a weekly, structured 9-probe live API acceptance artifact in CI.
+
+### Fixed — 2026-08-19 AI-readability contract pass
+
+- Reconciled the market inventory to **24 total (18 active + 6 legacy)** after expanding `app.justlend.org/marketNew` and cross-checking `/lend/jtoken` plus the MCP chain catalog; added the previously omitted active `jU` market everywhere.
+- Corrected `/lend/account`: `addresses` is optional, omission returns the global account index, and the endpoint-specific default `pageSize` is 50.
+- Added verification provenance and freshness metadata to `contracts.json` and its JSON Schema.
+
 ### Added — 2026-05-22 API-style + reference-gap pass
 
 - **TronWeb call style unified across all developer pages.** Removed every `.methods.X()` (Web3.js-style) call from `developers/common_pitfalls.md` (10 occurrences) and `developers/supply_and_borrow_market/sbm.md` (admonition snippet) — now consistently using TronWeb 5.x direct style (`contract.method(args).call()` / `.send()`). Also dropped `.send({ from: addr })` (8 in common_pitfalls + 4 in sbm) in favor of the canonical TronWeb pattern of setting `tronWeb.defaultAddress` once. Both styles were technically supported, but the same file used both inconsistently. The `safeApprove` helper now throws early if `tronWeb.defaultAddress.base58` is unset (silent "no sender" failure was the most common confusion).

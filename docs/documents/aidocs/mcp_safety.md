@@ -20,7 +20,7 @@ Use this page before any JustLend MCP workflow that may sign or broadcast a tran
 JustLend MCP tools fall into three practical classes:
 
 1. **Read-only tools**: query markets, account state, balances, blocks, prices, rewards, or supported networks. These do not move assets.
-2. **Local state / interaction tools**: connect browser wallet, set wallet mode, set network, select active wallet. These change local configuration or start a browser interaction.
+2. **Local state / interaction tools**: set wallet mode, set network, and select the active wallet. These change local configuration. `connect_browser_wallet` currently returns a safety notice because the legacy unauthenticated bridge is disabled.
 3. **On-chain write tools**: supply, borrow, repay, withdraw, approve, transfer, stake, unstake, vote, rent energy, return energy, deploy or write contracts. These may move assets or create obligations.
 
 Use [`mcp_tools.md`](mcp_tools.md) for the generated side-effect class and annotation of each tool.
@@ -40,14 +40,16 @@ Before any on-chain write tool, the agent must show:
 
 Then ask for explicit confirmation.
 
+For `buy_energy_direct`, the confirmation must be tied to the authoritative quote: show payer, every receiver, duration, and exact TRX amount. The configured backend validates and may broadcast the signed payment. If the result is ambiguous, call `get_energy_payment_risk` and do not sign a second payment while the first remains unresolved.
+
 ## Private key rule
 
 Never ask the user to paste a private key or seed phrase into chat or MCP tool arguments.
 
-Allowed wallet modes:
+Supported wallet mode:
 
-- **Browser wallet mode**: recommended. TronLink or another browser wallet signs transactions. Private keys never leave the wallet.
 - **Agent wallet mode**: encrypted local wallet managed by `@bankofai/agent-wallet`. Use CLI or local wallet management; do not pass private keys through MCP prompts.
+- **Browser mode is disabled**: the legacy loopback bridge lacks request-level authentication. Do not bypass this fail-closed control; wait for an authenticated replacement.
 
 ## Approval rule
 

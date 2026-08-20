@@ -167,7 +167,7 @@ Endpoints that accept `pageNo` and `pageSize` return:
 ```
 
 - `pageNo` is 1‑based. Default = `1`.
-- `pageSize` default = `10`, **max = `1000`**.
+- `pageSize` default = `10`, **max = `1000`**, except `/lend/account`, whose verified default is `50`.
 - Invalid or out-of-range `pageNo`/`pageSize` are often **silently ignored** (defaults applied, `200 SUCCESS`) rather than rejected — validate client-side. See [§1.6 Error responses](#16-error-responses).
 
 ### 1.6 Error responses
@@ -350,23 +350,29 @@ Returns the on‑chain state of every Supply & Borrow market: rates, total suppl
 
 ### 3.2 `GET /lend/account` — User SBM positions
 
-Returns each queried wallet's supply/borrow positions, health factor and totals.
+Returns supply/borrow positions, health factors, and totals. With `addresses`, it filters to one or more wallets. Without `addresses`, it returns the global paginated account index; this read-only scan behavior and its 50-row default were verified on 2026-08-19.
 
 **Parameters**
 
 | Name                  | In    | Type    | Required | Description                                                                   |
 |-----------------------|-------|---------|----------|-------------------------------------------------------------------------------|
-| `addresses`           | query | string  | yes      | One or more TRON addresses, **comma‑separated** (no spaces).                  |
+| `addresses`           | query | string  | no       | Optional TRON Base58 filter: one address or multiple **comma-separated** addresses (no spaces). Omit for the global account index. |
 | `minBorrowValueInTrx` | query | number  | no       | Only return accounts whose total borrow value (in TRX) is ≥ this threshold.   |
 | `maxHealth`           | query | number  | no       | Only return accounts whose health is ≤ this threshold (useful to find risky). |
 | `pageNo`              | query | integer | no       | 1‑based page number. Default `1`.                                             |
-| `pageSize`            | query | integer | no       | Page size. Default `10`, max `1000`.                                          |
+| `pageSize`            | query | integer | no       | Page size. Verified default `50`, max `1000`.                                 |
 
-**Example request**
+**Example requests**
 
 ```http
+# Filter to explicit wallets
 GET /lend/account?addresses=T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb,TXJgM...&pageNo=1&pageSize=20
+
+# Global account scan (50 rows by default)
+GET /lend/account?pageNo=1
 ```
+
+Validate Base58 addresses client-side. The live service may silently accept malformed filters instead of returning a validation error.
 
 **Response data** (real response captured 2026-07-15)
 
