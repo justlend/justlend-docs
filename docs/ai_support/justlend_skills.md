@@ -1,6 +1,6 @@
 ---
-title: JustLend Skills (read-only)
-description: "GitHub-distributed JustLend Skills — 9 read-only MCP tools and 5 skill modules for AI agents to query JustLend market data, account health, and balances. CLI also available."
+title: JustLend Skills
+description: "GitHub-distributed JustLend Skills — 6 workflow modules plus a bundled 9-tool read-only MCP server for AI agents. CLI also available."
 ---
 
 # JustLend Skills
@@ -17,10 +17,10 @@ JustLend Skills is a GitHub-distributed AI Agent skills project for the **JustLe
 It also works as a standalone **CLI tool** for quick market checks directly from the terminal.
 
 !!! note
-    This is a **read-only** query package. No write operations or transaction signing are supported. For write operations (supply, borrow, repay, withdraw, sTRX staking, energy rental, governance voting), use the full MCP server: [@justlend/mcp-server-justlend](mcp_server.md).
+    The bundled MCP server and standalone CLI are **read-only** and never sign transactions. The package's workflow skill files also cover writes such as lending, staking, energy rental/direct purchase, and governance; those actions route to the full MCP server: [@justlend/mcp-server-justlend](mcp_server.md), require a signing wallet, and require explicit confirmation.
 
 !!! note "Bundled server is read-only V1; V2 (Moolah) needs the full server"
-    The **bundled lite MCP server** (the 9 query tools) is **read-only JustLend V1** (the Compound V2-style pooled markets). The package also ships a `justlend-lending-v2` skill module with V2 instructions, but **V2 tool execution is not part of the lite server** — the `justlend-lending-v2`, `justlend-trx-staking`, `justlend-energy-rental`, and `justlend-governance-v1` modules require the [full MCP server](mcp_server.md). To *query* V2 (Moolah) read-only (vault APY/TVL, market parameters, user positions, liquidation candidates), use the full server's read-only `get_moolah_*` tools — e.g. `get_moolah_vaults`, `get_moolah_markets`, `get_moolah_user_position`, `get_moolah_dashboard` — documented in [MCP Server → JustLend V2 (Moolah)](mcp_server.md). Those read tools require no wallet; only the V2 *write* tools do.
+    The **bundled lite MCP server** (the 9 query tools) is **read-only JustLend V1** (the Compound V2-style pooled markets). The package also ships workflow modules whose execution is not part of the lite server — `justlend-lending-v2`, `justlend-trx-staking`, `justlend-energy-rental`, `justlend-energy-purchase`, and `justlend-governance-v1` require the [full MCP server](mcp_server.md). To *query* V2 (Moolah) read-only (vault APY/TVL, market parameters, user positions, liquidation candidates), use the full server's read-only `get_moolah_*` tools — e.g. `get_moolah_vaults`, `get_moolah_markets`, `get_moolah_user_position`, `get_moolah_dashboard` — documented in [MCP Server → JustLend V2 (Moolah)](mcp_server.md). Those read tools require no wallet; only the V2 *write* tools do.
 
 !!! tip "Companion references for agents using these tools"
     The tool outputs use protocol-specific terminology — `mantissa`, `borrowIndex`, `exchangeRate`, `collateralFactor`, `closeFactor`, `liquidationIncentive`, `status: active|legacy`. Each is defined in the [Glossary](../resources/glossary.md) with units and on-chain encoding. When asking the agent to *act* on a market (e.g. supply, repay), point it at [Common Pitfalls](../developers/common_pitfalls.md) first — the same gotchas (USDT `approve()` race, decimals mismatch, etc.) apply whether the agent uses Skills, the full MCP server, or raw TronWeb.
@@ -39,17 +39,18 @@ It also works as a standalone **CLI tool** for quick market checks directly from
 
 ### Skill Modules
 
-The project includes 5 structured skill modules in the `/skills` directory that provide AI agents with domain-specific instructions and workflows:
+The project includes 6 structured skill modules in the `/skills` directory that provide AI agents with domain-specific instructions and workflows:
 
 | Skill | Description | MCP Server Required |
 |-------|-------------|---------------------|
-| **justlend-lending-v1** | Market queries, account analysis, health factor monitoring | JustLend Skills (built-in) |
+| **justlend-lending-v1** | V1 lending queries and supply/borrow/repay/withdraw workflows | Built-in for reads; Full MCP for writes |
 | **justlend-lending-v2** | JustLend V2 (Moolah) isolated markets + ERC4626 vaults: supply/borrow/liquidate | Full MCP Server |
 | **justlend-trx-staking** | Stake TRX for sTRX liquid staking tokens | Full MCP Server |
 | **justlend-energy-rental** | Rent TRON Energy at discounted rates (50-80% cheaper) | Full MCP Server |
+| **justlend-energy-purchase** | Quote, confirm, track, and reconcile direct Energy purchases | Full MCP Server |
 | **justlend-governance-v1** | View proposals, deposit JST for voting power, cast votes | Full MCP Server |
 
-The `justlend-lending-v1` skill works with the built-in 9 query tools. The other four skills provide instructional guidance and require the [full MCP server](mcp_server.md) for tool execution (and write operations).
+The read-only portions of `justlend-lending-v1` work with the built-in 9 query tools. Its write flows and the other five skills require the [full MCP server](mcp_server.md) for tool execution.
 
 ## Bundled Market Shortcuts
 
@@ -249,6 +250,13 @@ Rent TRON Energy from the JustLend marketplace at 50-80% lower cost than burning
 
 !!! note
     This skill requires the [full MCP server](mcp_server.md) for tool execution.
+
+### Energy Direct Purchase (justlend-energy-purchase)
+
+Obtain an authoritative quote, confirm the exact `total_sun` payment, submit it for backend-controlled broadcast, track the order, and reconcile ambiguous payment results before initiating another purchase.
+
+!!! warning
+    This skill requires the [full MCP server](mcp_server.md), an explicitly configured energy API URL, and a signing wallet. Never expose a private key or signed transaction, and never retry with a second payment while payment risk is unresolved.
 
 ### DAO Governance (justlend-governance-v1)
 

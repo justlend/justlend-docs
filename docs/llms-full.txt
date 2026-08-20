@@ -436,14 +436,14 @@ JustLend ships four complementary agent and developer integration surfaces:
 
 ### 7.1 JustLend Skills — GitHub distribution
 
-Read-only skills package, version **v1.1.1**. Repo: <https://github.com/justlend/justlend-skills>.
+Workflow skills package with a bundled read-only runtime, version **v1.1.1**. Repo: <https://github.com/justlend/justlend-skills>.
 
 Install by cloning that repository and running `bash install.sh`. The local package identifier `@justlend/justlend-skills` is **not published to npm**; do not use `npm install @justlend/justlend-skills`. An `npm install` run inside the clone only installs the project's dependencies.
 
 - Combines structured **skill instructions** (for any Claude-compatible agent — Claude Code, Claude Desktop, Cursor, Codex) with a lightweight built-in **read-only MCP server** exposing **9 query tools**.
 - Also runs standalone as a **CLI** (`node scripts/justlend_api.mjs markets|dashboard|account ...`).
 - Requires `TRONGRID_API_KEY` (free at <https://trongrid.io>). Supports `NETWORK=mainnet|nile`.
-- **No wallet, no signing, no write operations** — strictly read-only by design.
+- The bundled MCP server and standalone CLI need no wallet and are strictly read-only. Write skill workflows route to the full MCP server, a signing wallet, and explicit confirmation.
 - All 9 tools declare a versioned `outputSchema`. Successes expose `{ schemaVersion: "1.0.0", tool, result }` in `structuredContent` while preserving raw JSON text; failures expose `{ schemaVersion, tool, error, errorCode, retryable, hint }`. Auto-retry only `rate_limit` / `transient` errors.
 - `get_supported_markets` lists only 8 bundled balance/allowance shortcuts. Use `get_all_markets`, the live API, or `contracts.json` for the canonical **24-market (18 active + 6 legacy)** roster.
 
@@ -451,10 +451,11 @@ Skill modules:
 
 | Skill | Function | Backend |
 |-------|----------|---------|
-| `justlend-lending-v1`  | Market queries, account analysis, health monitoring | Built-in MCP (read-only) |
+| `justlend-lending-v1`  | V1 queries and lending write workflows             | Built-in reads; full MCP writes |
 | `justlend-lending-v2`  | V2 isolated markets and ERC4626 vault guidance       | Requires full MCP |
 | `justlend-trx-staking` | sTRX staking guidance                              | Requires full MCP (write) |
 | `justlend-energy-rental` | Energy rental guidance                           | Requires full MCP (write) |
+| `justlend-energy-purchase` | Quote-bound direct Energy purchase and recovery | Requires full MCP (write) |
 | `justlend-governance-v1` | JIP voting guidance                              | Requires full MCP (write) |
 
 Built-in MCP tools (all read-only): `get_all_markets`, `get_dashboard`, `get_supported_markets`, `get_jtoken_details`, `get_account_summary`, `get_account_data_from_api`, `get_trx_balance`, `get_token_balance`, `check_allowance`.
@@ -494,7 +495,7 @@ Source-installable CLI, version **v1.0.1**. Repo: <https://github.com/justlend/j
 - 31 top-level command groups cover V1/V2 reads and writes, staking, energy rental, governance, rewards, history, portfolio, and simulation.
 - Use `--json` and branch on the process exit code for agents and CI. Success is `{ schemaVersion: "1.0.0", success: true, data }`; failure is `{ schemaVersion, success: false, error, code, retryable, hint? }`, including parser/usage failures. Validate with `schemas/output-v1.schema.json`; never scrape human tables.
 - Run `--dry-run --dry-run-owner <address>` before any write; dry-run does not sign or broadcast.
-- `--no-broadcast` signs without sending. Mainnet broadcasts require explicit user intent; never add `--yes` automatically.
+- `--no-broadcast` signs without sending for supported write commands. Energy direct purchase rejects it because the configured backend controls broadcast; use a quote or `--dry-run` before the explicitly confirmed purchase. Mainnet broadcasts require explicit user intent; never add `--yes` automatically.
 - Prefer Nile for integration tests. Full guidance: <https://docs.justlend.org/ai_support/cli_and_sdk>.
 
 ### 7.4 JustLend V2 Utils — embedded browser / Node.js SDK

@@ -67,7 +67,7 @@ const requiredSnippets = {
   'docs/getting_started/overview.md': ['18 active + 6 legacy = 24'],
   'docs/developers/contracts_overview.md': ['18 active + 6 legacy = 24', 'per market, 23 instances'],
   'docs/ai_support/mcp_server.md': ['v1.1.3', '24 jToken markets in total', '| jU', '`outputSchema`', '`structuredContent`'],
-  'docs/ai_support/justlend_skills.md': ['`1.1.1`', '8 static shortcuts', '`structuredContent`', '`rate_limit`'],
+  'docs/ai_support/justlend_skills.md': ['`1.1.1`', '6 structured skill modules', 'justlend-energy-purchase', '8 static shortcuts', '`structuredContent`', '`rate_limit`'],
   'docs/ai_support/cli_and_sdk.md': ['justlend/justlend-cli', '`1.0.1`', 'schemas/output-v1.schema.json', 'justlend/justlend-utils-v2', '--dry-run'],
   'docs/llms.txt': ['justlend-cli', 'v1.1.3', 'v1.1.1', 'justlend-utils-v2', '/lend/account?addresses={address}'],
   'docs/llms-full.txt': ['JustLend CLI — deterministic terminal automation', 'v1.0.1', 'v1.1.3', 'v1.1.1', 'JustLend V2 Utils'],

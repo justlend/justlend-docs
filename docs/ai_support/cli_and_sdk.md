@@ -42,6 +42,7 @@ The CLI exposes 31 top-level command groups covering V1 and V2 lending, vaults, 
 - Validate output with [`schemas/output-v1.schema.json`](https://github.com/justlend/justlend-cli/blob/main/schemas/output-v1.schema.json). Treat `retryable` as the retry signal; never blindly retry a write.
 - Use `--dry-run --dry-run-owner <address>` first. Dry-run simulates and never signs or broadcasts.
 - Use `--no-broadcast` for sign-only validation, then broadcast only after explicit human intent.
+- Energy direct purchase is the exception: it rejects `--no-broadcast` because the configured backend controls broadcast. Use `energy purchase quote` or `--dry-run` before the explicitly confirmed purchase instead.
 - In non-interactive or JSON mode, writes require `--yes`; that flag bypasses the local prompt and must not be added automatically.
 - Prefer `--network nile` for integration tests. Mainnet writes are irreversible.
 

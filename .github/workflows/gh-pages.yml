@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - main  # Trigger this workflow whenever the main branch changes
+  pull_request:
+    branches:
+      - main  # Validate AI contracts and strict docs builds before merge
   workflow_dispatch:    # Allow manual triggering of this workflow via the "Run workflow" button on the GitHub UI Actions tab
   schedule:
     - cron: '17 2 * * 1'  # Weekly live contract check, Monday 02:17 UTC
@@ -62,6 +65,7 @@ jobs:
       run: echo 'docs.justlend.org' > site/CNAME
 
     - name: Deploy
+      if: github.event_name != 'pull_request'
       uses: JamesIves/github-pages-deploy-action@v4
       with:
         token: ${{ secrets.TOKEN}}
