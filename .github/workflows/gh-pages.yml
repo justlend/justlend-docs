@@ -28,6 +28,7 @@ jobs:
       run: node scripts/verify-ai-consistency.mjs
 
     - name: Run live API agent acceptance
+      if: github.event_name != 'pull_request'
       run: |
         node scripts/api-acceptance.mjs --json > docs/developers/apis/agent-acceptance-latest.json
         node -e "const r=require('./docs/developers/apis/agent-acceptance-latest.json'); if(!r.success||r.passed!==r.total) process.exit(1)"
