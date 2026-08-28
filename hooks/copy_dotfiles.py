@@ -1,6 +1,6 @@
-"""MkDocs hooks: dotfile mirroring + AI-snapshot metadata substitution.
+"""MkDocs hooks: machine-readable source publishing and snapshot metadata.
 
-This module installs two `on_post_build` actions:
+This module installs three `on_post_build` actions:
 
 1. **Dotfile publishing.** MkDocs intentionally skips dotfile directories
    (anything starting with `.`) during the build pass. We need
@@ -10,7 +10,12 @@ This module installs two `on_post_build` actions:
    into `site/.<dir>/`, and writes `site/.nojekyll` so GitHub Pages serves
    those directories instead of dropping them during Jekyll processing.
 
-2. **Snapshot metadata substitution.** `docs/llms-full.txt §0` contains
+2. **Raw Markdown publishing.** Every source `docs/**/*.md` file is copied
+   to the equivalent `site/**/*.md` URL alongside rendered HTML. Page templates
+   advertise that canonical source with `rel="alternate" type="text/markdown"`,
+   giving agents a stable raw representation without GitHub URL guessing.
+
+3. **Snapshot metadata substitution.** `docs/llms-full.txt §0` contains
    `{{LAST_GENERATED}}`, `{{DOCS_COMMIT}}`, and `{{DOCS_COMMIT_SHORT}}`
    placeholders. We replace them with the current build date and the
    current `git rev-parse HEAD` so the snapshot header always reflects
@@ -41,6 +46,17 @@ def _copy_dotfile_dirs(docs_dir: Path, site_dir: Path) -> None:
     # Without this marker GitHub Pages runs Jekyll and excludes directories
     # whose names start with a dot, even though they exist on gh-pages.
     (site_dir / ".nojekyll").touch()
+
+
+def _copy_markdown_sources(docs_dir: Path, site_dir: Path) -> None:
+    copied = 0
+    for src in docs_dir.rglob("*.md"):
+        relative = src.relative_to(docs_dir)
+        dest = site_dir / relative
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(src, dest)
+        copied += 1
+    print(f"[raw_markdown] published {copied} Markdown source files")
 
 
 def _current_git_sha(repo_root: Path) -> str:
@@ -84,4 +100,5 @@ def on_post_build(config, **kwargs) -> None:
     repo_root = docs_dir.parent
 
     _copy_dotfile_dirs(docs_dir, site_dir)
+    _copy_markdown_sources(docs_dir, site_dir)
     _substitute_snapshot_metadata(site_dir, repo_root)

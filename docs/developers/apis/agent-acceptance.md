@@ -7,16 +7,17 @@ description: End-to-end evidence that an anonymous agent can call the JustLend p
 
 This page is the **end-to-end acceptance artifact** for the [JustLend DAO API](../apis.md): proof that an agent with nothing but the docs and an HTTP client can call the API and get responses matching the documented contract ([`justlend_apis.yaml`](justlend_apis.yaml)).
 
-- **What it exercises:** every **anonymous GET** read endpoint (no wallet, no key, no auth) plus the V1 and V2 error contracts.
-- **How to reproduce:** from the repo root, run `node scripts/api-acceptance.mjs` (Node ≥ 18, read-only, ~8 GET requests). Exit code `0` means every assertion holds.
-- **Status: 8/8 probes passed** on the last run. If a re-run fails, the live service has drifted from the documented contract — update [`apis.md`](../apis.md) and the YAML, and record the new run here.
+- **What it exercises:** representative anonymous GET read paths (no wallet, key, or auth), the canonical market inventory, `/lend/account` default pagination, and the V1/V2 error contracts.
+- **How to reproduce:** from the repo root, run `node scripts/api-acceptance.mjs` (Node ≥ 18, read-only, 9 GET requests). Use `--json` for a versioned machine-readable report; exit code `0` means every assertion holds.
+- **Status: 9/9 probes passed** on the last run. The latest structured artifact is [`agent-acceptance-latest.json`](agent-acceptance-latest.json). If a re-run fails, the live service has drifted from the documented contract — update [`apis.md`](../apis.md) and the YAML, and record the new run here.
 
 ## Last verified run
 
 ```text
-JustLend API agent acceptance — 2026-07-15T08:09:17.239Z — base https://openapi.just.network
+JustLend API agent acceptance — 2026-08-19T08:29:52.523Z — base https://openapi.just.network
 
 PASS  V1 market list                             HTTP 200  /lend/jtoken
+PASS  V1 global account pagination               HTTP 200  /lend/account
 PASS  V1 sTRX + Energy Rental dashboard          HTTP 200  /lend/strx
 PASS  V1 mining APY map                          HTTP 200  /mining/apy
 PASS  V1 high-risk account list                  HTTP 200  /justlend/liquidate/highRiskAccountList
@@ -25,14 +26,15 @@ PASS  V2 market list                             HTTP 200  /v2/index/market/list
 PASS  V1 error contract (unknown path)           HTTP 200  /lend/nonExistentXYZ
 PASS  V2 error contract (missing params)         HTTP 200  /v2/vault/position
 
-8/8 endpoint probes passed.
+9/9 endpoint probes passed.
 ```
 
 ## What each probe asserts
 
 | Probe | Endpoint | Key assertions |
 |-------|----------|----------------|
-| V1 market list | `/lend/jtoken` | HTTP 200; `code: 0`, `message: "SUCCESS"`; `tokenList` ≥ 20 entries; `supplyRate`/`cash`/`exchangeRate` are decimal **strings**; `borrowIndex` is a BigInt-safe integer string; `underlyingDecimal` is a JSON integer. |
+| V1 market list | `/lend/jtoken` | HTTP 200; `code: 0`, `message: "SUCCESS"`; exactly 24 entries matching `contracts.json`, including `jU`; `supplyRate`/`cash`/`exchangeRate` are decimal **strings**; `borrowIndex` is a BigInt-safe integer string; `underlyingDecimal` is a JSON integer. |
+| V1 global account pagination | `/lend/account` (no `addresses`) | `addresses` is optional; omitted `pageSize` returns 50 rows; `totalCount` and `totalPage` are positive integers. |
 | V1 sTRX dashboard | `/lend/strx` | `code: 0`; `stakeInfo.reserves` present as decimal string (key renamed from the historical `reserse`); `stakeInfo.decimal` serialized as the string `"18"`; `rentInfo` prices are decimal strings. |
 | V1 mining APY | `/mining/apy` | `code: 0`; one key per market (≥ 20); every value is `{ "USDD": "<decimal string>" }`. |
 | V1 high-risk list | `/justlend/liquidate/highRiskAccountList` | `code: 0`; `jtokens` is a plain **object map** (not an array); `updateTime` epoch-ms integer; account entries carry string `risk` / USD fields and integer `liquidateStatusStartTime`. |

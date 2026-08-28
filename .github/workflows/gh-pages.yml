@@ -3,19 +3,38 @@ on:
   push:
     branches:
       - main  # Trigger this workflow whenever the main branch changes
-    workflow_dispatch:    # Allow manual triggering of this workflow via the "Run workflow" button on the GitHub UI Actions tab
+  pull_request:
+    branches:
+      - main  # Validate AI contracts and strict docs builds before merge
+  workflow_dispatch:    # Allow manual triggering of this workflow via the "Run workflow" button on the GitHub UI Actions tab
+  schedule:
+    - cron: '17 2 * * 1'  # Weekly live contract check, Monday 02:17 UTC
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v4  # Action that checks out the repository
+      uses: actions/checkout@v7  # Action that checks out the repository
       with:
         persist-credentials: false   # Disable auto-injection of GITHUB_TOKEN so a higher-privilege token can be supplied in later steps
         fetch-depth: 0   # Required by mkdocs-git-revision-date-localized-plugin to compute per-page last-updated
 
+    - name: Setup Node.js
+      uses: actions/setup-node@v7
+      with:
+        node-version: 20
+
+    - name: Verify AI-readable source consistency
+      run: node scripts/verify-ai-consistency.mjs
+
+    - name: Run live API agent acceptance
+      if: github.event_name != 'pull_request'
+      run: |
+        node scripts/api-acceptance.mjs --json > docs/developers/apis/agent-acceptance-latest.json
+        node -e "const r=require('./docs/developers/apis/agent-acceptance-latest.json'); if(!r.success||r.passed!==r.total) process.exit(1)"
+
     - name: Setup Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v7
       with:
         python-version: 3.x   # Install Python
 
@@ -31,18 +50,23 @@ jobs:
         pip install mkdocs-git-revision-date-localized-plugin==1.4.7   # per-page last-updated from git history
 
     - name: Build the document
-      run: mkdocs build  # Build the MkDocs site
+      run: mkdocs build --strict
 
     - name: Verify security metadata output
       run: |
         test -f site/.nojekyll
         test -f site/.well-known/security.txt
         cmp docs/.well-known/security.txt site/.well-known/security.txt
+        test -f site/ai_support/cli_and_sdk.md
+        cmp docs/ai_support/cli_and_sdk.md site/ai_support/cli_and_sdk.md
+        grep -q 'type="text/markdown"' site/ai_support/cli_and_sdk/index.html
+        test -f site/developers/apis/agent-acceptance-latest.json
 
     - name: Add CNAME file
       run: echo 'docs.justlend.org' > site/CNAME
 
     - name: Deploy
+      if: github.event_name != 'pull_request'
       uses: JamesIves/github-pages-deploy-action@v4
       with:
         token: ${{ secrets.TOKEN}}

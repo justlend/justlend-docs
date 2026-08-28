@@ -88,7 +88,10 @@
     <link rel="llms-full" href="{{ '/llms-full.txt' | url }}" type="text/plain">
     <link rel="alternate" type="text/plain" title="llms.txt — site index for LLMs" href="{{ '/llms.txt' | url }}">
     <link rel="alternate" type="text/plain" title="llms-full.txt — full-text snapshot for LLMs" href="{{ '/llms-full.txt' | url }}">
-    <meta name="ai-content-declaration" content="llms.txt,llms-full.txt">
+    {% if page.file and page.file.src_uri and page.file.src_uri.endswith('.md') %}
+      <link rel="alternate" type="text/markdown" title="Raw Markdown source" href="{{ config.site_url }}{{ page.file.src_uri }}">
+    {% endif %}
+    <meta name="ai-content-declaration" content="llms.txt,llms-full.txt,raw-markdown">
     {# Schema.org JSON-LD. Gives AI crawlers and search engines a structured #}
     {# entity for JustLend DAO: what it is, what runs it, where its machine- #}
     {# readable surfaces live. Emitted on every page so that any RAG chunk   #}
@@ -122,7 +125,9 @@
           "sameAs": [
             "https://github.com/justlend/justlend-protocol",
             "https://github.com/justlend/mcp-server-justlend",
-            "https://github.com/justlend/justlend-skills"
+            "https://github.com/justlend/justlend-skills",
+            "https://github.com/justlend/justlend-cli",
+            "https://github.com/justlend/justlend-utils-v2"
           ],
           "provider": { "@id": "https://justlend.org/#org" },
           "documentation": "https://docs.justlend.org/llms.txt",
@@ -267,8 +272,11 @@
               <article class="md-content__inner md-typeset">
                 {% block content %}
                   {% include "partials/content.html" %}
+                  {% if page.file and page.file.src_uri and page.file.src_uri.endswith('.md') %}
+                    <p class="md-source-file"><a href="{{ config.site_url }}{{ page.file.src_uri }}" rel="alternate" type="text/markdown">View raw Markdown</a></p>
+                  {% endif %}
 		  <hr class="content-footer-divider">  <!-- 添加的水平线 -->
-      	    	  {% include "partials/footer.html" %}
+                  {% include "partials/footer.html" %}
                 {% endblock %}
               </article>
             </div>

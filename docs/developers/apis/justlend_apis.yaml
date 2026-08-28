@@ -694,14 +694,17 @@ paths:
       tags:
         - Supply and Borrow Market V1
       summary: Get Account Information on V1
-      description: Query to get the SBM user account information. (To pass parameters to obtain specific information, please click 「Test」and fill in the address information in the Query parameters section.)
+      description: >-
+        Query SBM account information. When `addresses` is provided, returns the matching
+        wallet or comma-separated wallets. When omitted, returns the global paginated account
+        index; the observed default page size for this endpoint is 50. This endpoint is read-only.
       operationId: getLendAccounts
       parameters:
-        - '$ref': '#/components/parameters/addresses'
+        - '$ref': '#/components/parameters/accountAddresses'
         - '$ref': '#/components/parameters/minBorrowValueInTrx'
         - '$ref': '#/components/parameters/maxHealth'
         - '$ref': '#/components/parameters/pageNo'
-        - '$ref': '#/components/parameters/pageSize'
+        - '$ref': '#/components/parameters/accountPageSize'
       responses:
         '200':
           description: >-
@@ -1184,6 +1187,27 @@ components:
         type: integer
         format: int64
         default: 10
+        maximum: 1000
+    accountAddresses:
+      name: addresses
+      in: query
+      description: >-
+        Optional TRON Base58 wallet filter. Supply one address or multiple comma-separated
+        addresses with no spaces. Omit it to scan the global paginated account index.
+      required: false
+      schema:
+        type: string
+        pattern: '^(T[1-9A-HJ-NP-Za-km-z]{33})(,T[1-9A-HJ-NP-Za-km-z]{33})*$'
+    accountPageSize:
+      name: pageSize
+      in: query
+      description: Page size for `/lend/account`; observed default 50, maximum 1000.
+      required: false
+      schema:
+        type: integer
+        format: int64
+        default: 50
+        minimum: 1
         maximum: 1000
     addresses:
       name: addresses

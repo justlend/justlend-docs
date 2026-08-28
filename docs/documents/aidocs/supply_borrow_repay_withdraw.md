@@ -21,7 +21,7 @@ These are write operations. They can sign and broadcast TRON transactions that m
 ## General safety workflow
 
 1. Confirm network: `mainnet` for real funds, `nile` for testing.
-2. Confirm wallet mode: browser wallet is preferred; agent-wallet is local encrypted fallback.
+2. Confirm wallet mode: use encrypted `agent-wallet`; the legacy unauthenticated browser bridge is disabled.
 3. Validate asset and market: use `get_market_data` or `get_supported_markets`.
 4. Check account state: use `get_account_summary`.
 5. Estimate energy and fees where possible.

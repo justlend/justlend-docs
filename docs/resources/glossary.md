@@ -166,11 +166,11 @@ The 48-hour minimum delay between a proposal succeeding (vote period closes with
 
 ### active (jToken status)
 
-Open for new supply and borrow. The default state. 17 of 23 jToken markets are currently `active`.
+Open for new supply and borrow. The default state. 18 of 24 jToken markets are currently `active`.
 
 ### legacy (jToken status)
 
-**Closed to new supply and borrow.** Existing positions can still be unwound (`repayBorrow`, `redeem`, `redeemUnderlying`). The contract remains queryable indefinitely; addresses do not get reused. 6 of 23 jToken markets are currently `legacy`. The canonical list and per-market `status` field are in [`contracts.json`](../developers/contracts.json) and the [APIs §2 reference table](../developers/apis.md#2-jtoken-address-reference). See also: [Developer common pitfalls — legacy markets](../developers/common_pitfalls.md#10-legacy-markets).
+**Closed to new supply and borrow.** Existing positions can still be unwound (`repayBorrow`, `redeem`, `redeemUnderlying`). The contract remains queryable indefinitely; addresses do not get reused. 6 of 24 jToken markets are currently `legacy`. The canonical list and per-market `status` field are in [`contracts.json`](../developers/contracts.json) and the [APIs §2 reference table](../developers/apis.md#2-jtoken-address-reference). See also: [Developer common pitfalls — legacy markets](../developers/common_pitfalls.md#10-legacy-markets).
 
 ---
 

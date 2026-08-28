@@ -4,7 +4,7 @@
     "generated_by": "scripts/generate_contracts_json.py",
     "source_of_truth": "https://github.com/justlend/mcp-server-justlend/blob/main/src/core/chains.ts",
     "last_generated": "2026-06-26",
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "schema_version_policy": "Semantic versioning. MAJOR = breaking field rename or removal. MINOR = additive field (e.g. new role keys, new networks). PATCH = address corrections within an existing structure. Consumers should pin a MAJOR.",
     "address_formats": {
       "base58": "TRON Base58Check, T-prefixed, 34 chars — for wallets, Tronscan, TronWeb display, and end-user prompts.",
@@ -15,7 +15,13 @@
       "active": "Market is open for new supply and borrow. Use for new positions.",
       "legacy": "Market is closed to new supply and borrow. Contract is still queryable so existing positions can be unwound, but do not direct new deposits to it."
     },
-    "comment": "All addresses are returned in three equivalent formats (see address_formats above). Network is recorded per record so consumers can mix Mainnet + Nile in one pass without context loss. Each entry under `networks.*.jtokens` carries an explicit `status` field (see status_values above) so consumers can filter `active` vs `legacy` without parsing prose elsewhere."
+    "comment": "All addresses are returned in three equivalent formats (see address_formats above). Network is recorded per record so consumers can mix Mainnet + Nile in one pass without context loss. Each entry under `networks.*.jtokens` carries an explicit `status` field (see status_values above) so consumers can filter `active` vs `legacy` without parsing prose elsewhere.",
+    "last_verified": "2026-08-19",
+    "verification_sources": [
+      "https://app.justlend.org/",
+      "https://openapi.just.network/lend/jtoken",
+      "https://github.com/justlend/mcp-server-justlend/blob/main/src/core/chains.ts"
+    ]
   },
   "networks": {
     "mainnet": {
