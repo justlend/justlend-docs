@@ -22,22 +22,9 @@ mkdocs serve
 Before opening a pull request, run:
 
 ```bash
-node --test scripts/api-acceptance.test.mjs
 mkdocs build --strict
 ```
 
-## CI and live API monitoring
-
-- **Publish Document** runs source consistency checks, offline API CLI regression tests,
-  and the strict documentation build. Failed checks still block deployment; pull requests
-  never deploy. Live API availability is not a documentation deployment prerequisite.
-- **Monitor Live API** runs the nine read-only production probes every Monday at 02:17 UTC
-  or manually through GitHub Actions. Failed probes fail this independent workflow and
-  print diagnostics to stderr; the JSON report is retained as a run artifact for 14 days,
-  including on failure. This workflow never deploys or updates repository files.
-- The published `agent-acceptance-latest.json` is the committed verification snapshot,
-  not a live status feed. Check its `generatedAt` timestamp. Refresh it only after a
-  successful, reviewed live run; current monitoring results are in the monitor's run artifacts.
 
 ## 🤝 Contact Us
 
