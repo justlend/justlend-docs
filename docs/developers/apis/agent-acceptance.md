@@ -9,7 +9,9 @@ This page is the **end-to-end acceptance artifact** for the [JustLend DAO API](.
 
 - **What it exercises:** representative anonymous GET read paths (no wallet, key, or auth), the canonical market inventory, `/lend/account` default pagination, and the V1/V2 error contracts.
 - **How to reproduce:** from the repo root, run `node scripts/api-acceptance.mjs` (Node ≥ 18, read-only, 9 GET requests). Use `--json` for a versioned machine-readable report; exit code `0` means every assertion holds.
-- **Status: 9/9 probes passed** on the last run. The latest structured artifact is [`agent-acceptance-latest.json`](agent-acceptance-latest.json). If a re-run fails, the live service has drifted from the documented contract — update [`apis.md`](../apis.md) and the YAML, and record the new run here.
+- **Recorded status: 9/9 probes passed** in the committed verification snapshot, [`agent-acceptance-latest.json`](agent-acceptance-latest.json). Check its `generatedAt` timestamp; this is historical evidence, not a live status feed.
+- **Current monitoring:** the independent [Monitor Live API workflow](https://github.com/justlend/justlend-docs/actions/workflows/api-monitor.yml) runs weekly and on manual dispatch. Its JSON reports are retained as run artifacts for 14 days, including failures. Monitoring failures do not block documentation deployment or overwrite this snapshot.
+- **When a run fails:** inspect the HTTP status and failed assertions first. Network or access failures (such as HTTP 403 HTML responses) are not evidence of API contract drift. Update [`apis.md`](../apis.md) and the YAML only for verified contract changes; refresh this snapshot after a successful, reviewed run.
 
 ## Last verified run
 
