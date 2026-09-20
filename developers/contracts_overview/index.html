@@ -67,7 +67,10 @@
     <link rel="llms-full" href="/llms-full.txt" type="text/plain">
     <link rel="alternate" type="text/plain" title="llms.txt — site index for LLMs" href="/llms.txt">
     <link rel="alternate" type="text/plain" title="llms-full.txt — full-text snapshot for LLMs" href="/llms-full.txt">
-    <meta name="ai-content-declaration" content="llms.txt,llms-full.txt">
+    
+      <link rel="alternate" type="text/markdown" title="Raw Markdown source" href="https://docs.justlend.org/developers/contracts_overview.md">
+    
+    <meta name="ai-content-declaration" content="llms.txt,llms-full.txt,raw-markdown">
     
     
     
@@ -101,7 +104,9 @@
           "sameAs": [
             "https://github.com/justlend/justlend-protocol",
             "https://github.com/justlend/mcp-server-justlend",
-            "https://github.com/justlend/justlend-skills"
+            "https://github.com/justlend/justlend-skills",
+            "https://github.com/justlend/justlend-cli",
+            "https://github.com/justlend/justlend-utils-v2"
           ],
           "provider": { "@id": "https://justlend.org/#org" },
           "documentation": "https://docs.justlend.org/llms.txt",
@@ -138,8 +143,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "Architecture summary of every JustLend DAO contract on TRON \u2014 SBM jTokens, Comptroller, interest rate models, price oracle, governance, sTRX, Energy Rental \u2014 with proxy mode, ABI links, and key functions in one table.",
-          "dateModified": "2026-08-11",
-          "datePublished": "2026-08-11"
+          "dateModified": "2026-09-20",
+          "datePublished": "2026-09-20"
         }
       ]
     }
@@ -1544,6 +1549,28 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../../ai_support/cli_and_sdk/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CLI and V2 SDK
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
     
@@ -1554,10 +1581,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" >
         
           
-          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -1569,8 +1596,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_5">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
             <span class="md-nav__icon md-icon"></span>
             AI Docs for Agents
           </label>
@@ -2240,7 +2267,7 @@
 <li><strong>Protocol:</strong> JustLend DAO</li>
 <li><strong>Network:</strong> TRON Mainnet (Base58 addresses; see <a href="../contracts.json"><code>/developers/contracts.json</code></a> for Mainnet + Nile addresses in Base58, EVM <code>0x</code> hex, and TRON-internal <code>41</code> hex) </li>
 <li><strong>Architecture:</strong> Compound V2 fork</li>
-<li><strong>Markets:</strong> 17 active + 6 legacy = 23 jToken markets (authoritative list: <a href="../apis/#2-jtoken-address-reference">APIs §2</a>) </li>
+<li><strong>Markets:</strong> 18 active + 6 legacy = 24 jToken markets (authoritative list: <a href="../apis/#2-jtoken-address-reference">APIs §2</a>)</li>
 <li><strong>Upgrade pattern:</strong> every contract listed below is either <code>Delegator → Delegate</code> (proxy + implementation, <strong>upgradeable</strong> by Governance) or <strong>immutable</strong>, explicitly tagged in the table. The page first gives a one-screen machine-readable summary table; deeper per-component prose follows.</li>
 </ul>
 </div>
@@ -2325,7 +2352,7 @@
 <td><code>Unitroller</code> (entrypoint)</td>
 <td><a href="https://tronscan.org/#/contract/TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7"><code>TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7</code></a></td>
 <td><strong>Yes</strong> (impl behind proxy)</td>
-<td>Compound <code>Unitroller</code> (<code>_setPendingImplementation</code> + <code>_acceptImplementation</code>)</td>
+<td>JustLend <code>Unitroller</code> (<code>_setPendingImplementation</code> + <code>_acceptImplementation</code>)</td>
 <td><code>enterMarkets</code>, <code>exitMarket</code>, <code>getAccountLiquidity</code>, <code>markets</code>, <code>closeFactorMantissa</code>, <code>liquidationIncentiveMantissa</code></td>
 <td><a href="../abis/comptroller.json"><code>comptroller.json</code></a></td>
 <td><a href="../supply_and_borrow_market/comptroller/">Comptroller</a></td>
@@ -2345,17 +2372,17 @@
 <td><code>CErc20Delegator</code> (jTRX)</td>
 <td><a href="https://tronscan.org/#/contract/TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP"><code>TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP</code></a></td>
 <td><strong>Yes</strong> (impl behind delegator)</td>
-<td>Compound <code>CErc20Delegator</code> (<code>_setImplementation</code>)</td>
+<td>JustLend <code>CErc20Delegator</code> (<code>_setImplementation</code>)</td>
 <td><code>mint()</code> (payable, TRX), <code>borrow</code>, <code>repayBorrow</code> (payable), <code>redeem</code>, <code>redeemUnderlying</code>, <code>liquidateBorrow</code> (payable)</td>
 <td><a href="../abis/jtoken.json"><code>jtoken.json</code></a> (plus <a href="../abis/jtrx-mint.json"><code>jtrx-mint.json</code></a>, <a href="../abis/jtrx-repay.json"><code>jtrx-repay.json</code></a> for TRX-specific payable variants)</td>
 <td><a href="../supply_and_borrow_market/sbm/">SBM</a></td>
 </tr>
 <tr>
 <td>SBM (TRC20 markets)</td>
-<td><code>CErc20Delegator</code> (per market, 22 instances)</td>
+<td><code>CErc20Delegator</code> (per market, 23 instances)</td>
 <td>See <a href="../apis/#2-jtoken-address-reference"><code>apis.md §2</code></a></td>
 <td><strong>Yes</strong> per market</td>
-<td>Compound <code>CErc20Delegator</code> (<code>_setImplementation</code>)</td>
+<td>JustLend <code>CErc20Delegator</code> (<code>_setImplementation</code>)</td>
 <td><code>mint(uint)</code>, <code>borrow</code>, <code>repayBorrow(uint)</code>, <code>redeem</code>, <code>redeemUnderlying</code>, <code>liquidateBorrow(address, uint, address)</code></td>
 <td><a href="../abis/jtoken.json"><code>jtoken.json</code></a></td>
 <td><a href="../supply_and_borrow_market/sbm/">SBM</a>, <a href="../deployed_contracts/">Deployed Contracts</a></td>
@@ -2405,7 +2432,7 @@
 <td><code>GovernorBravoDelegator</code> (entrypoint)</td>
 <td><a href="https://tronscan.org/#/contract/TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD"><code>TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD</code></a></td>
 <td><strong>Yes</strong> (impl behind delegator)</td>
-<td>Compound <code>GovernorBravoDelegator</code> (<code>_setImplementation</code>)</td>
+<td>JustLend <code>GovernorBravoDelegator</code> (<code>_setImplementation</code>)</td>
 <td><code>propose</code>, <code>queue</code>, <code>execute</code>, <code>cancel</code>, <code>castVote</code>, <code>castVoteWithReason</code>, <code>state</code>, <code>deposit</code></td>
 <td><a href="../abis/governor-alpha.json"><code>governor-alpha.json</code></a> (Governor ABI; the WJST escrow is <code>wjst.json</code>)</td>
 <td><a href="../supply_and_borrow_market/governance/">Governance</a></td>
@@ -2454,8 +2481,8 @@
 <td>Staked TRX</td>
 <td><code>sTRX</code> (liquid-staking contract)</td>
 <td><a href="https://tronscan.org/#/contract/TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5"><code>TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5</code></a></td>
-<td><strong>No</strong> (constructor-fixed; new contract on protocol upgrade)</td>
-<td>None</td>
+<td><strong>Yes</strong> (impl behind proxy)</td>
+<td>JustLend <code>STRXProxy</code></td>
 <td><code>deposit()</code> (payable), <code>withdraw</code>, <code>withdrawExact</code>, <code>claim</code>, <code>claimAll</code>, <code>exchangeRate</code>, <code>balanceInTrx</code></td>
 <td><a href="../abis/strx.json"><code>strx.json</code></a></td>
 <td><a href="../staked_trx/">Staked TRX</a></td>
@@ -2464,8 +2491,8 @@
 <td>Energy Rental</td>
 <td><code>EnergyRental</code> market contract</td>
 <td><a href="https://tronscan.org/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd"><code>TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd</code></a></td>
-<td><strong>No</strong></td>
-<td>None</td>
+<td><strong>Yes</strong> (impl behind proxy)</td>
+<td>JustLend <code>MarketProxy</code></td>
 <td><code>rentResource</code> (payable), <code>returnResource</code>, <code>returnResourceByReceiver</code>, <code>liquidate</code>, <code>getRentInfo</code>, <code>_rentalRate</code></td>
 <td><a href="../abis/energy-market.json"><code>energy-market.json</code></a>, rate model in <a href="../abis/energy-rate-model.json"><code>energy-rate-model.json</code></a></td>
 <td><a href="../energy_rental/">Energy Rental</a></td>
@@ -2503,7 +2530,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="August 11, 2026 03:37:43 UTC">2026-08-11</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="September 20, 2026 09:00:06 UTC">2026-09-20</span>
   </span>
 
     
@@ -2516,8 +2543,11 @@
 
 
 
+                  
+                    <p class="md-source-file"><a href="https://docs.justlend.org/developers/contracts_overview.md" rel="alternate" type="text/markdown">View raw Markdown</a></p>
+                  
 		  <hr class="content-footer-divider">  <!-- 添加的水平线 -->
-      	    	  <footer class="md-footer">
+                  <footer class="md-footer">
   
   <!--div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">

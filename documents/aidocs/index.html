@@ -15,7 +15,7 @@
         <link rel="canonical" href="https://docs.justlend.org/documents/aidocs/">
       
       
-        <link rel="prev" href="../../ai_support/justlend_skills/">
+        <link rel="prev" href="../../ai_support/cli_and_sdk/">
       
       
         <link rel="next" href="source_of_truth/">
@@ -67,7 +67,10 @@
     <link rel="llms-full" href="/llms-full.txt" type="text/plain">
     <link rel="alternate" type="text/plain" title="llms.txt — site index for LLMs" href="/llms.txt">
     <link rel="alternate" type="text/plain" title="llms-full.txt — full-text snapshot for LLMs" href="/llms-full.txt">
-    <meta name="ai-content-declaration" content="llms.txt,llms-full.txt">
+    
+      <link rel="alternate" type="text/markdown" title="Raw Markdown source" href="https://docs.justlend.org/documents/aidocs/index.md">
+    
+    <meta name="ai-content-declaration" content="llms.txt,llms-full.txt,raw-markdown">
     
     
     
@@ -101,7 +104,9 @@
           "sameAs": [
             "https://github.com/justlend/justlend-protocol",
             "https://github.com/justlend/mcp-server-justlend",
-            "https://github.com/justlend/justlend-skills"
+            "https://github.com/justlend/justlend-skills",
+            "https://github.com/justlend/justlend-cli",
+            "https://github.com/justlend/justlend-utils-v2"
           ],
           "provider": { "@id": "https://justlend.org/#org" },
           "documentation": "https://docs.justlend.org/llms.txt",
@@ -138,8 +143,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "AI-oriented JustLend documentation map for RAG systems, coding agents, and MCP clients. Points agents to the correct source of truth for markets, accounts, transactions, contracts, APIs, and safety.",
-          "dateModified": "2026-06-12",
-          "datePublished": "2026-06-12"
+          "dateModified": "2026-08-19",
+          "datePublished": "2026-08-19"
         }
       ]
     }
@@ -1404,6 +1409,28 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai_support/cli_and_sdk/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CLI and V2 SDK
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -1418,10 +1445,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" checked>
         
           
-          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -1433,8 +1460,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_4_5">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_6">
             <span class="md-nav__icon md-icon"></span>
             AI Docs for Agents
           </label>
@@ -2185,6 +2212,7 @@
 <ol>
 <li><strong>OpenAPI specification</strong>: <a href="../../developers/apis/justlend_apis.yaml"><code>/developers/apis/justlend_apis.yaml</code></a> for public HTTP API routes, parameters, response schemas, units, and errors.</li>
 <li><strong>MCP tools</strong>: <a href="mcp_tools/"><code>mcp_tools.md</code></a> and the live MCP server for tool names, input schemas, safety annotations, wallet mode, and transaction workflows.</li>
+<li><strong>CLI / V2 Utils</strong>: <a href="../../ai_support/cli_and_sdk/"><code>CLI and V2 SDK</code></a> for deterministic terminal automation or embedded application integrations; inspect write side effects before signing.</li>
 <li><strong>Contract directory</strong>: <a href="../../developers/contracts.json"><code>/developers/contracts.json</code></a> for deployed contract addresses, network names, and active versus legacy market status.</li>
 <li><strong>JSON ABIs</strong>: <a href="../../developers/abis/jtoken.json"><code>/developers/abis/</code></a> for contract calls and event decoding.</li>
 <li><strong>Human docs</strong>: concept and developer pages for explanations, examples, and risk context.</li>
@@ -2271,7 +2299,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 12, 2026 10:48:42 UTC">2026-06-12</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="August 19, 2026 09:32:01 UTC">2026-08-19</span>
   </span>
 
     
@@ -2284,8 +2312,11 @@
 
 
 
+                  
+                    <p class="md-source-file"><a href="https://docs.justlend.org/documents/aidocs/index.md" rel="alternate" type="text/markdown">View raw Markdown</a></p>
+                  
 		  <hr class="content-footer-divider">  <!-- 添加的水平线 -->
-      	    	  <footer class="md-footer">
+                  <footer class="md-footer">
   
   <!--div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">

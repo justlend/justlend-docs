@@ -63,7 +63,10 @@
     <link rel="llms-full" href="/llms-full.txt" type="text/plain">
     <link rel="alternate" type="text/plain" title="llms.txt — site index for LLMs" href="/llms.txt">
     <link rel="alternate" type="text/plain" title="llms-full.txt — full-text snapshot for LLMs" href="/llms-full.txt">
-    <meta name="ai-content-declaration" content="llms.txt,llms-full.txt">
+    
+      <link rel="alternate" type="text/markdown" title="Raw Markdown source" href="https://docs.justlend.org/index.md">
+    
+    <meta name="ai-content-declaration" content="llms.txt,llms-full.txt,raw-markdown">
     
     
     
@@ -97,7 +100,9 @@
           "sameAs": [
             "https://github.com/justlend/justlend-protocol",
             "https://github.com/justlend/mcp-server-justlend",
-            "https://github.com/justlend/justlend-skills"
+            "https://github.com/justlend/justlend-skills",
+            "https://github.com/justlend/justlend-cli",
+            "https://github.com/justlend/justlend-utils-v2"
           ],
           "provider": { "@id": "https://justlend.org/#org" },
           "documentation": "https://docs.justlend.org/llms.txt",
@@ -134,8 +139,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "Official documentation for JustLend DAO \u2014 the largest lending protocol on TRON. Compound V2 architecture, sTRX liquid staking, Energy Rental, governance, deployed contracts, OpenAPI, and AI agent integration.",
-          "dateModified": "2026-07-22",
-          "datePublished": "2026-07-22"
+          "dateModified": "2026-08-24",
+          "datePublished": "2026-08-24"
         }
       ]
     }
@@ -1400,6 +1405,28 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="ai_support/cli_and_sdk/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CLI and V2 SDK
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
     
@@ -1410,10 +1437,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" >
         
           
-          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -1425,8 +1452,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_5">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
             <span class="md-nav__icon md-icon"></span>
             AI Docs for Agents
           </label>
@@ -2097,7 +2124,7 @@
 </blockquote>
 <p><strong>JustLend DAO</strong> is the largest lending protocol on TRON, built on the Compound V2 architecture. The protocol covers four integrated sub-protocols:</p>
 <ul>
-<li><strong>SBM (Supply &amp; Borrow Market)</strong> — supply TRX or TRC20 assets to earn interest; over-collateralize one asset to borrow another. <strong>17 active + 6 legacy = 23 jToken markets</strong> on TRON Mainnet (<a href="developers/apis/#2-jtoken-address-reference">authoritative list</a>).</li>
+<li><strong>SBM (Supply &amp; Borrow Market)</strong> — supply TRX or TRC20 assets to earn interest; over-collateralize one asset to borrow another. <strong>18 active + 6 legacy = 24 jToken markets</strong> on TRON Mainnet (<a href="developers/apis/#2-jtoken-address-reference">authoritative list</a>).</li>
 <li><strong>sTRX</strong> — one-click TRX liquid staking under Stake 2.0. Deposit TRX, receive sTRX (TRC20), earn voting + energy-rental yield.</li>
 <li><strong>Energy Rental</strong> — rent TRON Energy at 50–80% below the cost of burning TRX.</li>
 <li><strong>Governance</strong> — JST holders propose, vote, and execute on-chain via <code>GovernorBravo</code> + <code>Timelock</code>.</li>
@@ -2106,7 +2133,7 @@
 <ul>
 <li><strong>Users:</strong> <a href="getting_started/overview/">Overview</a> · <a href="getting_started/concepts/supply/">Supply</a> · <a href="getting_started/concepts/borrow/">Borrow</a> · <a href="getting_started/concepts/liquidations/">Liquidations</a> · <a href="getting_started/concepts/risks/">Risks</a></li>
 <li><strong>Developers:</strong> <a href="developers/contracts_overview/">Contracts Overview</a> · <a href="developers/supply_and_borrow_market/sbm/">SBM reference</a> · <a href="developers/deployed_contracts/">Deployed Contracts</a> · <a href="developers/apis/">APIs</a></li>
-<li><strong>AI Agents:</strong> <a href="llms.txt"><code>/llms.txt</code></a> · <a href="llms-full.txt"><code>/llms-full.txt</code></a> · <a href="developers/contracts.json"><code>/developers/contracts.json</code></a> · <a href="developers/apis/justlend_apis.yaml">OpenAPI 3.1 YAML</a> · <a href="developers/abis/">JSON ABI catalog</a> · <a href="ai_support/ai_llms/">AI / LLMs page</a> · <a href="ai_support/mcp_server/">Full MCP Server (98 tools)</a> · <a href="ai_support/justlend_skills/">Skills (9 read-only tools, GitHub install)</a></li>
+<li><strong>AI Agents:</strong> <a href="llms.txt"><code>/llms.txt</code></a> · <a href="llms-full.txt"><code>/llms-full.txt</code></a> · <a href="developers/contracts.json"><code>/developers/contracts.json</code></a> · <a href="developers/apis/justlend_apis.yaml">OpenAPI 3.1 YAML</a> · <a href="developers/abis/">JSON ABI catalog</a> · <a href="ai_support/ai_llms/">AI / LLMs page</a> · <a href="ai_support/mcp_server/">Full MCP Server (104 tools)</a> · <a href="ai_support/justlend_skills/">Skills (6 workflows + 9 bundled read-only tools)</a> · <a href="ai_support/cli_and_sdk/">CLI and V2 SDK</a></li>
 <li><strong>Governance:</strong> <a href="governance/jips/">JIPs</a> · <a href="governance/tokenomics/">Tokenomics (JST)</a> · <a href="https://forum.justlend.org">Forum</a></li>
 </ul>
 <h2 id="external">External<a class="headerlink" href="#external" title="Permanent link">&para;</a></h2>
@@ -2114,7 +2141,7 @@
 <li><strong>App:</strong> <a href="https://app.justlend.org">https://app.justlend.org</a></li>
 <li><strong>Whitepaper (PDF):</strong> <a href="https://justlend.org/docs/justlend_whitepaper_en.pdf">https://justlend.org/docs/justlend_whitepaper_en.pdf</a></li>
 <li><strong>Audits:</strong> <a href="https://justlend.org/docs/justlend_audit_en.pdf">Supply &amp; Borrow</a> · <a href="https://justlend.org/docs/justlend_strx_audit_en.pdf">Staked TRX</a></li>
-<li><strong>GitHub:</strong> <a href="https://github.com/justlend/justlend-protocol">protocol</a> · <a href="https://github.com/justlend/mcp-server-justlend">MCP server</a> · <a href="https://github.com/justlend/justlend-skills">Skills</a> · <a href="https://github.com/justlend/justlend-docs">these docs</a></li>
+<li><strong>GitHub:</strong> <a href="https://github.com/justlend/justlend-protocol">protocol</a> · <a href="https://github.com/justlend/mcp-server-justlend">MCP server</a> · <a href="https://github.com/justlend/justlend-skills">Skills</a> · <a href="https://github.com/justlend/justlend-cli">CLI</a> · <a href="https://github.com/justlend/justlend-utils-v2">V2 Utils</a> · <a href="https://github.com/justlend/justlend-docs">these docs</a></li>
 </ul>
 
 
@@ -2136,7 +2163,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="July 22, 2026 03:59:22 UTC">2026-07-22</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="August 24, 2026 06:45:33 UTC">2026-08-24</span>
   </span>
 
     
@@ -2149,8 +2176,11 @@
 
 
 
+                  
+                    <p class="md-source-file"><a href="https://docs.justlend.org/index.md" rel="alternate" type="text/markdown">View raw Markdown</a></p>
+                  
 		  <hr class="content-footer-divider">  <!-- 添加的水平线 -->
-      	    	  <footer class="md-footer">
+                  <footer class="md-footer">
   
   <!--div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">

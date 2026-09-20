@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="@justlend/mcp-server-justlend v1.1.2 — 98 MCP tools across JustLend V1 (supply, borrow, repay, sTRX staking, energy rental, governance, mining) and V2 vaults/markets/liquidation, plus historical records and general TRON utilities. Dual-mode signing (browser TronLink or encrypted agent-wallet).">
+        <meta name="description" content="@justlend/mcp-server-justlend v1.1.3 — 104 MCP tools with versioned output schemas across JustLend V1 and V2, secure energy direct purchase, historical records, general TRON utilities, and encrypted agent-wallet signing.">
       
       
         <meta name="author" content="JustLend DAO">
@@ -67,7 +67,10 @@
     <link rel="llms-full" href="/llms-full.txt" type="text/plain">
     <link rel="alternate" type="text/plain" title="llms.txt — site index for LLMs" href="/llms.txt">
     <link rel="alternate" type="text/plain" title="llms-full.txt — full-text snapshot for LLMs" href="/llms-full.txt">
-    <meta name="ai-content-declaration" content="llms.txt,llms-full.txt">
+    
+      <link rel="alternate" type="text/markdown" title="Raw Markdown source" href="https://docs.justlend.org/ai_support/mcp_server.md">
+    
+    <meta name="ai-content-declaration" content="llms.txt,llms-full.txt,raw-markdown">
     
     
     
@@ -101,7 +104,9 @@
           "sameAs": [
             "https://github.com/justlend/justlend-protocol",
             "https://github.com/justlend/mcp-server-justlend",
-            "https://github.com/justlend/justlend-skills"
+            "https://github.com/justlend/justlend-skills",
+            "https://github.com/justlend/justlend-cli",
+            "https://github.com/justlend/justlend-utils-v2"
           ],
           "provider": { "@id": "https://justlend.org/#org" },
           "documentation": "https://docs.justlend.org/llms.txt",
@@ -137,9 +142,9 @@
             "publisher": { "@id": "https://justlend.org/#org" }
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
-          "description": "@justlend/mcp-server-justlend v1.1.2 \u2014 98 MCP tools across JustLend V1 (supply, borrow, repay, sTRX staking, energy rental, governance, mining) and V2 vaults/markets/liquidation, plus historical records and general TRON utilities. Dual-mode signing (browser TronLink or encrypted agent-wallet).",
-          "dateModified": "2026-07-15",
-          "datePublished": "2026-07-15"
+          "description": "@justlend/mcp-server-justlend v1.1.3 \u2014 104 MCP tools with versioned output schemas across JustLend V1 and V2, secure energy direct purchase, historical records, general TRON utilities, and encrypted agent-wallet signing.",
+          "dateModified": "2026-08-27",
+          "datePublished": "2026-08-27"
         }
       ]
     }
@@ -1610,9 +1615,9 @@
 
 
 <li class="md-nav__item ">
-  <a href="#tools-98-total" class="md-nav__link">
+  <a href="#tools-104-total" class="md-nav__link">
     <span class="md-ellipsis">
-      Tools (98 total)
+      Tools (104 total)
     </span>
   </a>
   
@@ -1738,6 +1743,28 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../cli_and_sdk/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CLI and V2 SDK
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
     
@@ -1748,10 +1775,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" >
         
           
-          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -1763,8 +1790,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_5">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
             <span class="md-nav__icon md-icon"></span>
             AI Docs for Agents
           </label>
@@ -2434,9 +2461,9 @@
 <ul>
 <li><a href="#overview">Overview</a> — what this server is and how it differs from <a href="../justlend_skills/">Skills</a>.</li>
 <li><a href="#installation">Installation</a> — npm, source, and Claude Desktop config.</li>
-<li><a href="#wallet-setup-first-use-choice">Wallet setup (browser vs agent-wallet)</a> — browser (TronLink TIP-6963) vs agent-wallet (encrypted local).</li>
+<li><a href="#wallet-setup-first-use-choice">Wallet setup</a> — encrypted agent-wallet; the legacy unauthenticated browser bridge is currently disabled.</li>
 <li><a href="#http-mode-authentication-mcp_api_key">HTTP-mode authentication (<code>MCP_API_KEY</code>)</a> — stdio (local clients) is open; HTTP/SSE is fail-closed.</li>
-<li><a href="#tools-98-total">Tool catalog (98 tools)</a> — <strong>V1</strong>: Wallet &amp; Network · Market Data · Account &amp; Balances · Lending Operations · Mining &amp; Rewards · JST Voting / Governance · Energy Rental · sTRX Staking · Transfers · General TRON. <strong>V2</strong>: Vaults · Markets · Liquidation · Dashboard/History · Mining. Plus Historical Records.</li>
+<li><a href="#tools-104-total">Tool catalog (104 tools)</a> — <strong>V1</strong>: Wallet &amp; Network · Market Data · Account &amp; Balances · Lending Operations · Mining &amp; Rewards · JST Voting / Governance · Energy Rental / Direct Purchase · sTRX Staking · Transfers · General TRON. <strong>V2</strong>: Vaults · Markets · Liquidation · Dashboard/History · Mining. Plus Historical Records.</li>
 <li><a href="#prompts-ai-guided-workflows">Guided prompts</a> — the 14 shipped MCP prompts (<code>supply_assets</code>, <code>analyze_portfolio</code>, <code>cast_vote</code>, <code>moolah_supply</code>, <code>moolah_borrow</code>, …).</li>
 <li><a href="#security-considerations">Security considerations</a> — <code>destructiveHint</code>, dry-run mode, source-of-truth priority, HTTP-mode <code>MCP_API_KEY</code>.</li>
 </ul>
@@ -2452,11 +2479,11 @@
 <p>Beyond JustLend-specific operations, the server also exposes a full set of <strong>general-purpose TRON chain utilities</strong> — balance queries, block/transaction data, token metadata, TRX transfers, smart contract reads/writes, staking (Stake 2.0), multicall, and more.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Current version (<strong>v1.1.2</strong>) covers <strong>JustLend V1</strong> <em>and</em> <strong>JustLend V2</strong>. V1 is the Compound-V2-style pooled supply/borrow market (jTokens); V2 is an isolated-market + ERC4626-vault protocol. The two surfaces are namespaced — V1 tools like <code>get_market_data</code> / <code>supply</code>, V2 tools prefixed <code>moolah_*</code> / <code>get_moolah_*</code> (the <code>moolah</code> identifier is V2's on-chain/tool naming). See the <a href="../../developers/justlend_v2/">JustLend V2</a> developer page for the protocol model and deployed contracts.</p>
+<p>Current version (<strong>v1.1.3</strong>) covers <strong>JustLend V1</strong> <em>and</em> <strong>JustLend V2</strong>. V1 is the Compound-V2-style pooled supply/borrow market (jTokens); V2 is an isolated-market + ERC4626-vault protocol. The two surfaces are namespaced — V1 tools like <code>get_market_data</code> / <code>supply</code>, V2 tools prefixed <code>moolah_*</code> / <code>get_moolah_*</code> (the <code>moolah</code> identifier is V2's on-chain/tool naming). See the <a href="../../developers/justlend_v2/">JustLend V2</a> developer page for the protocol model and deployed contracts.</p>
 </div>
 <div class="admonition tip">
-<p class="admonition-title">v1.1.2 Update</p>
-<p><strong>v1.1.2</strong> adds native <strong>TRX ↔ WTRX</strong> wrap/unwrap (<code>wrap_trx</code> / <code>unwrap_trx</code>) and hardens TRC20 approvals — USDT/USDC/USDJ defensively reset the allowance to <code>0</code> before a new non-zero <code>approve</code> (matching the official front-end; the reset tx is confirmed on-chain before re-approving), and <code>amount='0'</code> reliably revokes. Tool errors now also carry a <strong><code>retryable</code></strong> flag with a <code>transient</code> class (see the error contract below), so agents can distinguish safe-to-retry RPC hiccups from errors needing corrective action. The surface is now <strong>98 tools</strong>. <strong>v1.1.0</strong> introduced <strong>JustLend V2</strong> support (from 59): 30 V2 tools (vaults, markets, liquidation, dashboard/history, mining) + 7 historical-records tools, plus 4 V2 AI prompts (<strong>14</strong> total) and a V2 gas estimator. It also ships <strong>AI-agent ergonomics</strong> — structured self-healing tool errors (<code>{ error, errorCode, hint }</code>), self-describing amounts (<code>{ raw, decimals, _unit, display }</code>) on core reads, and hardened input schemas (Base58-address + decimal-amount validation). The machine-readable <code>mcp-api-list.md</code> catalog is regenerated from source (now 98 tools). All prior V1 safety work remains in place: TRC20 allowance checks before supply/repay, opt-in <code>max</code> approvals with revoke hints, typed broadcast handling, <code>toSafeCallValueNumber</code> guards on every broadcast/simulation path, mainnet fail-closed on pre-flight <code>REVERT</code>, constant-time <code>MCP_API_KEY</code> comparison, and governance failed-proposal filtering.</p>
+<p class="admonition-title">v1.1.3 Update</p>
+<p><strong>v1.1.3</strong> makes every one of the <strong>104 tools</strong> declare an MCP <code>outputSchema</code>. Successful calls preserve legacy text content and also expose <code>{ schemaVersion: "1.0.0", tool, result }</code> in <code>structuredContent</code>, so agents no longer need to infer output shape from prose. It also adds six fail-closed energy direct-purchase tools for configuration, quote, public payer history, order recovery, configured-wallet payment-risk inspection, and explicitly confirmed purchase; reconciles the V1 inventory to <strong>24 markets (18 active + 6 legacy)</strong>; and restores active <code>jU</code> to the product table. The legacy unauthenticated browser-wallet bridge is disabled, so writes use encrypted agent-wallet signing. <strong>v1.1.2</strong> added native <strong>TRX ↔ WTRX</strong> wrap/unwrap (<code>wrap_trx</code> / <code>unwrap_trx</code>), hardened TRC20 approvals, and added <code>retryable</code> error classification. <strong>v1.1.0</strong> introduced the V2 tool and prompt surface.</p>
 </div>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
 <p><a href="https://justlend.org">JustLend DAO</a> is the largest lending protocol on TRON, based on the Compound V2 architecture. This MCP server wraps the full protocol functionality into tools and guided prompts that local MCP clients such as Claude Desktop, Codex, Claude Code, and Cursor can use.</p>
@@ -2488,17 +2515,16 @@
 <li><strong>Token Approvals</strong>: Manage TRC20 approvals for jToken contracts</li>
 <li><strong>Energy Cost Estimation</strong>: Estimate energy, bandwidth, and TRX cost for any lending operation before executing</li>
 <li><strong>JST Voting / Governance</strong>: View proposals, cast votes, deposit/withdraw JST for voting power, reclaim votes</li>
-<li><strong>Energy Rental</strong>: Rent energy from JustLend, calculate rental prices, query rental orders, return/cancel rentals</li>
+<li><strong>Energy Rental + Direct Purchase</strong>: Rent energy on-chain, or fetch an authoritative quote and explicitly confirm a separately configured service purchase with payer-scoped recovery and duplicate-payment protection</li>
 <li><strong>sTRX Staking</strong>: Stake TRX to receive sTRX, unstake sTRX, claim staking rewards, check withdrawal eligibility<ul>
 <li>Precision-safe BigInt/string math for TRX Sun conversion and 18-decimal sTRX balances/exchange-rate display</li>
 </ul>
 </li>
 </ul>
-<p><strong>Browser Wallet Signing</strong></p>
+<p><strong>Wallet Signing</strong></p>
 <ul>
-<li><strong>TronLink Integration</strong>: Connect TronLink or other browser wallets via <code>tronlink-signer</code> SDK</li>
-<li><strong>Sign-only mode</strong>: Server builds transactions, browser only signs — private keys never leave the wallet</li>
-<li><strong>Dual wallet mode</strong>: Users choose between <code>browser</code> (recommended) or <code>agent</code> (encrypted local storage)</li>
+<li><strong>Encrypted agent-wallet</strong>: The supported signing mode stores encrypted keys under <code>~/.agent-wallet/</code> and reads <code>AGENT_WALLET_PASSWORD</code> from the server environment</li>
+<li><strong>Browser bridge disabled</strong>: The legacy loopback browser bridge lacks request-level authentication; <code>connect_browser_wallet</code> and browser mode fail closed until an authenticated replacement is available</li>
 </ul>
 <p><strong>General TRON Chain</strong></p>
 <ul>
@@ -2510,10 +2536,10 @@
 <li><strong>Transfers</strong>: Send TRX, transfer TRC20 tokens, approve spenders</li>
 <li><strong>Staking (Stake 2.0)</strong>: Freeze/unfreeze TRX for BANDWIDTH or ENERGY, withdraw expired unfreeze</li>
 <li><strong>Address Utilities</strong>: Hex ↔ Base58 conversion, address validation, resolution</li>
-<li><strong>Wallet</strong>: Sign messages, secure key management via agent-wallet or browser wallet</li>
+<li><strong>Wallet</strong>: Sign messages and transactions through encrypted agent-wallet; the unauthenticated browser bridge is disabled</li>
 </ul>
 <h2 id="supported-markets">Supported Markets<a class="headerlink" href="#supported-markets" title="Permanent link">&para;</a></h2>
-<p>The protocol exposes 23 jToken markets in total (17 active + 6 paused legacy markets). Call <code>get_supported_markets</code> for the live list with addresses. The active markets are:</p>
+<p>The protocol exposes <strong>24 jToken markets in total (18 active + 6 legacy markets)</strong>. This count was verified against the expanded market table at <a href="https://app.justlend.org/">app.justlend.org</a>, the live <code>/lend/jtoken</code> API, and the canonical contract directory on 2026-08-19. Call <code>get_supported_markets</code> for the live list with addresses. The active markets are:</p>
 <table>
 <thead>
 <tr>
@@ -2608,6 +2634,11 @@
 <td>HTX</td>
 <td>HTX token</td>
 </tr>
+<tr>
+<td>jU</td>
+<td>U</td>
+<td>U token</td>
+</tr>
 </tbody>
 </table>
 <h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
@@ -2628,11 +2659,8 @@ npm<span class="w"> </span>install
 <p>The script checks Node.js 20+, installs dependencies, builds the project, and generates local Claude Code config.</p>
 <h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
 <h3 id="wallet-setup-first-use-choice">Wallet Setup (First-Use Choice)<a class="headerlink" href="#wallet-setup-first-use-choice" title="Permanent link">&para;</a></h3>
-<p>On first use, the server presents a wallet mode selection. Users choose between:</p>
-<ol>
-<li><strong>Browser mode</strong> (recommended): Connect TronLink via <code>connect_browser_wallet</code> — private keys never leave the browser</li>
-<li><strong>Agent mode</strong>: Encrypted local wallet via <code>set_wallet_mode</code> with <code>mode="agent"</code> — keys stored in <code>~/.agent-wallet/</code></li>
-</ol>
+<p>On first use, select <strong>agent mode</strong> with <code>set_wallet_mode</code> and <code>mode="agent"</code>. The legacy browser mode is disabled until its local bridge supports request-level authentication.</p>
+<p>Agent-wallet stores encrypted keys under <code>~/.agent-wallet/</code>; set <code>AGENT_WALLET_PASSWORD</code> in the server environment.</p>
 <p>Private keys are <strong>never</strong> stored in environment variables by default.</p>
 <p>You can also manage wallets via <strong>CLI</strong> or <strong>MCP tools</strong>:</p>
 <h4 id="cli-agent-wallet">CLI (agent-wallet)<a class="headerlink" href="#cli-agent-wallet" title="Permanent link">&para;</a></h4>
@@ -2663,15 +2691,15 @@ npx<span class="w"> </span>agent-wallet<span class="w"> </span>activate<span cla
 </tr>
 <tr>
 <td><code>connect_browser_wallet</code></td>
-<td>Connect TronLink / browser wallet for signing</td>
+<td>Return a safety notice while the unauthenticated browser bridge is disabled</td>
 </tr>
 <tr>
 <td><code>set_wallet_mode</code></td>
-<td>Switch between <code>browser</code> and <code>agent</code> signing</td>
+<td>Select supported <code>agent</code> signing; <code>browser</code> currently fails closed</td>
 </tr>
 <tr>
 <td><code>get_wallet_mode</code></td>
-<td>Show current signing mode and addresses</td>
+<td>Show agent-wallet status and report legacy browser mode as disabled</td>
 </tr>
 <tr>
 <td><code>list_wallets</code></td>
@@ -2687,7 +2715,10 @@ npx<span class="w"> </span>agent-wallet<span class="w"> </span>activate<span cla
 <div class="highlight"><pre><span></span><code>npx<span class="w"> </span>agent-wallet<span class="w"> </span>import
 </code></pre></div>
 <h3 id="environment-variables">Environment Variables<a class="headerlink" href="#environment-variables" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="c1"># Strongly recommended — avoids TronGrid 429 rate limiting on mainnet</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Required for non-interactive agent-wallet unlock</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">AGENT_WALLET_PASSWORD</span><span class="o">=</span><span class="s2">&quot;your_wallet_password&quot;</span>
+
+<span class="c1"># Strongly recommended — avoids TronGrid 429 rate limiting on mainnet</span>
 <span class="nb">export</span><span class="w"> </span><span class="nv">TRONGRID_API_KEY</span><span class="o">=</span><span class="s2">&quot;your_trongrid_api_key&quot;</span>
 
 <span class="c1"># Optional: HTTP/SSE transport mode — start it with `npm run start:http`</span>
@@ -2698,7 +2729,14 @@ npx<span class="w"> </span>agent-wallet<span class="w"> </span>activate<span cla
 
 <span class="c1"># Required in HTTP mode — see &quot;HTTP Mode Authentication&quot; below for how to generate one</span>
 <span class="nb">export</span><span class="w"> </span><span class="nv">MCP_API_KEY</span><span class="o">=</span><span class="s2">&quot;your_strong_random_secret&quot;</span>
+
+<span class="c1"># Optional energy direct-purchase override; mainnet defaults to https://tegrow.ablesdxd.link</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">JUSTLEND_ENERGY_API_URL</span><span class="o">=</span><span class="s2">&quot;https://energy-api.example&quot;</span>
+<span class="c1"># Custom/test endpoints also require this explicit trust opt-in</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">JUSTLEND_ALLOW_UNTRUSTED_HOSTS</span><span class="o">=</span><span class="s2">&quot;1&quot;</span>
 </code></pre></div>
+<p>Energy direct purchase is fail-closed: mainnet uses the official <code>https://tegrow.ablesdxd.link</code> service by default, while a non-mainnet signer requires a matching custom service. Load live limits with <code>get_energy_purchase_config</code>, obtain an authoritative <code>quote_energy_purchase</code>, show the exact payer/receivers/duration/TRX amount, and call <code>buy_energy_direct</code> with <code>confirmPayment=true</code> only after explicit confirmation. If submission is ambiguous or an idempotent response has no order token, query <code>get_energy_purchase_history</code> and then call <code>get_energy_payment_risk</code> with no arguments. The risk check is read-only, is scoped to the configured wallet, and never replays a stored payment. Never sign a second payment while the risk list is non-empty; replay/reconciliation is allowed only inside a separately user-confirmed <code>buy_energy_direct</code> recovery attempt.</p>
+<p>After signing, an ambiguous result may store the exact signed request (signature plus raw transaction) in the local mode-<code>0600</code> <code>~/.mcp-server-justlend/energy-payment-risks.json</code> recovery file. The request remains broadcastable until expiry, is redacted from MCP output, and is removed only after public history confirms the payment/order or the backend deterministically rejects it before broadcast. <code>get_energy_payment_risk</code> only observes this state; it cannot clear or replay the request.</p>
 <h3 id="http-mode-authentication-mcp_api_key">HTTP Mode Authentication (<code>MCP_API_KEY</code>)<a class="headerlink" href="#http-mode-authentication-mcp_api_key" title="Permanent link">&para;</a></h3>
 <p><strong>Most users do not need this.</strong> Claude Desktop, Claude Code, and Cursor connect over <strong>stdio</strong> by default, which has no network surface and no auth. <code>MCP_API_KEY</code> only applies when you run the server in <strong>HTTP/SSE mode</strong> (<code>npm run start:http</code>).</p>
 <h4 id="what-it-is">What it is<a class="headerlink" href="#what-it-is" title="Permanent link">&para;</a></h4>
@@ -2810,7 +2848,7 @@ curl<span class="w"> </span>-N<span class="w"> </span>-H<span class="w"> </span>
 </code></pre></div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>No <code>TRON_PRIVATE_KEY</code> needed — choose browser-wallet signing or encrypted agent-wallet mode at runtime.</p>
+<p>No <code>TRON_PRIVATE_KEY</code> is needed. Configure encrypted agent-wallet and pass <code>AGENT_WALLET_PASSWORD</code> through the server environment; browser signing is currently disabled.</p>
 </div>
 <h4 id="cursor">Cursor<a class="headerlink" href="#cursor" title="Permanent link">&para;</a></h4>
 <p>Add to <code>.cursor/mcp.json</code>:</p>
@@ -2837,7 +2875,7 @@ npm<span class="w"> </span>run<span class="w"> </span>start:http
 npm<span class="w"> </span>run<span class="w"> </span>dev
 </code></pre></div>
 <h2 id="api-reference">API Reference<a class="headerlink" href="#api-reference" title="Permanent link">&para;</a></h2>
-<h3 id="tools-98-total">Tools (98 total)<a class="headerlink" href="#tools-98-total" title="Permanent link">&para;</a></h3>
+<h3 id="tools-104-total">Tools (104 total)<a class="headerlink" href="#tools-104-total" title="Permanent link">&para;</a></h3>
 <div class="admonition info">
 <p class="admonition-title">V1 + V2</p>
 <p>The first ten groups below are <strong>JustLend V1</strong> (pooled jToken market). The <strong>JustLend V2</strong> groups (vaults / markets / liquidation / dashboard / mining) and <strong>Historical Records</strong> follow. V2 tools are namespaced <code>moolah_*</code> / <code>get_moolah_*</code>.</p>
@@ -2859,17 +2897,17 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 </tr>
 <tr>
 <td><code>connect_browser_wallet</code></td>
-<td>Connect TronLink / browser wallet for signing</td>
+<td>Return a safety notice while the unauthenticated browser bridge is disabled</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td><code>set_wallet_mode</code></td>
-<td>Switch between <code>browser</code> and <code>agent</code> signing</td>
+<td>Select supported <code>agent</code> signing; <code>browser</code> currently fails closed</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td><code>get_wallet_mode</code></td>
-<td>Show current signing mode and addresses</td>
+<td>Show agent-wallet status and report browser mode as disabled</td>
 <td>No</td>
 </tr>
 <tr>
@@ -3172,6 +3210,36 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 <tr>
 <td><code>return_energy_rental</code></td>
 <td>Cancel an active rental (with active order check)</td>
+<td><strong>Yes</strong></td>
+</tr>
+<tr>
+<td><code>get_energy_purchase_config</code></td>
+<td>Load live direct-purchase limits, durations, prices, and pool capacity</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>quote_energy_purchase</code></td>
+<td>Obtain an authoritative quote without creating or paying for an order</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>get_energy_purchase_order</code></td>
+<td>Query an order lifecycle by order ID, with an optional access token</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>get_energy_purchase_history</code></td>
+<td>Query public in-progress and settled orders by payer address</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>get_energy_payment_risk</code></td>
+<td>Report configured-wallet payment risks without replaying a signed payment; accepts no arguments</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>buy_energy_direct</code></td>
+<td>Sign a quote-bound TRX payment after <code>confirmPayment=true</code>; configured backend validates and may broadcast</td>
 <td><strong>Yes</strong></td>
 </tr>
 </tbody>
@@ -3602,6 +3670,13 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 <li><strong>Chain configs (Mainnet / Nile testnet)</strong>: <a href="https://github.com/justlend/mcp-server-justlend/blob/main/src/core/chains.ts"><code>src/core/chains.ts</code></a></li>
 </ul>
 <h2 id="error-contract">Error contract<a class="headerlink" href="#error-contract" title="Permanent link">&para;</a></h2>
+<p>Every tool declares a common success <code>outputSchema</code>. Schema-aware clients should consume <code>structuredContent</code> and pin schema major <code>1</code>; older clients may continue reading the first text content item:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;schemaVersion&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1.0.0&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;get_supported_markets&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;result&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span>
+<span class="p">}</span>
+</code></pre></div>
 <p>Every tool returns errors as structured JSON with <code>isError: true</code>, so an agent can branch without parsing prose:</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"> </span><span class="nt">&quot;error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;sanitized message&gt;&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;errorCode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;code&gt;&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;retryable&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;hint&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;how to fix&gt;&quot;</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
@@ -3633,7 +3708,7 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 <tr>
 <td><code>wallet_not_configured</code></td>
 <td style="text-align: center;">❌ false</td>
-<td>Configure a wallet (<code>import_wallet</code> / <code>connect_browser_wallet</code>), then <code>set_active_wallet</code>.</td>
+<td>Run <code>npx agent-wallet start</code> (or import/generate via CLI), set <code>AGENT_WALLET_PASSWORD</code>, select <code>agent</code> mode, and activate the wallet.</td>
 </tr>
 <tr>
 <td><code>execution_reverted</code></td>
@@ -3655,9 +3730,9 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 <p>Only <code>transient</code> is safe to auto-retry; every other code requires a corrective action first.</p>
 <h2 id="security-considerations">Security Considerations<a class="headerlink" href="#security-considerations" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Browser wallet (recommended)</strong>: Private keys never leave TronLink — the <code>tronlink-signer</code> SDK sends unsigned transactions to the browser and receives signed results</li>
 <li><strong>Encrypted agent-wallet</strong>: Private keys are encrypted at rest in <code>~/.agent-wallet/</code> with file permissions <code>0600</code>/<code>0700</code> — never stored in environment variables or config files</li>
-<li><strong>No key in parameters</strong>: All signing functions use the agent-wallet or browser wallet internally; private keys are never passed as function parameters or exposed via MCP tools</li>
+<li><strong>Browser bridge fail-closed</strong>: The legacy unauthenticated loopback bridge is disabled; do not expose it until request-level authentication is available</li>
+<li><strong>No key in parameters</strong>: Signing functions use agent-wallet internally; private keys are never passed as function parameters or exposed via MCP tools</li>
 <li><strong>Import via CLI</strong>: Use <code>npx agent-wallet import</code> from a terminal — private key import is not exposed as an MCP tool to avoid key exposure in AI conversation logs</li>
 <li><strong>Explicit approvals</strong>: TRC20/JST approval tools require an exact amount, while <code>max</code> remains available only when the user explicitly opts in</li>
 <li><strong>Pre-flight checks</strong>: Supply/repay validate allowance first, lending tools report energy/bandwidth sufficiency warnings, and reverted simulations are not broadcast</li>
@@ -3692,6 +3767,8 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 → AI uses <code>rent_energy</code> prompt: checks balance → checks rental status → calculates price → rents energy → verifies</p>
 <p><strong>"Cancel my energy rental to TXxx..."</strong>
 → AI calls <code>get_energy_rent_info</code> to verify active rental → calls <code>return_energy_rental</code> → confirms refund</p>
+<p><strong>"Buy energy directly for these receiver addresses"</strong>
+→ AI calls <code>get_energy_purchase_config</code> → obtains <code>quote_energy_purchase</code> → shows payer, receivers, duration, and exact TRX amount → calls <code>buy_energy_direct</code> only after explicit confirmation → verifies token-bearing results with <code>get_energy_purchase_order</code>; tokenless/ambiguous results route through public history and the no-argument, read-only <code>get_energy_payment_risk</code> check before any explicitly confirmed recovery attempt</p>
 <p><strong>"Stake 1000 TRX to earn sTRX rewards"</strong>
 → AI uses <code>stake_trx</code> prompt: checks balance → checks exchange rate &amp; APY → stakes TRX → verifies sTRX received</p>
 <p><strong>"Do I have any sTRX rewards to claim?"</strong>
@@ -3699,7 +3776,7 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 <p><strong>"Can I withdraw my unstaked TRX?"</strong>
 → AI calls <code>check_strx_withdrawal_eligibility</code> to check unbonding status and completed withdrawal rounds</p>
 <p><strong>"Connect my TronLink wallet"</strong>
-→ AI calls <code>connect_browser_wallet</code>, opens browser window for user to approve in TronLink</p>
+→ AI explains that the legacy browser bridge is disabled, then guides the user to configure encrypted agent-wallet rather than bypassing the safety control</p>
 <p><strong>"How much energy will supplying 100 USDT cost?"</strong>
 → AI calls <code>estimate_lending_energy</code> with operation=supply, market=jUSDT, amount=100, returns energy/bandwidth/TRX breakdown</p>
 
@@ -3722,7 +3799,7 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="July 15, 2026 11:03:22 UTC">2026-07-15</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="August 27, 2026 08:24:25 UTC">2026-08-27</span>
   </span>
 
     
@@ -3735,8 +3812,11 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 
 
 
+                  
+                    <p class="md-source-file"><a href="https://docs.justlend.org/ai_support/mcp_server.md" rel="alternate" type="text/markdown">View raw Markdown</a></p>
+                  
 		  <hr class="content-footer-divider">  <!-- 添加的水平线 -->
-      	    	  <footer class="md-footer">
+                  <footer class="md-footer">
   
   <!--div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">

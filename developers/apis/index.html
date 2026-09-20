@@ -24,7 +24,8 @@
 <link href="/llms-full.txt" rel="llms-full" type="text/plain"/>
 <link href="/llms.txt" rel="alternate" title="llms.txt — site index for LLMs" type="text/plain"/>
 <link href="/llms-full.txt" rel="alternate" title="llms-full.txt — full-text snapshot for LLMs" type="text/plain"/>
-<meta content="llms.txt,llms-full.txt" name="ai-content-declaration"/>
+<link href="https://docs.justlend.org/developers/apis.md" rel="alternate" title="Raw Markdown source" type="text/markdown"/>
+<meta content="llms.txt,llms-full.txt,raw-markdown" name="ai-content-declaration"/>
 <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -54,7 +55,9 @@
           "sameAs": [
             "https://github.com/justlend/justlend-protocol",
             "https://github.com/justlend/mcp-server-justlend",
-            "https://github.com/justlend/justlend-skills"
+            "https://github.com/justlend/justlend-skills",
+            "https://github.com/justlend/justlend-cli",
+            "https://github.com/justlend/justlend-utils-v2"
           ],
           "provider": { "@id": "https://justlend.org/#org" },
           "documentation": "https://docs.justlend.org/llms.txt",
@@ -91,8 +94,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "Public read-only REST API at openapi.just.network \u2014 V1 markets, account positions, liquidation risk, USDD supply-mining rewards, sTRX staking, Energy Rental, plus JustLend V2 (Moolah) vaults and isolated markets. Authoritative schema is the OpenAPI 3.1 YAML.",
-          "dateModified": "2026-07-15",
-          "datePublished": "2026-07-15"
+          "dateModified": "2026-08-19",
+          "datePublished": "2026-08-19"
         }
       ]
     }
@@ -852,17 +855,25 @@
   </span>
 </a>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../ai_support/cli_and_sdk/">
+<span class="md-ellipsis">
+    CLI and V2 SDK
+    
+  </span>
+</a>
+</li>
 <li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" id="__nav_4_5" type="checkbox"/>
-<label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+<input class="md-nav__toggle md-toggle" id="__nav_4_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="0">
 <span class="md-ellipsis">
     AI Docs for Agents
     
   </span>
 <span class="md-nav__icon md-icon"></span>
 </label>
-<nav aria-expanded="false" aria-labelledby="__nav_4_5_label" class="md-nav" data-md-level="2">
-<label class="md-nav__title" for="__nav_4_5">
+<nav aria-expanded="false" aria-labelledby="__nav_4_6_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_4_6">
 <span class="md-nav__icon md-icon"></span>
             AI Docs for Agents
           </label>
@@ -1339,7 +1350,7 @@
 </code></pre></div>
 <ul>
 <li><code>pageNo</code> is 1‑based. Default = <code>1</code>.</li>
-<li><code>pageSize</code> default = <code>10</code>, <strong>max = <code>1000</code></strong>.</li>
+<li><code>pageSize</code> default = <code>10</code>, <strong>max = <code>1000</code></strong>, except <code>/lend/account</code>, whose verified default is <code>50</code>.</li>
 <li>Invalid or out-of-range <code>pageNo</code>/<code>pageSize</code> are often <strong>silently ignored</strong> (defaults applied, <code>200 SUCCESS</code>) rather than rejected — validate client-side. See <a href="#16-error-responses">§1.6 Error responses</a>.</li>
 </ul>
 <h3 id="16-error-responses">1.6 Error responses<a class="headerlink" href="#16-error-responses" title="Permanent link">¶</a></h3>
@@ -1758,7 +1769,7 @@ on persistent 429 across multiple windows:
 </table>
 <hr/>
 <h3 id="32-get-lendaccount-user-sbm-positions">3.2 <code>GET /lend/account</code> — User SBM positions<a class="headerlink" href="#32-get-lendaccount-user-sbm-positions" title="Permanent link">¶</a></h3>
-<p>Returns each queried wallet's supply/borrow positions, health factor and totals.</p>
+<p>Returns supply/borrow positions, health factors, and totals. With <code>addresses</code>, it filters to one or more wallets. Without <code>addresses</code>, it returns the global paginated account index; this read-only scan behavior and its 50-row default were verified on 2026-08-19.</p>
 <p><strong>Parameters</strong></p>
 <table>
 <thead>
@@ -1775,8 +1786,8 @@ on persistent 429 across multiple windows:
 <td><code>addresses</code></td>
 <td>query</td>
 <td>string</td>
-<td>yes</td>
-<td>One or more TRON addresses, <strong>comma‑separated</strong> (no spaces).</td>
+<td>no</td>
+<td>Optional TRON Base58 filter: one address or multiple <strong>comma-separated</strong> addresses (no spaces). Omit for the global account index.</td>
 </tr>
 <tr>
 <td><code>minBorrowValueInTrx</code></td>
@@ -1804,13 +1815,18 @@ on persistent 429 across multiple windows:
 <td>query</td>
 <td>integer</td>
 <td>no</td>
-<td>Page size. Default <code>10</code>, max <code>1000</code>.</td>
+<td>Page size. Verified default <code>50</code>, max <code>1000</code>.</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Example request</strong></p>
-<div class="highlight"><pre><span></span><code><span class="err">GET /lend/account?addresses=T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb,TXJgM...&amp;pageNo=1&amp;pageSize=20</span>
+<p><strong>Example requests</strong></p>
+<div class="highlight"><pre><span></span><code><span class="err"># Filter to explicit wallets</span>
+<span class="err">GET /lend/account?addresses=T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb,TXJgM...&amp;pageNo=1&amp;pageSize=20</span>
+
+<span class="err"># Global account scan (50 rows by default)</span>
+<span class="err">GET /lend/account?pageNo=1</span>
 </code></pre></div>
+<p>Validate Base58 addresses client-side. The live service may silently accept malformed filters instead of returning a validation error.</p>
 <p><strong>Response data</strong> (real response captured 2026-07-15)</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
 <span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
@@ -3939,9 +3955,10 @@ curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">"TRON-PRO
 <span class="md-icon" title="Last update">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"></path></svg>
 </span>
-<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="July 15, 2026 08:14:15 UTC">2026-07-15</span>
+<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="August 19, 2026 09:32:01 UTC">2026-08-19</span>
 </span>
 </aside>
+<p class="md-source-file"><a href="https://docs.justlend.org/developers/apis.md" rel="alternate" type="text/markdown">View raw Markdown</a></p>
 <hr class="content-footer-divider"/> <!-- 添加的水平线 -->
 <footer class="md-footer">
 <!--div class="md-footer-meta md-typeset">

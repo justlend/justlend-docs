@@ -1,0 +1,25 @@
+---
+title: Community Links
+description: JustLend DAO official sites, Telegram groups, forum, X/Twitter, GitHub organization, and the Immunefi bug bounty portal.
+---
+
+# Community Links
+
+### **Websites**
+* [Main JUST Network](https://just.network/)
+* [Main JustLend Network](https://justlend.org/)
+* [JustLend Markets](https://app.justlend.org/marketNew)
+
+### **Telegram groups**
+* [JUST-Defi](https://t.me/just_defi)
+* [JustLend DAO Official](https://t.me/officialjustlend)
+
+### **Forum**
+* [JustLend DAO Forum](https://forum.justlend.org/)
+
+### **X (Formerly Twitter)**
+* [JUST-Defi Twitter](https://x.com/DeFi_JUST)
+
+### **Developers**
+* [Github](https://github.com/justlend)
+* [Bug Bounty](https://immunefi.com/bug-bounty/justlenddao/information/)

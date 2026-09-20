@@ -67,7 +67,10 @@
     <link rel="llms-full" href="/llms-full.txt" type="text/plain">
     <link rel="alternate" type="text/plain" title="llms.txt — site index for LLMs" href="/llms.txt">
     <link rel="alternate" type="text/plain" title="llms-full.txt — full-text snapshot for LLMs" href="/llms-full.txt">
-    <meta name="ai-content-declaration" content="llms.txt,llms-full.txt">
+    
+      <link rel="alternate" type="text/markdown" title="Raw Markdown source" href="https://docs.justlend.org/documents/aidocs/mcp_safety.md">
+    
+    <meta name="ai-content-declaration" content="llms.txt,llms-full.txt,raw-markdown">
     
     
     
@@ -101,7 +104,9 @@
           "sameAs": [
             "https://github.com/justlend/justlend-protocol",
             "https://github.com/justlend/mcp-server-justlend",
-            "https://github.com/justlend/justlend-skills"
+            "https://github.com/justlend/justlend-skills",
+            "https://github.com/justlend/justlend-cli",
+            "https://github.com/justlend/justlend-utils-v2"
           ],
           "provider": { "@id": "https://justlend.org/#org" },
           "documentation": "https://docs.justlend.org/llms.txt",
@@ -138,8 +143,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "Safety rules for JustLend MCP tools, including read-only vs write tools, destructive operations, wallet modes, private-key handling, and human-in-the-loop confirmation.",
-          "dateModified": "2026-07-15",
-          "datePublished": "2026-07-15"
+          "dateModified": "2026-08-27",
+          "datePublished": "2026-08-27"
         }
       ]
     }
@@ -1404,6 +1409,28 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai_support/cli_and_sdk/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CLI and V2 SDK
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -1418,10 +1445,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" checked>
         
           
-          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -1433,8 +1460,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_4_5">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_6">
             <span class="md-nav__icon md-icon"></span>
             AI Docs for Agents
           </label>
@@ -2261,7 +2288,7 @@
 <p>JustLend MCP tools fall into three practical classes:</p>
 <ol>
 <li><strong>Read-only tools</strong>: query markets, account state, balances, blocks, prices, rewards, or supported networks. These do not move assets.</li>
-<li><strong>Local state / interaction tools</strong>: connect browser wallet, set wallet mode, set network, select active wallet. These change local configuration or start a browser interaction.</li>
+<li><strong>Local state / interaction tools</strong>: set wallet mode, set network, and select the active wallet. These change local configuration. <code>connect_browser_wallet</code> currently returns a safety notice because the legacy unauthenticated bridge is disabled.</li>
 <li><strong>On-chain write tools</strong>: supply, borrow, repay, withdraw, approve, transfer, stake, unstake, vote, rent energy, return energy, deploy or write contracts. These may move assets or create obligations.</li>
 </ol>
 <p>Use <a href="../mcp_tools/"><code>mcp_tools.md</code></a> for the generated side-effect class and annotation of each tool.</p>
@@ -2278,12 +2305,13 @@
 <li>whether it will sign and broadcast a transaction</li>
 </ul>
 <p>Then ask for explicit confirmation.</p>
+<p>For <code>buy_energy_direct</code>, the confirmation must be tied to the authoritative quote: show payer, every receiver, duration, and exact TRX amount. The configured backend validates and may broadcast the signed payment. If the result is ambiguous, query public payer history and call <code>get_energy_payment_risk</code> with no arguments. That configured-wallet check is read-only and never replays a stored payment. Do not sign a second payment while the first remains unresolved; any recovery replay must happen only inside a separately confirmed <code>buy_energy_direct</code> call.</p>
 <h2 id="private-key-rule">Private key rule<a class="headerlink" href="#private-key-rule" title="Permanent link">&para;</a></h2>
 <p>Never ask the user to paste a private key or seed phrase into chat or MCP tool arguments.</p>
-<p>Allowed wallet modes:</p>
+<p>Supported wallet mode:</p>
 <ul>
-<li><strong>Browser wallet mode</strong>: recommended. TronLink or another browser wallet signs transactions. Private keys never leave the wallet.</li>
 <li><strong>Agent wallet mode</strong>: encrypted local wallet managed by <code>@bankofai/agent-wallet</code>. Use CLI or local wallet management; do not pass private keys through MCP prompts.</li>
+<li><strong>Browser mode is disabled</strong>: the legacy loopback bridge lacks request-level authentication. Do not bypass this fail-closed control; wait for an authenticated replacement.</li>
 </ul>
 <h2 id="approval-rule">Approval rule<a class="headerlink" href="#approval-rule" title="Permanent link">&para;</a></h2>
 <p>For TRC20 supply/repay flows:</p>
@@ -2398,7 +2426,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="July 15, 2026 07:31:01 UTC">2026-07-15</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="August 27, 2026 08:24:25 UTC">2026-08-27</span>
   </span>
 
     
@@ -2411,8 +2439,11 @@
 
 
 
+                  
+                    <p class="md-source-file"><a href="https://docs.justlend.org/documents/aidocs/mcp_safety.md" rel="alternate" type="text/markdown">View raw Markdown</a></p>
+                  
 		  <hr class="content-footer-divider">  <!-- 添加的水平线 -->
-      	    	  <footer class="md-footer">
+                  <footer class="md-footer">
   
   <!--div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">

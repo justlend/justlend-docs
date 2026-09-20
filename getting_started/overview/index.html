@@ -65,7 +65,10 @@
     <link rel="llms-full" href="/llms-full.txt" type="text/plain">
     <link rel="alternate" type="text/plain" title="llms.txt — site index for LLMs" href="/llms.txt">
     <link rel="alternate" type="text/plain" title="llms-full.txt — full-text snapshot for LLMs" href="/llms-full.txt">
-    <meta name="ai-content-declaration" content="llms.txt,llms-full.txt">
+    
+      <link rel="alternate" type="text/markdown" title="Raw Markdown source" href="https://docs.justlend.org/getting_started/overview.md">
+    
+    <meta name="ai-content-declaration" content="llms.txt,llms-full.txt,raw-markdown">
     
     
     
@@ -99,7 +102,9 @@
           "sameAs": [
             "https://github.com/justlend/justlend-protocol",
             "https://github.com/justlend/mcp-server-justlend",
-            "https://github.com/justlend/justlend-skills"
+            "https://github.com/justlend/justlend-skills",
+            "https://github.com/justlend/justlend-cli",
+            "https://github.com/justlend/justlend-utils-v2"
           ],
           "provider": { "@id": "https://justlend.org/#org" },
           "documentation": "https://docs.justlend.org/llms.txt",
@@ -136,8 +141,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "JustLend DAO is the largest lending protocol on TRON (Compound V2 architecture) \u2014 suppliers, borrowers, jTokens, liquidation, supply mining. Entry point for the full documentation set.",
-          "dateModified": "2026-05-22",
-          "datePublished": "2026-05-22"
+          "dateModified": "2026-08-19",
+          "datePublished": "2026-08-19"
         }
       ]
     }
@@ -1471,6 +1476,28 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../../ai_support/cli_and_sdk/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CLI and V2 SDK
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
     
@@ -1481,10 +1508,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" >
         
           
-          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -1496,8 +1523,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_5">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
             <span class="md-nav__icon md-icon"></span>
             AI Docs for Agents
           </label>
@@ -2163,7 +2190,7 @@
 <h1 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h1>
 <div class="admonition info">
 <p class="admonition-title">Documentation freshness</p>
-<p><strong>Protocol:</strong> JustLend DAO · <strong>Network:</strong> TRON Mainnet · <strong>Markets:</strong> 17 active + 6 legacy = 23 jToken markets (<a href="../../developers/apis/#2-jtoken-address-reference">authoritative list</a>). Per-page <code>last-updated</code> is rendered in the footer (sourced from git commit history). For changelog see <a href="https://github.com/justlend/justlend-docs/blob/main/CHANGELOG.md">CHANGELOG.md</a>; for the machine-readable snapshot see <a href="../../llms-full.txt"><code>/llms-full.txt</code></a> (header includes <code>last_generated</code> and <code>docs_commit</code>).</p>
+<p><strong>Protocol:</strong> JustLend DAO · <strong>Network:</strong> TRON Mainnet · <strong>Markets:</strong> 18 active + 6 legacy = 24 jToken markets (<a href="../../developers/apis/#2-jtoken-address-reference">authoritative list</a>). Per-page <code>last-updated</code> is rendered in the footer (sourced from git commit history). For changelog see <a href="https://github.com/justlend/justlend-docs/blob/main/CHANGELOG.md">CHANGELOG.md</a>; for the machine-readable snapshot see <a href="../../llms-full.txt"><code>/llms-full.txt</code></a> (header includes <code>last_generated</code> and <code>docs_commit</code>).</p>
 </div>
 <p>JustLend DAO is a cutting-edge money market protocol powered by TRON, designed to create fund pools with interest rates determined by an algorithm based on the supply and demand of TRON assets. The protocol involves two main roles: suppliers and borrowers, who engage directly with the platform to earn or pay floating interest rates.</p>
 <p>Each money market on JustLend DAO represents a specific TRON asset, including TRX, TRC20 stablecoins like USDT, and other TRC20-based tokens. The platform features an open and transparent ledger that records all transactions and historical interest rates, ensuring transparency and trust among users.
@@ -2223,7 +2250,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 22, 2026 06:51:42 UTC">2026-05-22</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="August 19, 2026 09:32:01 UTC">2026-08-19</span>
   </span>
 
     
@@ -2236,8 +2263,11 @@
 
 
 
+                  
+                    <p class="md-source-file"><a href="https://docs.justlend.org/getting_started/overview.md" rel="alternate" type="text/markdown">View raw Markdown</a></p>
+                  
 		  <hr class="content-footer-divider">  <!-- 添加的水平线 -->
-      	    	  <footer class="md-footer">
+                  <footer class="md-footer">
   
   <!--div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">

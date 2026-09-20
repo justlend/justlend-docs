@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="How agents should choose between JustLend OpenAPI, MCP tools, contracts.json, ABI JSON files, llms.txt, and human documentation.">
+        <meta name="description" content="How agents should choose between JustLend OpenAPI, MCP tools, CLI, V2 Utils, contracts.json, ABI JSON files, llms.txt, and human documentation.">
       
       
         <meta name="author" content="JustLend DAO">
@@ -67,7 +67,10 @@
     <link rel="llms-full" href="/llms-full.txt" type="text/plain">
     <link rel="alternate" type="text/plain" title="llms.txt — site index for LLMs" href="/llms.txt">
     <link rel="alternate" type="text/plain" title="llms-full.txt — full-text snapshot for LLMs" href="/llms-full.txt">
-    <meta name="ai-content-declaration" content="llms.txt,llms-full.txt">
+    
+      <link rel="alternate" type="text/markdown" title="Raw Markdown source" href="https://docs.justlend.org/documents/aidocs/source_of_truth.md">
+    
+    <meta name="ai-content-declaration" content="llms.txt,llms-full.txt,raw-markdown">
     
     
     
@@ -101,7 +104,9 @@
           "sameAs": [
             "https://github.com/justlend/justlend-protocol",
             "https://github.com/justlend/mcp-server-justlend",
-            "https://github.com/justlend/justlend-skills"
+            "https://github.com/justlend/justlend-skills",
+            "https://github.com/justlend/justlend-cli",
+            "https://github.com/justlend/justlend-utils-v2"
           ],
           "provider": { "@id": "https://justlend.org/#org" },
           "documentation": "https://docs.justlend.org/llms.txt",
@@ -137,9 +142,9 @@
             "publisher": { "@id": "https://justlend.org/#org" }
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
-          "description": "How agents should choose between JustLend OpenAPI, MCP tools, contracts.json, ABI JSON files, llms.txt, and human documentation.",
-          "dateModified": "2026-07-15",
-          "datePublished": "2026-07-15"
+          "description": "How agents should choose between JustLend OpenAPI, MCP tools, CLI, V2 Utils, contracts.json, ABI JSON files, llms.txt, and human documentation.",
+          "dateModified": "2026-08-19",
+          "datePublished": "2026-08-19"
         }
       ]
     }
@@ -1404,6 +1409,28 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai_support/cli_and_sdk/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CLI and V2 SDK
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -1418,10 +1445,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" checked>
         
           
-          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -1433,8 +1460,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_4_5">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_6">
             <span class="md-nav__icon md-icon"></span>
             AI Docs for Agents
           </label>
@@ -2235,6 +2262,22 @@
 <p>Best for: account analysis, market queries, transaction pre-flight, supply, borrow, repay, withdraw, sTRX staking, energy rental, governance voting, transfers, and general TRON utilities.</p>
 </li>
 <li>
+<p><strong>JustLend CLI</strong> — use for deterministic terminal and CI automation.</p>
+</li>
+<li>Guide: <a href="../../../ai_support/cli_and_sdk/"><code>CLI and V2 SDK</code></a></li>
+<li>Repository: <a href="https://github.com/justlend/justlend-cli"><code>justlend/justlend-cli</code></a></li>
+<li>
+<p>Best for: versioned JSON envelopes, process exit codes, dry-run simulation, scripted reads, and intentionally confirmed writes.</p>
+</li>
+<li>
+<p><strong>JustLend V2 Utils</strong> — use for embedded browser or Node.js integrations.</p>
+</li>
+<li>Guide: <a href="../../../ai_support/cli_and_sdk/"><code>CLI and V2 SDK</code></a></li>
+<li>Repository: <a href="https://github.com/justlend/justlend-utils-v2"><code>justlend/justlend-utils-v2</code></a></li>
+<li>
+<p>Best for: application-owned V2 vault, market, liquidation, reward, WTRX, and energy workflows using an explicitly injected <code>TronWeb</code> instance.</p>
+</li>
+<li>
 <p><strong>Contract directory</strong> — use for deployed addresses.</p>
 </li>
 <li>File: <a href="../../../developers/contracts.json"><code>/developers/contracts.json</code></a></li>
@@ -2297,7 +2340,17 @@
 <tr>
 <td>“Supply / borrow / repay / withdraw for me”</td>
 <td>MCP guided prompt + tool</td>
-<td>Human docs for explanation only</td>
+<td>CLI dry-run, then explicit confirmation</td>
+</tr>
+<tr>
+<td>“Automate this from a shell or CI job”</td>
+<td>CLI <code>--json</code> + exit code</td>
+<td>MCP tool call</td>
+</tr>
+<tr>
+<td>“Embed V2 in my app”</td>
+<td>V2 Utils + injected <code>TronWeb</code></td>
+<td>ABI JSON + application-owned integration</td>
 </tr>
 <tr>
 <td>“What contract address should I use?”</td>
@@ -2330,6 +2383,8 @@
 <li>“查市场 / APY / TVL / 利用率” → MCP <code>get_market_data</code> / <code>get_all_markets</code> or OpenAPI <a href="../../../developers/apis/justlend_apis.yaml"><code>justlend_apis.yaml</code></a>.</li>
 <li>“查我的仓位 / 健康度 / 清算风险” → MCP <code>get_account_summary</code> and <a href="../account_position/">Account Positions</a>.</li>
 <li>“存款 / 借款 / 还款 / 赎回” → MCP write tools plus <a href="../mcp_safety/">MCP Safety Policy</a>.</li>
+<li>“命令行 / CI 自动化” → <a href="../../../ai_support/cli_and_sdk/#cli-deterministic-terminal-automation">JustLend CLI</a> with <code>--json</code>, exit-code checks, and dry-run first.</li>
+<li>“前端 / Node.js 集成 V2” → <a href="../../../ai_support/cli_and_sdk/#v2-utils-embedded-application-integration">JustLend V2 Utils</a> with an explicitly injected <code>TronWeb</code> instance.</li>
 <li>“合约地址 / ABI / 事件解析” → <a href="../../../developers/contracts.json"><code>contracts.json</code></a> and <a href="../../../developers/abis/jtoken.json"><code>developers/abis/</code></a>.</li>
 </ul>
 
@@ -2352,7 +2407,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="July 15, 2026 08:14:15 UTC">2026-07-15</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="August 19, 2026 09:32:01 UTC">2026-08-19</span>
   </span>
 
     
@@ -2365,8 +2420,11 @@
 
 
 
+                  
+                    <p class="md-source-file"><a href="https://docs.justlend.org/documents/aidocs/source_of_truth.md" rel="alternate" type="text/markdown">View raw Markdown</a></p>
+                  
 		  <hr class="content-footer-divider">  <!-- 添加的水平线 -->
-      	    	  <footer class="md-footer">
+                  <footer class="md-footer">
   
   <!--div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">

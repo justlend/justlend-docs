@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="GitHub-distributed JustLend Skills — 9 read-only MCP tools and 5 skill modules for AI agents to query JustLend market data, account health, and balances. CLI also available.">
+        <meta name="description" content="GitHub-distributed JustLend Skills — 6 workflow modules plus a bundled 9-tool read-only MCP server for AI agents. CLI also available.">
       
       
         <meta name="author" content="JustLend DAO">
@@ -18,7 +18,7 @@
         <link rel="prev" href="../mcp_server/">
       
       
-        <link rel="next" href="../../documents/aidocs/">
+        <link rel="next" href="../cli_and_sdk/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -26,7 +26,7 @@
     
     
       
-        <title>JustLend Skills (read-only) - JustLend DAO Documentation</title>
+        <title>JustLend Skills - JustLend DAO Documentation</title>
       
     
     
@@ -67,7 +67,10 @@
     <link rel="llms-full" href="/llms-full.txt" type="text/plain">
     <link rel="alternate" type="text/plain" title="llms.txt — site index for LLMs" href="/llms.txt">
     <link rel="alternate" type="text/plain" title="llms-full.txt — full-text snapshot for LLMs" href="/llms-full.txt">
-    <meta name="ai-content-declaration" content="llms.txt,llms-full.txt">
+    
+      <link rel="alternate" type="text/markdown" title="Raw Markdown source" href="https://docs.justlend.org/ai_support/justlend_skills.md">
+    
+    <meta name="ai-content-declaration" content="llms.txt,llms-full.txt,raw-markdown">
     
     
     
@@ -101,7 +104,9 @@
           "sameAs": [
             "https://github.com/justlend/justlend-protocol",
             "https://github.com/justlend/mcp-server-justlend",
-            "https://github.com/justlend/justlend-skills"
+            "https://github.com/justlend/justlend-skills",
+            "https://github.com/justlend/justlend-cli",
+            "https://github.com/justlend/justlend-utils-v2"
           ],
           "provider": { "@id": "https://justlend.org/#org" },
           "documentation": "https://docs.justlend.org/llms.txt",
@@ -137,9 +142,9 @@
             "publisher": { "@id": "https://justlend.org/#org" }
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
-          "description": "GitHub-distributed JustLend Skills \u2014 9 read-only MCP tools and 5 skill modules for AI agents to query JustLend market data, account health, and balances. CLI also available.",
-          "dateModified": "2026-07-22",
-          "datePublished": "2026-07-22"
+          "description": "GitHub-distributed JustLend Skills \u2014 6 workflow modules plus a bundled 9-tool read-only MCP server for AI agents. CLI also available.",
+          "dateModified": "2026-08-27",
+          "datePublished": "2026-08-27"
         }
       ]
     }
@@ -193,7 +198,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              JustLend Skills (read-only)
+              JustLend Skills
             
           </span>
         </div>
@@ -1482,9 +1487,9 @@
 
 
 <li class="md-nav__item ">
-  <a href="#featured-markets-cli-quick-reference" class="md-nav__link">
+  <a href="#bundled-market-shortcuts" class="md-nav__link">
     <span class="md-ellipsis">
-      Featured Markets (CLI Quick Reference)
+      Bundled Market Shortcuts
     </span>
   </a>
   
@@ -1651,6 +1656,19 @@
 
 
 <li class="md-nav__item ">
+  <a href="#energy-direct-purchase-justlend-energy-purchase" class="md-nav__link">
+    <span class="md-ellipsis">
+      Energy Direct Purchase (justlend-energy-purchase)
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
   <a href="#dao-governance-justlend-governance-v1" class="md-nav__link">
     <span class="md-ellipsis">
       DAO Governance (justlend-governance-v1)
@@ -1795,6 +1813,28 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../cli_and_sdk/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CLI and V2 SDK
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
     
@@ -1805,10 +1845,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" >
         
           
-          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -1820,8 +1860,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_5">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
             <span class="md-nav__icon md-icon"></span>
             AI Docs for Agents
           </label>
@@ -2487,6 +2527,7 @@
 <h1 id="justlend-skills">JustLend Skills<a class="headerlink" href="#justlend-skills" title="Permanent link">&para;</a></h1>
 <p><strong>GitHub</strong>: <a href="https://github.com/justlend/justlend-skills">https://github.com/justlend/justlend-skills</a></p>
 <p>JustLend Skills is a GitHub-distributed AI Agent skills project for the <strong>JustLend DAO</strong> protocol on TRON. Its local package identifier is <code>@justlend/justlend-skills</code>. It provides structured skill instructions and a lightweight <strong>read-only</strong> <a href="https://modelcontextprotocol.io/">MCP server</a> (9 query tools) that enables AI agents (Claude Code, Claude Desktop, Cursor, Codex, etc.) to query market data, monitor account positions, and analyze DeFi lending information.</p>
+<p><strong>Current version:</strong> <code>1.1.1</code> · bundled MCP output schema: <code>1.0.0</code></p>
 <div class="admonition important">
 <p class="admonition-title">Install from GitHub, not the npm registry</p>
 <p><code>@justlend/justlend-skills</code> is <strong>not currently published to npm</strong>. The scoped name identifies the cloned project for local tooling; it is not an installable registry package. Clone the <a href="https://github.com/justlend/justlend-skills">GitHub repository</a> and run <code>bash install.sh</code>. Do <strong>not</strong> run <code>npm install @justlend/justlend-skills</code>.</p>
@@ -2494,11 +2535,11 @@
 <p>It also works as a standalone <strong>CLI tool</strong> for quick market checks directly from the terminal.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This is a <strong>read-only</strong> query package. No write operations or transaction signing are supported. For write operations (supply, borrow, repay, withdraw, sTRX staking, energy rental, governance voting), use the full MCP server: <a href="../mcp_server/">@justlend/mcp-server-justlend</a>.</p>
+<p>The bundled MCP server and standalone CLI are <strong>read-only</strong> and never sign transactions. The package's workflow skill files also cover writes such as lending, staking, energy rental/direct purchase, and governance; those actions route to the full MCP server: <a href="../mcp_server/">@justlend/mcp-server-justlend</a>, require a signing wallet, and require explicit confirmation.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Bundled server is read-only V1; V2 (Moolah) needs the full server</p>
-<p>The <strong>bundled lite MCP server</strong> (the 9 query tools) is <strong>read-only JustLend V1</strong> (the Compound V2-style pooled markets). The package also ships a <code>justlend-lending-v2</code> skill module with V2 instructions, but <strong>V2 tool execution is not part of the lite server</strong> — the <code>justlend-lending-v2</code>, <code>justlend-trx-staking</code>, <code>justlend-energy-rental</code>, and <code>justlend-governance-v1</code> modules require the <a href="../mcp_server/">full MCP server</a>. To <em>query</em> V2 (Moolah) read-only (vault APY/TVL, market parameters, user positions, liquidation candidates), use the full server's read-only <code>get_moolah_*</code> tools — e.g. <code>get_moolah_vaults</code>, <code>get_moolah_markets</code>, <code>get_moolah_user_position</code>, <code>get_moolah_dashboard</code> — documented in <a href="../mcp_server/">MCP Server → JustLend V2 (Moolah)</a>. Those read tools require no wallet; only the V2 <em>write</em> tools do.</p>
+<p>The <strong>bundled lite MCP server</strong> (the 9 query tools) is <strong>read-only JustLend V1</strong> (the Compound V2-style pooled markets). The package also ships workflow modules whose execution is not part of the lite server — <code>justlend-lending-v2</code>, <code>justlend-trx-staking</code>, <code>justlend-energy-rental</code>, <code>justlend-energy-purchase</code>, and <code>justlend-governance-v1</code> require the <a href="../mcp_server/">full MCP server</a>. To <em>query</em> V2 (Moolah) read-only (vault APY/TVL, market parameters, user positions, liquidation candidates), use the full server's read-only <code>get_moolah_*</code> tools — e.g. <code>get_moolah_vaults</code>, <code>get_moolah_markets</code>, <code>get_moolah_user_position</code>, <code>get_moolah_dashboard</code> — documented in <a href="../mcp_server/">MCP Server → JustLend V2 (Moolah)</a>. Those read tools require no wallet; only the V2 <em>write</em> tools do.</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Companion references for agents using these tools</p>
@@ -2515,7 +2556,7 @@
 <li><strong>Token Allowances</strong>: Check TRC20 approval status for JustLend contracts</li>
 </ul>
 <h3 id="skill-modules">Skill Modules<a class="headerlink" href="#skill-modules" title="Permanent link">&para;</a></h3>
-<p>The project includes 5 structured skill modules in the <code>/skills</code> directory that provide AI agents with domain-specific instructions and workflows:</p>
+<p>The project includes 6 structured skill modules in the <code>/skills</code> directory that provide AI agents with domain-specific instructions and workflows:</p>
 <table>
 <thead>
 <tr>
@@ -2527,8 +2568,8 @@
 <tbody>
 <tr>
 <td><strong>justlend-lending-v1</strong></td>
-<td>Market queries, account analysis, health factor monitoring</td>
-<td>JustLend Skills (built-in)</td>
+<td>V1 lending queries and supply/borrow/repay/withdraw workflows</td>
+<td>Built-in for reads; Full MCP for writes</td>
 </tr>
 <tr>
 <td><strong>justlend-lending-v2</strong></td>
@@ -2546,17 +2587,22 @@
 <td>Full MCP Server</td>
 </tr>
 <tr>
+<td><strong>justlend-energy-purchase</strong></td>
+<td>Quote, confirm, track, and safely inspect unresolved direct Energy purchases</td>
+<td>Full MCP Server</td>
+</tr>
+<tr>
 <td><strong>justlend-governance-v1</strong></td>
 <td>View proposals, deposit JST for voting power, cast votes</td>
 <td>Full MCP Server</td>
 </tr>
 </tbody>
 </table>
-<p>The <code>justlend-lending-v1</code> skill works with the built-in 9 query tools. The other four skills provide instructional guidance and require the <a href="../mcp_server/">full MCP server</a> for tool execution (and write operations).</p>
-<h2 id="featured-markets-cli-quick-reference">Featured Markets (CLI Quick Reference)<a class="headerlink" href="#featured-markets-cli-quick-reference" title="Permanent link">&para;</a></h2>
+<p>The read-only portions of <code>justlend-lending-v1</code> work with the built-in 9 query tools. Its write flows and the other five skills require the <a href="../mcp_server/">full MCP server</a> for tool execution.</p>
+<h2 id="bundled-market-shortcuts">Bundled Market Shortcuts<a class="headerlink" href="#bundled-market-shortcuts" title="Permanent link">&para;</a></h2>
 <div class="admonition warning">
 <p class="admonition-title">Not an exhaustive market list</p>
-<p>The table below lists the <strong>9 markets the bundled CLI examples target by symbol shortcut</strong>. It is <strong>not</strong> the protocol's full market roster. The JustLend DAO protocol currently exposes <strong>18 active + 6 legacy = 24 markets total</strong> (see the single source of truth below). All 24 are queryable through the Skills MCP server via <code>get_supported_markets</code> / <code>get_all_markets</code> — the CLI shortcuts are just a convenience subset for human terminal use.</p>
+<p>The table below lists the <strong>8 static shortcuts</strong> used by the bundled <code>get_token_balance</code> and <code>check_allowance</code> implementations. It is <strong>not</strong> the protocol's full market roster. The JustLend DAO protocol exposes <strong>18 active + 6 legacy = 24 markets total</strong>, including active <code>jU</code>. <code>get_all_markets</code> queries the visible live inventory; <code>get_supported_markets</code> returns only these 8 shortcuts. Use the full MCP server or <code>contracts.json</code> for the complete static address catalog.</p>
 </div>
 <p><strong>Single source of truth for the live market list (in order of preference):</strong></p>
 <ol>
@@ -2567,56 +2613,60 @@
 <table>
 <thead>
 <tr>
+<th>Shortcut</th>
 <th>jToken</th>
 <th>Underlying</th>
-<th>Description</th>
+<th>Status / purpose</th>
 </tr>
 </thead>
 <tbody>
 <tr>
+<td><code>TRX</code></td>
 <td>jTRX</td>
 <td>TRX</td>
-<td>Native TRON token</td>
+<td>Active; native balance, no allowance</td>
 </tr>
 <tr>
+<td><code>USDT</code></td>
 <td>jUSDT</td>
 <td>USDT</td>
-<td>Tether USD</td>
+<td>Active shortcut</td>
 </tr>
 <tr>
+<td><code>USDD</code></td>
 <td>jUSDD</td>
 <td>USDD</td>
-<td>Decentralized USD</td>
+<td>Active shortcut</td>
 </tr>
 <tr>
+<td><code>USDC</code></td>
+<td>jUSDCOLD</td>
+<td>USDCOLD</td>
+<td>Legacy compatibility shortcut</td>
+</tr>
+<tr>
+<td><code>BTC</code></td>
 <td>jBTC</td>
 <td>BTC</td>
-<td>Bitcoin (TRC20)</td>
+<td>Active shortcut</td>
 </tr>
 <tr>
+<td><code>ETH</code></td>
 <td>jETH</td>
 <td>ETH</td>
-<td>Ethereum (TRC20) — dApp display name "ETH" (formerly "ETHOLD")</td>
+<td>Active shortcut</td>
 </tr>
 <tr>
-<td>jETHB</td>
-<td>ETHB</td>
-<td>Ethereum bridged — dApp display name "ETHB" (formerly "ETH")</td>
-</tr>
-<tr>
+<td><code>SUN</code></td>
 <td>jSUN</td>
 <td>SUN</td>
-<td>SUN Token</td>
+<td>Active shortcut</td>
 </tr>
 <tr>
+<td><code>WIN</code></td>
 <td>jWIN</td>
 <td>WIN</td>
-<td>WINkLink</td>
-</tr>
-<tr>
-<td>jHTX</td>
-<td>HTX</td>
-<td>HTX token</td>
+<td>Active shortcut</td>
 </tr>
 </tbody>
 </table>
@@ -2633,6 +2683,8 @@ bash<span class="w"> </span>install.sh
 </code></pre></div>
 <p>Or install the cloned repository's dependencies manually:</p>
 <div class="highlight"><pre><span></span><code>npm<span class="w"> </span>install
+npm<span class="w"> </span><span class="nb">test</span><span class="w">               </span><span class="c1"># offline MCP schema/version/error-contract checks</span>
+npm<span class="w"> </span>run<span class="w"> </span>test:smoke<span class="w">     </span><span class="c1"># live 24-market inventory drift check</span>
 </code></pre></div>
 <p>The <code>npm install</code> command above must be run <strong>inside the cloned repository</strong>; it does not install <code>@justlend/justlend-skills</code> from npm. The <code>install.sh</code> script installs those dependencies, creates <code>.env</code>, and prompts for your TronGrid API key.</p>
 <h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
@@ -2717,7 +2769,7 @@ ln<span class="w"> </span>-s<span class="w"> </span>~/.codex/justlend-skills/ski
 <p>For quick checks directly from the terminal:</p>
 <div class="highlight"><pre><span></span><code>node<span class="w"> </span>scripts/justlend_api.mjs<span class="w"> </span>markets<span class="w">              </span><span class="c1"># List all markets with APY</span>
 node<span class="w"> </span>scripts/justlend_api.mjs<span class="w"> </span>dashboard<span class="w">            </span><span class="c1"># Protocol dashboard (TVL, users)</span>
-node<span class="w"> </span>scripts/justlend_api.mjs<span class="w"> </span>supported-markets<span class="w">    </span><span class="c1"># List supported markets &amp; addresses</span>
+node<span class="w"> </span>scripts/justlend_api.mjs<span class="w"> </span>supported-markets<span class="w">    </span><span class="c1"># List 8 bundled shortcuts &amp; addresses</span>
 node<span class="w"> </span>scripts/justlend_api.mjs<span class="w"> </span>balance<span class="w"> </span>&lt;addr&gt;<span class="w">       </span><span class="c1"># Check TRX balance</span>
 node<span class="w"> </span>scripts/justlend_api.mjs<span class="w"> </span>balance<span class="w"> </span>&lt;addr&gt;<span class="w"> </span>USDT<span class="w">  </span><span class="c1"># Check token balance</span>
 node<span class="w"> </span>scripts/justlend_api.mjs<span class="w"> </span>account<span class="w"> </span>&lt;addr&gt;<span class="w">       </span><span class="c1"># Account health status</span>
@@ -2747,6 +2799,12 @@ node<span class="w"> </span>scripts/justlend_api.mjs<span class="w"> </span>allo
 <p class="admonition-title">Note</p>
 <p>This skill requires the <a href="../mcp_server/">full MCP server</a> for tool execution.</p>
 </div>
+<h3 id="energy-direct-purchase-justlend-energy-purchase">Energy Direct Purchase (justlend-energy-purchase)<a class="headerlink" href="#energy-direct-purchase-justlend-energy-purchase" title="Permanent link">&para;</a></h3>
+<p>Obtain an authoritative quote, confirm the exact <code>total_sun</code> payment, submit it for backend-controlled broadcast, track token-bearing orders, recover tokenless results through public payer history, and inspect the configured wallet’s unresolved risk state before initiating another purchase.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This skill requires the <a href="../mcp_server/">full MCP server</a> and a signing wallet. Mainnet uses the official <code>https://tegrow.ablesdxd.link</code> endpoint by default; a custom/test or non-mainnet service must be configured explicitly. Never expose a private key or signed transaction in tool output. The full server may retain the exact signed request in a local mode-<code>0600</code> recovery file after an ambiguous submission. The no-argument risk check is read-only and never replays it; never retry with a second payment while payment risk is unresolved.</p>
+</div>
 <h3 id="dao-governance-justlend-governance-v1">DAO Governance (justlend-governance-v1)<a class="headerlink" href="#dao-governance-justlend-governance-v1" title="Permanent link">&para;</a></h3>
 <p>Participate in JustLend DAO governance proposals. Deposit JST for voting power (1 JST = 1 Vote), cast votes, and reclaim votes after proposals end.</p>
 <div class="admonition note">
@@ -2763,7 +2821,14 @@ node<span class="w"> </span>scripts/justlend_api.mjs<span class="w"> </span>allo
 </ol>
 <h2 id="mcp-tools-reference">MCP Tools Reference<a class="headerlink" href="#mcp-tools-reference" title="Permanent link">&para;</a></h2>
 <h3 id="tools-9-total-all-read-only">Tools (9 total, all read-only)<a class="headerlink" href="#tools-9-total-all-read-only" title="Permanent link">&para;</a></h3>
-<p>Every tool returns its result as JSON text (<code>content[0].text</code>). Input types and required flags are taken from each tool's <code>inputSchema</code>; all inputs are strings.</p>
+<p>Every tool declares both <code>inputSchema</code> and <code>outputSchema</code>. For backward compatibility, successful calls keep the raw result as JSON text in <code>content[0].text</code>; schema-aware clients should consume <code>structuredContent</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;schemaVersion&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1.0.0&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;get_all_markets&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;result&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Pin schema major <code>1</code>. Input types and required flags come from each tool's <code>inputSchema</code>; all current arguments are strings and unknown properties are rejected.</p>
 <table>
 <thead>
 <tr>
@@ -2786,7 +2851,7 @@ node<span class="w"> </span>scripts/justlend_api.mjs<span class="w"> </span>allo
 <tr>
 <td><code>get_supported_markets</code></td>
 <td><em>(none)</em></td>
-<td>Array — <code>symbol</code>, <code>jtokenAddress</code>, <code>underlyingAddress</code>, <code>decimals</code>, <code>isNative</code></td>
+<td>8-shortcut array — <code>symbol</code>, <code>jToken</code>, <code>underlying</code>, <code>decimals</code>, <code>isNative</code></td>
 </tr>
 <tr>
 <td><code>get_jtoken_details</code></td>
@@ -2821,45 +2886,57 @@ node<span class="w"> </span>scripts/justlend_api.mjs<span class="w"> </span>allo
 </tbody>
 </table>
 <blockquote>
-<p>Inputs validate as JSON-Schema <code>string</code>. <code>address</code> must be a Base58 TRON address (<code>T…</code>, 34 chars); <code>token</code>/<code>asset</code> are symbols resolved to contract addresses internally; <code>jtokenAddr</code> is a jToken contract address.</p>
+<p>The bundled schema currently enforces JSON-string types and required fields, not a Base58 regex. Callers should still supply a valid Base58 TRON address (<code>T…</code>, 34 chars). <code>token</code>/<code>asset</code> are one of the 8 shortcut symbols resolved internally; <code>jtokenAddr</code> is a jToken contract address.</p>
 </blockquote>
 <h3 id="error-handling">Error Handling<a class="headerlink" href="#error-handling" title="Permanent link">&para;</a></h3>
-<p>Tool failures return a structured error result rather than throwing — the client sees <code>isError: true</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;text&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Error: &lt;message&gt;&quot;</span><span class="w"> </span><span class="p">}],</span><span class="w"> </span><span class="nt">&quot;isError&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">}</span>
+<p>Tool failures return a versioned structured error rather than throwing — the client sees <code>isError: true</code>, and the same JSON object appears in text and <code>structuredContent</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;schemaVersion&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1.0.0&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;get_all_markets&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;HTTP 429 rate limit&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;errorCode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;rate_limit&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;retryable&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;hint&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Retry this read after exponential backoff and respect any Retry-After value.&quot;</span>
+<span class="p">}</span>
 </code></pre></div>
-<p>Common messages and how to recover:</p>
+<p>Stable codes and how to recover:</p>
 <table>
 <thead>
 <tr>
-<th>Message</th>
-<th>Cause</th>
-<th>Fix</th>
+<th><code>errorCode</code></th>
+<th style="text-align: center;">Retryable</th>
+<th>Agent action</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>API Error: &lt;code&gt;</code></td>
-<td>JustLend API returned a non-zero <code>code</code></td>
-<td>Retry; if it persists, verify the address/market exists</td>
+<td><code>invalid_input</code></td>
+<td style="text-align: center;">No</td>
+<td>Correct the tool name, address, or shortcut symbol before retrying.</td>
 </tr>
 <tr>
-<td><code>Unknown asset: &lt;symbol&gt;</code></td>
-<td><code>asset</code> / <code>token</code> symbol not recognized</td>
-<td>Use a supported symbol (see <code>get_supported_markets</code>)</td>
+<td><code>authentication</code></td>
+<td style="text-align: center;">No</td>
+<td>Set a valid local <code>TRONGRID_API_KEY</code>, then retry.</td>
 </tr>
 <tr>
-<td><code>Failed to read token balance</code> / <code>Failed to read allowance</code></td>
-<td>On-chain read returned empty (bad address or RPC hiccup)</td>
-<td>Check the address format; retry on transient RPC errors</td>
+<td><code>rate_limit</code></td>
+<td style="text-align: center;">Yes</td>
+<td>Back off exponentially and respect <code>Retry-After</code>.</td>
 </tr>
 <tr>
-<td><code>TronGrid</code> 4xx / <code>429</code></td>
-<td>Missing or rate-limited <code>TRONGRID_API_KEY</code></td>
-<td>Set a valid key; back off on <code>429</code></td>
+<td><code>transient</code></td>
+<td style="text-align: center;">Yes</td>
+<td>Retry the read with exponential backoff.</td>
+</tr>
+<tr>
+<td><code>internal</code></td>
+<td style="text-align: center;">No</td>
+<td>Inspect server stderr and arguments; do not loop automatically.</td>
 </tr>
 </tbody>
 </table>
-<p>All tools are read-only, so a failure never leaves partial on-chain state — errors are safe to retry.</p>
+<p>All tools are read-only, so a failure never leaves partial on-chain state. Even so, auto-retry only when <code>retryable: true</code>; corrective errors should not be repeated unchanged.</p>
 <h2 id="security">Security<a class="headerlink" href="#security" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Read-Only</strong>: All tools use read-only contract calls (<code>triggerConstantContract</code>) or HTTP API queries. No transaction signing or state modifications.</li>
@@ -2908,7 +2985,7 @@ node<span class="w"> </span>scripts/justlend_api.mjs<span class="w"> </span>allo
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="July 22, 2026 03:59:22 UTC">2026-07-22</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="August 27, 2026 08:24:25 UTC">2026-08-27</span>
   </span>
 
     
@@ -2921,8 +2998,11 @@ node<span class="w"> </span>scripts/justlend_api.mjs<span class="w"> </span>allo
 
 
 
+                  
+                    <p class="md-source-file"><a href="https://docs.justlend.org/ai_support/justlend_skills.md" rel="alternate" type="text/markdown">View raw Markdown</a></p>
+                  
 		  <hr class="content-footer-divider">  <!-- 添加的水平线 -->
-      	    	  <footer class="md-footer">
+                  <footer class="md-footer">
   
   <!--div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">

@@ -63,7 +63,10 @@
     <link rel="llms-full" href="/llms-full.txt" type="text/plain">
     <link rel="alternate" type="text/plain" title="llms.txt — site index for LLMs" href="/llms.txt">
     <link rel="alternate" type="text/plain" title="llms-full.txt — full-text snapshot for LLMs" href="/llms-full.txt">
-    <meta name="ai-content-declaration" content="llms.txt,llms-full.txt">
+    
+      <link rel="alternate" type="text/markdown" title="Raw Markdown source" href="https://docs.justlend.org/developers/apis/agent-acceptance.md">
+    
+    <meta name="ai-content-declaration" content="llms.txt,llms-full.txt,raw-markdown">
     
     
     
@@ -97,7 +100,9 @@
           "sameAs": [
             "https://github.com/justlend/justlend-protocol",
             "https://github.com/justlend/mcp-server-justlend",
-            "https://github.com/justlend/justlend-skills"
+            "https://github.com/justlend/justlend-skills",
+            "https://github.com/justlend/justlend-cli",
+            "https://github.com/justlend/justlend-utils-v2"
           ],
           "provider": { "@id": "https://justlend.org/#org" },
           "documentation": "https://docs.justlend.org/llms.txt",
@@ -134,8 +139,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "End-to-end evidence that an anonymous agent can call the JustLend public API \u2014 real recorded responses, contract assertions, and the runnable acceptance script.",
-          "dateModified": "2026-07-15",
-          "datePublished": "2026-07-15"
+          "dateModified": "2026-08-19",
+          "datePublished": "2026-08-19"
         }
       ]
     }
@@ -1400,6 +1405,28 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../../../ai_support/cli_and_sdk/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CLI and V2 SDK
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
     
@@ -1410,10 +1437,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" >
         
           
-          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -1425,8 +1452,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_5">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
             <span class="md-nav__icon md-icon"></span>
             AI Docs for Agents
           </label>
@@ -2092,14 +2119,15 @@
 <h1 id="api-agent-acceptance-run">API Agent Acceptance Run<a class="headerlink" href="#api-agent-acceptance-run" title="Permanent link">&para;</a></h1>
 <p>This page is the <strong>end-to-end acceptance artifact</strong> for the <a href="../">JustLend DAO API</a>: proof that an agent with nothing but the docs and an HTTP client can call the API and get responses matching the documented contract (<a href="../justlend_apis.yaml"><code>justlend_apis.yaml</code></a>).</p>
 <ul>
-<li><strong>What it exercises:</strong> every <strong>anonymous GET</strong> read endpoint (no wallet, no key, no auth) plus the V1 and V2 error contracts.</li>
-<li><strong>How to reproduce:</strong> from the repo root, run <code>node scripts/api-acceptance.mjs</code> (Node ≥ 18, read-only, ~8 GET requests). Exit code <code>0</code> means every assertion holds.</li>
-<li><strong>Status: 8/8 probes passed</strong> on the last run. If a re-run fails, the live service has drifted from the documented contract — update <a href="../"><code>apis.md</code></a> and the YAML, and record the new run here.</li>
+<li><strong>What it exercises:</strong> representative anonymous GET read paths (no wallet, key, or auth), the canonical market inventory, <code>/lend/account</code> default pagination, and the V1/V2 error contracts.</li>
+<li><strong>How to reproduce:</strong> from the repo root, run <code>node scripts/api-acceptance.mjs</code> (Node ≥ 18, read-only, 9 GET requests). Use <code>--json</code> for a versioned machine-readable report; exit code <code>0</code> means every assertion holds.</li>
+<li><strong>Status: 9/9 probes passed</strong> on the last run. The latest structured artifact is <a href="../agent-acceptance-latest.json"><code>agent-acceptance-latest.json</code></a>. If a re-run fails, the live service has drifted from the documented contract — update <a href="../"><code>apis.md</code></a> and the YAML, and record the new run here.</li>
 </ul>
 <h2 id="last-verified-run">Last verified run<a class="headerlink" href="#last-verified-run" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>JustLend API agent acceptance — 2026-07-15T08:09:17.239Z — base https://openapi.just.network
+<div class="highlight"><pre><span></span><code>JustLend API agent acceptance — 2026-08-19T08:29:52.523Z — base https://openapi.just.network
 
 PASS  V1 market list                             HTTP 200  /lend/jtoken
+PASS  V1 global account pagination               HTTP 200  /lend/account
 PASS  V1 sTRX + Energy Rental dashboard          HTTP 200  /lend/strx
 PASS  V1 mining APY map                          HTTP 200  /mining/apy
 PASS  V1 high-risk account list                  HTTP 200  /justlend/liquidate/highRiskAccountList
@@ -2108,7 +2136,7 @@ PASS  V2 market list                             HTTP 200  /v2/index/market/list
 PASS  V1 error contract (unknown path)           HTTP 200  /lend/nonExistentXYZ
 PASS  V2 error contract (missing params)         HTTP 200  /v2/vault/position
 
-8/8 endpoint probes passed.
+9/9 endpoint probes passed.
 </code></pre></div>
 <h2 id="what-each-probe-asserts">What each probe asserts<a class="headerlink" href="#what-each-probe-asserts" title="Permanent link">&para;</a></h2>
 <table>
@@ -2123,7 +2151,12 @@ PASS  V2 error contract (missing params)         HTTP 200  /v2/vault/position
 <tr>
 <td>V1 market list</td>
 <td><code>/lend/jtoken</code></td>
-<td>HTTP 200; <code>code: 0</code>, <code>message: "SUCCESS"</code>; <code>tokenList</code> ≥ 20 entries; <code>supplyRate</code>/<code>cash</code>/<code>exchangeRate</code> are decimal <strong>strings</strong>; <code>borrowIndex</code> is a BigInt-safe integer string; <code>underlyingDecimal</code> is a JSON integer.</td>
+<td>HTTP 200; <code>code: 0</code>, <code>message: "SUCCESS"</code>; exactly 24 entries matching <code>contracts.json</code>, including <code>jU</code>; <code>supplyRate</code>/<code>cash</code>/<code>exchangeRate</code> are decimal <strong>strings</strong>; <code>borrowIndex</code> is a BigInt-safe integer string; <code>underlyingDecimal</code> is a JSON integer.</td>
+</tr>
+<tr>
+<td>V1 global account pagination</td>
+<td><code>/lend/account</code> (no <code>addresses</code>)</td>
+<td><code>addresses</code> is optional; omitted <code>pageSize</code> returns 50 rows; <code>totalCount</code> and <code>totalPage</code> are positive integers.</td>
 </tr>
 <tr>
 <td>V1 sTRX dashboard</td>
@@ -2259,7 +2292,7 @@ PASS  V2 error contract (missing params)         HTTP 200  /v2/vault/position
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="July 15, 2026 08:14:15 UTC">2026-07-15</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="August 19, 2026 09:32:01 UTC">2026-08-19</span>
   </span>
 
     
@@ -2272,8 +2305,11 @@ PASS  V2 error contract (missing params)         HTTP 200  /v2/vault/position
 
 
 
+                  
+                    <p class="md-source-file"><a href="https://docs.justlend.org/developers/apis/agent-acceptance.md" rel="alternate" type="text/markdown">View raw Markdown</a></p>
+                  
 		  <hr class="content-footer-divider">  <!-- 添加的水平线 -->
-      	    	  <footer class="md-footer">
+                  <footer class="md-footer">
   
   <!--div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
