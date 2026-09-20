@@ -22,6 +22,7 @@ mkdocs serve
 Before opening a pull request, run:
 
 ```bash
+node --test scripts/api-acceptance.test.mjs
 mkdocs build --strict
 ```
 

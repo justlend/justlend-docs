@@ -27,6 +27,9 @@ jobs:
     - name: Verify AI-readable source consistency
       run: node scripts/verify-ai-consistency.mjs
 
+    - name: Test API acceptance output contracts
+      run: node --test scripts/api-acceptance.test.mjs
+
     - name: Run live API agent acceptance
       if: github.event_name != 'pull_request'
       run: |
