@@ -212,6 +212,15 @@ const report = {
 
 if (JSON_MODE) {
   process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
+  // CI redirects stdout to the published report. Keep failures visible in the
+  // job log without corrupting that JSON or hiding the nonzero exit status.
+  if (!report.success) {
+    console.error(`${report.passed}/${report.total} endpoint probes passed.`);
+    for (const result of results.filter((result) => !result.pass)) {
+      console.error(`FAIL ${result.name} (HTTP ${result.httpStatus ?? '—'}) ${result.path}`);
+      for (const failure of result.failures) console.error(`      ✗ ${failure}`);
+    }
+  }
 } else {
   const pad = (value, length) => String(value).padEnd(length);
   console.log(`\nJustLend API agent acceptance — ${generatedAt} — base ${BASE}\n`);

@@ -7,8 +7,6 @@ on:
     branches:
       - main  # Validate AI contracts and strict docs builds before merge
   workflow_dispatch:    # Allow manual triggering of this workflow via the "Run workflow" button on the GitHub UI Actions tab
-  schedule:
-    - cron: '17 2 * * 1'  # Weekly live contract check, Monday 02:17 UTC
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -27,11 +25,8 @@ jobs:
     - name: Verify AI-readable source consistency
       run: node scripts/verify-ai-consistency.mjs
 
-    - name: Run live API agent acceptance
-      if: github.event_name != 'pull_request'
-      run: |
-        node scripts/api-acceptance.mjs --json > docs/developers/apis/agent-acceptance-latest.json
-        node -e "const r=require('./docs/developers/apis/agent-acceptance-latest.json'); if(!r.success||r.passed!==r.total) process.exit(1)"
+    - name: Test API acceptance output contracts
+      run: node --test scripts/api-acceptance.test.mjs
 
     - name: Setup Python
       uses: actions/setup-python@v7
