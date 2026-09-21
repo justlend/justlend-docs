@@ -8,7 +8,7 @@ description: JustLend DAO EnergyRental contract reference — rentResource, retu
 !!! info "About this page"
     * **Protocol:** JustLend DAO Energy Rental (one-to-many TRON Energy marketplace)
     * **Network:** TRON Mainnet
-    * **Contract:** [`TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd`](https://tronscan.org/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd) (immutable)
+    * **Contract:** [`TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd`](https://tronscan.org/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd)
     * **Units:** `amount` parameters refer to the **delegated TRX amount in TRX**, **not** the energy amount — divide your target energy by `energyStakePerTrx` from the dashboard API to get TRX.
     * **`resourceType`:** `0 = bandwidth`, `1 = energy`.
     * **Constraint:** receiver must be a regular account, not a contract.
