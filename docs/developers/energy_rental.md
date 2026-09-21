@@ -49,7 +49,7 @@ Upon normal termination of the rental, a portion of the deposit will be refunded
 * `rentalRate:` the borrowing interest rate, which is the rate paid per second by the borrower to the staker, scaled by 10^18.
 * `stableRate:` the weighted average interest rate for borrowings, which is a constantly updating six-hour rolling average, scaled by 10^18.
 * `liquidateThreshold:` the liquidation threshold, which is the remaining rental duration of the user's prepayment, initialized to 0.
-* `fee:` the penalty reserve for liquidation. Users who execute liquidation can receive a liquidation reward calculated as `Max(20 TRX, 0.01% * energyAmount / energyRentPerTrx)`, where `energyRentPerTrx` is derived from the [/lend/strx](https://openapi.just.network/lend/strx) API as `10000 / rentInfo.priceFor10KEnergByRent`. The minimum fee is 20 TRX.
+* `fee:` the penalty reserve for liquidation. Users who execute liquidation can receive a liquidation reward calculated as `Max(20 TRX, 0.008% * energyAmount / energyRentPerTrx)`, where `energyRentPerTrx` is derived from the [/lend/strx](https://openapi.just.network/lend/strx) API as `10000 / rentInfo.priceFor10KEnergByRent`. The minimum fee is 20 TRX.
 
 **Note:** the parameters of `rentalRate`, `stableRate` and `liquidateThreshold` can be obtained by calling the [EnergyRental](https://tronscan.org/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd) contract.
 
