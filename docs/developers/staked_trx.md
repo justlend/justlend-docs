@@ -29,7 +29,7 @@ function exchangeRate() public view returns (uint256)
 ```
 
 * **Parameter description:** N/A.
-* **Returns:** exchange rate, 1 sTRX / 1 TRX exchange rate, scaled by 1e18.
+* **Returns:** the current TRX-per-sTRX exchange rate, scaled by 1e18.
 
 
 ### **Total TRX Assets**
@@ -230,10 +230,19 @@ async function stake(trxAmount /* in TRX, e.g. 1000 */) {
 ```javascript
 async function quoteStake(trxAmount) {
   const strx = await tronWeb.contract().at(STRX);
-  const rate = await strx.exchangeRate().call(); // sTRX per TRX, scaled 1e18
-  // strxReceived = trxAmount * 1e18 / rate  (both scaled 1e18 in different ways)
-  const trxSun = BigInt(trxAmount) * 1_000_000n;
-  const strxReceived = (trxSun * (10n ** 18n)) / BigInt(rate.toString());
+  const rate = await strx.exchangeRate().call(); // TRX per sTRX, scaled 1e18
+
+  // Convert the decimal TRX input to sun before using integer arithmetic.
+  // tronWeb.toSun uses decimal math, so values such as 0.5 or "0.5" stay exact.
+  const trxSunString = tronWeb.toSun(String(trxAmount));
+  if (!/^\d+$/.test(trxSunString)) {
+    throw new Error('trxAmount must be a non-negative TRX amount with at most 6 decimals');
+  }
+  const trxSun = BigInt(trxSunString);
+
+  // BaseSTRX.DECIMAL_MULTIPLIER = 1e30 (18 sTRX decimals + the 12-decimal
+  // difference between sTRX units and TRX sun).
+  const strxReceived = (trxSun * (10n ** 30n)) / BigInt(rate.toString());
   return strxReceived; // in sTRX smallest unit (18 decimals)
 }
 ```
