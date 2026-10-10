@@ -141,8 +141,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "JustLend DAO is the largest lending protocol on TRON (Compound V2 architecture) \u2014 suppliers, borrowers, jTokens, liquidation, supply mining. Entry point for the full documentation set.",
-          "dateModified": "2026-08-19",
-          "datePublished": "2026-08-19"
+          "dateModified": "2026-10-10",
+          "datePublished": "2026-10-10"
         }
       ]
     }
@@ -2190,7 +2190,9 @@
 <h1 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h1>
 <div class="admonition info">
 <p class="admonition-title">Documentation freshness</p>
-<p><strong>Protocol:</strong> JustLend DAO · <strong>Network:</strong> TRON Mainnet · <strong>Markets:</strong> 18 active + 6 legacy = 24 jToken markets (<a href="../../developers/apis/#2-jtoken-address-reference">authoritative list</a>). Per-page <code>last-updated</code> is rendered in the footer (sourced from git commit history). For changelog see <a href="https://github.com/justlend/justlend-docs/blob/main/CHANGELOG.md">CHANGELOG.md</a>; for the machine-readable snapshot see <a href="../../llms-full.txt"><code>/llms-full.txt</code></a> (header includes <code>last_generated</code> and <code>docs_commit</code>).</p>
+<p><strong>Protocol:</strong> JustLend DAO
+<strong>Network:</strong> TRON Mainnet
+<strong>Markets:</strong> 18 active + 6 legacy = 24 jToken markets (<a href="../../developers/apis/#2-jtoken-address-reference">authoritative list</a>). Per-page <code>last-updated</code> is rendered in the footer (sourced from git commit history). For changelog see <a href="https://github.com/justlend/justlend-docs/blob/main/CHANGELOG.md">CHANGELOG.md</a>; for the machine-readable snapshot see <a href="../../llms-full.txt"><code>/llms-full.txt</code></a> (header includes <code>last_generated</code> and <code>docs_commit</code>).</p>
 </div>
 <p>JustLend DAO is a cutting-edge money market protocol powered by TRON, designed to create fund pools with interest rates determined by an algorithm based on the supply and demand of TRON assets. The protocol involves two main roles: suppliers and borrowers, who engage directly with the platform to earn or pay floating interest rates.</p>
 <p>Each money market on JustLend DAO represents a specific TRON asset, including TRX, TRC20 stablecoins like USDT, and other TRC20-based tokens. The platform features an open and transparent ledger that records all transactions and historical interest rates, ensuring transparency and trust among users.
@@ -2206,7 +2208,7 @@
 </ul>
 </li>
 <li>
-<p><strong>Redeem:</strong> suppliers can redeem the underlying assets they have supplied at any time.</p>
+<p><strong>Redeem:</strong> Suppliers can withdraw their tokens as long as there is sufficient liquidity in the reserve. Please ensure the risk value (health factor) remains in a safe state after the withdrawal.</p>
 </li>
 <li>
 <p><strong>Borrowers:</strong> over-collateralize an asset can borrow from the corresponding market on JustLend DAO.</p>
@@ -2219,7 +2221,7 @@
 <p><strong>Repay:</strong> borrowers can repay their loans at any time.</p>
 </li>
 <li>
-<p><strong>Liquidation:</strong> if the value of a borrower's collateralized assets falls below the liquidation threshold, JustLend DAO smart contracts will trigger liquidation automatically.</p>
+<p><strong>Liquidation:</strong> If an account reaches the liquidation threshold (Risk Value &gt; 100), the protocol allows liquidators to repay a portion of the account's debt and receive collateral as a liquidation reward.</p>
 </li>
 </ul>
 <h3 id="where-to-interact"><strong>Where to interact</strong><a class="headerlink" href="#where-to-interact" title="Permanent link">&para;</a></h3>
@@ -2250,7 +2252,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="August 19, 2026 09:32:01 UTC">2026-08-19</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 10, 2026 08:58:31 UTC">2026-10-10</span>
   </span>
 
     

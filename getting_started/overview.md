@@ -6,7 +6,9 @@ description: JustLend DAO is the largest lending protocol on TRON (Compound V2 a
 # Overview
 
 !!! info "Documentation freshness"
-    **Protocol:** JustLend DAO · **Network:** TRON Mainnet · **Markets:** 18 active + 6 legacy = 24 jToken markets ([authoritative list](../developers/apis.md#2-jtoken-address-reference)). Per-page `last-updated` is rendered in the footer (sourced from git commit history). For changelog see [CHANGELOG.md](https://github.com/justlend/justlend-docs/blob/main/CHANGELOG.md); for the machine-readable snapshot see [`/llms-full.txt`](../llms-full.txt) (header includes `last_generated` and `docs_commit`).
+    **Protocol:** JustLend DAO
+    **Network:** TRON Mainnet
+    **Markets:** 18 active + 6 legacy = 24 jToken markets ([authoritative list](../developers/apis.md#2-jtoken-address-reference)). Per-page `last-updated` is rendered in the footer (sourced from git commit history). For changelog see [CHANGELOG.md](https://github.com/justlend/justlend-docs/blob/main/CHANGELOG.md); for the machine-readable snapshot see [`/llms-full.txt`](../llms-full.txt) (header includes `last_generated` and `docs_commit`).
 
 JustLend DAO is a cutting-edge money market protocol powered by TRON, designed to create fund pools with interest rates determined by an algorithm based on the supply and demand of TRON assets. The protocol involves two main roles: suppliers and borrowers, who engage directly with the platform to earn or pay floating interest rates.
 
@@ -21,7 +23,7 @@ Each money market on JustLend DAO represents a specific TRON asset, including TR
     * Smart contracts distribute jToken that corresponds to underlying assets to users' accounts at the exchange rate.
     * Supplied assets to JustLend DAO money markets can enjoy interest earnings on their loans.Redeem: Suppliers can redeem the underlying assets they have supplied at any time.
 
-* **Redeem:** suppliers can redeem the underlying assets they have supplied at any time.
+* **Redeem:** Suppliers can withdraw their tokens as long as there is sufficient liquidity in the reserve. Please ensure the risk value (health factor) remains in a safe state after the withdrawal.
 
 * **Borrowers:** over-collateralize an asset can borrow from the corresponding market on JustLend DAO.
     * Unlike P2P lending, borrowers do not have to negotiate with suppliers: orders will be automatically matched by JustLend DAO smart contracts as long as the token market has sufficient liquidity.
@@ -29,7 +31,7 @@ Each money market on JustLend DAO represents a specific TRON asset, including TR
 
 * **Repay:** borrowers can repay their loans at any time.
 
-* **Liquidation:** if the value of a borrower's collateralized assets falls below the liquidation threshold, JustLend DAO smart contracts will trigger liquidation automatically.
+* **Liquidation:** If an account reaches the liquidation threshold (Risk Value > 100), the protocol allows liquidators to repay a portion of the account's debt and receive collateral as a liquidation reward.
 
 ### **Where to interact**
 
