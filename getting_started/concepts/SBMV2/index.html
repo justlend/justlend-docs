@@ -143,8 +143,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "Official documentation for JustLend DAO \u2014 the largest lending protocol on TRON. Compound V2 architecture. Covers supply / borrow / liquidation, sTRX liquid staking, Energy Rental, governance, deployed contracts (Mainnet + Nile), public OpenAPI, and AI agent integration (llms.txt, contracts.json, JSON ABIs, MCP).",
-          "dateModified": "2026-06-16",
-          "datePublished": "2026-06-16"
+          "dateModified": "2026-10-10",
+          "datePublished": "2026-10-10"
         }
       ]
     }
@@ -2335,15 +2335,15 @@
 <p>This adaptive mechanism, driven by target utilization and time, enables the protocol to continuously self-regulate utilization levels, ensuring market efficiency and sustainability without the need for governance intervention.</p>
 <h2 id="liquidations">Liquidations<a class="headerlink" href="#liquidations" title="Permanent link">&para;</a></h2>
 <p>The core liquidation logic of the SBM V2 protocol remains consistent with the mechanism used in SBM V1. A borrower becomes eligible for liquidation when the value of their debt exceeds the value of their collateral adjusted by the Collateral Factor (CF). This condition is evaluated using the <strong>Liquidation Loan-to-Value (LLTV) threshold</strong>, which varies by market based on the underlying collateral asset.</p>
-<p>Under V2, liquidation is triggered when LTV equals the market’s defined LLTV (e.g., 80%).</p>
+<p>Under V2, liquidation is triggered when LTV exceeds the market’s defined LLTV (e.g., 80%), where</p>
 <div class="codehilite"><pre><span></span><code>LTV = (Borrow Amount <span class="gs">* Borrow Price) / (Collateral Amount *</span> Collateral Price) ​
 </code></pre></div>
 
-<p>This is equivalent to the SBM V1 risk metric, a position becomes liquidatable once the Risk Level equals to 100%:</p>
+<p>This is equivalent to the SBM V1 risk metric, a position becomes liquidatable once the Risk Level exceeds 100, where</p>
 <div class="codehilite"><pre><span></span><code>Risk Level = Total Borrow / Borrow Limit <span class="gs">* 100 = Total Borrow / ∑ (Asset supplied *</span> Collateral Factor)
 </code></pre></div>
 
-<p>However, unlike V1, SBM V2 introduces a significant improvement through its isolated-lending model, where each market operates independently with its own risk parameters (e.g., LLTV.). This architecture ensures that risk events are contained within individual markets, preventing unwanted spillover effects and reducing systemic liquidation risk across the protocol. As a result, users benefit from enhanced safety, more predictable outcomes, and a more robust overall risk framework.</p>
+<p>However, unlike V1, SBM V2 introduces a significant improvement through its isolated-lending model, where each market operates independently with its own risk parameters (e.g., LLTV). This architecture ensures that risk events are contained within individual markets, preventing unwanted spillover effects and reducing systemic liquidation risk across the protocol. As a result, users benefit from enhanced safety, more predictable outcomes, and a more robust overall risk framework.</p>
 <h2 id="comparison-justlend-sbm-v1-vs-v2">Comparison: JustLend SBM V1 vs V2<a class="headerlink" href="#comparison-justlend-sbm-v1-vs-v2" title="Permanent link">&para;</a></h2>
 <p>To provide a clearer understanding of the improvements and optimizations introduced in JustLend DAO SBM V2, the following table presents a detailed comparison with V1. This comparison highlights the key differences in design, functionality, and performance, allowing users to quickly grasp the core enhancements made in the latest version.</p>
 <table>
@@ -2382,7 +2382,7 @@
 </tr>
 <tr>
 <td style="text-align: left;"><strong>User Investment Yield</strong></td>
-<td>Users can only invest their assets into one market at a time.</td>
+<td>Users can optionally deposit assets into multiple markets at once.</td>
 <td>Vault Managers adjust investments every hour, optimizing returns across multiple markets.</td>
 </tr>
 <tr>
@@ -2419,7 +2419,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 16, 2026 07:55:18 UTC">2026-06-16</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 10, 2026 08:10:23 UTC">2026-10-10</span>
   </span>
 
     
