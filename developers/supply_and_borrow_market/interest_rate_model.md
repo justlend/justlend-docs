@@ -63,12 +63,12 @@ The interest rate is defined as below.
 
 **if u < kink:**
 <div style="text-align: center; font-size: 20px;">
-    supply_rate(u) = a_1 * u + b
+    borrow_rate(u) = a_1 * u + b
 </div>
 
 **if u >= kink:**
 <div style="text-align: center; font-size: 20px;">
-    supply_rate(u) = a_1 * kink + a_2 * (u - kink) + b
+    borrow_rate(u) = a_1 * kink + a_2 * (u - kink) + b
 </div>
 
 where the borrow utilization rate `u` is defined as:
