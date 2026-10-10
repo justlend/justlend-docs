@@ -358,7 +358,7 @@ Returns supply/borrow positions, health factors, and totals. With `addresses`, i
 |-----------------------|-------|---------|----------|-------------------------------------------------------------------------------|
 | `addresses`           | query | string  | no       | Optional TRON Base58 filter: one address or multiple **comma-separated** addresses (no spaces). Omit for the global account index. |
 | `minBorrowValueInTrx` | query | number  | no       | Only return accounts whose total borrow value (in TRX) is ≥ this threshold.   |
-| `maxHealth`           | query | number  | no       | Only return accounts whose health is ≤ this threshold (useful to find risky). |
+| `maxHealth`           | query | number  | no       | Only return accounts whose health is < this threshold (useful to find risky). |
 | `pageNo`              | query | integer | no       | 1‑based page number. Default `1`.                                             |
 | `pageSize`            | query | integer | no       | Page size. Verified default `50`, max `1000`.                                 |
 
@@ -411,7 +411,7 @@ Validate Base58 addresses client-side. The live service may silently accept malf
 | Field                       | Type    | Required | Unit              | Description                                                                          |
 |-----------------------------|---------|----------|-------------------|--------------------------------------------------------------------------------------|
 | `address`                   | string  | Yes      | TRON address      | Wallet address. (Earlier versions of this page showed the key as `addresses`; the service returns `address`.) |
-| `health`                    | string  | Yes      | ratio (decimal string) | Health factor. `> 1` healthy, `≤ 1` liquidatable. `"5.88"` = very safe.         |
+| `health`                    | string  | Yes      | ratio (decimal string) | Health factor. `>= 1` healthy, `< 1` liquidatable. `"5.88"` = very safe.         |
 | `totalCollateralValueInTrx` | string  | Yes      | TRX               | Sum of collateral value (after `collateralFactor`). Decimal string.                  |
 | `totalBorrowValueInTrx`     | string  | Yes      | TRX               | Sum of outstanding borrow value. Decimal string.                                     |
 | `liquidateStatusStartTime`  | string\|null | Yes (nullable) | timestamp | Timestamp when this account first entered a liquidatable state, or `null` if it is not currently flagged. Always present. |
