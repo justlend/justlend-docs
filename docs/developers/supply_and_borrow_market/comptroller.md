@@ -114,4 +114,4 @@ function liquidationIncentiveMantissa() view returns (uint256)
 ```
 
 * **Parameter description:** N/A.
-* **Returns:** The close factor, scaled by 1e18.
+* **Returns:** The liquidation incentive, scaled by 1e18.
