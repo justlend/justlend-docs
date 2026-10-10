@@ -96,7 +96,7 @@ function getActions(uint proposalId) public view returns (address[] memory targe
 
 
 ### **Get Receipt**
-Calling this method gets the votes of a specified voter on a proposal.
+Calling this method gets the receipt of a specified voter on a proposal.
 ``` solidity
 function getReceipt(uint proposalId, address voter) public view returns (Receipt memory)
 
@@ -104,7 +104,7 @@ struct Receipt {
     bool hasVoted;
     bool support;
     uint256 votes;
-}}
+}
 ```
 
 * **Parameter description:**
@@ -163,7 +163,7 @@ function castVoteWithReason(uint proposalId, uint votes, bool support, string ca
 
 * **Parameter description:**
     * `proposalId:` ID of the proposal to vote;
-    * `vote:` number of the votes to be cast;
+    * `votes:` number of the votes to be cast;
     * `support:` for or against;
     * `reason:` voting reason.
 * **Returns:** None, reverts on error.
@@ -172,12 +172,12 @@ function castVoteWithReason(uint proposalId, uint votes, bool support, string ca
 ### **Cast Vote By Signature**
 Calling this method casts votes on a specified proposal. Comparing with `castVote()`, this method allows offline signature.
 ``` solidity
-function castVoteWithReason(uint proposalId, uint votes, bool support, string calldata reson) public
+function castVoteWithSignature(uint proposalId, uint votes, bool support, uint v, uint r, uint s) public
 ```
 
 * **Parameter description:**
     * `proposalId:` ID of the proposal to vote;
-    * `vote:` number of the votes to be cast;
+    * `votes:` number of the votes to be cast;
     * `support:` for or against;
     * `v:` recover byte of the signature;
     * `r:` half of the ECDSA signature pair;
