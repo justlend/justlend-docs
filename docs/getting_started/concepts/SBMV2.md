@@ -58,15 +58,15 @@ This adaptive mechanism, driven by target utilization and time, enables the prot
 ## Liquidations
 The core liquidation logic of the SBM V2 protocol remains consistent with the mechanism used in SBM V1. A borrower becomes eligible for liquidation when the value of their debt exceeds the value of their collateral adjusted by the Collateral Factor (CF). This condition is evaluated using the **Liquidation Loan-to-Value (LLTV) threshold**, which varies by market based on the underlying collateral asset.
 
-Under V2, liquidation is triggered when LTV equals the market’s defined LLTV (e.g., 80%).
+Under V2, liquidation is triggered when LTV exceeds the market’s defined LLTV (e.g., 80%), where
 
     LTV = (Borrow Amount * Borrow Price) / (Collateral Amount * Collateral Price) ​
                                                           
-This is equivalent to the SBM V1 risk metric, a position becomes liquidatable once the Risk Level equals to 100%:
+This is equivalent to the SBM V1 risk metric, a position becomes liquidatable once the Risk Level exceeds 100, where
 
     Risk Level = Total Borrow / Borrow Limit * 100 = Total Borrow / ∑ (Asset supplied * Collateral Factor)
                                                           
-However, unlike V1, SBM V2 introduces a significant improvement through its isolated-lending model, where each market operates independently with its own risk parameters (e.g., LLTV.). This architecture ensures that risk events are contained within individual markets, preventing unwanted spillover effects and reducing systemic liquidation risk across the protocol. As a result, users benefit from enhanced safety, more predictable outcomes, and a more robust overall risk framework.
+However, unlike V1, SBM V2 introduces a significant improvement through its isolated-lending model, where each market operates independently with its own risk parameters (e.g., LLTV). This architecture ensures that risk events are contained within individual markets, preventing unwanted spillover effects and reducing systemic liquidation risk across the protocol. As a result, users benefit from enhanced safety, more predictable outcomes, and a more robust overall risk framework.
 
 
 ##  Comparison: JustLend SBM V1 vs V2
@@ -79,7 +79,7 @@ To provide a clearer understanding of the improvements and optimizations introdu
 | **Risk Isolation**            | Risks are shared across assets, with collateral automatically used as borrowed assets.                                                           | Each market is independent, with complete risk isolation. |
 | **Liquidity Characteristics** | Shared liquidity across assets and larger liquidity pools; collateral can also be borrowed.                                                      | Independent liquidity for each asset pair, which may lead to fragmented liquidity; collateral cannot be borrowed. |
 | **User Investment Method**    | Users deposit assets directly into JustLend’s market.                                                                                            | Users deposit assets into a Vault, and the Vault Manager is responsible for maximizing investment returns. |
-| **User Investment Yield**     | Users can only invest their assets into one market at a time.                                                                                    | Vault Managers adjust investments every hour, optimizing returns across multiple markets. |
+| **User Investment Yield**     | Users can optionally deposit assets into multiple markets at once.                                                                               | Vault Managers adjust investments every hour, optimizing returns across multiple markets. |
 | **Borrower’s Collateral**     | Borrower’s collateral and user investments are mixed, and collateral can be borrowed as well.                                                    | User investments and borrower’s collateral are separated, and collateral cannot be borrowed again. |
 | **Collateral Interest**       | Collateral shares deposit interest, which dilutes deposit APY.                                                                                   | Borrower’s collateral does not earn interest, ensuring investor returns are not diluted. |
 
