@@ -47,10 +47,14 @@ The JustLend dApp surfaces every account-level risk metric in one place:
 If you have enabled “Risk Alert” yet still fail to receive email notifications even when the trigger conditions are met, check the following settings:
 
 1. **Mailbox Settings**
+   
   * Junk folder: Check the junk folder in your mailbox. Sometimes, email notifications can be mistakenly classified as junk emails. If you find the target notification in the junk folder, move it to your inbox or add the sender to your “Contacts”.
   * Email filters: Verify if your email service provider has set filters that have blocked or filtered out the email notifications. It is important to make sure the sender’s address is added to your whitelist or allowlist.
-2. **Email Sending Issues**
-  * Sending delays: Sometimes, email notifications may not come through quickly due to the delay issues. Please be patient and check your inbox again later.
-  * Sending failures: If your emails cannot be sent or are rejected, you may also experience difficulty in receiving email notifications. In this case, you can check your outbox about this kind of issue and try again in the JustLend platform.
+
+2. **Email Receiving Issues**
+
+  * Receiving delays: Sometimes, email notifications may not come through quickly due to the delay issues. Please be patient and check your inbox again later.
+  * Receiving failures: If your emails cannot be received or are rejected, you may also experience difficulty in receiving email notifications. In this case, you can check your inbox about this kind of issue and try again in the JustLend platform.
+
 3. **User Information**
   * Incorrect email address: Make sure you have provided a correct email address in the “Risk Alert” service on JustLend DAO and have verified that your address functions well.
