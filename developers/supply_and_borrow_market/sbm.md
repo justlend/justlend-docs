@@ -220,14 +220,14 @@ RepayBorrow(address payer, address borrower, uint repayAmount, uint accountBorro
 <a id="repayborrowbehalf"></a>
 
 ### **repayBorrowBehalf**
-Calling this method repays their own borrow.
+Calling this method repay a loan on behalf of the borrower.
 ``` solidity
-function repayBorrow(uint amount) external payable
+function repayBorrowBehalf(address borrower, uint repayAmount) external payable
 ```
 
 * **Parameter description:**
     * `borrower:` the account with the debt being paid off.
-    * `msg.value:` the amount to repay.
+    * `repayAmount:` the amount to repay.
 * **Returns:** None, reverts on error.
 
 
@@ -567,7 +567,7 @@ async function apys(jTokenAddr) {
 }
 ```
 
-For mining-reward-inclusive APY, prefer the API field `supplyApy` on `GET /lend/jtoken`.
+For mining-reward-inclusive APY, prefer the API field `supplyRate` on `GET /lend/jtoken`.
 
 &emsp;
 
