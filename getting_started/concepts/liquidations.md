@@ -6,7 +6,13 @@ description: How JustLend SBM liquidations work — Risk Value formula, observat
 # Liquidations
 
 !!! info "About this page"
-    **Protocol:** JustLend DAO (Compound V2 fork on TRON) · **Network:** TRON Mainnet · **Page scope:** how liquidation works for **SBM (Supply & Borrow Market)** positions on JustLend — risk-value formula, thresholds, on-chain mechanics, and the manual liquidation workflow. · **Unit conventions used here:** [Collateral Factor](../../resources/glossary.md#collateral-factor) ∈ [0, 1] (decimal, e.g. `0.80` = 80%); [Risk Value](../../resources/glossary.md#risk-value) is a percentage scalar (`100` means at the liquidation threshold, **not** `1.0`); USD amounts are de-scaled human numbers. · **Related contracts:** `Comptroller` (sets [`closeFactorMantissa`](../../resources/glossary.md#close-factor), [`liquidationIncentiveMantissa`](../../resources/glossary.md#liquidation-incentive), and per-market `collateralFactorMantissa`; see [Comptroller](../../developers/supply_and_borrow_market/comptroller.md)) and `CErc20Delegator` jTokens (expose `liquidateBorrow`; see [SBM](../../developers/supply_and_borrow_market/sbm.md)). · **Key terms defined inline below:** Risk Value, Borrow Limit, Total Borrow, Collateral Factor, Observation Threshold, Liquidation Threshold, Liquidation Reward — fuller definitions in [Glossary](../../resources/glossary.md). · **For liquidator-bot developers:** [Common Pitfalls #6 (50% close-factor cap) + #9 (oracle freshness)](../../developers/common_pitfalls.md).
+    **Protocol:** JustLend DAO (Compound V2 fork on TRON)
+    **Network:** TRON Mainnet
+    **Page scope:** how liquidation works for **SBM (Supply & Borrow Market)** positions on JustLend — risk-value formula, thresholds, on-chain mechanics, and the manual liquidation workflow.
+    **Unit conventions used here:** [Collateral Factor](../../resources/glossary.md#collateral-factor) ∈ [0, 1] (decimal, e.g. `0.80` = 80%); [Risk Value](../../resources/glossary.md#risk-value) is a percentage scalar (`100` means at the liquidation threshold, **not** `1.0`); USD amounts are de-scaled human numbers.
+    **Related contracts:** `Comptroller` (sets [`closeFactorMantissa`](../../resources/glossary.md#close-factor), [`liquidationIncentiveMantissa`](../../resources/glossary.md#liquidation-incentive), and per-market `collateralFactorMantissa`; see [Comptroller](../../developers/supply_and_borrow_market/comptroller.md)) and `CErc20Delegator` jTokens (expose `liquidateBorrow`; see [SBM](../../developers/supply_and_borrow_market/sbm.md)).
+    **Key terms defined inline below:** Risk Value, Borrow Limit, Total Borrow, Collateral Factor, Observation Threshold, Liquidation Threshold, Liquidation Reward — fuller definitions in [Glossary](../../resources/glossary.md).
+    **For liquidator-bot developers:** [Common Pitfalls #6 (50% close-factor cap) + #9 (oracle freshness)](../../developers/common_pitfalls.md).
 
 Liquidation is determined by **Risk Value**, which is a critical metric within the JustLend DAO Protocol that measures the safety of a borrow position. It is calculated as:
 
@@ -36,7 +42,7 @@ Liquidation occurs when a borrower’s risk value exceeds 100, indicating that t
 
 ## **Liquidation Tool**
 
-Liquidation will be triggered when the risk value of your positions hits 100. The liquidator will settle the debt (in the borrowed token), take away the supplied asset (in the corresponding jToken), and earn a liquidation reward equal to 8% of the repaid debt value. It should be noted that each liquidation can only cover the debt of one token.
+Liquidation will be triggered when the risk value of your positions exceeds 100. The liquidator will settle the debt (in the borrowed token), take away the supplied asset (in the corresponding jToken), and earn a liquidation reward equal to 8% of the repaid debt value. It should be noted that each liquidation can only cover the debt of one token.
 
 As a borrower, please keep a close eye on your risk value to prevent liquidation. Once liquidation occurs, you will find a record of your jTokens being transferred out of your wallet.
 
@@ -48,7 +54,7 @@ By proceeding to use the liquidation tool, you confirm that you have read, under
 This manual provides a step-by-step guide for participating in the liquidation process on the JustLend DAO platform to maintain market stability and earn liquidation rewards. Liquidation can be triggered when a borrower's **Risk Value** exceeds a critical threshold. As a liquidator, you repay the borrower's debt in exchange for their collateral at a discounted rate, effectively earning a **liquidation reward**.
 
 * **Observation Threshold:** Accounts with a **Risk Value > 95** will be listed on the Liquidation page.
-* **Liquidation Threshold:** Liquidation becomes executable only when the **Risk Value is ≥ 100**.
+* **Liquidation Threshold:** Liquidation becomes executable only when the **Risk Value is > 100**.
 
 ### 1. **Preparation**
 
@@ -61,7 +67,7 @@ Before starting, ensure you have met the following requirements:
 
 * **Monitor High-Risk Accounts:** Navigate to the [Liquidation Page](https://app.justlend.org/liquidate?lang=en-US) on the JustLend DAO official website. Review the list of accounts with a **Risk Value exceeding 95**. These are   potential candidates for liquidation.
 
-* **Select a Target Account:** Identify an account where the **Risk Value is ≥ 100**. At this stage, the **「Liquidate」** button will become active and clickable.
+* **Select a Target Account:** Identify an account where the **Risk Value is > 100**. At this stage, the **「Liquidate」** button will become active and clickable.
 
 * **Configure Liquidation Parameters:** Click the **「Liquidate」** button. A pop-up window will appear displaying:
 
