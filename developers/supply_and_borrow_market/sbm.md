@@ -567,7 +567,7 @@ async function apys(jTokenAddr) {
 }
 ```
 
-For supply APY, prefer the API field `supplyRate` on `GET /lend/jtoken`.
+For mining-reward-inclusive APY, prefer the API field `supplyRate` on `GET /lend/jtoken`.
 
 &emsp;
 
