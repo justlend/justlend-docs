@@ -112,8 +112,8 @@ struct Receipt {
     * `voter:` address of the specified account.
 * **Returns:**
     * `hasVoted:` voted or not;
-    * `values:` for or against;
-    * `signatures:` vote count.
+    * `support:` for or against;
+    * `votes:` vote count.
 
 
 ### **Proposal State**
