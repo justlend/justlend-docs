@@ -33,7 +33,7 @@ check(markets.length === 24, `contracts.json must expose 24 markets, found ${mar
 check(active.length === 18, `contracts.json must expose 18 active markets, found ${active.length}`);
 check(legacy.length === 6, `contracts.json must expose 6 legacy markets, found ${legacy.length}`);
 check(active.some((market) => market.symbol === 'jU'), 'jU must be present and active');
-check(contracts._meta.schema_version === '1.2.0', 'contracts.json schema_version must be 1.2.0');
+check(contracts._meta.schema_version === '1.2.1', 'contracts.json schema_version must be 1.2.1');
 check(contracts._meta.last_verified === '2026-08-19', 'contracts.json last_verified must be 2026-08-19');
 check(
   Array.isArray(contracts._meta.verification_sources) &&

@@ -76,7 +76,7 @@
 Base URL: `https://openapi.just.network`. Schema in [justlend_apis.yaml](https://docs.justlend.org/developers/apis/justlend_apis.yaml). Endpoints include:
 
 - `GET /lend/jtoken` — All jToken markets with supply/borrow APY, mining rewards, TVL (aggregate for protocol-level totals).
-- `GET /lend/jtoken?address={jToken}` — Single jToken market details.
+- `GET /lend/jtoken` — Fetch the full market list and select `data.tokenList` by jToken `address` client-side; an `address` query parameter is not a supported server filter.
 - `GET /lend/account?addresses={address}` — Account SBM positions, health factor, rewards (paginated).
 - `GET /mining/reward?address={jToken}` · `GET /mining/apy` · `GET /mining/distributions?addr={address}` — Mining reward config / per-market APY / distribution snapshots.
 

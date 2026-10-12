@@ -9,13 +9,13 @@ description: Base58 addresses for every JustLend DAO contract on TRON Mainnet, p
     For agents and tooling that need every address in **TRON Base58 + EVM 0x-Hex + TRON-internal 41-Hex** form, download [`contracts.json`](contracts.json). The file is structured as `networks.{mainnet,nile}.{comptroller,governance,price_oracle,jtokens,interest_rate_models,strx}`, with each address record carrying `base58 / hex_evm / hex_tron / tronscan` fields. The tables below show **Base58 only** for readability; use the JSON for cross-chain bridges, EVM-side tooling, Etherscan-like indexers, and TronGrid calls that require `41`-prefixed hex.
 
 !!! tip "Machine-readable ABIs"
-    Every contract referenced on this page has a downloadable JSON ABI under [`abis/`](abis/jtoken.json):
+    Minimal JSON interfaces are available under [`abis/`](abis/index.md). They are **not complete deployment ABIs**; check each file's functions/events and [scope](abis/index.md#scope-and-provenance) before encoding calls or decoding logs:
     
     | Contract | ABI |
     |---|---|
     | jToken (CErc20) — `mint` / `borrow` / `repayBorrow` / `redeem` / `liquidateBorrow` | [`abis/jtoken.json`](abis/jtoken.json) |
     | jToken — TRX-specific `mint()` payable | [`abis/jtrx-mint.json`](abis/jtrx-mint.json) |
-    | jToken — TRX-specific `repayBorrow()` payable | [`abis/jtrx-repay.json`](abis/jtrx-repay.json) |
+    | jToken — TRX-specific `repayBorrow(uint256)` payable | [`abis/jtrx-repay.json`](abis/jtrx-repay.json) |
     | Comptroller / Unitroller | [`abis/comptroller.json`](abis/comptroller.json) |
     | PriceOracle | [`abis/price-oracle.json`](abis/price-oracle.json) |
     | TRC20 (generic) | [`abis/trc20.json`](abis/trc20.json) |
@@ -159,7 +159,7 @@ Prices are denominated in **TRX** , scaled by `1e^(33 - tokenDecimal)`. See [Pri
 | Component | Contract | Address | Tronscan |
 |-----------|----------|---------|----------|
 | Governor Proxy | `GovernorBravoDelegator` | `TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD` | [Contract](https://tronscan.org/#/contract/TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD) |
-| Governor (impl) | `GovernorBravoDelegate` | `TCiQTkxhzwSeXhRsNdHCvrxHRAvpjQn5Dt` | [Contract](https://tronscan.org/#/contract/TCiQTkxhzwSeXhRsNdHCvrxHRAvpjQn5Dt) |
+| Governor (impl) | `GovernorBravoDelegate` | `TUeNh9BsYK44XePmFAuKZWg2rJuU7bSt5u` | [Contract](https://tronscan.org/#/contract/TUeNh9BsYK44XePmFAuKZWg2rJuU7bSt5u) |
 | Time-lock | `Timelock` | `TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x` | [Contract](https://tronscan.org/#/contract/TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x) |
 
 See [Governance](supply_and_borrow_market/governance.md) for the proposal lifecycle and voting flow.

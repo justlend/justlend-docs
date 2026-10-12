@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0.0",
+  "checked_at": "2026-10-12",
+  "scope": "minimal interfaces, not complete compiler deployment artifacts",
+  "network": "mainnet",
+  "verification_rpc": "https://api.trongrid.io/wallet/getcontract",
+  "interfaces": [
+    {
+      "file": "governor-alpha.json",
+      "target": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+      "implementation": "TUeNh9BsYK44XePmFAuKZWg2rJuU7bSt5u",
+      "complete": false,
+      "notes": "Selected current Bravo functions/events. getReceipt tuple components expanded from official source, not reproduced compiler output. Legacy filename retained.",
+      "tuple_source": "https://github.com/justlend/justlend-protocol/blob/f28f3b462a4f281761e23423554563e15fc9f028/contracts/Governance/Bravo/GovernorBravoInterfaces.sol"
+    },
+    {
+      "file": "wjst.json",
+      "target": "TXk9LnTnLN7oH96H3sKxJayMxLxR9M4ZD6",
+      "complete": false,
+      "notes": "Selected functions and wrapping/vote-lock events from the Mainnet node ABI."
+    },
+    {
+      "file": "jtrx-repay.json",
+      "target": "TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP",
+      "complete": false,
+      "notes": "Only repayBorrow(uint256) and repayBorrowBehalf(address), both payable."
+    },
+    {
+      "file": "price-oracle.json",
+      "target": "TGnYnSn4G9PgWFj7QQemh4YMZKp3fkympJ",
+      "complete": false,
+      "notes": "Only getUnderlyingPrice; does not include backend methods."
+    },
+    {
+      "file": "price-oracle-impl.json",
+      "target": "TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV",
+      "complete": false,
+      "notes": "Selected backend methods and PricePosted. Target checked with proxy.v1PriceOracle()."
+    },
+    {
+      "file": "strx.json",
+      "target": "TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5",
+      "implementation": "TUAV6ZSCXtF8KVvDKSeVmAbJEovTBf4HtG",
+      "complete": false,
+      "notes": "Existing function-only subset retained. Full deployment ABI unavailable in the checked node responses; no Deposit/Withdraw/Claim event definitions. Implementation pointer observed through Tronscan; not a compiler verification."
+    }
+  ],
+  "other_files": "Other JSON files are also partial interfaces. This manifest does not certify unlisted deployments or Nile compatibility."
+}

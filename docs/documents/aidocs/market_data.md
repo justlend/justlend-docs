@@ -27,10 +27,28 @@ Use this page when the user asks about supported markets, APY, TVL, utilization,
 ### OpenAPI
 
 - `GET /lend/jtoken`: all jToken markets and live market data.
-- `GET /lend/jtoken?address={jToken}`: details for a specific jToken.
+- For a specific market, fetch `GET /lend/jtoken` and select the entry whose `address` equals the target jToken address. The service does **not** support an `address` filter; a query parameter may be ignored and the full list returned.
 - Protocol-level totals: aggregate `GET /lend/jtoken` (no dedicated dashboard endpoint).
 
 Schema: [`/developers/apis/justlend_apis.yaml`](../../developers/apis/justlend_apis.yaml)
+
+Read-only example (Base58 addresses are case-sensitive; never assume the first entry is the requested market):
+
+```javascript
+async function getMarket(jTokenAddress) {
+  const response = await fetch('https://openapi.just.network/lend/jtoken');
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  const body = await response.json();
+  if (body.code !== 0 || !Array.isArray(body.data?.tokenList)) {
+    throw new Error(body.message || 'Invalid market response');
+  }
+  const market = body.data.tokenList.find(item => item.address === jTokenAddress);
+  if (!market) throw new Error(`Market not found: ${jTokenAddress}`);
+  return market;
+}
+```
+
+For example, pass jUSDT's Mainnet address `TXJgMdjVX5dKiQaUi9QobwNxtSQaFqccvd`, not its underlying USDT address. On 2026-10-12, passing this address as a server query still returned all 24 markets, with jTRX first.
 
 ### Static address directory
 
@@ -65,7 +83,7 @@ Do not hard-code APY, TVL, utilization, liquidity, price, reward APY, or paused 
 | User question | Best source |
 |---------------|-------------|
 | “JustLend supports which markets?” | MCP `get_supported_markets` |
-| “What is jUSDT supply APY?” | MCP `get_market_data` or OpenAPI `/lend/jtoken?address={jToken}` |
+| “What is jUSDT supply APY?” | MCP `get_market_data` or fetch `/lend/jtoken` and select by `address` client-side |
 | “Show all market TVL and utilization.” | MCP `get_all_markets` or OpenAPI `/lend/jtoken` |
 | “What is the jUSDT contract address?” | `contracts.json` or MCP `get_supported_markets` |
 | “Is jWBTT still active?” | `contracts.json` status + MCP market data |

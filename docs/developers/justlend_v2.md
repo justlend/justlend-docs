@@ -35,7 +35,7 @@ A V2 market is fully described by an immutable **`MarketParams`** tuple and addr
 
 Because every market is a self-contained `(loan, collateral, oracle, irm, lltv)` tuple, risk is **isolated**: a bad asset in one market cannot drain another. Interest accrues into a **shares** accounting model — `supplyShares` and `borrowShares` whose value grows as interest is paid, rather than per-block index rebasing.
 
-A position's **risk** is reported as a `0–1+` ratio against `lltv` (the MCP server surfaces this as `risk` / `riskLevel`): `> 1.0` means the position is liquidatable.
+A position's conceptual **risk** ratio is `risk = LTV / LLTV`, where `LTV = debt value / collateral value`. Thus **LTV > LLTV** corresponds to **risk > 1**, not `risk > LLTV`. These display ratios do not replace the deployed contract's integer-arithmetic health check.
 
 ### Vaults (ERC4626)
 
@@ -43,7 +43,7 @@ V2 **vaults** are ERC4626 tokenized vaults that aggregate supply-side liquidity 
 
 ### Liquidation
 
-When a borrower's risk reaches the market `lltv`, anyone may liquidate through the **PublicLiquidatorProxy**: repay part of the debt (in the loan token) and seize the corresponding collateral at a discount. See `get_moolah_pending_liquidations` / `get_moolah_liquidation_quote` / `moolah_liquidate` in the [MCP server tool catalog](../ai_support/mcp_server.md#tools-104-total).
+When a borrower's **LTV exceeds the market's LLTV** (equivalently, the conceptual **risk ratio exceeds 1**), anyone may submit a liquidation through the **PublicLiquidatorProxy**: repay part of the debt in the loan token and seize collateral. Exact equality is not, by itself, an excess; do not decide eligibility from rounded LTV or risk values. The deployed contract determines health using accrued debt, oracle prices, and integer rounding at execution time, and a liquidator must still submit a successful transaction. See `get_moolah_pending_liquidations` / `get_moolah_liquidation_quote` / `moolah_liquidate` in the [MCP server tool catalog](../ai_support/mcp_server.md#tools-104-total).
 
 ### Native TRX
 

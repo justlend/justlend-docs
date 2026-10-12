@@ -12,7 +12,7 @@ description: JustLend DAO sTRX liquid-staking contract reference — exchangeRat
     * **Units:** Prices are denominated in **TRX** , scaled by `1e^(33 - tokenDecimal)`; sTRX is an 18-decimal TRC20; `exchangeRate()` is scaled by `1e18`, always ≥ 1, grows monotonically as rewards accrue.
     * **Unbonding:** 14-day queue on JustLend
     * **User-side overview:** [Staked TRX concept](../getting_started/concepts/staked_trx.md)
-    * **ABI:** [`abis/strx.json`](abis/strx.json).
+    * **ABI:** [`abis/strx.json`](abis/strx.json) is a **minimal function-only interface**. It omits the events discussed below and is not sufficient for event decoding; obtain the matching verified deployment artifact. See [ABI scope](abis/index.md#scope-and-provenance).
 
 Based on Stake 2.0, with TRX Liquid Staking, users can stake TRX to get sTRX tokens and gain high rewards. Compared to traditional staking, TRX Liquid Staking is easier to use and more profitable. Staked TRX will be used automatically for voting and governance, and gain rewards via Energy Rental.
 The contract [StakedTRX](https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5) used to set up the staked TRX service.

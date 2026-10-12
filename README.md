@@ -25,6 +25,21 @@ Before opening a pull request, run:
 mkdocs build --strict
 ```
 
+For the documentation verification regressions (offline; no wallet signing or broadcasts):
+
+```bash
+python -m pip install -r requirements-test.txt
+node scripts/verify-ai-consistency.mjs
+node scripts/normalize-mcp-catalog.mjs --check
+node --test scripts/api-acceptance.test.mjs
+python scripts/test-docs-regressions.py
+mkdocs build --strict
+DOCS_SITE_DIR=site python scripts/test-docs-regressions.py
+```
+
+After importing the generated MCP catalog, run `node scripts/normalize-mcp-catalog.mjs`
+to apply the docs-local table escaping and transaction/configuration distinctions.
+
 
 ## 🤝 Contact Us
 

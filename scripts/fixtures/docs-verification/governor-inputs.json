@@ -1,0 +1,87 @@
+{
+  "source": "https://api.trongrid.io/wallet/getcontract",
+  "implementation": "TUeNh9BsYK44XePmFAuKZWg2rJuU7bSt5u",
+  "checked_at": "2026-10-12",
+  "functions": [
+    {
+      "name": "castVote",
+      "inputs": [
+        {
+          "name": "proposalId",
+          "type": "uint256"
+        },
+        {
+          "name": "votes",
+          "type": "uint256"
+        },
+        {
+          "name": "support",
+          "type": "uint8"
+        }
+      ]
+    },
+    {
+      "name": "castVoteBySig",
+      "inputs": [
+        {
+          "name": "proposalId",
+          "type": "uint256"
+        },
+        {
+          "name": "votes",
+          "type": "uint256"
+        },
+        {
+          "name": "support",
+          "type": "uint8"
+        },
+        {
+          "name": "v",
+          "type": "uint8"
+        },
+        {
+          "name": "r",
+          "type": "bytes32"
+        },
+        {
+          "name": "s",
+          "type": "bytes32"
+        }
+      ]
+    },
+    {
+      "name": "castVoteWithReason",
+      "inputs": [
+        {
+          "name": "proposalId",
+          "type": "uint256"
+        },
+        {
+          "name": "votes",
+          "type": "uint256"
+        },
+        {
+          "name": "support",
+          "type": "uint8"
+        },
+        {
+          "name": "reason",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "getReceipt",
+      "inputs": [
+        {
+          "name": "proposalId",
+          "type": "uint256"
+        },
+        {
+          "name": "voter",
+          "type": "address"
+        }
+      ]
+    }
+  ]
+}

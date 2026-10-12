@@ -97,7 +97,7 @@
         "status":              { "enum": ["active", "legacy"], "description": "`active` = open for new supply/borrow. `legacy` = closed to new supply/borrow but still queryable for existing positions to unwind." },
         "underlying_symbol":   { "type": "string", "description": "The underlying asset symbol — e.g. `USDT`, `USDC`." },
         "decimals":            { "const": 8, "description": "jToken decimals. **Always 8** for every Compound V2 jToken regardless of the underlying." },
-        "underlying_decimals": { "type": "integer", "minimum": 0, "maximum": 18, "description": "Underlying token's decimals. TRX = 6, USDT/USDC/TUSD = 6, BTC/WBTC = 8, ETH/USDD = 18." },
+        "underlying_decimals": { "type": "integer", "minimum": 0, "maximum": 18, "description": "Underlying token's decimals. TRX = 6, USDT/USDC/WBTT = 6, BTC/WBTC = 8, TUSD/ETH/USDD/sTRX/wstUSDT = 18." },
         "delegator":           { "$ref": "#/$defs/contract_record" },
         "delegate":            { "$ref": "#/$defs/contract_record", "description": "The CErc20Delegate implementation behind the delegator. Optional; some delegators point at a shared/inline implementation." },
         "delegate_implementation": { "$ref": "#/$defs/contract_record", "description": "Legacy alias for `delegate`. Either key may appear in older generations of this file." },

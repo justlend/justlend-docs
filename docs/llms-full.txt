@@ -25,7 +25,7 @@ JustLend DAO is the largest lending protocol on TRON, based on the Compound V2 a
 
 ### Roles
 
-- **Suppliers** — deposit underlying assets into a market via `mint()`. In return they receive jTokens (TRC20 receipts whose exchange rate to the underlying increases over time as interest accrues). Suppliers can `redeem` jTokens for the underlying at any time, subject to available liquidity.
+- **Suppliers** — deposit underlying assets into a market via `mint()`. In return they receive jTokens (TRC20 receipts whose exchange rate to the underlying increases over time as interest accrues). Suppliers can `redeem` jTokens for the underlying at any time, subject to available liquidity and sufficient collateral for outstanding debt.
 - **Borrowers** — over-collateralize one asset to borrow another. Borrow rates are determined per-block by the interest-rate model and apply uniformly to all borrowers of the same asset in the same block. Borrowers can `repayBorrow` at any time.
 - **Liquidators** — repay debt of unhealthy positions and seize a discounted portion of the collateral as a reward.
 
@@ -109,7 +109,7 @@ One-click TRX liquid staking under Stake 2.0:
 Rent TRON Energy at ~50–80% below the cost of burning TRX (worked example in [Energy Rental concept page §Cost Estimation](https://docs.justlend.org/getting_started/concepts/energy_rental#cost-estimation) shows 71% savings for a USDT-holding receiver and 84% for a receiver without USDT at one specific past snapshot; actual savings move with the TRON energy unit price and contract usage):
 
 - Specify: **Rental Amount** (energy units), **Rental Duration** (hourly or daily, max 30 days), **Receiving Address** (must be a regular account, not a contract).
-- Prepayment includes: Energy Fee (proportional to duration; unused portion refunded) + Security Deposit (~1 day's energy fee) + Liquidation Penalty (`max(20 TRX, 0.008% × delegated TRX)`).
+- Estimate prepayment using current rental and stable rates, the duration plus reserve threshold, and `max(minFee, delegated amount × feeRatio)`. Read current parameters rather than assuming a fixed 20 TRX fee. Refunds depend on usage and settlement, not a guaranteed constant.
 - One USDT transfer: ~64,000 energy if the receiver already holds USDT (warm storage), ~130,000 energy if the receiver is creating a fresh USDT balance (cold storage). 120,000 is a common midpoint estimate but it under-rents in the cold-storage case.
 - Energy is fully restored after 24h and reusable.
 - For short rentals (< 3 hours), return immediately after use to avoid early liquidation from price fluctuations.
@@ -122,7 +122,7 @@ Rent TRON Energy at ~50–80% below the cost of burning TRX (worked example in [
 
 1. JST holders with ≥ **200,000,000 JST** (verified: `proposalThreshold() = 2e26`) call `propose()` on `GovernorBravoDelegator`.
 2. After `votingDelay() = 1 block ≈ 3 sec`, proposal transitions Pending → Active. **There is no protocol-enforced review period** — voting is essentially immediate. The "~2-day off-chain review" is a community / forum norm, not enforced by the contracts; do not write bots that assume any gap between `propose()` and Active.
-3. Voting runs for `votingPeriod() = 86,400 blocks ≈ 3 days`. 1 JST = 1 Vote (after depositing JST → WJST via `deposit()`).
+3. Voting runs for `votingPeriod() = 86,400 blocks ≈ 3 days`. 1 JST = 1 Vote after depositing JST into WJST. Votes use the available WJST balance at voting time, not a proposal-block snapshot; voted weight is locked. Once the proposal is no longer Pending or Active, call WJST.withdrawVotes(proposalId) to unlock, then WJST.withdraw(amount) to redeem JST.
 4. Approval requires (a) For votes > Against votes AND (b) For votes > **600,000,000** (verified: `quorumVotes() = 6e26`).
 5. Approved proposals enter a Timelock with `delay() = 172,800 sec = 48 hours` (verified on-chain), then can be `execute()`d.
 
@@ -163,8 +163,10 @@ function reserveFactorMantissa() returns (uint)
 function mint() external payable                            // jTRX only — supply TRX via msg.value
 function mint(uint mintAmount) external returns (uint)      // jTRC20 — supply TRC20; requires prior approve()
 function borrow(uint borrowAmount) external returns (uint)
-function repayBorrow(uint amount) external payable          // jTRX: msg.value; jTRC20: amount param
-function repayBorrowBehalf(address borrower, uint amount) external payable
+function repayBorrow(uint amount) external payable          // Mainnet jTRX: amount in sun AND callValue
+function repayBorrow(uint repayAmount) external returns (uint) // jTRC20: underlying raw units; prior approve
+function repayBorrowBehalf(address borrower) external payable // jTRX: amount via callValue
+function repayBorrowBehalf(address borrower, uint repayAmount) external returns (uint) // jTRC20
 function redeem(uint redeemTokens) external returns (uint)
 function redeemUnderlying(uint redeemAmount) external returns (uint)
 function transfer(address dst, uint256 amount) external nonReentrant returns (bool)
@@ -188,7 +190,7 @@ function closeFactorMantissa() view returns (uint256)                  // % of d
 function liquidationIncentiveMantissa() view returns (uint256)         // scaled 1e18
 ```
 
-`getAccountLiquidity` returns either `liquidity > 0` (healthy) or `shortfall > 0` (liquidatable) — at most one is non-zero.
+After checking `error == 0`, `getAccountLiquidity` reports available `liquidity` or a positive `shortfall`; at most one is non-zero, and both may be zero at the boundary. Positive shortfall is the V1 undercollateralization condition, not a guarantee that every liquidation transaction will succeed. Rounded Risk Value and API health values do not replace it; a no-debt account can return API `health = "0"` without being liquidatable.
 
 ### 4.3 Interest Rate Models
 
@@ -229,9 +231,10 @@ function cancel(uint proposalId) public
 function getActions(uint proposalId) public view returns (address[], uint[], string[], bytes[])
 function getReceipt(uint proposalId, address voter) public view returns (Receipt)   // {hasVoted, support, votes}
 function state(uint proposalId) public view returns (ProposalState)                  // Pending|Active|Canceled|Defeated|Succeeded|Queued|Expired|Executed
-function deposit(uint256 amount) public                                              // JST → WJST 1:1
-function castVote(uint proposalId, uint votes, bool support) public
-function castVoteWithReason(uint proposalId, uint votes, bool support, string reason) public
+// WJST (not Governor): deposit(uint256 amount), withdrawVotes(uint256 proposalId), withdraw(uint256 amount)
+function castVote(uint proposalId, uint votes, uint8 support) public
+function castVoteWithReason(uint proposalId, uint votes, uint8 support, string reason) public
+function castVoteBySig(uint256 proposalId, uint256 votes, uint8 support, uint8 v, bytes32 r, bytes32 s) external
 ```
 
 ### 4.6 sTRX
@@ -259,12 +262,15 @@ function claimAll() external returns (uint256)
 
 Contract: `TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd` (mainnet).
 
-Prepayment formula:
+New-rental budget estimate in integer raw units (not an executable quote):
 
 ```
-Prepay  = trxAmount × max(rentalRate, stableRate) × (durationValueInSeconds + 86400 + liquidateThreshold) + fee
-Refund≥ = trxAmount × max(rentalRate, stableRate) × (21600              + liquidateThreshold) + fee
+feeSun = max(minFeeSun, ceil(amountSun × feeRatioMantissa / 10^18))
+prepaySun = ceil(amountSun × max(rentalRateMantissa, stableRateMantissa)
+                 × (durationSeconds + 86400 + liquidateThresholdSeconds) / 10^18) + feeSun
 ```
+
+Read both rates, the time threshold, the proportional fee ratio, and the minimum fee from the current deployment. For a read-only MCP estimate, use `calculate_energy_rental_price` with `energyAmount` and `durationHours` (plus `receiverAddress` for an existing order). Do not invoke the signing/broadcasting `rent_energy` tool merely to quote a price. Re-quote and confirm separately before a write; refunds and renewal deposits depend on actual order state.
 
 Key functions:
 
@@ -352,12 +358,12 @@ For the full list including each delegator's matching delegate-implementation co
 ### 5.3 Price Oracle
 
 - **PriceOracle (impl)**: `TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV`
-- **PriceOracleProxy**: `TCKp2AzuhzV4B4Ahx1ej4mvQgHZ1kH7F7k`
+- **PriceOracleProxy** (current Comptroller oracle): `TGnYnSn4G9PgWFj7QQemh4YMZKp3fkympJ`
 
 ### 5.4 Governance
 
 - **GovernorBravoDelegator** (entrypoint): `TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD`
-- **GovernorBravoDelegate** (impl): `TCiQTkxhzwSeXhRsNdHCvrxHRAvpjQn5Dt`
+- **GovernorBravoDelegate** (impl): `TUeNh9BsYK44XePmFAuKZWg2rJuU7bSt5u`
 - **Timelock**: `TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x`
 - **JST** (token): `TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9`
 
@@ -426,7 +432,7 @@ The HTTP API returns **current state**. For historical events (`Mint`, `Borrow`,
 2. **Self-hosted indexer** — most robust path is a custom decoder against a `java-tron` archive node (or TronGrid archive plan) + the JSON ABIs at <https://docs.justlend.org/developers/abis/>. Generic EVM indexers (DipDup, Subsquid, Substreams, Goldsky, …) have evolving TRON support and should be evaluated case-by-case; do not adopt one based on a "supports TRON" claim without a proof-of-concept run against your specific events first. Best for production analytics, full historical backfills.
 3. **Compose MCP server read primitives** — for low-volume agent-driven lookups via `@justlend/mcp-server-justlend`. Not optimized for historical-event sweeps.
 
-ABIs at `/developers/abis/` carry the canonical event signatures — derive `topic0` at runtime via `keccak256("Mint(address,uint256,uint256)")` rather than hard-coding. See [APIs §8](https://docs.justlend.org/developers/apis#8-event-stream-and-indexing-options) for the full table.
+Interfaces at `/developers/abis/` are minimal subsets, not a full event registry. Check for the exact event definition and indexed flags; obtain the matching verified deployment ABI when absent (including sTRX events). Derive `topic0` only from a verified signature. See [APIs §8](https://docs.justlend.org/developers/apis#8-event-stream-and-indexing-options) for the full table.
 
 ---
 

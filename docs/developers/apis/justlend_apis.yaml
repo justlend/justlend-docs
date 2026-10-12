@@ -80,7 +80,7 @@ paths:
                     examples:
                       - Success
                   data:
-                    type: object
+                    type: [object, "null"]
                     description: Vault directory. `null` when `code` is not `200`.
                     required:
                       - userVaults
@@ -189,7 +189,7 @@ paths:
                     examples:
                       - Success
                   data:
-                    type: object
+                    type: [object, "null"]
                     description: Market directory. `null` when `code` is not `200`.
                     required:
                       - userMarkets
@@ -265,7 +265,7 @@ paths:
                     examples:
                       - Success
                   data:
-                    type: object
+                    type: [object, "null"]
                     description: User position information. `null` when `code` is not `200`.
                     required:
                       - totalBorrowUsd
@@ -412,7 +412,7 @@ paths:
                     examples:
                       - Success
                   data:
-                    type: object
+                    type: [object, "null"]
                     description: User vault position. `null` when `code` is not `200`.
                     required:
                       - shareAmount
@@ -524,7 +524,7 @@ paths:
                     examples:
                       - Success
                   data:
-                    type: object
+                    type: [object, "null"]
                     description: User market position. `null` when `code` is not `200`.
                     required:
                       - borrowAddress
@@ -1485,7 +1485,12 @@ components:
             - TB2e78zyzMnaNG2GRazazmbVVv3J564YHg
         health:
           type: string
-          description: Health factor of the account. Decimal string. `> 1` healthy, `≤ 1` liquidatable.
+          description: >-
+            Risk reference, not a liquidation predicate. Check totalBorrowValueInTrx first;
+            an account with no debt may return health="0" and is not liquidatable. With
+            positive debt, health < 1 suggests undercollateralization. For V1, require
+            a successful on-chain getAccountLiquidity read (error == 0) with shortfall > 0
+            and all other contract checks; rounded API values or equality alone are insufficient.
           x-unit: ratio
           examples:
             - '1.00000595'

@@ -14,7 +14,7 @@ tags:
 
 Use this page when an AI agent must choose a JustLend MCP tool, inspect required parameters, compare read-only tools with write tools, or explain whether a workflow can sign and broadcast a TRON transaction.
 
-This docs-local page wraps the generated catalog from the MCP repository so RAG systems can retrieve both routing context and the complete tool list in one chunk set.
+This docs-local page wraps the generated catalog from the MCP repository so RAG systems can retrieve both routing context and the complete tool list in one chunk set. Docs-local corrections escape table-cell delimiters and distinguish transaction effects from MCP `destructiveHint` annotations. After importing a regenerated catalog, run `node scripts/normalize-mcp-catalog.mjs` in this docs repository and the documentation regression tests; the upstream generator is maintained separately.
 
 ## Source links and routing rules
 
@@ -62,7 +62,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 **Read-only tools**: 63  |  **Write tools**: 41 (of which marked destructive: 28)
 
-> ⚠️ Tools marked 🔴 **sign and broadcast TRON transactions that move real assets** — the client MUST require human confirmation (HITL) before executing. 🟡 tools only change local wallet/network config or start an interaction. Private keys are managed encrypted by `@bankofai/agent-wallet` and are **never passed as tool arguments**. The legacy unauthenticated browser-wallet bridge is disabled.
+> ⚠️ 🔴 identifies on-chain transactions, including transfers, approvals, collateral membership, and claims, whether or not the MCP annotation marks them destructive. They require explicit human confirmation **before** building a signing/broadcast workflow. 🟡 identifies local configuration or the disabled browser interaction, not an on-chain write. `destructiveHint: false` does not mean read-only. Private keys remain encrypted in `@bankofai/agent-wallet` and are never tool arguments. The browser-wallet bridge remains disabled.
 
 ---
 
@@ -89,7 +89,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 ### `set_active_wallet`
 
 **Set Active Wallet**
-- **Side effect**: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- **Side effect**: 🟡 Local configuration — changes local wallet/network settings; does not build, sign, or broadcast a chain transaction. Confirm the new configuration before subsequent writes.
 - **annotations**: idempotent: true · openWorld: false
 - **Description**: Set the active wallet by wallet ID. Use list_wallets to see available wallet IDs.
 - **Output schema**: common structured envelope v1.0.0 (`schemaVersion`, `tool`, `result`)
@@ -101,26 +101,26 @@ Consume `structuredContent` when available; older clients may continue parsing t
 ### `connect_browser_wallet`
 
 **Connect Browser Wallet**
-- **Side effect**: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- **Side effect**: 🟡 Disabled interaction — returns a safety notice; does not build, sign, or broadcast a transaction. Do not bypass the disabled browser bridge.
 - **annotations**: idempotent: false · openWorld: true
 - **Description**: Browser wallet signing is temporarily disabled because the legacy local bridge lacks request-level authentication. Use agent-wallet with AGENT_WALLET_PASSWORD until an authenticated bridge is available.
 - **Output schema**: common structured envelope v1.0.0 (`schemaVersion`, `tool`, `result`)
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | Required TRON address (T...). If set, the user must connect this exact address. |
+| `address` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | Required TRON address (T...). If set, the user must connect this exact address. |
 
 ### `set_wallet_mode`
 
 **Set Wallet Mode**
-- **Side effect**: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- **Side effect**: 🟡 Local configuration — changes local wallet/network settings; does not build, sign, or broadcast a chain transaction. Confirm the new configuration before subsequent writes.
 - **annotations**: idempotent: true · openWorld: false
 - **Description**: Switch wallet signing mode. 'agent' uses an encrypted key stored in ~/.agent-wallet/. Browser mode is disabled until the local bridge supports request-level authentication. Selecting agent mode for the first time will create an encrypted agent-wallet if needed.
 - **Output schema**: common structured envelope v1.0.0 (`schemaVersion`, `tool`, `result`)
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `mode` | enum(browser | agent) | ✅ |  | Wallet mode: 'browser' or 'agent' |
+| `mode` | enum(browser \| agent) | ✅ |  | Wallet mode: 'browser' or 'agent' |
 
 ### `get_wallet_mode`
 
@@ -134,7 +134,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 ### `set_network`
 
 **Set Global Network**
-- **Side effect**: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- **Side effect**: 🟡 Local configuration — changes local wallet/network settings; does not build, sign, or broadcast a chain transaction. Confirm the new configuration before subsequent writes.
 - **annotations**: idempotent: true · openWorld: false
 - **Description**: Set the global default network used by all JustLend operations unless explicitly overridden.
 - **Output schema**: common structured envelope v1.0.0 (`schemaVersion`, `tool`, `result`)
@@ -155,31 +155,31 @@ Consume `structuredContent` when available; older clients may continue parsing t
 ### `transfer_trx`
 
 **Transfer TRX**
-- **Side effect**: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- **Side effect**: 🔴 On-chain transaction — Transfers native TRX to the confirmed recipient. Builds a transaction, requires wallet signing, and may broadcast; explicit confirmation is required before execution.
 - **annotations**: idempotent: false · openWorld: true
 - **Description**: Transfer TRX to another TRON address. Checks balance sufficiency (including gas) before sending. Typical cost: ~0 energy + ~270 bandwidth.
 - **Output schema**: common structured envelope v1.0.0 (`schemaVersion`, `tool`, `result`)
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `to` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | ✅ |  | Recipient TRON address (Base58 T... format) |
-| `amount` | string (pattern /^\d+(\.\d+)?$/) | ✅ |  | Amount of TRX to transfer (e.g. '1', '10.5') |
+| `to` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | ✅ |  | Recipient TRON address (Base58 T... format) |
+| `amount` | string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>) | ✅ |  | Amount of TRX to transfer (e.g. '1', '10.5') |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `transfer_trc20`
 
 **Transfer TRC20**
-- **Side effect**: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- **Side effect**: 🔴 On-chain transaction — Transfers the selected TRC20 token to the confirmed recipient. Builds a transaction, requires wallet signing, and may broadcast; explicit confirmation is required before execution.
 - **annotations**: idempotent: false · openWorld: true
 - **Description**: Transfer TRC20 tokens to another TRON address. You can pass a token symbol (e.g. 'USDT', 'JST', 'wstUSDT') or a contract address. Symbol resolution uses the server's known TRON token registry and JustLend underlying-token mappings. Amount is in human-readable units (e.g. '100' for 100 USDT). Checks balance sufficiency before sending.
 - **Output schema**: common structured envelope v1.0.0 (`schemaVersion`, `tool`, `result`)
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `to` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | ✅ |  | Recipient TRON address (Base58 T... format) |
-| `amount` | string (pattern /^\d+(\.\d+)?$/) | ✅ |  | Amount to transfer in human-readable units (e.g. '100' for 100 USDT) |
+| `to` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | ✅ |  | Recipient TRON address (Base58 T... format) |
+| `amount` | string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>) | ✅ |  | Amount to transfer in human-readable units (e.g. '100' for 100 USDT) |
 | `token` | string | — |  | Token symbol (e.g. 'USDT', 'JST', 'SUN'). Preferred over tokenAddress. |
-| `tokenAddress` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | TRC20 token contract address. Use 'token' parameter instead when possible. |
+| `tokenAddress` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | TRC20 token contract address. Use 'token' parameter instead when possible. |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ## Market Data (13)
@@ -252,7 +252,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | TRON address (Base58 T... format) to check. Leave empty to use configured wallet. |
+| `address` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | TRON address (Base58 T... format) to check. Leave empty to use configured wallet. |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `check_allowance`
@@ -266,8 +266,8 @@ Consume `structuredContent` when available; older clients may continue parsing t
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
 | `market` | string | ✅ |  | jToken symbol (e.g. 'jUSDT') |
-| `amount` | string (pattern /^\d+(\.\d+)?$/) | — |  | Amount to check sufficiency against (human-readable, e.g. '0.5'). If provided, returns whether allowance is sufficient. |
-| `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | Address to check. Default: configured wallet |
+| `amount` | string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>) | — |  | Amount to check sufficiency against (human-readable, e.g. '0.5'). If provided, returns whether allowance is sufficient. |
+| `address` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | Address to check. Default: configured wallet |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `get_trx_balance`
@@ -280,7 +280,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | TRON address. Default: configured wallet |
+| `address` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | TRON address. Default: configured wallet |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `get_token_balance`
@@ -294,8 +294,8 @@ Consume `structuredContent` when available; older clients may continue parsing t
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
 | `token` | string | — |  | Token symbol (e.g. 'USDD', 'USDT', 'TRX', 'ETH', 'BTC', 'SUN', 'JST', 'WIN', 'BTT', 'NFT', 'TUSD', 'WBTC', 'USD1', 'wstUSDT', 'sTRX'). Preferred over tokenAddress. |
-| `tokenAddress` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | TRC20 token contract address. Use 'token' parameter with a symbol name instead when possible. |
-| `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | TRON address. Default: configured wallet |
+| `tokenAddress` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | TRC20 token contract address. Use 'token' parameter with a symbol name instead when possible. |
+| `address` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | TRON address. Default: configured wallet |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `get_wallet_balances`
@@ -309,7 +309,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
 | `tokens` | string[] | — |  | List of token symbols to check (e.g. ['USDT', 'USDD', 'ETH', 'BTC']). Defaults to all TRC20 underlying tokens across all JustLend markets. |
-| `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | TRON wallet address. Default: configured wallet |
+| `address` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | TRON wallet address. Default: configured wallet |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `get_mining_rewards`
@@ -322,7 +322,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | TRON address. Leave empty to use configured wallet. |
+| `address` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | TRON address. Leave empty to use configured wallet. |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `get_usdd_mining_config`
@@ -359,7 +359,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
 | `market` | string | ✅ |  | jToken symbol (e.g. 'jUSDT', 'jTRX') |
-| `amount` | string (pattern /^\d+(\.\d+)?$/) | ✅ |  | Amount of underlying to supply (e.g. '1000' for 1000 USDT) |
+| `amount` | string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>) | ✅ |  | Amount of underlying to supply (e.g. '1000' for 1000 USDT) |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `withdraw`
@@ -373,7 +373,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
 | `market` | string | ✅ |  | jToken symbol (e.g. 'jUSDT', 'jTRX') |
-| `amount` | string (pattern /^\d+(\.\d+)?$/) | ✅ |  | Amount of underlying to withdraw (e.g. '500') |
+| `amount` | string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>) | ✅ |  | Amount of underlying to withdraw (e.g. '500') |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `withdraw_all`
@@ -400,7 +400,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
 | `market` | string | ✅ |  | jToken symbol (e.g. 'jUSDT', 'jTRX') |
-| `amount` | string (pattern /^\d+(\.\d+)?$/) | ✅ |  | Amount of underlying to borrow (e.g. '500') |
+| `amount` | string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>) | ✅ |  | Amount of underlying to borrow (e.g. '500') |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `repay`
@@ -414,13 +414,13 @@ Consume `structuredContent` when available; older clients may continue parsing t
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
 | `market` | string | ✅ |  | jToken symbol (e.g. 'jUSDT', 'jTRX') |
-| `amount` | string (pattern /^(\d+(\.\d+)?|max)$/) | ✅ |  | Amount to repay (e.g. '500'), or 'max' for full repayment |
+| `amount` | string (pattern <code>/^(&#92;d+(&#92;.&#92;d+)?&#124;max)$/</code>) | ✅ |  | Amount to repay (e.g. '500'), or 'max' for full repayment |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `enter_market`
 
 **Enter Market (Enable Collateral)**
-- **Side effect**: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- **Side effect**: 🔴 On-chain transaction — Changes on-chain Comptroller collateral membership for the selected market. Builds a transaction, requires wallet signing, and may broadcast; explicit confirmation is required before execution.
 - **annotations**: idempotent: true · openWorld: true
 - **Description**: Enable a jToken market as collateral. Required before borrowing against supplied assets. Once entered, your supply in this market counts towards your borrowing capacity. Typical cost: ~80,000 energy + ~300 bandwidth.
 - **Output schema**: common structured envelope v1.0.0 (`schemaVersion`, `tool`, `result`)
@@ -446,7 +446,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 ### `approve_underlying`
 
 **Approve Underlying Token**
-- **Side effect**: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- **Side effect**: 🔴 On-chain transaction — Changes the underlying token allowance granted to the jToken contract. Builds a transaction, requires wallet signing, and may broadcast; explicit confirmation is required before execution.
 - **annotations**: idempotent: true · openWorld: true
 - **Description**: Approve the jToken contract to spend your underlying TRC20 tokens. Required before supply() or repay() for TRC20-backed markets (not needed for jTRX). Pass the EXACT amount you intend to use (recommended). Pass amount='max' for unlimited approval ONLY when the user explicitly opts in — it lets the jToken contract spend the user's entire balance, present and future, until revoked. Typical cost: ~23,000 energy + ~265 bandwidth.
 - **Output schema**: common structured envelope v1.0.0 (`schemaVersion`, `tool`, `result`)
@@ -454,13 +454,13 @@ Consume `structuredContent` when available; older clients may continue parsing t
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
 | `market` | string | ✅ |  | jToken symbol (e.g. 'jUSDT') |
-| `amount` | string (pattern /^(\d+(\.\d+)?|max)$/) | ✅ |  | Exact amount to approve (e.g. '100'), or 'max' for unlimited (NOT recommended; user must opt in). |
+| `amount` | string (pattern <code>/^(&#92;d+(&#92;.&#92;d+)?&#124;max)$/</code>) | ✅ |  | Exact amount to approve (e.g. '100'), or 'max' for unlimited (NOT recommended; user must opt in). |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `claim_rewards`
 
 **Claim Rewards**
-- **Side effect**: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- **Side effect**: 🔴 On-chain transaction — Claims mining rewards through an on-chain transaction. Builds a transaction, requires wallet signing, and may broadcast; explicit confirmation is required before execution.
 - **annotations**: idempotent: false · openWorld: true
 - **Description**: Claim accrued JustLend mining rewards for the configured wallet. Typical cost: ~60,000 energy + ~330 bandwidth.
 - **Output schema**: common structured envelope v1.0.0 (`schemaVersion`, `tool`, `result`)
@@ -479,11 +479,11 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `operation` | enum(supply | withdraw | withdraw_all | borrow | repay | approve | enter_market | exit_market | claim_rewards) | ✅ |  | The operation to estimate resources for |
+| `operation` | enum(supply \| withdraw \| withdraw_all \| borrow \| repay \| approve \| enter_market \| exit_market \| claim_rewards) | ✅ |  | The operation to estimate resources for |
 | `market` | string | ✅ |  | jToken symbol (e.g. 'jUSDT', 'jTRX', 'jUSDD'). Required for all operations except claim_rewards. |
-| `amount` | string (pattern /^\d+(\.\d+)?$/) | — |  | Amount in underlying token units (e.g. '100'). Default: '1'. Not needed for enter_market, exit_market, approve, withdraw_all, claim_rewards. |
-| `spender` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | Custom spender address for approve operation. Default: jToken contract address. Only used when operation is 'approve'. |
-| `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | TRON address for simulation. Default: configured wallet |
+| `amount` | string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>) | — |  | Amount in underlying token units (e.g. '100'). Default: '1'. Not needed for enter_market, exit_market, approve, withdraw_all, claim_rewards. |
+| `spender` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | Custom spender address for approve operation. Default: jToken contract address. Only used when operation is 'approve'. |
+| `address` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | TRON address for simulation. Default: configured wallet |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ## JST Voting / Governance (10)
@@ -511,7 +511,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | TRON address. Default: configured wallet |
+| `address` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | TRON address. Default: configured wallet |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `get_vote_info`
@@ -524,7 +524,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | TRON address. Default: configured wallet |
+| `address` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | TRON address. Default: configured wallet |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `get_locked_votes`
@@ -538,7 +538,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
 | `proposalId` | number | ✅ |  | The proposal ID to check |
-| `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | TRON address. Default: configured wallet |
+| `address` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | TRON address. Default: configured wallet |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `check_jst_allowance_for_voting`
@@ -551,20 +551,20 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | TRON address. Default: configured wallet |
+| `address` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | TRON address. Default: configured wallet |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `approve_jst_for_voting`
 
 **Approve JST for Voting**
-- **Side effect**: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- **Side effect**: 🔴 On-chain transaction — Changes the JST allowance granted to WJST. Builds a transaction, requires wallet signing, and may broadcast; explicit confirmation is required before execution.
 - **annotations**: idempotent: true · openWorld: true
 - **Description**: Approve JST token for the WJST voting contract. Required before depositing JST to get voting power. Pass the EXACT amount you intend to deposit (recommended). Pass amount='max' for unlimited approval ONLY when the user explicitly opts in — it lets the WJST contract spend the user's entire JST balance, present and future, until revoked.
 - **Output schema**: common structured envelope v1.0.0 (`schemaVersion`, `tool`, `result`)
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `amount` | string (pattern /^(\d+(\.\d+)?|max)$/) | ✅ |  | Exact amount to approve (e.g. '1000'), or 'max' for unlimited (NOT recommended; user must opt in). |
+| `amount` | string (pattern <code>/^(&#92;d+(&#92;.&#92;d+)?&#124;max)$/</code>) | ✅ |  | Exact amount to approve (e.g. '1000'), or 'max' for unlimited (NOT recommended; user must opt in). |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `deposit_jst_for_votes`
@@ -577,7 +577,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `amount` | string (pattern /^\d+(\.\d+)?$/) | ✅ |  | Amount of JST to deposit (e.g. '1000') |
+| `amount` | string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>) | ✅ |  | Amount of JST to deposit (e.g. '1000') |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `withdraw_votes_to_jst`
@@ -590,7 +590,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `amount` | string (pattern /^\d+(\.\d+)?$/) | ✅ |  | Amount of votes/WJST to withdraw back to JST (e.g. '1000') |
+| `amount` | string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>) | ✅ |  | Amount of votes/WJST to withdraw back to JST (e.g. '1000') |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `cast_vote`
@@ -605,7 +605,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 |-------|------|:--------:|---------|-------------|
 | `proposalId` | number | ✅ |  | The proposal ID to vote on |
 | `support` | boolean | ✅ |  | true = vote FOR the proposal, false = vote AGAINST |
-| `votes` | string (pattern /^\d+(\.\d+)?$/) | ✅ |  | Amount of votes to cast (e.g. '1000') |
+| `votes` | string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>) | ✅ |  | Amount of votes to cast (e.g. '1000') |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `withdraw_votes_from_proposal`
@@ -669,7 +669,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | Payer address. Default: configured wallet |
+| `address` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | Payer address. Default: configured wallet |
 | `page` | number (min 0) | — |  | History page (1-based; used with size) |
 | `size` | number (min 0) | — |  | Rows per page; omit for the backend default/all-history view |
 
@@ -696,7 +696,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 | `energyPerReceiver` | number (min 0, max 9007199254740991) | ✅ |  | Energy amount for each receiver |
 | `duration` | string (min len 1) | ✅ |  | Duration exactly as advertised by get_energy_purchase_config |
 | `expectedAmountSun` | number (min 0, max 9007199254740991) | ✅ |  | Exact total_sun from the quote explicitly confirmed by the user |
-| `expectedPayAddress` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | ✅ |  | Exact payment_address from the quote explicitly confirmed by the user |
+| `expectedPayAddress` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | ✅ |  | Exact payment_address from the quote explicitly confirmed by the user |
 | `confirmPayment` | literal | ✅ |  | Must be true only after the user explicitly confirms this value-moving payment |
 | `network` | string | — |  | Signing network. Default: configured network |
 
@@ -736,7 +736,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 |-------|------|:--------:|---------|-------------|
 | `energyAmount` | number (min 50000) | ✅ |  | Amount of energy to rent (minimum 300,000 for new rental, minimum 50,000 for renewal) |
 | `durationHours` | number (min 0) | — |  | Rental duration in hours. Required for new rentals (minimum 1). Optional for renewals (default 0 = no additional time). |
-| `receiverAddress` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | Receiver address. If provided, checks for existing rental to calculate renewal cost. |
+| `receiverAddress` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | Receiver address. If provided, checks for existing rental to calculate renewal cost. |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `get_energy_rental_rate`
@@ -762,8 +762,8 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | Address to query. Default: configured wallet |
-| `type` | enum(renter | receiver | all) | — |  | Filter by role. Default: all |
+| `address` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | Address to query. Default: configured wallet |
+| `type` | enum(renter \| receiver \| all) | — |  | Filter by role. Default: all |
 | `page` | number | — |  | Page number (0-indexed). Default: 0 |
 | `pageSize` | number | — |  | Results per page. Default: 10 |
 | `network` | string | — |  | Network. Default: mainnet |
@@ -778,8 +778,8 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `renterAddress` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | Renter address. Default: configured wallet |
-| `receiverAddress` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | ✅ |  | Receiver address |
+| `renterAddress` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | Renter address. Default: configured wallet |
+| `receiverAddress` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | ✅ |  | Receiver address |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `get_return_rental_info`
@@ -792,8 +792,8 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `renterAddress` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | Renter address. Default: configured wallet |
-| `receiverAddress` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | ✅ |  | Receiver address |
+| `renterAddress` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | Renter address. Default: configured wallet |
+| `receiverAddress` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | ✅ |  | Receiver address |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `rent_energy`
@@ -806,7 +806,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `receiverAddress` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | ✅ |  | Address that will receive the energy |
+| `receiverAddress` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | ✅ |  | Address that will receive the energy |
 | `energyAmount` | number (min 50000) | ✅ |  | Amount of energy to rent (minimum 300,000 for new rental, minimum 50,000 for renewal) |
 | `durationHours` | number (min 1) | — |  | Rental duration in hours (minimum 1 hour). Required for new rentals. Ignored for renewals (uses existing order's remaining duration). |
 | `network` | string | — |  | Network. Default: mainnet |
@@ -821,8 +821,8 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `counterpartyAddress` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | ✅ |  | The other party's address (receiver if you are renter, renter if you are receiver) |
-| `endOrderType` | enum(renter | receiver) | — |  | Your role: 'renter' (default) or 'receiver' |
+| `counterpartyAddress` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | ✅ |  | The other party's address (receiver if you are renter, renter if you are receiver) |
+| `endOrderType` | enum(renter \| receiver) | — |  | Your role: 'renter' (default) or 'receiver' |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ## sTRX Staking (7)
@@ -849,7 +849,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | Address to query. Default: configured wallet |
+| `address` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | Address to query. Default: configured wallet |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `get_strx_balance`
@@ -862,7 +862,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | Address to check. Default: configured wallet |
+| `address` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | Address to check. Default: configured wallet |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `check_strx_withdrawal_eligibility`
@@ -875,7 +875,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | Address to check. Default: configured wallet |
+| `address` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | Address to check. Default: configured wallet |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `stake_trx_to_strx`
@@ -888,7 +888,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `amount` | string (pattern /^\d+(\.\d+)?$/) | ✅ |  | Amount of TRX to stake (human-readable decimal string, e.g. '1' or '10.5') |
+| `amount` | string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>) | ✅ |  | Amount of TRX to stake (human-readable decimal string, e.g. '1' or '10.5') |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `unstake_strx`
@@ -901,7 +901,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `amount` | string (pattern /^\d+(\.\d+)?$/) | ✅ |  | Amount of sTRX to unstake (human-readable decimal string, e.g. '1' or '10.5') |
+| `amount` | string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>) | ✅ |  | Amount of sTRX to unstake (human-readable decimal string, e.g. '1' or '10.5') |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `claim_strx_rewards`
@@ -928,7 +928,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `amount` | string (pattern /^\d+(\.\d+)?$/) | ✅ |  | Amount of TRX to wrap into WTRX (human-readable decimal string, e.g. '1' or '10.5') |
+| `amount` | string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>) | ✅ |  | Amount of TRX to wrap into WTRX (human-readable decimal string, e.g. '1' or '10.5') |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `unwrap_trx`
@@ -941,7 +941,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `amount` | string (pattern /^\d+(\.\d+)?$/) | ✅ |  | Amount of WTRX to unwrap into TRX (human-readable decimal string, e.g. '1' or '10.5') |
+| `amount` | string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>) | ✅ |  | Amount of WTRX to unwrap into TRX (human-readable decimal string, e.g. '1' or '10.5') |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ## JustLend V2 (Moolah) — Vaults (6)
@@ -970,13 +970,13 @@ Consume `structuredContent` when available; older clients may continue parsing t
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
 | `vaultSymbol` | string | ✅ |  | Vault symbol: 'TRX', 'USDT', or 'USDD' |
-| `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | User address to include share balance. Default: configured wallet |
+| `address` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | User address to include share balance. Default: configured wallet |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `approve_moolah_vault`
 
 **Approve Moolah Vault**
-- **Side effect**: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- **Side effect**: 🔴 On-chain transaction — Changes the token allowance granted to the selected V2 vault. Builds a transaction, requires wallet signing, and may broadcast; explicit confirmation is required before execution.
 - **annotations**: idempotent: true · openWorld: true
 - **Description**: Approve TRC20 token spending for a Moolah vault before depositing. Not needed for TRX vaults. Pass the EXACT amount you intend to deposit (recommended). Pass amount='max' for unlimited approval ONLY when the user explicitly opts in — it lets the vault contract spend the user's entire balance, present and future, until revoked (amount='0').
 - **Output schema**: common structured envelope v1.0.0 (`schemaVersion`, `tool`, `result`)
@@ -984,7 +984,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
 | `vaultSymbol` | string | ✅ |  | Vault symbol: 'USDT' or 'USDD' |
-| `amount` | string (pattern /^(\d+(\.\d+)?|max)$/) | ✅ |  | Exact amount to approve (e.g. '100'), or 'max' for unlimited (NOT recommended; user must opt in). |
+| `amount` | string (pattern <code>/^(&#92;d+(&#92;.&#92;d+)?&#124;max)$/</code>) | ✅ |  | Exact amount to approve (e.g. '100'), or 'max' for unlimited (NOT recommended; user must opt in). |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `moolah_vault_deposit`
@@ -998,7 +998,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
 | `vaultSymbol` | string | ✅ |  | Vault symbol: 'TRX', 'USDT', or 'USDD' |
-| `amount` | string (pattern /^\d+(\.\d+)?$/) | ✅ |  | Amount of underlying to deposit (e.g. '1000' for 1000 USDT) |
+| `amount` | string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>) | ✅ |  | Amount of underlying to deposit (e.g. '1000' for 1000 USDT) |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `moolah_vault_withdraw`
@@ -1012,7 +1012,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
 | `vaultSymbol` | string | ✅ |  | Vault symbol: 'TRX', 'USDT', or 'USDD' |
-| `amount` | string (pattern /^(\d+(\.\d+)?|max)$/) | ✅ |  | Amount of underlying to withdraw, or 'max' for full withdrawal |
+| `amount` | string (pattern <code>/^(&#92;d+(&#92;.&#92;d+)?&#124;max)$/</code>) | ✅ |  | Amount of underlying to withdraw, or 'max' for full withdrawal |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `moolah_vault_redeem`
@@ -1026,7 +1026,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
 | `vaultSymbol` | string | ✅ |  | Vault symbol: 'TRX', 'USDT', or 'USDD' |
-| `shares` | string (pattern /^(\d+(\.\d+)?|max)$/) | ✅ |  | Number of shares to redeem, or 'max' for all shares |
+| `shares` | string (pattern <code>/^(&#92;d+(&#92;.&#92;d+)?&#124;max)$/</code>) | ✅ |  | Number of shares to redeem, or 'max' for all shares |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ## JustLend V2 (Moolah) — Markets (8)
@@ -1070,23 +1070,23 @@ Consume `structuredContent` when available; older clients may continue parsing t
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
 | `marketId` | string | ✅ |  | Market ID (bytes32 hex) |
-| `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | User address. Default: configured wallet |
+| `address` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | User address. Default: configured wallet |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `approve_moolah_proxy`
 
 **Approve Moolah Proxy**
-- **Side effect**: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- **Side effect**: 🔴 On-chain transaction — Changes the token allowance granted to the V2 core contract. Builds a transaction, requires wallet signing, and may broadcast; explicit confirmation is required before execution.
 - **annotations**: idempotent: true · openWorld: true
 - **Description**: Approve TRC20 token spending for the Moolah core contract before supplying collateral or repaying. Not needed for TRX operations. Pass the EXACT amount you intend to use (recommended). Pass amount='max' for unlimited approval ONLY when the user explicitly opts in — it lets the Moolah proxy spend the user's entire balance, present and future, until revoked (amount='0').
 - **Output schema**: common structured envelope v1.0.0 (`schemaVersion`, `tool`, `result`)
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `tokenAddress` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | ✅ |  | TRC20 contract address (Base58) |
+| `tokenAddress` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | ✅ |  | TRC20 contract address (Base58) |
 | `tokenSymbol` | string | ✅ |  | Token symbol for display (e.g. 'USDT') |
 | `tokenDecimals` | number (min 0, max 38) | ✅ |  | Token decimals (e.g. 6 for USDT). Integer in [0, 38]. |
-| `amount` | string (pattern /^(\d+(\.\d+)?|max)$/) | ✅ |  | Exact amount to approve (e.g. '100'), or 'max' for unlimited (NOT recommended; user must opt in). |
+| `amount` | string (pattern <code>/^(&#92;d+(&#92;.&#92;d+)?&#124;max)$/</code>) | ✅ |  | Exact amount to approve (e.g. '100'), or 'max' for unlimited (NOT recommended; user must opt in). |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `moolah_supply_collateral`
@@ -1100,7 +1100,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
 | `marketId` | string | ✅ |  | Market ID (bytes32 hex) — from get_moolah_markets |
-| `amount` | string (pattern /^\d+(\.\d+)?$/) | ✅ |  | Amount of collateral to supply (e.g. '10000' for 10000 TRX) |
+| `amount` | string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>) | ✅ |  | Amount of collateral to supply (e.g. '10000' for 10000 TRX) |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `moolah_withdraw_collateral`
@@ -1114,7 +1114,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
 | `marketId` | string | ✅ |  | Market ID (bytes32 hex) |
-| `amount` | string (pattern /^(\d+(\.\d+)?|max)$/) | ✅ |  | Amount of collateral to withdraw, or 'max' for all (requires no active borrows) |
+| `amount` | string (pattern <code>/^(&#92;d+(&#92;.&#92;d+)?&#124;max)$/</code>) | ✅ |  | Amount of collateral to withdraw, or 'max' for all (requires no active borrows) |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `moolah_borrow`
@@ -1128,8 +1128,8 @@ Consume `structuredContent` when available; older clients may continue parsing t
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
 | `marketId` | string | ✅ |  | Market ID (bytes32 hex) — from get_moolah_markets |
-| `collateralAmount` | string (pattern /^\d+(\.\d+)?$/) | — |  | Collateral to supply first (e.g. '10000' TRX). Omit to skip. |
-| `borrowAmount` | string (pattern /^\d+(\.\d+)?$/) | — |  | Loan token amount to borrow (e.g. '500' USDT). Omit to skip. |
+| `collateralAmount` | string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>) | — |  | Collateral to supply first (e.g. '10000' TRX). Omit to skip. |
+| `borrowAmount` | string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>) | — |  | Loan token amount to borrow (e.g. '500' USDT). Omit to skip. |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `moolah_repay`
@@ -1143,7 +1143,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
 | `marketId` | string | ✅ |  | Market ID (bytes32 hex) |
-| `amount` | string (pattern /^(\d+(\.\d+)?|max)$/) | ✅ |  | Loan amount to repay, or 'max' for full repayment |
+| `amount` | string (pattern <code>/^(&#92;d+(&#92;.&#92;d+)?&#124;max)$/</code>) | ✅ |  | Loan amount to repay, or 'max' for full repayment |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ## JustLend V2 (Moolah) — Liquidation (5)
@@ -1177,8 +1177,8 @@ Consume `structuredContent` when available; older clients may continue parsing t
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
 | `marketId` | string | ✅ |  | Market ID (bytes32 hex) |
-| `seizedAssets` | string (pattern /^\d+$/) | — |  | Collateral amount to seize (raw units). Provide this OR repaidShares. |
-| `repaidShares` | string (pattern /^\d+$/) | — |  | Borrow shares to repay (raw units). Provide this OR seizedAssets. |
+| `seizedAssets` | string (pattern <code>/^&#92;d+$/</code>) | — |  | Collateral amount to seize (raw units). Provide this OR repaidShares. |
+| `repaidShares` | string (pattern <code>/^&#92;d+$/</code>) | — |  | Borrow shares to repay (raw units). Provide this OR seizedAssets. |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `get_moolah_liquidation_records`
@@ -1191,7 +1191,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `type` | enum(bot | public) | — |  | Filter by liquidator type |
+| `type` | enum(bot \| public) | — |  | Filter by liquidator type |
 | `debtToken` | string | — |  | Filter by loan token symbol |
 | `collateralToken` | string | — |  | Filter by collateral token symbol |
 | `page` | number | — |  | Page number (0-indexed). Default: 0 |
@@ -1209,25 +1209,25 @@ Consume `structuredContent` when available; older clients may continue parsing t
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
 | `marketId` | string | ✅ |  | Market ID (bytes32 hex) |
-| `borrower` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | ✅ |  | Address of the borrower to liquidate (Base58) |
-| `seizedAssets` | string (pattern /^\d+$/) | — |  | Collateral units to seize (raw). Provide this OR repaidShares. |
-| `repaidShares` | string (pattern /^\d+$/) | — |  | Borrow shares to repay (raw). Provide this OR seizedAssets. |
+| `borrower` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | ✅ |  | Address of the borrower to liquidate (Base58) |
+| `seizedAssets` | string (pattern <code>/^&#92;d+$/</code>) | — |  | Collateral units to seize (raw). Provide this OR repaidShares. |
+| `repaidShares` | string (pattern <code>/^&#92;d+$/</code>) | — |  | Borrow shares to repay (raw). Provide this OR seizedAssets. |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `approve_liquidator_token`
 
 **Approve Liquidator Token**
-- **Side effect**: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- **Side effect**: 🔴 On-chain transaction — Changes the loan-token allowance granted to the public liquidator. Builds a transaction, requires wallet signing, and may broadcast; explicit confirmation is required before execution.
 - **annotations**: idempotent: true · openWorld: true
 - **Description**: Approve loan token spending for the Moolah public liquidator contract. Required before calling moolah_liquidate. Pass the EXACT amount you intend to use (recommended). Pass amount='max' for unlimited approval ONLY when the user explicitly opts in — it lets the liquidator contract spend the user's entire balance, present and future, until revoked (amount='0').
 - **Output schema**: common structured envelope v1.0.0 (`schemaVersion`, `tool`, `result`)
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `tokenAddress` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | ✅ |  | Loan token contract address (Base58) |
+| `tokenAddress` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | ✅ |  | Loan token contract address (Base58) |
 | `tokenSymbol` | string | ✅ |  | Token symbol for display (e.g. 'USDT') |
 | `tokenDecimals` | number (min 0, max 38) | ✅ |  | Token decimals (e.g. 6 for USDT). Integer in [0, 38]. |
-| `amount` | string (pattern /^(\d+(\.\d+)?|max)$/) | ✅ |  | Exact amount to approve (e.g. '100'), or 'max' for unlimited (NOT recommended; user must opt in). |
+| `amount` | string (pattern <code>/^(&#92;d+(&#92;.&#92;d+)?&#124;max)$/</code>) | ✅ |  | Exact amount to approve (e.g. '100'), or 'max' for unlimited (NOT recommended; user must opt in). |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ## JustLend V2 (Moolah) — Dashboard & History (6)
@@ -1242,7 +1242,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | User address to include V2 position summary. Default: configured wallet |
+| `address` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | User address to include V2 position summary. Default: configured wallet |
 | `depositToken` | string | — |  | Filter vaults and markets by deposit token symbol |
 | `collateralToken` | string | — |  | Filter markets by collateral token symbol |
 | `network` | string | — |  | Network. Default: mainnet |
@@ -1257,8 +1257,8 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | User address. Default: configured wallet |
-| `timeFilter` | enum(ONE_DAY | ONE_WEEK | ONE_MONTH) | — |  | History time range. Default: ONE_WEEK |
+| `address` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | User address. Default: configured wallet |
+| `timeFilter` | enum(ONE_DAY \| ONE_WEEK \| ONE_MONTH) | — |  | History time range. Default: ONE_WEEK |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `get_moolah_records`
@@ -1271,7 +1271,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | User address. Default: configured wallet |
+| `address` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | User address. Default: configured wallet |
 | `pageNo` | number | — |  | Page number, 1-indexed. Default: 1 |
 | `pageSize` | number | — |  | Records per page. Default: 20 |
 | `network` | string | — |  | Network. Default: mainnet |
@@ -1286,7 +1286,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `vaultAddress` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | ✅ |  | Vault contract address (Base58 T...) |
+| `vaultAddress` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | ✅ |  | Vault contract address (Base58 T...) |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `estimate_moolah_energy`
@@ -1299,9 +1299,9 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `operation` | enum(vault_deposit | vault_withdraw | vault_redeem | approve_vault | supply_collateral | withdraw_collateral | borrow | repay | approve_proxy | liquidate | approve_liquidator) | ✅ |  | Moolah operation to estimate |
+| `operation` | enum(vault_deposit \| vault_withdraw \| vault_redeem \| approve_vault \| supply_collateral \| withdraw_collateral \| borrow \| repay \| approve_proxy \| liquidate \| approve_liquidator) | ✅ |  | Moolah operation to estimate |
 | `isTRX` | boolean | — |  | Whether the route uses native TRX (via TrxProviderProxy). Default: false |
-| `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | Owner address for resource-sufficiency check. Default: configured wallet |
+| `address` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | Owner address for resource-sufficiency check. Default: configured wallet |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `get_moolah_market_history`
@@ -1329,7 +1329,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `vaultAddress` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | ✅ |  | Vault contract address (Base58 T...) |
+| `vaultAddress` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | ✅ |  | Vault contract address (Base58 T...) |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `get_moolah_mining_resolver`
@@ -1354,7 +1354,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | TRON address. Default: configured wallet |
+| `address` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | TRON address. Default: configured wallet |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `get_moolah_pending_mining_periods`
@@ -1367,7 +1367,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | TRON address. Default: configured wallet |
+| `address` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | TRON address. Default: configured wallet |
 | `includeClaimed` | boolean | — |  | Include rounds the backend marks as claimed. Default: false |
 | `network` | string | — |  | Network. Default: mainnet |
 
@@ -1386,7 +1386,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 | `index` | union | — |  | Override: leaf index inside the tree |
 | `amounts` | string[] | — |  | Override: token amounts in raw units (integer strings), slot-aligned with the tree's tokenAddress[] |
 | `proof` | string[] | — |  | Override: merkle proof (bytes32[]) |
-| `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | Owner address used to refetch the airdrop entry when periodKey is supplied. Default: signing wallet |
+| `address` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | Owner address used to refetch the airdrop entry when periodKey is supplied. Default: signing wallet |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ## Historical Records (7)
@@ -1401,7 +1401,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | ✅ |  | TRON address (T...). Default: configured wallet |
+| `address` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | ✅ |  | TRON address (T...). Default: configured wallet |
 | `page` | number | — |  | Page number, 1-indexed. Default: 1 |
 | `pageSize` | number | — |  | Records per page. Default: 20 |
 | `network` | string | — |  | Must be 'mainnet'. Default: mainnet |
@@ -1416,7 +1416,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | ✅ |  | TRON address. Default: configured wallet |
+| `address` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | ✅ |  | TRON address. Default: configured wallet |
 | `page` | number | — |  | Page number, 1-indexed. Default: 1 |
 | `pageSize` | number | — |  | Records per page. Default: 20 |
 | `network` | string | — |  | Must be 'mainnet'. Default: mainnet |
@@ -1431,7 +1431,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | ✅ |  | TRON address. Default: configured wallet |
+| `address` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | ✅ |  | TRON address. Default: configured wallet |
 | `page` | number | — |  | Page number, 1-indexed. Default: 1 |
 | `pageSize` | number | — |  | Records per page. Default: 20 |
 | `network` | string | — |  | Must be 'mainnet'. Default: mainnet |
@@ -1446,7 +1446,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | ✅ |  | TRON address. Default: configured wallet |
+| `address` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | ✅ |  | TRON address. Default: configured wallet |
 | `page` | number | — |  | Page number, 1-indexed. Default: 1 |
 | `pageSize` | number | — |  | Records per page. Default: 20 |
 | `network` | string | — |  | Must be 'mainnet'. Default: mainnet |
@@ -1461,7 +1461,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | ✅ |  | TRON address. Default: configured wallet |
+| `address` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | ✅ |  | TRON address. Default: configured wallet |
 | `network` | string | — |  | Must be 'mainnet'. Default: mainnet |
 
 ### `claim_v1_mining_period`
@@ -1481,9 +1481,9 @@ Consume `structuredContent` when available; older clients may continue parsing t
 | `proof` | string[] | — |  | Override: merkle proof (bytes32[]) |
 | `tokenAddress` | union | — |  | Override: token address(es) used for routing when the entry is single-token |
 | `tokenSymbol` | union | — |  | Override: token symbol(s); useful when tokenAddress is missing |
-| `distributor` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | Force a specific distributor address. Set with `selector` to bypass routing. |
-| `selector` | enum(single | multi) | — |  | Force a selector. 'single' = (uint256,uint256,uint256,bytes32[])[]; 'multi' = (uint256,uint256,uint256[],bytes32[])[] |
-| `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | — |  | Owner address used to refetch the airdrop entry when key is supplied. Default: signing wallet |
+| `distributor` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | Force a specific distributor address. Set with `selector` to bypass routing. |
+| `selector` | enum(single \| multi) | — |  | Force a selector. 'single' = (uint256,uint256,uint256,bytes32[])[]; 'multi' = (uint256,uint256,uint256[],bytes32[])[] |
+| `address` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | — |  | Owner address used to refetch the airdrop entry when key is supplied. Default: signing wallet |
 | `network` | string | — |  | Network. Default: mainnet |
 
 ### `get_liquidation_records`
@@ -1496,7 +1496,7 @@ Consume `structuredContent` when available; older clients may continue parsing t
 
 | Param | Type | Required | Default | Description |
 |-------|------|:--------:|---------|-------------|
-| `address` | string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/) | ✅ |  | TRON address. Default: configured wallet |
+| `address` | string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>) | ✅ |  | TRON address. Default: configured wallet |
 | `page` | number | — |  | Page number, 1-indexed. Default: 1 |
 | `pageSize` | number | — |  | Records per page. Default: 20 |
 | `network` | string | — |  | Must be 'mainnet'. Default: mainnet |

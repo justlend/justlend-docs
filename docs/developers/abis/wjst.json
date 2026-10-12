@@ -1,31 +1,92 @@
 [
   {
-    "type": "function",
-    "name": "balanceOf",
+    "name": "Deposit",
     "inputs": [
       {
-        "type": "address",
-        "name": "account"
-      }
-    ],
-    "outputs": [
+        "indexed": true,
+        "name": "dst",
+        "type": "address"
+      },
       {
+        "name": "sad",
         "type": "uint256"
       }
     ],
-    "stateMutability": "view"
+    "type": "event",
+    "anonymous": false
   },
   {
-    "type": "function",
+    "name": "VoteAndLock",
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "src",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "name": "proposalId",
+        "type": "uint256"
+      },
+      {
+        "name": "support",
+        "type": "uint8"
+      },
+      {
+        "name": "sad",
+        "type": "uint256"
+      }
+    ],
+    "type": "event",
+    "anonymous": false
+  },
+  {
+    "name": "WithdrawVote",
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "src",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "name": "proposalId",
+        "type": "uint256"
+      },
+      {
+        "name": "sad",
+        "type": "uint256"
+      }
+    ],
+    "type": "event",
+    "anonymous": false
+  },
+  {
+    "name": "Withdrawal",
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "src",
+        "type": "address"
+      },
+      {
+        "name": "sad",
+        "type": "uint256"
+      }
+    ],
+    "type": "event",
+    "anonymous": false
+  },
+  {
     "name": "allowance",
     "inputs": [
       {
-        "type": "address",
-        "name": "owner"
+        "name": "src",
+        "type": "address"
       },
       {
-        "type": "address",
-        "name": "spender"
+        "name": "guy",
+        "type": "address"
       }
     ],
     "outputs": [
@@ -33,63 +94,19 @@
         "type": "uint256"
       }
     ],
+    "type": "function",
     "stateMutability": "view"
   },
   {
-    "type": "function",
-    "name": "lockTo",
-    "inputs": [
-      {
-        "type": "address",
-        "name": "user"
-      },
-      {
-        "type": "uint256",
-        "name": "proposalId"
-      }
-    ],
-    "outputs": [
-      {
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "deposit",
-    "inputs": [
-      {
-        "type": "uint256",
-        "name": "amount"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "withdraw",
-    "inputs": [
-      {
-        "type": "uint256",
-        "name": "amount"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
     "name": "approve",
     "inputs": [
       {
-        "type": "address",
-        "name": "spender"
+        "name": "guy",
+        "type": "address"
       },
       {
-        "type": "uint256",
-        "name": "amount"
+        "name": "sad",
+        "type": "uint256"
       }
     ],
     "outputs": [
@@ -97,6 +114,142 @@
         "type": "bool"
       }
     ],
+    "type": "function",
     "stateMutability": "nonpayable"
+  },
+  {
+    "name": "approve",
+    "inputs": [
+      {
+        "name": "guy",
+        "type": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "bool"
+      }
+    ],
+    "type": "function",
+    "stateMutability": "nonpayable"
+  },
+  {
+    "name": "balanceOf",
+    "inputs": [
+      {
+        "name": "guy",
+        "type": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256"
+      }
+    ],
+    "type": "function",
+    "stateMutability": "view"
+  },
+  {
+    "name": "deposit",
+    "inputs": [
+      {
+        "name": "sad",
+        "type": "uint256"
+      }
+    ],
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "outputs": []
+  },
+  {
+    "name": "getPriorVotes",
+    "inputs": [
+      {
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "name": "blockNumber",
+        "type": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256"
+      }
+    ],
+    "type": "function",
+    "stateMutability": "view"
+  },
+  {
+    "name": "lockOf",
+    "inputs": [
+      {
+        "name": "guy",
+        "type": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256"
+      }
+    ],
+    "type": "function",
+    "stateMutability": "view"
+  },
+  {
+    "name": "lockTo",
+    "inputs": [
+      {
+        "name": "guy",
+        "type": "address"
+      },
+      {
+        "name": "proposalId",
+        "type": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256"
+      }
+    ],
+    "type": "function",
+    "stateMutability": "view"
+  },
+  {
+    "name": "totalLocked",
+    "outputs": [
+      {
+        "type": "uint256"
+      }
+    ],
+    "type": "function",
+    "stateMutability": "view",
+    "inputs": []
+  },
+  {
+    "name": "withdraw",
+    "inputs": [
+      {
+        "name": "sad",
+        "type": "uint256"
+      }
+    ],
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "outputs": []
+  },
+  {
+    "name": "withdrawVotes",
+    "inputs": [
+      {
+        "name": "proposalId",
+        "type": "uint256"
+      }
+    ],
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "outputs": []
   }
 ]

@@ -1,0 +1,248 @@
+"""Offline regressions for the 2026-10-12 docs verification.
+
+Run: python -m pip install -r requirements-test.txt
+     python scripts/test-docs-regressions.py
+No test signs, broadcasts, or queries a live service.
+"""
+
+import copy
+import json
+import os
+import re
+import subprocess
+import unittest
+from pathlib import Path
+
+import markdown
+import yaml
+from jsonschema import Draft202012Validator
+from html.parser import HTMLParser
+
+ROOT = Path(__file__).resolve().parents[1]
+FIXTURES = ROOT / "scripts/fixtures/docs-verification"
+
+
+def read(path):
+    return (ROOT / path).read_text()
+
+
+def javascript_block(path, function):
+    blocks = re.findall(r"```javascript\n(.*?)\n```", read(path), re.S)
+    return next(block for block in blocks if f"function {function}(" in block)
+
+
+def run_js(source):
+    return json.loads(subprocess.check_output(["node", "--input-type=module", "-e", source], text=True))
+
+
+class Tables(HTMLParser):
+    def __init__(self, source, rendered=False):
+        super().__init__()
+        self.rows = []
+        self.row = None
+        self.cell = None
+        self.feed(source if rendered else markdown.markdown(source, extensions=["tables", "fenced_code"]))
+
+    def handle_starttag(self, tag, attrs):
+        if tag == "tr":
+            self.row = []
+        elif tag in ("td", "th"):
+            self.cell = ""
+
+    def handle_data(self, data):
+        if self.cell is not None:
+            self.cell += data
+
+    def handle_endtag(self, tag):
+        if tag in ("td", "th"):
+            self.row.append(self.cell)
+            self.cell = None
+        elif tag == "tr":
+            self.rows.append(self.row)
+            self.row = None
+
+
+class DocumentationRegressions(unittest.TestCase):
+    def test_v2_null_business_errors_and_invalid_controls(self):
+        spec = yaml.safe_load(read("docs/developers/apis/justlend_apis.yaml"))
+        fixtures = json.loads((FIXTURES / "v2-errors.json").read_text())
+        self.assertEqual(len(fixtures["responses"]), 5)
+        for item in fixtures["responses"]:
+            with self.subTest(path=item["path"]):
+                schema = copy.deepcopy(spec["paths"][item["path"]]["get"]["responses"]["200"]["content"]["application/json"]["schema"])
+                schema["components"] = spec["components"]
+                Draft202012Validator.check_schema(schema)
+                validator = Draft202012Validator(schema)
+                self.assertEqual(list(validator.iter_errors(item["response"])), [])
+                for invalid in ([], "not an object", 123):
+                    self.assertFalse(validator.is_valid({**item["response"], "data": invalid}))
+                # Nullable must not discard required object fields.
+                self.assertFalse(validator.is_valid({**item["response"], "data": {}}))
+
+    def test_glossary_decimals_match_observed_mainnet_values(self):
+        evidence = json.loads((FIXTURES / "mainnet-reads.json").read_text())
+        section = read("docs/resources/glossary.md").split("### underlying decimals", 1)[1].split("\n---", 1)[0]
+        rows = Tables(section).rows[1:]
+        values = {token.strip(): int(row[1]) for row in rows for token in row[0].split(",")}
+        for key, observation in evidence.items():
+            if key.startswith("decimals_"):
+                token = key.removeprefix("decimals_")
+                with self.subTest(token=token):
+                    self.assertEqual(values[token], int(observation["constant_result"][0], 16))
+
+    def test_mcp_parameter_tables_preserve_all_columns(self):
+        source = read("docs/documents/aidocs/mcp_tools.md")
+        for section in re.split(r"^### `", source, flags=re.M)[1:]:
+            tool = section.split("`", 1)[0]
+            for line in section.splitlines():
+                if line.startswith("| `"):
+                    cells = re.split(r"(?<!\\)\|", line)[1:-1]
+                    self.assertEqual(len(cells), 5, (tool, line))
+        mode = next(row for row in Tables(source).rows if row and row[0] == "mode")
+        self.assertEqual(mode[1], "enum(browser | agent)")
+        self.assertEqual(mode[2], "✅")
+        self.assertEqual(mode[3], "")
+        repay = source.split('### `repay`', 1)[1].split('\n### ', 1)[0]
+        amount = next(row for row in Tables(repay).rows if row and row[0] == 'amount')
+        self.assertEqual(amount[1], r'string (pattern /^(\d+(\.\d+)?|max)$/)')
+
+    def test_quotes_do_not_invoke_the_rental_write_tool(self):
+        source = read("docs/getting_started/concepts/energy_rental.md")
+        self.assertNotIn("--dry-run", source)
+        self.assertIn("calculate_energy_rental_price", source)
+
+    def test_governance_call_signatures_match_deployed_abi(self):
+        observed = json.loads((FIXTURES / "governor-inputs.json").read_text())
+        abi = json.loads(read("docs/developers/abis/governor-alpha.json"))
+        by_name = {item.get("name"): item for item in abi}
+        for method in observed["functions"]:
+            with self.subTest(method=method["name"]):
+                self.assertIn(method["name"], by_name)
+                self.assertEqual(by_name[method["name"]]["inputs"], method["inputs"])
+        receipt = by_name["getReceipt"]["outputs"]
+        self.assertEqual(len(receipt), 1)
+        self.assertEqual(receipt[0]["type"], "tuple")
+        self.assertEqual([(p["name"], p["type"]) for p in receipt[0]["components"]],
+                         [("hasVoted", "bool"), ("support", "uint8"), ("votes", "uint96")])
+
+    def test_native_repayment_matches_observed_mainnet_abi(self):
+        observed = json.loads((FIXTURES / "jtrx-repayment.json").read_text())
+        documented = json.loads(read("docs/developers/abis/jtrx-repay.json"))
+        for expected in observed["functions"]:
+            actual = next(item for item in documented if item["name"] == expected["name"])
+            self.assertEqual(actual["inputs"], expected["inputs"])
+            self.assertEqual(actual["stateMutability"], "payable")
+        text = read("docs/developers/supply_and_borrow_market/sbm.md")
+        self.assertIn("function repayBorrow(uint256 amount) external payable", text)
+        self.assertIn("function repayBorrowBehalf(address borrower) external payable", text)
+        self.assertIn("function repayBorrowBehalf(address borrower, uint256 repayAmount) external returns (uint256)", text)
+
+    def test_exchange_rate_examples_preserve_raw_units(self):
+        source = javascript_block("docs/resources/glossary.md", "underlyingRawFromJTokens")
+        result = run_js(source + """
+console.log(JSON.stringify([
+  underlyingRawFromJTokens('100000000', '200000000000000000000000000').toString(),
+  underlyingRawFromJTokens('100000000', '20000000000000000').toString(),
+  underlyingRawFromJTokens('1', '1').toString()
+]));
+""")
+        # One jToken: 0.02 of an 18-decimal asset, or 2 of a 6-decimal asset.
+        self.assertEqual(result, [str(2 * 10**16), "2000000", "0"])
+
+    def test_prepaid_estimate_covers_higher_stable_rate_and_dynamic_fee(self):
+        source = javascript_block("docs/developers/energy_rental.md", "estimatePrepaymentSun")
+        result = run_js(source + """
+const common = {amountSun:'100000000', rentalRateMantissa:'1000000000000',
+ stableRateMantissa:'2000000000000', durationSeconds:'86400',
+ liquidateThresholdSeconds:'3600', feeRatioMantissa:'80000000000000', minFeeSun:'20000000'};
+console.log(JSON.stringify([
+ estimatePrepaymentSun(common).toString(),
+ estimatePrepaymentSun({...common, amountSun:'1000000000000', liquidateThresholdSeconds:'0'}).toString(),
+ estimatePrepaymentSun({...common, amountSun:'1', rentalRateMantissa:'1', stableRateMantissa:'1',
+  durationSeconds:'1', liquidateThresholdSeconds:'0', feeRatioMantissa:'1', minFeeSun:'0'}).toString()
+]));
+""")
+        self.assertEqual(result, ["55280000", "345680000000", "2"])
+
+    def test_prepaid_estimate_rejects_missing_or_unsafe_inputs(self):
+        source = javascript_block("docs/developers/energy_rental.md", "estimatePrepaymentSun")
+        result = run_js(source + """
+const common = {amountSun:'100000000', rentalRateMantissa:'1000000000000',
+ stableRateMantissa:'2000000000000', durationSeconds:'86400',
+ liquidateThresholdSeconds:'3600', feeRatioMantissa:'80000000000000', minFeeSun:'20000000'};
+const rejects = [undefined, -1n, '1.5', Number.MAX_SAFE_INTEGER + 1, 0n].map(amountSun => {
+ try { estimatePrepaymentSun({...common, amountSun}); return false; } catch { return true; }
+});
+try { estimatePrepaymentSun({...common, stableRateMantissa:undefined}); rejects.push(false); }
+catch { rejects.push(true); }
+console.log(JSON.stringify(rejects));
+""")
+        self.assertEqual(result, [True] * 6)
+
+    def test_market_lookup_filters_full_list_and_fails_closed(self):
+        source = javascript_block("docs/documents/aidocs/market_data.md", "getMarket")
+        result = run_js(source + """
+const list = [
+ {address:'TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP', symbol:'jTRX'},
+ {address:'TXJgMdjVX5dKiQaUi9QobwNxtSQaFqccvd', symbol:'jUSDT'}
+];
+let body = {code:0, data:{tokenList:list}};
+let ok = true;
+globalThis.fetch = async url => {
+ if (url !== 'https://openapi.just.network/lend/jtoken') throw Error('Unsupported server filter');
+ return {ok, status:503, json:async () => body};
+};
+const results = [(await getMarket(list[1].address)).symbol];
+async function fails(address) { try { await getMarket(address); return false; } catch { return true; } }
+results.push(await fails('not-in-the-list'));
+body = {code:202, message:'unavailable'}; results.push(await fails(list[1].address));
+body = {code:0, data:{tokenList:null}}; results.push(await fails(list[1].address));
+body = {code:0, data:{tokenList:list}}; ok=false; results.push(await fails(list[1].address));
+console.log(JSON.stringify(results));
+""")
+        self.assertEqual(result, ["jUSDT", True, True, True, True])
+
+    def test_catalog_normalization_is_repeatable_after_import(self):
+        script = (ROOT / "scripts/normalize-mcp-catalog.mjs").as_uri()
+        result = run_js(f"import {{normalizeMcpCatalog}} from {json.dumps(script)};" + r"""
+const input = '### `transfer_trx`\n- **Side effect**: 🟡 State-changing (Write)\n' +
+ '| Param | Type | Required | Default | Description |\n' +
+ '| `mode` | enum(browser | agent) | ✅ |  | Wallet mode |\n' +
+ '| `amount` | string (pattern /^(1|max)$/) | ✅ |  | Amount |\n' +
+ '### `set_network`\n- **Side effect**: 🟡 State-changing (Write)\n';
+const once = normalizeMcpCatalog(input);
+console.log(JSON.stringify({once, stable:normalizeMcpCatalog(once) === once}));
+""")
+        self.assertTrue(result["stable"])
+        self.assertIn("On-chain transaction", result["once"])
+        self.assertIn("Local configuration", result["once"])
+        self.assertIn(r"enum(browser \| agent)", result["once"])
+        self.assertIn("/^(1&#124;max)$/", result["once"])
+
+    def test_contract_registry_remains_schema_valid(self):
+        schema = json.loads(read("docs/developers/contracts.schema.json"))
+        data = json.loads(read("docs/developers/contracts.json"))
+        self.assertEqual(list(Draft202012Validator(schema).iter_errors(data)), [])
+        observation = json.loads((FIXTURES / "mainnet-reads.json").read_text())["gov_impl"]
+        address = data["networks"]["mainnet"]["governance"]["governor_delegate"]["address"]
+        self.assertEqual(address["hex_evm"], "0x" + observation["constant_result"][0][-40:])
+        observation = json.loads((FIXTURES / "mainnet-reads.json").read_text())["oracle"]
+        address = data["networks"]["mainnet"]["price_oracle"]["proxy"]["address"]
+        self.assertEqual(address["hex_evm"], "0x" + observation["constant_result"][0][-40:])
+
+    @unittest.skipUnless(os.environ.get("DOCS_SITE_DIR"), "Set DOCS_SITE_DIR to a fresh strict MkDocs build")
+    def test_built_catalog_and_downloads_match_fixed_sources(self):
+        site = Path(os.environ["DOCS_SITE_DIR"])
+        html = (site / "documents/aidocs/mcp_tools/index.html").read_text()
+        mode = next(row for row in Tables(html, rendered=True).rows if row and row[0] == "mode")
+        self.assertEqual(mode, ["mode", "enum(browser | agent)", "✅", "", "Wallet mode: 'browser' or 'agent'"])
+        repay = html.split('id="repay"', 1)[1].split('</table>', 1)[0] + '</table>'
+        amount = next(row for row in Tables(repay, rendered=True).rows if row and row[0] == 'amount')
+        self.assertEqual(amount[1], r'string (pattern /^(\d+(\.\d+)?|max)$/)')
+        for path in ["developers/apis/justlend_apis.yaml", "developers/abis/governor-alpha.json",
+                     "developers/abis/price-oracle-impl.json", "developers/abis/manifest.json"]:
+            self.assertEqual((site / path).read_bytes(), (ROOT / "docs" / path).read_bytes())
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)

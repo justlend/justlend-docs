@@ -1,51 +1,214 @@
 [
   {
-    "type": "function",
-    "name": "castVote",
+    "name": "ProposalCanceled",
     "inputs": [
       {
-        "type": "uint256",
-        "name": "proposalId"
-      },
-      {
-        "type": "uint256",
-        "name": "votes"
-      },
-      {
-        "type": "uint8",
-        "name": "support"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "withdrawVotes",
-    "inputs": [
-      {
-        "type": "uint256",
-        "name": "proposalId"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "proposalCount",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
+        "name": "id",
         "type": "uint256"
       }
     ],
-    "stateMutability": "view"
+    "type": "event",
+    "anonymous": false
   },
   {
+    "name": "ProposalCreated",
+    "inputs": [
+      {
+        "name": "id",
+        "type": "uint256"
+      },
+      {
+        "name": "proposer",
+        "type": "address"
+      },
+      {
+        "name": "targets",
+        "type": "address[]"
+      },
+      {
+        "name": "values",
+        "type": "uint256[]"
+      },
+      {
+        "name": "signatures",
+        "type": "string[]"
+      },
+      {
+        "name": "calldatas",
+        "type": "bytes[]"
+      },
+      {
+        "name": "startBlock",
+        "type": "uint256"
+      },
+      {
+        "name": "endBlock",
+        "type": "uint256"
+      },
+      {
+        "name": "description",
+        "type": "string"
+      }
+    ],
+    "type": "event",
+    "anonymous": false
+  },
+  {
+    "name": "ProposalExecuted",
+    "inputs": [
+      {
+        "name": "id",
+        "type": "uint256"
+      }
+    ],
+    "type": "event",
+    "anonymous": false
+  },
+  {
+    "name": "ProposalQueued",
+    "inputs": [
+      {
+        "name": "id",
+        "type": "uint256"
+      },
+      {
+        "name": "eta",
+        "type": "uint256"
+      }
+    ],
+    "type": "event",
+    "anonymous": false
+  },
+  {
+    "name": "VoteCast",
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "voter",
+        "type": "address"
+      },
+      {
+        "name": "proposalId",
+        "type": "uint256"
+      },
+      {
+        "name": "support",
+        "type": "uint8"
+      },
+      {
+        "name": "votes",
+        "type": "uint256"
+      },
+      {
+        "name": "reason",
+        "type": "string"
+      }
+    ],
+    "type": "event",
+    "anonymous": false
+  },
+  {
+    "name": "cancel",
+    "inputs": [
+      {
+        "name": "proposalId",
+        "type": "uint256"
+      }
+    ],
     "type": "function",
-    "name": "state",
+    "stateMutability": "nonpayable",
+    "outputs": []
+  },
+  {
+    "name": "castVote",
+    "inputs": [
+      {
+        "name": "proposalId",
+        "type": "uint256"
+      },
+      {
+        "name": "votes",
+        "type": "uint256"
+      },
+      {
+        "name": "support",
+        "type": "uint8"
+      }
+    ],
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "outputs": []
+  },
+  {
+    "name": "castVoteBySig",
+    "inputs": [
+      {
+        "name": "proposalId",
+        "type": "uint256"
+      },
+      {
+        "name": "votes",
+        "type": "uint256"
+      },
+      {
+        "name": "support",
+        "type": "uint8"
+      },
+      {
+        "name": "v",
+        "type": "uint8"
+      },
+      {
+        "name": "r",
+        "type": "bytes32"
+      },
+      {
+        "name": "s",
+        "type": "bytes32"
+      }
+    ],
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "outputs": []
+  },
+  {
+    "name": "castVoteWithReason",
+    "inputs": [
+      {
+        "name": "proposalId",
+        "type": "uint256"
+      },
+      {
+        "name": "votes",
+        "type": "uint256"
+      },
+      {
+        "name": "support",
+        "type": "uint8"
+      },
+      {
+        "name": "reason",
+        "type": "string"
+      }
+    ],
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "outputs": []
+  },
+  {
+    "name": "execute",
+    "inputs": [
+      {
+        "name": "proposalId",
+        "type": "uint256"
+      }
+    ],
+    "type": "function",
+    "stateMutability": "payable",
+    "outputs": []
+  },
+  {
+    "name": "getActions",
     "inputs": [
       {
         "name": "proposalId",
@@ -54,14 +217,26 @@
     ],
     "outputs": [
       {
-        "name": "",
-        "type": "uint8"
+        "name": "targets",
+        "type": "address[]"
+      },
+      {
+        "name": "values",
+        "type": "uint256[]"
+      },
+      {
+        "name": "signatures",
+        "type": "string[]"
+      },
+      {
+        "name": "calldatas",
+        "type": "bytes[]"
       }
     ],
+    "type": "function",
     "stateMutability": "view"
   },
   {
-    "type": "function",
     "name": "getReceipt",
     "inputs": [
       {
@@ -75,26 +250,64 @@
     ],
     "outputs": [
       {
-        "name": "hasVoted",
-        "type": "bool"
-      },
-      {
-        "name": "support",
-        "type": "uint8"
-      },
-      {
-        "name": "votes",
-        "type": "uint96"
+        "name": "receipt",
+        "type": "tuple",
+        "components": [
+          {
+            "name": "hasVoted",
+            "type": "bool"
+          },
+          {
+            "name": "support",
+            "type": "uint8"
+          },
+          {
+            "name": "votes",
+            "type": "uint96"
+          }
+        ]
       }
     ],
+    "type": "function",
     "stateMutability": "view"
   },
   {
+    "name": "implementation",
+    "outputs": [
+      {
+        "type": "address"
+      }
+    ],
     "type": "function",
+    "stateMutability": "view",
+    "inputs": []
+  },
+  {
+    "name": "proposalCount",
+    "outputs": [
+      {
+        "type": "uint256"
+      }
+    ],
+    "type": "function",
+    "stateMutability": "view",
+    "inputs": []
+  },
+  {
+    "name": "proposalThreshold",
+    "outputs": [
+      {
+        "type": "uint256"
+      }
+    ],
+    "type": "function",
+    "stateMutability": "view",
+    "inputs": []
+  },
+  {
     "name": "proposals",
     "inputs": [
       {
-        "name": "",
         "type": "uint256"
       }
     ],
@@ -140,6 +353,111 @@
         "type": "bool"
       }
     ],
+    "type": "function",
     "stateMutability": "view"
+  },
+  {
+    "name": "propose",
+    "inputs": [
+      {
+        "name": "targets",
+        "type": "address[]"
+      },
+      {
+        "name": "values",
+        "type": "uint256[]"
+      },
+      {
+        "name": "signatures",
+        "type": "string[]"
+      },
+      {
+        "name": "calldatas",
+        "type": "bytes[]"
+      },
+      {
+        "name": "description",
+        "type": "string"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256"
+      }
+    ],
+    "type": "function",
+    "stateMutability": "nonpayable"
+  },
+  {
+    "name": "queue",
+    "inputs": [
+      {
+        "name": "proposalId",
+        "type": "uint256"
+      }
+    ],
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "outputs": []
+  },
+  {
+    "name": "quorumVotes",
+    "outputs": [
+      {
+        "type": "uint256"
+      }
+    ],
+    "type": "function",
+    "stateMutability": "view",
+    "inputs": []
+  },
+  {
+    "name": "state",
+    "inputs": [
+      {
+        "name": "proposalId",
+        "type": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint8"
+      }
+    ],
+    "type": "function",
+    "stateMutability": "view"
+  },
+  {
+    "name": "votingDelay",
+    "outputs": [
+      {
+        "type": "uint256"
+      }
+    ],
+    "type": "function",
+    "stateMutability": "view",
+    "inputs": []
+  },
+  {
+    "name": "votingPeriod",
+    "outputs": [
+      {
+        "type": "uint256"
+      }
+    ],
+    "type": "function",
+    "stateMutability": "view",
+    "inputs": []
+  },
+  {
+    "name": "wjst",
+    "outputs": [
+      {
+        "type": "address"
+      }
+    ],
+    "type": "function",
+    "stateMutability": "view",
+    "inputs": []
   }
 ]

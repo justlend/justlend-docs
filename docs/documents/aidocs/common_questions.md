@@ -29,7 +29,7 @@ Chinese: “JustLend 有哪些市场？”、“支持哪些币种？”
 
 ### What is the APY for jUSDT / jTRX / another market?
 
-Use MCP `get_market_data` for one market or `get_all_markets` for all markets. For HTTP integration, use OpenAPI `GET /lend/jtoken` or `GET /lend/jtoken?address={jToken}`.
+Use MCP `get_market_data` for one market or `get_all_markets` for all markets. For HTTP integration, fetch `GET /lend/jtoken` and select `data.tokenList` by the target jToken's `address` client-side; the endpoint does not support server-side `address` filtering. See the [market lookup example](market_data.md#openapi).
 
 Chinese: “USDT 存款年化多少？”、“TRX 借款 APY 多少？”
 
@@ -43,7 +43,7 @@ Chinese: “查一下这个地址的 JustLend 仓位”、“这个地址健康�
 
 ### Can this account be liquidated?
 
-Use MCP `get_account_summary`. Explain liquidation risk using health factor, borrow limit, total borrow, collateral value, and current prices. State that it is a snapshot and should be refreshed before action.
+Use MCP `get_account_summary`. Check debt first: the public API may return `health = "0"` for an account with no debt, which is not a liquidatable position. Explain risk using debt, borrow limit, collateral, and current prices, not an API health threshold alone. For V1, confirm `getAccountLiquidity` returns `error == 0` and `shortfall > 0`, then check the other liquidation requirements. State that it is a snapshot and must be refreshed before action.
 
 Chinese: “会不会被清算？”、“风险值是多少？”
 
