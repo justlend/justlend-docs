@@ -18,7 +18,9 @@ For the JustLend protocol itself, see governance proposals on [forum.justlend.or
 - Updated the verified Mainnet Governor implementation and Oracle entrypoint in the address registry; aligned voting input types, Receipt tuple fields, WJST locking/unlocking, and token-weighted governance prose.
 - Replaced the incomplete, automatically broadcast energy-prepayment example with an integer read-only estimator and separated rental-income collection from queries.
 - Distinguished MCP chain transactions from local configuration and preserved enumeration/regex cells with an idempotent docs-local catalog normalizer.
-- Expanded verified governance, WJST, Oracle-backend, and jTRX repayment interface subsets. Explicitly documented incomplete ABI coverage instead of promising full event decoding; the sTRX deployment event ABI is still required.
+- Expanded verified governance, WJST, Oracle-backend, and jTRX repayment interface subsets. Corrected the contract overview's Oracle-backend ABI link.
+- Added all 27 current STRXG2 event declarations and rental settlement interfaces from bytecode-matched compiler output; cross-checked `Deposit`, `Withdraw`, `Claim`, and `RentClaimed` against real Mainnet receipts. Preserved the distinction between these interface subsets and complete deployment artifacts.
+- Specified `claimRental()` as an sTRX-only write returning this call's transferred amount in sun, and documented `rentClaimed()` as the separate cumulative read.
 
 ### Added — 2026-10-12 verification regressions
 

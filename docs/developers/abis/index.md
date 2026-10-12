@@ -21,8 +21,11 @@ The [machine-readable scope manifest](manifest.json) records the corrections che
 
 - **GovernorBravo:** Mainnet proxy `TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD` returned implementation `TUeNh9BsYK44XePmFAuKZWg2rJuU7bSt5u`. Input types and selected events were taken from that implementation's node ABI. `getReceipt` returns one tuple; its `bool / uint8 / uint96` components were expanded from the pinned official source because the node omits tuple components. This is not a bytecode-reproduced compiler artifact. The filename `governor-alpha.json` is retained for URL compatibility; its documented target is **Bravo**, not every Alpha/Bravo deployment.
 - **Oracle:** `price-oracle.json` is the read interface for Mainnet's `TGnYnSn4G9PgWFj7QQemh4YMZKp3fkympJ` entrypoint. `assetPrices`, `anchors`, `poster`, `getPrice`, and `setPrice` belong to its `v1PriceOracle()` backend, `TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV`; those verified methods are provided separately in `price-oracle-impl.json`. Do not send a backend-only call to the proxy. `setPrice` is a restricted state-changing operation, not a public read.
-- **sTRX:** `strx.json` remains **function-only** and does not contain `Deposit`, `Withdraw`, or `Claim` event definitions. A complete matching deployment ABI was not obtained; use a verified build artifact for the current implementation before event decoding. Do not guess field types or which fields are `indexed` from a prose event name.
+- **sTRX:** `strx.json` includes selected functions (with corrected return types) and all **27 event declarations** from the current Mainnet `STRXG2` implementation, `TUAV6ZSCXtF8KVvDKSeVmAbJEovTBf4HtG`. This includes `Deposit`, `Withdraw`, and `Claim`, with `user` indexed. The functions now include `withdrawExact` and `claim`. This is still a subset of functions and excludes the separate administrative proxy ABI; it is not a guarantee for historical implementations or Nile.
+- **Energy Rental:** `energy-market.json` includes `strx`, `totalRent`, `rentClaimed`, restricted `claimRental`, and `RentClaimed` from Mainnet `MarketG1`, `TNoHbPuBQrVanVf9qxUsSvHdB2eDkeDAKD`. `claimRental()` returns the amount transferred to sTRX **in that call**, in sun; `rentClaimed()` is the cumulative read. See [Protocol income collection](../energy_rental.md#protocol-income-collection).
 - **jTRX / WJST:** the native-TRX repayment and WJST vote-unlocking interfaces were checked against their Mainnet node ABIs. Other files remain subsets; entries absent from them are unsupported by that download.
+
+The sTRX and rental additions were compiled with [TRON Solidity 0.8.18](https://github.com/tronprotocol/solidity/releases/tag/tv_0.8.18), optimizer enabled with 200 runs. Their creation bytecode matches the current node responses after removing **only** trailing Solidity CBOR metadata and its length; full metadata is **not** identical, and a complete reproducible source bundle is not included here. The manifest records compiler and bytecode hashes. `Deposit`, `Withdraw`, `Claim`, and `RentClaimed` were additionally decoded from successful Mainnet transaction receipts and checked against confirmed TronGrid events; raw-log regression fixtures are stored in `scripts/fixtures/docs-verification/settlement-events.json` in the docs repository. No transaction was submitted for verification.
 
 ## Catalog
 
@@ -37,10 +40,10 @@ The [machine-readable scope manifest](manifest.json) records the corrections che
 | [`price-oracle-impl.json`](price-oracle-impl.json) | Mainnet Oracle backend | `assetPrices`, `anchors`, `poster`, `getPrice`, restricted `setPrice`, and `PricePosted`. Not the proxy interface. |
 | [`governor-alpha.json`](governor-alpha.json) | Mainnet GovernorBravo (legacy filename) | Selected proposal lifecycle and voting methods, `castVoteBySig`, tuple `getReceipt`, and selected proposal/vote events. |
 | [`poly.json`](poly.json) | JST voting | `castVote`, `getVoteInfo`, `totalVote`, `surplusVotes`, `jstBalance` (JST-weighted voting helper). |
-| [`strx.json`](strx.json) | sTRX (Staked TRX) | Selected staking/balance functions only; **no events**. |
+| [`strx.json`](strx.json) | sTRX (Staked TRX) | Selected staking/balance functions plus all 27 current STRXG2 event declarations, including `Deposit`, `Withdraw`, and `Claim`. |
 | [`wjst.json`](wjst.json) | Mainnet WJST | Wrapping, available/locked votes, `withdrawVotes`, and selected wrap/vote-lock events. |
 | [`trc20.json`](trc20.json) | TRC20 (generic) | `approve`, `allowance`, `balanceOf`, `decimals`, `transfer` for any underlying TRC20 asset. |
-| [`energy-market.json`](energy-market.json) | Energy Rental market | `getRentInfo`, rental / stable rates, `feeRatio`, order accounting. |
+| [`energy-market.json`](energy-market.json) | Energy Rental market | Rental/order reads plus `rentClaimed`, restricted `claimRental`, and `RentClaimed` for sTRX settlement. |
 | [`energy-rate-model.json`](energy-rate-model.json) | Energy Rental rate model | `getRentalRate`, `totalDelegated`, `totalFrozen`. |
 
 ## Decoding events

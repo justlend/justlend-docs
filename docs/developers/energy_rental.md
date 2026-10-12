@@ -131,10 +131,19 @@ function totalRent() view external returns (uint256)
 ```
 
 * **Parameter description:** N/A;
-* **Returns:** the amount of total rental income.
+* **Returns:** the recorded total rental income, in sun (`1 TRX = 1,000,000 sun`).
 
 
-`totalRent()` must not be reused as a query for cumulative claimed income. The similarly named `claimRental()` is a state-changing collection operation, not a historical read; see [Protocol income collection](#protocol-income-collection).
+### Cumulative claimed rental income
+
+```solidity
+function rentClaimed() external view returns (uint256)
+```
+
+* **Parameter description:** N/A.
+* **Returns:** the cumulative rental income already transferred from the market to sTRX, in **sun** (`1 TRX = 1,000,000 sun`). This is the recorded cumulative counter, not the amount claimable now.
+
+`totalRent()` is a different accounting value and must not be reused as cumulative claimed income. The similarly named `claimRental()` is a state-changing collection operation, not a historical read; see [Protocol income collection](#protocol-income-collection). The read methods, collection method, and `RentClaimed` event are included in [`energy-market.json`](abis/energy-market.json).
 
 
 ### **Liquidation Rate**
@@ -171,7 +180,14 @@ function _rentalRate(uint256 amount, uint256 resourceType) view external returns
 function claimRental() external returns (uint256)
 ```
 
-This is the protocol's rental-income collection path, associated with sTRX settlement, **not a user-facing query for cumulative claimed rent**. It is not `view` and must not appear in a read-only monitoring workflow. Its returned integer must not be presented as an all-time claimed-income counter. The minimal downloadable market ABI does not document this administrative/settlement integration; obtain the matching deployed implementation and confirm its caller restrictions, return semantics, and accounting events before integrating. No independent cumulative-claimed query is asserted here, and no user transaction example is provided.
+This is the protocol's rental-income collection path, **not a user-facing query for cumulative claimed rent**. It is not `view` and must not appear in a read-only monitoring workflow.
+
+* **Parameters:** none.
+* **Caller:** only the sTRX contract configured by the market's `strx()` getter; ordinary user wallets cannot call it successfully.
+* **Returns:** the rental amount actually transferred into sTRX **by this call**, in **sun** (`1 TRX = 1,000,000 sun`). It is **not** an all-time total. The transfer is capped by the market's available TRX balance; if nothing is transferred, the return is `0`.
+* **Accounting event:** a positive transfer increments `rentClaimed` and emits `RentClaimed(uint256 add, uint256 totalClaimed)`. Both values are in sun: `add` is this transfer and `totalClaimed` is the cumulative value after it. Both fields are non-indexed. A zero transfer emits no `RentClaimed` event.
+
+These semantics were checked against the current Mainnet `MarketG1` implementation (`TNoHbPuBQrVanVf9qxUsSvHdB2eDkeDAKD`): compiler output matches its executable bytecode with only compiler metadata excluded. A successful Mainnet settlement receipt also matches the event amount and the internal TRX transfer to sTRX. See [ABI scope and provenance](abis/index.md#scope-and-provenance). No user transaction example is provided.
 
 <a id="rent-resources"></a>
 

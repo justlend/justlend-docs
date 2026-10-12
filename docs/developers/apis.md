@@ -1243,7 +1243,7 @@ Use the embedded Swagger UI below to call endpoints directly from this page. Sam
 
 ## 8. Event-stream and indexing options
 
-The HTTP API exposes **current state**. For **historical events** (every `Mint`, `Borrow`, `RepayBorrow`, `Redeem`, `LiquidateBorrow`, `enterMarkets`, governance `ProposalCreated`/`VoteCast`/`ProposalExecuted`, sTRX `Deposit`/`Withdrawal`, EnergyRental `RentResource`/`ReturnResource`) you need an event source.
+The HTTP API exposes **current state**. For **historical events** (every `Mint`, `Borrow`, `RepayBorrow`, `Redeem`, `LiquidateBorrow`, `enterMarkets`, governance `ProposalCreated`/`VoteCast`/`ProposalExecuted`, sTRX `Deposit`/`Withdraw`, EnergyRental `RentResource`/`ReturnResource`) you need an event source.
 
 **There is currently no official JustLend subgraph or hosted indexer.** Use one of these patterns instead:
 
@@ -1277,10 +1277,11 @@ The [downloadable JSON interfaces](abis/index.md) are **not a complete event-sig
 
 | Interface | Event coverage / required action |
 |---|---|
-| `jtoken.json`, `comptroller.json`, `energy-market.json` | Minimal function interfaces; obtain matching deployment ABIs for event indexing. |
+| `jtoken.json`, `comptroller.json` | Minimal function interfaces; obtain matching deployment ABIs for event indexing. |
 | `governor-alpha.json` | Selected Mainnet Bravo proposal/vote events, checked against the current implementation's node ABI. |
 | `wjst.json` | Selected Mainnet wrapping and vote-lock events; check the file for the exact event. |
 | `price-oracle-impl.json` | Includes the backend's `PricePosted` event; do not confuse it with the proxy interface. |
-| `strx.json` | No events. `Deposit`, `Withdraw`, and `Claim` require a complete matching implementation ABI; no event topic is asserted here. |
+| `strx.json` | All 27 event declarations from current Mainnet STRXG2, including `Deposit`, `Withdraw`, and `Claim`; compiled against bytecode-matched source and checked with real receipts. Separate proxy administration and historical implementations are outside this subset. |
+| `energy-market.json` | Includes `RentClaimed(uint256 add, uint256 totalClaimed)`; both non-indexed values are in sun. Other rental events remain outside this subset. |
 
 For a verified event entry, derive topic 0 from its exact canonical signature (including every input type) rather than guessing from a prose name. Use the ABI version applicable at the event's block; upgrades can change signatures. Missing event definitions are a coverage gap, not permission to silently decode with a similar contract's ABI.

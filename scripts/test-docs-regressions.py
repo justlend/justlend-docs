@@ -63,6 +63,66 @@ class Tables(HTMLParser):
 
 
 class DocumentationRegressions(unittest.TestCase):
+    def test_contract_summary_links_cover_oracle_and_staking_functions(self):
+        rows = [line for line in read("docs/developers/contracts_overview.md").splitlines()
+                if line.startswith(("| Price Oracle |", "| Staked TRX |"))]
+        self.assertEqual(len(rows), 3)
+        for row in rows:
+            cells = [cell.strip() for cell in row.split("|")[1:-1]]
+            with self.subTest(contract=cells[1]):
+                methods = {method.split("(", 1)[0] for method in re.findall(r"`([^`]+)`", cells[5])}
+                links = re.findall(r"\]\((abis/[^)]+\.json)\)", cells[6])
+                self.assertTrue(methods)
+                self.assertTrue(links)
+                available = {item["name"] for link in links
+                             for item in json.loads(read("docs/developers/" + link))
+                             if item["type"] == "function"}
+                self.assertFalse(methods - available, f"ABI links omit {sorted(methods - available)}")
+
+    def test_settlement_event_abis_decode_observed_receipts(self):
+        observed = json.loads((FIXTURES / "settlement-events.json").read_text())
+        manifest = json.loads(read("docs/developers/abis/manifest.json"))
+        strx_scope = next(item for item in manifest["interfaces"] if item["file"] == "strx.json")
+        strx_events = [item["name"] for item in json.loads(read("docs/developers/abis/strx.json"))
+                       if item["type"] == "event"]
+        self.assertCountEqual(strx_events, strx_scope["implementation_events"])
+        self.assertEqual(len(strx_events), strx_scope["implementation_event_count"])
+        self.assertEqual({event["name"] for event in observed["events"]},
+                         {"Deposit", "Withdraw", "Claim", "RentClaimed"})
+        for event in observed["events"]:
+            with self.subTest(event=event["name"]):
+                file = "energy-market.json" if event["name"] == "RentClaimed" else "strx.json"
+                abi = json.loads(read("docs/developers/abis/" + file))
+                entries = [item for item in abi if item["type"] == "event" and item["name"] == event["name"]]
+                self.assertEqual(len(entries), 1, f"Missing or duplicate {event['name']} ABI")
+                entry = entries[0]
+                self.assertFalse(entry["anonymous"])
+                self.assertEqual(entry["name"] + "(" + ",".join(p["type"] for p in entry["inputs"]) + ")",
+                                 event["canonical_signature"])
+                declaration = entry["name"] + "(" + ", ".join(
+                    p["type"] + (" indexed" if p["indexed"] else "") + " " + p["name"]
+                    for p in entry["inputs"]) + ")"
+                self.assertEqual(declaration, event["event"])
+                if event["name"] != "RentClaimed":
+                    self.assertIn("event " + declaration + ";", read("docs/developers/staked_trx.md"))
+                log = event["raw_log"]
+                topics = iter(log["topics"][1:])
+                words = iter(re.findall(r".{64}", log["data"]))
+                decoded = {}
+                for param in entry["inputs"]:
+                    word = next(topics if param["indexed"] else words)
+                    self.assertIn(param["type"], ("address", "uint256"))
+                    decoded[param["name"]] = ("0x" + word[-40:] if param["type"] == "address"
+                                              else str(int(word, 16)))
+                self.assertEqual(decoded, event["decoded"])
+                self.assertEqual(list(topics), [])
+                self.assertEqual(list(words), [])
+                if event["name"] == "RentClaimed":
+                    transfer = event["trx_transfer"]
+                    self.assertFalse(transfer["rejected"])
+                    self.assertEqual(transfer["caller_address"][2:], log["address"])
+                    self.assertEqual(transfer["callValueInfo"], [{"callValue": int(decoded["add"])}])
+
     def test_v2_null_business_errors_and_invalid_controls(self):
         spec = yaml.safe_load(read("docs/developers/apis/justlend_apis.yaml"))
         fixtures = json.loads((FIXTURES / "v2-errors.json").read_text())
@@ -240,7 +300,8 @@ console.log(JSON.stringify({once, stable:normalizeMcpCatalog(once) === once}));
         amount = next(row for row in Tables(repay, rendered=True).rows if row and row[0] == 'amount')
         self.assertEqual(amount[1], r'string (pattern /^(\d+(\.\d+)?|max)$/)')
         for path in ["developers/apis/justlend_apis.yaml", "developers/abis/governor-alpha.json",
-                     "developers/abis/price-oracle-impl.json", "developers/abis/manifest.json"]:
+                     "developers/abis/price-oracle-impl.json", "developers/abis/manifest.json",
+                     "developers/abis/strx.json", "developers/abis/energy-market.json"]:
             self.assertEqual((site / path).read_bytes(), (ROOT / "docs" / path).read_bytes())
 
 

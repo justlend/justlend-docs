@@ -244,7 +244,7 @@ Contract: `TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5` (mainnet).
 ```solidity
 function exchangeRate() public view returns (uint256)                  // sTRX → TRX, scaled 1e18
 function totalUnderlying() public view returns (uint256)
-function balanceInTrx(address _account) public view returns (uint256)
+function viewBalanceOfUnderlying(address _account) public view returns (uint256)
 function round() view external returns (uint256)                       // current unfreezing round (starts at 1)
 function claimable() external returns (uint256)
 function withdrawal() external returns (uint256)
@@ -288,9 +288,12 @@ function badDebt() view external returns (uint256)
 function badDebtCovered() view external returns (uint256)
 function badDebtGap() view external returns (uint256)
 function totalRent() view external returns (uint256)
+function rentClaimed() external view returns (uint256)
 ```
 
 `resourceType`: `0 = bandwidth`, `1 = energy`.
+
+`rentClaimed()` is the recorded cumulative rental income transferred to sTRX, in sun. It is not the same as `totalRent()`. `claimRental() external returns (uint256)` is a **write restricted to the configured sTRX contract**, not a monitoring read. It returns the actual transfer **in this call**, in sun (`1 TRX = 1,000,000 sun`), or zero if nothing is transferred. A positive transfer emits `RentClaimed(add, totalClaimed)`, where both non-indexed fields are in sun and `totalClaimed` is the counter after the transfer. See [Rental income collection](https://docs.justlend.org/developers/energy_rental/#protocol-income-collection).
 
 ### 4.8 SBM Error Codes (selected)
 
@@ -432,7 +435,7 @@ The HTTP API returns **current state**. For historical events (`Mint`, `Borrow`,
 2. **Self-hosted indexer** — most robust path is a custom decoder against a `java-tron` archive node (or TronGrid archive plan) + the JSON ABIs at <https://docs.justlend.org/developers/abis/>. Generic EVM indexers (DipDup, Subsquid, Substreams, Goldsky, …) have evolving TRON support and should be evaluated case-by-case; do not adopt one based on a "supports TRON" claim without a proof-of-concept run against your specific events first. Best for production analytics, full historical backfills.
 3. **Compose MCP server read primitives** — for low-volume agent-driven lookups via `@justlend/mcp-server-justlend`. Not optimized for historical-event sweeps.
 
-Interfaces at `/developers/abis/` are minimal subsets, not a full event registry. Check for the exact event definition and indexed flags; obtain the matching verified deployment ABI when absent (including sTRX events). Derive `topic0` only from a verified signature. See [APIs §8](https://docs.justlend.org/developers/apis#8-event-stream-and-indexing-options) for the full table.
+Interfaces at `/developers/abis/` are subsets, not a universal event registry. `strx.json` now includes all 27 event declarations from the current Mainnet STRXG2 implementation, including `Deposit`, `Withdraw`, and `Claim`; `energy-market.json` includes `RentClaimed`. These additions use bytecode-matched compiler output (excluding compiler metadata), with the four settlement events also checked against real receipts. Check the exact event definition and indexed flags; obtain the matching deployment ABI when absent or decoding a different historical implementation. Derive `topic0` only from a verified signature. See [APIs §8](https://docs.justlend.org/developers/apis#8-event-stream-and-indexing-options) and [ABI provenance](https://docs.justlend.org/developers/abis/#scope-and-provenance).
 
 ---
 

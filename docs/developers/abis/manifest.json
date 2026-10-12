@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "checked_at": "2026-10-12",
   "scope": "minimal interfaces, not complete compiler deployment artifacts",
   "network": "mainnet",
@@ -42,8 +42,72 @@
       "target": "TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5",
       "implementation": "TUAV6ZSCXtF8KVvDKSeVmAbJEovTBf4HtG",
       "complete": false,
-      "notes": "Existing function-only subset retained. Full deployment ABI unavailable in the checked node responses; no Deposit/Withdraw/Claim event definitions. Implementation pointer observed through Tronscan; not a compiler verification."
+      "notes": "Selected functions with compiler-correct return types, plus all 27 event declarations from the current STRXG2 implementation ABI. Does not include the separate administrative proxy ABI or certify historical/Nile deployments.",
+      "bytecode_verification": {
+        "creation_bytecode_sha256": "b47387152376c9513dc890b0760b81d2ea25d7e097f7fb5f2dee8fcd8ef552ef",
+        "creation_executable_sha256": "bc6e283499d301babde5105027afc52cf928d7fa0d2952cb1601bffc13064fa7",
+        "excluded_metadata_bytes": 53,
+        "executable_match": true,
+        "full_bytecode_match": false
+      },
+      "implementation_event_count": 27,
+      "implementation_events": [
+        "Approval",
+        "BalanceFrozen",
+        "BalanceUnfrozen",
+        "Claim",
+        "Deposit",
+        "FreezeBalance",
+        "Income",
+        "MaxAmountForEnergyUpdated",
+        "MinFreezeAmountUpdated",
+        "RentFactorUpdated",
+        "RentSupplied",
+        "ReserveAdminUpdated",
+        "ReservesAdded",
+        "ReservesClaimed",
+        "ResourceObtained",
+        "ResourceReleased",
+        "RewardFactorUpdated",
+        "RoundClaim",
+        "RoundUnfreeze",
+        "RoundWithdraw",
+        "SrListUpdated",
+        "Transfer",
+        "UnfreezeBalance",
+        "UpdateTotalUnderlying",
+        "Vote",
+        "VoteOperatorUpdated",
+        "Withdraw"
+      ]
+    },
+    {
+      "file": "energy-market.json",
+      "target": "TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd",
+      "complete": false,
+      "implementation": "TNoHbPuBQrVanVf9qxUsSvHdB2eDkeDAKD",
+      "bytecode_verification": {
+        "creation_bytecode_sha256": "c66f4e441f88f9bc0b2cf31be8417c5ea220596cfc49dd9abfebf85cf92c3782",
+        "creation_executable_sha256": "1c465c0f1db1d40ae38e9ced76ef7a0e825af1d4cff96ea3cef5a740b0fa0111",
+        "excluded_metadata_bytes": 53,
+        "executable_match": true,
+        "full_bytecode_match": false
+      },
+      "notes": "Existing rental subset plus strx, totalRent, rentClaimed, claimRental and RentClaimed from bytecode-matched MarketG1. claimRental is restricted to the configured sTRX caller; returns the amount transferred in this call, in sun."
     }
   ],
-  "other_files": "Other JSON files are also partial interfaces. This manifest does not certify unlisted deployments or Nile compatibility."
+  "other_files": "Other JSON files are also partial interfaces. This manifest does not certify unlisted deployments or Nile compatibility.",
+  "compiler_verification": {
+    "compiler": "0.8.18+commit.f18bedfe.Emscripten.clang",
+    "compiler_release": "https://github.com/tronprotocol/solidity/releases/tag/tv_0.8.18",
+    "compiler_sha256": "cc258d6b2a77eb19c8092fa3c9d13fd5f658bdc309ef358b5ff0a9c069d5ea6c",
+    "optimizer": {
+      "enabled": true,
+      "runs": 200
+    },
+    "comparison": "Compiler creation bytecode matches wallet/getcontract.bytecode after removing only the trailing Solidity CBOR metadata and length. Full bytecode metadata is not identical; no exact source-bundle reproduction is claimed.",
+    "source_bundle_included": false,
+    "event_cross_check": "Deposit, Withdraw, Claim, and RentClaimed were decoded from successful Mainnet transaction receipts and compared with confirmed TronGrid events.",
+    "offline_event_fixture": "scripts/fixtures/docs-verification/settlement-events.json"
+  }
 }
