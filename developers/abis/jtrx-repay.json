@@ -1,18 +1,26 @@
 [
   {
-    "type": "function",
     "name": "repayBorrow",
     "inputs": [
       {
-        "type": "uint256",
-        "name": "repayAmount"
-      }
-    ],
-    "outputs": [
-      {
+        "name": "amount",
         "type": "uint256"
       }
     ],
-    "stateMutability": "payable"
+    "type": "function",
+    "stateMutability": "payable",
+    "outputs": []
+  },
+  {
+    "name": "repayBorrowBehalf",
+    "inputs": [
+      {
+        "name": "borrower",
+        "type": "address"
+      }
+    ],
+    "type": "function",
+    "stateMutability": "payable",
+    "outputs": []
   }
 ]

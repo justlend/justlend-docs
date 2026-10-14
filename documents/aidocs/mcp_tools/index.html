@@ -143,8 +143,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "Generated JustLend MCP tool catalog with routing guidance, side-effect classes, safety annotations, wallet requirements, and source links for AI agents.",
-          "dateModified": "2026-08-27",
-          "datePublished": "2026-08-27"
+          "dateModified": "2026-10-12",
+          "datePublished": "2026-10-12"
         }
       ]
     }
@@ -3818,7 +3818,7 @@
 
 <h1 id="justlend-mcp-tool-catalog-for-ai-agents">JustLend MCP Tool Catalog for AI Agents<a class="headerlink" href="#justlend-mcp-tool-catalog-for-ai-agents" title="Permanent link">&para;</a></h1>
 <p>Use this page when an AI agent must choose a JustLend MCP tool, inspect required parameters, compare read-only tools with write tools, or explain whether a workflow can sign and broadcast a TRON transaction.</p>
-<p>This docs-local page wraps the generated catalog from the MCP repository so RAG systems can retrieve both routing context and the complete tool list in one chunk set.</p>
+<p>This docs-local page wraps the generated catalog from the MCP repository so RAG systems can retrieve both routing context and the complete tool list in one chunk set. Docs-local corrections escape table-cell delimiters and distinguish transaction effects from MCP <code>destructiveHint</code> annotations. After importing a regenerated catalog, run <code>node scripts/normalize-mcp-catalog.mjs</code> in this docs repository and the documentation regression tests; the upstream generator is maintained separately.</p>
 <h2 id="source-links-and-routing-rules">Source links and routing rules<a class="headerlink" href="#source-links-and-routing-rules" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Start with the <a href="../">AI Docs Index</a> for task routing.</li>
@@ -3883,7 +3883,7 @@
 <p>Consume <code>structuredContent</code> when available; older clients may continue parsing the first text content item. Error results keep <code>isError: true</code> and the existing structured JSON error body.</p>
 <p><strong>Read-only tools</strong>: 63  |  <strong>Write tools</strong>: 41 (of which marked destructive: 28)</p>
 <blockquote>
-<p>⚠️ Tools marked 🔴 <strong>sign and broadcast TRON transactions that move real assets</strong> — the client MUST require human confirmation (HITL) before executing. 🟡 tools only change local wallet/network config or start an interaction. Private keys are managed encrypted by <code>@bankofai/agent-wallet</code> and are <strong>never passed as tool arguments</strong>. The legacy unauthenticated browser-wallet bridge is disabled.</p>
+<p>⚠️ 🔴 identifies on-chain transactions, including transfers, approvals, collateral membership, and claims, whether or not the MCP annotation marks them destructive. They require explicit human confirmation <strong>before</strong> building a signing/broadcast workflow. 🟡 identifies local configuration or the disabled browser interaction, not an on-chain write. <code>destructiveHint: false</code> does not mean read-only. Private keys remain encrypted in <code>@bankofai/agent-wallet</code> and are never tool arguments. The browser-wallet bridge remains disabled.</p>
 </blockquote>
 <hr />
 <h2 id="wallet-network-10">Wallet &amp; Network (10)<a class="headerlink" href="#wallet-network-10" title="Permanent link">&para;</a></h2>
@@ -3903,7 +3903,7 @@
 - <strong>Params</strong>: none</p>
 <h3 id="set_active_wallet"><code>set_active_wallet</code><a class="headerlink" href="#set_active_wallet" title="Permanent link">&para;</a></h3>
 <p><strong>Set Active Wallet</strong>
-- <strong>Side effect</strong>: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- <strong>Side effect</strong>: 🟡 Local configuration — changes local wallet/network settings; does not build, sign, or broadcast a chain transaction. Confirm the new configuration before subsequent writes.
 - <strong>annotations</strong>: idempotent: true · openWorld: false
 - <strong>Description</strong>: Set the active wallet by wallet ID. Use list_wallets to see available wallet IDs.
 - <strong>Output schema</strong>: common structured envelope v1.0.0 (<code>schemaVersion</code>, <code>tool</code>, <code>result</code>)</p>
@@ -3929,7 +3929,7 @@
 </table>
 <h3 id="connect_browser_wallet"><code>connect_browser_wallet</code><a class="headerlink" href="#connect_browser_wallet" title="Permanent link">&para;</a></h3>
 <p><strong>Connect Browser Wallet</strong>
-- <strong>Side effect</strong>: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- <strong>Side effect</strong>: 🟡 Disabled interaction — returns a safety notice; does not build, sign, or broadcast a transaction. Do not bypass the disabled browser bridge.
 - <strong>annotations</strong>: idempotent: false · openWorld: true
 - <strong>Description</strong>: Browser wallet signing is temporarily disabled because the legacy local bridge lacks request-level authentication. Use agent-wallet with AGENT_WALLET_PASSWORD until an authenticated bridge is available.
 - <strong>Output schema</strong>: common structured envelope v1.0.0 (<code>schemaVersion</code>, <code>tool</code>, <code>result</code>)</p>
@@ -3946,7 +3946,7 @@
 <tbody>
 <tr>
 <td><code>address</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>Required TRON address (T...). If set, the user must connect this exact address.</td>
@@ -3955,7 +3955,7 @@
 </table>
 <h3 id="set_wallet_mode"><code>set_wallet_mode</code><a class="headerlink" href="#set_wallet_mode" title="Permanent link">&para;</a></h3>
 <p><strong>Set Wallet Mode</strong>
-- <strong>Side effect</strong>: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- <strong>Side effect</strong>: 🟡 Local configuration — changes local wallet/network settings; does not build, sign, or broadcast a chain transaction. Confirm the new configuration before subsequent writes.
 - <strong>annotations</strong>: idempotent: true · openWorld: false
 - <strong>Description</strong>: Switch wallet signing mode. 'agent' uses an encrypted key stored in ~/.agent-wallet/. Browser mode is disabled until the local bridge supports request-level authentication. Selecting agent mode for the first time will create an encrypted agent-wallet if needed.
 - <strong>Output schema</strong>: common structured envelope v1.0.0 (<code>schemaVersion</code>, <code>tool</code>, <code>result</code>)</p>
@@ -3972,10 +3972,10 @@
 <tbody>
 <tr>
 <td><code>mode</code></td>
-<td>enum(browser</td>
-<td style="text-align: center;">agent)</td>
-<td>✅</td>
+<td>enum(browser | agent)</td>
+<td style="text-align: center;">✅</td>
 <td></td>
+<td>Wallet mode: 'browser' or 'agent'</td>
 </tr>
 </tbody>
 </table>
@@ -3988,7 +3988,7 @@
 - <strong>Params</strong>: none</p>
 <h3 id="set_network"><code>set_network</code><a class="headerlink" href="#set_network" title="Permanent link">&para;</a></h3>
 <p><strong>Set Global Network</strong>
-- <strong>Side effect</strong>: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- <strong>Side effect</strong>: 🟡 Local configuration — changes local wallet/network settings; does not build, sign, or broadcast a chain transaction. Confirm the new configuration before subsequent writes.
 - <strong>annotations</strong>: idempotent: true · openWorld: false
 - <strong>Description</strong>: Set the global default network used by all JustLend operations unless explicitly overridden.
 - <strong>Output schema</strong>: common structured envelope v1.0.0 (<code>schemaVersion</code>, <code>tool</code>, <code>result</code>)</p>
@@ -4021,7 +4021,7 @@
 - <strong>Params</strong>: none</p>
 <h3 id="transfer_trx"><code>transfer_trx</code><a class="headerlink" href="#transfer_trx" title="Permanent link">&para;</a></h3>
 <p><strong>Transfer TRX</strong>
-- <strong>Side effect</strong>: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- <strong>Side effect</strong>: 🔴 On-chain transaction — Transfers native TRX to the confirmed recipient. Builds a transaction, requires wallet signing, and may broadcast; explicit confirmation is required before execution.
 - <strong>annotations</strong>: idempotent: false · openWorld: true
 - <strong>Description</strong>: Transfer TRX to another TRON address. Checks balance sufficiency (including gas) before sending. Typical cost: ~0 energy + ~270 bandwidth.
 - <strong>Output schema</strong>: common structured envelope v1.0.0 (<code>schemaVersion</code>, <code>tool</code>, <code>result</code>)</p>
@@ -4038,14 +4038,14 @@
 <tbody>
 <tr>
 <td><code>to</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">✅</td>
 <td></td>
 <td>Recipient TRON address (Base58 T... format)</td>
 </tr>
 <tr>
 <td><code>amount</code></td>
-<td>string (pattern /^\d+(.\d+)?$/)</td>
+<td>string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>)</td>
 <td style="text-align: center;">✅</td>
 <td></td>
 <td>Amount of TRX to transfer (e.g. '1', '10.5')</td>
@@ -4061,7 +4061,7 @@
 </table>
 <h3 id="transfer_trc20"><code>transfer_trc20</code><a class="headerlink" href="#transfer_trc20" title="Permanent link">&para;</a></h3>
 <p><strong>Transfer TRC20</strong>
-- <strong>Side effect</strong>: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- <strong>Side effect</strong>: 🔴 On-chain transaction — Transfers the selected TRC20 token to the confirmed recipient. Builds a transaction, requires wallet signing, and may broadcast; explicit confirmation is required before execution.
 - <strong>annotations</strong>: idempotent: false · openWorld: true
 - <strong>Description</strong>: Transfer TRC20 tokens to another TRON address. You can pass a token symbol (e.g. 'USDT', 'JST', 'wstUSDT') or a contract address. Symbol resolution uses the server's known TRON token registry and JustLend underlying-token mappings. Amount is in human-readable units (e.g. '100' for 100 USDT). Checks balance sufficiency before sending.
 - <strong>Output schema</strong>: common structured envelope v1.0.0 (<code>schemaVersion</code>, <code>tool</code>, <code>result</code>)</p>
@@ -4078,14 +4078,14 @@
 <tbody>
 <tr>
 <td><code>to</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">✅</td>
 <td></td>
 <td>Recipient TRON address (Base58 T... format)</td>
 </tr>
 <tr>
 <td><code>amount</code></td>
-<td>string (pattern /^\d+(.\d+)?$/)</td>
+<td>string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>)</td>
 <td style="text-align: center;">✅</td>
 <td></td>
 <td>Amount to transfer in human-readable units (e.g. '100' for 100 USDT)</td>
@@ -4099,7 +4099,7 @@
 </tr>
 <tr>
 <td><code>tokenAddress</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>TRC20 token contract address. Use 'token' parameter instead when possible.</td>
@@ -4251,7 +4251,7 @@
 <tbody>
 <tr>
 <td><code>address</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>TRON address (Base58 T... format) to check. Leave empty to use configured wallet.</td>
@@ -4291,14 +4291,14 @@
 </tr>
 <tr>
 <td><code>amount</code></td>
-<td>string (pattern /^\d+(.\d+)?$/)</td>
+<td>string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>Amount to check sufficiency against (human-readable, e.g. '0.5'). If provided, returns whether allowance is sufficient.</td>
 </tr>
 <tr>
 <td><code>address</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>Address to check. Default: configured wallet</td>
@@ -4331,7 +4331,7 @@
 <tbody>
 <tr>
 <td><code>address</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>TRON address. Default: configured wallet</td>
@@ -4371,14 +4371,14 @@
 </tr>
 <tr>
 <td><code>tokenAddress</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>TRC20 token contract address. Use 'token' parameter with a symbol name instead when possible.</td>
 </tr>
 <tr>
 <td><code>address</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>TRON address. Default: configured wallet</td>
@@ -4418,7 +4418,7 @@
 </tr>
 <tr>
 <td><code>address</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>TRON wallet address. Default: configured wallet</td>
@@ -4451,7 +4451,7 @@
 <tbody>
 <tr>
 <td><code>address</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>TRON address. Leave empty to use configured wallet.</td>
@@ -4525,7 +4525,7 @@
 </tr>
 <tr>
 <td><code>amount</code></td>
-<td>string (pattern /^\d+(.\d+)?$/)</td>
+<td>string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>)</td>
 <td style="text-align: center;">✅</td>
 <td></td>
 <td>Amount of underlying to supply (e.g. '1000' for 1000 USDT)</td>
@@ -4565,7 +4565,7 @@
 </tr>
 <tr>
 <td><code>amount</code></td>
-<td>string (pattern /^\d+(.\d+)?$/)</td>
+<td>string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>)</td>
 <td style="text-align: center;">✅</td>
 <td></td>
 <td>Amount of underlying to withdraw (e.g. '500')</td>
@@ -4638,7 +4638,7 @@
 </tr>
 <tr>
 <td><code>amount</code></td>
-<td>string (pattern /^\d+(.\d+)?$/)</td>
+<td>string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>)</td>
 <td style="text-align: center;">✅</td>
 <td></td>
 <td>Amount of underlying to borrow (e.g. '500')</td>
@@ -4678,10 +4678,10 @@
 </tr>
 <tr>
 <td><code>amount</code></td>
-<td>string (pattern /^(\d+(.\d+)?</td>
-<td style="text-align: center;">max)$/)</td>
-<td>✅</td>
+<td>string (pattern <code>/^(&#92;d+(&#92;.&#92;d+)?&#124;max)$/</code>)</td>
+<td style="text-align: center;">✅</td>
 <td></td>
+<td>Amount to repay (e.g. '500'), or 'max' for full repayment</td>
 </tr>
 <tr>
 <td><code>network</code></td>
@@ -4694,7 +4694,7 @@
 </table>
 <h3 id="enter_market"><code>enter_market</code><a class="headerlink" href="#enter_market" title="Permanent link">&para;</a></h3>
 <p><strong>Enter Market (Enable Collateral)</strong>
-- <strong>Side effect</strong>: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- <strong>Side effect</strong>: 🔴 On-chain transaction — Changes on-chain Comptroller collateral membership for the selected market. Builds a transaction, requires wallet signing, and may broadcast; explicit confirmation is required before execution.
 - <strong>annotations</strong>: idempotent: true · openWorld: true
 - <strong>Description</strong>: Enable a jToken market as collateral. Required before borrowing against supplied assets. Once entered, your supply in this market counts towards your borrowing capacity. Typical cost: ~80,000 energy + ~300 bandwidth.
 - <strong>Output schema</strong>: common structured envelope v1.0.0 (<code>schemaVersion</code>, <code>tool</code>, <code>result</code>)</p>
@@ -4760,7 +4760,7 @@
 </table>
 <h3 id="approve_underlying"><code>approve_underlying</code><a class="headerlink" href="#approve_underlying" title="Permanent link">&para;</a></h3>
 <p><strong>Approve Underlying Token</strong>
-- <strong>Side effect</strong>: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- <strong>Side effect</strong>: 🔴 On-chain transaction — Changes the underlying token allowance granted to the jToken contract. Builds a transaction, requires wallet signing, and may broadcast; explicit confirmation is required before execution.
 - <strong>annotations</strong>: idempotent: true · openWorld: true
 - <strong>Description</strong>: Approve the jToken contract to spend your underlying TRC20 tokens. Required before supply() or repay() for TRC20-backed markets (not needed for jTRX). Pass the EXACT amount you intend to use (recommended). Pass amount='max' for unlimited approval ONLY when the user explicitly opts in — it lets the jToken contract spend the user's entire balance, present and future, until revoked. Typical cost: ~23,000 energy + ~265 bandwidth.
 - <strong>Output schema</strong>: common structured envelope v1.0.0 (<code>schemaVersion</code>, <code>tool</code>, <code>result</code>)</p>
@@ -4784,10 +4784,10 @@
 </tr>
 <tr>
 <td><code>amount</code></td>
-<td>string (pattern /^(\d+(.\d+)?</td>
-<td style="text-align: center;">max)$/)</td>
-<td>✅</td>
+<td>string (pattern <code>/^(&#92;d+(&#92;.&#92;d+)?&#124;max)$/</code>)</td>
+<td style="text-align: center;">✅</td>
 <td></td>
+<td>Exact amount to approve (e.g. '100'), or 'max' for unlimited (NOT recommended; user must opt in).</td>
 </tr>
 <tr>
 <td><code>network</code></td>
@@ -4800,7 +4800,7 @@
 </table>
 <h3 id="claim_rewards"><code>claim_rewards</code><a class="headerlink" href="#claim_rewards" title="Permanent link">&para;</a></h3>
 <p><strong>Claim Rewards</strong>
-- <strong>Side effect</strong>: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- <strong>Side effect</strong>: 🔴 On-chain transaction — Claims mining rewards through an on-chain transaction. Builds a transaction, requires wallet signing, and may broadcast; explicit confirmation is required before execution.
 - <strong>annotations</strong>: idempotent: false · openWorld: true
 - <strong>Description</strong>: Claim accrued JustLend mining rewards for the configured wallet. Typical cost: ~60,000 energy + ~330 bandwidth.
 - <strong>Output schema</strong>: common structured envelope v1.0.0 (<code>schemaVersion</code>, <code>tool</code>, <code>result</code>)</p>
@@ -4843,10 +4843,10 @@
 <tbody>
 <tr>
 <td><code>operation</code></td>
-<td>enum(supply</td>
-<td style="text-align: center;">withdraw</td>
-<td>withdraw_all</td>
-<td>borrow</td>
+<td>enum(supply | withdraw | withdraw_all | borrow | repay | approve | enter_market | exit_market | claim_rewards)</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>The operation to estimate resources for</td>
 </tr>
 <tr>
 <td><code>market</code></td>
@@ -4857,21 +4857,21 @@
 </tr>
 <tr>
 <td><code>amount</code></td>
-<td>string (pattern /^\d+(.\d+)?$/)</td>
+<td>string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>Amount in underlying token units (e.g. '100'). Default: '1'. Not needed for enter_market, exit_market, approve, withdraw_all, claim_rewards.</td>
 </tr>
 <tr>
 <td><code>spender</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>Custom spender address for approve operation. Default: jToken contract address. Only used when operation is 'approve'.</td>
 </tr>
 <tr>
 <td><code>address</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>TRON address for simulation. Default: configured wallet</td>
@@ -4938,7 +4938,7 @@
 <tbody>
 <tr>
 <td><code>address</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>TRON address. Default: configured wallet</td>
@@ -4971,7 +4971,7 @@
 <tbody>
 <tr>
 <td><code>address</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>TRON address. Default: configured wallet</td>
@@ -5011,7 +5011,7 @@
 </tr>
 <tr>
 <td><code>address</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>TRON address. Default: configured wallet</td>
@@ -5044,7 +5044,7 @@
 <tbody>
 <tr>
 <td><code>address</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>TRON address. Default: configured wallet</td>
@@ -5060,7 +5060,7 @@
 </table>
 <h3 id="approve_jst_for_voting"><code>approve_jst_for_voting</code><a class="headerlink" href="#approve_jst_for_voting" title="Permanent link">&para;</a></h3>
 <p><strong>Approve JST for Voting</strong>
-- <strong>Side effect</strong>: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- <strong>Side effect</strong>: 🔴 On-chain transaction — Changes the JST allowance granted to WJST. Builds a transaction, requires wallet signing, and may broadcast; explicit confirmation is required before execution.
 - <strong>annotations</strong>: idempotent: true · openWorld: true
 - <strong>Description</strong>: Approve JST token for the WJST voting contract. Required before depositing JST to get voting power. Pass the EXACT amount you intend to deposit (recommended). Pass amount='max' for unlimited approval ONLY when the user explicitly opts in — it lets the WJST contract spend the user's entire JST balance, present and future, until revoked.
 - <strong>Output schema</strong>: common structured envelope v1.0.0 (<code>schemaVersion</code>, <code>tool</code>, <code>result</code>)</p>
@@ -5077,10 +5077,10 @@
 <tbody>
 <tr>
 <td><code>amount</code></td>
-<td>string (pattern /^(\d+(.\d+)?</td>
-<td style="text-align: center;">max)$/)</td>
-<td>✅</td>
+<td>string (pattern <code>/^(&#92;d+(&#92;.&#92;d+)?&#124;max)$/</code>)</td>
+<td style="text-align: center;">✅</td>
 <td></td>
+<td>Exact amount to approve (e.g. '1000'), or 'max' for unlimited (NOT recommended; user must opt in).</td>
 </tr>
 <tr>
 <td><code>network</code></td>
@@ -5110,7 +5110,7 @@
 <tbody>
 <tr>
 <td><code>amount</code></td>
-<td>string (pattern /^\d+(.\d+)?$/)</td>
+<td>string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>)</td>
 <td style="text-align: center;">✅</td>
 <td></td>
 <td>Amount of JST to deposit (e.g. '1000')</td>
@@ -5143,7 +5143,7 @@
 <tbody>
 <tr>
 <td><code>amount</code></td>
-<td>string (pattern /^\d+(.\d+)?$/)</td>
+<td>string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>)</td>
 <td style="text-align: center;">✅</td>
 <td></td>
 <td>Amount of votes/WJST to withdraw back to JST (e.g. '1000')</td>
@@ -5190,7 +5190,7 @@
 </tr>
 <tr>
 <td><code>votes</code></td>
-<td>string (pattern /^\d+(.\d+)?$/)</td>
+<td>string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>)</td>
 <td style="text-align: center;">✅</td>
 <td></td>
 <td>Amount of votes to cast (e.g. '1000')</td>
@@ -5337,7 +5337,7 @@
 <tbody>
 <tr>
 <td><code>address</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>Payer address. Default: configured wallet</td>
@@ -5412,7 +5412,7 @@
 </tr>
 <tr>
 <td><code>expectedPayAddress</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">✅</td>
 <td></td>
 <td>Exact payment_address from the quote explicitly confirmed by the user</td>
@@ -5518,7 +5518,7 @@
 </tr>
 <tr>
 <td><code>receiverAddress</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>Receiver address. If provided, checks for existing rental to calculate renewal cost.</td>
@@ -5584,17 +5584,17 @@
 <tbody>
 <tr>
 <td><code>address</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>Address to query. Default: configured wallet</td>
 </tr>
 <tr>
 <td><code>type</code></td>
-<td>enum(renter</td>
-<td style="text-align: center;">receiver</td>
-<td>all)</td>
-<td>—</td>
+<td>enum(renter | receiver | all)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>Filter by role. Default: all</td>
 </tr>
 <tr>
 <td><code>page</code></td>
@@ -5638,14 +5638,14 @@
 <tbody>
 <tr>
 <td><code>renterAddress</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>Renter address. Default: configured wallet</td>
 </tr>
 <tr>
 <td><code>receiverAddress</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">✅</td>
 <td></td>
 <td>Receiver address</td>
@@ -5678,14 +5678,14 @@
 <tbody>
 <tr>
 <td><code>renterAddress</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>Renter address. Default: configured wallet</td>
 </tr>
 <tr>
 <td><code>receiverAddress</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">✅</td>
 <td></td>
 <td>Receiver address</td>
@@ -5718,7 +5718,7 @@
 <tbody>
 <tr>
 <td><code>receiverAddress</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">✅</td>
 <td></td>
 <td>Address that will receive the energy</td>
@@ -5765,17 +5765,17 @@
 <tbody>
 <tr>
 <td><code>counterpartyAddress</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">✅</td>
 <td></td>
 <td>The other party's address (receiver if you are renter, renter if you are receiver)</td>
 </tr>
 <tr>
 <td><code>endOrderType</code></td>
-<td>enum(renter</td>
-<td style="text-align: center;">receiver)</td>
-<td>—</td>
+<td>enum(renter | receiver)</td>
+<td style="text-align: center;">—</td>
 <td></td>
+<td>Your role: 'renter' (default) or 'receiver'</td>
 </tr>
 <tr>
 <td><code>network</code></td>
@@ -5832,7 +5832,7 @@
 <tbody>
 <tr>
 <td><code>address</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>Address to query. Default: configured wallet</td>
@@ -5865,7 +5865,7 @@
 <tbody>
 <tr>
 <td><code>address</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>Address to check. Default: configured wallet</td>
@@ -5898,7 +5898,7 @@
 <tbody>
 <tr>
 <td><code>address</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>Address to check. Default: configured wallet</td>
@@ -5931,7 +5931,7 @@
 <tbody>
 <tr>
 <td><code>amount</code></td>
-<td>string (pattern /^\d+(.\d+)?$/)</td>
+<td>string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>)</td>
 <td style="text-align: center;">✅</td>
 <td></td>
 <td>Amount of TRX to stake (human-readable decimal string, e.g. '1' or '10.5')</td>
@@ -5964,7 +5964,7 @@
 <tbody>
 <tr>
 <td><code>amount</code></td>
-<td>string (pattern /^\d+(.\d+)?$/)</td>
+<td>string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>)</td>
 <td style="text-align: center;">✅</td>
 <td></td>
 <td>Amount of sTRX to unstake (human-readable decimal string, e.g. '1' or '10.5')</td>
@@ -6024,7 +6024,7 @@
 <tbody>
 <tr>
 <td><code>amount</code></td>
-<td>string (pattern /^\d+(.\d+)?$/)</td>
+<td>string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>)</td>
 <td style="text-align: center;">✅</td>
 <td></td>
 <td>Amount of TRX to wrap into WTRX (human-readable decimal string, e.g. '1' or '10.5')</td>
@@ -6057,7 +6057,7 @@
 <tbody>
 <tr>
 <td><code>amount</code></td>
-<td>string (pattern /^\d+(.\d+)?$/)</td>
+<td>string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>)</td>
 <td style="text-align: center;">✅</td>
 <td></td>
 <td>Amount of WTRX to unwrap into TRX (human-readable decimal string, e.g. '1' or '10.5')</td>
@@ -6131,7 +6131,7 @@
 </tr>
 <tr>
 <td><code>address</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>User address to include share balance. Default: configured wallet</td>
@@ -6147,7 +6147,7 @@
 </table>
 <h3 id="approve_moolah_vault"><code>approve_moolah_vault</code><a class="headerlink" href="#approve_moolah_vault" title="Permanent link">&para;</a></h3>
 <p><strong>Approve Moolah Vault</strong>
-- <strong>Side effect</strong>: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- <strong>Side effect</strong>: 🔴 On-chain transaction — Changes the token allowance granted to the selected V2 vault. Builds a transaction, requires wallet signing, and may broadcast; explicit confirmation is required before execution.
 - <strong>annotations</strong>: idempotent: true · openWorld: true
 - <strong>Description</strong>: Approve TRC20 token spending for a Moolah vault before depositing. Not needed for TRX vaults. Pass the EXACT amount you intend to deposit (recommended). Pass amount='max' for unlimited approval ONLY when the user explicitly opts in — it lets the vault contract spend the user's entire balance, present and future, until revoked (amount='0').
 - <strong>Output schema</strong>: common structured envelope v1.0.0 (<code>schemaVersion</code>, <code>tool</code>, <code>result</code>)</p>
@@ -6171,10 +6171,10 @@
 </tr>
 <tr>
 <td><code>amount</code></td>
-<td>string (pattern /^(\d+(.\d+)?</td>
-<td style="text-align: center;">max)$/)</td>
-<td>✅</td>
+<td>string (pattern <code>/^(&#92;d+(&#92;.&#92;d+)?&#124;max)$/</code>)</td>
+<td style="text-align: center;">✅</td>
 <td></td>
+<td>Exact amount to approve (e.g. '100'), or 'max' for unlimited (NOT recommended; user must opt in).</td>
 </tr>
 <tr>
 <td><code>network</code></td>
@@ -6211,7 +6211,7 @@
 </tr>
 <tr>
 <td><code>amount</code></td>
-<td>string (pattern /^\d+(.\d+)?$/)</td>
+<td>string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>)</td>
 <td style="text-align: center;">✅</td>
 <td></td>
 <td>Amount of underlying to deposit (e.g. '1000' for 1000 USDT)</td>
@@ -6251,10 +6251,10 @@
 </tr>
 <tr>
 <td><code>amount</code></td>
-<td>string (pattern /^(\d+(.\d+)?</td>
-<td style="text-align: center;">max)$/)</td>
-<td>✅</td>
+<td>string (pattern <code>/^(&#92;d+(&#92;.&#92;d+)?&#124;max)$/</code>)</td>
+<td style="text-align: center;">✅</td>
 <td></td>
+<td>Amount of underlying to withdraw, or 'max' for full withdrawal</td>
 </tr>
 <tr>
 <td><code>network</code></td>
@@ -6291,10 +6291,10 @@
 </tr>
 <tr>
 <td><code>shares</code></td>
-<td>string (pattern /^(\d+(.\d+)?</td>
-<td style="text-align: center;">max)$/)</td>
-<td>✅</td>
+<td>string (pattern <code>/^(&#92;d+(&#92;.&#92;d+)?&#124;max)$/</code>)</td>
+<td style="text-align: center;">✅</td>
 <td></td>
+<td>Number of shares to redeem, or 'max' for all shares</td>
 </tr>
 <tr>
 <td><code>network</code></td>
@@ -6412,7 +6412,7 @@
 </tr>
 <tr>
 <td><code>address</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>User address. Default: configured wallet</td>
@@ -6428,7 +6428,7 @@
 </table>
 <h3 id="approve_moolah_proxy"><code>approve_moolah_proxy</code><a class="headerlink" href="#approve_moolah_proxy" title="Permanent link">&para;</a></h3>
 <p><strong>Approve Moolah Proxy</strong>
-- <strong>Side effect</strong>: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- <strong>Side effect</strong>: 🔴 On-chain transaction — Changes the token allowance granted to the V2 core contract. Builds a transaction, requires wallet signing, and may broadcast; explicit confirmation is required before execution.
 - <strong>annotations</strong>: idempotent: true · openWorld: true
 - <strong>Description</strong>: Approve TRC20 token spending for the Moolah core contract before supplying collateral or repaying. Not needed for TRX operations. Pass the EXACT amount you intend to use (recommended). Pass amount='max' for unlimited approval ONLY when the user explicitly opts in — it lets the Moolah proxy spend the user's entire balance, present and future, until revoked (amount='0').
 - <strong>Output schema</strong>: common structured envelope v1.0.0 (<code>schemaVersion</code>, <code>tool</code>, <code>result</code>)</p>
@@ -6445,7 +6445,7 @@
 <tbody>
 <tr>
 <td><code>tokenAddress</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">✅</td>
 <td></td>
 <td>TRC20 contract address (Base58)</td>
@@ -6466,10 +6466,10 @@
 </tr>
 <tr>
 <td><code>amount</code></td>
-<td>string (pattern /^(\d+(.\d+)?</td>
-<td style="text-align: center;">max)$/)</td>
-<td>✅</td>
+<td>string (pattern <code>/^(&#92;d+(&#92;.&#92;d+)?&#124;max)$/</code>)</td>
+<td style="text-align: center;">✅</td>
 <td></td>
+<td>Exact amount to approve (e.g. '100'), or 'max' for unlimited (NOT recommended; user must opt in).</td>
 </tr>
 <tr>
 <td><code>network</code></td>
@@ -6506,7 +6506,7 @@
 </tr>
 <tr>
 <td><code>amount</code></td>
-<td>string (pattern /^\d+(.\d+)?$/)</td>
+<td>string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>)</td>
 <td style="text-align: center;">✅</td>
 <td></td>
 <td>Amount of collateral to supply (e.g. '10000' for 10000 TRX)</td>
@@ -6546,10 +6546,10 @@
 </tr>
 <tr>
 <td><code>amount</code></td>
-<td>string (pattern /^(\d+(.\d+)?</td>
-<td style="text-align: center;">max)$/)</td>
-<td>✅</td>
+<td>string (pattern <code>/^(&#92;d+(&#92;.&#92;d+)?&#124;max)$/</code>)</td>
+<td style="text-align: center;">✅</td>
 <td></td>
+<td>Amount of collateral to withdraw, or 'max' for all (requires no active borrows)</td>
 </tr>
 <tr>
 <td><code>network</code></td>
@@ -6586,14 +6586,14 @@
 </tr>
 <tr>
 <td><code>collateralAmount</code></td>
-<td>string (pattern /^\d+(.\d+)?$/)</td>
+<td>string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>Collateral to supply first (e.g. '10000' TRX). Omit to skip.</td>
 </tr>
 <tr>
 <td><code>borrowAmount</code></td>
-<td>string (pattern /^\d+(.\d+)?$/)</td>
+<td>string (pattern <code>/^&#92;d+(&#92;.&#92;d+)?$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>Loan token amount to borrow (e.g. '500' USDT). Omit to skip.</td>
@@ -6633,10 +6633,10 @@
 </tr>
 <tr>
 <td><code>amount</code></td>
-<td>string (pattern /^(\d+(.\d+)?</td>
-<td style="text-align: center;">max)$/)</td>
-<td>✅</td>
+<td>string (pattern <code>/^(&#92;d+(&#92;.&#92;d+)?&#124;max)$/</code>)</td>
+<td style="text-align: center;">✅</td>
 <td></td>
+<td>Loan amount to repay, or 'max' for full repayment</td>
 </tr>
 <tr>
 <td><code>network</code></td>
@@ -6742,14 +6742,14 @@
 </tr>
 <tr>
 <td><code>seizedAssets</code></td>
-<td>string (pattern /^\d+$/)</td>
+<td>string (pattern <code>/^&#92;d+$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>Collateral amount to seize (raw units). Provide this OR repaidShares.</td>
 </tr>
 <tr>
 <td><code>repaidShares</code></td>
-<td>string (pattern /^\d+$/)</td>
+<td>string (pattern <code>/^&#92;d+$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>Borrow shares to repay (raw units). Provide this OR seizedAssets.</td>
@@ -6782,10 +6782,10 @@
 <tbody>
 <tr>
 <td><code>type</code></td>
-<td>enum(bot</td>
-<td style="text-align: center;">public)</td>
-<td>—</td>
+<td>enum(bot | public)</td>
+<td style="text-align: center;">—</td>
 <td></td>
+<td>Filter by liquidator type</td>
 </tr>
 <tr>
 <td><code>debtToken</code></td>
@@ -6850,21 +6850,21 @@
 </tr>
 <tr>
 <td><code>borrower</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">✅</td>
 <td></td>
 <td>Address of the borrower to liquidate (Base58)</td>
 </tr>
 <tr>
 <td><code>seizedAssets</code></td>
-<td>string (pattern /^\d+$/)</td>
+<td>string (pattern <code>/^&#92;d+$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>Collateral units to seize (raw). Provide this OR repaidShares.</td>
 </tr>
 <tr>
 <td><code>repaidShares</code></td>
-<td>string (pattern /^\d+$/)</td>
+<td>string (pattern <code>/^&#92;d+$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>Borrow shares to repay (raw). Provide this OR seizedAssets.</td>
@@ -6880,7 +6880,7 @@
 </table>
 <h3 id="approve_liquidator_token"><code>approve_liquidator_token</code><a class="headerlink" href="#approve_liquidator_token" title="Permanent link">&para;</a></h3>
 <p><strong>Approve Liquidator Token</strong>
-- <strong>Side effect</strong>: 🟡 State-changing (Write) — changes local wallet/network config or starts an interaction; client should confirm
+- <strong>Side effect</strong>: 🔴 On-chain transaction — Changes the loan-token allowance granted to the public liquidator. Builds a transaction, requires wallet signing, and may broadcast; explicit confirmation is required before execution.
 - <strong>annotations</strong>: idempotent: true · openWorld: true
 - <strong>Description</strong>: Approve loan token spending for the Moolah public liquidator contract. Required before calling moolah_liquidate. Pass the EXACT amount you intend to use (recommended). Pass amount='max' for unlimited approval ONLY when the user explicitly opts in — it lets the liquidator contract spend the user's entire balance, present and future, until revoked (amount='0').
 - <strong>Output schema</strong>: common structured envelope v1.0.0 (<code>schemaVersion</code>, <code>tool</code>, <code>result</code>)</p>
@@ -6897,7 +6897,7 @@
 <tbody>
 <tr>
 <td><code>tokenAddress</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">✅</td>
 <td></td>
 <td>Loan token contract address (Base58)</td>
@@ -6918,10 +6918,10 @@
 </tr>
 <tr>
 <td><code>amount</code></td>
-<td>string (pattern /^(\d+(.\d+)?</td>
-<td style="text-align: center;">max)$/)</td>
-<td>✅</td>
+<td>string (pattern <code>/^(&#92;d+(&#92;.&#92;d+)?&#124;max)$/</code>)</td>
+<td style="text-align: center;">✅</td>
 <td></td>
+<td>Exact amount to approve (e.g. '100'), or 'max' for unlimited (NOT recommended; user must opt in).</td>
 </tr>
 <tr>
 <td><code>network</code></td>
@@ -6952,7 +6952,7 @@
 <tbody>
 <tr>
 <td><code>address</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>User address to include V2 position summary. Default: configured wallet</td>
@@ -6999,17 +6999,17 @@
 <tbody>
 <tr>
 <td><code>address</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>User address. Default: configured wallet</td>
 </tr>
 <tr>
 <td><code>timeFilter</code></td>
-<td>enum(ONE_DAY</td>
-<td style="text-align: center;">ONE_WEEK</td>
-<td>ONE_MONTH)</td>
-<td>—</td>
+<td>enum(ONE_DAY | ONE_WEEK | ONE_MONTH)</td>
+<td style="text-align: center;">—</td>
+<td></td>
+<td>History time range. Default: ONE_WEEK</td>
 </tr>
 <tr>
 <td><code>network</code></td>
@@ -7039,7 +7039,7 @@
 <tbody>
 <tr>
 <td><code>address</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>User address. Default: configured wallet</td>
@@ -7086,7 +7086,7 @@
 <tbody>
 <tr>
 <td><code>vaultAddress</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">✅</td>
 <td></td>
 <td>Vault contract address (Base58 T...)</td>
@@ -7119,10 +7119,10 @@
 <tbody>
 <tr>
 <td><code>operation</code></td>
-<td>enum(vault_deposit</td>
-<td style="text-align: center;">vault_withdraw</td>
-<td>vault_redeem</td>
-<td>approve_vault</td>
+<td>enum(vault_deposit | vault_withdraw | vault_redeem | approve_vault | supply_collateral | withdraw_collateral | borrow | repay | approve_proxy | liquidate | approve_liquidator)</td>
+<td style="text-align: center;">✅</td>
+<td></td>
+<td>Moolah operation to estimate</td>
 </tr>
 <tr>
 <td><code>isTRX</code></td>
@@ -7133,7 +7133,7 @@
 </tr>
 <tr>
 <td><code>address</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>Owner address for resource-sufficiency check. Default: configured wallet</td>
@@ -7200,7 +7200,7 @@
 <tbody>
 <tr>
 <td><code>vaultAddress</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">✅</td>
 <td></td>
 <td>Vault contract address (Base58 T...)</td>
@@ -7259,7 +7259,7 @@
 <tbody>
 <tr>
 <td><code>address</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>TRON address. Default: configured wallet</td>
@@ -7292,7 +7292,7 @@
 <tbody>
 <tr>
 <td><code>address</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>TRON address. Default: configured wallet</td>
@@ -7367,7 +7367,7 @@
 </tr>
 <tr>
 <td><code>address</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>Owner address used to refetch the airdrop entry when periodKey is supplied. Default: signing wallet</td>
@@ -7401,7 +7401,7 @@
 <tbody>
 <tr>
 <td><code>address</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">✅</td>
 <td></td>
 <td>TRON address (T...). Default: configured wallet</td>
@@ -7448,7 +7448,7 @@
 <tbody>
 <tr>
 <td><code>address</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">✅</td>
 <td></td>
 <td>TRON address. Default: configured wallet</td>
@@ -7495,7 +7495,7 @@
 <tbody>
 <tr>
 <td><code>address</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">✅</td>
 <td></td>
 <td>TRON address. Default: configured wallet</td>
@@ -7542,7 +7542,7 @@
 <tbody>
 <tr>
 <td><code>address</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">✅</td>
 <td></td>
 <td>TRON address. Default: configured wallet</td>
@@ -7589,7 +7589,7 @@
 <tbody>
 <tr>
 <td><code>address</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">✅</td>
 <td></td>
 <td>TRON address. Default: configured wallet</td>
@@ -7671,21 +7671,21 @@
 </tr>
 <tr>
 <td><code>distributor</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>Force a specific distributor address. Set with <code>selector</code> to bypass routing.</td>
 </tr>
 <tr>
 <td><code>selector</code></td>
-<td>enum(single</td>
-<td style="text-align: center;">multi)</td>
-<td>—</td>
+<td>enum(single | multi)</td>
+<td style="text-align: center;">—</td>
 <td></td>
+<td>Force a selector. 'single' = (uint256,uint256,uint256,bytes32[])[]; 'multi' = (uint256,uint256,uint256[],bytes32[])[]</td>
 </tr>
 <tr>
 <td><code>address</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">—</td>
 <td></td>
 <td>Owner address used to refetch the airdrop entry when key is supplied. Default: signing wallet</td>
@@ -7718,7 +7718,7 @@
 <tbody>
 <tr>
 <td><code>address</code></td>
-<td>string (pattern /^T[1-9A-HJ-NP-Za-km-z]{33}$/)</td>
+<td>string (pattern <code>/^T[1-9A-HJ-NP-Za-km-z]{33}$/</code>)</td>
 <td style="text-align: center;">✅</td>
 <td></td>
 <td>TRON address. Default: configured wallet</td>
@@ -7768,7 +7768,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="August 27, 2026 08:24:25 UTC">2026-08-27</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 12, 2026 09:32:17 UTC">2026-10-12</span>
   </span>
 
     

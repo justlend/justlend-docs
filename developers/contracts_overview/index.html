@@ -143,8 +143,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "Architecture summary of every JustLend DAO contract on TRON \u2014 SBM jTokens, Comptroller, interest rate models, price oracle, governance, sTRX, Energy Rental \u2014 with proxy mode, ABI links, and key functions in one table.",
-          "dateModified": "2026-10-09",
-          "datePublished": "2026-10-09"
+          "dateModified": "2026-10-14",
+          "datePublished": "2026-10-14"
         }
       ]
     }
@@ -2295,6 +2295,7 @@
 </ul>
 <h4 id="jtokens-contract">JTokens Contract<a class="headerlink" href="#jtokens-contract" title="Permanent link">&para;</a></h4>
 <p><code>JToken:</code> the contract used to support all assets by JustLend DAO, such as the jTRX, jUSDT, jSUN and jBTC you receive after supplying the corresponding assets.</p>
+<p>For the selected Mainnet pointers, see <a href="../deployed_contracts/#address-verification">address verification methods</a>. The <a href="../abis/#scope-and-provenance">ABI scope and provenance</a> describe which interfaces use node ABI, compiler output or pinned source and which deployments remain outside their scope.</p>
 <h4 id="interest-rate-model-contract">Interest Rate Model Contract<a class="headerlink" href="#interest-rate-model-contract" title="Permanent link">&para;</a></h4>
 <p><code>WhitePaperInterestRateModel:</code> the contract used to set up a straightforward interest rate model, which the borrowing rate is directly proportional to the utilization.</p>
 <p><code>JumpRateModelV2:</code> the Contract used to set up a complex interest rate model, which the interest rate jumps to a higher tier when the utilization rate exceeds u optimal.</p>
@@ -2424,7 +2425,7 @@
 <td>Replaced via proxy</td>
 <td>Implementation only</td>
 <td><code>getPrice</code>, <code>assetPrices</code>, <code>setPrice</code> (poster-only)</td>
-<td><a href="../abis/price-oracle.json"><code>price-oracle.json</code></a></td>
+<td><a href="../abis/price-oracle-impl.json"><code>price-oracle-impl.json</code></a></td>
 <td><a href="../supply_and_borrow_market/price_oracle/">Price Oracle</a></td>
 </tr>
 <tr>
@@ -2433,14 +2434,14 @@
 <td><a href="https://tronscan.org/#/contract/TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD"><code>TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD</code></a></td>
 <td><strong>Yes</strong> (impl behind delegator)</td>
 <td>JustLend <code>GovernorBravoDelegator</code> (<code>_setImplementation</code>)</td>
-<td><code>propose</code>, <code>queue</code>, <code>execute</code>, <code>cancel</code>, <code>castVote</code>, <code>castVoteWithReason</code>, <code>state</code>, <code>deposit</code></td>
+<td><code>propose</code>, <code>queue</code>, <code>execute</code>, <code>cancel</code>, <code>castVote</code>, <code>castVoteWithReason</code>, <code>castVoteBySig</code>, <code>state</code></td>
 <td><a href="../abis/governor-alpha.json"><code>governor-alpha.json</code></a> (Governor ABI; the WJST escrow is <code>wjst.json</code>)</td>
 <td><a href="../supply_and_borrow_market/governance/">Governance</a></td>
 </tr>
 <tr>
 <td>Governance</td>
 <td><code>GovernorBravoDelegate</code> (implementation)</td>
-<td><a href="https://tronscan.org/#/contract/TCiQTkxhzwSeXhRsNdHCvrxHRAvpjQn5Dt"><code>TCiQTkxhzwSeXhRsNdHCvrxHRAvpjQn5Dt</code></a></td>
+<td><a href="https://tronscan.org/#/contract/TUeNh9BsYK44XePmFAuKZWg2rJuU7bSt5u"><code>TUeNh9BsYK44XePmFAuKZWg2rJuU7bSt5u</code></a></td>
 <td>Replaced via delegator</td>
 <td>Implementation only</td>
 <td>— (delegated)</td>
@@ -2483,7 +2484,7 @@
 <td><a href="https://tronscan.org/#/contract/TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5"><code>TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5</code></a></td>
 <td><strong>Yes</strong> (impl behind proxy)</td>
 <td>JustLend <code>STRXProxy</code></td>
-<td><code>deposit()</code> (payable), <code>withdraw</code>, <code>withdrawExact</code>, <code>claim</code>, <code>claimAll</code>, <code>exchangeRate</code>, <code>balanceInTrx</code></td>
+<td><code>deposit()</code> (payable), <code>withdraw</code>, <code>withdrawExact</code>, <code>claim</code>, <code>claimAll</code>, <code>exchangeRate</code>, <code>viewBalanceOfUnderlying</code></td>
 <td><a href="../abis/strx.json"><code>strx.json</code></a></td>
 <td><a href="../staked_trx/">Staked TRX</a></td>
 </tr>
@@ -2530,7 +2531,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 9, 2026 06:33:28 UTC">2026-10-09</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 14, 2026 08:34:59 UTC">2026-10-14</span>
   </span>
 
     

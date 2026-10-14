@@ -143,8 +143,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "Base58 addresses for every JustLend DAO contract on TRON Mainnet, plus the Nile testnet subset. For machine consumers, the same data is available with Base58 / 0x / 41-hex formats in /developers/contracts.json.",
-          "dateModified": "2026-08-11",
-          "datePublished": "2026-08-11"
+          "dateModified": "2026-10-14",
+          "datePublished": "2026-10-14"
         }
       ]
     }
@@ -1212,6 +1212,19 @@
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        
+
+
+
+<li class="md-nav__item ">
+  <a href="#address-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      Address verification
+    </span>
+  </a>
+  
+</li>
       
         
 
@@ -2435,7 +2448,7 @@
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Machine-readable ABIs</p>
-<p>Every contract referenced on this page has a downloadable JSON ABI under <a href="../abis/jtoken.json"><code>abis/</code></a>:</p>
+<p>Minimal JSON interfaces are available under <a href="../abis/"><code>abis/</code></a>. They are <strong>not complete deployment ABIs</strong>; check each file's functions/events and <a href="../abis/#scope-and-provenance">scope</a> before encoding calls or decoding logs:</p>
 <table>
 <thead>
 <tr>
@@ -2453,7 +2466,7 @@
 <td><a href="../abis/jtrx-mint.json"><code>abis/jtrx-mint.json</code></a></td>
 </tr>
 <tr>
-<td>jToken — TRX-specific <code>repayBorrow()</code> payable</td>
+<td>jToken — TRX-specific <code>repayBorrow(uint256)</code> payable</td>
 <td><a href="../abis/jtrx-repay.json"><code>abis/jtrx-repay.json</code></a></td>
 </tr>
 <tr>
@@ -2508,6 +2521,70 @@
 <p class="admonition-title">Decimals / precision</p>
 <p>The JustLend DAO architecture treats every token amount in <strong>its underlying's smallest unit</strong>. Always read <code>decimals()</code> on the underlying TRC20 before constructing <code>mint</code>, <code>borrow</code>, <code>repayBorrow</code>, or <code>redeemUnderlying</code> amounts. Common cases: TRX/USDT/USDC = 6, USDD/ETH = 18, BTC/WBTC = 8. jToken amounts (<code>redeem</code>, <code>transfer</code>) use <strong>8 decimals</strong> regardless of the underlying. For the full enumeration and the units rationale, see <a href="../../resources/glossary/#jtoken-decimals">Glossary → jToken decimals</a> and <a href="../common_pitfalls/#5-jtoken-8-underlying-varies-decimals">Common Pitfalls #5</a>.</p>
 </div>
+<h2 id="address-verification">Address verification<a class="headerlink" href="#address-verification" title="Permanent link">&para;</a></h2>
+<p>Selected Mainnet pointers were checked on <strong>2026-10-14</strong> with <code>wallet/triggerconstantcontract</code> at <code>https://api.trongrid.io</code>. The <a href="../abis/manifest.json">ABI manifest</a> records each getter and returned address; its interface records distinguish node ABI, compiler-derived ABI and source-only tuple fields.</p>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Read on</th>
+<th>Getter</th>
+<th>Returned address</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Governor implementation</td>
+<td><code>TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD</code></td>
+<td><code>implementation()</code></td>
+<td><code>TUeNh9BsYK44XePmFAuKZWg2rJuU7bSt5u</code></td>
+</tr>
+<tr>
+<td>Oracle entrypoint</td>
+<td><code>TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7</code></td>
+<td><code>oracle()</code></td>
+<td><code>TGnYnSn4G9PgWFj7QQemh4YMZKp3fkympJ</code></td>
+</tr>
+<tr>
+<td>Oracle backend</td>
+<td><code>TGnYnSn4G9PgWFj7QQemh4YMZKp3fkympJ</code></td>
+<td><code>v1PriceOracle()</code></td>
+<td><code>TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV</code></td>
+</tr>
+<tr>
+<td>WJST</td>
+<td><code>TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD</code></td>
+<td><code>wjst()</code></td>
+<td><code>TXk9LnTnLN7oH96H3sKxJayMxLxR9M4ZD6</code></td>
+</tr>
+<tr>
+<td>sTRX implementation</td>
+<td><code>TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5</code></td>
+<td><code>implementation()</code></td>
+<td><code>TUAV6ZSCXtF8KVvDKSeVmAbJEovTBf4HtG</code></td>
+</tr>
+<tr>
+<td>Rental implementation</td>
+<td><code>TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd</code></td>
+<td><code>implementation()</code></td>
+<td><code>TNoHbPuBQrVanVf9qxUsSvHdB2eDkeDAKD</code></td>
+</tr>
+<tr>
+<td>Rental market's sTRX</td>
+<td><code>TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd</code></td>
+<td><code>strx()</code></td>
+<td><code>TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5</code></td>
+</tr>
+</tbody>
+</table>
+<p>Use the proxy as the Governor/sTRX/rental calling entrypoint, not its implementation. The Oracle backend exposes a different interface from the Oracle proxy. These reads are a dated, non-atomic observation of selected Mainnet pointers, not a whole-registry or Nile verification. Re-read pointers after upgrades and resolve the implementation applicable to a historical event before decoding it.</p>
+<p>For example, this read requires no wallet signature or broadcast:</p>
+<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>--fail<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>https://api.trongrid.io/wallet/triggerconstantcontract<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--data<span class="w"> </span><span class="s1">&#39;{&quot;owner_address&quot;:&quot;TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD&quot;,&quot;contract_address&quot;:&quot;TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD&quot;,&quot;function_selector&quot;:&quot;implementation()&quot;,&quot;parameter&quot;:&quot;&quot;,&quot;visible&quot;:true}&#39;</span>
+</code></pre></div>
+<p>Require <code>result.result == true</code> and a valid 32-byte <code>constant_result</code> word. Take the last 20 bytes, prepend TRON's <code>41</code> prefix, and convert with a TRON address library. Never treat an RPC error or an empty response as an address.</p>
 <h2 id="address-formats">Address formats<a class="headerlink" href="#address-formats" title="Permanent link">&para;</a></h2>
 <p>TRON addresses appear in three equivalent formats. Human-facing tables on this page use Base58; machine consumers should use <a href="../contracts.json"><code>contracts.json</code></a> for all three forms.</p>
 <table>
@@ -2940,8 +3017,8 @@
 <tr>
 <td>Governor (impl)</td>
 <td><code>GovernorBravoDelegate</code></td>
-<td><code>TCiQTkxhzwSeXhRsNdHCvrxHRAvpjQn5Dt</code></td>
-<td><a href="https://tronscan.org/#/contract/TCiQTkxhzwSeXhRsNdHCvrxHRAvpjQn5Dt">Contract</a></td>
+<td><code>TUeNh9BsYK44XePmFAuKZWg2rJuU7bSt5u</code></td>
+<td><a href="https://tronscan.org/#/contract/TUeNh9BsYK44XePmFAuKZWg2rJuU7bSt5u">Contract</a></td>
 </tr>
 <tr>
 <td>Time-lock</td>
@@ -3388,7 +3465,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="August 11, 2026 03:41:35 UTC">2026-08-11</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 14, 2026 08:34:59 UTC">2026-10-14</span>
   </span>
 
     

@@ -94,8 +94,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "Public read-only REST API at openapi.just.network \u2014 V1 markets, account positions, liquidation risk, USDD supply-mining rewards, sTRX staking, Energy Rental, plus JustLend V2 (Moolah) vaults and isolated markets. Authoritative schema is the OpenAPI 3.1 YAML.",
-          "dateModified": "2026-10-09",
-          "datePublished": "2026-10-09"
+          "dateModified": "2026-10-14",
+          "datePublished": "2026-10-14"
         }
       ]
     }
@@ -1343,7 +1343,7 @@
 </tr>
 </tbody>
 </table>
-<p>A user's <strong>total supply APY</strong> in a market that has mining enabled is therefore <code>supplyRate + apy</code>.</p>
+<p>A user's <strong>total supply APY</strong> in a market that has mining enabled is therefore <code>supplyRate + miningApy</code> for the matching reward component. Here <code>miningApy</code> is a local variable, <strong>not</strong> a literal <code>apy</code> property in the <code>/mining/apy</code> response: that response is a map keyed first by jToken address and then by reward token, for example <code>data[jTokenAddress].USDD</code>. Match the exact market and reward token before combining annualized decimal values; do not double-count a component already included in another displayed metric.</p>
 <h3 id="15-pagination">1.5 Pagination<a class="headerlink" href="#15-pagination" title="Permanent link">¶</a></h3>
 <p>Endpoints that accept <code>pageNo</code> and <code>pageSize</code> return:</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"> </span><span class="nt">"totalCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">1234</span><span class="p">,</span><span class="w"> </span><span class="nt">"totalPage"</span><span class="p">:</span><span class="w"> </span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="nt">"list"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
@@ -1613,6 +1613,7 @@ on persistent 429 across multiple windows:
 <h3 id="31-get-lendjtoken-list-all-sbm-markets">3.1 <code>GET /lend/jtoken</code> — List all SBM markets<a class="headerlink" href="#31-get-lendjtoken-list-all-sbm-markets" title="Permanent link">¶</a></h3>
 <p>Returns the on‑chain state of every Supply &amp; Borrow market: rates, total supply/borrow, exchange rates, prices, and collateral factor.</p>
 <p><strong>Parameters:</strong> none.</p>
+<p>An <code>address</code> query parameter is not a supported market filter and may be ignored. To look up one market, select <code>data.tokenList</code> by its case-sensitive jToken <code>address</code> after fetching the list; see the <a href="../../documents/aidocs/market_data/#openapi">read-only client example</a>. Do not use the first entry as a substitute for a lookup result.</p>
 <p><strong>Response data</strong> (real response captured 2026-07-15; one of 24 entries shown)</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
 <span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
@@ -1880,7 +1881,7 @@ on persistent 429 across multiple windows:
 <td>string</td>
 <td>Yes</td>
 <td>ratio (decimal string)</td>
-<td>Health factor. <code>&gt;= 1</code> healthy, <code>&lt; 1</code> liquidatable. <code>"5.88"</code> = very safe.</td>
+<td>Risk reference only. With positive debt, <code>&lt; 1</code> suggests insufficient collateral; it is not an execution predicate. A debt-free account may return <code>"0"</code>, which does <strong>not</strong> imply liquidation eligibility. See the debt-first check below.</td>
 </tr>
 <tr>
 <td><code>totalCollateralValueInTrx</code></td>
@@ -1948,6 +1949,15 @@ on persistent 429 across multiple windows:
 </tbody>
 </table>
 <hr/>
+<h4 id="debt-first-liquidation-check">Debt-first liquidation check<a class="headerlink" href="#debt-first-liquidation-check" title="Permanent link">¶</a></h4>
+<p>The following is a read-only Mainnet observation from <strong>2026-10-12</strong>, not a liquidation candidate:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="nt">"address"</span><span class="p">:</span><span class="s2">"T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"</span><span class="p">,</span><span class="nt">"totalBorrowValueInTrx"</span><span class="p">:</span><span class="s2">"0.000000"</span><span class="p">,</span><span class="nt">"health"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">}</span>
+</code></pre></div>
+<ol>
+<li>Check <code>totalBorrowValueInTrx</code> before interpreting <code>health</code>. No debt means there is nothing to liquidate, even if <code>health</code> is zero.</li>
+<li>With debt, treat <code>health &lt; 1</code> as a risk-screening signal only. Do not classify equality or rounded values as proof of eligibility.</li>
+<li>For V1, read <code>Comptroller.getAccountLiquidity(account)</code> on-chain and require <code>error == 0</code> and <code>shortfall &gt; 0</code>. A transaction must also pass the close-factor, collateral, and other contract checks at execution.</li>
+</ol>
 <h3 id="33-get-justlendliquidatehighriskaccountlist-highrisk-accounts">3.3 <code>GET /justlend/liquidate/highRiskAccountList</code> — High‑risk accounts<a class="headerlink" href="#33-get-justlendliquidatehighriskaccountlist-highrisk-accounts" title="Permanent link">¶</a></h3>
 <p>Returns accounts that are currently liquidatable or close to it. Use this to drive liquidation bots.</p>
 <p><strong>Parameters:</strong> none.</p>
@@ -3868,7 +3878,7 @@ on persistent 429 across multiple windows:
 <p><iframe class="swagger-ui-iframe" frameborder="0" id="888bc520" onload="this.style.display = 'block'; this.style.overflow = 'hidden'; this.style.width = '100%';" src="swagger-888bc520.html" style="display:none;" width="100%"></iframe></p>
 <hr/>
 <h2 id="8-event-stream-and-indexing-options">8. Event-stream and indexing options<a class="headerlink" href="#8-event-stream-and-indexing-options" title="Permanent link">¶</a></h2>
-<p>The HTTP API exposes <strong>current state</strong>. For <strong>historical events</strong> (every <code>Mint</code>, <code>Borrow</code>, <code>RepayBorrow</code>, <code>Redeem</code>, <code>LiquidateBorrow</code>, <code>enterMarkets</code>, governance <code>ProposalCreated</code>/<code>VoteCast</code>/<code>ProposalExecuted</code>, sTRX <code>Deposit</code>/<code>Withdrawal</code>, EnergyRental <code>RentResource</code>/<code>ReturnResource</code>) you need an event source.</p>
+<p>The HTTP API exposes <strong>current state</strong>. For <strong>historical events</strong> (every <code>Mint</code>, <code>Borrow</code>, <code>RepayBorrow</code>, <code>Redeem</code>, <code>LiquidateBorrow</code>, <code>enterMarkets</code>, governance <code>ProposalCreated</code>/<code>VoteCast</code>/<code>ProposalExecuted</code>, sTRX <code>Deposit</code>/<code>Withdraw</code>, EnergyRental <code>RentResource</code>/<code>ReturnResource</code>) you need an event source.</p>
 <p><strong>There is currently no official JustLend subgraph or hosted indexer.</strong> Use one of these patterns instead:</p>
 <h3 id="81-trongrid-event-filter-recommended-for-low-volume-queries">8.1 TronGrid event filter (recommended for low-volume queries)<a class="headerlink" href="#81-trongrid-event-filter-recommended-for-low-volume-queries" title="Permanent link">¶</a></h3>
 <p><a href="https://www.trongrid.io/">TronGrid</a> exposes <code>GET /v1/contracts/{address}/events</code> for any contract. Filter by <code>event_name</code> and time range. Free tier covers most ad-hoc analytics; paid tiers raise the rate limit.</p>
@@ -3880,82 +3890,55 @@ curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">"TRON-PRO
 <h3 id="82-self-hosted-indexer-recommended-for-production-analytics">8.2 Self-hosted indexer (recommended for production analytics)<a class="headerlink" href="#82-self-hosted-indexer-recommended-for-production-analytics" title="Permanent link">¶</a></h3>
 <p>Stand up an indexer that consumes block ranges and writes typed event tables. TRON's EVM compatibility is partial (different signature scheme, different fee model, different address encoding) so most "EVM-indexer" tooling needs a TRON-specific datasource — verify support before adopting.</p>
 <ul>
-<li><strong>Custom decoder against a TRON archive endpoint (most robust path).</strong> Run <code>java-tron</code> in archive mode, or use a TronGrid full-archive plan, and decode events with the JSON ABIs at <a href="../abis/jtoken.json"><code>/developers/abis/</code></a>. Write your own schema; commit indices on <code>(market, block_number)</code> for the per-market views you need. Most operational overhead, most flexibility, no third-party dependency.</li>
+<li><strong>Custom decoder against a TRON archive endpoint (most robust path).</strong> Run <code>java-tron</code> in archive mode, or use a TronGrid full-archive plan, and decode events with the verified ABI for the target deployment. The <a href="../abis/">downloadable interfaces</a> are subsets and must be checked for event coverage first. Write your own schema; commit indices on <code>(market, block_number)</code> for the per-market views you need. Most operational overhead, most flexibility, no third-party dependency.</li>
 <li><strong>Generic EVM indexers (DipDup, Subsquid, Substreams, Goldsky, etc.).</strong> These have evolving TRON support — some via official adapters, some via community forks, some not at all. Treat any "DipDup/Subsquid supports TRON" claim as needing verification against the project's current docs and your specific event-decoding needs. None of these are recommended without a proof-of-concept run against a TRON archive endpoint first.</li>
 <li><strong>Tron-native option: TronGrid event API.</strong> §8.1 covers this; for low-to-mid volume it removes the need for a self-hosted indexer entirely.</li>
 </ul>
 <h3 id="83-mcp-server-read_events-when-integrating-with-an-ai-agent">8.3 MCP server <code>read_events</code> (when integrating with an AI agent)<a class="headerlink" href="#83-mcp-server-read_events-when-integrating-with-an-ai-agent" title="Permanent link">¶</a></h3>
 <p>For low-volume agent-driven queries, the <a href="../../ai_support/mcp_server/">full MCP server</a> exposes contract read primitives that can be composed into event lookups (<code>get_account_summary</code>, <code>get_market_data</code>, etc.). For raw event log access, fall back to TronGrid via your own tooling — MCP is not optimized for historical-event sweeps.</p>
 <h3 id="84-quick-reference-event-signatures-by-contract">8.4 Quick reference: event signatures by contract<a class="headerlink" href="#84-quick-reference-event-signatures-by-contract" title="Permanent link">¶</a></h3>
-<p>ABIs at <a href="../abis/jtoken.json"><code>/developers/abis/</code></a> carry the canonical event signatures. The most commonly indexed:</p>
+<p>The <a href="../abis/">downloadable JSON interfaces</a> are <strong>not a complete event-signature registry</strong>. Check the <code>type: "event"</code> entries and their <code>indexed</code> flags before using a file to decode logs. In particular:</p>
 <table>
 <thead>
 <tr>
-<th>Contract</th>
-<th>Event</th>
-<th>Topic 0 (keccak256 signature hash)</th>
+<th>Interface</th>
+<th>Event coverage / required action</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>jToken (<code>jtoken.json</code>)</td>
-<td><code>Mint(address minter, uint mintAmount, uint mintTokens)</code></td>
-<td>derived from ABI</td>
+<td><code>jtoken.json</code>, <code>comptroller.json</code></td>
+<td>Minimal function interfaces; obtain matching deployment ABIs for event indexing.</td>
 </tr>
 <tr>
-<td>jToken</td>
-<td><code>Borrow(address borrower, uint borrowAmount, uint accountBorrows, uint totalBorrows)</code></td>
-<td>derived from ABI</td>
+<td><code>governor-alpha.json</code></td>
+<td>Selected Mainnet Bravo proposal/vote events, checked against the current implementation's node ABI.</td>
 </tr>
 <tr>
-<td>jToken</td>
-<td><code>RepayBorrow(address payer, address borrower, uint repayAmount, uint accountBorrows, uint totalBorrows)</code></td>
-<td>derived from ABI</td>
+<td><code>wjst.json</code></td>
+<td>Selected Mainnet wrapping and vote-lock events; check the file for the exact event.</td>
 </tr>
 <tr>
-<td>jToken</td>
-<td><code>Redeem(address redeemer, uint redeemAmount, uint redeemTokens)</code></td>
-<td>derived from ABI</td>
+<td><code>price-oracle-impl.json</code></td>
+<td>Includes the backend's <code>PricePosted</code> event; do not confuse it with the proxy interface.</td>
 </tr>
 <tr>
-<td>jToken</td>
-<td><code>LiquidateBorrow(address liquidator, address borrower, uint repayAmount, address cTokenCollateral, uint seizeTokens)</code></td>
-<td>derived from ABI</td>
+<td><code>strx.json</code></td>
+<td>All 27 event declarations from current Mainnet STRXG2, including <code>Deposit</code>, <code>Withdraw</code>, and <code>Claim</code>; compiled against bytecode-matched source and checked with real receipts. Separate proxy administration and historical implementations are outside this subset.</td>
 </tr>
 <tr>
-<td>Comptroller (<code>comptroller.json</code>)</td>
-<td><code>MarketEntered(CToken cToken, address account)</code></td>
-<td>derived from ABI</td>
-</tr>
-<tr>
-<td>Comptroller</td>
-<td><code>MarketExited(CToken cToken, address account)</code></td>
-<td>derived from ABI</td>
-</tr>
-<tr>
-<td>GovernorBravo (<code>governor-alpha.json</code>)</td>
-<td><code>ProposalCreated</code>, <code>VoteCast</code>, <code>ProposalExecuted</code>, <code>ProposalCanceled</code></td>
-<td>derived from ABI</td>
-</tr>
-<tr>
-<td>sTRX (<code>strx.json</code>)</td>
-<td><code>Deposit(address user, uint trxAmount, uint sTRXAmount)</code>, <code>WithdrawRequested</code>, <code>Claim</code></td>
-<td>derived from ABI</td>
-</tr>
-<tr>
-<td>EnergyRental (<code>energy-market.json</code>)</td>
-<td><code>RentResource(address renter, address receiver, uint amount, uint resourceType)</code>, <code>ReturnResource</code>, <code>Liquidate</code></td>
-<td>derived from ABI</td>
+<td><code>energy-market.json</code></td>
+<td>Includes the compiler-verified <code>RentResource</code>, <code>ReturnResource</code>, <code>Liquidate</code>, and <code>RentClaimed</code> declarations. <code>RentClaimed</code>'s two non-indexed values are in sun. Other implementation/admin events remain outside this subset.</td>
 </tr>
 </tbody>
 </table>
-<p>Compute the topic 0 with any standard tool: <code>web3.utils.sha3('Mint(address,uint256,uint256)')</code>. Avoid hard-coding topic hashes in source — derive from the JSON ABIs at runtime, since event signatures could change in a future upgrade.</p>
+<p>For a verified event entry, derive topic 0 from its exact canonical signature (including every input type) rather than guessing from a prose name. Use the ABI version applicable at the event's block; upgrades can change signatures. Missing event definitions are a coverage gap, not permission to silently decode with a similar contract's ABI.</p>
 <aside class="md-source-file">
 <span class="md-source-file__fact">
 <span class="md-icon" title="Last update">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"></path></svg>
 </span>
-<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 9, 2026 08:26:12 UTC">2026-10-09</span>
+<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 14, 2026 08:21:12 UTC">2026-10-14</span>
 </span>
 </aside>
 <p class="md-source-file"><a href="https://docs.justlend.org/developers/apis.md" rel="alternate" type="text/markdown">View raw Markdown</a></p>

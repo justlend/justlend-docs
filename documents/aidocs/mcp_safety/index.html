@@ -143,8 +143,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "Safety rules for JustLend MCP tools, including read-only vs write tools, destructive operations, wallet modes, private-key handling, and human-in-the-loop confirmation.",
-          "dateModified": "2026-08-27",
-          "datePublished": "2026-08-27"
+          "dateModified": "2026-10-12",
+          "datePublished": "2026-10-12"
         }
       ]
     }
@@ -2292,6 +2292,7 @@
 <li><strong>On-chain write tools</strong>: supply, borrow, repay, withdraw, approve, transfer, stake, unstake, vote, rent energy, return energy, deploy or write contracts. These may move assets or create obligations.</li>
 </ol>
 <p>Use <a href="../mcp_tools/"><code>mcp_tools.md</code></a> for the generated side-effect class and annotation of each tool.</p>
+<p>Do not derive this classification from <code>destructiveHint</code> alone. <code>transfer_trx</code>, <code>transfer_trc20</code>, <code>approve_underlying</code>, <code>approve_jst_for_voting</code>, <code>approve_moolah_vault</code>, <code>approve_moolah_proxy</code>, <code>approve_liquidator_token</code>, <code>enter_market</code>, and <code>claim_rewards</code> all have an <strong>on-chain transaction path</strong>: transaction construction, wallet signing, and possible broadcast. Approvals change allowance and entering a market changes collateral membership even when no token transfer occurs in that call. They are not local configuration operations and require confirmation before invocation. <code>set_active_wallet</code>, <code>set_wallet_mode</code>, and <code>set_network</code> change local configuration and do not themselves build, sign, or broadcast transactions.</p>
 <h2 id="human-confirmation-rule">Human confirmation rule<a class="headerlink" href="#human-confirmation-rule" title="Permanent link">&para;</a></h2>
 <p>Before any on-chain write tool, the agent must show:</p>
 <ul>
@@ -2426,7 +2427,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="August 27, 2026 08:24:25 UTC">2026-08-27</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 12, 2026 09:32:17 UTC">2026-10-12</span>
   </span>
 
     

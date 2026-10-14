@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="How JustLend SBM liquidations work — Risk Value formula, observation (>95) and execution (≥100) thresholds, 50% close factor, 8% liquidation reward, and the permissionless `liquidateBorrow` workflow.">
+        <meta name="description" content="How JustLend SBM liquidations work — Risk Value formula, observation (>95) and execution (>100) thresholds, display rounding, per-asset close factor, liquidation reward, and the permissionless `liquidateBorrow` workflow.">
       
       
         <meta name="author" content="JustLend DAO">
@@ -142,9 +142,9 @@
             "publisher": { "@id": "https://justlend.org/#org" }
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
-          "description": "How JustLend SBM liquidations work \u2014 Risk Value formula, observation (\u003e95) and execution (\u2265100) thresholds, 50% close factor, 8% liquidation reward, and the permissionless `liquidateBorrow` workflow.",
-          "dateModified": "2026-10-08",
-          "datePublished": "2026-10-08"
+          "description": "How JustLend SBM liquidations work \u2014 Risk Value formula, observation (\u003e95) and execution (\u003e100) thresholds, display rounding, per-asset close factor, liquidation reward, and the permissionless `liquidateBorrow` workflow.",
+          "dateModified": "2026-10-12",
+          "datePublished": "2026-10-12"
         }
       ]
     }
@@ -534,6 +534,19 @@
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        
+
+
+
+<li class="md-nav__item ">
+  <a href="#display-rounding-is-not-the-liquidation-condition" class="md-nav__link">
+    <span class="md-ellipsis">
+      Display rounding is not the liquidation condition
+    </span>
+  </a>
+  
+</li>
       
         
 
@@ -2273,6 +2286,36 @@
 <p><strong>Borrow Limit</strong>  =  ∑ (Asset supplied * Collateral Factor) = 100 * 80% + 200 * 75% = 230</p>
 <p><strong>Risk Value</strong>  =  Total Borrow / Borrow Limit * 100 = (90 + 50) / 230 * 100 = 60.87</p>
 <p>A risk value above 100 represents a position that is above the liquidation threshold. Regular monitoring is essential, as the risk value fluctuates based on both the value of collateral factor and borrowed assets. To reduce the risk value , users can either supply more collateral or repay part of the borrow position. The risk value is directly tied to collateral value. If the collateral value increases, the risk value  decrease; if it falls, the risk value increases, increasing the risk of liquidation.</p>
+<h3 id="display-rounding-is-not-the-liquidation-condition">Display rounding is not the liquidation condition<a class="headerlink" href="#display-rounding-is-not-the-liquidation-condition" title="Permanent link">&para;</a></h3>
+<p>For V1, use <code>Comptroller.getAccountLiquidity(account)</code> and require a successful read (<code>error == 0</code>) with <strong><code>shortfall &gt; 0</code></strong> before treating an account as undercollateralized. The Risk Value is a display metric derived from debt and the collateral-adjusted borrow limit; it does not replace the contract's integer arithmetic, oracle values, and interest accrual.</p>
+<p>For illustration, if a display rounds to two decimal places:</p>
+<table>
+<thead>
+<tr>
+<th>Unrounded Risk Value</th>
+<th>Display</th>
+<th>Mathematical relationship</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>99.999</td>
+<td>100.00</td>
+<td>Debt is below the borrow limit.</td>
+</tr>
+<tr>
+<td>100.000</td>
+<td>100.00</td>
+<td>Debt equals the borrow limit; equality alone is not a positive shortfall.</td>
+</tr>
+<tr>
+<td>100.001</td>
+<td>100.00</td>
+<td>Debt exceeds the borrow limit.</td>
+</tr>
+</tbody>
+</table>
+<p>These examples illustrate rounding, not a guarantee of the current UI's formatting. A displayed <strong>100</strong> therefore cannot establish eligibility on its own. Re-read the chain before acting; the liquidation transaction must still satisfy all contract checks, including the selected market's debt, close factor, and available collateral. Eligibility does not automatically execute a liquidation.</p>
 <table>
 <thead>
 <tr>
@@ -2383,7 +2426,7 @@ By proceeding to use the liquidation tool, you confirm that you have read, under
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 8, 2026 09:30:57 UTC">2026-10-08</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 12, 2026 09:32:17 UTC">2026-10-12</span>
   </span>
 
     

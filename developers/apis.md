@@ -156,7 +156,7 @@ The OpenAPI YAML makes the unit and scale machine-readable: amount / rate / pric
 | `borrowRate`  | Annualized interest a borrower pays.                                      | `0.06467371`  | `6.47 % APY` |
 | `apy` (mining)| Annualized USDD mining reward APY paid on top of `supplyRate`.            | `0.09175706`  | `9.18 % APY` |
 
-A user's **total supply APY** in a market that has mining enabled is therefore `supplyRate + apy`.
+A user's **total supply APY** in a market that has mining enabled is therefore `supplyRate + miningApy` for the matching reward component. Here `miningApy` is a local variable, **not** a literal `apy` property in the `/mining/apy` response: that response is a map keyed first by jToken address and then by reward token, for example `data[jTokenAddress].USDD`. Match the exact market and reward token before combining annualized decimal values; do not double-count a component already included in another displayed metric.
 
 ### 1.5 Pagination
 
@@ -294,6 +294,8 @@ Returns the on‑chain state of every Supply & Borrow market: rates, total suppl
 
 **Parameters:** none.
 
+An `address` query parameter is not a supported market filter and may be ignored. To look up one market, select `data.tokenList` by its case-sensitive jToken `address` after fetching the list; see the [read-only client example](../documents/aidocs/market_data.md#openapi). Do not use the first entry as a substitute for a lookup result.
+
 **Response data** (real response captured 2026-07-15; one of 24 entries shown)
 
 ```json
@@ -411,7 +413,7 @@ Validate Base58 addresses client-side. The live service may silently accept malf
 | Field                       | Type    | Required | Unit              | Description                                                                          |
 |-----------------------------|---------|----------|-------------------|--------------------------------------------------------------------------------------|
 | `address`                   | string  | Yes      | TRON address      | Wallet address. (Earlier versions of this page showed the key as `addresses`; the service returns `address`.) |
-| `health`                    | string  | Yes      | ratio (decimal string) | Health factor. `>= 1` healthy, `< 1` liquidatable. `"5.88"` = very safe.         |
+| `health`                    | string  | Yes      | ratio (decimal string) | Risk reference only. With positive debt, `< 1` suggests insufficient collateral; it is not an execution predicate. A debt-free account may return `"0"`, which does **not** imply liquidation eligibility. See the debt-first check below. |
 | `totalCollateralValueInTrx` | string  | Yes      | TRX               | Sum of collateral value (after `collateralFactor`). Decimal string.                  |
 | `totalBorrowValueInTrx`     | string  | Yes      | TRX               | Sum of outstanding borrow value. Decimal string.                                     |
 | `liquidateStatusStartTime`  | string\|null | Yes (nullable) | timestamp | Timestamp when this account first entered a liquidatable state, or `null` if it is not currently flagged. Always present. |
@@ -423,6 +425,19 @@ Validate Base58 addresses client-side. The live service may silently accept malf
 | `tokens[].borrowBalanceUnderlying` | string | Yes | underlying       | Outstanding borrow in underlying. Decimal string.                                    |
 
 ---
+
+#### Debt-first liquidation check
+
+The following is a read-only Mainnet observation from **2026-10-12**, not a liquidation candidate:
+
+```json
+{"address":"T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb","totalBorrowValueInTrx":"0.000000","health":"0"}
+```
+
+1. Check `totalBorrowValueInTrx` before interpreting `health`. No debt means there is nothing to liquidate, even if `health` is zero.
+2. With debt, treat `health < 1` as a risk-screening signal only. Do not classify equality or rounded values as proof of eligibility.
+3. For V1, read `Comptroller.getAccountLiquidity(account)` on-chain and require `error == 0` and `shortfall > 0`. A transaction must also pass the close-factor, collateral, and other contract checks at execution.
+
 
 ### 3.3 `GET /justlend/liquidate/highRiskAccountList` — High‑risk accounts
 
@@ -1228,7 +1243,7 @@ Use the embedded Swagger UI below to call endpoints directly from this page. Sam
 
 ## 8. Event-stream and indexing options
 
-The HTTP API exposes **current state**. For **historical events** (every `Mint`, `Borrow`, `RepayBorrow`, `Redeem`, `LiquidateBorrow`, `enterMarkets`, governance `ProposalCreated`/`VoteCast`/`ProposalExecuted`, sTRX `Deposit`/`Withdrawal`, EnergyRental `RentResource`/`ReturnResource`) you need an event source.
+The HTTP API exposes **current state**. For **historical events** (every `Mint`, `Borrow`, `RepayBorrow`, `Redeem`, `LiquidateBorrow`, `enterMarkets`, governance `ProposalCreated`/`VoteCast`/`ProposalExecuted`, sTRX `Deposit`/`Withdraw`, EnergyRental `RentResource`/`ReturnResource`) you need an event source.
 
 **There is currently no official JustLend subgraph or hosted indexer.** Use one of these patterns instead:
 
@@ -1248,7 +1263,7 @@ Pros: zero setup, well-documented, works for any JustLend contract. Cons: cursor
 
 Stand up an indexer that consumes block ranges and writes typed event tables. TRON's EVM compatibility is partial (different signature scheme, different fee model, different address encoding) so most "EVM-indexer" tooling needs a TRON-specific datasource — verify support before adopting.
 
-- **Custom decoder against a TRON archive endpoint (most robust path).** Run `java-tron` in archive mode, or use a TronGrid full-archive plan, and decode events with the JSON ABIs at [`/developers/abis/`](abis/jtoken.json). Write your own schema; commit indices on `(market, block_number)` for the per-market views you need. Most operational overhead, most flexibility, no third-party dependency.
+- **Custom decoder against a TRON archive endpoint (most robust path).** Run `java-tron` in archive mode, or use a TronGrid full-archive plan, and decode events with the verified ABI for the target deployment. The [downloadable interfaces](abis/index.md) are subsets and must be checked for event coverage first. Write your own schema; commit indices on `(market, block_number)` for the per-market views you need. Most operational overhead, most flexibility, no third-party dependency.
 - **Generic EVM indexers (DipDup, Subsquid, Substreams, Goldsky, etc.).** These have evolving TRON support — some via official adapters, some via community forks, some not at all. Treat any "DipDup/Subsquid supports TRON" claim as needing verification against the project's current docs and your specific event-decoding needs. None of these are recommended without a proof-of-concept run against a TRON archive endpoint first.
 - **Tron-native option: TronGrid event API.** §8.1 covers this; for low-to-mid volume it removes the need for a self-hosted indexer entirely.
 
@@ -1258,19 +1273,15 @@ For low-volume agent-driven queries, the [full MCP server](../ai_support/mcp_ser
 
 ### 8.4 Quick reference: event signatures by contract
 
-ABIs at [`/developers/abis/`](abis/jtoken.json) carry the canonical event signatures. The most commonly indexed:
+The [downloadable JSON interfaces](abis/index.md) are **not a complete event-signature registry**. Check the `type: "event"` entries and their `indexed` flags before using a file to decode logs. In particular:
 
-| Contract | Event | Topic 0 (keccak256 signature hash) |
-|---|---|---|
-| jToken (`jtoken.json`) | `Mint(address minter, uint mintAmount, uint mintTokens)` | derived from ABI |
-| jToken | `Borrow(address borrower, uint borrowAmount, uint accountBorrows, uint totalBorrows)` | derived from ABI |
-| jToken | `RepayBorrow(address payer, address borrower, uint repayAmount, uint accountBorrows, uint totalBorrows)` | derived from ABI |
-| jToken | `Redeem(address redeemer, uint redeemAmount, uint redeemTokens)` | derived from ABI |
-| jToken | `LiquidateBorrow(address liquidator, address borrower, uint repayAmount, address cTokenCollateral, uint seizeTokens)` | derived from ABI |
-| Comptroller (`comptroller.json`) | `MarketEntered(CToken cToken, address account)` | derived from ABI |
-| Comptroller | `MarketExited(CToken cToken, address account)` | derived from ABI |
-| GovernorBravo (`governor-alpha.json`) | `ProposalCreated`, `VoteCast`, `ProposalExecuted`, `ProposalCanceled` | derived from ABI |
-| sTRX (`strx.json`) | `Deposit(address user, uint trxAmount, uint sTRXAmount)`, `WithdrawRequested`, `Claim` | derived from ABI |
-| EnergyRental (`energy-market.json`) | `RentResource(address renter, address receiver, uint amount, uint resourceType)`, `ReturnResource`, `Liquidate` | derived from ABI |
+| Interface | Event coverage / required action |
+|---|---|
+| `jtoken.json`, `comptroller.json` | Minimal function interfaces; obtain matching deployment ABIs for event indexing. |
+| `governor-alpha.json` | Selected Mainnet Bravo proposal/vote events, checked against the current implementation's node ABI. |
+| `wjst.json` | Selected Mainnet wrapping and vote-lock events; check the file for the exact event. |
+| `price-oracle-impl.json` | Includes the backend's `PricePosted` event; do not confuse it with the proxy interface. |
+| `strx.json` | All 27 event declarations from current Mainnet STRXG2, including `Deposit`, `Withdraw`, and `Claim`; compiled against bytecode-matched source and checked with real receipts. Separate proxy administration and historical implementations are outside this subset. |
+| `energy-market.json` | Includes the compiler-verified `RentResource`, `ReturnResource`, `Liquidate`, and `RentClaimed` declarations. `RentClaimed`'s two non-indexed values are in sun. Other implementation/admin events remain outside this subset. |
 
-Compute the topic 0 with any standard tool: `web3.utils.sha3('Mint(address,uint256,uint256)')`. Avoid hard-coding topic hashes in source — derive from the JSON ABIs at runtime, since event signatures could change in a future upgrade.
+For a verified event entry, derive topic 0 from its exact canonical signature (including every input type) rather than guessing from a prose name. Use the ABI version applicable at the event's block; upgrades can change signatures. Missing event definitions are a coverage gap, not permission to silently decode with a similar contract's ABI.

@@ -11,7 +11,8 @@ description: JustLend DAO PriceOracle reference — getUnderlyingPrice, assetPri
     * **Pattern:** `PriceOracleProxy` (entrypoint, `TGnYnSn4G9PgWFj7QQemh4YMZKp3fkympJ`) → `PriceOracle` (impl, `TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV`)
     * **Data source:** [Chainlink](https://chain.link/) Data Feeds. The `poster` address relays Chainlink prices on-chain via `setPrice(asset, price)`
     * **Units:** Prices are denominated in **TRX** , scaled by `1e^(33 - tokenDecimal)`. For an 18-decimal token like USDD, the value for the price feed is calculated based on the exchange rate of 1 USDD to TRX (assuming a price of 3.0266), Price Feed Value = 3.0266 * 1e^(33 - 18) = 3.0266 * 1e^15
-    * **ABI:** [`abis/price-oracle.json`](../abis/price-oracle.json).
+    * **ABI:** [`price-oracle.json`](../abis/price-oracle.json) contains only the proxy's `getUnderlyingPrice` read. [`price-oracle-impl.json`](../abis/price-oracle-impl.json) contains selected backend methods below, including `assetPrices` and restricted `setPrice`. These are different contract interfaces; do not call a backend method at the proxy address.
+    * **Verification basis:** `Comptroller.oracle()` and the returned proxy's `v1PriceOracle()` were re-read on 2026-10-14; selected backend ABI entries match the node ABI. See [getter methods and address roles](../deployed_contracts.md#address-verification) and the [ABI manifest](../abis/manifest.json). This documents current pointers, not a deployment performed by this repository.
 
 Blockchain-powered smart contracts, by design, cannot access external market data directly. To ensure accurate and tamper-resistant pricing, the JustLend DAO protocol relies on a multi-source data aggregation system that draws from reputable and decentralized sources.
 
@@ -28,6 +29,8 @@ The source code is available on [Github](https://github.com/justlend/justlend-pr
 
 
 ## **Contracts ABI**
+
+The methods in the following sections target the **Oracle backend**, not the proxy. Mainnet's proxy `v1PriceOracle()` pointer was checked on **2026-10-12** and resolves to `TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV`. Re-read the pointer before integration. For ordinary collateral/borrow valuation, prefer `getUnderlyingPrice(jToken)` on the current `Comptroller.oracle()` entrypoint.
 
 ### **Anchor Token Price**
 Calling this methods returns the current price anchor of a specified token.

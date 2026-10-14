@@ -76,7 +76,7 @@
 Base URL: `https://openapi.just.network`. Schema in [justlend_apis.yaml](https://docs.justlend.org/developers/apis/justlend_apis.yaml). Endpoints include:
 
 - `GET /lend/jtoken` — All jToken markets with supply/borrow APY, mining rewards, TVL (aggregate for protocol-level totals).
-- `GET /lend/jtoken?address={jToken}` — Single jToken market details.
+- `GET /lend/jtoken` — Fetch the full market list and select `data.tokenList` by jToken `address` client-side; an `address` query parameter is not a supported server filter.
 - `GET /lend/account?addresses={address}` — Account SBM positions, health factor, rewards (paginated).
 - `GET /mining/reward?address={jToken}` · `GET /mining/apy` · `GET /mining/distributions?addr={address}` — Mining reward config / per-market APY / distribution snapshots.
 
@@ -95,6 +95,8 @@ Refer to the OpenAPI spec for the full endpoint list, request parameters, respon
 - [Privacy Policy (PDF)](https://justlend.org/docs/JustLend_Privacy_Policy_en.pdf)
 
 ## Notes for AI agents
+
+- [ABI scope and provenance](https://docs.justlend.org/developers/abis/#scope-and-provenance) — interface targets, verification dates, compiler/source distinctions and coverage limits. [Address verification](https://docs.justlend.org/developers/deployed_contracts/#address-verification) explains the Mainnet pointer getters.
 
 - **Networks**: Rendered contract tables are **TRON Mainnet** unless a section says otherwise. Use Nile testnet (`NETWORK=nile`) for testing, and fetch [`/developers/contracts.json`](https://docs.justlend.org/developers/contracts.json) for Mainnet + Nile addresses.
 - **Address formats**: `contracts.json` includes Base58, EVM `0x` hex, and TRON-internal `41` hex. Rendered tables may show Base58 only.

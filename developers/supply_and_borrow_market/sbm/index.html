@@ -143,8 +143,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "JustLend DAO core lending contract reference \u2014 jToken (`CErc20Delegator`) function signatures for mint, borrow, repayBorrow, redeem, liquidateBorrow, with TronWeb examples and error codes.",
-          "dateModified": "2026-10-09",
-          "datePublished": "2026-10-09"
+          "dateModified": "2026-10-14",
+          "datePublished": "2026-10-14"
         }
       ]
     }
@@ -2824,16 +2824,22 @@
 </ul>
 <p><a id="repayborrow"></a></p>
 <h3 id="repayborrow"><strong>repayBorrow</strong><a class="headerlink" href="#repayborrow" title="Permanent link">&para;</a></h3>
-<p>Calling this method repays their own borrow.
-<div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">repayBorrow</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">amount</span><span class="p">)</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">payable</span>
+<p>Repay the caller's own borrow. Select the signature and payment mechanism for the target market:
+<div class="highlight"><pre><span></span><code><span class="c1">// Mainnet jTRX: amount is in sun; attach the payment as callValue.</span>
+<span class="kt">function</span><span class="w"> </span><span class="nv">repayBorrow</span><span class="p">(</span><span class="kt">uint256</span><span class="w"> </span><span class="nv">amount</span><span class="p">)</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">payable</span>
+<span class="c1">// jTRC20: amount is in underlying raw units; approve the jToken first.</span>
+<span class="kt">function</span><span class="w"> </span><span class="nv">repayBorrow</span><span class="p">(</span><span class="kt">uint256</span><span class="w"> </span><span class="nv">repayAmount</span><span class="p">)</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint256</span><span class="p">)</span>
 </code></pre></div></p>
 <ul>
 <li><strong>Parameter description:</strong><ul>
-<li><code>amount:</code> the amount of the asset to repay.</li>
+<li><code>amount</code> / <code>repayAmount</code>: repayment in the underlying asset's smallest units.</li>
+<li>For a fixed-amount jTRX repayment, use <code>jtrx.repayBorrow(amountSun).send({callValue: amountSun})</code>. Both the amount argument and TRX payment are required; <strong>the deployed Mainnet jTRX does not expose <code>repayBorrow()</code> without an argument</strong>.</li>
+<li>For jTRC20, use <code>jtoken.repayBorrow(amountRaw).send()</code> after TRC20 approval; do not attach TRX as the repayment.</li>
 </ul>
 </li>
-<li><strong>Returns:</strong> None, reverts on error.</li>
+<li><strong>Returns:</strong> jTRX returns no value and reverts on failure. jTRC20 returns a protocol error code (<code>0</code> for success). A transaction ID alone is not proof of repayment; check execution results and the updated debt.</li>
 </ul>
+<p>The jTRX signature and empty return definition were rechecked against the Mainnet ABI at <code>TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP</code> on <strong>2026-10-14</strong>, agreeing with the 2026-10-12 read and the official <a href="https://github.com/justlend/justlend-protocol/blob/f28f3b462a4f281761e23423554563e15fc9f028/contracts/CEther.sol"><code>CEther.sol</code></a> source. The original downloadable self-repayment signature already had a <code>uint256</code> argument; its correction removes the erroneous return value and adds the native-TRX behalf interface, not a no-argument replacement. See <a href="../../abis/#scope-and-provenance">ABI scope and provenance</a>. Do not substitute an Ethereum Compound ABI.</p>
 <h4 id="event_1"><strong>Event</strong><a class="headerlink" href="#event_1" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code>RepayBorrow<span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">payer</span><span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">borrower</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">repayAmount</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">accountBorrows</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">totalBorrows</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">borrowIndex</span><span class="p">)</span>
 </code></pre></div>
@@ -2850,28 +2856,35 @@
 </ul>
 <p><a id="repayborrowbehalf"></a></p>
 <h3 id="repayborrowbehalf"><strong>repayBorrowBehalf</strong><a class="headerlink" href="#repayborrowbehalf" title="Permanent link">&para;</a></h3>
-<p>Calling this method repay a loan on behalf of the borrower.
-<div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">repayBorrowBehalf</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">borrower</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">repayAmount</span><span class="p">)</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">payable</span>
+<p>Repay a loan on behalf of the specified borrower. The payer supplies the funds; the debt belongs to <code>borrower</code>.
+<div class="highlight"><pre><span></span><code><span class="c1">// jTRX: repayment amount comes from msg.value / TronWeb callValue, in sun.</span>
+<span class="kt">function</span><span class="w"> </span><span class="nv">repayBorrowBehalf</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">borrower</span><span class="p">)</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">payable</span>
+<span class="c1">// jTRC20: repayment amount is an explicit underlying-raw-unit argument.</span>
+<span class="kt">function</span><span class="w"> </span><span class="nv">repayBorrowBehalf</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">borrower</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">repayAmount</span><span class="p">)</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint256</span><span class="p">)</span>
 </code></pre></div></p>
 <ul>
 <li><strong>Parameter description:</strong><ul>
 <li><code>borrower:</code> the account with the debt being paid off.</li>
-<li><code>repayAmount:</code> the amount to repay.</li>
+<li><code>repayAmount:</code> jTRC20 repayment in underlying raw units; the payer must approve the jToken.</li>
+<li><code>msg.value:</code> jTRX repayment in sun, supplied with <code>callValue</code>.</li>
 </ul>
 </li>
-<li><strong>Returns:</strong> None, reverts on error.</li>
+<li><strong>Returns:</strong> jTRX returns no value and reverts on failure; jTRC20 returns a protocol error code (<code>0</code> for success).</li>
 </ul>
 <p><a id="mint"></a></p>
 <h3 id="mint"><strong>Mint</strong><a class="headerlink" href="#mint" title="Permanent link">&para;</a></h3>
 <p>Calling this method supplies assets into the market and receives jTokens in exchange.
 <div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">mint</span><span class="p">()</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">payable</span>
+<span class="c1">// jTRC20: approve the jToken to spend this many underlying raw units first.</span>
+<span class="kt">function</span><span class="w"> </span><span class="nv">mint</span><span class="p">(</span><span class="kt">uint256</span><span class="w"> </span><span class="nv">mintAmount</span><span class="p">)</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint256</span><span class="p">)</span>
 </code></pre></div></p>
 <ul>
 <li><strong>Parameter description:</strong><ul>
-<li><code>msg.value:</code> the amount of TRX to supply.</li>
+<li><code>msg.value:</code> jTRX supply amount in sun, attached through TronWeb <code>callValue</code>; jTRX has no <code>mintAmount</code> argument.</li>
+<li><code>mintAmount:</code> jTRC20 supply amount in underlying raw units; do not attach TRX as the deposit.</li>
 </ul>
 </li>
-<li><strong>Returns:</strong> None, reverts on error.</li>
+<li><strong>Returns:</strong> jTRX returns no value and reverts on failure; jTRC20 returns a protocol error code (<code>0</code> for success).</li>
 </ul>
 <h4 id="event_2"><strong>Event</strong><a class="headerlink" href="#event_2" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code>Mint<span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">minter</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">mintAmount</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">mintTokens</span><span class="p">)</span>
@@ -3173,7 +3186,7 @@
 <span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">supplyAPR</span><span class="p">,</span><span class="w"> </span><span class="nx">borrowAPR</span><span class="w"> </span><span class="p">};</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>For mining-reward-inclusive APY, prefer the API field <code>supplyRate</code> on <code>GET /lend/jtoken</code>.</p>
+<p>For the API's annualized <strong>interest-only</strong> supply rate, read <code>supplyRate</code> from <code>GET /lend/jtoken</code>; it <strong>excludes mining rewards</strong>. Mining APY is returned separately by <code>GET /mining/apy</code>. Match both responses to the same jToken address before combining their annualized decimal values (<code>supplyRate + apy</code> for the documented reward component), and keep interest and reward components visible. Do not add a reward twice or silently substitute another market's reward. See <a href="../../apis/#14-rate-apy-semantics">Rate / APY semantics</a>.</p>
 <p>&emsp;</p>
 <h2 id="error-code-and-failure-info"><strong>Error Code And Failure info</strong><a class="headerlink" href="#error-code-and-failure-info" title="Permanent link">&para;</a></h2>
 <h3 id="error-code"><strong>Error code</strong><a class="headerlink" href="#error-code" title="Permanent link">&para;</a></h3>
@@ -3616,7 +3629,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 9, 2026 08:32:00 UTC">2026-10-09</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 14, 2026 08:34:59 UTC">2026-10-14</span>
   </span>
 
     

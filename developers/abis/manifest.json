@@ -1,0 +1,215 @@
+{
+  "schema_version": "1.4.0",
+  "checked_at": "2026-10-14",
+  "scope": "minimal interfaces, not complete compiler deployment artifacts",
+  "network": "mainnet",
+  "verification_rpc": "https://api.trongrid.io/wallet/getcontract",
+  "interfaces": [
+    {
+      "file": "governor-alpha.json",
+      "target": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+      "implementation": "TUeNh9BsYK44XePmFAuKZWg2rJuU7bSt5u",
+      "complete": false,
+      "notes": "Selected current Bravo functions/events. getReceipt tuple components expanded from official source, not reproduced compiler output. Legacy filename retained.",
+      "tuple_source": "https://github.com/justlend/justlend-protocol/blob/f28f3b462a4f281761e23423554563e15fc9f028/contracts/Governance/Bravo/GovernorBravoInterfaces.sol",
+      "verification_basis": "node_abi",
+      "checked_entry_count": 23,
+      "download_sha256": "f3be9b593ae3c5cda695f1b5dc665913fb67628660fc2bf2ed4fbe66a3fc547d"
+    },
+    {
+      "file": "wjst.json",
+      "target": "TXk9LnTnLN7oH96H3sKxJayMxLxR9M4ZD6",
+      "complete": false,
+      "notes": "Selected functions and wrapping/vote-lock events from the Mainnet node ABI.",
+      "verification_basis": "node_abi",
+      "checked_entry_count": 15,
+      "download_sha256": "447975f789ddecc6043a5fa4817341f96e963a5c183f07d468559772dba1b302"
+    },
+    {
+      "file": "jtrx-repay.json",
+      "target": "TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP",
+      "complete": false,
+      "notes": "Only repayBorrow(uint256) and repayBorrowBehalf(address), both payable.",
+      "verification_basis": "node_abi",
+      "checked_entry_count": 2,
+      "download_sha256": "43793c4b0fc719c11a3db0c6bb0e6bcdb545e15e38c430df5dec4b6f90caf6a7"
+    },
+    {
+      "file": "price-oracle.json",
+      "target": "TGnYnSn4G9PgWFj7QQemh4YMZKp3fkympJ",
+      "complete": false,
+      "notes": "Only getUnderlyingPrice; does not include backend methods.",
+      "verification_basis": "node_abi",
+      "checked_entry_count": 1,
+      "download_sha256": "838acc79d465c519a1a8a199d56d715a4704bff0ec816f1618ba2136cb58ad00"
+    },
+    {
+      "file": "price-oracle-impl.json",
+      "target": "TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV",
+      "complete": false,
+      "notes": "Selected backend methods and PricePosted. Target checked with proxy.v1PriceOracle().",
+      "verification_basis": "node_abi",
+      "checked_entry_count": 6,
+      "download_sha256": "2470b3a0cc3d3a0aa57b37f22bab1df3abdeaf7e1a082b825f19ad556f50641d"
+    },
+    {
+      "file": "strx.json",
+      "target": "TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5",
+      "implementation": "TUAV6ZSCXtF8KVvDKSeVmAbJEovTBf4HtG",
+      "complete": false,
+      "notes": "Selected functions with compiler-correct return types, plus all 27 event declarations from the current STRXG2 implementation ABI. Does not include the separate administrative proxy ABI or certify historical/Nile deployments.",
+      "bytecode_verification": {
+        "creation_bytecode_sha256": "b47387152376c9513dc890b0760b81d2ea25d7e097f7fb5f2dee8fcd8ef552ef",
+        "creation_executable_sha256": "bc6e283499d301babde5105027afc52cf928d7fa0d2952cb1601bffc13064fa7",
+        "excluded_metadata_bytes": 53,
+        "executable_match": true,
+        "full_bytecode_match": false
+      },
+      "implementation_event_count": 27,
+      "implementation_events": [
+        "Approval",
+        "BalanceFrozen",
+        "BalanceUnfrozen",
+        "Claim",
+        "Deposit",
+        "FreezeBalance",
+        "Income",
+        "MaxAmountForEnergyUpdated",
+        "MinFreezeAmountUpdated",
+        "RentFactorUpdated",
+        "RentSupplied",
+        "ReserveAdminUpdated",
+        "ReservesAdded",
+        "ReservesClaimed",
+        "ResourceObtained",
+        "ResourceReleased",
+        "RewardFactorUpdated",
+        "RoundClaim",
+        "RoundUnfreeze",
+        "RoundWithdraw",
+        "SrListUpdated",
+        "Transfer",
+        "UnfreezeBalance",
+        "UpdateTotalUnderlying",
+        "Vote",
+        "VoteOperatorUpdated",
+        "Withdraw"
+      ],
+      "verification_basis": "compiler_abi_with_metadata_excluded_creation_bytecode_match",
+      "checked_entry_count": 39,
+      "download_sha256": "9352b6b49982ff756ae12fc24b5100cba9cd9ae23c547377cf0465ee11f655df",
+      "compiler_input_sha256": "2e1656c5e5fa064ad01e69b2f75aa26c55e20c806f2b0d43f95fa8b09b16e5c7",
+      "source_file_sha256": "6383b5c510a0f107c8f83e9cc7906c3fb68a37a264097cbe064c6931eaa0f7d0",
+      "supplied_artifact_cross_check": {
+        "checked_at": "2026-10-14",
+        "artifact": "STRXG2.abi.json",
+        "artifact_sha256": "0f9aba03914a252397883c2a3a001b1411d0145210b03d60e0e1d776a06aa12c",
+        "entry_count": 107,
+        "entry_counts": {
+          "event": 27,
+          "fallback": 1,
+          "function": 78,
+          "receive": 1
+        },
+        "parsed_json_equal_to_compiler_abi": true,
+        "matched_selected_entry_count": 39
+      }
+    },
+    {
+      "file": "energy-market.json",
+      "target": "TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd",
+      "complete": false,
+      "implementation": "TNoHbPuBQrVanVf9qxUsSvHdB2eDkeDAKD",
+      "bytecode_verification": {
+        "creation_bytecode_sha256": "c66f4e441f88f9bc0b2cf31be8417c5ea220596cfc49dd9abfebf85cf92c3782",
+        "creation_executable_sha256": "1c465c0f1db1d40ae38e9ced76ef7a0e825af1d4cff96ea3cef5a740b0fa0111",
+        "excluded_metadata_bytes": 53,
+        "executable_match": true,
+        "full_bytecode_match": false
+      },
+      "notes": "Selected MarketG1 functions aligned with bytecode-matched compiler ABI: getRentInfo returns uint256,uint256,bool; rentals returns a RentalInfo tuple; rentPaused returns bool; both return methods return uint256. Includes RentResource, ReturnResource, Liquidate and RentClaimed events. claimRental is sTRX-only and returns this call transferred amount in sun.",
+      "verification_basis": "compiler_abi_with_metadata_excluded_creation_bytecode_match",
+      "checked_entry_count": 23,
+      "download_sha256": "0abb1b8e76d1ce6a4f5cc050f81a73b24a167958b4e62a67dc31ed0a6c291437",
+      "compiler_input_sha256": "2e1656c5e5fa064ad01e69b2f75aa26c55e20c806f2b0d43f95fa8b09b16e5c7",
+      "source_file_sha256": "32323d5ffc8a8bb4c840197a91ed552e8da44d105d03f1360e22e113bedede82",
+      "supplied_artifact_cross_check": {
+        "checked_at": "2026-10-14",
+        "artifact": "MarketG1.abi.json",
+        "artifact_sha256": "2241309d8f920cfea76c013bbf3a88bc003e6e4c1e2cfa511eae7f868443fe56",
+        "entry_count": 74,
+        "entry_counts": {
+          "event": 16,
+          "function": 58
+        },
+        "parsed_json_equal_to_compiler_abi": true,
+        "matched_selected_entry_count": 23
+      }
+    }
+  ],
+  "other_files": "Other JSON files are also partial interfaces. This manifest does not certify unlisted deployments or Nile compatibility.",
+  "compiler_verification": {
+    "compiler": "0.8.18+commit.f18bedfe.Emscripten.clang",
+    "compiler_release": "https://github.com/tronprotocol/solidity/releases/tag/tv_0.8.18",
+    "compiler_sha256": "cc258d6b2a77eb19c8092fa3c9d13fd5f658bdc309ef358b5ff0a9c069d5ea6c",
+    "optimizer": {
+      "enabled": true,
+      "runs": 200
+    },
+    "comparison": "Compiler creation bytecode matches wallet/getcontract.bytecode after removing only the trailing Solidity CBOR metadata and length. Full bytecode metadata is not identical; no exact source-bundle reproduction is claimed.",
+    "source_bundle_included": false,
+    "event_cross_check": "Deposit, Withdraw, Claim, and RentClaimed were decoded from successful Mainnet transaction receipts and compared with confirmed TronGrid events.",
+    "offline_event_fixture": "scripts/fixtures/docs-verification/settlement-events.json"
+  },
+  "verification_method": "Compare normalized function inputs/outputs/mutability and event types/indexed flags, including tuple components where available; Receipt components have a separate pinned-source basis.",
+  "address_verification": {
+    "checked_at": "2026-10-14",
+    "rpc": "https://api.trongrid.io/wallet/triggerconstantcontract",
+    "atomic_block_snapshot": false,
+    "calls": [
+      {
+        "label": "governor_implementation",
+        "contract_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+        "function_selector": "implementation()",
+        "returned_address": "TUeNh9BsYK44XePmFAuKZWg2rJuU7bSt5u"
+      },
+      {
+        "label": "oracle_proxy",
+        "contract_address": "TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7",
+        "function_selector": "oracle()",
+        "returned_address": "TGnYnSn4G9PgWFj7QQemh4YMZKp3fkympJ"
+      },
+      {
+        "label": "oracle_backend",
+        "contract_address": "TGnYnSn4G9PgWFj7QQemh4YMZKp3fkympJ",
+        "function_selector": "v1PriceOracle()",
+        "returned_address": "TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV"
+      },
+      {
+        "label": "governor_wjst",
+        "contract_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+        "function_selector": "wjst()",
+        "returned_address": "TXk9LnTnLN7oH96H3sKxJayMxLxR9M4ZD6"
+      },
+      {
+        "label": "strx_implementation",
+        "contract_address": "TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5",
+        "function_selector": "implementation()",
+        "returned_address": "TUAV6ZSCXtF8KVvDKSeVmAbJEovTBf4HtG"
+      },
+      {
+        "label": "market_implementation",
+        "contract_address": "TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd",
+        "function_selector": "implementation()",
+        "returned_address": "TNoHbPuBQrVanVf9qxUsSvHdB2eDkeDAKD"
+      },
+      {
+        "label": "market_strx",
+        "contract_address": "TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd",
+        "function_selector": "strx()",
+        "returned_address": "TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5"
+      }
+    ],
+    "scope": "Selected Mainnet pointers only; re-read after upgrades. This does not update the whole-registry or Nile verification date."
+  }
+}

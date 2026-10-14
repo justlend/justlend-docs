@@ -143,8 +143,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "The 10 most common foot-guns when integrating with JustLend DAO on TRON \u2014 USDT-style approve race, enterMarkets requirement, mint() overload between jTRX and jTRC20, redeem vs redeemUnderlying, jToken decimals mismatch, liquidateBorrow close factor, uint256(-1) magic, TRX gas model, oracle-staleness behavior, and legacy market caveats.",
-          "dateModified": "2026-05-22",
-          "datePublished": "2026-05-22"
+          "dateModified": "2026-10-12",
+          "datePublished": "2026-10-12"
         }
       ]
     }
@@ -2443,7 +2443,7 @@
 <span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">jToken</span><span class="p">.</span><span class="nx">mint</span><span class="p">(</span><span class="nx">amount</span><span class="p">).</span><span class="nx">send</span><span class="p">();</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>Same overload pattern applies to <code>repayBorrow(uint)</code> vs <code>repayBorrow() payable</code> and <code>liquidateBorrow(...)</code>.</p>
+<p>Do not assume the same argument difference for self-repayment: <strong>Mainnet jTRX uses <code>repayBorrow(uint256 amount) payable</code></strong>, with both <code>amount</code> and <code>callValue</code> in sun. jTRC20 uses <code>repayBorrow(uint256 repayAmount)</code> without a TRX payment and returns an error code. For repayment on behalf of another account, jTRX uses <code>repayBorrowBehalf(borrower)</code> plus <code>callValue</code>, while jTRC20 uses <code>repayBorrowBehalf(borrower, amount)</code>. See the <a href="../supply_and_borrow_market/sbm/#repayborrow">verified repayment signatures</a>.</p>
 <hr />
 <h2 id="4-redeem-vs-redeemunderlying">4. <code>redeem()</code> vs <code>redeemUnderlying()</code><a class="headerlink" href="#4-redeem-vs-redeemunderlying" title="Permanent link">&para;</a></h2>
 <table>
@@ -2467,11 +2467,11 @@
 </tr>
 </tbody>
 </table>
-<p>The arguments are not interchangeable. <code>redeem(100e6)</code> on jUSDT redeems <code>100e6 / 10⁸ = 0.01</code> jTokens (a tiny amount). <code>redeemUnderlying(100e6)</code> on jUSDT redeems whatever number of jTokens is needed to return <code>100 USDT</code> (6-decimal underlying). Pick by intent; verify with <a href="../supply_and_borrow_market/sbm/#underlying-balance"><code>balanceOfUnderlying(user)</code></a> before sending.</p>
+<p>The arguments are not interchangeable. <code>redeem(100e6)</code> on jUSDT redeems <code>100e6 / 10⁸ = 1</code> jToken (8-decimal units). <code>redeemUnderlying(100e6)</code> on jUSDT redeems whatever number of jTokens is needed to return <code>100 USDT</code> (6-decimal underlying). Pick by intent; verify with <a href="../supply_and_borrow_market/sbm/#underlying-balance"><code>balanceOfUnderlying(user)</code></a> before sending.</p>
 <hr />
 <h2 id="5-jtoken-8-underlying-varies-decimals">5. jToken (8) ↔ underlying (varies) decimals<a class="headerlink" href="#5-jtoken-8-underlying-varies-decimals" title="Permanent link">&para;</a></h2>
 <p><strong>Symptom.</strong> Off-by-10² to 10¹² error in a downstream balance calculation.</p>
-<p><strong>Rule.</strong> Every jToken is 8 decimals. The underlying may be anything from 6 (TRX, USDT, USDC) to 8 (BTC, sTRX) to 18 (USDD, ETH). The exchange rate compensates, but only if you remember which side of the conversion you're on.</p>
+<p><strong>Rule.</strong> Every jToken is 8 decimals. Underlyings use their own precision: for example, TRX, USDT, USDC, and WBTT use 6; BTC and WBTC use 8; sTRX, wstUSDT, USDD, TUSD, USDJ, USD1, SUN, BTT, JST, HTX, and ETH use 18. The exchange rate compensates, but only if you remember which side of the conversion you're on. See the <a href="../../resources/glossary/#underlying-decimals">verified precision table</a> and query the underlying contract's <code>decimals()</code> rather than inferring it from a symbol.</p>
 <div class="highlight"><pre><span></span><code><span class="c1">// jUSDT (jToken 8 dec) ↔ USDT (underlying 6 dec)</span>
 <span class="c1">// exchange rate is scaled by 1e18 and encodes both the price *and* the decimal diff</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">er</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">BigInt</span><span class="p">((</span><span class="k">await</span><span class="w"> </span><span class="nx">jUSDT</span><span class="p">.</span><span class="nx">exchangeRateCurrent</span><span class="p">().</span><span class="nx">call</span><span class="p">()).</span><span class="nx">toString</span><span class="p">());</span>
@@ -2482,7 +2482,7 @@
 <hr />
 <h2 id="6-liquidateborrow-close-factor-50">6. <code>liquidateBorrow()</code> close factor (50%)<a class="headerlink" href="#6-liquidateborrow-close-factor-50" title="Permanent link">&para;</a></h2>
 <p><strong>Symptom.</strong> Liquidation reverts with <code>LIQUIDATE_CLOSE_AMOUNT_TOO_LARGE</code> or similar.</p>
-<p><strong>Rule.</strong> In a single <code>liquidateBorrow()</code> call, you may repay <strong>at most <code>closeFactorMantissa / 1e18 = 50%</code></strong> of the borrower's outstanding debt <strong>on that specific borrowed asset</strong>. To fully liquidate, call repeatedly.</p>
+<p><strong>Rule.</strong> In a single <code>liquidateBorrow()</code> call, you may repay <strong>at most <code>closeFactorMantissa / 1e18 = 50%</code></strong> of the borrower's outstanding debt <strong>on that specific borrowed asset</strong>. Re-check eligibility and the remaining debt before any subsequent transaction; the first liquidation may already restore collateral coverage.</p>
 <div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">debt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">BigInt</span><span class="p">((</span><span class="k">await</span><span class="w"> </span><span class="nx">jUSDT</span><span class="p">.</span><span class="nx">borrowBalanceCurrent</span><span class="p">(</span><span class="nx">borrower</span><span class="p">).</span><span class="nx">call</span><span class="p">()).</span><span class="nx">toString</span><span class="p">());</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">closeFactor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">BigInt</span><span class="p">(</span>
 <span class="w">  </span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">comptroller</span><span class="p">.</span><span class="nx">closeFactorMantissa</span><span class="p">().</span><span class="nx">call</span><span class="p">()).</span><span class="nx">toString</span><span class="p">()</span>
@@ -2556,7 +2556,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 22, 2026 06:51:42 UTC">2026-05-22</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 12, 2026 09:32:17 UTC">2026-10-12</span>
   </span>
 
     

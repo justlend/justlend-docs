@@ -143,8 +143,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "JustLend DAO EnergyRental contract reference \u2014 rentResource, returnResource, returnResourceByReceiver, liquidate, getRentInfo, plus TronWeb examples. Powers the one-to-many TRON Energy marketplace.",
-          "dateModified": "2026-10-10",
-          "datePublished": "2026-10-10"
+          "dateModified": "2026-10-14",
+          "datePublished": "2026-10-14"
         }
       ]
     }
@@ -1301,9 +1301,9 @@
 
 
 <li class="md-nav__item ">
-  <a href="#claimed-rent-income" class="md-nav__link">
+  <a href="#cumulative-claimed-rental-income" class="md-nav__link">
     <span class="md-ellipsis">
-      Claimed Rent Income
+      Cumulative claimed rental income
     </span>
   </a>
   
@@ -1353,6 +1353,19 @@
   
     <nav class="md-nav" aria-label="Write Interface">
       <ul class="md-nav__list">
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#protocol-income-collection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Protocol income collection
+    </span>
+  </a>
+  
+</li>
         
           
 
@@ -1443,9 +1456,9 @@
 
 
 <li class="md-nav__item ">
-  <a href="#2-rent-energy-the-rentresource-call" class="md-nav__link">
+  <a href="#2-estimate-the-full-new-rental-prepayment-read-only" class="md-nav__link">
     <span class="md-ellipsis">
-      2. Rent energy (the rentResource call)
+      2. Estimate the full new-rental prepayment (read-only)
     </span>
   </a>
   
@@ -2461,7 +2474,7 @@
 <li><strong>Protocol:</strong> JustLend DAO Energy Rental (one-to-many TRON Energy marketplace)</li>
 <li><strong>Network:</strong> TRON Mainnet</li>
 <li><strong>Contract:</strong> <a href="https://tronscan.org/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd"><code>TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd</code></a></li>
-<li><strong>Units:</strong> <code>amount</code> parameters refer to the <strong>delegated TRX amount in TRX</strong>, <strong>not</strong> the energy amount — divide your target energy by <code>energyStakePerTrx</code> from the dashboard API to get TRX.</li>
+<li><strong>Units:</strong> contract <code>amount</code> parameters refer to <strong>delegated TRX in sun</strong> (1 TRX = 10^6 sun), <strong>not</strong> energy units. Divide target energy by <code>energyStakePerTrx</code> to obtain whole TRX, then convert to sun before a contract call.</li>
 <li><strong><code>resourceType</code>:</strong> <code>0 = bandwidth</code>, <code>1 = energy</code>.</li>
 <li><strong>Constraint:</strong> receiver must be a regular account, not a contract.</li>
 <li><strong>User-side overview:</strong> <a href="../../getting_started/concepts/energy_rental/">Energy Rental concept</a> </li>
@@ -2474,12 +2487,12 @@ The contract <a href="https://tronscan.org/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx
 <p>During the energy rental process, a prepayment amount, which includes a deposit and rent, is calculated based
 on the <strong>Rental Amount</strong> and <strong>Rental Duration</strong>. The detailed formula is as follows:</p>
 <div style="text-align: center; font-size: 20px;">
-    Prepay = trxAmount ∗ max(rentalRate, stableRate) ∗ (durationValueInSeconds + 86400 + liquidateThreshold) + fee
+    PrepaySun = ceil(amountSun × max(rentalRateMantissa, stableRateMantissa) × (durationSeconds + 86400 + liquidateThresholdSeconds) / 10^18) + feeSun
 </div>
 
-<p>Upon normal termination of the rental, a portion of the deposit will be refunded based on the energy usage. The specific refund calculation formula is as follows:</p>
+<p>This is a <strong>budget estimate for a new rental</strong>, not an executable quote or a guaranteed upper bound after rates change. Renewals also depend on the existing order and remaining deposit. Upon termination, the refundable amount depends on actual usage, rates, and contract settlement; the following historical illustration must not be treated as a guaranteed minimum refund:</p>
 <div style="text-align: center; font-size: 20px;">
-    Refund at least = trxAmount ∗ max(rentalRate, stableRate) ∗ (21600 + liquidateThreshold) + fee
+    Illustrative reserve = trxAmount × max(rentalRateMantissa, stableRateMantissa) / 10^18 × (21600 + liquidateThresholdSeconds) + feeTrx
 </div>
 
 <h4 id="parameters"><strong>Parameters:</strong><a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h4>
@@ -2495,13 +2508,13 @@ on the <strong>Rental Amount</strong> and <strong>Rental Duration</strong>. The 
 </div>
 
 <ul>
-<li><code>durationValueInSeconds:</code> the duration of the energy rental in seconds, calculated by converting the <strong>Rental Duration</strong> into seconds.</li>
-<li><code>rentalRate:</code> the borrowing interest rate, which is the rate paid per second by the borrower to the staker, scaled by 10^18.</li>
-<li><code>stableRate:</code> the weighted average interest rate for borrowings, which is a constantly updating six-hour rolling average, scaled by 10^18.</li>
-<li><code>liquidateThreshold:</code> the liquidation threshold, which is the remaining rental duration of the user's prepayment, initialized to 0.</li>
-<li><code>fee:</code> the penalty reserve for liquidation. Users who execute liquidation can receive a liquidation reward calculated as <code>Max(20 TRX, 0.008% * energyAmount / energyRentPerTrx)</code>, where <code>energyRentPerTrx</code> is derived from the <a href="https://openapi.just.network/lend/strx">/lend/strx</a> API as <code>10000 / rentInfo.priceFor10KEnergByRent</code>. The minimum fee is 20 TRX.</li>
+<li><code>durationSeconds:</code> the duration of the energy rental in seconds, calculated by converting the <strong>Rental Duration</strong> into seconds.</li>
+<li><code>rentalRateMantissa:</code> current per-second rate from <code>_rentalRate(amountSun, resourceType)</code>, scaled by 10^18.</li>
+<li><code>stableRateMantissa:</code> smoothed rate from <code>_stableRate(resourceType)</code>, scaled by 10^18. Use the higher of these two rates, not just the current rental rate.</li>
+<li><code>liquidateThresholdSeconds:</code> additional time reserve from <code>liquidateThreshold()</code>, in seconds. Do not assume it is zero.</li>
+<li><code>feeSun:</code> liquidation fee reserve, estimated as <code>max(minFee(), ceil(amountSun × feeRatio() / 10^18))</code>. <code>minFee()</code> is in sun and <code>feeRatio()</code> is a 10^18-scaled ratio. A fixed 20 TRX is not a substitute for the current minimum and proportional fee; the latter can be larger.</li>
 </ul>
-<p><strong>Note:</strong> the parameters of <code>rentalRate</code>, <code>stableRate</code> and <code>liquidateThreshold</code> can be obtained by calling the <a href="https://tronscan.org/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd">EnergyRental</a> contract.</p>
+<p><strong>Note:</strong> read all parameters from the <a href="https://tronscan.org/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd">EnergyRental</a> contract on the same network and at a consistent state. These are the inputs used by the <a href="https://github.com/justlend/mcp-server-justlend/blob/7d53a6ca755fbe70724ae6aaed9276462716cee2/src/core/services/energy-rental.ts">MCP rental estimator</a>. Missing reads must stop the estimate; do not silently replace them with historical constants. Re-quote before a separately confirmed transaction.</p>
 <h2 id="query-interface"><strong>Query Interface</strong><a class="headerlink" href="#query-interface" title="Permanent link">&para;</a></h2>
 <h3 id="rental-order-information"><strong>Rental Order Information</strong><a class="headerlink" href="#rental-order-information" title="Permanent link">&para;</a></h3>
 <p>View the information of a rental order.
@@ -2529,7 +2542,7 @@ on the <strong>Rental Amount</strong> and <strong>Rental Duration</strong>. The 
 </ul>
 <h3 id="current-rental-order-information-updated-to-current"><strong>Current Rental Order Information (updated to current)</strong><a class="headerlink" href="#current-rental-order-information-updated-to-current" title="Permanent link">&para;</a></h3>
 <p>View the information of an rental order, with the returned data updated to current.
-<div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">getRentInfo</span><span class="w"> </span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">renter</span><span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">receiver</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">resourceType</span><span class="p">)</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span>view<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint256</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">getRentInfo</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">renter</span><span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">receiver</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">resourceType</span><span class="p">)</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span>view<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint256</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="p">)</span>
 </code></pre></div></p>
 <ul>
 <li><strong>Parameter description:</strong><ul>
@@ -2539,11 +2552,13 @@ on the <strong>Rental Amount</strong> and <strong>Rental Duration</strong>. The 
 </ul>
 </li>
 <li><strong>Returns:</strong><ul>
-<li><code>securityDeposit:</code> order deposit, updated to current；</li>
-<li><code>rentIndex:</code> eal-time global index of the order at the time of query.</li>
+<li><code>securityDeposit:</code> order deposit after accrued rent, in sun;</li>
+<li><code>rentIndex:</code> the current global rent index at query time;</li>
+<li><code>liquidatable:</code> the Energy Rental contract's deposit-reserve check. This is a rental-order flag, not the V1 lending account's <code>shortfall</code> check; other execution guards still apply.</li>
 </ul>
 </li>
 </ul>
+<p><code>rentals(...)</code> returns <strong>one tuple</strong> <code>(amount, securityDeposit, rentIndex)</code>, whereas <code>getRentInfo(...)</code> returns <strong>three separate positional values</strong>; its compiler ABI does not name the outputs. <code>rentPaused(resourceType)</code> returns a <strong>bool</strong>. The downloadable <a href="../abis/energy-market.json">MarketG1 interface</a> includes these definitions and the <code>uint256</code> refund returns of both resource-return methods. Their <a href="../abis/#scope-and-provenance">verification basis</a> is the compiler ABI with metadata-excluded creation-bytecode matching, not a guessed node ABI.</p>
 <h3 id="bad-debt"><strong>Bad Debt</strong><a class="headerlink" href="#bad-debt" title="Permanent link">&para;</a></h3>
 <p>If the user's rent is greater than securityDeposit, a bad debt will be generated. This field will be updated when repayment or liquidation occurs.
 <div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">badDebt</span><span class="p">()</span><span class="w"> </span>view<span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint256</span><span class="p">)</span>
@@ -2574,16 +2589,16 @@ on the <strong>Rental Amount</strong> and <strong>Rental Duration</strong>. The 
 </code></pre></div></p>
 <ul>
 <li><strong>Parameter description:</strong> N/A;</li>
-<li><strong>Returns:</strong> the amount of total rental income.</li>
+<li><strong>Returns:</strong> the recorded total rental income, in sun (<code>1 TRX = 1,000,000 sun</code>).</li>
 </ul>
-<h3 id="claimed-rent-income"><strong>Claimed Rent Income</strong><a class="headerlink" href="#claimed-rent-income" title="Permanent link">&para;</a></h3>
-<p>The STRX contract can extract the income through the <code>claimRental</code> function, which records the accumulated income that has been extracted.
-<div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">claimRental</span><span class="p">()</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint256</span><span class="p">)</span>
-</code></pre></div></p>
+<h3 id="cumulative-claimed-rental-income">Cumulative claimed rental income<a class="headerlink" href="#cumulative-claimed-rental-income" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">rentClaimed</span><span class="p">()</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span>view<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint256</span><span class="p">)</span>
+</code></pre></div>
 <ul>
-<li><strong>Parameter description:</strong> N/A;</li>
-<li><strong>Returns:</strong> the amount of accumulate income that has been extracted.</li>
+<li><strong>Parameter description:</strong> N/A.</li>
+<li><strong>Returns:</strong> the cumulative rental income already transferred from the market to sTRX, in <strong>sun</strong> (<code>1 TRX = 1,000,000 sun</code>). This is the recorded cumulative counter, not the amount claimable now.</li>
 </ul>
+<p><code>totalRent()</code> is a different accounting value and must not be reused as cumulative claimed income. The similarly named <code>claimRental()</code> is a state-changing collection operation, not a historical read; see <a href="#protocol-income-collection">Protocol income collection</a>. The read methods, collection method, and <code>RentClaimed</code> event are included in <a href="../abis/energy-market.json"><code>energy-market.json</code></a>.</p>
 <h3 id="liquidation-rate"><strong>Liquidation Rate</strong><a class="headerlink" href="#liquidation-rate" title="Permanent link">&para;</a></h3>
 <p>The <code>liquidateRate</code> is used during liquidation. If the price fluctuates greatly, it will be diluted for 6 hours. Rapidly raised prices will not take effect immediately during the liquidation process.
 <div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">_liquidateRate</span><span class="p">(</span><span class="kt">uint256</span><span class="w"> </span><span class="nv">resourceType</span><span class="p">)</span><span class="w"> </span>view<span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint256</span><span class="p">)</span>
@@ -2609,6 +2624,19 @@ on the <strong>Rental Amount</strong> and <strong>Rental Duration</strong>. The 
 <li><strong>Returns:</strong> current rental rate.</li>
 </ul>
 <h2 id="write-interface"><strong>Write Interface</strong><a class="headerlink" href="#write-interface" title="Permanent link">&para;</a></h2>
+<h3 id="protocol-income-collection">Protocol income collection<a class="headerlink" href="#protocol-income-collection" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">claimRental</span><span class="p">()</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint256</span><span class="p">)</span>
+</code></pre></div>
+<p>This is the protocol's rental-income collection path, <strong>not a user-facing query for cumulative claimed rent</strong>. It is not <code>view</code> and must not appear in a read-only monitoring workflow.</p>
+<ul>
+<li><strong>Parameters:</strong> none.</li>
+<li><strong>Caller:</strong> only the sTRX contract configured by the market's <code>strx()</code> getter; ordinary user wallets cannot call it successfully.</li>
+<li><strong>Returns:</strong> the rental amount actually transferred into sTRX <strong>by this call</strong>, in <strong>sun</strong> (<code>1 TRX = 1,000,000 sun</code>). It is <strong>not</strong> an all-time total. The transfer is capped by the market's available TRX balance; if nothing is transferred, the return is <code>0</code>.</li>
+<li><strong>Accounting event:</strong> a positive transfer increments <code>rentClaimed</code> and emits <code>RentClaimed(uint256 add, uint256 totalClaimed)</code>. Both values are in sun: <code>add</code> is this transfer and <code>totalClaimed</code> is the cumulative value after it. Both fields are non-indexed. A zero transfer emits no <code>RentClaimed</code> event.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="kt">event</span><span class="w"> </span><span class="nv">RentClaimed</span><span class="p">(</span><span class="kt">uint256</span><span class="w"> </span><span class="nv">add</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">totalClaimed</span><span class="p">);</span>
+</code></pre></div>
+<p>These semantics were checked against the current Mainnet <code>MarketG1</code> implementation (<code>TNoHbPuBQrVanVf9qxUsSvHdB2eDkeDAKD</code>): compiler output matches its executable bytecode with only compiler metadata excluded. A successful Mainnet settlement receipt also matches the event amount and the internal TRX transfer to sTRX. See <a href="../abis/#scope-and-provenance">ABI scope and provenance</a>. No user transaction example is provided.</p>
 <p><a id="rent-resources"></a></p>
 <h3 id="rent-resources"><strong>Rent Resources</strong><a class="headerlink" href="#rent-resources" title="Permanent link">&para;</a></h3>
 <p>Rent resources, allow amount = 0 (extension only) or msg.value = 0 (no new deposit), both are 0 is not allowed.
@@ -2626,7 +2654,7 @@ on the <strong>Rental Amount</strong> and <strong>Rental Duration</strong>. The 
 <li><strong>Returns:</strong> None, revert on failure.</li>
 </ul>
 <h4 id="event"><strong>Event</strong><a class="headerlink" href="#event" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code>RentResource<span class="w"> </span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">indexed</span><span class="w"> </span>renter<span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">indexed</span><span class="w"> </span>receiver<span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">addedAmount</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">resourceType</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">addedSecurityDeposit</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">amount</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="kt">event</span><span class="w"> </span><span class="nv">RentResource</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">indexed</span><span class="w"> </span>renter<span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">indexed</span><span class="w"> </span>receiver<span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">addedAmount</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">resourceType</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">addedSecurityDeposit</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">amount</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">securityDeposit</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">rentIndex</span><span class="p">);</span>
 </code></pre></div>
 <ul>
 <li>Emits when renting occurs.<ul>
@@ -2636,6 +2664,8 @@ on the <strong>Rental Amount</strong> and <strong>Rental Duration</strong>. The 
 <li><code>resourceType:</code> resource type, 0: bandwidth; 1: energy;</li>
 <li><code>addedSecurityDeposit:</code> the added deposit amount;</li>
 <li><code>amount:</code> the total amount of rental resources in the order after renting.</li>
+<li><code>securityDeposit:</code> total order deposit after this rental, in sun;</li>
+<li><code>rentIndex:</code> the order's rent index after this update.</li>
 </ul>
 </li>
 </ul>
@@ -2655,10 +2685,10 @@ on the <strong>Rental Amount</strong> and <strong>Rental Duration</strong>. The 
 <li><strong>Returns:</strong> the amount of the deposit returned in this operation. 0 for a partial return.</li>
 </ul>
 <h4 id="event_1"><strong>Event</strong><a class="headerlink" href="#event_1" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code>ReturnResource<span class="p">(</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">indexed</span><span class="w"> </span>renter<span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">indexed</span><span class="w"> </span>receiver<span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">subedAmount</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">resourceType</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">usageRental</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">subedSecurityDeposit</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">amount</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="kt">event</span><span class="w"> </span><span class="nv">ReturnResource</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">indexed</span><span class="w"> </span>renter<span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">indexed</span><span class="w"> </span>receiver<span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">subedAmount</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">resourceType</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">usageRental</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">subedSecurityDeposit</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">amount</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">securityDeposit</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">rentIndex</span><span class="p">);</span>
 </code></pre></div>
 <ul>
-<li>Emits when renting occurs.<ul>
+<li>Emits when resources are returned.<ul>
 <li><code>renter:</code> order payer;</li>
 <li><code>receiver:</code> the resource receiver of this rental;</li>
 <li><code>subedAmount:</code> the amount of TRX (minimum unit) for returned resources;</li>
@@ -2666,6 +2696,8 @@ on the <strong>Rental Amount</strong> and <strong>Rental Duration</strong>. The 
 <li><code>usageRental:</code> the cost of recovery for the used resources in the returned resources;</li>
 <li><code>subedSecurityDeposit:</code> the refunded deposit amount (0 for partial returns);</li>
 <li><code>amount:</code> the remaining amount of rental resources after returning resources.</li>
+<li><code>securityDeposit:</code> remaining order deposit after this return, in sun;</li>
+<li><code>rentIndex:</code> the order's rent index after this update.</li>
 </ul>
 </li>
 </ul>
@@ -2699,7 +2731,7 @@ on the <strong>Rental Amount</strong> and <strong>Rental Duration</strong>. The 
 <li><strong>Returns:</strong> Liquidation reward in this operation.</li>
 </ul>
 <h4 id="event_2"><strong>Event</strong><a class="headerlink" href="#event_2" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code>Liquidate<span class="p">(</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">indexed</span><span class="w"> </span>liquidator<span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">indexed</span><span class="w"> </span>renter<span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">indexed</span><span class="w"> </span>receiver<span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">amount</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">resourceType</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">usageRental</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">liquidateFee</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">sendBack</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="kt">event</span><span class="w"> </span><span class="nv">Liquidate</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">indexed</span><span class="w"> </span>liquidator<span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">indexed</span><span class="w"> </span>renter<span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">indexed</span><span class="w"> </span>receiver<span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">amount</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">resourceType</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">usageRental</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">liquidateFee</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">sendBack</span><span class="p">);</span>
 </code></pre></div>
 <ul>
 <li>Emits when liquidation occurs.<ul>
@@ -2739,34 +2771,30 @@ on the <strong>Rental Amount</strong> and <strong>Rental Duration</strong>. The 
 <span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nb">BigInt</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">ceil</span><span class="p">(</span><span class="nx">trxNeeded</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1</span><span class="nx">_000_000</span><span class="p">));</span><span class="w">     </span><span class="c1">// sun</span>
 <span class="p">}</span>
 </code></pre></div>
-<h3 id="2-rent-energy-the-rentresource-call">2. Rent energy (the <code>rentResource</code> call)<a class="headerlink" href="#2-rent-energy-the-rentresource-call" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">rentEnergy</span><span class="p">({</span><span class="w"> </span><span class="nx">receiver</span><span class="p">,</span><span class="w"> </span><span class="nx">targetEnergy</span><span class="p">,</span><span class="w"> </span><span class="nx">durationSeconds</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">rental</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">tronWeb</span><span class="p">.</span><span class="nx">contract</span><span class="p">().</span><span class="nx">at</span><span class="p">(</span><span class="nx">ENERGY_RENTAL</span><span class="p">);</span>
-
-<span class="w">  </span><span class="c1">// Compute prepayment off-chain (formula from the page above):</span>
-<span class="w">  </span><span class="c1">//   prepay = trxAmount × max(rentalRate, stableRate) × (duration + 86400 + liquidateThreshold) + fee</span>
-<span class="w">  </span><span class="c1">// Easiest: query `_rentalRate(amount, resourceType)` for the current per-second rate</span>
-<span class="w">  </span><span class="c1">//   and the EnergyRental dashboard for `stableRate`, `liquidateThreshold`, and `fee`.</span>
-<span class="w">  </span><span class="c1">// Simplest path: overshoot the prepayment slightly; the unused portion is refunded on return.</span>
-
-<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">amountSun</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">energyToDelegatedSun</span><span class="p">(</span><span class="nx">targetEnergy</span><span class="p">);</span>
-<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">rentalRate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">BigInt</span><span class="p">((</span><span class="k">await</span><span class="w"> </span><span class="nx">rental</span><span class="p">.</span><span class="nx">_rentalRate</span><span class="p">(</span><span class="nx">amountSun</span><span class="p">,</span><span class="w"> </span><span class="nx">ENERGY</span><span class="p">).</span><span class="nx">call</span><span class="p">()).</span><span class="nx">toString</span><span class="p">());</span>
-
-<span class="w">  </span><span class="c1">// Rough prepayment (use a conservative buffer; precise formula in the page above)</span>
-<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">buffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">BigInt</span><span class="p">(</span><span class="nx">durationSeconds</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">86</span><span class="nx">_400</span><span class="p">);</span>
-<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">fee</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mf">20</span><span class="nx">_000_000n</span><span class="p">;</span><span class="w"> </span><span class="c1">// 20 TRX minimum liquidation reserve</span>
-<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">prepay</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">amountSun</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nx">rentalRate</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nx">buffer</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mi">10n</span><span class="w"> </span><span class="o">**</span><span class="w"> </span><span class="mi">18n</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">fee</span><span class="p">;</span>
-
-<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">txId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">rental</span>
-<span class="w">    </span><span class="p">.</span><span class="nx">rentResource</span><span class="p">(</span><span class="nx">receiver</span><span class="p">,</span><span class="w"> </span><span class="nx">amountSun</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span><span class="w"> </span><span class="nx">ENERGY</span><span class="p">)</span>
-<span class="w">    </span><span class="p">.</span><span class="nx">send</span><span class="p">({</span><span class="w"> </span><span class="nx">callValue</span><span class="o">:</span><span class="w"> </span><span class="nb">Number</span><span class="p">(</span><span class="nx">prepay</span><span class="p">),</span><span class="w"> </span><span class="nx">feeLimit</span><span class="o">:</span><span class="w"> </span><span class="mf">200</span><span class="nx">_000_000</span><span class="w"> </span><span class="p">});</span>
-
-<span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;rent tx:&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">txId</span><span class="p">);</span>
+<h3 id="2-estimate-the-full-new-rental-prepayment-read-only">2. Estimate the full new-rental prepayment (read-only)<a class="headerlink" href="#2-estimate-the-full-new-rental-prepayment-read-only" title="Permanent link">&para;</a></h3>
+<p>The pure helper below uses integer raw units, both rates, the additional time threshold, and a dynamic fee. Pass current contract values as integer strings or <code>BigInt</code> values. It does <strong>not</strong> sign or broadcast a transaction and does not account for an existing rental.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">function</span><span class="w"> </span><span class="nx">estimatePrepaymentSun</span><span class="p">({</span><span class="w"> </span><span class="nx">amountSun</span><span class="p">,</span><span class="w"> </span><span class="nx">rentalRateMantissa</span><span class="p">,</span><span class="w"> </span><span class="nx">stableRateMantissa</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">durationSeconds</span><span class="p">,</span><span class="w"> </span><span class="nx">liquidateThresholdSeconds</span><span class="p">,</span><span class="w"> </span><span class="nx">feeRatioMantissa</span><span class="p">,</span><span class="w"> </span><span class="nx">minFeeSun</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">raw</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="nx">amountSun</span><span class="p">,</span><span class="w"> </span><span class="nx">rentalRateMantissa</span><span class="p">,</span><span class="w"> </span><span class="nx">stableRateMantissa</span><span class="p">,</span><span class="w"> </span><span class="nx">durationSeconds</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">liquidateThresholdSeconds</span><span class="p">,</span><span class="w"> </span><span class="nx">feeRatioMantissa</span><span class="p">,</span><span class="w"> </span><span class="nx">minFeeSun</span><span class="p">];</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">raw</span><span class="p">.</span><span class="nx">some</span><span class="p">(</span><span class="nx">value</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="o">!</span><span class="p">[</span><span class="s1">&#39;string&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;bigint&#39;</span><span class="p">].</span><span class="nx">includes</span><span class="p">(</span><span class="ow">typeof</span><span class="w"> </span><span class="nx">value</span><span class="p">)</span><span class="w"> </span><span class="o">||</span>
+<span class="w">    </span><span class="o">!</span><span class="sr">/^\d+$/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nb">String</span><span class="p">(</span><span class="nx">value</span><span class="p">))))</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="s1">&#39;Use non-negative integer raw values&#39;</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">[</span><span class="nx">amount</span><span class="p">,</span><span class="w"> </span><span class="nx">rental</span><span class="p">,</span><span class="w"> </span><span class="nx">stable</span><span class="p">,</span><span class="w"> </span><span class="nx">duration</span><span class="p">,</span><span class="w"> </span><span class="nx">threshold</span><span class="p">,</span><span class="w"> </span><span class="nx">feeRatio</span><span class="p">,</span><span class="w"> </span><span class="nx">minFee</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">raw</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nb">BigInt</span><span class="p">);</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">amount</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="mi">0n</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nx">duration</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="mi">0n</span><span class="p">)</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="s1">&#39;New rentals need positive amount and duration&#39;</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">scale</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10n</span><span class="w"> </span><span class="o">**</span><span class="w"> </span><span class="mi">18n</span><span class="p">;</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">ceilScaled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">value</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">(</span><span class="nx">value</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">scale</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1n</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nx">scale</span><span class="p">;</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">rate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">rental</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="nx">stable</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="nx">rental</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nx">stable</span><span class="p">;</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">proportionalFee</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ceilScaled</span><span class="p">(</span><span class="nx">amount</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nx">feeRatio</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">fee</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">proportionalFee</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="nx">minFee</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="nx">proportionalFee</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nx">minFee</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">ceilScaled</span><span class="p">(</span><span class="nx">amount</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nx">rate</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="nx">duration</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">86</span><span class="nx">_400n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">threshold</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">fee</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>For prepayment precision, use the JustLend MCP server's <code>calculate_energy_rental_price</code> tool — it implements the full formula and accounts for <code>stableRate</code> and <code>liquidateThreshold</code>. See <a href="../../ai_support/mcp_server/">MCP Server</a>.</p>
+<p>Illustrative controls (not current prices): with 100 TRX delegated, a 1-day duration, rental rate <code>1e12</code>, stable rate <code>2e12</code>, a 3,600-second threshold, fee ratio <code>8e13</code>, and minimum fee 20 TRX, the estimate is <strong>55.28 TRX</strong>. With 1,000,000 TRX delegated, the same rates and fee ratio, and a zero threshold, the proportional fee is <strong>80 TRX</strong>, not 20, and the estimate is <strong>345,680 TRX</strong>.</p>
+<p>For a read-only MCP estimate, call <code>calculate_energy_rental_price</code> with <code>{"energyAmount":300000,"durationHours":24,"network":"mainnet"}</code>. For a renewal, provide <code>receiverAddress</code> and use the tool's existing-order calculation instead. A successful estimate alone does not establish that its inputs are current; apply the fallback checks below. Only a separate, explicitly confirmed <code>rent_energy</code> operation or <code>rentResource(receiver, amountSun, 1)</code> transaction should sign and broadcast, with reviewed prepayment supplied as <code>callValue</code>. Estimation itself must never trigger that write.</p>
+<div class="admonition warning">
+<p class="admonition-title">MCP estimate fallback (version-specific)</p>
+<p>In MCP commit <a href="https://github.com/justlend/mcp-server-justlend/blob/7d53a6ca755fbe70724ae6aaed9276462716cee2/src/core/services/energy-rental.ts#L175-L320"><code>7d53a6c</code></a>, failed parameter or rate reads can return defaults rather than an error: for example, <code>liquidateThreshold = 86400</code>, <code>feeRatio = 0.05</code>, <code>minFee = 50</code> TRX, or rate <code>4e-8</code>. The rate path can also substitute a rate-model estimate for the two primary rate reads. The structured quote has <strong>no per-field fallback/provenance marker</strong>; logs alone are not a caller-visible guarantee. A successful <code>calculate_energy_rental_price</code> response can therefore contain fallback inputs.</p>
+<p>Before a write, independently verify both current rates, the liquidation time threshold, fee ratio, minimum fee, rental availability, and applicable existing-order state through successful reads on the intended network. Recompute the quote with verified inputs and re-confirm the resulting payment. <strong>If these inputs cannot be verified, stop; do not sign or broadcast using fallback defaults.</strong> This warning describes the pinned version, not every later MCP release. It is an integration safeguard, not a fix to MCP server code or frontend acceptance.</p>
 </div>
 <h3 id="3-return-rental-reclaim-deposit">3. Return rental &amp; reclaim deposit<a class="headerlink" href="#3-return-rental-reclaim-deposit" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">returnEnergy</span><span class="p">({</span><span class="w"> </span><span class="nx">receiver</span><span class="p">,</span><span class="w"> </span><span class="nx">returnAmountSun</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">{</span>
@@ -2791,9 +2819,9 @@ on the <strong>Rental Amount</strong> and <strong>Rental Duration</strong>. The 
 <div class="highlight"><pre><span></span><code><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">getRental</span><span class="p">({</span><span class="w"> </span><span class="nx">renter</span><span class="p">,</span><span class="w"> </span><span class="nx">receiver</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">rental</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">tronWeb</span><span class="p">.</span><span class="nx">contract</span><span class="p">().</span><span class="nx">at</span><span class="p">(</span><span class="nx">ENERGY_RENTAL</span><span class="p">);</span>
 <span class="w">  </span><span class="c1">// Real-time view (updated to current block)</span>
-<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">[</span><span class="nx">securityDeposit</span><span class="p">,</span><span class="w"> </span><span class="nx">rentIndex</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">rental</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">[</span><span class="nx">securityDeposit</span><span class="p">,</span><span class="w"> </span><span class="nx">rentIndex</span><span class="p">,</span><span class="w"> </span><span class="nx">liquidatable</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">rental</span>
 <span class="w">    </span><span class="p">.</span><span class="nx">getRentInfo</span><span class="p">(</span><span class="nx">renter</span><span class="p">,</span><span class="w"> </span><span class="nx">receiver</span><span class="p">,</span><span class="w"> </span><span class="nx">ENERGY</span><span class="p">).</span><span class="nx">call</span><span class="p">();</span>
-<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">securityDeposit</span><span class="o">:</span><span class="w"> </span><span class="nx">securityDeposit</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span><span class="w"> </span><span class="nx">rentIndex</span><span class="o">:</span><span class="w"> </span><span class="nx">rentIndex</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span><span class="w"> </span><span class="p">};</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">securityDeposit</span><span class="o">:</span><span class="w"> </span><span class="nx">securityDeposit</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span><span class="w"> </span><span class="nx">rentIndex</span><span class="o">:</span><span class="w"> </span><span class="nx">rentIndex</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span><span class="w"> </span><span class="nx">liquidatable</span><span class="w"> </span><span class="p">};</span>
 <span class="p">}</span>
 </code></pre></div>
 
@@ -2816,7 +2844,7 @@ on the <strong>Rental Amount</strong> and <strong>Rental Duration</strong>. The 
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 10, 2026 08:28:17 UTC">2026-10-10</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 14, 2026 09:04:41 UTC">2026-10-14</span>
   </span>
 
     

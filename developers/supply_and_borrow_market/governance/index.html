@@ -143,8 +143,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "JustLend DAO governance contract reference \u2014 propose, vote, queue, execute through GovernorBravo. JST \u2192 WJST 1:1 wrapping gives voting power; a 48-hour Timelock executes successful proposals.",
-          "dateModified": "2026-10-09",
-          "datePublished": "2026-10-09"
+          "dateModified": "2026-10-14",
+          "datePublished": "2026-10-14"
         }
       ]
     }
@@ -1101,6 +1101,19 @@
 
 
 
+<li class="md-nav__item ">
+  <a href="#governance-boundaries-and-evidence" class="md-nav__link">
+    <span class="md-ellipsis">
+      Governance boundaries and evidence
+    </span>
+  </a>
+  
+</li>
+      
+        
+
+
+
 <li class="md-nav__item has-children">
   <a href="#proposals" class="md-nav__link" aria-expanded="true">
     <span class="md-ellipsis">
@@ -1268,6 +1281,19 @@
   <a href="#cast-vote-by-signature" class="md-nav__link">
     <span class="md-ellipsis">
       Cast Vote By Signature
+    </span>
+  </a>
+  
+</li>
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#available-votes-locks-and-withdrawal" class="md-nav__link">
+    <span class="md-ellipsis">
+      Available votes, locks, and withdrawal
     </span>
   </a>
   
@@ -2352,11 +2378,12 @@
 <ul>
 <li><strong>Protocol:</strong> JustLend DAO</li>
 <li><strong>Network:</strong> TRON Mainnet</li>
-<li><strong>Components:</strong> <code>JST</code> (TRC20, <code>TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9</code>) → <code>WJST</code> (voting wrapper, deposit JST → receive WJST 1:1) → <code>GovernorBravoDelegator</code> (entrypoint, <code>TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD</code>) → <code>GovernorBravoDelegate</code> (impl, <code>TCiQTkxhzwSeXhRsNdHCvrxHRAvpjQn5Dt</code>) → <code>Timelock</code> (executor, <code>TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x</code>, <strong><code>delay() = 172,800 sec = 48 hours</code></strong> verified on-chain). <strong>Always call the Delegator</strong>, not the Delegate.</li>
-<li><strong>Voting power:</strong> 1 JST = 1 Vote. Threshold: For votes &gt; Against votes AND For votes &gt; 600,000,000 (<code>quorumVotes()</code>). Proposal threshold: ≥ 200,000,000 JST (<code>proposalThreshold()</code>). </li>
+<li><strong>Components:</strong> <code>JST</code> (TRC20, <code>TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9</code>) → <code>WJST</code> (voting wrapper, deposit JST → receive WJST 1:1) → <code>GovernorBravoDelegator</code> (entrypoint, <code>TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD</code>) → <code>GovernorBravoDelegate</code> (impl, <code>TUeNh9BsYK44XePmFAuKZWg2rJuU7bSt5u</code>) → <code>Timelock</code> (executor, <code>TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x</code>, <strong><code>delay() = 172,800 sec = 48 hours</code></strong> verified on-chain). <strong>Always call the Delegator</strong>, not the Delegate.</li>
+<li><strong>Voting power:</strong> 1 JST wrapped as WJST = 1 whole vote. Approval requires For votes &gt; Against votes AND For votes &gt;= 600,000,000 (<code>quorumVotes()</code>). Non-whitelisted proposers need available WJST strictly greater than 200,000,000 (<code>proposalThreshold()</code>), not merely that many JST in a wallet.</li>
 <li><strong>Lifecycle states:</strong> <code>Pending → Active → (Canceled | Defeated | Succeeded) → Queued → Executed | Expired</code>. </li>
-<li><strong>On-chain timing (verified):</strong> <code>votingDelay() = 1 block ≈ 3 sec</code> (Pending → Active is effectively instant), <code>votingPeriod() = 86,400 blocks ≈ 3 days</code>, Timelock <code>delay() = 48 hours</code>. <strong>Off-chain ~2-day forum review</strong> is a community norm, <strong>not enforced by the contracts</strong> — any agent that programmatically calls <code>propose()</code> will see <code>Active</code> state on the very next block.</li>
+<li><strong>On-chain timing (read on 2026-10-14):</strong> <code>votingDelay() = 1 block</code>, <code>votingPeriod() = 86,400 blocks ≈ 3 days</code>, Timelock <code>delay() = 48 hours</code>. For creation at block B, B+1 is still Pending; the earliest Active block is B+2. Read <code>state(proposalId)</code> before voting. The <strong>off-chain ~2-day forum discussion</strong> is a community norm, not a contract-enforced review period; it does not remove the on-chain block boundary.</li>
 <li><strong>ABI:</strong> <a href="../../abis/governor-alpha.json"><code>abis/governor-alpha.json</code></a> (Governor) + <a href="../../abis/wjst.json"><code>abis/wjst.json</code></a> (voting wrapper) </li>
+<li><strong>Implementation check:</strong> <code>implementation()</code> on the Governor proxy returned the implementation above on <strong>2026-10-14</strong>, agreeing with the 2026-10-12 read. This corrects a documentation pointer; it does not deploy or upgrade a contract, and the entrypoint remains the proxy. See <a href="../../deployed_contracts/#address-verification">address verification</a> and <a href="../../abis/#scope-and-provenance">ABI provenance</a>. Re-read it after an upgrade.</li>
 <li><strong>Discussion forum</strong> (off-chain, pre-proposal): <a href="https://forum.justlend.org">https://forum.justlend.org</a>.</li>
 </ul>
 </div>
@@ -2368,10 +2395,19 @@ governance module(<a href="https://tronscan.org/#/contract/TEqiF5JbhDPD77yjEfnEM
 <li>Queue</li>
 <li>Execute</li>
 <li>Cancel</li>
-<li>Deposit</li>
 <li>Vote</li>
 </ul>
+<p>JST deposit, vote unlocking, and JST withdrawal are calls to <strong>WJST</strong>, not GovernorBravo.</p>
 <p>The source code is available on <a href="https://github.com/justlend/justlend-protocol/blob/main/contracts/Governance/Bravo/GovernorBravoDelegate.sol">Github</a>.</p>
+<h2 id="governance-boundaries-and-evidence">Governance boundaries and evidence<a class="headerlink" href="#governance-boundaries-and-evidence" title="Permanent link">&para;</a></h2>
+<p>The Mainnet proxy getters were read on <strong>2026-10-14</strong>: <code>proposalThreshold() = 2e26</code>, <code>quorumVotes() = 6e26</code>, <code>votingDelay() = 1</code>, and <code>votingPeriod() = 86400</code>. WJST voting amounts use 18-decimal raw units. Getters establish parameter values, not comparison operators; the operators below come from the <a href="https://github.com/justlend/justlend-protocol/blob/f28f3b462a4f281761e23423554563e15fc9f028/contracts/Governance/Bravo/GovernorBravoDelegate.sol#L74-L91">pinned GovernorBravo <code>propose</code> implementation</a> and <a href="https://github.com/justlend/justlend-protocol/blob/f28f3b462a4f281761e23423554563e15fc9f028/contracts/Governance/Bravo/GovernorBravoDelegate.sol#L207-L226"><code>state</code> implementation</a>. These are source-level rules, not a claim that live boundary transactions were submitted.</p>
+<ul>
+<li><strong>Proposal balance gate:</strong> <code>availableVotes &gt; proposalThreshold || isWhitelisted</code>. Exactly 200,000,000 WJST does <strong>not</strong> pass for a non-whitelisted proposer; one additional raw unit does pass this balance gate. A current whitelist entry bypasses only this gate, not the other <code>propose()</code> checks. The <a href="https://github.com/justlend/justlend-protocol/blob/f28f3b462a4f281761e23423554563e15fc9f028/contracts/Governance/WJST.sol#L93-L96">pinned WJST <code>getPriorVotes</code> implementation</a> returns the available balance, despite its historical-sounding name; JST not deposited into WJST and votes already locked are not available voting balance.</li>
+<li><strong>Approval vote gate:</strong> <code>forVotes &gt; againstVotes &amp;&amp; forVotes &gt;= quorumVotes</code>. Exactly 600,000,000 For-votes meets quorum; a tie with Against still fails. This gate is evaluated after voting ends, for a proposal that has not been canceled.</li>
+<li><strong>Pending block condition:</strong> <code>blockNumber &lt;= startBlock</code>, where <code>startBlock = creationBlock + votingDelay</code>.</li>
+<li><strong>Active block condition:</strong> <code>startBlock &lt; blockNumber &amp;&amp; blockNumber &lt;= endBlock</code>, where <code>endBlock = startBlock + votingPeriod</code>. For a non-canceled proposal created at B with delay 1, B and B+1 are Pending; B+2 is the earliest Active block, and endBlock is still Active. Block timing is not a wall-clock guarantee.</li>
+</ul>
+<p>Re-read the parameters and implementation after upgrades. Approval is not execution: a successful proposal must be queued, then wait the Timelock delay before <code>execute()</code> can be called.</p>
 <h2 id="proposals"><strong>Proposals</strong><a class="headerlink" href="#proposals" title="Permanent link">&para;</a></h2>
 <h3 id="propose"><strong>Propose</strong><a class="headerlink" href="#propose" title="Permanent link">&para;</a></h3>
 <p>Calling this method creates a proposal to change &amp; update the JustLend DAO protocol.
@@ -2444,8 +2480,8 @@ governance module(<a href="https://tronscan.org/#/contract/TEqiF5JbhDPD77yjEfnEM
 
 <span class="kt">struct</span><span class="w"> </span><span class="nv">Receipt</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="nv">hasVoted</span><span class="p">;</span>
-<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="nv">support</span><span class="p">;</span>
-<span class="w">    </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">votes</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">uint8</span><span class="w"> </span><span class="nv">support</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">uint96</span><span class="w"> </span><span class="nv">votes</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div></p>
 <ul>
@@ -2456,11 +2492,12 @@ governance module(<a href="https://tronscan.org/#/contract/TEqiF5JbhDPD77yjEfnEM
 </li>
 <li><strong>Returns:</strong><ul>
 <li><code>hasVoted:</code> voted or not;</li>
-<li><code>values:</code> for or against;</li>
-<li><code>signatures:</code> vote count.</li>
+<li><code>support:</code> <code>0</code> = against, <code>1</code> = for, <code>2</code> = abstain; interpret it only when <code>hasVoted</code> is true;</li>
+<li><code>votes:</code> total recorded vote weight for this voter on this proposal, in 18-decimal WJST raw units.</li>
 </ul>
 </li>
 </ul>
+<p>The result is <strong>one tuple</strong> with these three components, not three unrelated proposal-action fields. The downloadable ABI expands the tuple using the official <a href="https://github.com/justlend/justlend-protocol/blob/f28f3b462a4f281761e23423554563e15fc9f028/contracts/Governance/Bravo/GovernorBravoInterfaces.sol"><code>Receipt</code> source definition</a>; the node's <code>getcontract</code> response only labels the output <code>tuple</code> and omits its components. See <a href="../../abis/#scope-and-provenance">ABI scope and provenance</a> before assuming full deployment-artifact coverage.</p>
 <h3 id="proposal-state"><strong>Proposal State</strong><a class="headerlink" href="#proposal-state" title="Permanent link">&para;</a></h3>
 <p>Calling this method returns the state of a specified proposal.
 <div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">state</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">proposalId</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>view<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span>ProposalState<span class="p">)</span>
@@ -2477,38 +2514,38 @@ governance module(<a href="https://tronscan.org/#/contract/TEqiF5JbhDPD77yjEfnEM
 </ul>
 <h2 id="poll-vote"><strong>Poll &amp; Vote</strong><a class="headerlink" href="#poll-vote" title="Permanent link">&para;</a></h2>
 <h3 id="deposit"><strong>Deposit</strong><a class="headerlink" href="#deposit" title="Permanent link">&para;</a></h3>
-<p>Calling this method exchanges JST for WJST at a one-to-one ratio.
+<p>Call this method on <strong>WJST</strong> (<code>TXk9LnTnLN7oH96H3sKxJayMxLxR9M4ZD6</code>) to exchange JST for WJST at a one-to-one ratio. First approve WJST to spend the requested JST amount. Do not call <code>deposit</code> on the Governor proxy.
 <div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">deposit</span><span class="p">(</span><span class="kt">uint256</span><span class="w"> </span><span class="nv">amount</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span>
 </code></pre></div></p>
 <ul>
 <li><strong>Parameter description:</strong><ul>
-<li><code>amount:</code> number of votes(WJST) to exchange.</li>
+<li><code>amount:</code> JST raw units to wrap (18 decimals; <code>10^18</code> raw units = 1 JST = 1 whole vote).</li>
 </ul>
 </li>
 <li><strong>Returns:</strong> None, reverts on error.</li>
 </ul>
 <h3 id="cast-vote"><strong>Cast Vote</strong><a class="headerlink" href="#cast-vote" title="Permanent link">&para;</a></h3>
 <p>Calling this method casts a vote on a proposal. Voting weight is determined based on the voter’s available WJST balance when the vote is cast, and the corresponding WJST is locked for the proposal.
-<div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">castVote</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">proposalId</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">votes</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nv">support</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span>
+<div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">castVote</span><span class="p">(</span><span class="kt">uint256</span><span class="w"> </span><span class="nv">proposalId</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">votes</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8</span><span class="w"> </span><span class="nv">support</span><span class="p">)</span><span class="w"> </span><span class="kt">external</span>
 </code></pre></div></p>
 <ul>
 <li><strong>Parameter description:</strong><ul>
 <li><code>proposalId:</code> ID of the proposal to vote;</li>
-<li><code>votes:</code> number of the votes to be cast;</li>
-<li><code>support:</code> for or against.</li>
+<li><code>votes:</code> desired <strong>total</strong> recorded vote weight on this proposal in 18-decimal WJST raw units, not an incremental amount. On a repeat vote, the same support choice must be retained; only the increase above the previous receipt is newly locked, subject to available WJST;</li>
+<li><code>support:</code> <code>0</code> = against, <code>1</code> = for, <code>2</code> = abstain.</li>
 </ul>
 </li>
 <li><strong>Returns:</strong> None, reverts on error.</li>
 </ul>
 <h3 id="cast-vote-with-reason"><strong>Cast Vote With Reason</strong><a class="headerlink" href="#cast-vote-with-reason" title="Permanent link">&para;</a></h3>
 <p>Calling this method casts a vote on a proposal. The reason can be submitted simultaneously.
-<div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">castVoteWithReason</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">proposalId</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">votes</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nv">support</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nv">calldata</span><span class="w"> </span>reason<span class="p">)</span><span class="w"> </span><span class="kt">public</span>
+<div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">castVoteWithReason</span><span class="p">(</span><span class="kt">uint256</span><span class="w"> </span><span class="nv">proposalId</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">votes</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8</span><span class="w"> </span><span class="nv">support</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nv">calldata</span><span class="w"> </span>reason<span class="p">)</span><span class="w"> </span><span class="kt">external</span>
 </code></pre></div></p>
 <ul>
 <li><strong>Parameter description:</strong><ul>
 <li><code>proposalId:</code> ID of the proposal to vote;</li>
-<li><code>votes:</code> number of the votes to be cast;</li>
-<li><code>support:</code> for or against;</li>
+<li><code>votes:</code> desired total recorded weight, in 18-decimal WJST raw units, as for <code>castVote</code>;</li>
+<li><code>support:</code> <code>0</code> = against, <code>1</code> = for, <code>2</code> = abstain;</li>
 <li><code>reason:</code> voting reason.</li>
 </ul>
 </li>
@@ -2516,13 +2553,13 @@ governance module(<a href="https://tronscan.org/#/contract/TEqiF5JbhDPD77yjEfnEM
 </ul>
 <h3 id="cast-vote-by-signature"><strong>Cast Vote By Signature</strong><a class="headerlink" href="#cast-vote-by-signature" title="Permanent link">&para;</a></h3>
 <p>Calling this method casts votes on a specified proposal. Comparing with <code>castVote()</code>, this method allows offline signature.
-<div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">castVoteWithSignature</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">proposalId</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">votes</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nv">support</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">v</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">r</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">s</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span>
+<div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">castVoteBySig</span><span class="p">(</span><span class="kt">uint256</span><span class="w"> </span><span class="nv">proposalId</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">votes</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8</span><span class="w"> </span><span class="nv">support</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8</span><span class="w"> </span><span class="nv">v</span><span class="p">,</span><span class="w"> </span><span class="kt">bytes32</span><span class="w"> </span><span class="nv">r</span><span class="p">,</span><span class="w"> </span><span class="kt">bytes32</span><span class="w"> </span><span class="nv">s</span><span class="p">)</span><span class="w"> </span><span class="kt">external</span>
 </code></pre></div></p>
 <ul>
 <li><strong>Parameter description:</strong><ul>
 <li><code>proposalId:</code> ID of the proposal to vote;</li>
-<li><code>votes:</code> number of the votes to be cast;</li>
-<li><code>support:</code> for or against;</li>
+<li><code>votes:</code> desired total recorded weight, in 18-decimal WJST raw units;</li>
+<li><code>support:</code> <code>0</code> = against, <code>1</code> = for, <code>2</code> = abstain;</li>
 <li><code>v:</code> recover byte of the signature;</li>
 <li><code>r:</code> half of the ECDSA signature pair;</li>
 <li><code>s:</code> half of the ECDSA signature pair.</li>
@@ -2530,6 +2567,10 @@ governance module(<a href="https://tronscan.org/#/contract/TEqiF5JbhDPD77yjEfnEM
 </li>
 <li><strong>Returns:</strong> None, reverts on error.</li>
 </ul>
+<p>These input types were checked against the ABI of Mainnet's current implementation, <code>TUeNh9BsYK44XePmFAuKZWg2rJuU7bSt5u</code>, on <strong>2026-10-12</strong>. Submit to the <strong>Governor proxy</strong>; offline signing is not a read-only vote, and execution still requires a transaction. Construct the signature domain for the correct network and proxy, not the implementation address.</p>
+<h3 id="available-votes-locks-and-withdrawal"><strong>Available votes, locks, and withdrawal</strong><a class="headerlink" href="#available-votes-locks-and-withdrawal" title="Permanent link">&para;</a></h3>
+<p>The deployed WJST's published <a href="https://github.com/justlend/justlend-protocol/blob/f28f3b462a4f281761e23423554563e15fc9f028/contracts/Governance/WJST.sol"><code>getPriorVotes(account, blockNumber)</code> implementation</a> ignores <code>blockNumber</code> and returns the account's <strong>current available WJST balance</strong>. It is not a historical proposal-block snapshot. Voting invokes <code>voteFresh</code> through the Governor, moving the incremental voted amount out of the available balance into the proposal-specific lock.</p>
+<p>After the proposal is no longer Pending or Active (<code>state(proposalId) &gt;= 2</code>), the voter may call <strong><code>WJST.withdrawVotes(proposalId)</code></strong> to restore those locked votes to their available WJST balance. This unlock step does not itself return JST. <strong><code>WJST.withdraw(amount)</code></strong> then burns available WJST and returns JST 1:1; it cannot spend still-locked votes. Both operations are state-changing and require wallet confirmation. A proposal ending does not automatically withdraw tokens.</p>
 
 
 
@@ -2550,7 +2591,7 @@ governance module(<a href="https://tronscan.org/#/contract/TEqiF5JbhDPD77yjEfnEM
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 9, 2026 07:38:52 UTC">2026-10-09</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 14, 2026 09:04:41 UTC">2026-10-14</span>
   </span>
 
     

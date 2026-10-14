@@ -143,8 +143,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "JustLend DAO PriceOracle reference \u2014 getUnderlyingPrice, assetPrices, setPrice (poster-only). Backed by Chainlink Data Feeds. Prices are scaled by 10^(tokenDecimal \u2212 6) in sun (10\u207b\u2076 TRX).",
-          "dateModified": "2026-06-24",
-          "datePublished": "2026-06-24"
+          "dateModified": "2026-10-14",
+          "datePublished": "2026-10-14"
         }
       ]
     }
@@ -2258,7 +2258,8 @@
 <li><strong>Pattern:</strong> <code>PriceOracleProxy</code> (entrypoint, <code>TGnYnSn4G9PgWFj7QQemh4YMZKp3fkympJ</code>) → <code>PriceOracle</code> (impl, <code>TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV</code>)</li>
 <li><strong>Data source:</strong> <a href="https://chain.link/">Chainlink</a> Data Feeds. The <code>poster</code> address relays Chainlink prices on-chain via <code>setPrice(asset, price)</code></li>
 <li><strong>Units:</strong> Prices are denominated in <strong>TRX</strong> , scaled by <code>1e^(33 - tokenDecimal)</code>. For an 18-decimal token like USDD, the value for the price feed is calculated based on the exchange rate of 1 USDD to TRX (assuming a price of 3.0266), Price Feed Value = 3.0266 * 1e^(33 - 18) = 3.0266 * 1e^15</li>
-<li><strong>ABI:</strong> <a href="../../abis/price-oracle.json"><code>abis/price-oracle.json</code></a>.</li>
+<li><strong>ABI:</strong> <a href="../../abis/price-oracle.json"><code>price-oracle.json</code></a> contains only the proxy's <code>getUnderlyingPrice</code> read. <a href="../../abis/price-oracle-impl.json"><code>price-oracle-impl.json</code></a> contains selected backend methods below, including <code>assetPrices</code> and restricted <code>setPrice</code>. These are different contract interfaces; do not call a backend method at the proxy address.</li>
+<li><strong>Verification basis:</strong> <code>Comptroller.oracle()</code> and the returned proxy's <code>v1PriceOracle()</code> were re-read on 2026-10-14; selected backend ABI entries match the node ABI. See <a href="../../deployed_contracts/#address-verification">getter methods and address roles</a> and the <a href="../../abis/manifest.json">ABI manifest</a>. This documents current pointers, not a deployment performed by this repository.</li>
 </ul>
 </div>
 <p>Blockchain-powered smart contracts, by design, cannot access external market data directly. To ensure accurate and tamper-resistant pricing, the JustLend DAO protocol relies on a multi-source data aggregation system that draws from reputable and decentralized sources.</p>
@@ -2271,6 +2272,7 @@
 </ul>
 <p>The source code is available on <a href="https://github.com/justlend/justlend-protocol/blob/main/contracts/PriceOracle/PriceOracleV1.sol">Github</a>.</p>
 <h2 id="contracts-abi"><strong>Contracts ABI</strong><a class="headerlink" href="#contracts-abi" title="Permanent link">&para;</a></h2>
+<p>The methods in the following sections target the <strong>Oracle backend</strong>, not the proxy. Mainnet's proxy <code>v1PriceOracle()</code> pointer was checked on <strong>2026-10-12</strong> and resolves to <code>TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV</code>. Re-read the pointer before integration. For ordinary collateral/borrow valuation, prefer <code>getUnderlyingPrice(jToken)</code> on the current <code>Comptroller.oracle()</code> entrypoint.</p>
 <h3 id="anchor-token-price"><strong>Anchor Token Price</strong><a class="headerlink" href="#anchor-token-price" title="Permanent link">&para;</a></h3>
 <p>Calling this methods returns the current price anchor of a specified token.
 <div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">anchors</span><span class="p">(</span><span class="kt">address</span><span class="p">)</span><span class="w"> </span>view<span class="w"> </span><span class="kt">returns</span><span class="p">(</span><span class="kt">uint256</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="p">)</span>
@@ -2346,7 +2348,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 24, 2026 03:36:18 UTC">2026-06-24</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 14, 2026 08:34:59 UTC">2026-10-14</span>
   </span>
 
     

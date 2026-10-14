@@ -143,8 +143,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "JustLend DAO sTRX liquid-staking contract reference \u2014 exchangeRate, deposit, withdraw, withdrawExact, claim, claimAll, plus TronWeb examples. Backs the user-facing sTRX feature on TRON.",
-          "dateModified": "2026-09-24",
-          "datePublished": "2026-09-24"
+          "dateModified": "2026-10-12",
+          "datePublished": "2026-10-12"
         }
       ]
     }
@@ -2451,7 +2451,7 @@
 <li><strong>Units:</strong> Prices are denominated in <strong>TRX</strong> , scaled by <code>1e^(33 - tokenDecimal)</code>; sTRX is an 18-decimal TRC20; <code>exchangeRate()</code> is scaled by <code>1e18</code>, always ≥ 1, grows monotonically as rewards accrue.</li>
 <li><strong>Unbonding:</strong> 14-day queue on JustLend</li>
 <li><strong>User-side overview:</strong> <a href="../../getting_started/concepts/staked_trx/">Staked TRX concept</a></li>
-<li><strong>ABI:</strong> <a href="../abis/strx.json"><code>abis/strx.json</code></a>.</li>
+<li><strong>ABI:</strong> <a href="../abis/strx.json"><code>abis/strx.json</code></a> includes selected staking/balance functions and all 27 event declarations from the current Mainnet STRXG2 implementation, including <code>Deposit</code>, <code>Withdraw</code>, and <code>Claim</code> with their indexed fields. It is not a complete function or administrative proxy ABI. See <a href="../abis/#scope-and-provenance">ABI scope and bytecode verification</a> before decoding other implementations or historical events.</li>
 </ul>
 </div>
 <p>Based on Stake 2.0, with TRX Liquid Staking, users can stake TRX to get sTRX tokens and gain high rewards. Compared to traditional staking, TRX Liquid Staking is easier to use and more profitable. Staked TRX will be used automatically for voting and governance, and gain rewards via Energy Rental.
@@ -2476,7 +2476,7 @@ The contract <a href="https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZxoqQ
 </ul>
 <h3 id="user-balance-in-trx"><strong>User Balance in TRX</strong><a class="headerlink" href="#user-balance-in-trx" title="Permanent link">&para;</a></h3>
 <p>Query the amount of TRX corresponding to the sTRX held by user.
-<div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">balanceInTrx</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">_account</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>view<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint256</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">viewBalanceOfUnderlying</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">_account</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>view<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint256</span><span class="p">)</span>
 </code></pre></div></p>
 <ul>
 <li><strong>Parameter description:</strong><ul>
@@ -2539,13 +2539,14 @@ The contract <a href="https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZxoqQ
 <li><strong>Returns:</strong> the amount of sTRX received by user through exchange, the minimum unit.</li>
 </ul>
 <h4 id="event"><strong>Event</strong><a class="headerlink" href="#event" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code>Deposit<span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">user</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">trxAmount</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">strx</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">userHoldStrx</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="kt">event</span><span class="w"> </span><span class="nv">Deposit</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">indexed</span><span class="w"> </span>user<span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">trxAmount</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">strxAmount</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">balance</span><span class="p">);</span>
 </code></pre></div>
 <ul>
 <li>Emits when user successfully deposits TRX.<ul>
-<li><code>trxAmount:</code> the amount of TRX user deposits;</li>
-<li><code>strx:</code> the amount of sTRX user gets;</li>
-<li><code>userHoldStrx:</code> the total amount of sTRX held by user after the deposit.</li>
+<li><code>user:</code> the depositor; indexed in the event topics;</li>
+<li><code>trxAmount:</code> the amount of TRX deposited, in sun;</li>
+<li><code>strxAmount:</code> the sTRX received, in 18-decimal raw units;</li>
+<li><code>balance:</code> the user's sTRX balance after the deposit, in 18-decimal raw units.</li>
 </ul>
 </li>
 </ul>
@@ -2562,13 +2563,14 @@ The contract <a href="https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZxoqQ
 <li><strong>Returns:</strong> the amount of TRX to be unfrozen when user withdraws, the minimum unit.</li>
 </ul>
 <h4 id="event_1"><strong>Event</strong><a class="headerlink" href="#event_1" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code>Withdraw<span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">user</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">strx</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">trxAmount</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">userHoldStrx</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="kt">event</span><span class="w"> </span><span class="nv">Withdraw</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">indexed</span><span class="w"> </span>user<span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">strxAmount</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">trxAmount</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">balance</span><span class="p">);</span>
 </code></pre></div>
 <ul>
 <li>Emits when user successfully withdraws sTRX.<ul>
-<li><code>strx:</code> the amount of sTRX user withdraws;</li>
-<li><code>trxAmount:</code> the amount of TRX user gets;</li>
-<li><code>userHoldStrx:</code> the total amount of sTRX held by user after the withdrawal.</li>
+<li><code>user:</code> the withdrawing account; indexed in the event topics;</li>
+<li><code>strxAmount:</code> the sTRX burned, in 18-decimal raw units;</li>
+<li><code>trxAmount:</code> the TRX queued for withdrawal, in sun;</li>
+<li><code>balance:</code> the user's remaining sTRX balance, in 18-decimal raw units.</li>
 </ul>
 </li>
 </ul>
@@ -2594,11 +2596,12 @@ The contract <a href="https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZxoqQ
 <li><strong>Returns:</strong> the amount of TRX claimed by user in the earliest unfreezing round, the minimum unit.</li>
 </ul>
 <h4 id="event_2"><strong>Event</strong><a class="headerlink" href="#event_2" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code>Claim<span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">user</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">trxAmount</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="kt">event</span><span class="w"> </span><span class="nv">Claim</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">indexed</span><span class="w"> </span>user<span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">trxAmount</span><span class="p">);</span>
 </code></pre></div>
 <ul>
 <li>Emits when user successfully claims TRX.<ul>
-<li><code>trxAmount:</code> the amount of TRX user claims.</li>
+<li><code>user:</code> the claiming account; indexed in the event topics;</li>
+<li><code>trxAmount:</code> the TRX claimed, in sun.</li>
 </ul>
 </li>
 </ul>
@@ -2701,7 +2704,7 @@ The contract <a href="https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZxoqQ
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="September 24, 2026 03:49:09 UTC">2026-09-24</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 12, 2026 10:10:43 UTC">2026-10-12</span>
   </span>
 
     

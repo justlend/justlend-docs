@@ -143,8 +143,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "How borrowing works on JustLend \u2014 over-collateralized loans against supplied assets, dynamic interest rates, collateral factors, and liquidation thresholds on TRON.",
-          "dateModified": "2026-06-17",
-          "datePublished": "2026-06-17"
+          "dateModified": "2026-10-12",
+          "datePublished": "2026-10-12"
         }
       ]
     }
@@ -2237,7 +2237,7 @@
 <ul>
 <li><code>Borrow Rate:</code> the interest rate borrowers pay for borrowing a specific asset. It fluctuates based on the market’s borrow utilization rate — as utilization increases, the borrow rate typically rises;</li>
 <li><code>Collateral:</code> the asset a user supplies and designates as collateral to secure their borrowings. If the collateral value falls below the required threshold, liquidation may occur;</li>
-<li><code>LLTV:</code> the maximum borrowing ratio before a position becomes subject to liquidation. For example, an LLTV of 80% means liquidation will occur if the loan value reaches 80% of the collateral value;</li>
+<li><code>LLTV:</code> the liquidation loan-to-value threshold. For example, an LLTV of 80% means a position becomes eligible for liquidation when its LTV <strong>exceeds 80%</strong>, not merely when a rounded display reaches 80%. Execution still requires a liquidator transaction and the contract's eligibility checks; see <a href="../../../developers/justlend_v2/#liquidation">V2 liquidation</a>;</li>
 <li><code>Liquidity:</code> the amount of assets currently available in the market for borrowing. High liquidity means more assets are available to borrow; low liquidity may indicate limited borrowing capacity.</li>
 </ul>
 <h4 id="borrow-assets">Borrow Assets<a class="headerlink" href="#borrow-assets" title="Permanent link">&para;</a></h4>
@@ -2289,7 +2289,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 17, 2026 04:14:30 UTC">2026-06-17</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 12, 2026 09:32:17 UTC">2026-10-12</span>
   </span>
 
     

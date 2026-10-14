@@ -105,7 +105,7 @@ if (jTokenSymbol === 'jTRX') {
 }
 ```
 
-Same overload pattern applies to `repayBorrow(uint)` vs `repayBorrow() payable` and `liquidateBorrow(...)`.
+Do not assume the same argument difference for self-repayment: **Mainnet jTRX uses `repayBorrow(uint256 amount) payable`**, with both `amount` and `callValue` in sun. jTRC20 uses `repayBorrow(uint256 repayAmount)` without a TRX payment and returns an error code. For repayment on behalf of another account, jTRX uses `repayBorrowBehalf(borrower)` plus `callValue`, while jTRC20 uses `repayBorrowBehalf(borrower, amount)`. See the [verified repayment signatures](supply_and_borrow_market/sbm.md#repayborrow).
 
 ---
 
@@ -116,7 +116,7 @@ Same overload pattern applies to `repayBorrow(uint)` vs `repayBorrow() payable` 
 | `redeem(redeemTokens)` | **jToken** (always 8 decimals) | "Withdraw a specific number of jTokens." |
 | `redeemUnderlying(redeemAmount)` | **underlying** (token's own decimals) | "Withdraw a specific number of underlying tokens." |
 
-The arguments are not interchangeable. `redeem(100e6)` on jUSDT redeems `100e6 / 10⁸ = 0.01` jTokens (a tiny amount). `redeemUnderlying(100e6)` on jUSDT redeems whatever number of jTokens is needed to return `100 USDT` (6-decimal underlying). Pick by intent; verify with [`balanceOfUnderlying(user)`](supply_and_borrow_market/sbm.md#underlying-balance) before sending.
+The arguments are not interchangeable. `redeem(100e6)` on jUSDT redeems `100e6 / 10⁸ = 1` jToken (8-decimal units). `redeemUnderlying(100e6)` on jUSDT redeems whatever number of jTokens is needed to return `100 USDT` (6-decimal underlying). Pick by intent; verify with [`balanceOfUnderlying(user)`](supply_and_borrow_market/sbm.md#underlying-balance) before sending.
 
 ---
 
@@ -124,7 +124,7 @@ The arguments are not interchangeable. `redeem(100e6)` on jUSDT redeems `100e6 /
 
 **Symptom.** Off-by-10² to 10¹² error in a downstream balance calculation.
 
-**Rule.** Every jToken is 8 decimals. The underlying may be anything from 6 (TRX, USDT, USDC) to 8 (BTC, sTRX) to 18 (USDD, ETH). The exchange rate compensates, but only if you remember which side of the conversion you're on.
+**Rule.** Every jToken is 8 decimals. Underlyings use their own precision: for example, TRX, USDT, USDC, and WBTT use 6; BTC and WBTC use 8; sTRX, wstUSDT, USDD, TUSD, USDJ, USD1, SUN, BTT, JST, HTX, and ETH use 18. The exchange rate compensates, but only if you remember which side of the conversion you're on. See the [verified precision table](../resources/glossary.md#underlying-decimals) and query the underlying contract's `decimals()` rather than inferring it from a symbol.
 
 ```javascript
 // jUSDT (jToken 8 dec) ↔ USDT (underlying 6 dec)
@@ -142,7 +142,7 @@ The `balanceOfUnderlying(account)` helper does this conversion for you and is th
 
 **Symptom.** Liquidation reverts with `LIQUIDATE_CLOSE_AMOUNT_TOO_LARGE` or similar.
 
-**Rule.** In a single `liquidateBorrow()` call, you may repay **at most `closeFactorMantissa / 1e18 = 50%`** of the borrower's outstanding debt **on that specific borrowed asset**. To fully liquidate, call repeatedly.
+**Rule.** In a single `liquidateBorrow()` call, you may repay **at most `closeFactorMantissa / 1e18 = 50%`** of the borrower's outstanding debt **on that specific borrowed asset**. Re-check eligibility and the remaining debt before any subsequent transaction; the first liquidation may already restore collateral coverage.
 
 ```javascript
 const debt = BigInt((await jUSDT.borrowBalanceCurrent(borrower).call()).toString());

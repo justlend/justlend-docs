@@ -141,8 +141,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "Single-page reference for the precise meaning, units, and on-chain encoding of JustLend DAO and Compound V2 terms \u2014 mantissa, kink, utilization, sun, borrow index, collateral / close / reserve factor, exchange rate, liquidation incentive, and more.",
-          "dateModified": "2026-08-19",
-          "datePublished": "2026-08-19"
+          "dateModified": "2026-10-14",
+          "datePublished": "2026-10-14"
         }
       ]
     }
@@ -2647,7 +2647,7 @@
 <ul>
 <li><code>collateralFactorMantissa = 800000000000000000</code> → <code>0.80</code> → 80% collateral factor.</li>
 <li><code>liquidationIncentiveMantissa = 1080000000000000000</code> → <code>1.08</code> → 8% liquidator reward.</li>
-<li><code>exchangeRateMantissa = 200000000000000000000000000</code> → <code>2e8</code> → 1 jToken = 2 × 10⁸ of the underlying's smallest unit (for an 18-decimal underlying paired with 8-decimal jToken, that's 0.2 underlying tokens per jToken).</li>
+<li><code>exchangeRateMantissa = 200000000000000000000000000</code> (<code>2e26</code>), with an 18-decimal underlying and an 8-decimal jToken: <strong>1 jToken = <code>2e26 / 10^(18 + 18 - 8) = 0.02</code> underlying tokens</strong>. Dividing the mantissa by <code>1e18</code> alone gives a ratio of raw units, not a ratio of whole tokens.</li>
 </ul>
 <p>A "scaled by 1e18" annotation anywhere in this documentation means "this is a mantissa."</p>
 <h3 id="jtoken-decimals">jToken decimals<a class="headerlink" href="#jtoken-decimals" title="Permanent link">&para;</a></h3>
@@ -2667,24 +2667,21 @@
 <td>6</td>
 </tr>
 <tr>
-<td>USDT, USDC, TUSD, USDJ, USD1, SUN, BTT, NFT, WIN, JST, HTX</td>
+<td>USDT, USDC, NFT, WIN, WBTT</td>
 <td>6</td>
 </tr>
 <tr>
-<td>BTC, WBTC, sTRX, wstUSDT</td>
+<td>BTC, WBTC</td>
 <td>8</td>
 </tr>
 <tr>
-<td>USDD, ETH, ETHB</td>
-<td>18</td>
-</tr>
-<tr>
-<td>WBTT</td>
+<td>USDD, ETH, ETHB, TUSD, USDJ, USD1, SUN, BTT, JST, HTX, sTRX, wstUSDT</td>
 <td>18</td>
 </tr>
 </tbody>
 </table>
 <p>For machine consumers, <a href="../../developers/contracts.json"><code>/developers/contracts.json</code> → <code>networks.*.jtokens.&lt;symbol&gt;.underlying_decimals</code></a> carries the canonical per-market value.</p>
+<p>The sTRX, wstUSDT, TUSD, USDJ, USD1, SUN, BTT, JST, HTX, and WBTT values above were checked against their <strong>Mainnet <code>decimals()</code> calls on 2026-10-12</strong>. The linked registry includes each underlying contract address; do not apply a mainnet value to an unrelated token with the same symbol.</p>
 <hr />
 <h2 id="interest-rate-model">Interest rate model<a class="headerlink" href="#interest-rate-model" title="Permanent link">&para;</a></h2>
 <h3 id="borrowrateperblock-supplyrateperblock">borrowRatePerBlock / supplyRatePerBlock<a class="headerlink" href="#borrowrateperblock-supplyrateperblock" title="Permanent link">&para;</a></h3>
@@ -2712,7 +2709,7 @@ blocksPerYear ≈ 10,517,760 on TRON at ~3 s/block (365.25 × 86400 / 3)
 </code></pre></div>
 <p>Distinct from <strong>borrow cap</strong>. Computed implicitly inside <code>getAccountLiquidity(account)</code> on the Comptroller — <code>liquidity</code> is <code>borrowLimit − totalBorrowValue</code>.</p>
 <h3 id="close-factor">close factor<a class="headerlink" href="#close-factor" title="Permanent link">&para;</a></h3>
-<p>The maximum fraction of a single borrower's debt that a single <code>liquidateBorrow()</code> call may repay. Mantissa-scaled. JustLend currently uses <code>0.5e18</code> → <strong>50%</strong>. Read via <code>Comptroller.closeFactorMantissa()</code>. To fully liquidate an unhealthy account you generally need at least two passes.</p>
+<p>The maximum fraction of a borrower's outstanding debt <strong>in the selected borrowed market</strong> that one <code>liquidateBorrow()</code> call may repay, not a fraction of debts summed across different assets. Mantissa-scaled. JustLend currently uses <code>0.5e18</code> → <strong>50%</strong>. Read via <code>Comptroller.closeFactorMantissa()</code>. A later liquidation requires a fresh eligibility check; one liquidation may already restore the account's collateral coverage.</p>
 <h3 id="collateral-factor">collateral factor<a class="headerlink" href="#collateral-factor" title="Permanent link">&para;</a></h3>
 <p>The fraction of a supplied asset's value that the protocol counts toward the user's borrow limit. Mantissa-scaled, in <code>[0, 0.9e18]</code>. Set by Governance per market. A <code>0.80</code> factor means $100 supplied → $80 toward your borrow limit. Read via <code>Comptroller.markets(jToken).collateralFactorMantissa</code>.</p>
 <h3 id="liquidation-incentive">liquidation incentive<a class="headerlink" href="#liquidation-incentive" title="Permanent link">&para;</a></h3>
@@ -2723,26 +2720,35 @@ blocksPerYear ≈ 10,517,760 on TRON at ~3 s/block (365.25 × 86400 / 3)
 <p>JustLend's user-facing single-number health metric. Defined on the dApp and on the <a href="../../getting_started/concepts/liquidations/">Liquidations page</a>:</p>
 <div class="highlight"><pre><span></span><code>RiskValue = totalBorrow / borrowLimit × 100
 </code></pre></div>
-<p>A scalar in <code>[0, ∞)</code>. Liquidatable when <code>RiskValue &gt; 100</code>. Distinct from <code>getAccountLiquidity(account)</code> — <code>Risk Value &gt; 100</code> ↔ <code>shortfall &gt; 0</code>.</p>
+<p>A display ratio, defined when the borrow limit is positive. Debt above that limit corresponds conceptually to <code>RiskValue &gt; 100</code>; the authoritative V1 undercollateralization check is a successful <code>getAccountLiquidity(account)</code> read with <code>shortfall &gt; 0</code>. Display rounding, oracle values, and integer arithmetic can affect the boundary. A displayed <code>100</code> is not proof of eligibility; see <a href="../../getting_started/concepts/liquidations/#display-rounding-is-not-the-liquidation-condition">boundary examples</a>.</p>
 <hr />
 <h2 id="token-mechanics">Token mechanics<a class="headerlink" href="#token-mechanics" title="Permanent link">&para;</a></h2>
 <h3 id="exchange-rate-jtoken-underlying">exchange rate (jToken ↔ underlying)<a class="headerlink" href="#exchange-rate-jtoken-underlying" title="Permanent link">&para;</a></h3>
-<p>The current ratio at which <code>mint</code>/<code>redeem</code> exchange jTokens for the underlying. Mantissa-scaled to <code>1e18</code>. Always ≥ initial value (1:1 at deployment, with adjustment for decimal differences), monotonically increases as interest accrues — <strong>the supply yield is captured by exchange-rate appreciation</strong>, not by minting new jTokens.</p>
-<p>For an 8-decimal jToken paired with a 6-decimal underlying, the initial exchange rate is <code>0.02e18</code> (so 1 jToken at mint = 50 underlying smallest-units = 50 / 10⁶ underlying). Read via <code>&lt;jToken&gt;.exchangeRateCurrent()</code> (accrues interest first) or <code>exchangeRateStored()</code> (cached).</p>
+<p>The ratio used by <code>mint</code>/<code>redeem</code> to exchange jTokens for the underlying. <strong>Supply interest is reflected in the exchange rate</strong>, rather than an increase in the holder's jToken balance. Do not assume a universal initial rate or a 1:1 whole-token ratio.</p>
+<div class="highlight"><pre><span></span><code>underlying raw units = jToken raw units × exchangeRateMantissa / 10^18
+underlying tokens per 1 jToken = exchangeRateMantissa / 10^(18 + underlyingDecimals - 8)
+</code></pre></div>
+<p>For example, <code>2e26</code> with an 18-decimal underlying means <strong>0.02 underlying tokens per jToken</strong>. A hypothetical rate of <code>0.02e18</code> gives <code>10^8 × 0.02e18 / 10^18 = 2,000,000</code> underlying raw units per whole jToken; with a 6-decimal underlying that is <strong>2 underlying tokens</strong>, not 50 raw units.</p>
+<p>Use integer arithmetic for raw amounts (division rounds down):</p>
+<div class="highlight"><pre><span></span><code><span class="kd">function</span><span class="w"> </span><span class="nx">underlyingRawFromJTokens</span><span class="p">(</span><span class="nx">jTokenRaw</span><span class="p">,</span><span class="w"> </span><span class="nx">exchangeRateMantissa</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nb">BigInt</span><span class="p">(</span><span class="nx">jTokenRaw</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nb">BigInt</span><span class="p">(</span><span class="nx">exchangeRateMantissa</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mi">10n</span><span class="w"> </span><span class="o">**</span><span class="w"> </span><span class="mi">18n</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Read via <code>&lt;jToken&gt;.exchangeRateCurrent()</code> (accrues interest first) or <code>exchangeRateStored()</code> (cached). Convert the resulting raw amount using the underlying's own decimals.</p>
 <h3 id="exchange-rate-strx-trx">exchange rate (sTRX ↔ TRX)<a class="headerlink" href="#exchange-rate-strx-trx" title="Permanent link">&para;</a></h3>
 <p>The current ratio at which <code>deposit</code>/<code>withdraw</code> exchange sTRX for TRX. Mantissa-scaled to <code>1e18</code>. Always ≥ 1 (no initial premium), monotonically increases as voting + Energy-Rental rewards accrue. Read via <code>sTRX.exchangeRate()</code>.</p>
 <h3 id="redemption-ratio">redemption ratio<a class="headerlink" href="#redemption-ratio" title="Permanent link">&para;</a></h3>
-<p>Same concept as <strong>exchange rate</strong> but used colloquially to mean "how much underlying I get back per share." For jTokens it's <code>exchangeRateMantissa / 1e18</code>; for sTRX likewise.</p>
+<p>Same concept as <strong>exchange rate</strong> but used colloquially to mean "how much underlying I get back per whole share." For jTokens use <code>exchangeRateMantissa / 10^(18 + underlyingDecimals - 8)</code>; for sTRX the whole-token TRX-per-sTRX ratio is <code>exchangeRate() / 1e18</code> (raw TRX and sTRX amounts still have different decimals).</p>
 <hr />
 <h2 id="governance">Governance<a class="headerlink" href="#governance" title="Permanent link">&para;</a></h2>
 <h3 id="vote-1-jst-1-vote-after-wjst-wrap">Vote (1 JST = 1 Vote, after WJST wrap)<a class="headerlink" href="#vote-1-jst-1-vote-after-wjst-wrap" title="Permanent link">&para;</a></h3>
-<p>Voting power on a JustLend proposal is denominated in <strong>WJST</strong>, which is minted 1:1 by depositing JST into <code>WJST.deposit()</code>. Voting weight is the WJST balance at the proposal's voting-snapshot block. Withdrawing WJST back to JST after a proposal closes restores the underlying JST.</p>
+<p>Voting power is <strong>token-weighted</strong>, not one vote per holder: deposit JST into WJST 1:1, with both amounts represented in 18-decimal raw units. The current WJST implementation uses the voter's <strong>available balance at voting time</strong>, not a proposal-block balance snapshot; the additional weight cast is locked for that proposal. When the proposal is no longer Pending or Active, call <code>WJST.withdrawVotes(proposalId)</code> to unlock it, then <code>WJST.withdraw(amount)</code> to redeem available WJST for JST. Neither step is automatic. See <a href="../../developers/supply_and_borrow_market/governance/#available-votes-locks-and-withdrawal">Governance: available votes and withdrawal</a>.</p>
 <h3 id="proposal-threshold">proposal threshold<a class="headerlink" href="#proposal-threshold" title="Permanent link">&para;</a></h3>
-<p>Minimum JST a single account must hold (via WJST) to call <code>propose()</code>. JustLend currently requires <strong>≥ 200,000,000 JST</strong>. Set in <code>GovernorBravoDelegate</code>.</p>
+<p>The available WJST balance gate for <code>propose()</code>: a non-whitelisted account must have <strong>strictly more than 200,000,000 WJST</strong>, not exactly that amount or merely JST in its wallet. A current whitelist entry bypasses this gate, not other proposal checks. <code>proposalThreshold() = 2e26</code> raw units was read on 2026-10-14; see <a href="../../developers/supply_and_borrow_market/governance/#governance-boundaries-and-evidence">governance boundaries and evidence</a>.</p>
 <h3 id="quorum">quorum<a class="headerlink" href="#quorum" title="Permanent link">&para;</a></h3>
-<p>Minimum For-votes a proposal must receive to be valid, regardless of For-vs-Against ratio. JustLend currently requires <strong>For votes &gt; 600,000,000</strong> AND <code>For &gt; Against</code>. See <a href="../../developers/supply_and_borrow_market/governance/">Governance contract reference</a>.</p>
+<p>The inclusive minimum For-votes: <strong>For votes &gt;= 600,000,000</strong>, together with the separate strict condition <code>For &gt; Against</code>. Exactly 600,000,000 meets quorum, but a tie with Against fails. <code>quorumVotes() = 6e26</code> raw units was read on 2026-10-14. See <a href="../../developers/supply_and_borrow_market/governance/#governance-boundaries-and-evidence">governance boundaries and evidence</a>.</p>
 <h3 id="timelock">Timelock<a class="headerlink" href="#timelock" title="Permanent link">&para;</a></h3>
-<p>The 48-hour minimum delay between a proposal succeeding (vote period closes with quorum met) and <code>execute()</code> becoming callable. Enforced by a separate Timelock contract (<code>TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x</code>), the only address authorized to call privileged setters on JustLend contracts.</p>
+<p>The 48-hour minimum delay between queueing a successful proposal and <code>execute()</code> becoming callable. Enforced by a separate Timelock contract (<code>TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x</code>), the only address authorized to call privileged setters on JustLend contracts.</p>
 <hr />
 <h2 id="market-status">Market status<a class="headerlink" href="#market-status" title="Permanent link">&para;</a></h2>
 <h3 id="active-jtoken-status">active (jToken status)<a class="headerlink" href="#active-jtoken-status" title="Permanent link">&para;</a></h3>
@@ -2781,7 +2787,7 @@ blocksPerYear ≈ 10,517,760 on TRON at ~3 s/block (365.25 × 86400 / 3)
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="August 19, 2026 09:32:01 UTC">2026-08-19</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 14, 2026 09:04:41 UTC">2026-10-14</span>
   </span>
 
     

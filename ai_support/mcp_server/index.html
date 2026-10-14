@@ -143,8 +143,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "@justlend/mcp-server-justlend v1.1.3 \u2014 104 MCP tools with versioned output schemas across JustLend V1 and V2, secure energy direct purchase, historical records, general TRON utilities, and encrypted agent-wallet signing.",
-          "dateModified": "2026-08-27",
-          "datePublished": "2026-08-27"
+          "dateModified": "2026-10-14",
+          "datePublished": "2026-10-14"
         }
       ]
     }
@@ -3179,7 +3179,7 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 </tr>
 <tr>
 <td><code>calculate_energy_rental_price</code></td>
-<td>Estimate cost for renting energy (prepayment, deposit, daily cost)</td>
+<td>Read-only cost estimate; a successful result is not proof of live inputs — see the <a href="../../developers/energy_rental/#2-estimate-the-full-new-rental-prepayment-read-only">version-specific fallback warning</a></td>
 <td>No</td>
 </tr>
 <tr>
@@ -3762,7 +3762,7 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 <p><strong>"Withdraw my votes from completed proposals"</strong>
 → AI calls <code>get_user_vote_status</code> to find withdrawable proposals → calls <code>withdraw_votes_from_proposal</code> for each</p>
 <p><strong>"How much does it cost to rent 300,000 energy for 7 days?"</strong>
-→ AI calls <code>calculate_energy_rental_price</code> with energyAmount=300000, durationHours=168, returns cost breakdown</p>
+→ AI calls <code>calculate_energy_rental_price</code> with energyAmount=300000, durationHours=168, returns an estimate (not a live-data guarantee). Before any separate write, independently verify current contract inputs; stop if they cannot be verified. See the version-specific fallback warning linked above.</p>
 <p><strong>"Rent 500,000 energy to address TXxx... for 14 days"</strong>
 → AI uses <code>rent_energy</code> prompt: checks balance → checks rental status → calculates price → rents energy → verifies</p>
 <p><strong>"Cancel my energy rental to TXxx..."</strong>
@@ -3799,7 +3799,7 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="August 27, 2026 08:24:25 UTC">2026-08-27</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 14, 2026 09:04:41 UTC">2026-10-14</span>
   </span>
 
     

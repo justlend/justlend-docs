@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Machine-readable JSON ABIs for JustLend DAO contracts — jToken, Comptroller, Price Oracle, Interest Rate Model, governance, sTRX, WJST, TRC20, and Energy Rental. Use for contract calls and event decoding.">
+        <meta name="description" content="Minimal JSON interfaces for JustLend DAO contract integrations, with explicit network, provenance, and event-decoding limitations. These files are not complete deployment build artifacts.">
       
       
         <meta name="author" content="JustLend DAO">
@@ -142,9 +142,9 @@
             "publisher": { "@id": "https://justlend.org/#org" }
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
-          "description": "Machine-readable JSON ABIs for JustLend DAO contracts \u2014 jToken, Comptroller, Price Oracle, Interest Rate Model, governance, sTRX, WJST, TRC20, and Energy Rental. Use for contract calls and event decoding.",
-          "dateModified": "2026-06-15",
-          "datePublished": "2026-06-15"
+          "description": "Minimal JSON interfaces for JustLend DAO contract integrations, with explicit network, provenance, and event-decoding limitations. These files are not complete deployment build artifacts.",
+          "dateModified": "2026-10-14",
+          "datePublished": "2026-10-14"
         }
       ]
     }
@@ -1283,6 +1283,38 @@
 
 
 
+<li class="md-nav__item has-children">
+  <a href="#scope-and-provenance" class="md-nav__link" aria-expanded="true">
+    <span class="md-ellipsis">
+      Scope and provenance
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Scope and provenance">
+      <ul class="md-nav__list">
+        
+          
+
+
+
+<li class="md-nav__item ">
+  <a href="#supplied-compiler-abi-cross-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      Supplied compiler ABI cross-check
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        
+
+
+
 <li class="md-nav__item ">
   <a href="#catalog" class="md-nav__link">
     <span class="md-ellipsis">
@@ -2203,10 +2235,44 @@
 
 
 <h1 id="json-abi-files">JSON ABI files<a class="headerlink" href="#json-abi-files" title="Permanent link">&para;</a></h1>
-<p>Machine-readable ABIs for JustLend DAO contracts. Use them for contract calls (encoding function inputs / decoding outputs) and for decoding on-chain events. Contract <strong>addresses</strong> live in <a href="../contracts.json"><code>contracts.json</code></a> (Mainnet + Nile, in Base58 / EVM <code>0x</code> hex / TRON <code>41</code> hex); this page only covers the <strong>interface</strong> definitions.</p>
+<p>These files are <strong>minimal integration interfaces, not complete deployment build artifacts</strong>. They encode/decode only the entries actually present in each JSON file. A function mentioned elsewhere in the documentation is not necessarily included, and a function-only file cannot decode events. Contract addresses live in <a href="../contracts.json"><code>contracts.json</code></a>; a Mainnet interface must not be assumed to match Nile or a later implementation.</p>
 <blockquote>
-<p>These files are the same ABIs the MCP server ships in <a href="https://github.com/justlend/mcp-server-justlend/blob/main/src/core/abis.ts"><code>src/core/abis.ts</code></a>. When the rendered docs and the JSON ever diverge, treat the JSON as authoritative.</p>
+<p>These interfaces originated from the MCP server's <a href="https://github.com/justlend/mcp-server-justlend/blob/main/src/core/abis.ts"><code>src/core/abis.ts</code></a>, with docs-local corrections described below. They are not guaranteed to remain byte-for-byte identical to the MCP package. Neither a prose page nor this subset overrides the ABI of the actual deployed implementation.</p>
 </blockquote>
+<h2 id="scope-and-provenance">Scope and provenance<a class="headerlink" href="#scope-and-provenance" title="Permanent link">&para;</a></h2>
+<p>The <a href="manifest.json">machine-readable scope manifest</a> records each selected interface's target, verification method, download hash and coverage, checked on <strong>2026-10-14</strong>. The <a href="../deployed_contracts/#address-verification">address verification methods</a> identify the read-only getters used to resolve Mainnet pointers. Re-read these pointers after upgrades; a dated observation does not certify a later or historical implementation.</p>
+<ul>
+<li><strong>GovernorBravo:</strong> Mainnet proxy <code>TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD</code> returned implementation <code>TUeNh9BsYK44XePmFAuKZWg2rJuU7bSt5u</code>. Input types and selected events were taken from that implementation's node ABI. <code>getReceipt</code> returns one tuple; its <code>bool / uint8 / uint96</code> components were expanded from the <a href="https://github.com/justlend/justlend-protocol/blob/f28f3b462a4f281761e23423554563e15fc9f028/contracts/Governance/Bravo/GovernorBravoInterfaces.sol#L149-L158">pinned official Receipt definition</a> because the node omits tuple components. This is not a bytecode-reproduced compiler artifact. The filename <code>governor-alpha.json</code> is retained for URL compatibility; its documented target is <strong>Bravo</strong>, not every Alpha/Bravo deployment.</li>
+<li><strong>Oracle:</strong> <code>price-oracle.json</code> is the read interface for Mainnet's <code>TGnYnSn4G9PgWFj7QQemh4YMZKp3fkympJ</code> entrypoint. <code>assetPrices</code>, <code>anchors</code>, <code>poster</code>, <code>getPrice</code>, and <code>setPrice</code> belong to its <code>v1PriceOracle()</code> backend, <code>TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV</code>; those verified methods are provided separately in <code>price-oracle-impl.json</code>. Do not send a backend-only call to the proxy. <code>setPrice</code> is a restricted state-changing operation, not a public read.</li>
+<li><strong>sTRX:</strong> <code>strx.json</code> includes selected functions (with corrected return types) and all <strong>27 event declarations</strong> from the current Mainnet <code>STRXG2</code> implementation, <code>TUAV6ZSCXtF8KVvDKSeVmAbJEovTBf4HtG</code>. This includes <code>Deposit</code>, <code>Withdraw</code>, and <code>Claim</code>, with <code>user</code> indexed. The functions now include <code>withdrawExact</code> and <code>claim</code>. This is still a subset of functions and excludes the separate administrative proxy ABI; it is not a guarantee for historical implementations or Nile.</li>
+<li><strong>Energy Rental:</strong> <code>energy-market.json</code> contains 19 selected functions and <code>RentResource</code>, <code>ReturnResource</code>, <code>Liquidate</code>, and <code>RentClaimed</code> from Mainnet <code>MarketG1</code>, <code>TNoHbPuBQrVanVf9qxUsSvHdB2eDkeDAKD</code>. Its compiler ABI defines the three positional <code>getRentInfo</code> returns, the <code>rentals</code> tuple, bool <code>rentPaused</code>, and both refund-return values. Restricted <code>claimRental()</code> returns the amount transferred to sTRX <strong>in that call</strong>, in sun; <code>rentClaimed()</code> is the cumulative read. See <a href="../energy_rental/#protocol-income-collection">Protocol income collection</a>.</li>
+<li><strong>jTRX / WJST:</strong> the native-TRX repayment and WJST vote-unlocking interfaces were checked against their Mainnet node ABIs. Other files remain subsets; entries absent from them are unsupported by that download.</li>
+</ul>
+<p>The Mainnet node returns no ABI entries for the current STRXG2 and MarketG1 implementations. These two interfaces instead use compiler output. The sTRX and rental additions were compiled with <a href="https://github.com/tronprotocol/solidity/releases/tag/tv_0.8.18">TRON Solidity 0.8.18</a>, optimizer enabled with 200 runs. Their creation bytecode matches the current node responses after removing <strong>only</strong> trailing Solidity CBOR metadata and its length; full metadata is <strong>not</strong> identical, and a complete reproducible source bundle is not included here. The manifest records compiler and bytecode hashes. <code>Deposit</code>, <code>Withdraw</code>, <code>Claim</code>, and <code>RentClaimed</code> were additionally decoded from successful Mainnet transaction receipts and checked against confirmed TronGrid events; raw-log regression fixtures are stored in <code>scripts/fixtures/docs-verification/settlement-events.json</code> in the docs repository. No transaction was submitted for verification.</p>
+<h3 id="supplied-compiler-abi-cross-check">Supplied compiler ABI cross-check<a class="headerlink" href="#supplied-compiler-abi-cross-check" title="Permanent link">&para;</a></h3>
+<p>On <strong>2026-10-14</strong>, the supplied <code>MarketG1.abi.json</code> and <code>STRXG2.abi.json</code> were compared with the compiler ABIs described above. Their full parsed JSON contents match, including input/output names and types, nested tuples, mutability, event <code>indexed</code>/<code>anonymous</code> fields, and fallback/receive entries. No duplicate canonical signatures were found. The manifest records each supplied file's SHA-256 and comparison counts.</p>
+<table>
+<thead>
+<tr>
+<th>Supplied artifact</th>
+<th>Full ABI entries</th>
+<th>Matching entries in the published subset</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MarketG1.abi.json</code></td>
+<td>74: 58 functions, 16 events</td>
+<td>All 23 in <code>energy-market.json</code>: 19 functions, 4 events</td>
+</tr>
+<tr>
+<td><code>STRXG2.abi.json</code></td>
+<td>107: 78 functions, 27 events, 1 fallback, 1 receive</td>
+<td>All 39 in <code>strx.json</code>: 12 functions, 27 events</td>
+</tr>
+</tbody>
+</table>
+<p>This cross-check does not replace the downloads with full deployment artifacts or expand their coverage. It confirms agreement with the dated compiler ABI, not an independent proof of deployment. The bytecode-metadata, proxy, historical-version and network limits above still apply.</p>
 <h2 id="catalog">Catalog<a class="headerlink" href="#catalog" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -2219,8 +2285,8 @@
 <tbody>
 <tr>
 <td><a href="jtoken.json"><code>jtoken.json</code></a></td>
-<td>jToken (Supply &amp; Borrow Market)</td>
-<td><code>mint</code>, <code>redeem</code>, <code>borrow</code>, <code>repayBorrow</code>, <code>balanceOfUnderlying</code>, <code>exchangeRateCurrent</code>, interest accounting, and <code>Mint</code> / <code>Borrow</code> / <code>Repay</code> events.</td>
+<td>jTRC20 (Supply &amp; Borrow Market)</td>
+<td>Selected token/lending functions only; no events. Use the native-TRX variants below where applicable.</td>
 </tr>
 <tr>
 <td><a href="jtrx-mint.json"><code>jtrx-mint.json</code></a></td>
@@ -2229,8 +2295,8 @@
 </tr>
 <tr>
 <td><a href="jtrx-repay.json"><code>jtrx-repay.json</code></a></td>
-<td>jTRX <code>repayBorrow</code> (TRX-specific)</td>
-<td>Payable <code>repayBorrow</code> / <code>repayAmount</code> for the native-TRX market.</td>
+<td>Mainnet jTRX repayment</td>
+<td>Payable <code>repayBorrow(uint256)</code> and <code>repayBorrowBehalf(address)</code>; payment uses <code>callValue</code>.</td>
 </tr>
 <tr>
 <td><a href="comptroller.json"><code>comptroller.json</code></a></td>
@@ -2248,9 +2314,14 @@
 <td><code>getUnderlyingPrice(jToken)</code> for collateral and borrow valuation.</td>
 </tr>
 <tr>
+<td><a href="price-oracle-impl.json"><code>price-oracle-impl.json</code></a></td>
+<td>Mainnet Oracle backend</td>
+<td><code>assetPrices</code>, <code>anchors</code>, <code>poster</code>, <code>getPrice</code>, restricted <code>setPrice</code>, and <code>PricePosted</code>. Not the proxy interface.</td>
+</tr>
+<tr>
 <td><a href="governor-alpha.json"><code>governor-alpha.json</code></a></td>
-<td>GovernorAlpha</td>
-<td>Proposal lifecycle, <code>castVote</code>, <code>forVotes</code> / <code>againstVotes</code> / <code>abstainVotes</code>, <code>eta</code>, <code>endBlock</code>.</td>
+<td>Mainnet GovernorBravo (legacy filename)</td>
+<td>Selected proposal lifecycle and voting methods, <code>castVoteBySig</code>, tuple <code>getReceipt</code>, and selected proposal/vote events.</td>
 </tr>
 <tr>
 <td><a href="poly.json"><code>poly.json</code></a></td>
@@ -2260,12 +2331,12 @@
 <tr>
 <td><a href="strx.json"><code>strx.json</code></a></td>
 <td>sTRX (Staked TRX)</td>
-<td><code>deposit</code>, <code>exchangeRate</code>, <code>claimAll</code>, balances — liquid-staking accounting.</td>
+<td>Selected staking/balance functions plus all 27 current STRXG2 event declarations, including <code>Deposit</code>, <code>Withdraw</code>, and <code>Claim</code>.</td>
 </tr>
 <tr>
 <td><a href="wjst.json"><code>wjst.json</code></a></td>
-<td>WJST (Wrapped JST)</td>
-<td><code>deposit</code>, <code>approve</code>, <code>allowance</code>, <code>balanceOf</code> — ERC20-style JST wrapper.</td>
+<td>Mainnet WJST</td>
+<td>Wrapping, available/locked votes, <code>withdrawVotes</code>, and selected wrap/vote-lock events.</td>
 </tr>
 <tr>
 <td><a href="trc20.json"><code>trc20.json</code></a></td>
@@ -2275,7 +2346,7 @@
 <tr>
 <td><a href="energy-market.json"><code>energy-market.json</code></a></td>
 <td>Energy Rental market</td>
-<td><code>getRentInfo</code>, rental / stable rates, <code>feeRatio</code>, order accounting.</td>
+<td>Compiler-aligned rental/order reads, tuple <code>rentals</code>, three-value <code>getRentInfo</code>, bool <code>rentPaused</code>, refund returns, settlement reads/writes, and <code>RentResource</code> / <code>ReturnResource</code> / <code>Liquidate</code> / <code>RentClaimed</code>.</td>
 </tr>
 <tr>
 <td><a href="energy-rate-model.json"><code>energy-rate-model.json</code></a></td>
@@ -2285,7 +2356,7 @@
 </tbody>
 </table>
 <h2 id="decoding-events">Decoding events<a class="headerlink" href="#decoding-events" title="Permanent link">&para;</a></h2>
-<p>Derive <code>topic0</code> at runtime from the canonical signature rather than hard-coding it — for example <code>keccak256("Mint(address,uint256,uint256)")</code>. The full per-contract event-signature table and indexing options (TronGrid event filter, self-hosted indexer, MCP <code>read_events</code>) are documented in <a href="../apis/#8-event-stream-and-indexing-options">APIs §8 — Event-stream and indexing options</a>.</p>
+<p>First confirm that the ABI contains the desired <code>type: "event"</code> entry and matches the deployed address, implementation, network, and historical block being decoded. If it does not, obtain the corresponding verified build artifact rather than inventing a signature. Only then derive <code>topic0</code> from the exact name and input types; <code>indexed</code> flags are also necessary to decode topics and data correctly. See <a href="../apis/#8-event-stream-and-indexing-options">APIs §8 — Event-stream and indexing options</a>.</p>
 <h2 id="for-ai-agents">For AI agents<a class="headerlink" href="#for-ai-agents" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Use these ABIs together with addresses from <a href="../contracts.json"><code>contracts.json</code></a>; never hard-code addresses from prose.</li>
@@ -2312,7 +2383,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 15, 2026 03:42:50 UTC">2026-06-15</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 14, 2026 09:04:41 UTC">2026-10-14</span>
   </span>
 
     
