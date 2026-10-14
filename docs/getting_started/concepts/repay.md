@@ -39,7 +39,7 @@ Borrowers can repay their loans using the same tokens they borrowed or through j
 ### Developer reference
 
 - Contract function: [`repayBorrow(amount)`](../../developers/supply_and_borrow_market/sbm.md#repayborrow) — pass `uint256(-1)` (i.e. `2^256 - 1`) to repay the full outstanding balance.
-- Repay on behalf of another account: [`repayBorrowBehalf(borrower, amount)`](../../developers/supply_and_borrow_market/sbm.md#repayborrowbehalf).
+- Repay on behalf of another account: [`repayBorrowBehalf(borrower, amount)` for jTRC20, or `repayBorrowBehalf(borrower)` plus `callValue` for jTRX](../../developers/supply_and_borrow_market/sbm.md#repayborrowbehalf).
 - Required prerequisite for TRC20 markets: `approve()` on the underlying for the jToken delegator.
-- For jTRX, the call is `payable` — pass the TRX amount via `msg.value`.
+- For a fixed-amount jTRX self-repayment, call `repayBorrow(amountSun)` and attach the same amount as `callValue` (`msg.value`). Do not call a no-argument `repayBorrow()` or pass `uint256(-1)` as a TRX payment value.
 - Live runnable example: [Repay USDT — TronWeb](../../developers/supply_and_borrow_market/sbm.md#examples-tronweb).

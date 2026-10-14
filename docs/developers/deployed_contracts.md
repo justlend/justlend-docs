@@ -9,13 +9,13 @@ description: Base58 addresses for every JustLend DAO contract on TRON Mainnet, p
     For agents and tooling that need every address in **TRON Base58 + EVM 0x-Hex + TRON-internal 41-Hex** form, download [`contracts.json`](contracts.json). The file is structured as `networks.{mainnet,nile}.{comptroller,governance,price_oracle,jtokens,interest_rate_models,strx}`, with each address record carrying `base58 / hex_evm / hex_tron / tronscan` fields. The tables below show **Base58 only** for readability; use the JSON for cross-chain bridges, EVM-side tooling, Etherscan-like indexers, and TronGrid calls that require `41`-prefixed hex.
 
 !!! tip "Machine-readable ABIs"
-    Every contract referenced on this page has a downloadable JSON ABI under [`abis/`](abis/jtoken.json):
-    
+    Minimal JSON interfaces are available under [`abis/`](abis/index.md). They are **not complete deployment ABIs**; check each file's functions/events and [scope](abis/index.md#scope-and-provenance) before encoding calls or decoding logs:
+
     | Contract | ABI |
     |---|---|
     | jToken (CErc20) — `mint` / `borrow` / `repayBorrow` / `redeem` / `liquidateBorrow` | [`abis/jtoken.json`](abis/jtoken.json) |
     | jToken — TRX-specific `mint()` payable | [`abis/jtrx-mint.json`](abis/jtrx-mint.json) |
-    | jToken — TRX-specific `repayBorrow()` payable | [`abis/jtrx-repay.json`](abis/jtrx-repay.json) |
+    | jToken — TRX-specific `repayBorrow(uint256)` payable | [`abis/jtrx-repay.json`](abis/jtrx-repay.json) |
     | Comptroller / Unitroller | [`abis/comptroller.json`](abis/comptroller.json) |
     | PriceOracle | [`abis/price-oracle.json`](abis/price-oracle.json) |
     | TRC20 (generic) | [`abis/trc20.json`](abis/trc20.json) |
@@ -34,6 +34,33 @@ description: Base58 addresses for every JustLend DAO contract on TRON Mainnet, p
 
 !!! warning "Decimals / precision"
     The JustLend DAO architecture treats every token amount in **its underlying's smallest unit**. Always read `decimals()` on the underlying TRC20 before constructing `mint`, `borrow`, `repayBorrow`, or `redeemUnderlying` amounts. Common cases: TRX/USDT/USDC = 6, USDD/ETH = 18, BTC/WBTC = 8. jToken amounts (`redeem`, `transfer`) use **8 decimals** regardless of the underlying. For the full enumeration and the units rationale, see [Glossary → jToken decimals](../resources/glossary.md#jtoken-decimals) and [Common Pitfalls #5](common_pitfalls.md#5-jtoken-8-underlying-varies-decimals).
+
+## Address verification
+
+Selected Mainnet pointers were checked on **2026-10-14** with `wallet/triggerconstantcontract` at `https://api.trongrid.io`. The [ABI manifest](abis/manifest.json) records each getter and returned address; its interface records distinguish node ABI, compiler-derived ABI and source-only tuple fields.
+
+| Role | Read on | Getter | Returned address |
+|---|---|---|---|
+| Governor implementation | `TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD` | `implementation()` | `TUeNh9BsYK44XePmFAuKZWg2rJuU7bSt5u` |
+| Oracle entrypoint | `TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7` | `oracle()` | `TGnYnSn4G9PgWFj7QQemh4YMZKp3fkympJ` |
+| Oracle backend | `TGnYnSn4G9PgWFj7QQemh4YMZKp3fkympJ` | `v1PriceOracle()` | `TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV` |
+| WJST | `TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD` | `wjst()` | `TXk9LnTnLN7oH96H3sKxJayMxLxR9M4ZD6` |
+| sTRX implementation | `TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5` | `implementation()` | `TUAV6ZSCXtF8KVvDKSeVmAbJEovTBf4HtG` |
+| Rental implementation | `TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd` | `implementation()` | `TNoHbPuBQrVanVf9qxUsSvHdB2eDkeDAKD` |
+| Rental market's sTRX | `TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd` | `strx()` | `TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5` |
+
+Use the proxy as the Governor/sTRX/rental calling entrypoint, not its implementation. The Oracle backend exposes a different interface from the Oracle proxy. These reads are a dated, non-atomic observation of selected Mainnet pointers, not a whole-registry or Nile verification. Re-read pointers after upgrades and resolve the implementation applicable to a historical event before decoding it.
+
+For example, this read requires no wallet signature or broadcast:
+
+```sh
+curl --fail --silent --show-error \
+  -H 'Content-Type: application/json' \
+  https://api.trongrid.io/wallet/triggerconstantcontract \
+  --data '{"owner_address":"TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD","contract_address":"TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD","function_selector":"implementation()","parameter":"","visible":true}'
+```
+
+Require `result.result == true` and a valid 32-byte `constant_result` word. Take the last 20 bytes, prepend TRON's `41` prefix, and convert with a TRON address library. Never treat an RPC error or an empty response as an address.
 
 ## Address formats
 
@@ -159,7 +186,7 @@ Prices are denominated in **TRX** , scaled by `1e^(33 - tokenDecimal)`. See [Pri
 | Component | Contract | Address | Tronscan |
 |-----------|----------|---------|----------|
 | Governor Proxy | `GovernorBravoDelegator` | `TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD` | [Contract](https://tronscan.org/#/contract/TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD) |
-| Governor (impl) | `GovernorBravoDelegate` | `TCiQTkxhzwSeXhRsNdHCvrxHRAvpjQn5Dt` | [Contract](https://tronscan.org/#/contract/TCiQTkxhzwSeXhRsNdHCvrxHRAvpjQn5Dt) |
+| Governor (impl) | `GovernorBravoDelegate` | `TUeNh9BsYK44XePmFAuKZWg2rJuU7bSt5u` | [Contract](https://tronscan.org/#/contract/TUeNh9BsYK44XePmFAuKZWg2rJuU7bSt5u) |
 | Time-lock | `Timelock` | `TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x` | [Contract](https://tronscan.org/#/contract/TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x) |
 
 See [Governance](supply_and_borrow_market/governance.md) for the proposal lifecycle and voting flow.

@@ -24,7 +24,7 @@ A fixed-point integer scaled by **`1e18`**. Compound V2 (and JustLend) represent
 
 - `collateralFactorMantissa = 800000000000000000` → `0.80` → 80% collateral factor.
 - `liquidationIncentiveMantissa = 1080000000000000000` → `1.08` → 8% liquidator reward.
-- `exchangeRateMantissa = 200000000000000000000000000` → `2e8` → 1 jToken = 2 × 10⁸ of the underlying's smallest unit (for an 18-decimal underlying paired with 8-decimal jToken, that's 0.2 underlying tokens per jToken).
+- `exchangeRateMantissa = 200000000000000000000000000` (`2e26`), with an 18-decimal underlying and an 8-decimal jToken: **1 jToken = `2e26 / 10^(18 + 18 - 8) = 0.02` underlying tokens**. Dividing the mantissa by `1e18` alone gives a ratio of raw units, not a ratio of whole tokens.
 
 A "scaled by 1e18" annotation anywhere in this documentation means "this is a mantissa."
 
@@ -39,12 +39,13 @@ Each TRC20 underlying carries its own `decimals()` value. JustLend markets curre
 | Underlying | decimals |
 |---|---|
 | TRX (native) | 6 |
-| USDT, USDC, TUSD, USDJ, USD1, SUN, BTT, NFT, WIN, JST, HTX | 6 |
-| BTC, WBTC, sTRX, wstUSDT | 8 |
-| USDD, ETH, ETHB | 18 |
-| WBTT | 18 |
+| USDT, USDC, NFT, WIN, WBTT | 6 |
+| BTC, WBTC | 8 |
+| USDD, ETH, ETHB, TUSD, USDJ, USD1, SUN, BTT, JST, HTX, sTRX, wstUSDT | 18 |
 
 For machine consumers, [`/developers/contracts.json` → `networks.*.jtokens.<symbol>.underlying_decimals`](../developers/contracts.json) carries the canonical per-market value.
+
+The sTRX, wstUSDT, TUSD, USDJ, USD1, SUN, BTT, JST, HTX, and WBTT values above were checked against their **Mainnet `decimals()` calls on 2026-10-12**. The linked registry includes each underlying contract address; do not apply a mainnet value to an unrelated token with the same symbol.
 
 ---
 
@@ -98,7 +99,7 @@ Distinct from **borrow cap**. Computed implicitly inside `getAccountLiquidity(ac
 
 ### close factor
 
-The maximum fraction of a single borrower's debt that a single `liquidateBorrow()` call may repay. Mantissa-scaled. JustLend currently uses `0.5e18` → **50%**. Read via `Comptroller.closeFactorMantissa()`. To fully liquidate an unhealthy account you generally need at least two passes.
+The maximum fraction of a borrower's outstanding debt **in the selected borrowed market** that one `liquidateBorrow()` call may repay, not a fraction of debts summed across different assets. Mantissa-scaled. JustLend currently uses `0.5e18` → **50%**. Read via `Comptroller.closeFactorMantissa()`. A later liquidation requires a fresh eligibility check; one liquidation may already restore the account's collateral coverage.
 
 ### collateral factor
 
@@ -120,7 +121,7 @@ JustLend's user-facing single-number health metric. Defined on the dApp and on t
 RiskValue = totalBorrow / borrowLimit × 100
 ```
 
-A scalar in `[0, ∞)`. Liquidatable when `RiskValue > 100`. Distinct from `getAccountLiquidity(account)` — `Risk Value > 100` ↔ `shortfall > 0`.
+A display ratio, defined when the borrow limit is positive. Debt above that limit corresponds conceptually to `RiskValue > 100`; the authoritative V1 undercollateralization check is a successful `getAccountLiquidity(account)` read with `shortfall > 0`. Display rounding, oracle values, and integer arithmetic can affect the boundary. A displayed `100` is not proof of eligibility; see [boundary examples](../getting_started/concepts/liquidations.md#display-rounding-is-not-the-liquidation-condition).
 
 ---
 
@@ -128,9 +129,24 @@ A scalar in `[0, ∞)`. Liquidatable when `RiskValue > 100`. Distinct from `getA
 
 ### exchange rate (jToken ↔ underlying)
 
-The current ratio at which `mint`/`redeem` exchange jTokens for the underlying. Mantissa-scaled to `1e18`. Always ≥ initial value (1:1 at deployment, with adjustment for decimal differences), monotonically increases as interest accrues — **the supply yield is captured by exchange-rate appreciation**, not by minting new jTokens.
+The ratio used by `mint`/`redeem` to exchange jTokens for the underlying. **Supply interest is reflected in the exchange rate**, rather than an increase in the holder's jToken balance. Do not assume a universal initial rate or a 1:1 whole-token ratio.
 
-For an 8-decimal jToken paired with a 6-decimal underlying, the initial exchange rate is `0.02e18` (so 1 jToken at mint = 50 underlying smallest-units = 50 / 10⁶ underlying). Read via `<jToken>.exchangeRateCurrent()` (accrues interest first) or `exchangeRateStored()` (cached).
+```text
+underlying raw units = jToken raw units × exchangeRateMantissa / 10^18
+underlying tokens per 1 jToken = exchangeRateMantissa / 10^(18 + underlyingDecimals - 8)
+```
+
+For example, `2e26` with an 18-decimal underlying means **0.02 underlying tokens per jToken**. A hypothetical rate of `0.02e18` gives `10^8 × 0.02e18 / 10^18 = 2,000,000` underlying raw units per whole jToken; with a 6-decimal underlying that is **2 underlying tokens**, not 50 raw units.
+
+Use integer arithmetic for raw amounts (division rounds down):
+
+```javascript
+function underlyingRawFromJTokens(jTokenRaw, exchangeRateMantissa) {
+  return BigInt(jTokenRaw) * BigInt(exchangeRateMantissa) / (10n ** 18n);
+}
+```
+
+Read via `<jToken>.exchangeRateCurrent()` (accrues interest first) or `exchangeRateStored()` (cached). Convert the resulting raw amount using the underlying's own decimals.
 
 ### exchange rate (sTRX ↔ TRX)
 
@@ -138,7 +154,7 @@ The current ratio at which `deposit`/`withdraw` exchange sTRX for TRX. Mantissa-
 
 ### redemption ratio
 
-Same concept as **exchange rate** but used colloquially to mean "how much underlying I get back per share." For jTokens it's `exchangeRateMantissa / 1e18`; for sTRX likewise.
+Same concept as **exchange rate** but used colloquially to mean "how much underlying I get back per whole share." For jTokens use `exchangeRateMantissa / 10^(18 + underlyingDecimals - 8)`; for sTRX the whole-token TRX-per-sTRX ratio is `exchangeRate() / 1e18` (raw TRX and sTRX amounts still have different decimals).
 
 ---
 
@@ -146,19 +162,19 @@ Same concept as **exchange rate** but used colloquially to mean "how much underl
 
 ### Vote (1 JST = 1 Vote, after WJST wrap)
 
-Voting power on a JustLend proposal is denominated in **WJST**, which is minted 1:1 by depositing JST into `WJST.deposit()`. Voting weight is the WJST balance at the proposal's voting-snapshot block. Withdrawing WJST back to JST after a proposal closes restores the underlying JST.
+Voting power is **token-weighted**, not one vote per holder: deposit JST into WJST 1:1, with both amounts represented in 18-decimal raw units. The current WJST implementation uses the voter's **available balance at voting time**, not a proposal-block balance snapshot; the additional weight cast is locked for that proposal. When the proposal is no longer Pending or Active, call `WJST.withdrawVotes(proposalId)` to unlock it, then `WJST.withdraw(amount)` to redeem available WJST for JST. Neither step is automatic. See [Governance: available votes and withdrawal](../developers/supply_and_borrow_market/governance.md#available-votes-locks-and-withdrawal).
 
 ### proposal threshold
 
-Minimum JST a single account must hold (via WJST) to call `propose()`. JustLend currently requires **≥ 200,000,000 JST**. Set in `GovernorBravoDelegate`.
+The available WJST balance gate for `propose()`: a non-whitelisted account must have **strictly more than 200,000,000 WJST**, not exactly that amount or merely JST in its wallet. A current whitelist entry bypasses this gate, not other proposal checks. `proposalThreshold() = 2e26` raw units was read on 2026-10-14; see [governance boundaries and evidence](../developers/supply_and_borrow_market/governance.md#governance-boundaries-and-evidence).
 
 ### quorum
 
-Minimum For-votes a proposal must receive to be valid, regardless of For-vs-Against ratio. JustLend currently requires **For votes > 600,000,000** AND `For > Against`. See [Governance contract reference](../developers/supply_and_borrow_market/governance.md).
+The inclusive minimum For-votes: **For votes >= 600,000,000**, together with the separate strict condition `For > Against`. Exactly 600,000,000 meets quorum, but a tie with Against fails. `quorumVotes() = 6e26` raw units was read on 2026-10-14. See [governance boundaries and evidence](../developers/supply_and_borrow_market/governance.md#governance-boundaries-and-evidence).
 
 ### Timelock
 
-The 48-hour minimum delay between a proposal succeeding (vote period closes with quorum met) and `execute()` becoming callable. Enforced by a separate Timelock contract (`TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x`), the only address authorized to call privileged setters on JustLend contracts.
+The 48-hour minimum delay between queueing a successful proposal and `execute()` becoming callable. Enforced by a separate Timelock contract (`TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x`), the only address authorized to call privileged setters on JustLend contracts.
 
 ---
 

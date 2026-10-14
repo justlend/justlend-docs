@@ -1,6 +1,6 @@
 ---
 title: Liquidations on JustLend DAO
-description: How JustLend SBM liquidations work — Risk Value formula, observation (>95) and execution (≥100) thresholds, 50% close factor, 8% liquidation reward, and the permissionless `liquidateBorrow` workflow.
+description: How JustLend SBM liquidations work — Risk Value formula, observation (>95) and execution (>100) thresholds, display rounding, per-asset close factor, liquidation reward, and the permissionless `liquidateBorrow` workflow.
 ---
 
 # Liquidations
@@ -30,6 +30,20 @@ The **Risk Value** measures a borrow position’s stability. The Borrow Limit, s
 **Risk Value**  =  Total Borrow / Borrow Limit * 100 = (90 + 50) / 230 * 100 = 60.87
 
 A risk value above 100 represents a position that is above the liquidation threshold. Regular monitoring is essential, as the risk value fluctuates based on both the value of collateral factor and borrowed assets. To reduce the risk value , users can either supply more collateral or repay part of the borrow position. The risk value is directly tied to collateral value. If the collateral value increases, the risk value  decrease; if it falls, the risk value increases, increasing the risk of liquidation.
+
+### Display rounding is not the liquidation condition
+
+For V1, use `Comptroller.getAccountLiquidity(account)` and require a successful read (`error == 0`) with **`shortfall > 0`** before treating an account as undercollateralized. The Risk Value is a display metric derived from debt and the collateral-adjusted borrow limit; it does not replace the contract's integer arithmetic, oracle values, and interest accrual.
+
+For illustration, if a display rounds to two decimal places:
+
+| Unrounded Risk Value | Display | Mathematical relationship |
+|---|---|---|
+| 99.999 | 100.00 | Debt is below the borrow limit. |
+| 100.000 | 100.00 | Debt equals the borrow limit; equality alone is not a positive shortfall. |
+| 100.001 | 100.00 | Debt exceeds the borrow limit. |
+
+These examples illustrate rounding, not a guarantee of the current UI's formatting. A displayed **100** therefore cannot establish eligibility on its own. Re-read the chain before acting; the liquidation transaction must still satisfy all contract checks, including the selected market's debt, close factor, and available collateral. Eligibility does not automatically execute a liquidation.
 
 | Range  | Levels of risk      | Recommendations                                                                                                     |
 |--------|---------------------|---------------------------------------------------------------------------------------------------------------------|

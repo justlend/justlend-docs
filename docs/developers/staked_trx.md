@@ -12,7 +12,7 @@ description: JustLend DAO sTRX liquid-staking contract reference — exchangeRat
     * **Units:** Prices are denominated in **TRX** , scaled by `1e^(33 - tokenDecimal)`; sTRX is an 18-decimal TRC20; `exchangeRate()` is scaled by `1e18`, always ≥ 1, grows monotonically as rewards accrue.
     * **Unbonding:** 14-day queue on JustLend
     * **User-side overview:** [Staked TRX concept](../getting_started/concepts/staked_trx.md)
-    * **ABI:** [`abis/strx.json`](abis/strx.json).
+    * **ABI:** [`abis/strx.json`](abis/strx.json) includes selected staking/balance functions and all 27 event declarations from the current Mainnet STRXG2 implementation, including `Deposit`, `Withdraw`, and `Claim` with their indexed fields. It is not a complete function or administrative proxy ABI. See [ABI scope and bytecode verification](abis/index.md#scope-and-provenance) before decoding other implementations or historical events.
 
 Based on Stake 2.0, with TRX Liquid Staking, users can stake TRX to get sTRX tokens and gain high rewards. Compared to traditional staking, TRX Liquid Staking is easier to use and more profitable. Staked TRX will be used automatically for voting and governance, and gain rewards via Energy Rental.
 The contract [StakedTRX](https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5) used to set up the staked TRX service.
@@ -45,7 +45,7 @@ function totalUnderlying() public view returns (uint256)
 ### **User Balance in TRX**
 Query the amount of TRX corresponding to the sTRX held by user.
 ``` solidity
-function balanceInTrx(address _account) public view returns (uint256)
+function viewBalanceOfUnderlying(address _account) public view returns (uint256)
 ```
 
 * **Parameter description:**
@@ -120,13 +120,14 @@ function deposit() external payable returns (uint256)
 
 #### **Event**
 ``` solidity
-Deposit(address user, uint256 trxAmount, uint256 strx, uint256 userHoldStrx)
+event Deposit(address indexed user, uint256 trxAmount, uint256 strxAmount, uint256 balance);
 ```
 
 * Emits when user successfully deposits TRX.
-    * `trxAmount:` the amount of TRX user deposits;
-    * `strx:` the amount of sTRX user gets;
-    * `userHoldStrx:` the total amount of sTRX held by user after the deposit.
+    * `user:` the depositor; indexed in the event topics;
+    * `trxAmount:` the amount of TRX deposited, in sun;
+    * `strxAmount:` the sTRX received, in 18-decimal raw units;
+    * `balance:` the user's sTRX balance after the deposit, in 18-decimal raw units.
 
 
 <a id="withdraw-strx"></a>
@@ -143,13 +144,14 @@ function withdraw(uint256 tokenAmount) external returns (uint256)
 
 #### **Event**
 ``` solidity
-Withdraw(address user, uint256 strx, uint256 trxAmount, uint256 userHoldStrx)
+event Withdraw(address indexed user, uint256 strxAmount, uint256 trxAmount, uint256 balance);
 ```
 
 * Emits when user successfully withdraws sTRX.
-    * `strx:` the amount of sTRX user withdraws;
-    * `trxAmount:` the amount of TRX user gets;
-    * `userHoldStrx:` the total amount of sTRX held by user after the withdrawal.
+    * `user:` the withdrawing account; indexed in the event topics;
+    * `strxAmount:` the sTRX burned, in 18-decimal raw units;
+    * `trxAmount:` the TRX queued for withdrawal, in sun;
+    * `balance:` the user's remaining sTRX balance, in 18-decimal raw units.
 
 
 <a id="withdraw-strx-with-the-amount-of-trx-specified"></a>
@@ -178,11 +180,12 @@ function claim() external returns (uint256)
 
 #### **Event**
 ``` solidity
-Claim(address user, uint256 trxAmount)
+event Claim(address indexed user, uint256 trxAmount);
 ```
 
 * Emits when user successfully claims TRX.
-    * `trxAmount:` the amount of TRX user claims.
+    * `user:` the claiming account; indexed in the event topics;
+    * `trxAmount:` the TRX claimed, in sun.
 
 
 <a id="claim-all-unfrozen-trx"></a>

@@ -10,6 +10,31 @@ For the JustLend protocol itself, see governance proposals on [forum.justlend.or
 
 ## [Unreleased]
 
+### Fixed — 2026-10-14 verification follow-up
+
+- Rechecked Mainnet Governor/Oracle/sTRX/rental pointers and ten token decimals; retained request/return observations in offline fixtures and documented the node-ABI, compiler-bytecode and source-only tuple bases.
+- Corrected five remaining MarketG1 return definitions: three-value `getRentInfo`, tuple `rentals`, bool `rentPaused`, and both refund-return methods. Added the three already documented rental events, including the missing final state fields of `RentResource` and `ReturnResource`.
+- Clarified the mining response's jToken/reward-token map rather than implying a literal `apy` property.
+- Kept ABI provenance and address-verification methods in the product reference. Review checklists and acceptance status stay with the PR/local report; regression observations live outside the published docs tree.
+- Added offline full-subset provenance, pointer/decimal, rental-output/event and fractional sTRX quote regressions. No transaction was signed/broadcast and no publishing workflow was changed.
+
+### Fixed — 2026-10-12 documentation verification
+
+- Clarified V1/V2 liquidation boundaries, rounded display values, withdrawal constraints, and the no-debt `health = "0"` case.
+- Corrected token decimals, jToken raw-unit examples, exchange-rate conversion, and native-TRX versus TRC20 supply/repayment signatures. Mainnet jTRX uses **`repayBorrow(uint256) payable`**, not the no-argument Ethereum variant.
+- Replaced unsupported market filtering with a client-side lookup and separated interest-only supply rates from mining rewards. Allowed `data: null` in the five V2 business-error response schemas.
+- Updated the verified Mainnet Governor implementation and Oracle entrypoint in the address registry; aligned voting input types, Receipt tuple fields, WJST locking/unlocking, and token-weighted governance prose.
+- Replaced the incomplete, automatically broadcast energy-prepayment example with an integer read-only estimator and separated rental-income collection from queries.
+- Distinguished MCP chain transactions from local configuration and preserved enumeration/regex cells with an idempotent docs-local catalog normalizer.
+- Expanded verified governance, WJST, Oracle-backend, and jTRX repayment interface subsets. Corrected the contract overview's Oracle-backend ABI link.
+- Added all 27 current STRXG2 event declarations and rental settlement interfaces from bytecode-matched compiler output; cross-checked `Deposit`, `Withdraw`, `Claim`, and `RentClaimed` against real Mainnet receipts. Preserved the distinction between these interface subsets and complete deployment artifacts.
+- Specified `claimRental()` as an sTRX-only write returning this call's transferred amount in sun, and documented `rentClaimed()` as the separate cumulative read.
+
+### Added — 2026-10-12 verification regressions
+
+- Added offline checks for observed API errors, token precision, deployed call signatures, numeric examples, market selection, catalog normalization, and built HTML/downloads. These run manually with `requirements-test.txt`; the existing publishing workflow was not changed.
+- Help-center announcements and the externally hosted whitepaper are outside this repository. This change does not claim to have edited or published those external documents, resolved their historical-rule ambiguities, or performed wallet transactions.
+
 ### Added — 2026-08-19 AI-readability contract pass
 
 - Added first-class CLI and V2 Utils discovery across navigation, `llms.txt`, `llms-full.txt`, AI source routing, JSON-LD, and a dedicated install/safety guide.

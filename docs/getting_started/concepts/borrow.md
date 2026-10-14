@@ -43,7 +43,7 @@ Borrowing can be done with a user interface [JustLend SBM V1](https://app.justle
 
 * `Borrow Rate:` the interest rate borrowers pay for borrowing a specific asset. It fluctuates based on the market’s borrow utilization rate — as utilization increases, the borrow rate typically rises;
 * `Collateral:` the asset a user supplies and designates as collateral to secure their borrowings. If the collateral value falls below the required threshold, liquidation may occur;
-* `LLTV:` the maximum borrowing ratio before a position becomes subject to liquidation. For example, an LLTV of 80% means liquidation will occur if the loan value reaches 80% of the collateral value;
+* `LLTV:` the liquidation loan-to-value threshold. For example, an LLTV of 80% means a position becomes eligible for liquidation when its LTV **exceeds 80%**, not merely when a rounded display reaches 80%. Execution still requires a liquidator transaction and the contract's eligibility checks; see [V2 liquidation](../../developers/justlend_v2.md#liquidation);
 * `Liquidity:` the amount of assets currently available in the market for borrowing. High liquidity means more assets are available to borrow; low liquidity may indicate limited borrowing capacity.
 
 #### Borrow Assets

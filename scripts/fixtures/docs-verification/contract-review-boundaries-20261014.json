@@ -1,0 +1,310 @@
+{
+  "checked_at": "2026-10-14",
+  "scope": "Offline documentation-expression regressions against pinned source conditions and dated Mainnet getter observations. No live proposal, vote, liquidation or rental transaction is tested.",
+  "sources": [
+    {
+      "github_url": "https://github.com/justlend/justlend-protocol/blob/f28f3b462a4f281761e23423554563e15fc9f028/contracts/Governance/Bravo/GovernorBravoDelegate.sol",
+      "commit": "f28f3b462a4f281761e23423554563e15fc9f028",
+      "sha256": "8e504c3a99faf809ad732c950129899887b3d3116330253159d1b02d1702c4d5"
+    },
+    {
+      "github_url": "https://github.com/justlend/justlend-protocol/blob/f28f3b462a4f281761e23423554563e15fc9f028/contracts/Governance/WJST.sol",
+      "commit": "f28f3b462a4f281761e23423554563e15fc9f028",
+      "sha256": "b98a4eb191850cd7ddd7131f868f83ffe2604643276cd48e32cba7fd94bc5b64"
+    },
+    {
+      "github_url": "https://github.com/justlend/justlend-protocol/blob/f28f3b462a4f281761e23423554563e15fc9f028/contracts/Comptroller.sol",
+      "commit": "f28f3b462a4f281761e23423554563e15fc9f028",
+      "sha256": "888f089f77588430baf3b10155d1b28920c93ca69c51ae7aaeeee59dba2c90b0"
+    },
+    {
+      "github_url": "https://github.com/justlend/mcp-server-justlend/blob/7d53a6ca755fbe70724ae6aaed9276462716cee2/src/core/services/energy-rental.ts",
+      "commit": "7d53a6ca755fbe70724ae6aaed9276462716cee2",
+      "sha256": "c0b221ec97e4cf3b315a9d9d4cd567e6722bc1abdfb224d3e22377c525f7f379"
+    }
+  ],
+  "governor_conditions": [
+    "wjst.getPriorVotes(msg.sender, sub256(block.number, 1)) > proposalThreshold || isWhitelisted(msg.sender)",
+    "uint startBlock = add256(block.number, votingDelay);",
+    "uint endBlock = add256(startBlock, votingPeriod);",
+    "block.number <= proposal.startBlock",
+    "block.number <= proposal.endBlock",
+    "proposal.forVotes <= proposal.againstVotes || proposal.forVotes < quorumVotes"
+  ],
+  "governor_constant_reads": [
+    {
+      "read_at": "2026-10-14T08:56:42.622249+00:00",
+      "request": {
+        "owner_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+        "contract_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+        "function_selector": "implementation()",
+        "parameter": "",
+        "visible": true
+      },
+      "response": {
+        "transaction": {
+          "raw_data": {
+            "ref_block_bytes": "042e",
+            "ref_block_hash": "366cdf0316093e17",
+            "expiration": 1791968262000,
+            "contract": [
+              {
+                "parameter": {
+                  "value": {
+                    "owner_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+                    "contract_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+                    "data": "5c60da1b"
+                  },
+                  "type_url": "type.googleapis.com/protocol.TriggerSmartContract"
+                },
+                "type": "TriggerSmartContract"
+              }
+            ],
+            "timestamp": 1791968202656
+          },
+          "ret": [
+            {}
+          ],
+          "raw_data_hex": "0a02042e2208366cdf0316093e1740f0ee86cd93345a6d081f12690a31747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e54726967676572536d617274436f6e747261637412340a1541356db5ff7599825aff31a25f8177f390304c93b8121541356db5ff7599825aff31a25f8177f390304c93b822045c60da1b70a09f83cd9334",
+          "txID": "5cd715f32aef503512bec80bd784d8f67d0d1c4ca297577501286082cc2344bb",
+          "visible": true
+        },
+        "constant_result": [
+          "000000000000000000000000ccda938a49c9ab6b0c302d4f7e42126e4821bfad"
+        ],
+        "result": {
+          "result": true
+        },
+        "energy_used": 450
+      }
+    },
+    {
+      "read_at": "2026-10-14T08:56:43.246187+00:00",
+      "request": {
+        "owner_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+        "contract_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+        "function_selector": "proposalThreshold()",
+        "parameter": "",
+        "visible": true
+      },
+      "response": {
+        "transaction": {
+          "raw_data": {
+            "ref_block_bytes": "042e",
+            "ref_block_hash": "366cdf0316093e17",
+            "expiration": 1791968262000,
+            "contract": [
+              {
+                "parameter": {
+                  "value": {
+                    "owner_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+                    "contract_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+                    "data": "b58131b0"
+                  },
+                  "type_url": "type.googleapis.com/protocol.TriggerSmartContract"
+                },
+                "type": "TriggerSmartContract"
+              }
+            ],
+            "timestamp": 1791968203290
+          },
+          "ret": [
+            {}
+          ],
+          "raw_data_hex": "0a02042e2208366cdf0316093e1740f0ee86cd93345a6d081f12690a31747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e54726967676572536d617274436f6e747261637412340a1541356db5ff7599825aff31a25f8177f390304c93b8121541356db5ff7599825aff31a25f8177f390304c93b82204b58131b0709aa483cd9334",
+          "txID": "e8d6ecf0ec424b26129fed59c41bae23f6f293844c3b15c0713ab8323740f338",
+          "visible": true
+        },
+        "constant_result": [
+          "000000000000000000000000000000000000000000a56fa5b99019a5c8000000"
+        ],
+        "result": {
+          "result": true
+        },
+        "energy_used": 1178,
+        "internal_transactions": [
+          {
+            "hash": "70d2ea569a20fb18a2e3c020b4b3920896ce40cd6a4e9b2bdcba5e9f682d656f",
+            "caller_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+            "transferTo_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+            "callValueInfo": [
+              {}
+            ],
+            "note": "63616c6c"
+          }
+        ]
+      }
+    },
+    {
+      "read_at": "2026-10-14T08:56:44.147552+00:00",
+      "request": {
+        "owner_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+        "contract_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+        "function_selector": "quorumVotes()",
+        "parameter": "",
+        "visible": true
+      },
+      "response": {
+        "transaction": {
+          "raw_data": {
+            "ref_block_bytes": "042e",
+            "ref_block_hash": "366cdf0316093e17",
+            "expiration": 1791968262000,
+            "contract": [
+              {
+                "parameter": {
+                  "value": {
+                    "owner_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+                    "contract_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+                    "data": "24bc1a64"
+                  },
+                  "type_url": "type.googleapis.com/protocol.TriggerSmartContract"
+                },
+                "type": "TriggerSmartContract"
+              }
+            ],
+            "timestamp": 1791968204190
+          },
+          "ret": [
+            {}
+          ],
+          "raw_data_hex": "0a02042e2208366cdf0316093e1740f0ee86cd93345a6d081f12690a31747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e54726967676572536d617274436f6e747261637412340a1541356db5ff7599825aff31a25f8177f390304c93b8121541356db5ff7599825aff31a25f8177f390304c93b8220424bc1a64709eab83cd9334",
+          "txID": "86d294c3ba6fb0dbdebd9d03a426f427ea7a11a4846f8d0f02c7d1d291b8f2fd",
+          "visible": true
+        },
+        "constant_result": [
+          "000000000000000000000000000000000000000001f04ef12cb04cf158000000"
+        ],
+        "result": {
+          "result": true
+        },
+        "energy_used": 1128,
+        "internal_transactions": [
+          {
+            "hash": "d8228fcad423fc1038812d2a1c597f6d3ceb1b0145907117be1e6eb57090308b",
+            "caller_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+            "transferTo_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+            "callValueInfo": [
+              {}
+            ],
+            "note": "63616c6c"
+          }
+        ]
+      }
+    },
+    {
+      "read_at": "2026-10-14T08:56:44.820828+00:00",
+      "request": {
+        "owner_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+        "contract_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+        "function_selector": "votingDelay()",
+        "parameter": "",
+        "visible": true
+      },
+      "response": {
+        "transaction": {
+          "raw_data": {
+            "ref_block_bytes": "042e",
+            "ref_block_hash": "366cdf0316093e17",
+            "expiration": 1791968262000,
+            "contract": [
+              {
+                "parameter": {
+                  "value": {
+                    "owner_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+                    "contract_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+                    "data": "3932abb1"
+                  },
+                  "type_url": "type.googleapis.com/protocol.TriggerSmartContract"
+                },
+                "type": "TriggerSmartContract"
+              }
+            ],
+            "timestamp": 1791968204861
+          },
+          "ret": [
+            {}
+          ],
+          "raw_data_hex": "0a02042e2208366cdf0316093e1740f0ee86cd93345a6d081f12690a31747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e54726967676572536d617274436f6e747261637412340a1541356db5ff7599825aff31a25f8177f390304c93b8121541356db5ff7599825aff31a25f8177f390304c93b822043932abb170bdb083cd9334",
+          "txID": "fa2abf0dea1f597224a08bd4b9563f4c93e6e63038c45f475850627a9f181d08",
+          "visible": true
+        },
+        "constant_result": [
+          "0000000000000000000000000000000000000000000000000000000000000001"
+        ],
+        "result": {
+          "result": true
+        },
+        "energy_used": 1156,
+        "internal_transactions": [
+          {
+            "hash": "fd3201eb4489e8caccd7a5008da46222a1c35a867cff28b8e5dd56f6aed132cf",
+            "caller_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+            "transferTo_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+            "callValueInfo": [
+              {}
+            ],
+            "note": "63616c6c"
+          }
+        ]
+      }
+    },
+    {
+      "read_at": "2026-10-14T08:56:45.330842+00:00",
+      "request": {
+        "owner_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+        "contract_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+        "function_selector": "votingPeriod()",
+        "parameter": "",
+        "visible": true
+      },
+      "response": {
+        "transaction": {
+          "raw_data": {
+            "ref_block_bytes": "042f",
+            "ref_block_hash": "94407271379b3fae",
+            "expiration": 1791968265000,
+            "contract": [
+              {
+                "parameter": {
+                  "value": {
+                    "owner_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+                    "contract_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+                    "data": "02a251a3"
+                  },
+                  "type_url": "type.googleapis.com/protocol.TriggerSmartContract"
+                },
+                "type": "TriggerSmartContract"
+              }
+            ],
+            "timestamp": 1791968205378
+          },
+          "ret": [
+            {}
+          ],
+          "raw_data_hex": "0a02042f220894407271379b3fae40a88687cd93345a6d081f12690a31747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e54726967676572536d617274436f6e747261637412340a1541356db5ff7599825aff31a25f8177f390304c93b8121541356db5ff7599825aff31a25f8177f390304c93b8220402a251a370c2b483cd9334",
+          "txID": "e9f9f4989d3eace395ad1295ca298ab5065ab06f7c352d43da09f71ea6c946f1",
+          "visible": true
+        },
+        "constant_result": [
+          "0000000000000000000000000000000000000000000000000000000000015180"
+        ],
+        "result": {
+          "result": true
+        },
+        "energy_used": 1113,
+        "internal_transactions": [
+          {
+            "hash": "44c4598e37acb7b2f70ccd66d159a60d13926150ff81976bd22f5a958bd326fc",
+            "caller_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+            "transferTo_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+            "callValueInfo": [
+              {}
+            ],
+            "note": "63616c6c"
+          }
+        ]
+      }
+    }
+  ]
+}

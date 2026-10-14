@@ -456,7 +456,7 @@ npm run dev
 |------|-------------|--------|
 | `get_energy_rental_dashboard` | Market data: TRX price, exchange rate, APY, energy per TRX | No |
 | `get_energy_rental_params` | On-chain params: fees, limits, pause status, usage charge ratio | No |
-| `calculate_energy_rental_price` | Estimate cost for renting energy (prepayment, deposit, daily cost) | No |
+| `calculate_energy_rental_price` | Read-only cost estimate; a successful result is not proof of live inputs — see the [version-specific fallback warning](../developers/energy_rental.md#2-estimate-the-full-new-rental-prepayment-read-only) | No |
 | `get_energy_rental_rate` | Current rental rate for a given TRX amount | No |
 | `get_user_energy_rental_orders` | User's rental orders (as renter, receiver, or all) | No |
 | `get_energy_rent_info` | On-chain rental info for a renter-receiver pair | No |
@@ -667,7 +667,7 @@ Only `transient` is safe to auto-retry; every other code requires a corrective a
 → AI calls `get_user_vote_status` to find withdrawable proposals → calls `withdraw_votes_from_proposal` for each
 
 **"How much does it cost to rent 300,000 energy for 7 days?"**
-→ AI calls `calculate_energy_rental_price` with energyAmount=300000, durationHours=168, returns cost breakdown
+→ AI calls `calculate_energy_rental_price` with energyAmount=300000, durationHours=168, returns an estimate (not a live-data guarantee). Before any separate write, independently verify current contract inputs; stop if they cannot be verified. See the version-specific fallback warning linked above.
 
 **"Rent 500,000 energy to address TXxx... for 14 days"**
 → AI uses `rent_energy` prompt: checks balance → checks rental status → calculates price → rents energy → verifies

@@ -25,6 +25,8 @@ JustLend MCP tools fall into three practical classes:
 
 Use [`mcp_tools.md`](mcp_tools.md) for the generated side-effect class and annotation of each tool.
 
+Do not derive this classification from `destructiveHint` alone. `transfer_trx`, `transfer_trc20`, `approve_underlying`, `approve_jst_for_voting`, `approve_moolah_vault`, `approve_moolah_proxy`, `approve_liquidator_token`, `enter_market`, and `claim_rewards` all have an **on-chain transaction path**: transaction construction, wallet signing, and possible broadcast. Approvals change allowance and entering a market changes collateral membership even when no token transfer occurs in that call. They are not local configuration operations and require confirmation before invocation. `set_active_wallet`, `set_wallet_mode`, and `set_network` change local configuration and do not themselves build, sign, or broadcast transactions.
+
 ## Human confirmation rule
 
 Before any on-chain write tool, the agent must show:

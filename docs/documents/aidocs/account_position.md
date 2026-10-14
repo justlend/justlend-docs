@@ -43,7 +43,7 @@ Schema: [`/developers/apis/justlend_apis.yaml`](../../developers/apis/justlend_a
 
 ## Interpretation rules
 
-- A lower health factor or higher risk value means higher liquidation risk.
+- With positive debt, a lower health factor or higher risk value suggests higher liquidation risk. Check debt first: the public API can return `health = "0"` for an account with no debt, which is not liquidatable. For V1, use a successful on-chain `getAccountLiquidity` read with `shortfall > 0` and the other contract checks, not the rounded API ratio alone.
 - A position can be supplied but not counted as collateral unless the market has been entered as collateral.
 - Borrow capacity depends on supplied value, collateral factors, oracle prices, and existing borrow value.
 - Liquidation risk changes when token prices, borrow balances, or interest rates change.

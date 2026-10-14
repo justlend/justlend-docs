@@ -194,14 +194,21 @@ Borrow(address borrower, uint borrowAmount, uint accountBorrows, uint totalBorro
 <a id="repayborrow"></a>
 
 ### **repayBorrow**
-Calling this method repays their own borrow.
+Repay the caller's own borrow. Select the signature and payment mechanism for the target market:
 ``` solidity
-function repayBorrow(uint amount) external payable
+// Mainnet jTRX: amount is in sun; attach the payment as callValue.
+function repayBorrow(uint256 amount) external payable
+// jTRC20: amount is in underlying raw units; approve the jToken first.
+function repayBorrow(uint256 repayAmount) external returns (uint256)
 ```
 
 * **Parameter description:**
-    * `amount:` the amount of the asset to repay.
-* **Returns:** None, reverts on error.
+    * `amount` / `repayAmount`: repayment in the underlying asset's smallest units.
+    * For a fixed-amount jTRX repayment, use `jtrx.repayBorrow(amountSun).send({callValue: amountSun})`. Both the amount argument and TRX payment are required; **the deployed Mainnet jTRX does not expose `repayBorrow()` without an argument**.
+    * For jTRC20, use `jtoken.repayBorrow(amountRaw).send()` after TRC20 approval; do not attach TRX as the repayment.
+* **Returns:** jTRX returns no value and reverts on failure. jTRC20 returns a protocol error code (`0` for success). A transaction ID alone is not proof of repayment; check execution results and the updated debt.
+
+The jTRX signature and empty return definition were rechecked against the Mainnet ABI at `TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP` on **2026-10-14**, agreeing with the 2026-10-12 read and the official [`CEther.sol`](https://github.com/justlend/justlend-protocol/blob/f28f3b462a4f281761e23423554563e15fc9f028/contracts/CEther.sol) source. The original downloadable self-repayment signature already had a `uint256` argument; its correction removes the erroneous return value and adds the native-TRX behalf interface, not a no-argument replacement. See [ABI scope and provenance](../abis/index.md#scope-and-provenance). Do not substitute an Ethereum Compound ABI.
 
 #### **Event**
 ``` solidity
@@ -220,15 +227,19 @@ RepayBorrow(address payer, address borrower, uint repayAmount, uint accountBorro
 <a id="repayborrowbehalf"></a>
 
 ### **repayBorrowBehalf**
-Calling this method repay a loan on behalf of the borrower.
+Repay a loan on behalf of the specified borrower. The payer supplies the funds; the debt belongs to `borrower`.
 ``` solidity
-function repayBorrowBehalf(address borrower, uint repayAmount) external payable
+// jTRX: repayment amount comes from msg.value / TronWeb callValue, in sun.
+function repayBorrowBehalf(address borrower) external payable
+// jTRC20: repayment amount is an explicit underlying-raw-unit argument.
+function repayBorrowBehalf(address borrower, uint256 repayAmount) external returns (uint256)
 ```
 
 * **Parameter description:**
     * `borrower:` the account with the debt being paid off.
-    * `repayAmount:` the amount to repay.
-* **Returns:** None, reverts on error.
+    * `repayAmount:` jTRC20 repayment in underlying raw units; the payer must approve the jToken.
+    * `msg.value:` jTRX repayment in sun, supplied with `callValue`.
+* **Returns:** jTRX returns no value and reverts on failure; jTRC20 returns a protocol error code (`0` for success).
 
 
 <a id="mint"></a>
@@ -237,11 +248,14 @@ function repayBorrowBehalf(address borrower, uint repayAmount) external payable
 Calling this method supplies assets into the market and receives jTokens in exchange.
 ``` solidity
 function mint() external payable
+// jTRC20: approve the jToken to spend this many underlying raw units first.
+function mint(uint256 mintAmount) external returns (uint256)
 ```
 
 * **Parameter description:**
-    * `msg.value:` the amount of TRX to supply.
-* **Returns:** None, reverts on error.
+    * `msg.value:` jTRX supply amount in sun, attached through TronWeb `callValue`; jTRX has no `mintAmount` argument.
+    * `mintAmount:` jTRC20 supply amount in underlying raw units; do not attach TRX as the deposit.
+* **Returns:** jTRX returns no value and reverts on failure; jTRC20 returns a protocol error code (`0` for success).
 
 #### **Event**
 ``` solidity
@@ -567,7 +581,7 @@ async function apys(jTokenAddr) {
 }
 ```
 
-For supply APY, prefer the API field `supplyRate` on `GET /lend/jtoken`.
+For the API's annualized **interest-only** supply rate, read `supplyRate` from `GET /lend/jtoken`; it **excludes mining rewards**. Mining APY is returned separately by `GET /mining/apy`. Match both responses to the same jToken address before combining their annualized decimal values (`supplyRate + apy` for the documented reward component), and keep interest and reward components visible. Do not add a reward twice or silently substitute another market's reward. See [Rate / APY semantics](../apis.md#14-rate-apy-semantics).
 
 &emsp;
 

@@ -9,7 +9,7 @@ description: JustLend DAO EnergyRental contract reference — rentResource, retu
     * **Protocol:** JustLend DAO Energy Rental (one-to-many TRON Energy marketplace)
     * **Network:** TRON Mainnet
     * **Contract:** [`TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd`](https://tronscan.org/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd)
-    * **Units:** `amount` parameters refer to the **delegated TRX amount in TRX**, **not** the energy amount — divide your target energy by `energyStakePerTrx` from the dashboard API to get TRX.
+    * **Units:** contract `amount` parameters refer to **delegated TRX in sun** (1 TRX = 10^6 sun), **not** energy units. Divide target energy by `energyStakePerTrx` to obtain whole TRX, then convert to sun before a contract call.
     * **`resourceType`:** `0 = bandwidth`, `1 = energy`.
     * **Constraint:** receiver must be a regular account, not a contract.
     * **User-side overview:** [Energy Rental concept](../getting_started/concepts/energy_rental.md) 
@@ -26,13 +26,13 @@ During the energy rental process, a prepayment amount, which includes a deposit 
 on the **Rental Amount** and **Rental Duration**. The detailed formula is as follows:
 
 <div style="text-align: center; font-size: 20px;">
-    Prepay = trxAmount ∗ max(rentalRate, stableRate) ∗ (durationValueInSeconds + 86400 + liquidateThreshold) + fee
+    PrepaySun = ceil(amountSun × max(rentalRateMantissa, stableRateMantissa) × (durationSeconds + 86400 + liquidateThresholdSeconds) / 10^18) + feeSun
 </div>
 
-Upon normal termination of the rental, a portion of the deposit will be refunded based on the energy usage. The specific refund calculation formula is as follows:
+This is a **budget estimate for a new rental**, not an executable quote or a guaranteed upper bound after rates change. Renewals also depend on the existing order and remaining deposit. Upon termination, the refundable amount depends on actual usage, rates, and contract settlement; the following historical illustration must not be treated as a guaranteed minimum refund:
 
 <div style="text-align: center; font-size: 20px;">
-    Refund at least = trxAmount ∗ max(rentalRate, stableRate) ∗ (21600 + liquidateThreshold) + fee
+    Illustrative reserve = trxAmount × max(rentalRateMantissa, stableRateMantissa) / 10^18 × (21600 + liquidateThresholdSeconds) + feeTrx
 </div>
 
 #### **Parameters:**
@@ -45,13 +45,13 @@ Upon normal termination of the rental, a portion of the deposit will be refunded
     trxAmount = energyAmount / energyStakePerTrx
 </div>
 
-* `durationValueInSeconds:` the duration of the energy rental in seconds, calculated by converting the **Rental Duration** into seconds.
-* `rentalRate:` the borrowing interest rate, which is the rate paid per second by the borrower to the staker, scaled by 10^18.
-* `stableRate:` the weighted average interest rate for borrowings, which is a constantly updating six-hour rolling average, scaled by 10^18.
-* `liquidateThreshold:` the liquidation threshold, which is the remaining rental duration of the user's prepayment, initialized to 0.
-* `fee:` the penalty reserve for liquidation. Users who execute liquidation can receive a liquidation reward calculated as `Max(20 TRX, 0.008% * energyAmount / energyRentPerTrx)`, where `energyRentPerTrx` is derived from the [/lend/strx](https://openapi.just.network/lend/strx) API as `10000 / rentInfo.priceFor10KEnergByRent`. The minimum fee is 20 TRX.
+* `durationSeconds:` the duration of the energy rental in seconds, calculated by converting the **Rental Duration** into seconds.
+* `rentalRateMantissa:` current per-second rate from `_rentalRate(amountSun, resourceType)`, scaled by 10^18.
+* `stableRateMantissa:` smoothed rate from `_stableRate(resourceType)`, scaled by 10^18. Use the higher of these two rates, not just the current rental rate.
+* `liquidateThresholdSeconds:` additional time reserve from `liquidateThreshold()`, in seconds. Do not assume it is zero.
+* `feeSun:` liquidation fee reserve, estimated as `max(minFee(), ceil(amountSun × feeRatio() / 10^18))`. `minFee()` is in sun and `feeRatio()` is a 10^18-scaled ratio. A fixed 20 TRX is not a substitute for the current minimum and proportional fee; the latter can be larger.
 
-**Note:** the parameters of `rentalRate`, `stableRate` and `liquidateThreshold` can be obtained by calling the [EnergyRental](https://tronscan.org/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd) contract.
+**Note:** read all parameters from the [EnergyRental](https://tronscan.org/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd) contract on the same network and at a consistent state. These are the inputs used by the [MCP rental estimator](https://github.com/justlend/mcp-server-justlend/blob/7d53a6ca755fbe70724ae6aaed9276462716cee2/src/core/services/energy-rental.ts). Missing reads must stop the estimate; do not silently replace them with historical constants. Re-quote before a separately confirmed transaction.
 
 
 
@@ -82,7 +82,7 @@ struct RentalInfo {
 ### **Current Rental Order Information (updated to current)**
 View the information of an rental order, with the returned data updated to current.
 ``` solidity
-function getRentInfo (address renter, address receiver, uint256 resourceType) external view returns (uint256, uint256)
+function getRentInfo(address renter, address receiver, uint256 resourceType) external view returns (uint256, uint256, bool)
 ```
 
 * **Parameter description:**
@@ -90,8 +90,11 @@ function getRentInfo (address renter, address receiver, uint256 resourceType) ex
     * `receiver:` the resource receiver of this rental;
     * `resourceType:` resource type, 0: bandwidth; 1: energy.
 * **Returns:**
-    * `securityDeposit:` order deposit, updated to current；
-    * `rentIndex:` eal-time global index of the order at the time of query.
+    * `securityDeposit:` order deposit after accrued rent, in sun;
+    * `rentIndex:` the current global rent index at query time;
+    * `liquidatable:` the Energy Rental contract's deposit-reserve check. This is a rental-order flag, not the V1 lending account's `shortfall` check; other execution guards still apply.
+
+`rentals(...)` returns **one tuple** `(amount, securityDeposit, rentIndex)`, whereas `getRentInfo(...)` returns **three separate positional values**; its compiler ABI does not name the outputs. `rentPaused(resourceType)` returns a **bool**. The downloadable [MarketG1 interface](abis/energy-market.json) includes these definitions and the `uint256` refund returns of both resource-return methods. Their [verification basis](abis/index.md#scope-and-provenance) is the compiler ABI with metadata-excluded creation-bytecode matching, not a guessed node ABI.
 
 
 ### **Bad Debt**
@@ -131,17 +134,19 @@ function totalRent() view external returns (uint256)
 ```
 
 * **Parameter description:** N/A;
-* **Returns:** the amount of total rental income.
+* **Returns:** the recorded total rental income, in sun (`1 TRX = 1,000,000 sun`).
 
 
-### **Claimed Rent Income**
-The sTRX contract can extract the income through the `claimRental` function, which records the accumulated income that has been extracted.
-``` solidity
-function claimRental() external returns (uint256)
+### Cumulative claimed rental income
+
+```solidity
+function rentClaimed() external view returns (uint256)
 ```
 
-* **Parameter description:** N/A;
-* **Returns:** the claimed rental amount transferred into the sTRX contract.
+* **Parameter description:** N/A.
+* **Returns:** the cumulative rental income already transferred from the market to sTRX, in **sun** (`1 TRX = 1,000,000 sun`). This is the recorded cumulative counter, not the amount claimable now.
+
+`totalRent()` is a different accounting value and must not be reused as cumulative claimed income. The similarly named `claimRental()` is a state-changing collection operation, not a historical read; see [Protocol income collection](#protocol-income-collection). The read methods, collection method, and `RentClaimed` event are included in [`energy-market.json`](abis/energy-market.json).
 
 
 ### **Liquidation Rate**
@@ -172,6 +177,25 @@ function _rentalRate(uint256 amount, uint256 resourceType) view external returns
 
 ## **Write Interface**
 
+### Protocol income collection
+
+```solidity
+function claimRental() external returns (uint256)
+```
+
+This is the protocol's rental-income collection path, **not a user-facing query for cumulative claimed rent**. It is not `view` and must not appear in a read-only monitoring workflow.
+
+* **Parameters:** none.
+* **Caller:** only the sTRX contract configured by the market's `strx()` getter; ordinary user wallets cannot call it successfully.
+* **Returns:** the rental amount actually transferred into sTRX **by this call**, in **sun** (`1 TRX = 1,000,000 sun`). It is **not** an all-time total. The transfer is capped by the market's available TRX balance; if nothing is transferred, the return is `0`.
+* **Accounting event:** a positive transfer increments `rentClaimed` and emits `RentClaimed(uint256 add, uint256 totalClaimed)`. Both values are in sun: `add` is this transfer and `totalClaimed` is the cumulative value after it. Both fields are non-indexed. A zero transfer emits no `RentClaimed` event.
+
+```solidity
+event RentClaimed(uint256 add, uint256 totalClaimed);
+```
+
+These semantics were checked against the current Mainnet `MarketG1` implementation (`TNoHbPuBQrVanVf9qxUsSvHdB2eDkeDAKD`): compiler output matches its executable bytecode with only compiler metadata excluded. A successful Mainnet settlement receipt also matches the event amount and the internal TRX transfer to sTRX. See [ABI scope and provenance](abis/index.md#scope-and-provenance). No user transaction example is provided.
+
 <a id="rent-resources"></a>
 
 ### **Rent Resources**
@@ -190,7 +214,7 @@ function rentResource (address receiver, uint256 amount, uint256 resourceType) e
 
 #### **Event**
 ``` solidity
-RentResource (address indexed renter, address indexed receiver, uint256 addedAmount, uint256 resourceType, uint256 addedSecurityDeposit, uint256 amount)
+event RentResource(address indexed renter, address indexed receiver, uint256 addedAmount, uint256 resourceType, uint256 addedSecurityDeposit, uint256 amount, uint256 securityDeposit, uint256 rentIndex);
 ```
 
 * Emits when renting occurs.
@@ -200,6 +224,8 @@ RentResource (address indexed renter, address indexed receiver, uint256 addedAmo
     * `resourceType:` resource type, 0: bandwidth; 1: energy;
     * `addedSecurityDeposit:` the added deposit amount;
     * `amount:` the total amount of rental resources in the order after renting.
+    * `securityDeposit:` total order deposit after this rental, in sun;
+    * `rentIndex:` the order's rent index after this update.
 
 
 <a id="return-resources-called-by-payer"></a>
@@ -219,10 +245,10 @@ function returnResource (address receiver, uint256 amount, uint256 resourceType)
 
 #### **Event**
 ``` solidity
-ReturnResource( address indexed renter, address indexed receiver, uint256 subedAmount, uint256 resourceType, uint256 usageRental, uint256 subedSecurityDeposit, uint256 amount)
+event ReturnResource(address indexed renter, address indexed receiver, uint256 subedAmount, uint256 resourceType, uint256 usageRental, uint256 subedSecurityDeposit, uint256 amount, uint256 securityDeposit, uint256 rentIndex);
 ```
 
-* Emits when renting occurs.
+* Emits when resources are returned.
     * `renter:` order payer;
     * `receiver:` the resource receiver of this rental;
     * `subedAmount:` the amount of TRX (minimum unit) for returned resources;
@@ -230,6 +256,8 @@ ReturnResource( address indexed renter, address indexed receiver, uint256 subedA
     * `usageRental:` the cost of recovery for the used resources in the returned resources;
     * `subedSecurityDeposit:` the refunded deposit amount (0 for partial returns);
     * `amount:` the remaining amount of rental resources after returning resources.
+    * `securityDeposit:` remaining order deposit after this return, in sun;
+    * `rentIndex:` the order's rent index after this update.
 
 
 <a id="return-resources-called-by-receiver"></a>
@@ -263,7 +291,7 @@ function liquidate (address renter, address receiver, uint256 resourceType) exte
 
 #### **Event**
 ``` solidity
-Liquidate( address indexed liquidator, address indexed renter, address indexed receiver, uint256 amount, uint256 resourceType, uint256 usageRental, uint256 liquidateFee, uint256 sendBack)
+event Liquidate(address indexed liquidator, address indexed renter, address indexed receiver, uint256 amount, uint256 resourceType, uint256 usageRental, uint256 liquidateFee, uint256 sendBack);
 ```
 
 * Emits when liquidation occurs.
@@ -310,36 +338,36 @@ async function energyToDelegatedSun(targetEnergy) {
 }
 ```
 
-### 2. Rent energy (the `rentResource` call)
+### 2. Estimate the full new-rental prepayment (read-only)
+
+The pure helper below uses integer raw units, both rates, the additional time threshold, and a dynamic fee. Pass current contract values as integer strings or `BigInt` values. It does **not** sign or broadcast a transaction and does not account for an existing rental.
 
 ```javascript
-async function rentEnergy({ receiver, targetEnergy, durationSeconds }) {
-  const rental = await tronWeb.contract().at(ENERGY_RENTAL);
-
-  // Compute prepayment off-chain (formula from the page above):
-  //   prepay = trxAmount × max(rentalRate, stableRate) × (duration + 86400 + liquidateThreshold) + fee
-  // Easiest: query `_rentalRate(amount, resourceType)` for the current per-second rate
-  //   and the EnergyRental dashboard for `stableRate`, `liquidateThreshold`, and `fee`.
-  // Simplest path: overshoot the prepayment slightly; the unused portion is refunded on return.
-
-  const amountSun = await energyToDelegatedSun(targetEnergy);
-  const rentalRate = BigInt((await rental._rentalRate(amountSun, ENERGY).call()).toString());
-
-  // Rough prepayment (use a conservative buffer; precise formula in the page above)
-  const buffer = BigInt(durationSeconds + 86_400);
-  const fee    = 20_000_000n; // 20 TRX minimum liquidation reserve
-  const prepay = amountSun * rentalRate * buffer / (10n ** 18n) + fee;
-
-  const txId = await rental
-    .rentResource(receiver, amountSun.toString(), ENERGY)
-    .send({ callValue: Number(prepay), feeLimit: 200_000_000 });
-
-  console.log('rent tx:', txId);
+function estimatePrepaymentSun({ amountSun, rentalRateMantissa, stableRateMantissa,
+  durationSeconds, liquidateThresholdSeconds, feeRatioMantissa, minFeeSun }) {
+  const raw = [amountSun, rentalRateMantissa, stableRateMantissa, durationSeconds,
+    liquidateThresholdSeconds, feeRatioMantissa, minFeeSun];
+  if (raw.some(value => !['string', 'bigint'].includes(typeof value) ||
+    !/^\d+$/.test(String(value)))) throw new Error('Use non-negative integer raw values');
+  const [amount, rental, stable, duration, threshold, feeRatio, minFee] = raw.map(BigInt);
+  if (amount === 0n || duration === 0n) throw new Error('New rentals need positive amount and duration');
+  const scale = 10n ** 18n;
+  const ceilScaled = value => (value + scale - 1n) / scale;
+  const rate = rental > stable ? rental : stable;
+  const proportionalFee = ceilScaled(amount * feeRatio);
+  const fee = proportionalFee > minFee ? proportionalFee : minFee;
+  return ceilScaled(amount * rate * (duration + 86_400n + threshold)) + fee;
 }
 ```
 
-!!! tip
-    For prepayment precision, use the JustLend MCP server's `calculate_energy_rental_price` tool — it implements the full formula and accounts for `stableRate` and `liquidateThreshold`. See [MCP Server](../ai_support/mcp_server.md).
+Illustrative controls (not current prices): with 100 TRX delegated, a 1-day duration, rental rate `1e12`, stable rate `2e12`, a 3,600-second threshold, fee ratio `8e13`, and minimum fee 20 TRX, the estimate is **55.28 TRX**. With 1,000,000 TRX delegated, the same rates and fee ratio, and a zero threshold, the proportional fee is **80 TRX**, not 20, and the estimate is **345,680 TRX**.
+
+For a read-only MCP estimate, call `calculate_energy_rental_price` with `{"energyAmount":300000,"durationHours":24,"network":"mainnet"}`. For a renewal, provide `receiverAddress` and use the tool's existing-order calculation instead. A successful estimate alone does not establish that its inputs are current; apply the fallback checks below. Only a separate, explicitly confirmed `rent_energy` operation or `rentResource(receiver, amountSun, 1)` transaction should sign and broadcast, with reviewed prepayment supplied as `callValue`. Estimation itself must never trigger that write.
+
+!!! warning "MCP estimate fallback (version-specific)"
+    In MCP commit [`7d53a6c`](https://github.com/justlend/mcp-server-justlend/blob/7d53a6ca755fbe70724ae6aaed9276462716cee2/src/core/services/energy-rental.ts#L175-L320), failed parameter or rate reads can return defaults rather than an error: for example, `liquidateThreshold = 86400`, `feeRatio = 0.05`, `minFee = 50` TRX, or rate `4e-8`. The rate path can also substitute a rate-model estimate for the two primary rate reads. The structured quote has **no per-field fallback/provenance marker**; logs alone are not a caller-visible guarantee. A successful `calculate_energy_rental_price` response can therefore contain fallback inputs.
+
+    Before a write, independently verify both current rates, the liquidation time threshold, fee ratio, minimum fee, rental availability, and applicable existing-order state through successful reads on the intended network. Recompute the quote with verified inputs and re-confirm the resulting payment. **If these inputs cannot be verified, stop; do not sign or broadcast using fallback defaults.** This warning describes the pinned version, not every later MCP release. It is an integration safeguard, not a fix to MCP server code or frontend acceptance.
 
 ### 3. Return rental & reclaim deposit
 
@@ -369,8 +397,8 @@ async function returnByReceiver({ renter, returnAmountSun }) {
 async function getRental({ renter, receiver }) {
   const rental = await tronWeb.contract().at(ENERGY_RENTAL);
   // Real-time view (updated to current block)
-  const [securityDeposit, rentIndex] = await rental
+  const [securityDeposit, rentIndex, liquidatable] = await rental
     .getRentInfo(renter, receiver, ENERGY).call();
-  return { securityDeposit: securityDeposit.toString(), rentIndex: rentIndex.toString() };
+  return { securityDeposit: securityDeposit.toString(), rentIndex: rentIndex.toString(), liquidatable };
 }
 ```

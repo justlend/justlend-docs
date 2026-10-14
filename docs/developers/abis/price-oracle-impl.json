@@ -1,0 +1,108 @@
+[
+  {
+    "name": "PricePosted",
+    "inputs": [
+      {
+        "name": "asset",
+        "type": "address"
+      },
+      {
+        "name": "previousPriceMantissa",
+        "type": "uint256"
+      },
+      {
+        "name": "requestedPriceMantissa",
+        "type": "uint256"
+      },
+      {
+        "name": "newPriceMantissa",
+        "type": "uint256"
+      }
+    ],
+    "type": "event",
+    "anonymous": false
+  },
+  {
+    "name": "anchors",
+    "inputs": [
+      {
+        "type": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "period",
+        "type": "uint256"
+      },
+      {
+        "name": "priceMantissa",
+        "type": "uint256"
+      }
+    ],
+    "type": "function",
+    "stateMutability": "view"
+  },
+  {
+    "name": "assetPrices",
+    "inputs": [
+      {
+        "name": "asset",
+        "type": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256"
+      }
+    ],
+    "type": "function",
+    "stateMutability": "view"
+  },
+  {
+    "name": "getPrice",
+    "inputs": [
+      {
+        "name": "asset",
+        "type": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256"
+      }
+    ],
+    "type": "function",
+    "stateMutability": "view"
+  },
+  {
+    "name": "poster",
+    "outputs": [
+      {
+        "type": "address"
+      }
+    ],
+    "type": "function",
+    "stateMutability": "view",
+    "inputs": []
+  },
+  {
+    "name": "setPrice",
+    "inputs": [
+      {
+        "name": "asset",
+        "type": "address"
+      },
+      {
+        "name": "requestedPriceMantissa",
+        "type": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256"
+      }
+    ],
+    "type": "function",
+    "stateMutability": "nonpayable"
+  }
+]

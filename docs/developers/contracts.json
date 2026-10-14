@@ -4,7 +4,7 @@
     "generated_by": "scripts/generate_contracts_json.py",
     "source_of_truth": "https://github.com/justlend/mcp-server-justlend/blob/main/src/core/chains.ts",
     "last_generated": "2026-06-26",
-    "schema_version": "1.2.0",
+    "schema_version": "1.2.1",
     "schema_version_policy": "Semantic versioning. MAJOR = breaking field rename or removal. MINOR = additive field (e.g. new role keys, new networks). PATCH = address corrections within an existing structure. Consumers should pin a MAJOR.",
     "address_formats": {
       "base58": "TRON Base58Check, T-prefixed, 34 chars — for wallets, Tronscan, TronWeb display, and end-user prompts.",
@@ -15,7 +15,7 @@
       "active": "Market is open for new supply and borrow. Use for new positions.",
       "legacy": "Market is closed to new supply and borrow. Contract is still queryable so existing positions can be unwound, but do not direct new deposits to it."
     },
-    "comment": "All addresses are returned in three equivalent formats (see address_formats above). Network is recorded per record so consumers can mix Mainnet + Nile in one pass without context loss. Each entry under `networks.*.jtokens` carries an explicit `status` field (see status_values above) so consumers can filter `active` vs `legacy` without parsing prose elsewhere.",
+    "comment": "Mainnet governor_delegate and price_oracle.proxy were rechecked via GovernorBravoDelegator.implementation() and Comptroller.oracle() on 2026-10-14; last_verified below remains the earlier whole-registry review date. All addresses are returned in three equivalent formats (see address_formats above). Network is recorded per record so consumers can mix Mainnet + Nile in one pass without context loss. Each entry under `networks.*.jtokens` carries an explicit `status` field (see status_values above) so consumers can filter `active` vs `legacy` without parsing prose elsewhere. Selected pointer verification methods: /developers/abis/manifest.json; this is not a new whole-registry audit.",
     "last_verified": "2026-08-19",
     "verification_sources": [
       "https://app.justlend.org/",
@@ -53,12 +53,12 @@
         "proxy": {
           "label": "PriceOracleProxy",
           "address": {
-            "base58": "TCKp2AzuhzV4B4Ahx1ej4mvQgHZ1kH7F7k",
-            "hex_evm": "0x19d5cda987533693ffbd7a5eb77acd209042acbb",
-            "hex_tron": "0x4119d5cda987533693ffbd7a5eb77acd209042acbb"
+            "base58": "TGnYnSn4G9PgWFj7QQemh4YMZKp3fkympJ",
+            "hex_evm": "0x4ac4d18acb107e4be0c5d513e4bf3ff5c44e2f05",
+            "hex_tron": "0x414ac4d18acb107e4be0c5d513e4bf3ff5c44e2f05"
           },
           "network": "mainnet",
-          "tronscan": "https://tronscan.org/#/contract/TCKp2AzuhzV4B4Ahx1ej4mvQgHZ1kH7F7k",
+          "tronscan": "https://tronscan.org/#/contract/TGnYnSn4G9PgWFj7QQemh4YMZKp3fkympJ",
           "role": "entrypoint"
         },
         "implementation": {
@@ -88,12 +88,12 @@
         "governor_delegate": {
           "label": "GovernorBravoDelegate",
           "address": {
-            "base58": "TCiQTkxhzwSeXhRsNdHCvrxHRAvpjQn5Dt",
-            "hex_evm": "0x1e1bb45c692a6aff872decabd6bd6e3559aa4b81",
-            "hex_tron": "0x411e1bb45c692a6aff872decabd6bd6e3559aa4b81"
+            "base58": "TUeNh9BsYK44XePmFAuKZWg2rJuU7bSt5u",
+            "hex_evm": "0xccda938a49c9ab6b0c302d4f7e42126e4821bfad",
+            "hex_tron": "0x41ccda938a49c9ab6b0c302d4f7e42126e4821bfad"
           },
           "network": "mainnet",
-          "tronscan": "https://tronscan.org/#/contract/TCiQTkxhzwSeXhRsNdHCvrxHRAvpjQn5Dt",
+          "tronscan": "https://tronscan.org/#/contract/TUeNh9BsYK44XePmFAuKZWg2rJuU7bSt5u",
           "role": "implementation"
         },
         "timelock": {

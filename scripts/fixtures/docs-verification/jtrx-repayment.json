@@ -1,0 +1,27 @@
+{
+  "source": "https://api.trongrid.io/wallet/getcontract",
+  "contract": "TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP",
+  "checked_at": "2026-10-12",
+  "functions": [
+    {
+      "name": "repayBorrow",
+      "inputs": [
+        {
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "payable"
+    },
+    {
+      "name": "repayBorrowBehalf",
+      "inputs": [
+        {
+          "name": "borrower",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "payable"
+    }
+  ]
+}

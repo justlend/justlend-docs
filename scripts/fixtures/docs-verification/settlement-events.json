@@ -1,0 +1,103 @@
+{
+  "checked_at": "2026-10-12T10:02:00.168183+00:00",
+  "rpc": "https://api.trongrid.io",
+  "events": [
+    {
+      "name": "Deposit",
+      "contract": "TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5",
+      "event": "Deposit(address indexed user, uint256 trxAmount, uint256 strxAmount, uint256 balance)",
+      "transaction_id": "1427648c9b7aca2c8755126f148753e6c4ef614a6b764922208170cf7e413fa4",
+      "block_number": 87041513,
+      "block_timestamp": 1791797397000,
+      "canonical_signature": "Deposit(address,uint256,uint256,uint256)",
+      "raw_log": {
+        "address": "c64e69acde1c7b16c2a3efcdbbdaa96c3644c2b3",
+        "topics": [
+          "36af321ec8d3c75236829c5317affd40ddb308863a1236d2d277a4025cccee1e",
+          "000000000000000000000000f67c247edbf512a715239237976ed2b03338eba9"
+        ],
+        "data": "000000000000000000000000000000000000000000000000000000000098424c00000000000000000000000000000000000000000000000068ef713db282a2fb0000000000000000000000000000000000000000000000f778b7f2533073c515"
+      },
+      "decoded": {
+        "user": "0xf67c247edbf512a715239237976ed2b03338eba9",
+        "trxAmount": "9978444",
+        "strxAmount": "7561386809180201723",
+        "balance": "4565044473850657752341"
+      }
+    },
+    {
+      "name": "Withdraw",
+      "contract": "TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5",
+      "event": "Withdraw(address indexed user, uint256 strxAmount, uint256 trxAmount, uint256 balance)",
+      "transaction_id": "0c5aa54c63cf10c0898a73f023c3452607b1b34c76fd5334994134270b7b2b65",
+      "block_number": 87040842,
+      "block_timestamp": 1791795384000,
+      "canonical_signature": "Withdraw(address,uint256,uint256,uint256)",
+      "raw_log": {
+        "address": "c64e69acde1c7b16c2a3efcdbbdaa96c3644c2b3",
+        "topics": [
+          "02f25270a4d87bea75db541cdfe559334a275b4a233520ed6c0a2429667cca94",
+          "00000000000000000000000012193168b09d1e45c4e4bef14295636aa74b2ca0"
+        ],
+        "data": "0000000000000000000000000000000000000000000000184358308ae9cfecf800000000000000000000000000000000000000000000000000000000233487490000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "decoded": {
+        "user": "0x12193168b09d1e45c4e4bef14295636aa74b2ca0",
+        "strxAmount": "447574539740707286264",
+        "trxAmount": "590645065",
+        "balance": "0"
+      }
+    },
+    {
+      "name": "Claim",
+      "contract": "TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5",
+      "event": "Claim(address indexed user, uint256 trxAmount)",
+      "transaction_id": "a33bb23e741d0c813741cae4a37e54c01b568c6527ec81f6f6d8b33819a176fa",
+      "block_number": 87042037,
+      "block_timestamp": 1791798969000,
+      "canonical_signature": "Claim(address,uint256)",
+      "raw_log": {
+        "address": "c64e69acde1c7b16c2a3efcdbbdaa96c3644c2b3",
+        "topics": [
+          "47cee97cb7acd717b3c0aa1435d004cd5b3c8c57d70dbceb4e4458bbd60e39d4",
+          "0000000000000000000000007c61557a1e23ad3bbff13722266476665d2b3141"
+        ],
+        "data": "000000000000000000000000000000000000000000000000000000001e27c622"
+      },
+      "decoded": {
+        "user": "0x7c61557a1e23ad3bbff13722266476665d2b3141",
+        "trxAmount": "505923106"
+      }
+    },
+    {
+      "name": "RentClaimed",
+      "contract": "TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd",
+      "event": "RentClaimed(uint256 add, uint256 totalClaimed)",
+      "transaction_id": "1427648c9b7aca2c8755126f148753e6c4ef614a6b764922208170cf7e413fa4",
+      "block_number": 87041513,
+      "block_timestamp": 1791797397000,
+      "canonical_signature": "RentClaimed(uint256,uint256)",
+      "raw_log": {
+        "address": "c60a6f5c81431c97ed01b61698b6853557f3afd4",
+        "topics": [
+          "4504b5b493f26aaef16fe8ae06ab2747ef5e6692941d39316449b75d32852684"
+        ],
+        "data": "0000000000000000000000000000000000000000000000000000000102033c6c00000000000000000000000000000000000000000000000000033239b13ae789"
+      },
+      "decoded": {
+        "add": "4328733804",
+        "totalClaimed": "899648298084233"
+      },
+      "trx_transfer": {
+        "caller_address": "41c60a6f5c81431c97ed01b61698b6853557f3afd4",
+        "transferTo_address": "41c64e69acde1c7b16c2a3efcdbbdaa96c3644c2b3",
+        "callValueInfo": [
+          {
+            "callValue": 4328733804
+          }
+        ],
+        "rejected": false
+      }
+    }
+  ]
+}

@@ -21,9 +21,9 @@ Each money market on JustLend DAO represents a specific TRON asset, including TR
 
 * **Suppliers:** supply assets to the money markets of JustLend DAO smart contracts, and the assets supplied are the underlying assets.
     * Smart contracts distribute jToken that corresponds to underlying assets to users' accounts at the exchange rate.
-    * Supplied assets to JustLend DAO money markets can enjoy interest earnings on their loans.
+    * Supplied assets earn interest paid by borrowers in the corresponding money market.
 
-* **Redeem:** Suppliers can withdraw their tokens as long as there is sufficient liquidity in the reserve. Please ensure the risk value (health factor) remains in a safe state after the withdrawal.
+* **Redeem:** Withdrawals are limited by the market's available liquidity and the collateral required to support the supplier's outstanding borrowings. A withdrawal must not create an account shortfall. See [Withdraw](concepts/withdraw.md) for the full conditions and steps.
 
 * **Borrowers:** over-collateralize an asset can borrow from the corresponding market on JustLend DAO.
     * Unlike P2P lending, borrowers do not have to negotiate with suppliers: orders will be automatically matched by JustLend DAO smart contracts as long as the token market has sufficient liquidity.
@@ -40,6 +40,5 @@ Each money market on JustLend DAO represents a specific TRON asset, including TR
 - **Energy Rental:** <https://app.justlend.org/energy?lang=en-US>.
 - **Liquidation tool:** <https://app.justlend.org/liquidate?lang=en-US>.
 - **Governance proposals:** <https://forum.justlend.org> (off-chain discussion) → on-chain `GovernorBravoDelegator` (see [Governance contracts](../developers/supply_and_borrow_market/governance.md)).
-
 
 

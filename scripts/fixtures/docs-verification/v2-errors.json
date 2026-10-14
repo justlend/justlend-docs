@@ -1,0 +1,51 @@
+{
+  "source": "https://openapi.just.network",
+  "checked_at": "2026-10-12",
+  "responses": [
+    {
+      "path": "/v2/index/vault/list",
+      "response": {
+        "code": 202,
+        "message": "error: Invalid TRON address format",
+        "data": null,
+        "timestamp": 1791792545340
+      }
+    },
+    {
+      "path": "/v2/index/market/list",
+      "response": {
+        "code": 202,
+        "message": "error: Invalid TRON address format",
+        "data": null,
+        "timestamp": 1791792545961
+      }
+    },
+    {
+      "path": "/v2/index/position",
+      "response": {
+        "code": 202,
+        "message": "Invalid TRON address format.",
+        "data": null,
+        "timestamp": 1791792545366
+      }
+    },
+    {
+      "path": "/v2/vault/position",
+      "response": {
+        "code": 202,
+        "message": "error: Invalid TRON address format; error: Invalid TRON address format",
+        "data": null,
+        "timestamp": 1791792545673
+      }
+    },
+    {
+      "path": "/v2/market/position",
+      "response": {
+        "code": 202,
+        "message": "invalid marketId",
+        "data": null,
+        "timestamp": 1791792546068
+      }
+    }
+  ]
+}

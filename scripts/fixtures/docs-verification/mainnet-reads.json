@@ -1,0 +1,272 @@
+{
+  "oracle": {
+    "checked_at": "2026-10-12T08:08:04.661284+00:00",
+    "endpoint": "triggerconstantcontract",
+    "request": {
+      "owner_address": "TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7",
+      "contract_address": "TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7",
+      "function_selector": "oracle()",
+      "parameter": "",
+      "visible": true
+    },
+    "status": 200,
+    "result": {
+      "result": true
+    },
+    "constant_result": [
+      "0000000000000000000000004ac4d18acb107e4be0c5d513e4bf3ff5c44e2f05"
+    ]
+  },
+  "close_factor": {
+    "checked_at": "2026-10-12T08:08:05.590548+00:00",
+    "endpoint": "triggerconstantcontract",
+    "request": {
+      "owner_address": "TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7",
+      "contract_address": "TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7",
+      "function_selector": "closeFactorMantissa()",
+      "parameter": "",
+      "visible": true
+    },
+    "status": 200,
+    "result": {
+      "result": true
+    },
+    "constant_result": [
+      "00000000000000000000000000000000000000000000000006f05b59d3b20000"
+    ]
+  },
+  "gov_impl": {
+    "checked_at": "2026-10-12T08:08:06.640217+00:00",
+    "endpoint": "triggerconstantcontract",
+    "request": {
+      "owner_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+      "contract_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+      "function_selector": "implementation()",
+      "parameter": "",
+      "visible": true
+    },
+    "status": 200,
+    "result": {
+      "result": true
+    },
+    "constant_result": [
+      "000000000000000000000000ccda938a49c9ab6b0c302d4f7e42126e4821bfad"
+    ]
+  },
+  "gov_wjst": {
+    "checked_at": "2026-10-12T08:08:08.733040+00:00",
+    "endpoint": "triggerconstantcontract",
+    "request": {
+      "owner_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+      "contract_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+      "function_selector": "wjst()",
+      "parameter": "",
+      "visible": true
+    },
+    "status": 200,
+    "result": {
+      "result": true
+    },
+    "constant_result": [
+      "000000000000000000000000eeda4dfab78d92917f11df192f9b460715d7f67b"
+    ]
+  },
+  "strx_rate": {
+    "checked_at": "2026-10-12T08:08:10.554297+00:00",
+    "endpoint": "triggerconstantcontract",
+    "request": {
+      "owner_address": "TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5",
+      "contract_address": "TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5",
+      "function_selector": "exchangeRate()",
+      "parameter": "",
+      "visible": true
+    },
+    "status": 200,
+    "result": {
+      "result": true
+    },
+    "constant_result": [
+      "00000000000000000000000000000000000000000000000012505cb85c6df63e"
+    ]
+  },
+  "decimals_wstUSDT": {
+    "checked_at": "2026-10-12T08:09:03.583781+00:00",
+    "endpoint": "triggerconstantcontract",
+    "request": {
+      "owner_address": "TGkxzkDKyMeq2T7edKnyjZoFypyzjkkssq",
+      "contract_address": "TGkxzkDKyMeq2T7edKnyjZoFypyzjkkssq",
+      "function_selector": "decimals()",
+      "parameter": "",
+      "visible": true
+    },
+    "status": 200,
+    "result": {
+      "result": true
+    },
+    "constant_result": [
+      "0000000000000000000000000000000000000000000000000000000000000012"
+    ]
+  },
+  "decimals_sTRX": {
+    "checked_at": "2026-10-12T08:09:04.429526+00:00",
+    "endpoint": "triggerconstantcontract",
+    "request": {
+      "owner_address": "TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5",
+      "contract_address": "TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5",
+      "function_selector": "decimals()",
+      "parameter": "",
+      "visible": true
+    },
+    "status": 200,
+    "result": {
+      "result": true
+    },
+    "constant_result": [
+      "0000000000000000000000000000000000000000000000000000000000000012"
+    ]
+  },
+  "decimals_SUN": {
+    "checked_at": "2026-10-12T08:09:05.566098+00:00",
+    "endpoint": "triggerconstantcontract",
+    "request": {
+      "owner_address": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+      "contract_address": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+      "function_selector": "decimals()",
+      "parameter": "",
+      "visible": true
+    },
+    "status": 200,
+    "result": {
+      "result": true
+    },
+    "constant_result": [
+      "0000000000000000000000000000000000000000000000000000000000000012"
+    ]
+  },
+  "decimals_BTT": {
+    "checked_at": "2026-10-12T08:09:06.423482+00:00",
+    "endpoint": "triggerconstantcontract",
+    "request": {
+      "owner_address": "TAFjULxiVgT4qWk6UZwjqwZXTSaGaqnVp4",
+      "contract_address": "TAFjULxiVgT4qWk6UZwjqwZXTSaGaqnVp4",
+      "function_selector": "decimals()",
+      "parameter": "",
+      "visible": true
+    },
+    "status": 200,
+    "result": {
+      "result": true
+    },
+    "constant_result": [
+      "0000000000000000000000000000000000000000000000000000000000000012"
+    ]
+  },
+  "decimals_JST": {
+    "checked_at": "2026-10-12T08:09:07.301013+00:00",
+    "endpoint": "triggerconstantcontract",
+    "request": {
+      "owner_address": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+      "contract_address": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+      "function_selector": "decimals()",
+      "parameter": "",
+      "visible": true
+    },
+    "status": 200,
+    "result": {
+      "result": true
+    },
+    "constant_result": [
+      "0000000000000000000000000000000000000000000000000000000000000012"
+    ]
+  },
+  "decimals_HTX": {
+    "checked_at": "2026-10-12T08:09:08.207503+00:00",
+    "endpoint": "triggerconstantcontract",
+    "request": {
+      "owner_address": "TUPM7K8REVzD2UdV4R5fe5M8XbnR2DdoJ6",
+      "contract_address": "TUPM7K8REVzD2UdV4R5fe5M8XbnR2DdoJ6",
+      "function_selector": "decimals()",
+      "parameter": "",
+      "visible": true
+    },
+    "status": 200,
+    "result": {
+      "result": true
+    },
+    "constant_result": [
+      "0000000000000000000000000000000000000000000000000000000000000012"
+    ]
+  },
+  "decimals_USD1": {
+    "checked_at": "2026-10-12T08:09:09.034432+00:00",
+    "endpoint": "triggerconstantcontract",
+    "request": {
+      "owner_address": "TPFqcBAaaUMCSVRCqPaQ9QnzKhmuoLR6Rc",
+      "contract_address": "TPFqcBAaaUMCSVRCqPaQ9QnzKhmuoLR6Rc",
+      "function_selector": "decimals()",
+      "parameter": "",
+      "visible": true
+    },
+    "status": 200,
+    "result": {
+      "result": true
+    },
+    "constant_result": [
+      "0000000000000000000000000000000000000000000000000000000000000012"
+    ]
+  },
+  "decimals_TUSD": {
+    "checked_at": "2026-10-12T08:09:09.967793+00:00",
+    "endpoint": "triggerconstantcontract",
+    "request": {
+      "owner_address": "TUpMhErZL2fhh4sVNULAbNKLokS4GjC1F4",
+      "contract_address": "TUpMhErZL2fhh4sVNULAbNKLokS4GjC1F4",
+      "function_selector": "decimals()",
+      "parameter": "",
+      "visible": true
+    },
+    "status": 200,
+    "result": {
+      "result": true
+    },
+    "constant_result": [
+      "0000000000000000000000000000000000000000000000000000000000000012"
+    ]
+  },
+  "decimals_USDJ": {
+    "checked_at": "2026-10-12T08:09:11.039891+00:00",
+    "endpoint": "triggerconstantcontract",
+    "request": {
+      "owner_address": "TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT",
+      "contract_address": "TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT",
+      "function_selector": "decimals()",
+      "parameter": "",
+      "visible": true
+    },
+    "status": 200,
+    "result": {
+      "result": true
+    },
+    "constant_result": [
+      "0000000000000000000000000000000000000000000000000000000000000012"
+    ]
+  },
+  "decimals_WBTT": {
+    "checked_at": "2026-10-12T08:09:11.926239+00:00",
+    "endpoint": "triggerconstantcontract",
+    "request": {
+      "owner_address": "TKfjV9RNKJJCqPvBtK8L7Knykh7DNWvnYt",
+      "contract_address": "TKfjV9RNKJJCqPvBtK8L7Knykh7DNWvnYt",
+      "function_selector": "decimals()",
+      "parameter": "",
+      "visible": true
+    },
+    "status": 200,
+    "result": {
+      "result": true
+    },
+    "constant_result": [
+      "0000000000000000000000000000000000000000000000000000000000000006"
+    ]
+  }
+}
