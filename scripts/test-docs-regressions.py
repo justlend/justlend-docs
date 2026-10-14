@@ -112,6 +112,13 @@ class DocumentationRegressions(unittest.TestCase):
                                      proof["node_creation_excluding_metadata_sha256"])
                     self.assertFalse(proof["full_bytecode_match"])
                     self.assertFalse(proof["source_bundle_publicly_reproducible"])
+                    cross_check = metadata["supplied_artifact_cross_check"]
+                    self.assertEqual(cross_check["matched_selected_entry_count"], len(entries))
+                    self.assertEqual(cross_check["entry_count"], sum(cross_check["entry_counts"].values()))
+                    self.assertGreater(cross_check["entry_count"], len(entries))
+                    self.assertRegex(cross_check["artifact_sha256"], r"^[0-9a-f]{64}$")
+                    # Full supplied artifacts stay local; this is a manifest
+                    # consistency check, not a replay of the full-ABI comparison.
         self.assertEqual(published["governor-alpha.json"]["tuple_source"], evidence["tuple_source"]["github_url"])
 
     def test_pointer_and_decimal_evidence_matches_registry(self):
@@ -307,6 +314,100 @@ const tronWeb = {
         self.assertEqual([(p["name"], p["type"]) for p in receipt[0]["components"]],
                          [("hasVoted", "bool"), ("support", "uint8"), ("votes", "uint96")])
 
+    def test_governance_documented_boundary_expressions(self):
+        # Execute the documented predicates, not an independently rewritten helper.
+        # This checks documentation examples, not EVM execution of the contract.
+        evidence = json.loads((FIXTURES / "contract-review-boundaries-20261014.json").read_text())
+        page = read("docs/developers/supply_and_borrow_market/governance.md")
+        values = {}
+        for observation in evidence["governor_constant_reads"]:
+            self.assertTrue(observation["response"]["result"]["result"])
+            name = observation["request"]["function_selector"]
+            values[name] = int(observation["response"]["constant_result"][0], 16)
+        self.assertEqual(values["proposalThreshold()"], 200_000_000 * 10**18)
+        self.assertEqual(values["quorumVotes()"], 600_000_000 * 10**18)
+        self.assertEqual(values["votingDelay()"], 1)
+        expressions = {}
+        for label in ["Proposal balance gate", "Approval vote gate", "Pending block condition", "Active block condition"]:
+            expressions[label] = re.search(r"\*\*" + label + r":\*\* `([^`]+)`", page)[1]
+        # Tie the balance predicate to the recorded official source, including the
+        # whitelist exception; the vote predicate is the inverse of Defeated.
+        balance = evidence["governor_conditions"][0].replace(
+            "wjst.getPriorVotes(msg.sender, sub256(block.number, 1))", "availableVotes").replace(
+            "isWhitelisted(msg.sender)", "isWhitelisted")
+        self.assertEqual(expressions["Proposal balance gate"], balance)
+        self.assertIn("proposal.forVotes <= proposal.againstVotes || proposal.forVotes < quorumVotes",
+                      evidence["governor_conditions"])
+        self.assertIn(evidence["sources"][0]["github_url"], page)
+        result = run_js(f"""
+const proposalThreshold = {values['proposalThreshold()']}n;
+const quorumVotes = {values['quorumVotes()']}n;
+const proposal = (availableVotes, isWhitelisted) => {expressions['Proposal balance gate']};
+const approval = (forVotes, againstVotes) => {expressions['Approval vote gate']};
+const startBlock = 100n + {values['votingDelay()']}n;
+const endBlock = startBlock + {values['votingPeriod()']}n;
+const pending = blockNumber => {expressions['Pending block condition']};
+const active = blockNumber => {expressions['Active block condition']};
+console.log(JSON.stringify({{
+  propose: [proposal(proposalThreshold - 1n, false), proposal(proposalThreshold, false),
+    proposal(proposalThreshold + 1n, false), proposal(0n, true)],
+  approve: [approval(quorumVotes - 1n, 0n), approval(quorumVotes, 0n),
+    approval(quorumVotes, quorumVotes), approval(quorumVotes + 1n, quorumVotes)],
+  states: [100n, 101n, 102n, endBlock, endBlock + 1n].map(n => [pending(n), active(n)])
+}}));
+""")
+        self.assertEqual(result, {
+            "propose": [False, False, True, True],
+            "approve": [False, True, False, True],
+            "states": [[True, False], [True, False], [False, True], [False, True], [False, False]],
+        })
+
+    def test_governance_summaries_preserve_strict_and_inclusive_boundaries(self):
+        for file in ["docs/developers/supply_and_borrow_market/governance.md",
+                     "docs/governance/jips.md", "docs/resources/glossary.md", "docs/llms-full.txt"]:
+            with self.subTest(file=file):
+                page = read(file)
+                self.assertRegex(page, r"For votes >= (?:\*\*)?600,000,000")
+                self.assertIn("non-whitelisted", page.lower())
+                self.assertNotRegex(page, r"(?:≥|>=)\s*(?:\*\*)?200,000,000")
+                self.assertNotRegex(page, r"For votes > (?:\*\*)?600,000,000")
+                if file.endswith("/governance.md"):
+                    self.assertIn("## Governance boundaries and evidence", page)
+                else:
+                    self.assertIn("governance-boundaries-and-evidence", page)
+                if not file.endswith("glossary.md"):
+                    self.assertIn("B+1", page)
+                    self.assertIn("B+2", page)
+                    self.assertNotRegex(page, r"effectively instant|essentially immediate|very next block|voting active begins immediately")
+
+    def test_llm_liquidation_predicate_rejects_equality_and_read_errors(self):
+        page = read("docs/llms-full.txt").split("### 2.5 Liquidation", 1)[1].split("### 2.6", 1)[0]
+        expression = re.search(r"liquidity read: `([^`]+)`", page)[1]
+        result = run_js(f"""
+const eligible = (error, shortfall) => {expression};
+console.log(JSON.stringify([[0n, 0n], [0n, 1n], [1n, 1n]].map(args => eligible(...args))));
+""")
+        self.assertEqual(result, [False, True, False])
+        self.assertIn("rounded display of 100 is not an execution predicate", page)
+        self.assertNotRegex(page, r"Risk Value (?:≥|>=) 100")
+        self.assertIn("contracts/Comptroller.sol#L451-L467", page)
+
+    def test_mcp_quote_warning_covers_successful_fallback_responses(self):
+        page = read("docs/developers/energy_rental.md")
+        warning = page.split('!!! warning "MCP estimate fallback (version-specific)"', 1)[1].split("### 3.", 1)[0]
+        evidence = json.loads((FIXTURES / "contract-review-boundaries-20261014.json").read_text())
+        self.assertIn(evidence["sources"][-1]["github_url"], warning)
+        for text in ["liquidateThreshold = 86400", "feeRatio = 0.05", "minFee = 50", "4e-8",
+                     "no per-field fallback/provenance marker", "independently verify both current rates",
+                     "If these inputs cannot be verified, stop; do not sign or broadcast"]:
+            self.assertIn(text, warning)
+        for file in ["docs/getting_started/concepts/energy_rental.md", "docs/llms-full.txt"]:
+            with self.subTest(file=file):
+                self.assertIn("7d53a6c", read(file))
+                self.assertIn("fallback defaults", read(file))
+                self.assertIn("cannot be verified", read(file))
+        self.assertIn("version-specific fallback warning", read("docs/ai_support/mcp_server.md"))
+
     def test_native_repayment_matches_observed_mainnet_abi(self):
         observed = json.loads((FIXTURES / "jtrx-repayment.json").read_text())
         documented = json.loads(read("docs/developers/abis/jtrx-repay.json"))
@@ -431,6 +532,7 @@ console.log(JSON.stringify({once, stable:normalizeMcpCatalog(once) === once}));
                      "developers/verification-evidence-20261014.json", "scripts/fixtures/docs-verification"]:
             self.assertFalse((site / path).exists(), path)
         forbidden = ["verification_evidence", "verification-evidence-20261014",
+                     "contract-review-boundaries-20261014",
                      "abi-provenance-20261014", "original 34 findings", "34-item checklist"]
         for path in site.rglob("*"):
             if path.is_file() and path.suffix in {".html", ".md", ".json", ".txt", ".xml"}:

@@ -27,6 +27,17 @@ The [machine-readable scope manifest](manifest.json) records each selected inter
 
 The Mainnet node returns no ABI entries for the current STRXG2 and MarketG1 implementations. These two interfaces instead use compiler output. The sTRX and rental additions were compiled with [TRON Solidity 0.8.18](https://github.com/tronprotocol/solidity/releases/tag/tv_0.8.18), optimizer enabled with 200 runs. Their creation bytecode matches the current node responses after removing **only** trailing Solidity CBOR metadata and its length; full metadata is **not** identical, and a complete reproducible source bundle is not included here. The manifest records compiler and bytecode hashes. `Deposit`, `Withdraw`, `Claim`, and `RentClaimed` were additionally decoded from successful Mainnet transaction receipts and checked against confirmed TronGrid events; raw-log regression fixtures are stored in `scripts/fixtures/docs-verification/settlement-events.json` in the docs repository. No transaction was submitted for verification.
 
+### Supplied compiler ABI cross-check
+
+On **2026-10-14**, the supplied `MarketG1.abi.json` and `STRXG2.abi.json` were compared with the compiler ABIs described above. Their full parsed JSON contents match, including input/output names and types, nested tuples, mutability, event `indexed`/`anonymous` fields, and fallback/receive entries. No duplicate canonical signatures were found. The manifest records each supplied file's SHA-256 and comparison counts.
+
+| Supplied artifact | Full ABI entries | Matching entries in the published subset |
+|---|---|---|
+| `MarketG1.abi.json` | 74: 58 functions, 16 events | All 23 in `energy-market.json`: 19 functions, 4 events |
+| `STRXG2.abi.json` | 107: 78 functions, 27 events, 1 fallback, 1 receive | All 39 in `strx.json`: 12 functions, 27 events |
+
+This cross-check does not replace the downloads with full deployment artifacts or expand their coverage. It confirms agreement with the dated compiler ABI, not an independent proof of deployment. The bytecode-metadata, proxy, historical-version and network limits above still apply.
+
 ## Catalog
 
 | ABI | Contract | Use for |

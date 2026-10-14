@@ -71,7 +71,7 @@ Pay back outstanding debt with the same underlying asset (or via `repayBorrowBeh
 
 ### 2.5 Liquidation
 
-Liquidation is triggered by **Risk Value**:
+**Risk Value** indicates collateral risk; crossing a displayed threshold does not automatically execute liquidation:
 
 $$
 \mathrm{Risk\ Value} = \frac{\mathrm{Total\ Borrow}}{\mathrm{Borrow\ Limit}} \times 100
@@ -86,7 +86,7 @@ $$
 | > 100 | **Liquidatable** |
 
 - Observation threshold: Risk Value > 95 (account is listed on the liquidation page).
-- Execution threshold: Risk Value ≥ 100.
+- V1 execution eligibility requires an error-free liquidity read: `error == 0 && shortfall > 0`. The ratio boundary is strictly Risk Value > 100, but a rounded display of 100 is not an execution predicate. Confirm on-chain shortfall and the other transaction guards; see the [pinned Comptroller check](https://github.com/justlend/justlend-protocol/blob/f28f3b462a4f281761e23423554563e15fc9f028/contracts/Comptroller.sol#L451-L467).
 - A liquidator may repay up to **50%** of a single borrowed asset in one transaction.
 - **Liquidation reward**: 8% of repaid debt value (paid in the seized jToken collateral).
 - Process is permissionless; any address may liquidate an eligible position.
@@ -122,11 +122,11 @@ Rent TRON Energy at ~50–80% below the cost of burning TRX (worked example in [
 
 ### Process (on-chain — verified against `GovernorBravoDelegator` at `TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD`)
 
-1. JST holders with ≥ **200,000,000 JST** (verified: `proposalThreshold() = 2e26`) call `propose()` on `GovernorBravoDelegator`.
-2. After `votingDelay() = 1 block ≈ 3 sec`, proposal transitions Pending → Active. **There is no protocol-enforced review period** — voting is essentially immediate. The "~2-day off-chain review" is a community / forum norm, not enforced by the contracts; do not write bots that assume any gap between `propose()` and Active.
+1. Non-whitelisted proposers need available WJST strictly greater than **200,000,000** (`proposalThreshold() = 2e26` raw units, read on 2026-10-14). A current whitelist entry bypasses this balance gate, not other proposal checks. Call `propose()` on `GovernorBravoDelegator`, not the implementation.
+2. `startBlock = creationBlock + votingDelay`; Pending includes `block.number <= startBlock`. With the observed `votingDelay() = 1`, creation at B means B+1 is still Pending and B+2 is the earliest Active block. Read `state(proposalId)` before voting. The ~2-day off-chain forum discussion is not protocol-enforced; the on-chain block boundary still applies.
 3. Voting runs for `votingPeriod() = 86,400 blocks ≈ 3 days`. 1 JST = 1 Vote after depositing JST into WJST. Votes use the available WJST balance at voting time, not a proposal-block snapshot; voted weight is locked. Once the proposal is no longer Pending or Active, call WJST.withdrawVotes(proposalId) to unlock, then WJST.withdraw(amount) to redeem JST.
-4. Approval requires (a) For votes > Against votes AND (b) For votes > **600,000,000** (verified: `quorumVotes() = 6e26`).
-5. Approved proposals enter a Timelock with `delay() = 172,800 sec = 48 hours` (verified on-chain), then can be `execute()`d.
+4. After voting, a non-canceled proposal passes when For votes > Against votes AND For votes >= **600,000,000** (`quorumVotes() = 6e26`, read on 2026-10-14). Exact quorum passes; a tie with Against fails. See [governance boundaries and pinned source](https://docs.justlend.org/developers/supply_and_borrow_market/governance/#governance-boundaries-and-evidence).
+5. A successful proposal must be queued. The Timelock delay is `172,800 sec = 48 hours` from queueing, after which `execute()` can be called before expiry; execution is not automatic.
 
 Full on-chain cycle: ~3 days voting + ~48 hours Timelock ≈ **5 days minimum**. Community typically adds ~2 days of forum discussion before `propose()` is called, for a total wall-clock of ~1 week — but again, that pre-propose discussion is not enforced anywhere.
 
@@ -272,7 +272,7 @@ prepaySun = ceil(amountSun × max(rentalRateMantissa, stableRateMantissa)
                  × (durationSeconds + 86400 + liquidateThresholdSeconds) / 10^18) + feeSun
 ```
 
-Read both rates, the time threshold, the proportional fee ratio, and the minimum fee from the current deployment. For a read-only MCP estimate, use `calculate_energy_rental_price` with `energyAmount` and `durationHours` (plus `receiverAddress` for an existing order). Do not invoke the signing/broadcasting `rent_energy` tool merely to quote a price. Re-quote and confirm separately before a write; refunds and renewal deposits depend on actual order state.
+Read both rates, the time threshold, the proportional fee ratio, and the minimum fee from the current deployment. For a read-only MCP estimate, use `calculate_energy_rental_price` with `energyAmount` and `durationHours` (plus `receiverAddress` for an existing order). Do not invoke the signing/broadcasting `rent_energy` tool merely to quote a price. MCP commit `7d53a6c` can silently substitute fallback defaults on failed parameter/rate reads, without per-field provenance in the structured quote; success does not prove live data. Independently verify current rates, threshold, fees, rental availability and applicable order state. If inputs cannot be verified, stop before signing or broadcasting; otherwise recompute and confirm separately. See the [version-specific fallback warning and source](https://docs.justlend.org/developers/energy_rental/#2-estimate-the-full-new-rental-prepayment-read-only). Refunds and renewal deposits depend on actual order state.
 
 Key functions:
 

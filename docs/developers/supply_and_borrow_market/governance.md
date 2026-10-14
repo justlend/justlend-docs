@@ -9,9 +9,9 @@ description: JustLend DAO governance contract reference — propose, vote, queue
     * **Protocol:** JustLend DAO
     * **Network:** TRON Mainnet
     * **Components:** `JST` (TRC20, `TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9`) → `WJST` (voting wrapper, deposit JST → receive WJST 1:1) → `GovernorBravoDelegator` (entrypoint, `TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD`) → `GovernorBravoDelegate` (impl, `TUeNh9BsYK44XePmFAuKZWg2rJuU7bSt5u`) → `Timelock` (executor, `TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x`, **`delay() = 172,800 sec = 48 hours`** verified on-chain). **Always call the Delegator**, not the Delegate.
-    * **Voting power:** 1 JST = 1 Vote. Threshold: For votes > Against votes AND For votes > 600,000,000 (`quorumVotes()`). Proposal threshold: ≥ 200,000,000 JST (`proposalThreshold()`). 
+    * **Voting power:** 1 JST wrapped as WJST = 1 whole vote. Approval requires For votes > Against votes AND For votes >= 600,000,000 (`quorumVotes()`). Non-whitelisted proposers need available WJST strictly greater than 200,000,000 (`proposalThreshold()`), not merely that many JST in a wallet.
     * **Lifecycle states:** `Pending → Active → (Canceled | Defeated | Succeeded) → Queued → Executed | Expired`. 
-    * **On-chain timing (verified):** `votingDelay() = 1 block ≈ 3 sec` (Pending → Active is effectively instant), `votingPeriod() = 86,400 blocks ≈ 3 days`, Timelock `delay() = 48 hours`. **Off-chain ~2-day forum review** is a community norm, **not enforced by the contracts** — any agent that programmatically calls `propose()` will see `Active` state on the very next block.
+    * **On-chain timing (read on 2026-10-14):** `votingDelay() = 1 block`, `votingPeriod() = 86,400 blocks ≈ 3 days`, Timelock `delay() = 48 hours`. For creation at block B, B+1 is still Pending; the earliest Active block is B+2. Read `state(proposalId)` before voting. The **off-chain ~2-day forum discussion** is a community norm, not a contract-enforced review period; it does not remove the on-chain block boundary.
     * **ABI:** [`abis/governor-alpha.json`](../abis/governor-alpha.json) (Governor) + [`abis/wjst.json`](../abis/wjst.json) (voting wrapper) 
     * **Implementation check:** `implementation()` on the Governor proxy returned the implementation above on **2026-10-14**, agreeing with the 2026-10-12 read. This corrects a documentation pointer; it does not deploy or upgrade a contract, and the entrypoint remains the proxy. See [address verification](../deployed_contracts.md#address-verification) and [ABI provenance](../abis/index.md#scope-and-provenance). Re-read it after an upgrade.
     * **Discussion forum** (off-chain, pre-proposal): <https://forum.justlend.org>.
@@ -31,6 +31,17 @@ JST deposit, vote unlocking, and JST withdrawal are calls to **WJST**, not Gover
 
 The source code is available on [Github](https://github.com/justlend/justlend-protocol/blob/main/contracts/Governance/Bravo/GovernorBravoDelegate.sol).
 
+
+## Governance boundaries and evidence
+
+The Mainnet proxy getters were read on **2026-10-14**: `proposalThreshold() = 2e26`, `quorumVotes() = 6e26`, `votingDelay() = 1`, and `votingPeriod() = 86400`. WJST voting amounts use 18-decimal raw units. Getters establish parameter values, not comparison operators; the operators below come from the [pinned GovernorBravo `propose` implementation](https://github.com/justlend/justlend-protocol/blob/f28f3b462a4f281761e23423554563e15fc9f028/contracts/Governance/Bravo/GovernorBravoDelegate.sol#L74-L91) and [`state` implementation](https://github.com/justlend/justlend-protocol/blob/f28f3b462a4f281761e23423554563e15fc9f028/contracts/Governance/Bravo/GovernorBravoDelegate.sol#L207-L226). These are source-level rules, not a claim that live boundary transactions were submitted.
+
+- **Proposal balance gate:** `availableVotes > proposalThreshold || isWhitelisted`. Exactly 200,000,000 WJST does **not** pass for a non-whitelisted proposer; one additional raw unit does pass this balance gate. A current whitelist entry bypasses only this gate, not the other `propose()` checks. The [pinned WJST `getPriorVotes` implementation](https://github.com/justlend/justlend-protocol/blob/f28f3b462a4f281761e23423554563e15fc9f028/contracts/Governance/WJST.sol#L93-L96) returns the available balance, despite its historical-sounding name; JST not deposited into WJST and votes already locked are not available voting balance.
+- **Approval vote gate:** `forVotes > againstVotes && forVotes >= quorumVotes`. Exactly 600,000,000 For-votes meets quorum; a tie with Against still fails. This gate is evaluated after voting ends, for a proposal that has not been canceled.
+- **Pending block condition:** `blockNumber <= startBlock`, where `startBlock = creationBlock + votingDelay`.
+- **Active block condition:** `startBlock < blockNumber && blockNumber <= endBlock`, where `endBlock = startBlock + votingPeriod`. For a non-canceled proposal created at B with delay 1, B and B+1 are Pending; B+2 is the earliest Active block, and endBlock is still Active. Block timing is not a wall-clock guarantee.
+
+Re-read the parameters and implementation after upgrades. Approval is not execution: a successful proposal must be queued, then wait the Timelock delay before `execute()` can be called.
 
 ## **Proposals**
 

@@ -166,15 +166,15 @@ Voting power is **token-weighted**, not one vote per holder: deposit JST into WJ
 
 ### proposal threshold
 
-Minimum JST a single account must hold (via WJST) to call `propose()`. JustLend currently requires **≥ 200,000,000 JST**. Set in `GovernorBravoDelegate`.
+The available WJST balance gate for `propose()`: a non-whitelisted account must have **strictly more than 200,000,000 WJST**, not exactly that amount or merely JST in its wallet. A current whitelist entry bypasses this gate, not other proposal checks. `proposalThreshold() = 2e26` raw units was read on 2026-10-14; see [governance boundaries and evidence](../developers/supply_and_borrow_market/governance.md#governance-boundaries-and-evidence).
 
 ### quorum
 
-Minimum For-votes a proposal must receive to be valid, regardless of For-vs-Against ratio. JustLend currently requires **For votes > 600,000,000** AND `For > Against`. See [Governance contract reference](../developers/supply_and_borrow_market/governance.md).
+The inclusive minimum For-votes: **For votes >= 600,000,000**, together with the separate strict condition `For > Against`. Exactly 600,000,000 meets quorum, but a tie with Against fails. `quorumVotes() = 6e26` raw units was read on 2026-10-14. See [governance boundaries and evidence](../developers/supply_and_borrow_market/governance.md#governance-boundaries-and-evidence).
 
 ### Timelock
 
-The 48-hour minimum delay between a proposal succeeding (vote period closes with quorum met) and `execute()` becoming callable. Enforced by a separate Timelock contract (`TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x`), the only address authorized to call privileged setters on JustLend contracts.
+The 48-hour minimum delay between queueing a successful proposal and `execute()` becoming callable. Enforced by a separate Timelock contract (`TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x`), the only address authorized to call privileged setters on JustLend contracts.
 
 ---
 

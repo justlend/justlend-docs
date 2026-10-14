@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "checked_at": "2026-10-14",
   "scope": "minimal interfaces, not complete compiler deployment artifacts",
   "network": "mainnet",
@@ -99,7 +99,21 @@
       "checked_entry_count": 39,
       "download_sha256": "9352b6b49982ff756ae12fc24b5100cba9cd9ae23c547377cf0465ee11f655df",
       "compiler_input_sha256": "2e1656c5e5fa064ad01e69b2f75aa26c55e20c806f2b0d43f95fa8b09b16e5c7",
-      "source_file_sha256": "6383b5c510a0f107c8f83e9cc7906c3fb68a37a264097cbe064c6931eaa0f7d0"
+      "source_file_sha256": "6383b5c510a0f107c8f83e9cc7906c3fb68a37a264097cbe064c6931eaa0f7d0",
+      "supplied_artifact_cross_check": {
+        "checked_at": "2026-10-14",
+        "artifact": "STRXG2.abi.json",
+        "artifact_sha256": "0f9aba03914a252397883c2a3a001b1411d0145210b03d60e0e1d776a06aa12c",
+        "entry_count": 107,
+        "entry_counts": {
+          "event": 27,
+          "fallback": 1,
+          "function": 78,
+          "receive": 1
+        },
+        "parsed_json_equal_to_compiler_abi": true,
+        "matched_selected_entry_count": 39
+      }
     },
     {
       "file": "energy-market.json",
@@ -118,7 +132,19 @@
       "checked_entry_count": 23,
       "download_sha256": "0abb1b8e76d1ce6a4f5cc050f81a73b24a167958b4e62a67dc31ed0a6c291437",
       "compiler_input_sha256": "2e1656c5e5fa064ad01e69b2f75aa26c55e20c806f2b0d43f95fa8b09b16e5c7",
-      "source_file_sha256": "32323d5ffc8a8bb4c840197a91ed552e8da44d105d03f1360e22e113bedede82"
+      "source_file_sha256": "32323d5ffc8a8bb4c840197a91ed552e8da44d105d03f1360e22e113bedede82",
+      "supplied_artifact_cross_check": {
+        "checked_at": "2026-10-14",
+        "artifact": "MarketG1.abi.json",
+        "artifact_sha256": "2241309d8f920cfea76c013bbf3a88bc003e6e4c1e2cfa511eae7f868443fe56",
+        "entry_count": 74,
+        "entry_counts": {
+          "event": 16,
+          "function": 58
+        },
+        "parsed_json_equal_to_compiler_abi": true,
+        "matched_selected_entry_count": 23
+      }
     }
   ],
   "other_files": "Other JSON files are also partial interfaces. This manifest does not certify unlisted deployments or Nile compatibility.",

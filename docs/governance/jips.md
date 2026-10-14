@@ -1,12 +1,12 @@
 ---
 title: JustLend Improvement Proposals (JIPs)
-description: How the JustLend DAO proposal lifecycle works — discussion on the forum, on-chain submission via GovernorBravo, 3-day voting period, 48-hour Timelock, then execution. JST holders with ≥ 200M JST can propose.
+description: How the JustLend DAO proposal lifecycle works — discussion on the forum, on-chain submission via GovernorBravo, 3-day voting period, 48-hour Timelock, then execution. Non-whitelisted proposers need more than 200M available WJST.
 ---
 
 # JustLend Improvement Proposals
 
 !!! info "About this page"
-    **Protocol:** JustLend DAO · **Network:** TRON Mainnet · **Scope:** the user-facing proposal lifecycle — how anyone with enough JST can introduce, debate, and pass changes to the protocol. · **Lifecycle (on-chain):** `propose()` on `GovernorBravoDelegator` (`TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD`) → voting begins after `votingDelay` (currently `1 block ≈ 3 seconds`, effectively instant) → `votingPeriod` of `86,400 blocks ≈ 3 days` (1 JST = 1 Vote after `deposit()`-ing into WJST) → `queue()` → 48-hour Timelock → `execute()`. **Off-chain norm (not protocol-enforced):** community typically discusses for ~2 days on <https://forum.justlend.org> **before** calling `propose()` — but the protocol does not enforce any delay between `propose()` and `Active` state. **Approval threshold:** For votes > Against votes **AND** For votes > 600,000,000. **Proposal threshold:** ≥ 200,000,000 JST. · **Developer reference:** [Governance contract reference](../developers/supply_and_borrow_market/governance.md).
+    **Protocol:** JustLend DAO · **Network:** TRON Mainnet · **Scope:** the user-facing proposal lifecycle. · **Lifecycle (on-chain):** `propose()` on `GovernorBravoDelegator` (`TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD`) → Pending → Active → voting for `86,400 blocks ≈ 3 days` → `queue()` → 48-hour Timelock → `execute()`. With `votingDelay() = 1`, a proposal created at B remains Pending at B+1 and can first be Active at B+2. **Off-chain norm:** community discussion for ~2 days on <https://forum.justlend.org> before proposing is not protocol-enforced; the on-chain block boundary still applies. **Approval threshold:** For votes > Against votes AND For votes >= 600,000,000. **Proposal threshold:** available WJST strictly greater than 200,000,000 for a non-whitelisted proposer. Parameters were read on 2026-10-14; see [governance boundaries and evidence](../developers/supply_and_borrow_market/governance.md#governance-boundaries-and-evidence).
 
 The JustLend DAO introduces a structured approach to decentralizing the JustLend protocol and empowering community autonomy. JustLend DAO fosters consensus among all participants in the JustLend ecosystem through governance mechanisms and economic incentives. The protocol's functions and the JST token serve as core security elements of the JustLend protocol.
 
@@ -18,15 +18,15 @@ The JustLend DAO was established to facilitate the development and long-term gov
 
 ### **Governance Process**
 
-JustLend Protocol's governance relies on participants locking JST tokens to acquire voting power for JustLend Improvement Proposals (JIPs).  The governance is first discussed in the [JustLend DAO forum](https://forum.justlend.org/). If there is no contentious, then it is conducted through voting. Any users who hold more than 200 million JST can initiate a proposal on the platform, and other users can participate in the vote. If and only if the number of votes in favor of the proposal exceeds the number of negative votes and meanwhile exceeds 600 million, the proposal can be passed and implemented two days later.
+JustLend governance uses JST deposited into WJST to acquire voting power for JustLend Improvement Proposals (JIPs). Proposals are typically discussed in the [JustLend DAO forum](https://forum.justlend.org/) before submission. Non-whitelisted proposers must have more than 200 million available WJST; a current whitelist entry bypasses this balance gate, but other proposal checks still apply. After voting, a non-canceled proposal passes the vote gate when For votes exceed Against votes and reach at least 600 million. It must then be queued and wait the 48-hour Timelock delay before execution; neither approval nor the passage of time automatically executes it.
 
 JST tokens enable holders to collectively act as managers of the protocol, enabling them to vote and propose. The process of submitting a proposal and voting is as shown below (before entering the lock phase, you can cancel the created proposal at any time by proposal)
 
 ![proposal process](https://raw.githubusercontent.com/justlend/justlend-docs/main/images/proposal.png)
 
-1. JST holders call governance contracts to create proposals. Once a proposal is successfully established, the voting active begins immediately.
+1. Eligible accounts call `propose()` to create proposals. With the observed delay of 1, a proposal created at B remains Pending through B+1; B+2 is the earliest Active block. Read `state(proposalId)` before casting a vote.
 2. Voting is token-weighted: **1 JST wrapped as WJST represents 1 whole vote**, not one vote per holder. Voters may vote for, against, or abstain, using available WJST at voting time; the voted weight is locked for the proposal. The voting period lasts for 3 days. After voting is no longer Pending or Active, unlocking votes and withdrawing JST are separate user transactions; see the [governance contract reference](../developers/supply_and_borrow_market/governance.md#available-votes-locks-and-withdrawal).
-3. Once the voting period ends, the governance contract will determine whether the proposal has been approved based on the number of votes. If the proposal does not pass, it will be terminated. If the proposal is approved, it will trigger the time lock executor.
-4. If the proposal is passed, the proposal will enter a lock-up period of 48 hours. After the lock-up period ends, the proposal will be in a pending state, and the proposal will take effect immediately after the execution.
+3. After the voting period ends, a non-canceled proposal becomes Defeated if either vote condition fails, or Succeeded if both pass. A successful proposal must be submitted to `queue()`; it does not automatically trigger the executor.
+4. Queueing sets the Timelock execution time. After the 48-hour delay, `execute()` may be called before expiry. The proposal remains Queued until execution or expiry, rather than returning to the initial Pending state.
 
-Taken together, in general, a full proposal will take at least a week.
+Including the usual ~2-day forum discussion, the process takes roughly a week. The on-chain voting and Timelock periods total about 5 days, plus the block boundary and any delay before queueing or execution; the forum period is not enforced on-chain.
