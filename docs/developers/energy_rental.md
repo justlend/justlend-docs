@@ -94,7 +94,7 @@ function getRentInfo(address renter, address receiver, uint256 resourceType) ext
     * `rentIndex:` the current global rent index at query time;
     * `liquidatable:` the Energy Rental contract's deposit-reserve check. This is a rental-order flag, not the V1 lending account's `shortfall` check; other execution guards still apply.
 
-`rentals(...)` returns **one tuple** `(amount, securityDeposit, rentIndex)`, whereas `getRentInfo(...)` returns **three separate positional values**; its compiler ABI does not name the outputs. `rentPaused(resourceType)` returns a **bool**. The downloadable [MarketG1 interface](abis/energy-market.json) includes these definitions and the `uint256` refund returns of both resource-return methods. Their [verification basis](verification_evidence.md#abi-verification-basis) is the compiler ABI with metadata-excluded creation-bytecode matching, not a guessed node ABI.
+`rentals(...)` returns **one tuple** `(amount, securityDeposit, rentIndex)`, whereas `getRentInfo(...)` returns **three separate positional values**; its compiler ABI does not name the outputs. `rentPaused(resourceType)` returns a **bool**. The downloadable [MarketG1 interface](abis/energy-market.json) includes these definitions and the `uint256` refund returns of both resource-return methods. Their [verification basis](abis/index.md#scope-and-provenance) is the compiler ABI with metadata-excluded creation-bytecode matching, not a guessed node ABI.
 
 
 ### **Bad Debt**

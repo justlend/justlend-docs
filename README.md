@@ -37,6 +37,8 @@ mkdocs build --strict
 DOCS_SITE_DIR=site python scripts/test-docs-regressions.py
 ```
 
+Product-facing interface sources, targets, verification dates and coverage belong in `docs/developers/abis/manifest.json` and the related reference pages. Offline observations used by regressions are in `scripts/fixtures/docs-verification/abi-provenance-20261014.json`, outside the published `docs/` tree. Issue checklists, acceptance status and full collection archives belong in the PR or local review report, not site navigation or search.
+
 After importing the generated MCP catalog, run `node scripts/normalize-mcp-catalog.mjs`
 to apply the docs-local table escaping and transaction/configuration distinctions.
 

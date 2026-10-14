@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.2.0",
+  "schema_version": "1.3.0",
   "checked_at": "2026-10-14",
   "scope": "minimal interfaces, not complete compiler deployment artifacts",
   "network": "mainnet",
@@ -135,6 +135,55 @@
     "event_cross_check": "Deposit, Withdraw, Claim, and RentClaimed were decoded from successful Mainnet transaction receipts and compared with confirmed TronGrid events.",
     "offline_event_fixture": "scripts/fixtures/docs-verification/settlement-events.json"
   },
-  "verification_evidence": "../verification-evidence-20261014.json",
-  "verification_method": "Compare normalized function inputs/outputs/mutability and event types/indexed flags, including tuple components where available; Receipt components have a separate pinned-source basis."
+  "verification_method": "Compare normalized function inputs/outputs/mutability and event types/indexed flags, including tuple components where available; Receipt components have a separate pinned-source basis.",
+  "address_verification": {
+    "checked_at": "2026-10-14",
+    "rpc": "https://api.trongrid.io/wallet/triggerconstantcontract",
+    "atomic_block_snapshot": false,
+    "calls": [
+      {
+        "label": "governor_implementation",
+        "contract_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+        "function_selector": "implementation()",
+        "returned_address": "TUeNh9BsYK44XePmFAuKZWg2rJuU7bSt5u"
+      },
+      {
+        "label": "oracle_proxy",
+        "contract_address": "TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7",
+        "function_selector": "oracle()",
+        "returned_address": "TGnYnSn4G9PgWFj7QQemh4YMZKp3fkympJ"
+      },
+      {
+        "label": "oracle_backend",
+        "contract_address": "TGnYnSn4G9PgWFj7QQemh4YMZKp3fkympJ",
+        "function_selector": "v1PriceOracle()",
+        "returned_address": "TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV"
+      },
+      {
+        "label": "governor_wjst",
+        "contract_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+        "function_selector": "wjst()",
+        "returned_address": "TXk9LnTnLN7oH96H3sKxJayMxLxR9M4ZD6"
+      },
+      {
+        "label": "strx_implementation",
+        "contract_address": "TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5",
+        "function_selector": "implementation()",
+        "returned_address": "TUAV6ZSCXtF8KVvDKSeVmAbJEovTBf4HtG"
+      },
+      {
+        "label": "market_implementation",
+        "contract_address": "TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd",
+        "function_selector": "implementation()",
+        "returned_address": "TNoHbPuBQrVanVf9qxUsSvHdB2eDkeDAKD"
+      },
+      {
+        "label": "market_strx",
+        "contract_address": "TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd",
+        "function_selector": "strx()",
+        "returned_address": "TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5"
+      }
+    ],
+    "scope": "Selected Mainnet pointers only; re-read after upgrades. This does not update the whole-registry or Nile verification date."
+  }
 }

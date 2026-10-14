@@ -17,7 +17,7 @@
 
 This document covers: protocol overview, core concepts (supply / borrow / withdraw / repay / liquidation / risks / sTRX / energy rental), governance, developer contract reference, deployed addresses (TRON mainnet + Nile), the HTTP API surface, and the AI integration story (Skills + MCP + CLI + V2 Utils). For exhaustive function signatures, field-by-field response schemas, JSON ABIs, and machine-readable address formats, see the individual reference pages and the OpenAPI YAML.
 
-**Verification scope:** The [2026-10-14 evidence](https://docs.justlend.org/developers/verification_evidence/) checks seven selected ABI files (109 entries), changed Mainnet pointers and the original 34 issues. It is not a full deployment/source-bundle or frontend acceptance certificate. Open external issues and unpublished repository fixes remain separate.
+**Interface provenance:** The [ABI manifest](https://docs.justlend.org/developers/abis/manifest.json) records targets, verification dates, download hashes and coverage for selected interfaces. [Address verification](https://docs.justlend.org/developers/deployed_contracts/#address-verification) explains the Mainnet pointer getters. These interfaces are not complete deployment artifacts or a guarantee for later upgrades.
 
 ---
 

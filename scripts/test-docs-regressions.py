@@ -65,7 +65,9 @@ class Tables(HTMLParser):
 
 class DocumentationRegressions(unittest.TestCase):
     def test_selected_abis_match_dated_verification_evidence(self):
-        evidence = json.loads(read("docs/developers/verification-evidence-20261014.json"))
+        evidence = json.loads((FIXTURES / "abi-provenance-20261014.json").read_text())
+        manifest = json.loads(read("docs/developers/abis/manifest.json"))
+        published = {item["file"]: item for item in manifest["interfaces"]}
 
         def types(parameters):
             return [p["type"] + "(" + ",".join(types(p["components"])) + ")"
@@ -84,12 +86,19 @@ class DocumentationRegressions(unittest.TestCase):
             return value
 
         self.assertEqual(len(evidence["abi_interfaces"]), 7)
+        self.assertEqual(manifest["checked_at"], evidence["checked_at"])
+        self.assertEqual(set(published), {item["file"] for item in evidence["abi_interfaces"]})
         self.assertEqual(evidence["abi_entries_checked"],
                          sum(len(item["entries"]) for item in evidence["abi_interfaces"]))
         for item in evidence["abi_interfaces"]:
             with self.subTest(file=item["file"]):
                 source = ROOT / "docs/developers/abis" / item["file"]
                 self.assertEqual(hashlib.sha256(source.read_bytes()).hexdigest(), item["download_sha256"])
+                metadata = published[item["file"]]
+                self.assertEqual(metadata["download_sha256"], item["download_sha256"])
+                self.assertEqual(metadata["verification_basis"], item["basis"])
+                self.assertEqual(metadata["checked_entry_count"], len(item["entries"]))
+                self.assertEqual(metadata.get("implementation", metadata["target"]), item["target"])
                 entries = json.loads(source.read_text())
                 by_key = {entry["type"].lower() + " " + entry["name"] + "(" +
                           ",".join(types(entry.get("inputs", []))) + ")": entry for entry in entries}
@@ -103,10 +112,23 @@ class DocumentationRegressions(unittest.TestCase):
                                      proof["node_creation_excluding_metadata_sha256"])
                     self.assertFalse(proof["full_bytecode_match"])
                     self.assertFalse(proof["source_bundle_publicly_reproducible"])
+        self.assertEqual(published["governor-alpha.json"]["tuple_source"], evidence["tuple_source"]["github_url"])
 
     def test_pointer_and_decimal_evidence_matches_registry(self):
-        evidence = json.loads(read("docs/developers/verification-evidence-20261014.json"))
+        evidence = json.loads((FIXTURES / "abi-provenance-20261014.json").read_text())
         reads = {item["label"]: item for item in evidence["constant_reads"]}
+        pointers = json.loads(read("docs/developers/abis/manifest.json"))["address_verification"]
+        self.assertEqual(pointers["checked_at"], evidence["checked_at"])
+        self.assertFalse(pointers["atomic_block_snapshot"])
+        for pointer in pointers["calls"]:
+            observation = reads[pointer["label"]]
+            self.assertTrue(observation["result"]["result"])
+            self.assertEqual(pointer["contract_address"], observation["request"]["contract_address"])
+            self.assertEqual(pointer["function_selector"], observation["request"]["function_selector"])
+            self.assertEqual(pointer["returned_address"], observation["decoded"])
+            self.assertIn("| `{}` | `{}` | `{}` |".format(
+                pointer["contract_address"], pointer["function_selector"], pointer["returned_address"]),
+                read("docs/developers/deployed_contracts.md"))
         registry = json.loads(read("docs/developers/contracts.json"))["networks"]["mainnet"]
         for label, address in [
             ("governor_implementation", registry["governance"]["governor_delegate"]["address"]),
@@ -122,10 +144,6 @@ class DocumentationRegressions(unittest.TestCase):
             observation = reads["decimals_" + symbol]
             self.assertEqual(observation["request"]["contract_address"], token["underlying"]["address"]["base58"])
             self.assertEqual(int(observation["decoded"]), token["underlying_decimals"])
-        ids = {item["id"] for item in evidence["issues"]}
-        self.assertEqual(ids, {f"JL-{number:03d}" for number in range(1, 35)})
-        self.assertFalse(evidence["all_issues_completed"])
-        self.assertEqual(sum(item["hosted_status"] == "already_correct" for item in evidence["issues"]), 11)
 
     def test_marketg1_tuples_returns_and_documented_events(self):
         abi = json.loads(read("docs/developers/abis/energy-market.json"))
@@ -145,7 +163,7 @@ class DocumentationRegressions(unittest.TestCase):
                 p["type"] + (" indexed" if p["indexed"] else "") + " " + p["name"]
                 for p in event["inputs"]) + ");"
             self.assertIn(declaration, read("docs/developers/energy_rental.md"))
-        extra = json.loads(read("docs/developers/verification-evidence-20261014.json"))["additional_constant_reads"]
+        extra = json.loads((FIXTURES / "abi-provenance-20261014.json").read_text())["additional_constant_reads"]
         for name in ["rent_info_empty_order", "rentals_empty_order"]:
             observed = next(item for item in extra if item["label"] == name)
             self.assertTrue(observed["result"]["result"])
@@ -405,9 +423,20 @@ console.log(JSON.stringify({once, stable:normalizeMcpCatalog(once) === once}));
         self.assertEqual(amount[1], r'string (pattern /^(\d+(\.\d+)?|max)$/)')
         for path in ["developers/apis/justlend_apis.yaml", "developers/abis/governor-alpha.json",
                      "developers/abis/price-oracle-impl.json", "developers/abis/manifest.json",
-                     "developers/abis/strx.json", "developers/abis/energy-market.json",
-                     "developers/verification-evidence-20261014.json"]:
+                     "developers/abis/strx.json", "developers/abis/energy-market.json"]:
             self.assertEqual((site / path).read_bytes(), (ROOT / "docs" / path).read_bytes())
+        # Review reports and offline observations must not leak into published output,
+        # including orphan pages, raw Markdown, search results and LLM indexes.
+        for path in ["developers/verification_evidence", "developers/verification_evidence.md",
+                     "developers/verification-evidence-20261014.json", "scripts/fixtures/docs-verification"]:
+            self.assertFalse((site / path).exists(), path)
+        forbidden = ["verification_evidence", "verification-evidence-20261014",
+                     "abi-provenance-20261014", "original 34 findings", "34-item checklist"]
+        for path in site.rglob("*"):
+            if path.is_file() and path.suffix in {".html", ".md", ".json", ".txt", ".xml"}:
+                content = path.read_text()
+                for token in forbidden:
+                    self.assertNotIn(token, content, str(path.relative_to(site)))
 
 
 if __name__ == "__main__":
