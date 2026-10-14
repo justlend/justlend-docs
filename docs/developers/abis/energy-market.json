@@ -1,261 +1,340 @@
 [
   {
-    "type": "function",
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "renter",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "receiver",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "resourceType",
+        "type": "uint256"
+      }
+    ],
     "name": "getRentInfo",
-    "inputs": [
-      {
-        "type": "address",
-        "name": "renter"
-      },
-      {
-        "type": "address",
-        "name": "receiver"
-      },
-      {
-        "type": "uint256",
-        "name": "resourceType"
-      }
-    ],
     "outputs": [
       {
-        "type": "uint256",
-        "name": "securityDeposit"
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       },
       {
-        "type": "uint256",
-        "name": "index"
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
       }
     ],
-    "stateMutability": "view"
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "type": "function",
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "renter",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "receiver",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "resourceType",
+        "type": "uint256"
+      }
+    ],
     "name": "rentals",
-    "inputs": [
-      {
-        "type": "address",
-        "name": "renter"
-      },
-      {
-        "type": "address",
-        "name": "receiver"
-      },
-      {
-        "type": "uint256",
-        "name": "resourceType"
-      }
-    ],
     "outputs": [
       {
-        "type": "uint256",
-        "name": "rentBalance"
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "securityDeposit",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "rentIndex",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct MarketV1Storage.RentalInfo",
+        "name": "",
+        "type": "tuple"
       }
     ],
-    "stateMutability": "view"
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "type": "function",
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "resourceType",
+        "type": "uint256"
+      }
+    ],
     "name": "totalDelegatedOfType",
-    "inputs": [
-      {
-        "type": "uint256",
-        "name": "resourceType"
-      }
-    ],
     "outputs": [
       {
+        "internalType": "uint256",
+        "name": "",
         "type": "uint256"
       }
     ],
-    "stateMutability": "view"
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "type": "function",
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "resourceType",
+        "type": "uint256"
+      }
+    ],
     "name": "totalFrozenOfType",
-    "inputs": [
-      {
-        "type": "uint256",
-        "name": "resourceType"
-      }
-    ],
     "outputs": [
       {
+        "internalType": "uint256",
+        "name": "",
         "type": "uint256"
       }
     ],
-    "stateMutability": "view"
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "type": "function",
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "resourceType",
+        "type": "uint256"
+      }
+    ],
     "name": "maxRentableOfType",
-    "inputs": [
-      {
-        "type": "uint256",
-        "name": "resourceType"
-      }
-    ],
     "outputs": [
       {
+        "internalType": "uint256",
+        "name": "",
         "type": "uint256"
       }
     ],
-    "stateMutability": "view"
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "type": "function",
+    "inputs": [],
     "name": "liquidateThreshold",
-    "inputs": [],
     "outputs": [
       {
+        "internalType": "uint256",
+        "name": "",
         "type": "uint256"
       }
     ],
-    "stateMutability": "view"
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "type": "function",
+    "inputs": [],
     "name": "feeRatio",
-    "inputs": [],
     "outputs": [
       {
+        "internalType": "uint256",
+        "name": "",
         "type": "uint256"
       }
     ],
-    "stateMutability": "view"
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "type": "function",
+    "inputs": [],
     "name": "minFee",
-    "inputs": [],
     "outputs": [
       {
+        "internalType": "uint256",
+        "name": "",
         "type": "uint256"
       }
     ],
-    "stateMutability": "view"
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "type": "function",
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "name": "rentPaused",
-    "inputs": [
-      {
-        "type": "uint256",
-        "name": "resourceType"
-      }
-    ],
     "outputs": [
       {
-        "type": "uint256"
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
       }
     ],
-    "stateMutability": "view"
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "type": "function",
-    "name": "usageChargeRatio",
     "inputs": [],
+    "name": "usageChargeRatio",
     "outputs": [
       {
+        "internalType": "uint256",
+        "name": "",
         "type": "uint256"
       }
     ],
-    "stateMutability": "view"
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "type": "function",
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "resourceType",
+        "type": "uint256"
+      }
+    ],
     "name": "_rentalRate",
-    "inputs": [
-      {
-        "type": "uint256",
-        "name": "amount"
-      },
-      {
-        "type": "uint256",
-        "name": "resourceType"
-      }
-    ],
     "outputs": [
       {
+        "internalType": "uint256",
+        "name": "",
         "type": "uint256"
       }
     ],
-    "stateMutability": "view"
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "type": "function",
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "resourceType",
+        "type": "uint256"
+      }
+    ],
     "name": "_stableRate",
-    "inputs": [
-      {
-        "type": "uint256",
-        "name": "resourceType"
-      }
-    ],
     "outputs": [
       {
+        "internalType": "uint256",
+        "name": "",
         "type": "uint256"
       }
     ],
-    "stateMutability": "view"
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "type": "function",
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "receiver",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "resourceType",
+        "type": "uint256"
+      }
+    ],
     "name": "rentResource",
-    "inputs": [
-      {
-        "type": "address",
-        "name": "receiver"
-      },
-      {
-        "type": "uint256",
-        "name": "stakeAmount"
-      },
-      {
-        "type": "uint256",
-        "name": "resourceType"
-      }
-    ],
     "outputs": [],
-    "stateMutability": "payable"
+    "stateMutability": "payable",
+    "type": "function"
   },
   {
-    "type": "function",
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "receiver",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "resourceType",
+        "type": "uint256"
+      }
+    ],
     "name": "returnResource",
-    "inputs": [
+    "outputs": [
       {
-        "type": "address",
-        "name": "renter"
-      },
-      {
-        "type": "uint256",
-        "name": "stakeAmount"
-      },
-      {
-        "type": "uint256",
-        "name": "resourceType"
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    "type": "function",
-    "name": "returnResourceByReceiver",
     "inputs": [
       {
-        "type": "address",
-        "name": "renter"
+        "internalType": "address",
+        "name": "renter",
+        "type": "address"
       },
       {
-        "type": "uint256",
-        "name": "stakeAmount"
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
       },
       {
-        "type": "uint256",
-        "name": "resourceType"
+        "internalType": "uint256",
+        "name": "resourceType",
+        "type": "uint256"
       }
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    "name": "returnResourceByReceiver",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
     "anonymous": false,
@@ -327,5 +406,176 @@
     ],
     "stateMutability": "view",
     "type": "function"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "renter",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "receiver",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "addedAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "resourceType",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "addedSecurityDeposit",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "securityDeposit",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "rentIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "RentResource",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "renter",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "receiver",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "subedAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "resourceType",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "usageRental",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "subedSecurityDeposit",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "securityDeposit",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "rentIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "ReturnResource",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "liquidator",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "renter",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "receiver",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "resourceType",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "usageRental",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "liquidateFee",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "sendBack",
+        "type": "uint256"
+      }
+    ],
+    "name": "Liquidate",
+    "type": "event"
   }
 ]

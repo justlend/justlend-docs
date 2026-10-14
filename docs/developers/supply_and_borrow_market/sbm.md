@@ -208,7 +208,7 @@ function repayBorrow(uint256 repayAmount) external returns (uint256)
     * For jTRC20, use `jtoken.repayBorrow(amountRaw).send()` after TRC20 approval; do not attach TRX as the repayment.
 * **Returns:** jTRX returns no value and reverts on failure. jTRC20 returns a protocol error code (`0` for success). A transaction ID alone is not proof of repayment; check execution results and the updated debt.
 
-The jTRX signature was checked against the Mainnet ABI at `TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP` on **2026-10-12**, and the official [`CEther.sol`](https://github.com/justlend/justlend-protocol/blob/f28f3b462a4f281761e23423554563e15fc9f028/contracts/CEther.sol) source. Do not substitute an Ethereum Compound ABI.
+The jTRX signature and empty return definition were rechecked against the Mainnet ABI at `TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP` on **2026-10-14**, agreeing with the 2026-10-12 read and the official [`CEther.sol`](https://github.com/justlend/justlend-protocol/blob/f28f3b462a4f281761e23423554563e15fc9f028/contracts/CEther.sol) source. The original downloadable self-repayment signature already had a `uint256` argument; its correction removes the erroneous return value and adds the native-TRX behalf interface, not a no-argument replacement. See [ABI verification evidence](../verification_evidence.md#abi-verification-basis). Do not substitute an Ethereum Compound ABI.
 
 #### **Event**
 ``` solidity

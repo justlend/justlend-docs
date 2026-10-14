@@ -10,6 +10,8 @@ description: Base58 addresses for every JustLend DAO contract on TRON Mainnet, p
 
 !!! tip "Machine-readable ABIs"
     Minimal JSON interfaces are available under [`abis/`](abis/index.md). They are **not complete deployment ABIs**; check each file's functions/events and [scope](abis/index.md#scope-and-provenance) before encoding calls or decoding logs:
+
+    The [2026-10-14 pointer and ABI verification](verification_evidence.md) explains why the Governor implementation and Oracle entrypoint were corrected, which proxy getters were read, and which ABI fields depend on compiler output or pinned source. Entry points were not upgraded by these documentation edits.
     
     | Contract | ABI |
     |---|---|

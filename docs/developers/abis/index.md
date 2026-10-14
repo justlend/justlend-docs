@@ -17,6 +17,8 @@ These files are **minimal integration interfaces, not complete deployment build 
 
 ## Scope and provenance
 
+The [2026-10-14 verification evidence](../verification_evidence.md) documents the exact proxy getters, node ABI sources, compiler comparison, source-only tuple expansion, and remaining issue coverage. The [machine-readable snapshot](../verification-evidence-20261014.json) records the checked interface entries and request/response words. It is a dated, non-atomic read snapshot, not a guarantee about a future upgrade or historical deployment.
+
 The [machine-readable scope manifest](manifest.json) records the corrections checked on **2026-10-12**:
 
 - **GovernorBravo:** Mainnet proxy `TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD` returned implementation `TUeNh9BsYK44XePmFAuKZWg2rJuU7bSt5u`. Input types and selected events were taken from that implementation's node ABI. `getReceipt` returns one tuple; its `bool / uint8 / uint96` components were expanded from the pinned official source because the node omits tuple components. This is not a bytecode-reproduced compiler artifact. The filename `governor-alpha.json` is retained for URL compatibility; its documented target is **Bravo**, not every Alpha/Bravo deployment.
@@ -43,7 +45,7 @@ The sTRX and rental additions were compiled with [TRON Solidity 0.8.18](https://
 | [`strx.json`](strx.json) | sTRX (Staked TRX) | Selected staking/balance functions plus all 27 current STRXG2 event declarations, including `Deposit`, `Withdraw`, and `Claim`. |
 | [`wjst.json`](wjst.json) | Mainnet WJST | Wrapping, available/locked votes, `withdrawVotes`, and selected wrap/vote-lock events. |
 | [`trc20.json`](trc20.json) | TRC20 (generic) | `approve`, `allowance`, `balanceOf`, `decimals`, `transfer` for any underlying TRC20 asset. |
-| [`energy-market.json`](energy-market.json) | Energy Rental market | Rental/order reads plus `rentClaimed`, restricted `claimRental`, and `RentClaimed` for sTRX settlement. |
+| [`energy-market.json`](energy-market.json) | Energy Rental market | Compiler-aligned rental/order reads, tuple `rentals`, three-value `getRentInfo`, bool `rentPaused`, refund returns, settlement reads/writes, and `RentResource` / `ReturnResource` / `Liquidate` / `RentClaimed`. |
 | [`energy-rate-model.json`](energy-rate-model.json) | Energy Rental rate model | `getRentalRate`, `totalDelegated`, `totalFrozen`. |
 
 ## Decoding events

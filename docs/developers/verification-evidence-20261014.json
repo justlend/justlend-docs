@@ -1,0 +1,3233 @@
+{
+  "schema_version": "1.0.0",
+  "checked_at": "2026-10-14",
+  "network": "TRON Mainnet",
+  "reviewed_head_before_supplement": "ded33496ecf9528d09b70659552d4f488ea242b0",
+  "scope": "Seven selected ABI interfaces, changed address pointers, original 34 documentation findings; not a whole-contract audit",
+  "all_issues_completed": false,
+  "publication_status": "PR open and not deployed at recheck; repository fixes are not hosted acceptance",
+  "observation_start_block": {
+    "number": 87096574,
+    "timestamp": 1791962628000,
+    "block_id": "000000000530fcfe1d7f9b2f98b234f9448c665cadd4785cf7b6a4f290d5b354"
+  },
+  "observation_end_block": {
+    "number": 87096591,
+    "timestamp": 1791962679000,
+    "block_id": "000000000530fd0f56a9dc116e8f1f2e4f1ecc51079e7a59b06ae7f8b84f26a7"
+  },
+  "atomic_block_snapshot": false,
+  "constant_reads": [
+    {
+      "label": "governor_implementation",
+      "request": {
+        "owner_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+        "contract_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+        "function_selector": "implementation()",
+        "parameter": "",
+        "visible": true
+      },
+      "endpoint": "https://api.trongrid.io/wallet/triggerconstantcontract",
+      "http_status": 200,
+      "observed_at": "2026-10-14T07:23:54.028269+00:00",
+      "result": {
+        "result": true
+      },
+      "constant_result": [
+        "000000000000000000000000ccda938a49c9ab6b0c302d4f7e42126e4821bfad"
+      ],
+      "kind": "address",
+      "decoded": "TUeNh9BsYK44XePmFAuKZWg2rJuU7bSt5u",
+      "hex_tron": "41ccda938a49c9ab6b0c302d4f7e42126e4821bfad",
+      "hex_evm": "0xccda938a49c9ab6b0c302d4f7e42126e4821bfad"
+    },
+    {
+      "label": "oracle_proxy",
+      "request": {
+        "owner_address": "TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7",
+        "contract_address": "TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7",
+        "function_selector": "oracle()",
+        "parameter": "",
+        "visible": true
+      },
+      "endpoint": "https://api.trongrid.io/wallet/triggerconstantcontract",
+      "http_status": 200,
+      "observed_at": "2026-10-14T07:23:56.022446+00:00",
+      "result": {
+        "result": true
+      },
+      "constant_result": [
+        "0000000000000000000000004ac4d18acb107e4be0c5d513e4bf3ff5c44e2f05"
+      ],
+      "kind": "address",
+      "decoded": "TGnYnSn4G9PgWFj7QQemh4YMZKp3fkympJ",
+      "hex_tron": "414ac4d18acb107e4be0c5d513e4bf3ff5c44e2f05",
+      "hex_evm": "0x4ac4d18acb107e4be0c5d513e4bf3ff5c44e2f05"
+    },
+    {
+      "label": "governor_wjst",
+      "request": {
+        "owner_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+        "contract_address": "TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD",
+        "function_selector": "wjst()",
+        "parameter": "",
+        "visible": true
+      },
+      "endpoint": "https://api.trongrid.io/wallet/triggerconstantcontract",
+      "http_status": 200,
+      "observed_at": "2026-10-14T07:23:57.998590+00:00",
+      "result": {
+        "result": true
+      },
+      "constant_result": [
+        "000000000000000000000000eeda4dfab78d92917f11df192f9b460715d7f67b"
+      ],
+      "kind": "address",
+      "decoded": "TXk9LnTnLN7oH96H3sKxJayMxLxR9M4ZD6",
+      "hex_tron": "41eeda4dfab78d92917f11df192f9b460715d7f67b",
+      "hex_evm": "0xeeda4dfab78d92917f11df192f9b460715d7f67b"
+    },
+    {
+      "label": "strx_implementation",
+      "request": {
+        "owner_address": "TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5",
+        "contract_address": "TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5",
+        "function_selector": "implementation()",
+        "parameter": "",
+        "visible": true
+      },
+      "endpoint": "https://api.trongrid.io/wallet/triggerconstantcontract",
+      "http_status": 200,
+      "observed_at": "2026-10-14T07:23:59.293604+00:00",
+      "result": {
+        "result": true
+      },
+      "constant_result": [
+        "000000000000000000000000c79446659d2fabc1f6c3069902c606ce202b7c5b"
+      ],
+      "kind": "address",
+      "decoded": "TUAV6ZSCXtF8KVvDKSeVmAbJEovTBf4HtG",
+      "hex_tron": "41c79446659d2fabc1f6c3069902c606ce202b7c5b",
+      "hex_evm": "0xc79446659d2fabc1f6c3069902c606ce202b7c5b"
+    },
+    {
+      "label": "market_implementation",
+      "request": {
+        "owner_address": "TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd",
+        "contract_address": "TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd",
+        "function_selector": "implementation()",
+        "parameter": "",
+        "visible": true
+      },
+      "endpoint": "https://api.trongrid.io/wallet/triggerconstantcontract",
+      "http_status": 200,
+      "observed_at": "2026-10-14T07:24:00.756058+00:00",
+      "result": {
+        "result": true
+      },
+      "constant_result": [
+        "0000000000000000000000008cb94f0ccb41cc8de909e00b01edef6a717ade8c"
+      ],
+      "kind": "address",
+      "decoded": "TNoHbPuBQrVanVf9qxUsSvHdB2eDkeDAKD",
+      "hex_tron": "418cb94f0ccb41cc8de909e00b01edef6a717ade8c",
+      "hex_evm": "0x8cb94f0ccb41cc8de909e00b01edef6a717ade8c"
+    },
+    {
+      "label": "market_strx",
+      "request": {
+        "owner_address": "TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd",
+        "contract_address": "TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd",
+        "function_selector": "strx()",
+        "parameter": "",
+        "visible": true
+      },
+      "endpoint": "https://api.trongrid.io/wallet/triggerconstantcontract",
+      "http_status": 200,
+      "observed_at": "2026-10-14T07:24:03.115636+00:00",
+      "result": {
+        "result": true
+      },
+      "constant_result": [
+        "000000000000000000000000c64e69acde1c7b16c2a3efcdbbdaa96c3644c2b3"
+      ],
+      "kind": "address",
+      "decoded": "TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5",
+      "hex_tron": "41c64e69acde1c7b16c2a3efcdbbdaa96c3644c2b3",
+      "hex_evm": "0xc64e69acde1c7b16c2a3efcdbbdaa96c3644c2b3"
+    },
+    {
+      "label": "close_factor",
+      "request": {
+        "owner_address": "TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7",
+        "contract_address": "TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7",
+        "function_selector": "closeFactorMantissa()",
+        "parameter": "",
+        "visible": true
+      },
+      "endpoint": "https://api.trongrid.io/wallet/triggerconstantcontract",
+      "http_status": 200,
+      "observed_at": "2026-10-14T07:24:04.548492+00:00",
+      "result": {
+        "result": true
+      },
+      "constant_result": [
+        "00000000000000000000000000000000000000000000000006f05b59d3b20000"
+      ],
+      "kind": "uint",
+      "decoded": "500000000000000000"
+    },
+    {
+      "label": "liquidation_incentive",
+      "request": {
+        "owner_address": "TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7",
+        "contract_address": "TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7",
+        "function_selector": "liquidationIncentiveMantissa()",
+        "parameter": "",
+        "visible": true
+      },
+      "endpoint": "https://api.trongrid.io/wallet/triggerconstantcontract",
+      "http_status": 200,
+      "observed_at": "2026-10-14T07:24:05.865424+00:00",
+      "result": {
+        "result": true
+      },
+      "constant_result": [
+        "0000000000000000000000000000000000000000000000000efcee47256c0000"
+      ],
+      "kind": "uint",
+      "decoded": "1080000000000000000"
+    },
+    {
+      "label": "oracle_backend",
+      "request": {
+        "owner_address": "TGnYnSn4G9PgWFj7QQemh4YMZKp3fkympJ",
+        "contract_address": "TGnYnSn4G9PgWFj7QQemh4YMZKp3fkympJ",
+        "function_selector": "v1PriceOracle()",
+        "parameter": "",
+        "visible": true
+      },
+      "endpoint": "https://api.trongrid.io/wallet/triggerconstantcontract",
+      "http_status": 200,
+      "observed_at": "2026-10-14T07:24:07.306059+00:00",
+      "result": {
+        "result": true
+      },
+      "constant_result": [
+        "00000000000000000000000080d2f390957701fb7c80de8767203ea1673f83db"
+      ],
+      "kind": "address",
+      "decoded": "TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV",
+      "hex_tron": "4180d2f390957701fb7c80de8767203ea1673f83db",
+      "hex_evm": "0x80d2f390957701fb7c80de8767203ea1673f83db"
+    },
+    {
+      "label": "decimals_wstUSDT",
+      "request": {
+        "owner_address": "TGkxzkDKyMeq2T7edKnyjZoFypyzjkkssq",
+        "contract_address": "TGkxzkDKyMeq2T7edKnyjZoFypyzjkkssq",
+        "function_selector": "decimals()",
+        "parameter": "",
+        "visible": true
+      },
+      "endpoint": "https://api.trongrid.io/wallet/triggerconstantcontract",
+      "http_status": 200,
+      "observed_at": "2026-10-14T07:24:08.679427+00:00",
+      "result": {
+        "result": true
+      },
+      "constant_result": [
+        "0000000000000000000000000000000000000000000000000000000000000012"
+      ],
+      "kind": "uint",
+      "decoded": "18"
+    },
+    {
+      "label": "decimals_sTRX",
+      "request": {
+        "owner_address": "TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5",
+        "contract_address": "TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5",
+        "function_selector": "decimals()",
+        "parameter": "",
+        "visible": true
+      },
+      "endpoint": "https://api.trongrid.io/wallet/triggerconstantcontract",
+      "http_status": 200,
+      "observed_at": "2026-10-14T07:24:09.848162+00:00",
+      "result": {
+        "result": true
+      },
+      "constant_result": [
+        "0000000000000000000000000000000000000000000000000000000000000012"
+      ],
+      "kind": "uint",
+      "decoded": "18"
+    },
+    {
+      "label": "decimals_SUN",
+      "request": {
+        "owner_address": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "contract_address": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "function_selector": "decimals()",
+        "parameter": "",
+        "visible": true
+      },
+      "endpoint": "https://api.trongrid.io/wallet/triggerconstantcontract",
+      "http_status": 200,
+      "observed_at": "2026-10-14T07:24:10.906292+00:00",
+      "result": {
+        "result": true
+      },
+      "constant_result": [
+        "0000000000000000000000000000000000000000000000000000000000000012"
+      ],
+      "kind": "uint",
+      "decoded": "18"
+    },
+    {
+      "label": "decimals_BTT",
+      "request": {
+        "owner_address": "TAFjULxiVgT4qWk6UZwjqwZXTSaGaqnVp4",
+        "contract_address": "TAFjULxiVgT4qWk6UZwjqwZXTSaGaqnVp4",
+        "function_selector": "decimals()",
+        "parameter": "",
+        "visible": true
+      },
+      "endpoint": "https://api.trongrid.io/wallet/triggerconstantcontract",
+      "http_status": 200,
+      "observed_at": "2026-10-14T07:24:12.452032+00:00",
+      "result": {
+        "result": true
+      },
+      "constant_result": [
+        "0000000000000000000000000000000000000000000000000000000000000012"
+      ],
+      "kind": "uint",
+      "decoded": "18"
+    },
+    {
+      "label": "decimals_JST",
+      "request": {
+        "owner_address": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+        "contract_address": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+        "function_selector": "decimals()",
+        "parameter": "",
+        "visible": true
+      },
+      "endpoint": "https://api.trongrid.io/wallet/triggerconstantcontract",
+      "http_status": 200,
+      "observed_at": "2026-10-14T07:24:13.518455+00:00",
+      "result": {
+        "result": true
+      },
+      "constant_result": [
+        "0000000000000000000000000000000000000000000000000000000000000012"
+      ],
+      "kind": "uint",
+      "decoded": "18"
+    },
+    {
+      "label": "decimals_HTX",
+      "request": {
+        "owner_address": "TUPM7K8REVzD2UdV4R5fe5M8XbnR2DdoJ6",
+        "contract_address": "TUPM7K8REVzD2UdV4R5fe5M8XbnR2DdoJ6",
+        "function_selector": "decimals()",
+        "parameter": "",
+        "visible": true
+      },
+      "endpoint": "https://api.trongrid.io/wallet/triggerconstantcontract",
+      "http_status": 200,
+      "observed_at": "2026-10-14T07:24:15.208997+00:00",
+      "result": {
+        "result": true
+      },
+      "constant_result": [
+        "0000000000000000000000000000000000000000000000000000000000000012"
+      ],
+      "kind": "uint",
+      "decoded": "18"
+    },
+    {
+      "label": "decimals_USD1",
+      "request": {
+        "owner_address": "TPFqcBAaaUMCSVRCqPaQ9QnzKhmuoLR6Rc",
+        "contract_address": "TPFqcBAaaUMCSVRCqPaQ9QnzKhmuoLR6Rc",
+        "function_selector": "decimals()",
+        "parameter": "",
+        "visible": true
+      },
+      "endpoint": "https://api.trongrid.io/wallet/triggerconstantcontract",
+      "http_status": 200,
+      "observed_at": "2026-10-14T07:24:16.375061+00:00",
+      "result": {
+        "result": true
+      },
+      "constant_result": [
+        "0000000000000000000000000000000000000000000000000000000000000012"
+      ],
+      "kind": "uint",
+      "decoded": "18"
+    },
+    {
+      "label": "decimals_TUSD",
+      "request": {
+        "owner_address": "TUpMhErZL2fhh4sVNULAbNKLokS4GjC1F4",
+        "contract_address": "TUpMhErZL2fhh4sVNULAbNKLokS4GjC1F4",
+        "function_selector": "decimals()",
+        "parameter": "",
+        "visible": true
+      },
+      "endpoint": "https://api.trongrid.io/wallet/triggerconstantcontract",
+      "http_status": 200,
+      "observed_at": "2026-10-14T07:24:17.534078+00:00",
+      "result": {
+        "result": true
+      },
+      "constant_result": [
+        "0000000000000000000000000000000000000000000000000000000000000012"
+      ],
+      "kind": "uint",
+      "decoded": "18"
+    },
+    {
+      "label": "decimals_USDJ",
+      "request": {
+        "owner_address": "TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT",
+        "contract_address": "TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT",
+        "function_selector": "decimals()",
+        "parameter": "",
+        "visible": true
+      },
+      "endpoint": "https://api.trongrid.io/wallet/triggerconstantcontract",
+      "http_status": 200,
+      "observed_at": "2026-10-14T07:24:19.410443+00:00",
+      "result": {
+        "result": true
+      },
+      "constant_result": [
+        "0000000000000000000000000000000000000000000000000000000000000012"
+      ],
+      "kind": "uint",
+      "decoded": "18"
+    },
+    {
+      "label": "decimals_WBTT",
+      "request": {
+        "owner_address": "TKfjV9RNKJJCqPvBtK8L7Knykh7DNWvnYt",
+        "contract_address": "TKfjV9RNKJJCqPvBtK8L7Knykh7DNWvnYt",
+        "function_selector": "decimals()",
+        "parameter": "",
+        "visible": true
+      },
+      "endpoint": "https://api.trongrid.io/wallet/triggerconstantcontract",
+      "http_status": 200,
+      "observed_at": "2026-10-14T07:24:21.018458+00:00",
+      "result": {
+        "result": true
+      },
+      "constant_result": [
+        "0000000000000000000000000000000000000000000000000000000000000006"
+      ],
+      "kind": "uint",
+      "decoded": "6"
+    },
+    {
+      "label": "min_fee",
+      "request": {
+        "owner_address": "TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd",
+        "contract_address": "TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd",
+        "function_selector": "minFee()",
+        "parameter": "",
+        "visible": true
+      },
+      "endpoint": "https://api.trongrid.io/wallet/triggerconstantcontract",
+      "http_status": 200,
+      "observed_at": "2026-10-14T07:24:36.175229+00:00",
+      "result": {
+        "result": true
+      },
+      "constant_result": [
+        "0000000000000000000000000000000000000000000000000000000001312d00"
+      ],
+      "kind": "uint",
+      "decoded": "20000000"
+    },
+    {
+      "label": "fee_ratio",
+      "request": {
+        "owner_address": "TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd",
+        "contract_address": "TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd",
+        "function_selector": "feeRatio()",
+        "parameter": "",
+        "visible": true
+      },
+      "endpoint": "https://api.trongrid.io/wallet/triggerconstantcontract",
+      "http_status": 200,
+      "observed_at": "2026-10-14T07:24:37.802240+00:00",
+      "result": {
+        "result": true
+      },
+      "constant_result": [
+        "000000000000000000000000000000000000000000000000000048c273950000"
+      ],
+      "kind": "uint",
+      "decoded": "80000000000000"
+    },
+    {
+      "label": "liquidation_time_threshold",
+      "request": {
+        "owner_address": "TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd",
+        "contract_address": "TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd",
+        "function_selector": "liquidateThreshold()",
+        "parameter": "",
+        "visible": true
+      },
+      "endpoint": "https://api.trongrid.io/wallet/triggerconstantcontract",
+      "http_status": 200,
+      "observed_at": "2026-10-14T07:24:39.330970+00:00",
+      "result": {
+        "result": true
+      },
+      "constant_result": [
+        "0000000000000000000000000000000000000000000000000000000000000000"
+      ],
+      "kind": "uint",
+      "decoded": "0"
+    },
+    {
+      "label": "stable_rate",
+      "request": {
+        "owner_address": "TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd",
+        "contract_address": "TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd",
+        "function_selector": "_stableRate(uint256)",
+        "parameter": "0000000000000000000000000000000000000000000000000000000000000001",
+        "visible": true
+      },
+      "endpoint": "https://api.trongrid.io/wallet/triggerconstantcontract",
+      "http_status": 200,
+      "observed_at": "2026-10-14T07:24:40.609591+00:00",
+      "result": {
+        "result": true
+      },
+      "constant_result": [
+        "000000000000000000000000000000000000000000000000000000013087c2b5"
+      ],
+      "kind": "uint",
+      "decoded": "5109170869"
+    },
+    {
+      "label": "rental_rate",
+      "request": {
+        "owner_address": "TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd",
+        "contract_address": "TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd",
+        "function_selector": "_rentalRate(uint256,uint256)",
+        "parameter": "0000000000000000000000000000000000000000000000000000000005f5e1000000000000000000000000000000000000000000000000000000000000000001",
+        "visible": true
+      },
+      "endpoint": "https://api.trongrid.io/wallet/triggerconstantcontract",
+      "http_status": 200,
+      "observed_at": "2026-10-14T07:24:42.003914+00:00",
+      "result": {
+        "result": true
+      },
+      "constant_result": [
+        "000000000000000000000000000000000000000000000000000000010b0d7fd4"
+      ],
+      "kind": "uint",
+      "decoded": "4480401364"
+    }
+  ],
+  "additional_constant_reads": [
+    {
+      "label": "zero_account_liquidity",
+      "request": {
+        "owner_address": "TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7",
+        "contract_address": "TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7",
+        "function_selector": "getAccountLiquidity(address)",
+        "parameter": "0000000000000000000000000000000000000000000000000000000000000000",
+        "visible": true
+      },
+      "endpoint": "https://api.trongrid.io/wallet/triggerconstantcontract",
+      "http_status": 200,
+      "observed_at": "2026-10-14T07:44:53.579287+00:00",
+      "result": {
+        "result": true
+      },
+      "constant_result": [
+        "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+      ],
+      "kind": "three positional uint256 values",
+      "decoded_values": {
+        "error": "0",
+        "liquidity": "0",
+        "shortfall": "0"
+      }
+    },
+    {
+      "label": "rent_info_empty_order",
+      "request": {
+        "owner_address": "TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd",
+        "contract_address": "TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd",
+        "function_selector": "getRentInfo(address,address,uint256)",
+        "parameter": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001",
+        "visible": true
+      },
+      "endpoint": "https://api.trongrid.io/wallet/triggerconstantcontract",
+      "http_status": 200,
+      "observed_at": "2026-10-14T07:44:54.646517+00:00",
+      "result": {
+        "result": true
+      },
+      "constant_result": [
+        "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000eb5d105bc8296470000000000000000000000000000000000000000000000000000000000000000"
+      ],
+      "kind": "two uint256 values and bool",
+      "decoded_values": {
+        "securityDeposit": "0",
+        "rentIndex": "1059983109883336263",
+        "liquidatable": false
+      }
+    },
+    {
+      "label": "rentals_empty_order",
+      "request": {
+        "owner_address": "TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd",
+        "contract_address": "TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd",
+        "function_selector": "rentals(address,address,uint256)",
+        "parameter": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001",
+        "visible": true
+      },
+      "endpoint": "https://api.trongrid.io/wallet/triggerconstantcontract",
+      "http_status": 200,
+      "observed_at": "2026-10-14T07:44:56.338571+00:00",
+      "result": {
+        "result": true
+      },
+      "constant_result": [
+        "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+      ],
+      "kind": "one RentalInfo tuple",
+      "decoded_values": {
+        "amount": "0",
+        "securityDeposit": "0",
+        "rentIndex": "0"
+      }
+    },
+    {
+      "label": "rent_paused",
+      "request": {
+        "owner_address": "TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd",
+        "contract_address": "TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd",
+        "function_selector": "rentPaused(uint256)",
+        "parameter": "0000000000000000000000000000000000000000000000000000000000000001",
+        "visible": true
+      },
+      "endpoint": "https://api.trongrid.io/wallet/triggerconstantcontract",
+      "http_status": 200,
+      "observed_at": "2026-10-14T07:44:57.912012+00:00",
+      "result": {
+        "result": true
+      },
+      "constant_result": [
+        "0000000000000000000000000000000000000000000000000000000000000000"
+      ],
+      "kind": "bool",
+      "decoded": false
+    },
+    {
+      "label": "wjst_future_block_read",
+      "request": {
+        "owner_address": "TXk9LnTnLN7oH96H3sKxJayMxLxR9M4ZD6",
+        "contract_address": "TXk9LnTnLN7oH96H3sKxJayMxLxR9M4ZD6",
+        "function_selector": "getPriorVotes(address,uint256)",
+        "parameter": "0000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "visible": true
+      },
+      "endpoint": "https://api.trongrid.io/wallet/triggerconstantcontract",
+      "http_status": 200,
+      "observed_at": "2026-10-14T07:44:59.140765+00:00",
+      "result": {
+        "result": true
+      },
+      "constant_result": [
+        "0000000000000000000000000000000000000000000000000000000000000000"
+      ],
+      "kind": "uint96",
+      "decoded": "0"
+    }
+  ],
+  "abi_entries_checked": 109,
+  "abi_interfaces": [
+    {
+      "file": "governor-alpha.json",
+      "target": "TUeNh9BsYK44XePmFAuKZWg2rJuU7bSt5u",
+      "node_contract_name": "GovernorBravoDelegate",
+      "node_abi_entry_count": 59,
+      "basis": "node_abi",
+      "download_sha256": "f3be9b593ae3c5cda695f1b5dc665913fb67628660fc2bf2ed4fbe66a3fc547d",
+      "coverage": "selected integration interface; not a complete deployment artifact",
+      "entries": [
+        {
+          "key": "event ProposalCanceled(uint256)",
+          "observed": {
+            "type": "event",
+            "name": "ProposalCanceled",
+            "inputs": [
+              "uint256"
+            ],
+            "indexed": [
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event ProposalCreated(uint256,address,address[],uint256[],string[],bytes[],uint256,uint256,string)",
+          "observed": {
+            "type": "event",
+            "name": "ProposalCreated",
+            "inputs": [
+              "uint256",
+              "address",
+              "address[]",
+              "uint256[]",
+              "string[]",
+              "bytes[]",
+              "uint256",
+              "uint256",
+              "string"
+            ],
+            "indexed": [
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event ProposalExecuted(uint256)",
+          "observed": {
+            "type": "event",
+            "name": "ProposalExecuted",
+            "inputs": [
+              "uint256"
+            ],
+            "indexed": [
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event ProposalQueued(uint256,uint256)",
+          "observed": {
+            "type": "event",
+            "name": "ProposalQueued",
+            "inputs": [
+              "uint256",
+              "uint256"
+            ],
+            "indexed": [
+              false,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event VoteCast(address,uint256,uint8,uint256,string)",
+          "observed": {
+            "type": "event",
+            "name": "VoteCast",
+            "inputs": [
+              "address",
+              "uint256",
+              "uint8",
+              "uint256",
+              "string"
+            ],
+            "indexed": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function cancel(uint256)",
+          "observed": {
+            "type": "function",
+            "name": "cancel",
+            "inputs": [
+              "uint256"
+            ],
+            "outputs": [],
+            "stateMutability": "nonpayable"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function castVote(uint256,uint256,uint8)",
+          "observed": {
+            "type": "function",
+            "name": "castVote",
+            "inputs": [
+              "uint256",
+              "uint256",
+              "uint8"
+            ],
+            "outputs": [],
+            "stateMutability": "nonpayable"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function castVoteBySig(uint256,uint256,uint8,uint8,bytes32,bytes32)",
+          "observed": {
+            "type": "function",
+            "name": "castVoteBySig",
+            "inputs": [
+              "uint256",
+              "uint256",
+              "uint8",
+              "uint8",
+              "bytes32",
+              "bytes32"
+            ],
+            "outputs": [],
+            "stateMutability": "nonpayable"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function castVoteWithReason(uint256,uint256,uint8,string)",
+          "observed": {
+            "type": "function",
+            "name": "castVoteWithReason",
+            "inputs": [
+              "uint256",
+              "uint256",
+              "uint8",
+              "string"
+            ],
+            "outputs": [],
+            "stateMutability": "nonpayable"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function execute(uint256)",
+          "observed": {
+            "type": "function",
+            "name": "execute",
+            "inputs": [
+              "uint256"
+            ],
+            "outputs": [],
+            "stateMutability": "payable"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function getActions(uint256)",
+          "observed": {
+            "type": "function",
+            "name": "getActions",
+            "inputs": [
+              "uint256"
+            ],
+            "outputs": [
+              "address[]",
+              "uint256[]",
+              "string[]",
+              "bytes[]"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function getReceipt(uint256,address)",
+          "observed": {
+            "type": "function",
+            "name": "getReceipt",
+            "inputs": [
+              "uint256",
+              "address"
+            ],
+            "outputs": [
+              "tuple(bool,uint8,uint96)"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched",
+          "tuple_component_basis": "Pinned official GovernorBravoInterfaces.sol Receipt definition: bool hasVoted,uint8 support,uint96 votes. Node ABI lacks components; exact deployment compiler artifact not reproduced.",
+          "tuple_components_node_verified": false
+        },
+        {
+          "key": "function implementation()",
+          "observed": {
+            "type": "function",
+            "name": "implementation",
+            "inputs": [],
+            "outputs": [
+              "address"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function proposalCount()",
+          "observed": {
+            "type": "function",
+            "name": "proposalCount",
+            "inputs": [],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function proposalThreshold()",
+          "observed": {
+            "type": "function",
+            "name": "proposalThreshold",
+            "inputs": [],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function proposals(uint256)",
+          "observed": {
+            "type": "function",
+            "name": "proposals",
+            "inputs": [
+              "uint256"
+            ],
+            "outputs": [
+              "uint256",
+              "address",
+              "uint256",
+              "uint256",
+              "uint256",
+              "uint256",
+              "uint256",
+              "uint256",
+              "bool",
+              "bool"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function propose(address[],uint256[],string[],bytes[],string)",
+          "observed": {
+            "type": "function",
+            "name": "propose",
+            "inputs": [
+              "address[]",
+              "uint256[]",
+              "string[]",
+              "bytes[]",
+              "string"
+            ],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "nonpayable"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function queue(uint256)",
+          "observed": {
+            "type": "function",
+            "name": "queue",
+            "inputs": [
+              "uint256"
+            ],
+            "outputs": [],
+            "stateMutability": "nonpayable"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function quorumVotes()",
+          "observed": {
+            "type": "function",
+            "name": "quorumVotes",
+            "inputs": [],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function state(uint256)",
+          "observed": {
+            "type": "function",
+            "name": "state",
+            "inputs": [
+              "uint256"
+            ],
+            "outputs": [
+              "uint8"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function votingDelay()",
+          "observed": {
+            "type": "function",
+            "name": "votingDelay",
+            "inputs": [],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function votingPeriod()",
+          "observed": {
+            "type": "function",
+            "name": "votingPeriod",
+            "inputs": [],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function wjst()",
+          "observed": {
+            "type": "function",
+            "name": "wjst",
+            "inputs": [],
+            "outputs": [
+              "address"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        }
+      ],
+      "node_response": {
+        "endpoint": "https://api.trongrid.io/wallet/getcontract",
+        "request": {
+          "value": "TUeNh9BsYK44XePmFAuKZWg2rJuU7bSt5u",
+          "visible": true
+        },
+        "observed_at": "2026-10-14T07:24:24.577575+00:00",
+        "http_status": 200,
+        "node_abi_entry_count": 59,
+        "creation_bytecode_sha256": "227d3c90433cda5da6ce5fde8a25585d58878c0d38ef835904142e68e0208014"
+      }
+    },
+    {
+      "file": "wjst.json",
+      "target": "TXk9LnTnLN7oH96H3sKxJayMxLxR9M4ZD6",
+      "node_contract_name": "WJST",
+      "node_abi_entry_count": 31,
+      "basis": "node_abi",
+      "download_sha256": "447975f789ddecc6043a5fa4817341f96e963a5c183f07d468559772dba1b302",
+      "coverage": "selected integration interface; not a complete deployment artifact",
+      "entries": [
+        {
+          "key": "event Deposit(address,uint256)",
+          "observed": {
+            "type": "event",
+            "name": "Deposit",
+            "inputs": [
+              "address",
+              "uint256"
+            ],
+            "indexed": [
+              true,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event VoteAndLock(address,uint256,uint8,uint256)",
+          "observed": {
+            "type": "event",
+            "name": "VoteAndLock",
+            "inputs": [
+              "address",
+              "uint256",
+              "uint8",
+              "uint256"
+            ],
+            "indexed": [
+              true,
+              true,
+              false,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event WithdrawVote(address,uint256,uint256)",
+          "observed": {
+            "type": "event",
+            "name": "WithdrawVote",
+            "inputs": [
+              "address",
+              "uint256",
+              "uint256"
+            ],
+            "indexed": [
+              true,
+              true,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event Withdrawal(address,uint256)",
+          "observed": {
+            "type": "event",
+            "name": "Withdrawal",
+            "inputs": [
+              "address",
+              "uint256"
+            ],
+            "indexed": [
+              true,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function allowance(address,address)",
+          "observed": {
+            "type": "function",
+            "name": "allowance",
+            "inputs": [
+              "address",
+              "address"
+            ],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function approve(address,uint256)",
+          "observed": {
+            "type": "function",
+            "name": "approve",
+            "inputs": [
+              "address",
+              "uint256"
+            ],
+            "outputs": [
+              "bool"
+            ],
+            "stateMutability": "nonpayable"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function approve(address)",
+          "observed": {
+            "type": "function",
+            "name": "approve",
+            "inputs": [
+              "address"
+            ],
+            "outputs": [
+              "bool"
+            ],
+            "stateMutability": "nonpayable"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function balanceOf(address)",
+          "observed": {
+            "type": "function",
+            "name": "balanceOf",
+            "inputs": [
+              "address"
+            ],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function deposit(uint256)",
+          "observed": {
+            "type": "function",
+            "name": "deposit",
+            "inputs": [
+              "uint256"
+            ],
+            "outputs": [],
+            "stateMutability": "nonpayable"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function getPriorVotes(address,uint256)",
+          "observed": {
+            "type": "function",
+            "name": "getPriorVotes",
+            "inputs": [
+              "address",
+              "uint256"
+            ],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function lockOf(address)",
+          "observed": {
+            "type": "function",
+            "name": "lockOf",
+            "inputs": [
+              "address"
+            ],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function lockTo(address,uint256)",
+          "observed": {
+            "type": "function",
+            "name": "lockTo",
+            "inputs": [
+              "address",
+              "uint256"
+            ],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function totalLocked()",
+          "observed": {
+            "type": "function",
+            "name": "totalLocked",
+            "inputs": [],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function withdraw(uint256)",
+          "observed": {
+            "type": "function",
+            "name": "withdraw",
+            "inputs": [
+              "uint256"
+            ],
+            "outputs": [],
+            "stateMutability": "nonpayable"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function withdrawVotes(uint256)",
+          "observed": {
+            "type": "function",
+            "name": "withdrawVotes",
+            "inputs": [
+              "uint256"
+            ],
+            "outputs": [],
+            "stateMutability": "nonpayable"
+          },
+          "status": "matched"
+        }
+      ],
+      "node_response": {
+        "endpoint": "https://api.trongrid.io/wallet/getcontract",
+        "request": {
+          "value": "TXk9LnTnLN7oH96H3sKxJayMxLxR9M4ZD6",
+          "visible": true
+        },
+        "observed_at": "2026-10-14T07:24:25.978974+00:00",
+        "http_status": 200,
+        "node_abi_entry_count": 31,
+        "creation_bytecode_sha256": "9a33a24501ee623883db39761e45b7679889d210f73b9d21f63d0ce48508c74f"
+      }
+    },
+    {
+      "file": "jtrx-repay.json",
+      "target": "TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP",
+      "node_contract_name": "CEther",
+      "node_abi_entry_count": 69,
+      "basis": "node_abi",
+      "download_sha256": "43793c4b0fc719c11a3db0c6bb0e6bcdb545e15e38c430df5dec4b6f90caf6a7",
+      "coverage": "selected integration interface; not a complete deployment artifact",
+      "entries": [
+        {
+          "key": "function repayBorrow(uint256)",
+          "observed": {
+            "type": "function",
+            "name": "repayBorrow",
+            "inputs": [
+              "uint256"
+            ],
+            "outputs": [],
+            "stateMutability": "payable"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function repayBorrowBehalf(address)",
+          "observed": {
+            "type": "function",
+            "name": "repayBorrowBehalf",
+            "inputs": [
+              "address"
+            ],
+            "outputs": [],
+            "stateMutability": "payable"
+          },
+          "status": "matched"
+        }
+      ],
+      "node_response": {
+        "endpoint": "https://api.trongrid.io/wallet/getcontract",
+        "request": {
+          "value": "TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP",
+          "visible": true
+        },
+        "observed_at": "2026-10-14T07:24:27.661421+00:00",
+        "http_status": 200,
+        "node_abi_entry_count": 69,
+        "creation_bytecode_sha256": "db571e4c64309b656143caefb3a84f5f84fd1f31018418325bdee1467ea45302"
+      }
+    },
+    {
+      "file": "price-oracle.json",
+      "target": "TGnYnSn4G9PgWFj7QQemh4YMZKp3fkympJ",
+      "node_contract_name": "PriceOracleProxy",
+      "node_abi_entry_count": 14,
+      "basis": "node_abi",
+      "download_sha256": "838acc79d465c519a1a8a199d56d715a4704bff0ec816f1618ba2136cb58ad00",
+      "coverage": "selected integration interface; not a complete deployment artifact",
+      "entries": [
+        {
+          "key": "function getUnderlyingPrice(address)",
+          "observed": {
+            "type": "function",
+            "name": "getUnderlyingPrice",
+            "inputs": [
+              "address"
+            ],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        }
+      ],
+      "node_response": {
+        "endpoint": "https://api.trongrid.io/wallet/getcontract",
+        "request": {
+          "value": "TGnYnSn4G9PgWFj7QQemh4YMZKp3fkympJ",
+          "visible": true
+        },
+        "observed_at": "2026-10-14T07:24:30.202826+00:00",
+        "http_status": 200,
+        "node_abi_entry_count": 14,
+        "creation_bytecode_sha256": "9418573bacf0a61a7724a469f23a02fde63aefe3f1a0fed5408a543a0f8ce8fd"
+      }
+    },
+    {
+      "file": "price-oracle-impl.json",
+      "target": "TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV",
+      "node_contract_name": "PriceOracle",
+      "node_abi_entry_count": 29,
+      "basis": "node_abi",
+      "download_sha256": "2470b3a0cc3d3a0aa57b37f22bab1df3abdeaf7e1a082b825f19ad556f50641d",
+      "coverage": "selected integration interface; not a complete deployment artifact",
+      "entries": [
+        {
+          "key": "event PricePosted(address,uint256,uint256,uint256)",
+          "observed": {
+            "type": "event",
+            "name": "PricePosted",
+            "inputs": [
+              "address",
+              "uint256",
+              "uint256",
+              "uint256"
+            ],
+            "indexed": [
+              false,
+              false,
+              false,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function anchors(address)",
+          "observed": {
+            "type": "function",
+            "name": "anchors",
+            "inputs": [
+              "address"
+            ],
+            "outputs": [
+              "uint256",
+              "uint256"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function assetPrices(address)",
+          "observed": {
+            "type": "function",
+            "name": "assetPrices",
+            "inputs": [
+              "address"
+            ],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function getPrice(address)",
+          "observed": {
+            "type": "function",
+            "name": "getPrice",
+            "inputs": [
+              "address"
+            ],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function poster()",
+          "observed": {
+            "type": "function",
+            "name": "poster",
+            "inputs": [],
+            "outputs": [
+              "address"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function setPrice(address,uint256)",
+          "observed": {
+            "type": "function",
+            "name": "setPrice",
+            "inputs": [
+              "address",
+              "uint256"
+            ],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "nonpayable"
+          },
+          "status": "matched"
+        }
+      ],
+      "node_response": {
+        "endpoint": "https://api.trongrid.io/wallet/getcontract",
+        "request": {
+          "value": "TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV",
+          "visible": true
+        },
+        "observed_at": "2026-10-14T07:24:31.556159+00:00",
+        "http_status": 200,
+        "node_abi_entry_count": 29,
+        "creation_bytecode_sha256": "393fd3f44446eeb06e70071cd1fb01905472ad3a47787b5d28f819e18c421c61"
+      }
+    },
+    {
+      "file": "strx.json",
+      "target": "TUAV6ZSCXtF8KVvDKSeVmAbJEovTBf4HtG",
+      "node_contract_name": "STRXG2",
+      "node_abi_entry_count": 0,
+      "basis": "compiler_abi_with_metadata_excluded_creation_bytecode_match",
+      "download_sha256": "9352b6b49982ff756ae12fc24b5100cba9cd9ae23c547377cf0465ee11f655df",
+      "coverage": "selected integration interface; not a complete deployment artifact",
+      "compiler_proof": {
+        "contract_name": "STRXG2",
+        "compiler": "0.8.18+commit.f18bedfe.Emscripten.clang",
+        "optimizer": {
+          "enabled": true,
+          "runs": 200
+        },
+        "compiler_input_sha256": "2e1656c5e5fa064ad01e69b2f75aa26c55e20c806f2b0d43f95fa8b09b16e5c7",
+        "source_file_sha256": "6383b5c510a0f107c8f83e9cc7906c3fb68a37a264097cbe064c6931eaa0f7d0",
+        "compiled_creation_sha256": "c2bf031c94e2853fb914121f79ac7b8296016cff428d544df054d6274f46b819",
+        "node_creation_sha256": "b47387152376c9513dc890b0760b81d2ea25d7e097f7fb5f2dee8fcd8ef552ef",
+        "compiled_creation_excluding_metadata_sha256": "bc6e283499d301babde5105027afc52cf928d7fa0d2952cb1601bffc13064fa7",
+        "node_creation_excluding_metadata_sha256": "bc6e283499d301babde5105027afc52cf928d7fa0d2952cb1601bffc13064fa7",
+        "executable_match": true,
+        "full_bytecode_match": false,
+        "excluded_metadata_bytes": 53,
+        "source_bundle_publicly_reproducible": false
+      },
+      "entries": [
+        {
+          "key": "function balanceOf(address)",
+          "observed": {
+            "type": "function",
+            "name": "balanceOf",
+            "inputs": [
+              "address"
+            ],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function totalSupply()",
+          "observed": {
+            "type": "function",
+            "name": "totalSupply",
+            "inputs": [],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function exchangeRate()",
+          "observed": {
+            "type": "function",
+            "name": "exchangeRate",
+            "inputs": [],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function totalUnfreezable()",
+          "observed": {
+            "type": "function",
+            "name": "totalUnfreezable",
+            "inputs": [],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function totalUnderlying()",
+          "observed": {
+            "type": "function",
+            "name": "totalUnderlying",
+            "inputs": [],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function getUnfreezeDelayDays()",
+          "observed": {
+            "type": "function",
+            "name": "getUnfreezeDelayDays",
+            "inputs": [],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function viewBalanceOfUnderlying(address)",
+          "observed": {
+            "type": "function",
+            "name": "viewBalanceOfUnderlying",
+            "inputs": [
+              "address"
+            ],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function deposit()",
+          "observed": {
+            "type": "function",
+            "name": "deposit",
+            "inputs": [],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "payable"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function withdraw(uint256)",
+          "observed": {
+            "type": "function",
+            "name": "withdraw",
+            "inputs": [
+              "uint256"
+            ],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "nonpayable"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function claimAll()",
+          "observed": {
+            "type": "function",
+            "name": "claimAll",
+            "inputs": [],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "nonpayable"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function withdrawExact(uint256)",
+          "observed": {
+            "type": "function",
+            "name": "withdrawExact",
+            "inputs": [
+              "uint256"
+            ],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "nonpayable"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function claim()",
+          "observed": {
+            "type": "function",
+            "name": "claim",
+            "inputs": [],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "nonpayable"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event Approval(address,address,uint256)",
+          "observed": {
+            "type": "event",
+            "name": "Approval",
+            "inputs": [
+              "address",
+              "address",
+              "uint256"
+            ],
+            "indexed": [
+              true,
+              true,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event BalanceFrozen(uint256)",
+          "observed": {
+            "type": "event",
+            "name": "BalanceFrozen",
+            "inputs": [
+              "uint256"
+            ],
+            "indexed": [
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event BalanceUnfrozen(uint256)",
+          "observed": {
+            "type": "event",
+            "name": "BalanceUnfrozen",
+            "inputs": [
+              "uint256"
+            ],
+            "indexed": [
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event Claim(address,uint256)",
+          "observed": {
+            "type": "event",
+            "name": "Claim",
+            "inputs": [
+              "address",
+              "uint256"
+            ],
+            "indexed": [
+              true,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event Deposit(address,uint256,uint256,uint256)",
+          "observed": {
+            "type": "event",
+            "name": "Deposit",
+            "inputs": [
+              "address",
+              "uint256",
+              "uint256",
+              "uint256"
+            ],
+            "indexed": [
+              true,
+              false,
+              false,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event FreezeBalance(address,uint256,uint256)",
+          "observed": {
+            "type": "event",
+            "name": "FreezeBalance",
+            "inputs": [
+              "address",
+              "uint256",
+              "uint256"
+            ],
+            "indexed": [
+              false,
+              false,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event Income(uint256,uint256)",
+          "observed": {
+            "type": "event",
+            "name": "Income",
+            "inputs": [
+              "uint256",
+              "uint256"
+            ],
+            "indexed": [
+              false,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event MaxAmountForEnergyUpdated(uint256,uint256)",
+          "observed": {
+            "type": "event",
+            "name": "MaxAmountForEnergyUpdated",
+            "inputs": [
+              "uint256",
+              "uint256"
+            ],
+            "indexed": [
+              false,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event MinFreezeAmountUpdated(uint256,uint256)",
+          "observed": {
+            "type": "event",
+            "name": "MinFreezeAmountUpdated",
+            "inputs": [
+              "uint256",
+              "uint256"
+            ],
+            "indexed": [
+              false,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event RentFactorUpdated(uint256,uint256)",
+          "observed": {
+            "type": "event",
+            "name": "RentFactorUpdated",
+            "inputs": [
+              "uint256",
+              "uint256"
+            ],
+            "indexed": [
+              false,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event RentSupplied(uint256,uint256)",
+          "observed": {
+            "type": "event",
+            "name": "RentSupplied",
+            "inputs": [
+              "uint256",
+              "uint256"
+            ],
+            "indexed": [
+              false,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event ReserveAdminUpdated(address,address)",
+          "observed": {
+            "type": "event",
+            "name": "ReserveAdminUpdated",
+            "inputs": [
+              "address",
+              "address"
+            ],
+            "indexed": [
+              false,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event ReservesAdded(uint256,uint256)",
+          "observed": {
+            "type": "event",
+            "name": "ReservesAdded",
+            "inputs": [
+              "uint256",
+              "uint256"
+            ],
+            "indexed": [
+              false,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event ReservesClaimed(address,bool,uint256,uint256)",
+          "observed": {
+            "type": "event",
+            "name": "ReservesClaimed",
+            "inputs": [
+              "address",
+              "bool",
+              "uint256",
+              "uint256"
+            ],
+            "indexed": [
+              false,
+              false,
+              false,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event ResourceObtained(uint256,uint256)",
+          "observed": {
+            "type": "event",
+            "name": "ResourceObtained",
+            "inputs": [
+              "uint256",
+              "uint256"
+            ],
+            "indexed": [
+              false,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event ResourceReleased(uint256,uint256)",
+          "observed": {
+            "type": "event",
+            "name": "ResourceReleased",
+            "inputs": [
+              "uint256",
+              "uint256"
+            ],
+            "indexed": [
+              false,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event RewardFactorUpdated(uint256,uint256)",
+          "observed": {
+            "type": "event",
+            "name": "RewardFactorUpdated",
+            "inputs": [
+              "uint256",
+              "uint256"
+            ],
+            "indexed": [
+              false,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event RoundClaim(address,uint256,uint256)",
+          "observed": {
+            "type": "event",
+            "name": "RoundClaim",
+            "inputs": [
+              "address",
+              "uint256",
+              "uint256"
+            ],
+            "indexed": [
+              false,
+              false,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event RoundUnfreeze(uint256,uint256,uint256)",
+          "observed": {
+            "type": "event",
+            "name": "RoundUnfreeze",
+            "inputs": [
+              "uint256",
+              "uint256",
+              "uint256"
+            ],
+            "indexed": [
+              false,
+              false,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event RoundWithdraw(address,uint256,uint256)",
+          "observed": {
+            "type": "event",
+            "name": "RoundWithdraw",
+            "inputs": [
+              "address",
+              "uint256",
+              "uint256"
+            ],
+            "indexed": [
+              false,
+              false,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event SrListUpdated(address[],address[])",
+          "observed": {
+            "type": "event",
+            "name": "SrListUpdated",
+            "inputs": [
+              "address[]",
+              "address[]"
+            ],
+            "indexed": [
+              false,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event Transfer(address,address,uint256)",
+          "observed": {
+            "type": "event",
+            "name": "Transfer",
+            "inputs": [
+              "address",
+              "address",
+              "uint256"
+            ],
+            "indexed": [
+              true,
+              true,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event UnfreezeBalance(address,uint256,uint256)",
+          "observed": {
+            "type": "event",
+            "name": "UnfreezeBalance",
+            "inputs": [
+              "address",
+              "uint256",
+              "uint256"
+            ],
+            "indexed": [
+              false,
+              false,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event UpdateTotalUnderlying(uint256,uint256)",
+          "observed": {
+            "type": "event",
+            "name": "UpdateTotalUnderlying",
+            "inputs": [
+              "uint256",
+              "uint256"
+            ],
+            "indexed": [
+              false,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event Vote(address,address[],uint256[])",
+          "observed": {
+            "type": "event",
+            "name": "Vote",
+            "inputs": [
+              "address",
+              "address[]",
+              "uint256[]"
+            ],
+            "indexed": [
+              false,
+              false,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event VoteOperatorUpdated(address,address)",
+          "observed": {
+            "type": "event",
+            "name": "VoteOperatorUpdated",
+            "inputs": [
+              "address",
+              "address"
+            ],
+            "indexed": [
+              false,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event Withdraw(address,uint256,uint256,uint256)",
+          "observed": {
+            "type": "event",
+            "name": "Withdraw",
+            "inputs": [
+              "address",
+              "uint256",
+              "uint256",
+              "uint256"
+            ],
+            "indexed": [
+              true,
+              false,
+              false,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        }
+      ],
+      "node_response": {
+        "endpoint": "https://api.trongrid.io/wallet/getcontract",
+        "request": {
+          "value": "TUAV6ZSCXtF8KVvDKSeVmAbJEovTBf4HtG",
+          "visible": true
+        },
+        "observed_at": "2026-10-14T07:24:32.950326+00:00",
+        "http_status": 200,
+        "node_abi_entry_count": 0,
+        "creation_bytecode_sha256": "b47387152376c9513dc890b0760b81d2ea25d7e097f7fb5f2dee8fcd8ef552ef"
+      }
+    },
+    {
+      "file": "energy-market.json",
+      "target": "TNoHbPuBQrVanVf9qxUsSvHdB2eDkeDAKD",
+      "node_contract_name": "MarketG1",
+      "node_abi_entry_count": 0,
+      "basis": "compiler_abi_with_metadata_excluded_creation_bytecode_match",
+      "download_sha256": "0abb1b8e76d1ce6a4f5cc050f81a73b24a167958b4e62a67dc31ed0a6c291437",
+      "coverage": "selected integration interface; not a complete deployment artifact",
+      "compiler_proof": {
+        "contract_name": "MarketG1",
+        "compiler": "0.8.18+commit.f18bedfe.Emscripten.clang",
+        "optimizer": {
+          "enabled": true,
+          "runs": 200
+        },
+        "compiler_input_sha256": "2e1656c5e5fa064ad01e69b2f75aa26c55e20c806f2b0d43f95fa8b09b16e5c7",
+        "source_file_sha256": "32323d5ffc8a8bb4c840197a91ed552e8da44d105d03f1360e22e113bedede82",
+        "compiled_creation_sha256": "dc439b95cc62506e16c16cdc1f80fe21131d7f9bb72fb3326747740fdca7b1f2",
+        "node_creation_sha256": "c66f4e441f88f9bc0b2cf31be8417c5ea220596cfc49dd9abfebf85cf92c3782",
+        "compiled_creation_excluding_metadata_sha256": "1c465c0f1db1d40ae38e9ced76ef7a0e825af1d4cff96ea3cef5a740b0fa0111",
+        "node_creation_excluding_metadata_sha256": "1c465c0f1db1d40ae38e9ced76ef7a0e825af1d4cff96ea3cef5a740b0fa0111",
+        "executable_match": true,
+        "full_bytecode_match": false,
+        "excluded_metadata_bytes": 53,
+        "source_bundle_publicly_reproducible": false
+      },
+      "entries": [
+        {
+          "key": "function getRentInfo(address,address,uint256)",
+          "observed": {
+            "type": "function",
+            "name": "getRentInfo",
+            "inputs": [
+              "address",
+              "address",
+              "uint256"
+            ],
+            "outputs": [
+              "uint256",
+              "uint256",
+              "bool"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function rentals(address,address,uint256)",
+          "observed": {
+            "type": "function",
+            "name": "rentals",
+            "inputs": [
+              "address",
+              "address",
+              "uint256"
+            ],
+            "outputs": [
+              "tuple(uint256,uint256,uint256)"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function totalDelegatedOfType(uint256)",
+          "observed": {
+            "type": "function",
+            "name": "totalDelegatedOfType",
+            "inputs": [
+              "uint256"
+            ],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function totalFrozenOfType(uint256)",
+          "observed": {
+            "type": "function",
+            "name": "totalFrozenOfType",
+            "inputs": [
+              "uint256"
+            ],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function maxRentableOfType(uint256)",
+          "observed": {
+            "type": "function",
+            "name": "maxRentableOfType",
+            "inputs": [
+              "uint256"
+            ],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function liquidateThreshold()",
+          "observed": {
+            "type": "function",
+            "name": "liquidateThreshold",
+            "inputs": [],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function feeRatio()",
+          "observed": {
+            "type": "function",
+            "name": "feeRatio",
+            "inputs": [],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function minFee()",
+          "observed": {
+            "type": "function",
+            "name": "minFee",
+            "inputs": [],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function rentPaused(uint256)",
+          "observed": {
+            "type": "function",
+            "name": "rentPaused",
+            "inputs": [
+              "uint256"
+            ],
+            "outputs": [
+              "bool"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function usageChargeRatio()",
+          "observed": {
+            "type": "function",
+            "name": "usageChargeRatio",
+            "inputs": [],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function _rentalRate(uint256,uint256)",
+          "observed": {
+            "type": "function",
+            "name": "_rentalRate",
+            "inputs": [
+              "uint256",
+              "uint256"
+            ],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function _stableRate(uint256)",
+          "observed": {
+            "type": "function",
+            "name": "_stableRate",
+            "inputs": [
+              "uint256"
+            ],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function rentResource(address,uint256,uint256)",
+          "observed": {
+            "type": "function",
+            "name": "rentResource",
+            "inputs": [
+              "address",
+              "uint256",
+              "uint256"
+            ],
+            "outputs": [],
+            "stateMutability": "payable"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function returnResource(address,uint256,uint256)",
+          "observed": {
+            "type": "function",
+            "name": "returnResource",
+            "inputs": [
+              "address",
+              "uint256",
+              "uint256"
+            ],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "nonpayable"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function returnResourceByReceiver(address,uint256,uint256)",
+          "observed": {
+            "type": "function",
+            "name": "returnResourceByReceiver",
+            "inputs": [
+              "address",
+              "uint256",
+              "uint256"
+            ],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "nonpayable"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event RentClaimed(uint256,uint256)",
+          "observed": {
+            "type": "event",
+            "name": "RentClaimed",
+            "inputs": [
+              "uint256",
+              "uint256"
+            ],
+            "indexed": [
+              false,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function claimRental()",
+          "observed": {
+            "type": "function",
+            "name": "claimRental",
+            "inputs": [],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "nonpayable"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function rentClaimed()",
+          "observed": {
+            "type": "function",
+            "name": "rentClaimed",
+            "inputs": [],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function strx()",
+          "observed": {
+            "type": "function",
+            "name": "strx",
+            "inputs": [],
+            "outputs": [
+              "address"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "function totalRent()",
+          "observed": {
+            "type": "function",
+            "name": "totalRent",
+            "inputs": [],
+            "outputs": [
+              "uint256"
+            ],
+            "stateMutability": "view"
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event RentResource(address,address,uint256,uint256,uint256,uint256,uint256,uint256)",
+          "observed": {
+            "type": "event",
+            "name": "RentResource",
+            "inputs": [
+              "address",
+              "address",
+              "uint256",
+              "uint256",
+              "uint256",
+              "uint256",
+              "uint256",
+              "uint256"
+            ],
+            "indexed": [
+              true,
+              true,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event ReturnResource(address,address,uint256,uint256,uint256,uint256,uint256,uint256,uint256)",
+          "observed": {
+            "type": "event",
+            "name": "ReturnResource",
+            "inputs": [
+              "address",
+              "address",
+              "uint256",
+              "uint256",
+              "uint256",
+              "uint256",
+              "uint256",
+              "uint256",
+              "uint256"
+            ],
+            "indexed": [
+              true,
+              true,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        },
+        {
+          "key": "event Liquidate(address,address,address,uint256,uint256,uint256,uint256,uint256)",
+          "observed": {
+            "type": "event",
+            "name": "Liquidate",
+            "inputs": [
+              "address",
+              "address",
+              "address",
+              "uint256",
+              "uint256",
+              "uint256",
+              "uint256",
+              "uint256"
+            ],
+            "indexed": [
+              true,
+              true,
+              true,
+              false,
+              false,
+              false,
+              false,
+              false
+            ],
+            "anonymous": false
+          },
+          "status": "matched"
+        }
+      ],
+      "node_response": {
+        "endpoint": "https://api.trongrid.io/wallet/getcontract",
+        "request": {
+          "value": "TNoHbPuBQrVanVf9qxUsSvHdB2eDkeDAKD",
+          "visible": true
+        },
+        "observed_at": "2026-10-14T07:24:34.714686+00:00",
+        "http_status": 200,
+        "node_abi_entry_count": 0,
+        "creation_bytecode_sha256": "c66f4e441f88f9bc0b2cf31be8417c5ea220596cfc49dd9abfebf85cf92c3782"
+      }
+    }
+  ],
+  "tuple_source": {
+    "url": "https://raw.githubusercontent.com/justlend/justlend-protocol/f28f3b462a4f281761e23423554563e15fc9f028/contracts/Governance/Bravo/GovernorBravoInterfaces.sol",
+    "github_url": "https://github.com/justlend/justlend-protocol/blob/f28f3b462a4f281761e23423554563e15fc9f028/contracts/Governance/Bravo/GovernorBravoInterfaces.sol",
+    "commit": "f28f3b462a4f281761e23423554563e15fc9f028",
+    "observed_at": "2026-10-14T07:26:25.039584+00:00",
+    "exit_code": 0,
+    "sha256": "82933073eb00f2a99c278d27cd860dda53a59c0696a53c36ea5355c92a59a5de"
+  },
+  "official_sources": [
+    {
+      "url": "https://raw.githubusercontent.com/justlend/justlend-protocol/f28f3b462a4f281761e23423554563e15fc9f028/contracts/CEther.sol",
+      "github_url": "https://github.com/justlend/justlend-protocol/blob/f28f3b462a4f281761e23423554563e15fc9f028/contracts/CEther.sol",
+      "commit": "f28f3b462a4f281761e23423554563e15fc9f028",
+      "observed_at": "2026-10-14T07:26:24.589779+00:00",
+      "exit_code": 0,
+      "sha256": "1b8e3c2ddfed8ce0899e9c95b3a330e3b5bf453eced781f15b7a3f123c5857c1"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/justlend/justlend-protocol/f28f3b462a4f281761e23423554563e15fc9f028/contracts/Comptroller.sol",
+      "github_url": "https://github.com/justlend/justlend-protocol/blob/f28f3b462a4f281761e23423554563e15fc9f028/contracts/Comptroller.sol",
+      "commit": "f28f3b462a4f281761e23423554563e15fc9f028",
+      "observed_at": "2026-10-14T07:26:25.039500+00:00",
+      "exit_code": 0,
+      "sha256": "888f089f77588430baf3b10155d1b28920c93ca69c51ae7aaeeee59dba2c90b0"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/justlend/justlend-protocol/f28f3b462a4f281761e23423554563e15fc9f028/contracts/Governance/WJST.sol",
+      "github_url": "https://github.com/justlend/justlend-protocol/blob/f28f3b462a4f281761e23423554563e15fc9f028/contracts/Governance/WJST.sol",
+      "commit": "f28f3b462a4f281761e23423554563e15fc9f028",
+      "observed_at": "2026-10-14T07:26:24.274175+00:00",
+      "exit_code": 0,
+      "sha256": "b98a4eb191850cd7ddd7131f868f83ffe2604643276cd48e32cba7fd94bc5b64"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/justlend/justlend-protocol/f28f3b462a4f281761e23423554563e15fc9f028/contracts/Governance/Bravo/GovernorBravoInterfaces.sol",
+      "github_url": "https://github.com/justlend/justlend-protocol/blob/f28f3b462a4f281761e23423554563e15fc9f028/contracts/Governance/Bravo/GovernorBravoInterfaces.sol",
+      "commit": "f28f3b462a4f281761e23423554563e15fc9f028",
+      "observed_at": "2026-10-14T07:26:25.039584+00:00",
+      "exit_code": 0,
+      "sha256": "82933073eb00f2a99c278d27cd860dda53a59c0696a53c36ea5355c92a59a5de"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/justlend/justlend-protocol/f28f3b462a4f281761e23423554563e15fc9f028/contracts/Governance/Bravo/GovernorBravoDelegate.sol",
+      "github_url": "https://github.com/justlend/justlend-protocol/blob/f28f3b462a4f281761e23423554563e15fc9f028/contracts/Governance/Bravo/GovernorBravoDelegate.sol",
+      "commit": "f28f3b462a4f281761e23423554563e15fc9f028",
+      "observed_at": "2026-10-14T07:26:26.150948+00:00",
+      "exit_code": 0,
+      "sha256": "8e504c3a99faf809ad732c950129899887b3d3116330253159d1b02d1702c4d5"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/justlend/justlend-protocol/f28f3b462a4f281761e23423554563e15fc9f028/contracts/Governance/Bravo/GovernorBravoDelegator.sol",
+      "github_url": "https://github.com/justlend/justlend-protocol/blob/f28f3b462a4f281761e23423554563e15fc9f028/contracts/Governance/Bravo/GovernorBravoDelegator.sol",
+      "commit": "f28f3b462a4f281761e23423554563e15fc9f028",
+      "observed_at": "2026-10-14T07:26:26.053880+00:00",
+      "exit_code": 0,
+      "sha256": "9e6ad9288d48f4faf243f9fc82b2d9ac071bb0717cf8ce52fc53838388a9367f"
+    }
+  ],
+  "compiler_sha256": "cc258d6b2a77eb19c8092fa3c9d13fd5f658bdc309ef358b5ff0a9c069d5ea6c",
+  "regression_controls": {
+    "quoteStake": {
+      "fixture_rate": "1.25 TRX per sTRX",
+      "inputs": [
+        10.5,
+        "10.5",
+        "0.5",
+        "0.000001"
+      ],
+      "outputs_raw_sTRX": [
+        "8400000000000000000",
+        "8400000000000000000",
+        "400000000000000000",
+        "800000000000"
+      ],
+      "mocked_boundary": "contract exchangeRate() and SDK decimal-to-sun adapter; no signing or broadcasting",
+      "initial_harness_failure": "JSON.stringify cannot serialize BigInt; output serialization changed to strings, implementation unchanged"
+    },
+    "refund_math": {
+      "starting_reserve_trx": "140",
+      "computed_results_trx": [
+        "1.4E+2",
+        "104",
+        "8E+1",
+        "44",
+        "1.2E+2",
+        "84"
+      ]
+    },
+    "liquidation_example": {
+      "selected_trx_debt_usd": "135",
+      "close_factor": "0.5",
+      "maximum_repayment_usd": "67.5",
+      "incentive": "1.08",
+      "usdc_seized_usd": "72.9",
+      "remaining_usdc_usd": "127.1",
+      "risk_value": "98.05608119731635988302081541"
+    }
+  },
+  "v2_error_responses": [
+    {
+      "path": "/v2/index/vault/list",
+      "method": "GET",
+      "url": "https://openapi.just.network/v2/index/vault/list?address=invalid",
+      "params": {
+        "address": "invalid"
+      },
+      "http_status": 200,
+      "response": {
+        "code": 202,
+        "message": "error: Invalid TRON address format",
+        "data": null,
+        "timestamp": 1791964016610
+      },
+      "observed_at": "2026-10-14T07:46:56.564155+00:00"
+    },
+    {
+      "path": "/v2/index/market/list",
+      "method": "GET",
+      "url": "https://openapi.just.network/v2/index/market/list?address=invalid",
+      "params": {
+        "address": "invalid"
+      },
+      "http_status": 200,
+      "response": {
+        "code": 202,
+        "message": "error: Invalid TRON address format",
+        "data": null,
+        "timestamp": 1791964017211
+      },
+      "observed_at": "2026-10-14T07:46:57.467288+00:00"
+    },
+    {
+      "path": "/v2/index/position",
+      "method": "GET",
+      "url": "https://openapi.just.network/v2/index/position?address=invalid",
+      "params": {
+        "address": "invalid"
+      },
+      "http_status": 200,
+      "response": {
+        "code": 202,
+        "message": "Invalid TRON address format.",
+        "data": null,
+        "timestamp": 1791964018129
+      },
+      "observed_at": "2026-10-14T07:46:58.063814+00:00"
+    },
+    {
+      "path": "/v2/vault/position",
+      "method": "GET",
+      "url": "https://openapi.just.network/v2/vault/position?vaultAddress=invalid&address=invalid",
+      "params": {
+        "vaultAddress": "invalid",
+        "address": "invalid"
+      },
+      "http_status": 200,
+      "response": {
+        "code": 202,
+        "message": "error: Invalid TRON address format; error: Invalid TRON address format",
+        "data": null,
+        "timestamp": 1791964018988
+      },
+      "observed_at": "2026-10-14T07:46:59.029071+00:00"
+    },
+    {
+      "path": "/v2/market/position",
+      "method": "GET",
+      "url": "https://openapi.just.network/v2/market/position?address=invalid",
+      "params": {
+        "address": "invalid"
+      },
+      "http_status": 200,
+      "response": {
+        "code": 202,
+        "message": "invalid marketId",
+        "data": null,
+        "timestamp": 1791964019597
+      },
+      "observed_at": "2026-10-14T07:46:59.531438+00:00"
+    }
+  ],
+  "issues": [
+    {
+      "id": "JL-001",
+      "issue": "Liquidation equality and display rounding",
+      "repository_status": "fixed_in_repository",
+      "hosted_status": "awaiting_docs_release",
+      "evidence_summary": "V1 liquidation requires an error-free liquidity result with shortfall > 0; pinned Comptroller source supports the predicate, and the sampled debt-free control returns shortfall=0. Three display-rounding examples are present. The hosted whitepaper V1 health residual is a separate unpublished correction.",
+      "source_urls": [
+        "https://docs.justlend.org/getting_started/concepts/liquidations/"
+      ]
+    },
+    {
+      "id": "JL-002",
+      "issue": "Withdrawal liquidity and collateral constraints",
+      "repository_status": "fixed_in_repository",
+      "hosted_status": "awaiting_docs_release",
+      "evidence_summary": "Overview no longer promises unconditional redemption; market liquidity and account shortfall constraints are explicit.",
+      "source_urls": [
+        "https://docs.justlend.org/getting_started/overview/",
+        "https://docs.justlend.org/getting_started/concepts/withdraw/"
+      ]
+    },
+    {
+      "id": "JL-003",
+      "issue": "Automatic liquidation wording",
+      "repository_status": "already_correct",
+      "hosted_status": "already_correct",
+      "evidence_summary": "Hosted Overview explains the liquidator action rather than automatic execution; transaction timing itself was not tested.",
+      "source_urls": [
+        "https://docs.justlend.org/getting_started/overview/",
+        "https://docs.justlend.org/getting_started/concepts/liquidations/"
+      ]
+    },
+    {
+      "id": "JL-004",
+      "issue": "Net APY denominator and net worth",
+      "repository_status": "not_applicable",
+      "hosted_status": "already_correct",
+      "evidence_summary": "Fresh help-center article uses Total supply as the Net APY denominator and separately defines Net worth; contradictory reverse-income sentence is absent. Frontend metrics are not covered.",
+      "source_urls": [
+        "https://support.justlend.org/hc/en-us/articles/43813165783961-Introduction-to-Net-APY-and-Net-Worth"
+      ]
+    },
+    {
+      "id": "JL-005",
+      "issue": "Refund examples include an extra 20 TRX",
+      "repository_status": "not_applicable",
+      "hosted_status": "already_correct",
+      "evidence_summary": "Fresh help-center examples use a 140 TRX reserve; six Decimal arithmetic controls give 140,104,80,44,120,84. Historical fee assumptions are not re-approved.",
+      "source_urls": [
+        "https://support.justlend.org/hc/en-us/articles/31228571004569-What-are-the-rules-for-rent-calculation"
+      ]
+    },
+    {
+      "id": "JL-006",
+      "issue": "Historical mining announcement dates",
+      "repository_status": "outside_repository",
+      "hosted_status": "still_open",
+      "evidence_summary": "Both articles retain internal date conflicts. Historical effective dates need the activity/content owner; different activities do not remove each article’s internal conflict.",
+      "source_urls": [
+        "https://support.justlend.org/hc/en-us/articles/40624200357017-JustLend-DAO-Launches-USDD-Supply-Mining-Phase-III",
+        "https://support.justlend.org/hc/en-us/articles/24538284200985-JustLend-DAO-Launches-Supply-Mining-Phase-32nd"
+      ]
+    },
+    {
+      "id": "JL-007",
+      "issue": "Mining tier count and 50M boundary",
+      "repository_status": "outside_repository",
+      "hosted_status": "still_open",
+      "evidence_summary": "All nine articles still describe four levels but list T1/T2/T3; the 50M equality boundary remains ambiguous. Historical rules need product confirmation.",
+      "source_urls": [
+        "https://support.justlend.org/hc/en-us/articles/53030363719193-JustLend-DAO-Launches-Supply-Mining-Phase-XII",
+        "https://support.justlend.org/hc/en-us/articles/52234325248025-JustLend-DAO-Launches-Supply-Mining-Phase-XI",
+        "https://support.justlend.org/hc/en-us/articles/51407310556569-JustLend-DAO-Launches-Supply-Mining-Phase-X",
+        "https://support.justlend.org/hc/en-us/articles/50562672574617-JustLend-DAO-Launches-Supply-Mining-Phase-IX",
+        "https://support.justlend.org/hc/en-us/articles/49811430979481-JustLend-DAO-Launches-USDD-V2-0-Market-Supply-Mining-Activity-VIII",
+        "https://support.justlend.org/hc/en-us/articles/48987900340121-JustLend-DAO-Launches-USDD-V2-0-Market-Supply-Mining-Activity-VII",
+        "https://support.justlend.org/hc/en-us/articles/48210999730073-JustLend-DAO-Launches-USDD-V2-0-Market-Supply-Mining-Activity-VI",
+        "https://support.justlend.org/hc/en-us/articles/47330960295321-JustLend-DAO-Launches-USDD-V2-0-Market-Supply-Mining-Activity-V",
+        "https://support.justlend.org/hc/en-us/articles/46226661748505-JustLend-DAO-Launches-USDD-V2-0-Market-Supply-Mining-Activity-IV"
+      ]
+    },
+    {
+      "id": "JL-008",
+      "issue": "Zero collateral factor and collateralizable wording",
+      "repository_status": "outside_repository",
+      "hosted_status": "still_open",
+      "evidence_summary": "U and USD1 announcements still use collateralizable wording alongside 0% collateral factor. This is not a claim that the markets cannot supply or borrow.",
+      "source_urls": [
+        "https://support.justlend.org/hc/en-us/articles/59218265355545-Announcement-on-Enabling-Supply-and-Borrowing-of-U-Market",
+        "https://support.justlend.org/hc/en-us/articles/49920375746585-Announcement-on-Enabling-Supply-and-Borrowing-of-USD1-Market"
+      ]
+    },
+    {
+      "id": "JL-009",
+      "issue": "Per-market liquidation close factor example",
+      "repository_status": "partial_outside_repository",
+      "hosted_status": "still_open",
+      "evidence_summary": "Close factor is 0.5 of selected TRX debt 135 USD: maximum repay 67.5 USD, seize 72.9 USDC, leave 127.1 USDC, risk about 98.06; help-center example still repays 105 USD TRX.",
+      "source_urls": [
+        "https://support.justlend.org/hc/en-us/articles/14318285226137-What-are-the-liquidation-rules",
+        "https://docs.justlend.org/developers/common_pitfalls/"
+      ]
+    },
+    {
+      "id": "JL-010",
+      "issue": "jToken redemption quantity",
+      "repository_status": "fixed_in_repository",
+      "hosted_status": "awaiting_docs_release",
+      "evidence_summary": "100e6 / 1e8 is 1 jToken; redeemUnderlying(100e6) is 100 USDT in a 6-decimal market.",
+      "source_urls": [
+        "https://docs.justlend.org/developers/common_pitfalls/"
+      ]
+    },
+    {
+      "id": "JL-011",
+      "issue": "Token decimals",
+      "repository_status": "fixed_in_repository",
+      "hosted_status": "awaiting_docs_release",
+      "evidence_summary": "Ten Mainnet decimals() reads match the corrected table; token addresses and return words are recorded below.",
+      "source_urls": [
+        "https://docs.justlend.org/developers/common_pitfalls/",
+        "https://docs.justlend.org/developers/staked_trx/",
+        "https://docs.justlend.org/developers/apis/",
+        "https://docs.justlend.org/resources/glossary/"
+      ]
+    },
+    {
+      "id": "JL-012",
+      "issue": "Oracle address roles",
+      "repository_status": "already_correct",
+      "hosted_status": "already_correct",
+      "evidence_summary": "Original human-facing targets already distinguish proxy and backend. Fresh Comptroller.oracle() and proxy.v1PriceOracle() confirm pointers; additional registry/LLM synchronization still awaits docs release.",
+      "source_urls": [
+        "https://docs.justlend.org/developers/contracts_overview/",
+        "https://docs.justlend.org/developers/deployed_contracts/",
+        "https://docs.justlend.org/developers/supply_and_borrow_market/price_oracle/"
+      ]
+    },
+    {
+      "id": "JL-013",
+      "issue": "sTRX quote precision and fractional input",
+      "repository_status": "already_correct",
+      "hosted_status": "already_correct",
+      "evidence_summary": "Extracted quoteStake passes four fixed-rate raw-unit controls; SDK decimal conversion and exchangeRate boundary are mocked, not wallet transactions.",
+      "source_urls": [
+        "https://docs.justlend.org/developers/staked_trx/",
+        "https://docs.justlend.org/developers/apis/"
+      ]
+    },
+    {
+      "id": "JL-014",
+      "issue": "Resource return caller",
+      "repository_status": "already_correct",
+      "hosted_status": "already_correct",
+      "evidence_summary": "Payer path uses msg.sender and receiver; receiver path uses renter and msg.sender. The selected returnResource ABI parameter name is now compiler-aligned.",
+      "source_urls": [
+        "https://docs.justlend.org/developers/energy_rental/"
+      ]
+    },
+    {
+      "id": "JL-015",
+      "issue": "Rental collection versus cumulative read",
+      "repository_status": "fixed_in_repository",
+      "hosted_status": "awaiting_docs_release",
+      "evidence_summary": "claimRental is an sTRX-only write returning this transfer in sun; rentClaimed is the cumulative read. Bytecode-matched source and historical RentClaimed receipt support the interpretation.",
+      "source_urls": [
+        "https://docs.justlend.org/developers/energy_rental/"
+      ]
+    },
+    {
+      "id": "JL-016",
+      "issue": "Liquidation incentive versus close factor",
+      "repository_status": "already_correct",
+      "hosted_status": "already_correct",
+      "evidence_summary": "Fresh incentive=1.08e18 and close factor=0.5e18 are distinct; the existing Returns definition is already corrected.",
+      "source_urls": [
+        "https://docs.justlend.org/developers/supply_and_borrow_market/comptroller/"
+      ]
+    },
+    {
+      "id": "JL-017",
+      "issue": "Vote signatures and receipt tuple",
+      "repository_status": "fixed_in_repository",
+      "hosted_status": "awaiting_docs_release",
+      "evidence_summary": "Selected input/output signatures match the node ABI. Receipt components come from pinned official source, not a reproduced deployment compiler artifact.",
+      "source_urls": [
+        "https://docs.justlend.org/developers/supply_and_borrow_market/governance/"
+      ]
+    },
+    {
+      "id": "JL-018",
+      "issue": "Borrow-rate formula variable name",
+      "repository_status": "already_correct",
+      "hosted_status": "already_correct",
+      "evidence_summary": "Both Jump Rate branches use borrow_rate; supply_rate is separately defined.",
+      "source_urls": [
+        "https://docs.justlend.org/developers/supply_and_borrow_market/interest_rate_model/"
+      ]
+    },
+    {
+      "id": "JL-019",
+      "issue": "Native TRX and TRC20 repayment",
+      "repository_status": "fixed_in_repository",
+      "hosted_status": "awaiting_docs_release",
+      "evidence_summary": "jTRX ABI has repayBorrow(uint256) payable without a return and repayBorrowBehalf(address) payable; not a no-argument replacement.",
+      "source_urls": [
+        "https://docs.justlend.org/developers/supply_and_borrow_market/sbm/",
+        "https://docs.justlend.org/developers/common_pitfalls/"
+      ]
+    },
+    {
+      "id": "JL-020",
+      "issue": "Unsupported address market filter",
+      "repository_status": "fixed_in_repository",
+      "hosted_status": "awaiting_docs_release",
+      "evidence_summary": "Fresh plain and address-query requests both return all 24 markets with jTRX first; client exact-address lookup and failure controls are present.",
+      "source_urls": [
+        "https://docs.justlend.org/documents/aidocs/common_questions/",
+        "https://docs.justlend.org/documents/aidocs/market_data/",
+        "https://docs.justlend.org/developers/apis/"
+      ]
+    },
+    {
+      "id": "JL-021",
+      "issue": "MCP chain writes versus local configuration",
+      "repository_status": "fixed_in_repository",
+      "hosted_status": "awaiting_docs_release",
+      "evidence_summary": "Nine named tool classes explicitly disclose transaction/sign/broadcast paths; local config and the disabled bridge remain separate. Server code is not changed.",
+      "source_urls": [
+        "https://docs.justlend.org/documents/aidocs/mcp_tools/",
+        "https://docs.justlend.org/documents/aidocs/mcp_safety/",
+        "https://docs.justlend.org/ai_support/mcp_server/"
+      ]
+    },
+    {
+      "id": "JL-022",
+      "issue": "Debt-free health zero",
+      "repository_status": "fixed_in_repository",
+      "hosted_status": "awaiting_docs_release",
+      "evidence_summary": "Fresh public API reports zero debt and health=0; the read-only liquidity query reports error=0/shortfall=0. Docs and YAML use debt-first interpretation.",
+      "source_urls": [
+        "https://docs.justlend.org/developers/apis/",
+        "https://docs.justlend.org/developers/apis/justlend_apis.yaml"
+      ]
+    },
+    {
+      "id": "JL-023",
+      "issue": "Supply interest versus mining APY",
+      "repository_status": "fixed_in_repository",
+      "hosted_status": "awaiting_docs_release",
+      "evidence_summary": "Fresh API has supplyRate, no supplyApy; mining response is keyed by jToken then reward token. Text now says miningApy is a local variable, not a literal response field.",
+      "source_urls": [
+        "https://docs.justlend.org/developers/supply_and_borrow_market/sbm/",
+        "https://docs.justlend.org/developers/apis/"
+      ]
+    },
+    {
+      "id": "JL-024",
+      "issue": "Prepayment estimate and frontend acceptance",
+      "repository_status": "partial",
+      "hosted_status": "partial",
+      "evidence_summary": "Both rates, threshold, dynamic fee and integer rounding are covered by documentation controls. Separate frontend review found the factors already present, but acceptance is not complete and the RPC failure path remains outside this PR.",
+      "source_urls": [
+        "https://docs.justlend.org/developers/energy_rental/"
+      ]
+    },
+    {
+      "id": "JL-025",
+      "issue": "Raw exchange-rate conversion",
+      "repository_status": "fixed_in_repository",
+      "hosted_status": "awaiting_docs_release",
+      "evidence_summary": "2e26 with 18-decimal underlying/8-decimal jToken means 0.02 whole tokens; 0.02e18 means 2000000 underlying raw units per whole jToken.",
+      "source_urls": [
+        "https://docs.justlend.org/resources/glossary/",
+        "https://docs.justlend.org/developers/common_pitfalls/",
+        "https://docs.justlend.org/developers/staked_trx/"
+      ]
+    },
+    {
+      "id": "JL-026",
+      "issue": "Token-weighted voting and vote locks",
+      "repository_status": "partial",
+      "hosted_status": "partial",
+      "evidence_summary": "Repository voting-weight/available-balance/explicit unlock explanations are corrected. Official PDF page 15 still has per-holder wording; local review copy is not publication.",
+      "source_urls": [
+        "https://docs.justlend.org/resources/glossary/",
+        "https://docs.justlend.org/developers/supply_and_borrow_market/governance/",
+        "https://docs.justlend.org/governance/jips/",
+        "https://justlend.org/docs/justlend_whitepaper_en.pdf"
+      ]
+    },
+    {
+      "id": "JL-027",
+      "issue": "Email inbox troubleshooting",
+      "repository_status": "already_correct",
+      "hosted_status": "already_correct",
+      "evidence_summary": "Fresh Risks page checks inbox/spam/address, not user outbox. Real email delivery is not tested.",
+      "source_urls": [
+        "https://docs.justlend.org/getting_started/concepts/risks/"
+      ]
+    },
+    {
+      "id": "JL-028",
+      "issue": "V1 multiple-market supply capability",
+      "repository_status": "already_correct",
+      "hosted_status": "already_correct",
+      "evidence_summary": "Fresh V1/V2 comparison permits multiple simultaneous V1 deposits; actual multi-position UI testing is not required to close the wording defect.",
+      "source_urls": [
+        "https://docs.justlend.org/getting_started/concepts/SBMV2/",
+        "https://support.justlend.org/hc/en-us/articles/360053116771-What-is-jToken"
+      ]
+    },
+    {
+      "id": "JL-029",
+      "issue": "V2 LTV LLTV and risk ratio",
+      "repository_status": "fixed_in_repository",
+      "hosted_status": "awaiting_docs_release",
+      "evidence_summary": "Text distinguishes LTV > LLTV and risk > 1, with rounded values not an execution predicate. Exact integer-rounding boundary transactions were not tested; the official PDF V2 wording already uses a strict greater-than boundary.",
+      "source_urls": [
+        "https://docs.justlend.org/developers/justlend_v2/",
+        "https://docs.justlend.org/getting_started/concepts/SBMV2/",
+        "https://docs.justlend.org/getting_started/concepts/borrow/",
+        "https://justlend.org/docs/justlend_whitepaper_en.pdf"
+      ]
+    },
+    {
+      "id": "JL-030",
+      "issue": "ABI coverage and deployment artifacts",
+      "repository_status": "partial",
+      "hosted_status": "partial",
+      "evidence_summary": "Seven selected interfaces now match 109 node/compiler/source-backed entries after correcting five MarketG1 return definitions and two incomplete prose event signatures. Complete public source/deployment artifacts, admin and historical ABI coverage remain gaps.",
+      "source_urls": [
+        "https://docs.justlend.org/developers/abis/",
+        "https://docs.justlend.org/developers/deployed_contracts/",
+        "https://docs.justlend.org/developers/apis/"
+      ]
+    },
+    {
+      "id": "JL-031",
+      "issue": "Read-only quote uses a write tool",
+      "repository_status": "fixed_in_repository",
+      "hosted_status": "awaiting_docs_release",
+      "evidence_summary": "Unsupported rent_energy --dry-run removed; quote uses calculate_energy_rental_price; no quote helper signs or broadcasts.",
+      "source_urls": [
+        "https://docs.justlend.org/getting_started/concepts/energy_rental/",
+        "https://docs.justlend.org/documents/aidocs/mcp_tools/"
+      ]
+    },
+    {
+      "id": "JL-032",
+      "issue": "Whitepaper mint vault overload",
+      "repository_status": "not_applicable",
+      "hosted_status": "already_correct",
+      "evidence_summary": "Fresh official PDF hash matches the 2026-10-12 snapshot; second page-24 mint includes address vault. Not a fix made by this PR.",
+      "source_urls": [
+        "https://justlend.org/docs/justlend_whitepaper_en.pdf",
+        "https://docs.justlend.org/developers/supply_and_borrow_market/sbmV2/"
+      ]
+    },
+    {
+      "id": "JL-033",
+      "issue": "Markdown table enum and regex escaping",
+      "repository_status": "fixed_in_repository",
+      "hosted_status": "awaiting_docs_release",
+      "evidence_summary": "Normalizer preserves enum pipes/regex backslashes and is idempotent; actual generated HTML columns are tested. Hosted catalog still needs release.",
+      "source_urls": [
+        "https://docs.justlend.org/documents/aidocs/mcp_tools/"
+      ]
+    },
+    {
+      "id": "JL-034",
+      "issue": "V2 null business-error schema",
+      "repository_status": "fixed_in_repository",
+      "hosted_status": "awaiting_docs_release",
+      "evidence_summary": "Five fresh GET error responses are HTTP200/code202/data:null and pass all five corrected schemas; invalid controls remain rejected.",
+      "source_urls": [
+        "https://docs.justlend.org/developers/apis/justlend_apis.yaml",
+        "https://spec.openapis.org/oas/v3.1.2.html#schema-object"
+      ]
+    }
+  ],
+  "issue_summary": {
+    "repository_fixes": 16,
+    "already_correct_original_targets": 11,
+    "partial_cross_scope": 3,
+    "external_unresolved": 4,
+    "hosted_original_targets_already_correct": 11,
+    "not_completed_end_to_end": 23
+  },
+  "whitepaper": {
+    "url": "https://justlend.org/docs/justlend_whitepaper_en.pdf",
+    "sha256": "771c200834f212f45ed4eaeabdc8c7c750e835ff6b3b5ad9c7ba78424f27f537",
+    "checked_at": "2026-10-14",
+    "still_open": [
+      "page 13 V1 inclusive Health threshold",
+      "page 15 one-vote-per-holder wording"
+    ],
+    "already_correct": [
+      "pages 13-14 V2 exceeds boundary",
+      "page 24 second mint includes vault"
+    ]
+  },
+  "coverage_gaps": [
+    "Exact public STRXG2/MarketG1 source/deployment bundle and full compiler metadata were not reproduced; metadata-excluded creation bytes match",
+    "Governor receipt components are source-backed; exact deployed compiler output is unavailable",
+    "Historical/Nile deployments, separate admin proxy and unlisted ABI files are not certified",
+    "No signing, broadcasting, full governance lifecycle, frontend UX or integer-edge liquidation transaction tests",
+    "External historical dates/tier decisions need product/content authority"
+  ],
+  "verification_checks": {
+    "checked_at": "2026-10-14",
+    "documentation_regressions": "19 passed, no skips, including freshly built HTML/downloads",
+    "existing_mocked_api_tests": "6 passed",
+    "live_invalid_read_response_schemas": "5 passed",
+    "strict_mkdocs_build": "passed",
+    "ai_consistency": "passed",
+    "catalog_normalization": "passed",
+    "publication": "not performed",
+    "new_regressions_in_ci": false
+  }
+}

@@ -96,6 +96,8 @@ Refer to the OpenAPI spec for the full endpoint list, request parameters, respon
 
 ## Notes for AI agents
 
+- [Dated address and ABI verification evidence](https://docs.justlend.org/developers/verification_evidence/) — proxy getter responses, compiler/source distinctions and the 34-issue completion boundaries; repository fixes are not hosted acceptance.
+
 - **Networks**: Rendered contract tables are **TRON Mainnet** unless a section says otherwise. Use Nile testnet (`NETWORK=nile`) for testing, and fetch [`/developers/contracts.json`](https://docs.justlend.org/developers/contracts.json) for Mainnet + Nile addresses.
 - **Address formats**: `contracts.json` includes Base58, EVM `0x` hex, and TRON-internal `41` hex. Rendered tables may show Base58 only.
 - **Precision**: jToken balances are returned in jToken units (8 decimals). Underlying token amounts use that token's own decimals (TRX = 6, USDT = 6, USDC = 6, BTC = 8, ETH = 18, etc.). Always check the underlying token's `decimals()` before submitting transactions.

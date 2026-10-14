@@ -41,6 +41,8 @@ JustLend DAO Protocol contracts are divided in these repositories:
 #### JTokens Contract
 `JToken:` the contract used to support all assets by JustLend DAO, such as the jTRX, jUSDT, jSUN and jBTC you receive after supplying the corresponding assets.
 
+The changed Mainnet Governor/Oracle pointers and selected downloadable interfaces have [dated verification evidence](verification_evidence.md). The evidence records proxy getter return words, ABI comparison methods, compiler hashes and coverage gaps; it does not certify every address in this page or a future upgrade.
+
 #### Interest Rate Model Contract
 `WhitePaperInterestRateModel:` the contract used to set up a straightforward interest rate model, which the borrowing rate is directly proportional to the utilization.
 

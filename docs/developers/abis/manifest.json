@@ -1,6 +1,6 @@
 {
-  "schema_version": "1.1.0",
-  "checked_at": "2026-10-12",
+  "schema_version": "1.2.0",
+  "checked_at": "2026-10-14",
   "scope": "minimal interfaces, not complete compiler deployment artifacts",
   "network": "mainnet",
   "verification_rpc": "https://api.trongrid.io/wallet/getcontract",
@@ -11,31 +11,46 @@
       "implementation": "TUeNh9BsYK44XePmFAuKZWg2rJuU7bSt5u",
       "complete": false,
       "notes": "Selected current Bravo functions/events. getReceipt tuple components expanded from official source, not reproduced compiler output. Legacy filename retained.",
-      "tuple_source": "https://github.com/justlend/justlend-protocol/blob/f28f3b462a4f281761e23423554563e15fc9f028/contracts/Governance/Bravo/GovernorBravoInterfaces.sol"
+      "tuple_source": "https://github.com/justlend/justlend-protocol/blob/f28f3b462a4f281761e23423554563e15fc9f028/contracts/Governance/Bravo/GovernorBravoInterfaces.sol",
+      "verification_basis": "node_abi",
+      "checked_entry_count": 23,
+      "download_sha256": "f3be9b593ae3c5cda695f1b5dc665913fb67628660fc2bf2ed4fbe66a3fc547d"
     },
     {
       "file": "wjst.json",
       "target": "TXk9LnTnLN7oH96H3sKxJayMxLxR9M4ZD6",
       "complete": false,
-      "notes": "Selected functions and wrapping/vote-lock events from the Mainnet node ABI."
+      "notes": "Selected functions and wrapping/vote-lock events from the Mainnet node ABI.",
+      "verification_basis": "node_abi",
+      "checked_entry_count": 15,
+      "download_sha256": "447975f789ddecc6043a5fa4817341f96e963a5c183f07d468559772dba1b302"
     },
     {
       "file": "jtrx-repay.json",
       "target": "TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP",
       "complete": false,
-      "notes": "Only repayBorrow(uint256) and repayBorrowBehalf(address), both payable."
+      "notes": "Only repayBorrow(uint256) and repayBorrowBehalf(address), both payable.",
+      "verification_basis": "node_abi",
+      "checked_entry_count": 2,
+      "download_sha256": "43793c4b0fc719c11a3db0c6bb0e6bcdb545e15e38c430df5dec4b6f90caf6a7"
     },
     {
       "file": "price-oracle.json",
       "target": "TGnYnSn4G9PgWFj7QQemh4YMZKp3fkympJ",
       "complete": false,
-      "notes": "Only getUnderlyingPrice; does not include backend methods."
+      "notes": "Only getUnderlyingPrice; does not include backend methods.",
+      "verification_basis": "node_abi",
+      "checked_entry_count": 1,
+      "download_sha256": "838acc79d465c519a1a8a199d56d715a4704bff0ec816f1618ba2136cb58ad00"
     },
     {
       "file": "price-oracle-impl.json",
       "target": "TMiNCmvD3zdsv6mk7niBU6NPBzVNjYMQTV",
       "complete": false,
-      "notes": "Selected backend methods and PricePosted. Target checked with proxy.v1PriceOracle()."
+      "notes": "Selected backend methods and PricePosted. Target checked with proxy.v1PriceOracle().",
+      "verification_basis": "node_abi",
+      "checked_entry_count": 6,
+      "download_sha256": "2470b3a0cc3d3a0aa57b37f22bab1df3abdeaf7e1a082b825f19ad556f50641d"
     },
     {
       "file": "strx.json",
@@ -79,7 +94,12 @@
         "Vote",
         "VoteOperatorUpdated",
         "Withdraw"
-      ]
+      ],
+      "verification_basis": "compiler_abi_with_metadata_excluded_creation_bytecode_match",
+      "checked_entry_count": 39,
+      "download_sha256": "9352b6b49982ff756ae12fc24b5100cba9cd9ae23c547377cf0465ee11f655df",
+      "compiler_input_sha256": "2e1656c5e5fa064ad01e69b2f75aa26c55e20c806f2b0d43f95fa8b09b16e5c7",
+      "source_file_sha256": "6383b5c510a0f107c8f83e9cc7906c3fb68a37a264097cbe064c6931eaa0f7d0"
     },
     {
       "file": "energy-market.json",
@@ -93,7 +113,12 @@
         "executable_match": true,
         "full_bytecode_match": false
       },
-      "notes": "Existing rental subset plus strx, totalRent, rentClaimed, claimRental and RentClaimed from bytecode-matched MarketG1. claimRental is restricted to the configured sTRX caller; returns the amount transferred in this call, in sun."
+      "notes": "Selected MarketG1 functions aligned with bytecode-matched compiler ABI: getRentInfo returns uint256,uint256,bool; rentals returns a RentalInfo tuple; rentPaused returns bool; both return methods return uint256. Includes RentResource, ReturnResource, Liquidate and RentClaimed events. claimRental is sTRX-only and returns this call transferred amount in sun.",
+      "verification_basis": "compiler_abi_with_metadata_excluded_creation_bytecode_match",
+      "checked_entry_count": 23,
+      "download_sha256": "0abb1b8e76d1ce6a4f5cc050f81a73b24a167958b4e62a67dc31ed0a6c291437",
+      "compiler_input_sha256": "2e1656c5e5fa064ad01e69b2f75aa26c55e20c806f2b0d43f95fa8b09b16e5c7",
+      "source_file_sha256": "32323d5ffc8a8bb4c840197a91ed552e8da44d105d03f1360e22e113bedede82"
     }
   ],
   "other_files": "Other JSON files are also partial interfaces. This manifest does not certify unlisted deployments or Nile compatibility.",
@@ -109,5 +134,7 @@
     "source_bundle_included": false,
     "event_cross_check": "Deposit, Withdraw, Claim, and RentClaimed were decoded from successful Mainnet transaction receipts and compared with confirmed TronGrid events.",
     "offline_event_fixture": "scripts/fixtures/docs-verification/settlement-events.json"
-  }
+  },
+  "verification_evidence": "../verification-evidence-20261014.json",
+  "verification_method": "Compare normalized function inputs/outputs/mutability and event types/indexed flags, including tuple components where available; Receipt components have a separate pinned-source basis."
 }

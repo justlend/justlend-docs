@@ -17,6 +17,8 @@
 
 This document covers: protocol overview, core concepts (supply / borrow / withdraw / repay / liquidation / risks / sTRX / energy rental), governance, developer contract reference, deployed addresses (TRON mainnet + Nile), the HTTP API surface, and the AI integration story (Skills + MCP + CLI + V2 Utils). For exhaustive function signatures, field-by-field response schemas, JSON ABIs, and machine-readable address formats, see the individual reference pages and the OpenAPI YAML.
 
+**Verification scope:** The [2026-10-14 evidence](https://docs.justlend.org/developers/verification_evidence/) checks seven selected ABI files (109 entries), changed Mainnet pointers and the original 34 issues. It is not a full deployment/source-bundle or frontend acceptance certificate. Open external issues and unpublished repository fixes remain separate.
+
 ---
 
 ## 1. Protocol Overview
@@ -435,7 +437,7 @@ The HTTP API returns **current state**. For historical events (`Mint`, `Borrow`,
 2. **Self-hosted indexer** — most robust path is a custom decoder against a `java-tron` archive node (or TronGrid archive plan) + the JSON ABIs at <https://docs.justlend.org/developers/abis/>. Generic EVM indexers (DipDup, Subsquid, Substreams, Goldsky, …) have evolving TRON support and should be evaluated case-by-case; do not adopt one based on a "supports TRON" claim without a proof-of-concept run against your specific events first. Best for production analytics, full historical backfills.
 3. **Compose MCP server read primitives** — for low-volume agent-driven lookups via `@justlend/mcp-server-justlend`. Not optimized for historical-event sweeps.
 
-Interfaces at `/developers/abis/` are subsets, not a universal event registry. `strx.json` now includes all 27 event declarations from the current Mainnet STRXG2 implementation, including `Deposit`, `Withdraw`, and `Claim`; `energy-market.json` includes `RentClaimed`. These additions use bytecode-matched compiler output (excluding compiler metadata), with the four settlement events also checked against real receipts. Check the exact event definition and indexed flags; obtain the matching deployment ABI when absent or decoding a different historical implementation. Derive `topic0` only from a verified signature. See [APIs §8](https://docs.justlend.org/developers/apis#8-event-stream-and-indexing-options) and [ABI provenance](https://docs.justlend.org/developers/abis/#scope-and-provenance).
+Interfaces at `/developers/abis/` are subsets, not a universal event registry. `strx.json` now includes all 27 event declarations from the current Mainnet STRXG2 implementation, including `Deposit`, `Withdraw`, and `Claim`; `energy-market.json` includes `RentResource`, `ReturnResource`, `Liquidate`, and `RentClaimed`, with compiler-aligned tuple/bool/refund returns. These additions use bytecode-matched compiler output (excluding compiler metadata), with the four settlement events also checked against real receipts. Check the exact event definition and indexed flags; obtain the matching deployment ABI when absent or decoding a different historical implementation. Derive `topic0` only from a verified signature. See [APIs §8](https://docs.justlend.org/developers/apis#8-event-stream-and-indexing-options) and [ABI provenance](https://docs.justlend.org/developers/abis/#scope-and-provenance).
 
 ---
 

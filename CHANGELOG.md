@@ -10,6 +10,14 @@ For the JustLend protocol itself, see governance proposals on [forum.justlend.or
 
 ## [Unreleased]
 
+### Fixed — 2026-10-14 verification follow-up
+
+- Rechecked Mainnet Governor/Oracle/sTRX/rental pointers and ten token decimals; added request/return words and explicit node-ABI, compiler-bytecode and source-only tuple evidence.
+- Corrected five remaining MarketG1 return definitions: three-value `getRentInfo`, tuple `rentals`, bool `rentPaused`, and both refund-return methods. Added the three already documented rental events, including the missing final state fields of `RentResource` and `ReturnResource`.
+- Clarified the mining response's jToken/reward-token map rather than implying a literal `apy` property.
+- Added a 34-item repository-versus-hosted checklist. The original issues are not all completed: publication, four external findings, frontend-linked acceptance, hosted whitepaper and exact deployment artifacts remain separate.
+- Added offline full-subset provenance, pointer/decimal, rental-output/event and fractional sTRX quote regressions. No transaction was signed/broadcast and no publishing workflow was changed.
+
 ### Fixed — 2026-10-12 documentation verification
 
 - Clarified V1/V2 liquidation boundaries, rounded display values, withdrawal constraints, and the no-debt `health = "0"` case.

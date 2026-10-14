@@ -6,6 +6,7 @@ No test signs, broadcasts, or queries a live service.
 """
 
 import copy
+import hashlib
 import json
 import os
 import re
@@ -63,6 +64,109 @@ class Tables(HTMLParser):
 
 
 class DocumentationRegressions(unittest.TestCase):
+    def test_selected_abis_match_dated_verification_evidence(self):
+        evidence = json.loads(read("docs/developers/verification-evidence-20261014.json"))
+
+        def types(parameters):
+            return [p["type"] + "(" + ",".join(types(p["components"])) + ")"
+                    if p["type"].startswith("tuple") and p.get("components") else p["type"]
+                    for p in parameters]
+
+        def canonical(entry):
+            kind = entry["type"].lower()
+            value = {"type": kind, "name": entry["name"], "inputs": types(entry.get("inputs", []))}
+            if kind == "function":
+                value.update(outputs=types(entry.get("outputs", [])),
+                             stateMutability=entry["stateMutability"].lower())
+            elif kind == "event":
+                value.update(indexed=[bool(p.get("indexed", False)) for p in entry["inputs"]],
+                             anonymous=bool(entry.get("anonymous", False)))
+            return value
+
+        self.assertEqual(len(evidence["abi_interfaces"]), 7)
+        self.assertEqual(evidence["abi_entries_checked"],
+                         sum(len(item["entries"]) for item in evidence["abi_interfaces"]))
+        for item in evidence["abi_interfaces"]:
+            with self.subTest(file=item["file"]):
+                source = ROOT / "docs/developers/abis" / item["file"]
+                self.assertEqual(hashlib.sha256(source.read_bytes()).hexdigest(), item["download_sha256"])
+                entries = json.loads(source.read_text())
+                by_key = {entry["type"].lower() + " " + entry["name"] + "(" +
+                          ",".join(types(entry.get("inputs", []))) + ")": entry for entry in entries}
+                self.assertEqual(set(by_key), {entry["key"] for entry in item["entries"]})
+                for observed in item["entries"]:
+                    self.assertEqual(canonical(by_key[observed["key"]]), observed["observed"])
+                    self.assertEqual(observed["status"], "matched")
+                if item["basis"].startswith("compiler_"):
+                    proof = item["compiler_proof"]
+                    self.assertEqual(proof["compiled_creation_excluding_metadata_sha256"],
+                                     proof["node_creation_excluding_metadata_sha256"])
+                    self.assertFalse(proof["full_bytecode_match"])
+                    self.assertFalse(proof["source_bundle_publicly_reproducible"])
+
+    def test_pointer_and_decimal_evidence_matches_registry(self):
+        evidence = json.loads(read("docs/developers/verification-evidence-20261014.json"))
+        reads = {item["label"]: item for item in evidence["constant_reads"]}
+        registry = json.loads(read("docs/developers/contracts.json"))["networks"]["mainnet"]
+        for label, address in [
+            ("governor_implementation", registry["governance"]["governor_delegate"]["address"]),
+            ("oracle_proxy", registry["price_oracle"]["proxy"]["address"]),
+            ("oracle_backend", registry["price_oracle"]["implementation"]["address"]),
+        ]:
+            self.assertTrue(reads[label]["result"]["result"])
+            self.assertEqual(address["base58"], reads[label]["decoded"])
+            self.assertEqual(address["hex_evm"], "0x" + reads[label]["constant_result"][0][-40:])
+            self.assertEqual(address["hex_tron"], "0x41" + reads[label]["constant_result"][0][-40:])
+        for symbol in ["wstUSDT", "sTRX", "SUN", "BTT", "JST", "HTX", "USD1", "TUSD", "USDJ", "WBTT"]:
+            token = registry["jtokens"]["j" + symbol]
+            observation = reads["decimals_" + symbol]
+            self.assertEqual(observation["request"]["contract_address"], token["underlying"]["address"]["base58"])
+            self.assertEqual(int(observation["decoded"]), token["underlying_decimals"])
+        ids = {item["id"] for item in evidence["issues"]}
+        self.assertEqual(ids, {f"JL-{number:03d}" for number in range(1, 35)})
+        self.assertFalse(evidence["all_issues_completed"])
+        self.assertEqual(sum(item["hosted_status"] == "already_correct" for item in evidence["issues"]), 11)
+
+    def test_marketg1_tuples_returns_and_documented_events(self):
+        abi = json.loads(read("docs/developers/abis/energy-market.json"))
+        functions = {item["name"]: item for item in abi if item["type"] == "function"}
+        self.assertEqual([p["type"] for p in functions["getRentInfo"]["outputs"]], ["uint256", "uint256", "bool"])
+        rental = functions["rentals"]["outputs"]
+        self.assertEqual(len(rental), 1)
+        self.assertEqual(rental[0]["type"], "tuple")
+        self.assertEqual([(p["name"], p["type"]) for p in rental[0]["components"]],
+                         [("amount", "uint256"), ("securityDeposit", "uint256"), ("rentIndex", "uint256")])
+        self.assertEqual(functions["rentPaused"]["outputs"][0]["type"], "bool")
+        for name in ["returnResource", "returnResourceByReceiver"]:
+            self.assertEqual([p["type"] for p in functions[name]["outputs"]], ["uint256"])
+        self.assertEqual(functions["returnResource"]["inputs"][0]["name"], "receiver")
+        for event in [item for item in abi if item["type"] == "event"]:
+            declaration = "event " + event["name"] + "(" + ", ".join(
+                p["type"] + (" indexed" if p["indexed"] else "") + " " + p["name"]
+                for p in event["inputs"]) + ");"
+            self.assertIn(declaration, read("docs/developers/energy_rental.md"))
+        extra = json.loads(read("docs/developers/verification-evidence-20261014.json"))["additional_constant_reads"]
+        for name in ["rent_info_empty_order", "rentals_empty_order"]:
+            observed = next(item for item in extra if item["label"] == name)
+            self.assertTrue(observed["result"]["result"])
+            self.assertEqual(len(observed["constant_result"][0]), 3 * 64)
+
+    def test_staking_quote_handles_fractional_raw_units(self):
+        source = javascript_block("docs/developers/staked_trx.md", "quoteStake")
+        adapter = """
+const STRX = 'read-only-fixture';
+const tronWeb = {
+  contract: () => ({at: async () => ({exchangeRate: () => ({call: async () => 1250000000000000000n})})}),
+  toSun: value => {
+    const [whole, fraction = ''] = String(value).split('.');
+    if (fraction.length > 6) throw new Error('Too many decimals');
+    return (BigInt(whole) * 1000000n + BigInt((fraction + '000000').slice(0, 6))).toString();
+  }
+};
+"""
+        observed = run_js(adapter + source + "\nconsole.log(JSON.stringify((await Promise.all([10.5, '10.5', '0.5', '0.000001'].map(quoteStake))).map(String)));")
+        self.assertEqual(observed, ["8400000000000000000", "8400000000000000000", "400000000000000000", "800000000000"])
+
     def test_contract_summary_links_cover_oracle_and_staking_functions(self):
         rows = [line for line in read("docs/developers/contracts_overview.md").splitlines()
                 if line.startswith(("| Price Oracle |", "| Staked TRX |"))]
@@ -301,7 +405,8 @@ console.log(JSON.stringify({once, stable:normalizeMcpCatalog(once) === once}));
         self.assertEqual(amount[1], r'string (pattern /^(\d+(\.\d+)?|max)$/)')
         for path in ["developers/apis/justlend_apis.yaml", "developers/abis/governor-alpha.json",
                      "developers/abis/price-oracle-impl.json", "developers/abis/manifest.json",
-                     "developers/abis/strx.json", "developers/abis/energy-market.json"]:
+                     "developers/abis/strx.json", "developers/abis/energy-market.json",
+                     "developers/verification-evidence-20261014.json"]:
             self.assertEqual((site / path).read_bytes(), (ROOT / "docs" / path).read_bytes())
 
 

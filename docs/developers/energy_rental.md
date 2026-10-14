@@ -82,7 +82,7 @@ struct RentalInfo {
 ### **Current Rental Order Information (updated to current)**
 View the information of an rental order, with the returned data updated to current.
 ``` solidity
-function getRentInfo (address renter, address receiver, uint256 resourceType) external view returns (uint256, uint256)
+function getRentInfo(address renter, address receiver, uint256 resourceType) external view returns (uint256, uint256, bool)
 ```
 
 * **Parameter description:**
@@ -90,8 +90,11 @@ function getRentInfo (address renter, address receiver, uint256 resourceType) ex
     * `receiver:` the resource receiver of this rental;
     * `resourceType:` resource type, 0: bandwidth; 1: energy.
 * **Returns:**
-    * `securityDeposit:` order deposit, updated to current；
-    * `rentIndex:` eal-time global index of the order at the time of query.
+    * `securityDeposit:` order deposit after accrued rent, in sun;
+    * `rentIndex:` the current global rent index at query time;
+    * `liquidatable:` the Energy Rental contract's deposit-reserve check. This is a rental-order flag, not the V1 lending account's `shortfall` check; other execution guards still apply.
+
+`rentals(...)` returns **one tuple** `(amount, securityDeposit, rentIndex)`, whereas `getRentInfo(...)` returns **three separate positional values**; its compiler ABI does not name the outputs. `rentPaused(resourceType)` returns a **bool**. The downloadable [MarketG1 interface](abis/energy-market.json) includes these definitions and the `uint256` refund returns of both resource-return methods. Their [verification basis](verification_evidence.md#abi-verification-basis) is the compiler ABI with metadata-excluded creation-bytecode matching, not a guessed node ABI.
 
 
 ### **Bad Debt**
@@ -187,6 +190,10 @@ This is the protocol's rental-income collection path, **not a user-facing query 
 * **Returns:** the rental amount actually transferred into sTRX **by this call**, in **sun** (`1 TRX = 1,000,000 sun`). It is **not** an all-time total. The transfer is capped by the market's available TRX balance; if nothing is transferred, the return is `0`.
 * **Accounting event:** a positive transfer increments `rentClaimed` and emits `RentClaimed(uint256 add, uint256 totalClaimed)`. Both values are in sun: `add` is this transfer and `totalClaimed` is the cumulative value after it. Both fields are non-indexed. A zero transfer emits no `RentClaimed` event.
 
+```solidity
+event RentClaimed(uint256 add, uint256 totalClaimed);
+```
+
 These semantics were checked against the current Mainnet `MarketG1` implementation (`TNoHbPuBQrVanVf9qxUsSvHdB2eDkeDAKD`): compiler output matches its executable bytecode with only compiler metadata excluded. A successful Mainnet settlement receipt also matches the event amount and the internal TRX transfer to sTRX. See [ABI scope and provenance](abis/index.md#scope-and-provenance). No user transaction example is provided.
 
 <a id="rent-resources"></a>
@@ -207,7 +214,7 @@ function rentResource (address receiver, uint256 amount, uint256 resourceType) e
 
 #### **Event**
 ``` solidity
-RentResource (address indexed renter, address indexed receiver, uint256 addedAmount, uint256 resourceType, uint256 addedSecurityDeposit, uint256 amount)
+event RentResource(address indexed renter, address indexed receiver, uint256 addedAmount, uint256 resourceType, uint256 addedSecurityDeposit, uint256 amount, uint256 securityDeposit, uint256 rentIndex);
 ```
 
 * Emits when renting occurs.
@@ -217,6 +224,8 @@ RentResource (address indexed renter, address indexed receiver, uint256 addedAmo
     * `resourceType:` resource type, 0: bandwidth; 1: energy;
     * `addedSecurityDeposit:` the added deposit amount;
     * `amount:` the total amount of rental resources in the order after renting.
+    * `securityDeposit:` total order deposit after this rental, in sun;
+    * `rentIndex:` the order's rent index after this update.
 
 
 <a id="return-resources-called-by-payer"></a>
@@ -236,10 +245,10 @@ function returnResource (address receiver, uint256 amount, uint256 resourceType)
 
 #### **Event**
 ``` solidity
-ReturnResource( address indexed renter, address indexed receiver, uint256 subedAmount, uint256 resourceType, uint256 usageRental, uint256 subedSecurityDeposit, uint256 amount)
+event ReturnResource(address indexed renter, address indexed receiver, uint256 subedAmount, uint256 resourceType, uint256 usageRental, uint256 subedSecurityDeposit, uint256 amount, uint256 securityDeposit, uint256 rentIndex);
 ```
 
-* Emits when renting occurs.
+* Emits when resources are returned.
     * `renter:` order payer;
     * `receiver:` the resource receiver of this rental;
     * `subedAmount:` the amount of TRX (minimum unit) for returned resources;
@@ -247,6 +256,8 @@ ReturnResource( address indexed renter, address indexed receiver, uint256 subedA
     * `usageRental:` the cost of recovery for the used resources in the returned resources;
     * `subedSecurityDeposit:` the refunded deposit amount (0 for partial returns);
     * `amount:` the remaining amount of rental resources after returning resources.
+    * `securityDeposit:` remaining order deposit after this return, in sun;
+    * `rentIndex:` the order's rent index after this update.
 
 
 <a id="return-resources-called-by-receiver"></a>
@@ -280,7 +291,7 @@ function liquidate (address renter, address receiver, uint256 resourceType) exte
 
 #### **Event**
 ``` solidity
-Liquidate( address indexed liquidator, address indexed renter, address indexed receiver, uint256 amount, uint256 resourceType, uint256 usageRental, uint256 liquidateFee, uint256 sendBack)
+event Liquidate(address indexed liquidator, address indexed renter, address indexed receiver, uint256 amount, uint256 resourceType, uint256 usageRental, uint256 liquidateFee, uint256 sendBack);
 ```
 
 * Emits when liquidation occurs.
@@ -381,8 +392,8 @@ async function returnByReceiver({ renter, returnAmountSun }) {
 async function getRental({ renter, receiver }) {
   const rental = await tronWeb.contract().at(ENERGY_RENTAL);
   // Real-time view (updated to current block)
-  const [securityDeposit, rentIndex] = await rental
+  const [securityDeposit, rentIndex, liquidatable] = await rental
     .getRentInfo(renter, receiver, ENERGY).call();
-  return { securityDeposit: securityDeposit.toString(), rentIndex: rentIndex.toString() };
+  return { securityDeposit: securityDeposit.toString(), rentIndex: rentIndex.toString(), liquidatable };
 }
 ```

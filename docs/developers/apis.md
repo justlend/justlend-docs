@@ -156,7 +156,7 @@ The OpenAPI YAML makes the unit and scale machine-readable: amount / rate / pric
 | `borrowRate`  | Annualized interest a borrower pays.                                      | `0.06467371`  | `6.47 % APY` |
 | `apy` (mining)| Annualized USDD mining reward APY paid on top of `supplyRate`.            | `0.09175706`  | `9.18 % APY` |
 
-A user's **total supply APY** in a market that has mining enabled is therefore `supplyRate + apy`.
+A user's **total supply APY** in a market that has mining enabled is therefore `supplyRate + miningApy` for the matching reward component. Here `miningApy` is a local variable, **not** a literal `apy` property in the `/mining/apy` response: that response is a map keyed first by jToken address and then by reward token, for example `data[jTokenAddress].USDD`. Match the exact market and reward token before combining annualized decimal values; do not double-count a component already included in another displayed metric.
 
 ### 1.5 Pagination
 
@@ -1282,6 +1282,6 @@ The [downloadable JSON interfaces](abis/index.md) are **not a complete event-sig
 | `wjst.json` | Selected Mainnet wrapping and vote-lock events; check the file for the exact event. |
 | `price-oracle-impl.json` | Includes the backend's `PricePosted` event; do not confuse it with the proxy interface. |
 | `strx.json` | All 27 event declarations from current Mainnet STRXG2, including `Deposit`, `Withdraw`, and `Claim`; compiled against bytecode-matched source and checked with real receipts. Separate proxy administration and historical implementations are outside this subset. |
-| `energy-market.json` | Includes `RentClaimed(uint256 add, uint256 totalClaimed)`; both non-indexed values are in sun. Other rental events remain outside this subset. |
+| `energy-market.json` | Includes the compiler-verified `RentResource`, `ReturnResource`, `Liquidate`, and `RentClaimed` declarations. `RentClaimed`'s two non-indexed values are in sun. Other implementation/admin events remain outside this subset. |
 
 For a verified event entry, derive topic 0 from its exact canonical signature (including every input type) rather than guessing from a prose name. Use the ABI version applicable at the event's block; upgrades can change signatures. Missing event definitions are a coverage gap, not permission to silently decode with a similar contract's ABI.

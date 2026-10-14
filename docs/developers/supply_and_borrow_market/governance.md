@@ -13,7 +13,7 @@ description: JustLend DAO governance contract reference — propose, vote, queue
     * **Lifecycle states:** `Pending → Active → (Canceled | Defeated | Succeeded) → Queued → Executed | Expired`. 
     * **On-chain timing (verified):** `votingDelay() = 1 block ≈ 3 sec` (Pending → Active is effectively instant), `votingPeriod() = 86,400 blocks ≈ 3 days`, Timelock `delay() = 48 hours`. **Off-chain ~2-day forum review** is a community norm, **not enforced by the contracts** — any agent that programmatically calls `propose()` will see `Active` state on the very next block.
     * **ABI:** [`abis/governor-alpha.json`](../abis/governor-alpha.json) (Governor) + [`abis/wjst.json`](../abis/wjst.json) (voting wrapper) 
-    * **Implementation check:** `implementation()` on the Governor proxy returned the implementation above on **2026-10-12**. Re-read it after an upgrade; the entrypoint remains the proxy.
+    * **Implementation check:** `implementation()` on the Governor proxy returned the implementation above on **2026-10-14**, agreeing with the 2026-10-12 read. This corrects a documentation pointer; it does not deploy or upgrade a contract, and the entrypoint remains the proxy. See the [getter responses and ABI/source verification basis](../verification_evidence.md#address-verification-basis). Re-read it after an upgrade.
     * **Discussion forum** (off-chain, pre-proposal): <https://forum.justlend.org>.
 
 JustLend DAO protocol is governed and upgraded by JST holders. There are three components included in the governance system: [JST](https://tronscan.org/#/token20/TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9)([WJST](https://tronscan.org/#/contract/TXk9LnTnLN7oH96H3sKxJayMxLxR9M4ZD6/code)) token,
