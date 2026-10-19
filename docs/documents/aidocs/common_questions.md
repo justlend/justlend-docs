@@ -99,7 +99,7 @@ Chinese: “jUSDT 合约地址是什么？”、“Nile 测试网地址在哪？
 
 ### How do I call or decode a contract?
 
-Use JSON ABIs under [`/developers/abis/`](../../developers/abis/jtoken.json). For event indexing, see the developer API docs and common pitfalls.
+Use JSON ABIs under [`/developers/abis/`](../../developers/abis/index.md). For event indexing, see the developer API docs and common pitfalls.
 
 Chinese: “怎么解析 Borrow 事件？”、“jToken ABI 在哪？”
 

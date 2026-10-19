@@ -42,7 +42,19 @@ Before any on-chain write tool, the agent must show:
 
 Then ask for explicit confirmation.
 
-For `buy_energy_direct`, the confirmation must be tied to the authoritative quote: show payer, every receiver, duration, and exact TRX amount. The configured backend validates and may broadcast the signed payment. If the result is ambiguous, query public payer history and call `get_energy_payment_risk` with no arguments. That configured-wallet check is read-only and never replays a stored payment. Do not sign a second payment while the first remains unresolved; any recovery replay must happen only inside a separately confirmed `buy_energy_direct` call.
+For `buy_energy_direct`, the confirmation must be tied to the authoritative quote: show network, payer, quoted `payment_address`, every receiver, duration, and exact TRX amount. Pass the confirmed payee as `expectedPayAddress` and `total_sun` as `expectedAmountSun`; set `confirmPayment=true` only after confirmation. The server already checks the payee, and the configured backend validates and may broadcast the signed payment. If the result is ambiguous, query public payer history and call `get_energy_payment_risk` with no arguments. That configured-wallet check is read-only and never replays a stored payment. Do not sign a second payment while the first remains unresolved; any recovery replay must happen only inside a separately confirmed `buy_energy_direct` call.
+
+Refusal or cancellation stops the workflow. Changes to wallet, network, payee,
+amount or other confirmed parameters require a new preview and confirmation.
+Unknown errors or missing `retryable` are not permission to replay a write; inspect
+the original transaction receipt and relevant post-state first. Leave unresolved
+outcomes pending rather than treating a tx hash or cached balance as success.
+
+For sTRX, `unstake_strx` starts unbonding. After the waiting period, query
+`check_strx_withdrawal_eligibility` and `get_strx_account`. Preserve `null` and
+degradation notes as unknown, not zero; only a known positive claimable amount
+supports a separately confirmed `claim_strx_rewards` (`claimAll`) call. Verify
+its receipt and updated state rather than starting another unstake.
 
 ## Private key rule
 
@@ -93,11 +105,11 @@ Pause and ask the user before proceeding if:
 | Workflow | MCP tool examples | Required safety handling |
 |----------|-------------------|--------------------------|
 | Market and APY lookup | `get_supported_markets`, `get_market_data`, `get_all_markets` | Read-only; cite live timestamp when available. |
-| Account risk lookup | `get_wallet_address`, `get_account_summary`, `get_balances` | Read-only; never infer health from stale data. |
+| Account risk lookup | `get_wallet_address`, `get_account_summary`, `get_wallet_balances` | Read-only; never infer health from stale data. |
 | Lending writes | `supply`, `borrow`, `repay`, `withdraw`, `withdraw_all` | Pre-flight, allowance check, explicit HITL confirmation. |
 | sTRX writes | `stake_trx_to_strx`, `unstake_strx`, `claim_strx_rewards` | Explain exchange rate and unbonding / claim flow. |
 | Energy rental writes | `rent_energy`, `return_energy_rental` | Confirm receiver, amount, duration, prepayment, and return rules. |
-| Governance writes | `vote_for_proposal`, `cast_vote`, `withdraw_votes_to_jst` | Confirm proposal id, vote direction, lock/withdraw effect. |
+| Governance writes | `cast_vote`, `withdraw_votes_from_proposal`, `withdraw_votes_to_jst` | Confirm proposal id, vote direction, lock/withdraw effect. |
 | WTRX wrap / unwrap | `wrap_trx`, `unwrap_trx` | Confirm amount + direction; 1:1 on-chain write, requires HITL. |
 
 ## Remote (HTTP/SSE) threat model

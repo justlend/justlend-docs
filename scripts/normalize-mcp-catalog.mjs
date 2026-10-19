@@ -28,9 +28,11 @@ const codeText = value => value.replace(/&/g, '&amp;').replace(/</g, '&lt;')
 export function normalizeMcpCatalog(source) {
   source = source.replace(
     /^(\| `[^`]+` \| )(.+?)( \| (?:✅|—) \| .*)$/gm,
-    (_, prefix, type, rest) => prefix + type
+    // Newer upstream catalogs already encode the entire type in <code>. Do not
+    // wrap its regex again or turn &#92; into literal &amp;#92; in rendered docs.
+    (_, prefix, type, rest) => prefix + (type.startsWith('<code>') ? type : type
       .replace(/\(pattern (\/.*\/)\)/, (_, pattern) => `(pattern <code>${codeText(pattern)}</code>)`)
-      .replace(/(?<!\\)\|/g, '\\|') + rest,
+      .replace(/(?<!\\)\|/g, '\\|')) + rest,
   );
   source = source.replace(/^### `([^`]+)`\n([\s\S]*?)(?=^### |$(?![\s\S]))/gm, (_, tool, body) => {
     let label;

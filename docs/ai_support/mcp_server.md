@@ -614,7 +614,7 @@ Every tool returns errors as structured JSON with `isError: true`, so an agent c
 | errorCode | retryable | Meaning / agent action |
 |-----------|:---------:|------------------------|
 | `transient` | ✅ true | Network/RPC timeout, `SERVER_BUSY`, 429/5xx — retry read-only calls after a short backoff; **never** blindly re-broadcast a write (re-query state first). |
-| `insufficient_allowance` | ❌ false | Approve the spender first (`approve_underlying` / `approve_for_votes` / `approve_moolah_*`), then retry. |
+| `insufficient_allowance` | ❌ false | Separately confirm the exact approval (`approve_underlying`, `approve_jst_for_voting`, `approve_moolah_vault`, or `approve_moolah_proxy`, as appropriate), recheck allowance, then separately confirm the intended write; do not retry automatically. |
 | `insufficient_balance` | ❌ false | Lower the amount or fund the wallet; verify with `get_trx_balance` / `get_token_balance`. |
 | `wallet_not_configured` | ❌ false | Run `npx agent-wallet start` (or import/generate via CLI), set `AGENT_WALLET_PASSWORD`, select `agent` mode, and activate the wallet. |
 | `execution_reverted` | ❌ false | Contract precondition failed (allowance / health / paused market) — simulate before broadcasting. |
@@ -682,7 +682,7 @@ Only `transient` is safe to auto-retry; every other code requires a corrective a
 → AI uses `stake_trx` prompt: checks balance → checks exchange rate & APY → stakes TRX → verifies sTRX received
 
 **"Do I have any sTRX rewards to claim?"**
-→ AI calls `get_strx_account` to check claimable rewards → calls `claim_strx_rewards` if available
+→ AI reads `get_strx_account` and `check_strx_withdrawal_eligibility`, then reports the result only. Unknown/null data is not zero and must not trigger a claim. A query alone never authorizes a transaction. If the user later requests a claim, refresh eligibility; for a known positive amount, show the current claimable amount, network and signer, obtain separate explicit confirmation, then call `claim_strx_rewards` and verify the receipt and post-state.
 
 **"Can I withdraw my unstaked TRX?"**
 → AI calls `check_strx_withdrawal_eligibility` to check unbonding status and completed withdrawal rounds

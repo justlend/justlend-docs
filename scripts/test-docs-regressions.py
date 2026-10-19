@@ -64,6 +64,38 @@ class Tables(HTMLParser):
 
 
 class DocumentationRegressions(unittest.TestCase):
+    def test_abi_catalog_named_entries_exist_in_downloads(self):
+        catalog = read("docs/developers/abis/index.md").split("## Catalog", 1)[1].split("## Decoding events", 1)[0]
+        checked = 0
+        for line in catalog.splitlines():
+            match = re.match(r"\| \[`([^`]+\.json)`\]\([^)]+\) \|[^|]+\| (.*?) \|", line)
+            if not match:
+                continue
+            filename, purpose = match.groups()
+            abi = json.loads(read("docs/developers/abis/" + filename))
+            names = {entry.get("name") for entry in abi}
+            positive_claims = re.sub(r"\bno `\w+`", "", purpose)
+            for entry in re.findall(r"`([A-Za-z_]\w*)(?:\([^`]*\))?`", positive_claims):
+                if entry != "callValue":  # TRON transaction property, not an ABI function.
+                    self.assertIn(entry, names, f"{filename} does not declare {entry}")
+            checked += 1
+        self.assertEqual(checked, len([p for p in (ROOT / "docs/developers/abis").glob("*.json")
+                                      if isinstance(json.loads(p.read_text()), list)]))
+
+    def test_annual_block_count_matches_documented_formula(self):
+        expected = int(365.25 * 86400 / 3)
+        glossary = read("docs/resources/glossary.md")
+        actual = re.search(r"blocksPerYear ≈ ([\d,]+)", glossary).group(1)
+        self.assertEqual(int(actual.replace(",", "")), expected)
+        self.assertIn(f"**{expected:,}** (`365.25 × 86400 / 3`)", read("docs/llms-full.txt"))
+
+    def test_abi_directory_labels_do_not_link_to_single_download(self):
+        for path in (ROOT / "docs").rglob("*.md"):
+            for label, target in re.findall(r"\[([^\]]+)\]\(([^)]+)\)", path.read_text()):
+                if label.strip("`").endswith("abis/"):
+                    self.assertTrue(target == "abis/index.md" or target.endswith("/abis/index.md") or target.endswith("/abis/"),
+                                    f"{path}: directory label links to {target}")
+
     def test_selected_abis_match_dated_verification_evidence(self):
         evidence = json.loads((FIXTURES / "abi-provenance-20261014.json").read_text())
         manifest = json.loads(read("docs/developers/abis/manifest.json"))
@@ -283,10 +315,16 @@ const tronWeb = {
         source = read("docs/documents/aidocs/mcp_tools.md")
         for section in re.split(r"^### `", source, flags=re.M)[1:]:
             tool = section.split("`", 1)[0]
+            columns = None
             for line in section.splitlines():
+                if line.startswith("| Param |"):
+                    columns = 5
+                elif line.startswith("| Field |"):
+                    columns = 4
                 if line.startswith("| `"):
                     cells = re.split(r"(?<!\\)\|", line)[1:-1]
-                    self.assertEqual(len(cells), 5, (tool, line))
+                    self.assertIsNotNone(columns, (tool, line))
+                    self.assertEqual(len(cells), columns, (tool, line))
         mode = next(row for row in Tables(source).rows if row and row[0] == "mode")
         self.assertEqual(mode[1], "enum(browser | agent)")
         self.assertEqual(mode[2], "✅")
@@ -379,6 +417,31 @@ console.log(JSON.stringify({{
                     self.assertIn("B+1", page)
                     self.assertIn("B+2", page)
                     self.assertNotRegex(page, r"effectively instant|essentially immediate|very next block|voting active begins immediately")
+
+    def test_strx_query_example_requires_separate_claim_consent(self):
+        page = read("docs/ai_support/mcp_server.md")
+        example = page.split('**"Do I have any sTRX rewards to claim?"**', 1)[1].split('**"Can I withdraw', 1)[0]
+        self.assertIn("reports the result only", example)
+        self.assertIn("A query alone never authorizes a transaction", example)
+        self.assertIn("Unknown/null data is not zero", example)
+        self.assertIn("obtain separate explicit confirmation, then call `claim_strx_rewards`", example)
+        self.assertIn("verify the receipt and post-state", example)
+
+    def test_api_risk_snapshot_is_not_execution_eligibility(self):
+        spec = yaml.safe_load(read("docs/developers/apis/justlend_apis.yaml"))
+        operation = spec["paths"]["/justlend/liquidate/highRiskAccountList"]["get"]
+        risk = spec["components"]["schemas"]["highRiskAccount"]["properties"]["risk"]
+        page = read("docs/developers/apis.md").split("### 3.3", 1)[1].split("### 3.4", 1)[0]
+        for text in [operation["description"], risk["description"], page]:
+            self.assertIn("shortfall > 0", text)
+            self.assertNotIn("liquidatable now", text)
+        self.assertIn("error == 0", operation["description"])
+        self.assertIn("unknown or failed reads", operation["description"])
+        self.assertIn("not current execution eligibility", risk["description"])
+        recovery = read("docs/ai_support/mcp_server.md").split("| `insufficient_allowance`", 1)[1].split("\n", 1)[0]
+        self.assertNotIn("approve_for_votes", recovery)
+        self.assertIn("approve_jst_for_voting", recovery)
+        self.assertIn("do not retry automatically", recovery)
 
     def test_llm_liquidation_predicate_rejects_equality_and_read_errors(self):
         page = read("docs/llms-full.txt").split("### 2.5 Liquidation", 1)[1].split("### 2.6", 1)[0]
@@ -492,6 +555,7 @@ const input = '### `transfer_trx`\n- **Side effect**: 🟡 State-changing (Write
  '| Param | Type | Required | Default | Description |\n' +
  '| `mode` | enum(browser | agent) | ✅ |  | Wallet mode |\n' +
  '| `amount` | string (pattern /^(1|max)$/) | ✅ |  | Amount |\n' +
+ '| `encoded` | <code>string (pattern /^&#92;d+$/)</code> | ✅ |  | Encoded upstream type |\n' +
  '### `set_network`\n- **Side effect**: 🟡 State-changing (Write)\n';
 const once = normalizeMcpCatalog(input);
 console.log(JSON.stringify({once, stable:normalizeMcpCatalog(once) === once}));
@@ -501,6 +565,7 @@ console.log(JSON.stringify({once, stable:normalizeMcpCatalog(once) === once}));
         self.assertIn("Local configuration", result["once"])
         self.assertIn(r"enum(browser \| agent)", result["once"])
         self.assertIn("/^(1&#124;max)$/", result["once"])
+        self.assertIn('<code>string (pattern /^&#92;d+$/)</code>', result["once"])
 
     def test_contract_registry_remains_schema_valid(self):
         schema = json.loads(read("docs/developers/contracts.schema.json"))

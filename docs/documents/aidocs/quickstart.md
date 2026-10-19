@@ -29,7 +29,7 @@ JustLend DAO is a decentralized lending protocol on TRON based on the Compound V
 - For one-shot context ingestion: [`/llms-full.txt`](../../llms-full.txt)
 - For public HTTP API integration: [`justlend_apis.yaml`](../../developers/apis/justlend_apis.yaml)
 - For contract addresses: [`contracts.json`](../../developers/contracts.json)
-- For contract calls: [`developers/abis/`](../../developers/abis/jtoken.json)
+- For contract calls: [`developers/abis/`](../../developers/abis/index.md)
 - For wallet-aware agent operations: [`mcp_tools.md`](mcp_tools.md)
 
 ## Minimal decision tree
