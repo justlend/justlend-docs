@@ -7,7 +7,7 @@ description: "GitHub-distributed JustLend Skills — 6 workflow modules plus a b
 
 **GitHub**: [https://github.com/justlend/justlend-skills](https://github.com/justlend/justlend-skills)
 
-JustLend Skills is a GitHub-distributed AI Agent skills project for the **JustLend DAO** protocol on TRON. Its local package identifier is `@justlend/justlend-skills`. It provides structured skill instructions and a lightweight **read-only** [MCP server](https://modelcontextprotocol.io/) (9 query tools) that enables AI agents (Claude Code, Claude Desktop, Cursor, Codex, etc.) to query market data, monitor account positions, and analyze DeFi lending information.
+JustLend Skills is a GitHub-distributed AI Agent skills project for the **JustLend** protocol on TRON. Its local package identifier is `@justlend/justlend-skills`. It provides structured skill instructions and a lightweight **read-only** [MCP server](https://modelcontextprotocol.io/) (9 query tools) that enables AI agents (Claude Code, Claude Desktop, Cursor, Codex, etc.) to query market data, monitor account positions, and analyze DeFi lending information.
 
 **Current version:** `1.1.1` · bundled MCP output schema: `1.0.0`
 
@@ -27,7 +27,7 @@ It also works as a standalone **CLI tool** for quick market checks directly from
 
 ## Overview
 
-[JustLend DAO](https://justlend.org) is the largest lending protocol on TRON, based on the Compound V2 architecture. JustLend Skills wraps the core query functionality into MCP tools and structured skill instructions that AI agents can use.
+[JustLend](https://justlend.org) is the largest lending protocol on TRON, based on the Compound V2 architecture. JustLend Skills wraps the core query functionality into MCP tools and structured skill instructions that AI agents can use.
 
 ### Key Capabilities
 
@@ -55,7 +55,7 @@ The read-only portions of `justlend-lending-v1` work with the built-in 9 query t
 ## Bundled Market Shortcuts
 
 !!! warning "Not an exhaustive market list"
-    The table below lists the **8 static shortcuts** used by the bundled `get_token_balance` and `check_allowance` implementations. It is **not** the protocol's full market roster. The JustLend DAO protocol exposes **18 active + 6 legacy = 24 markets total**, including active `jU`. `get_all_markets` queries the visible live inventory; `get_supported_markets` returns only these 8 shortcuts. Use the full MCP server or `contracts.json` for the complete static address catalog.
+    The table below lists the **8 static shortcuts** used by the bundled `get_token_balance` and `check_allowance` implementations. It is **not** the protocol's full market roster. The JustLend protocol exposes **18 active + 6 legacy = 24 markets total**, including active `jU`. `get_all_markets` queries the visible live inventory; `get_supported_markets` returns only these 8 shortcuts. Use the full MCP server or `contracts.json` for the complete static address catalog.
 
 **Single source of truth for the live market list (in order of preference):**
 
@@ -260,7 +260,7 @@ Obtain an authoritative quote, confirm the exact `total_sun` payment, submit it 
 
 ### DAO Governance (justlend-governance-v1)
 
-Participate in JustLend DAO governance proposals. Deposit JST for voting power (1 JST = 1 Vote), cast votes, and reclaim votes after proposals end.
+Participate in JUST DAO governance proposals. Deposit JST for voting power (1 JST = 1 Vote), cast votes, and reclaim votes after proposals end.
 
 !!! note
     This skill requires the [full MCP server](mcp_server.md) for tool execution.

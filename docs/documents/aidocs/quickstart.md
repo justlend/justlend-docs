@@ -1,6 +1,6 @@
 ---
 title: JustLend AI Quickstart
-description: Compact introduction to JustLend DAO for AI agents, including protocol scope, major workflows, and preferred integration surfaces.
+description: Compact introduction to JustLend for AI agents, including protocol scope, major workflows, and preferred integration surfaces.
 tags:
   - justlend
   - quickstart
@@ -13,7 +13,7 @@ tags:
 
 Use this page when the user needs a short protocol overview, feature routing, or a first answer about which JustLend document, OpenAPI endpoint, or MCP tool should be used.
 
-JustLend DAO is a decentralized lending protocol on TRON based on the Compound V2 architecture. Users supply TRX or TRC20 assets to earn interest, borrow against collateral, stake TRX for sTRX, rent TRON Energy, and participate in governance.
+JustLend is a decentralized lending protocol on TRON based on the Compound V2 architecture. Users supply TRX or TRC20 assets to earn interest, borrow against collateral, stake TRX for sTRX, rent TRON Energy, and participate in governance.
 
 ## What JustLend includes
 

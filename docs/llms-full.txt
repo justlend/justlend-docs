@@ -1,6 +1,6 @@
-# JustLend DAO Documentation — Full Text Snapshot for LLMs
+# JustLend Documentation — Full Text Snapshot for LLMs
 
-> A condensed, single-document snapshot of the JustLend DAO documentation, intended for LLMs that prefer one-shot ingestion over per-page crawling. Authoritative source is the live site at <https://docs.justlend.org>; the OpenAPI spec at <https://docs.justlend.org/developers/apis/justlend_apis.yaml> is the machine-readable contract.
+> A condensed, single-document snapshot of the JustLend documentation, intended for LLMs that prefer one-shot ingestion over per-page crawling. Authoritative source is the live site at <https://docs.justlend.org>; the OpenAPI spec at <https://docs.justlend.org/developers/apis/justlend_apis.yaml> is the machine-readable contract.
 
 ## 0. Snapshot metadata
 
@@ -23,7 +23,7 @@ This document covers: protocol overview, core concepts (supply / borrow / withdr
 
 ## 1. Protocol Overview
 
-JustLend DAO is the largest lending protocol on TRON, based on the Compound V2 architecture. It is a money market: suppliers deposit TRX or TRC20 assets into per-market liquidity pools and earn interest; borrowers over-collateralize an asset to borrow another asset from the pool. Interest rates float in real time as a function of utilization.
+JustLend is the largest lending protocol on TRON, based on the Compound V2 architecture. It is a money market: suppliers deposit TRX or TRC20 assets into per-market liquidity pools and earn interest; borrowers over-collateralize an asset to borrow another asset from the pool. Interest rates float in real time as a function of utilization.
 
 ### Roles
 

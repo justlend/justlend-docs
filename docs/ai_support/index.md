@@ -1,6 +1,6 @@
 ---
 title: AI Support
-description: Entry point for AI agents and LLM tooling on JustLend DAO — machine-readable docs (llms.txt, OpenAPI, contracts.json, ABIs), the MCP server, JustLend Skills, and the AI/RAG documentation set.
+description: Entry point for AI agents and LLM tooling on JustLend — machine-readable docs (llms.txt, OpenAPI, contracts.json, ABIs), the MCP server, JustLend Skills, and the AI/RAG documentation set.
 tags:
   - justlend
   - ai-support
@@ -12,7 +12,7 @@ tags:
 
 # AI Support
 
-This section collects everything an AI agent or LLM tool needs to integrate with JustLend DAO: machine-readable documentation endpoints, the MCP server, JustLend Skills, the official CLI and V2 utility library, and a compact AI/RAG documentation set.
+This section collects everything an AI agent or LLM tool needs to integrate with JustLend: machine-readable documentation endpoints, the MCP server, JustLend Skills, the official CLI and V2 utility library, and a compact AI/RAG documentation set.
 
 ## In this section
 

@@ -64,6 +64,45 @@ class Tables(HTMLParser):
 
 
 class DocumentationRegressions(unittest.TestCase):
+    def test_ai_copy_distinguishes_product_and_governance_brands(self):
+        paths = [
+            "docs/ai_support/ai_llms.md", "docs/ai_support/index.md",
+            "docs/ai_support/justlend_skills.md", "docs/ai_support/mcp_server.md",
+            "docs/developers/apis/agent-acceptance.md",
+            "docs/documents/aidocs/mcp_tools.md", "docs/documents/aidocs/quickstart.md",
+            "docs/llms-full.txt", "docs/llms.txt",
+        ]
+        for path in paths:
+            with self.subTest(path=path):
+                source = read(path)
+                self.assertNotIn("JustLend DAO", source)
+                self.assertNotRegex(source, r"JUST DAO is (?:a decentralized|the largest) lending protocol")
+        self.assertIn("JustLend is a decentralized lending protocol", read("docs/documents/aidocs/quickstart.md"))
+        skills = read("docs/ai_support/justlend_skills.md")
+        self.assertIn("Participate in JUST DAO governance proposals.", skills)
+        for identifier in ["justlend-governance-v1", "@justlend/justlend-skills"]:
+            self.assertIn(identifier, skills)
+        self.assertIn("`@justlend/mcp-server-justlend`", read("docs/ai_support/mcp_server.md"))
+        self.assertIn("Get the list of JUST DAO governance proposals.", read("docs/documents/aidocs/mcp_tools.md"))
+
+    def test_catalog_reimport_preserves_governance_brand_and_identifiers(self):
+        script = (ROOT / "scripts/normalize-mcp-catalog.mjs").as_uri()
+        source = (
+            "### `get_proposal_list`\n\n"
+            "- **Description**: Get the list of JustLend DAO governance proposals. Returns proposals.\n"
+            "- Package: `@justlend/mcp-server-justlend`\n"
+            "- Source: https://github.com/justlend/mcp-server-justlend\n"
+            "### `get_vote_info`\n\nUnchanged neighboring tool.\n"
+        )
+        result = run_js(f"import {{normalizeMcpCatalog}} from {json.dumps(script)};"
+                        f"const once = normalizeMcpCatalog({json.dumps(source)});"
+                        "console.log(JSON.stringify({once, stable:normalizeMcpCatalog(once) === once}));")
+        self.assertEqual(result["once"], source.replace(
+            "Get the list of JustLend DAO governance proposals.",
+            "Get the list of JUST DAO governance proposals.",
+        ))
+        self.assertTrue(result["stable"])
+
     def test_abi_catalog_named_entries_exist_in_downloads(self):
         catalog = read("docs/developers/abis/index.md").split("## Catalog", 1)[1].split("## Decoding events", 1)[0]
         checked = 0

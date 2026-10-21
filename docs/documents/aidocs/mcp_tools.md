@@ -14,7 +14,7 @@ tags:
 
 Use this page when an AI agent must choose a JustLend MCP tool, inspect required parameters, compare read-only tools with write tools, or explain whether a workflow can sign and broadcast a TRON transaction.
 
-This docs-local page wraps the generated catalog from the MCP repository so RAG systems can retrieve both routing context and the complete tool list in one chunk set. Docs-local corrections escape table-cell delimiters and distinguish transaction effects from MCP `destructiveHint` annotations. After importing a regenerated catalog, run `node scripts/normalize-mcp-catalog.mjs` in this docs repository and the documentation regression tests; the upstream generator is maintained separately.
+This docs-local page wraps the generated catalog from the MCP repository so RAG systems can retrieve both routing context and the complete tool list in one chunk set. Docs-local corrections escape table-cell delimiters, distinguish transaction effects from MCP `destructiveHint` annotations, and use JUST DAO for governance display text without renaming tool identifiers. After importing a regenerated catalog, run `node scripts/normalize-mcp-catalog.mjs` in this docs repository and the documentation regression tests; the upstream generator is maintained separately.
 
 ## Source links and routing rules
 
@@ -496,7 +496,7 @@ The envelope version covers `schemaVersion`, `tool`, and `result`, not every nes
 **Get Proposal List**
 - **Side effect**: 🟢 Read-only (Safe / Network Read)
 - **annotations**: idempotent: true · openWorld: true
-- **Description**: Get the list of JustLend DAO governance proposals. Returns proposals with their status (Active, Passed, Defeated, etc.), vote counts, and details. Sorted by newest first.
+- **Description**: Get the list of JUST DAO governance proposals. Returns proposals with their status (Active, Passed, Defeated, etc.), vote counts, and details. Sorted by newest first.
 - **Output schema**: common structured envelope v1.0.0 (`schemaVersion`, `tool`, `result`)
 
 | Param | Type | Required | Default | Description |

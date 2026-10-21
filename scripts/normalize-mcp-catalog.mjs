@@ -35,6 +35,14 @@ export function normalizeMcpCatalog(source) {
       .replace(/(?<!\\)\|/g, '\\|')) + rest,
   );
   source = source.replace(/^### `([^`]+)`\n([\s\S]*?)(?=^### |$(?![\s\S]))/gm, (_, tool, body) => {
+    // Docs display the governance organization as JUST DAO. Keep the upstream
+    // tool name, schemas, package names and links unchanged when re-importing.
+    if (tool === 'get_proposal_list') {
+      body = body.replace(
+        '- **Description**: Get the list of JustLend DAO governance proposals.',
+        '- **Description**: Get the list of JUST DAO governance proposals.',
+      );
+    }
     let label;
     if (localConfig.has(tool)) {
       label = '🟡 Local configuration — changes local wallet/network settings; does not build, sign, or broadcast a chain transaction. Confirm the new configuration before subsequent writes.';

@@ -5,7 +5,7 @@ description: Machine-readable documentation endpoints for AI agents — /llms.tx
 
 # AI / LLMs
 
-JustLend DAO provides machine-readable documentation endpoints optimized for LLMs and AI coding tools. Use these resources to give your AI assistant accurate, up-to-date context about the JustLend protocol.
+JustLend provides machine-readable documentation endpoints optimized for LLMs and AI coding tools. Use these resources to give your AI assistant accurate, up-to-date context about the JustLend protocol.
 
 ## Available endpoints
 
