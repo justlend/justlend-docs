@@ -1,12 +1,14 @@
 ---
 title: Glossary
-description: Single-page reference for the precise meaning, units, and on-chain encoding of JustLend DAO and Compound V2 terms — mantissa, kink, utilization, sun, borrow index, collateral / close / reserve factor, exchange rate, liquidation incentive, and more.
+description: Single-page reference for the precise meaning, units, and on-chain encoding of JustLend — mantissa, kink, utilization, sun, borrow index, collateral / close / reserve factor, exchange rate, liquidation incentive, and more.
 ---
 
 # Glossary
 
 !!! info "About this page"
-    **Protocol:** JustLend DAO (Compound V2 fork on TRON) · **Network:** TRON Mainnet (semantics carry over to Nile testnet) · **Scope:** definitions, units, and on-chain encoding of every protocol-specific term used elsewhere in this documentation. Each entry links to the function that returns or sets the value where applicable.
+    **Protocol:** JustLend 
+    **Network:** TRON Mainnet (semantics carry over to Nile testnet)
+    **Scope:** definitions, units, and on-chain encoding of every protocol-specific term used elsewhere in this documentation. Each entry links to the function that returns or sets the value where applicable.
 
 Terms are grouped by what they describe. Within each group, entries are ordered alphabetically. All scaled values use base-`1e18` unless explicitly noted.
 
