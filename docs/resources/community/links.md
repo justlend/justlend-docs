@@ -12,10 +12,10 @@ description: JustLend DAO official sites, Telegram groups, forum, X/Twitter, Git
 
 ### **Telegram groups**
 * [JUST-Defi](https://t.me/just_defi)
-* [JustLend DAO Official](https://t.me/officialjustlend)
+* [JustLend Official](https://t.me/officialjustlend)
 
 ### **Forum**
-* [JustLend DAO Forum](https://forum.justlend.org/)
+* [JUST Forum](https://forum.justlend.org/)
 
 ### **X (Formerly Twitter)**
 * [JUST-Defi Twitter](https://x.com/DeFi_JUST)
