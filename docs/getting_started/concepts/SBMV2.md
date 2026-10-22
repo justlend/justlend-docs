@@ -1,4 +1,4 @@
-JustLend DAO SBM V2 is a fully upgraded decentralized lending protocol built on the TRON network. The SBM V2 adopts an **isolated-collateral lending protocol** with a dual-layer structure of **Vaults** and **Markets**, and introduces the Adaptive Curve Interest Rate Model. This new design aims to provide higher capital efficiency for depositors and borrowers while ensuring a robust risk isolation framework.
+JustLend SBM V2 is a fully upgraded decentralized lending protocol built on the TRON network. The SBM V2 adopts an **isolated-collateral lending protocol** with a dual-layer structure of **Vaults** and **Markets**, and introduces the Adaptive Curve Interest Rate Model. This new design aims to provide higher capital efficiency for depositors and borrowers while ensuring a robust risk isolation framework.
 
 ## Protocol Architecture
 
@@ -26,7 +26,7 @@ JustLend DAO SBM V2 is a fully upgraded decentralized lending protocol built on 
 
 
 ## Interest Rate Model
-JustLend DAO SBM V2 introduces the **Adaptive Curve Interest Rate Model**. It builds upon the Jump Curve model used in SBM V1, but adds **dynamic adaptability**, allowing real-time rate adjustments to keep market utilization near an optimal level. This design ensures both rate stability and maximum capital efficiency.
+JustLend SBM V2 introduces the **Adaptive Curve Interest Rate Model**. It builds upon the Jump Curve model used in SBM V1, but adds **dynamic adaptability**, allowing real-time rate adjustments to keep market utilization near an optimal level. This design ensures both rate stability and maximum capital efficiency.
 
 Just Like SBM V1, SBM V2 uses a **jump-style rate curve**, where the borrow rate rises sharply once utilization exceeds the kink point. However, V2 introduces a dynamic vertical shift:
 
@@ -70,7 +70,7 @@ However, unlike V1, SBM V2 introduces a significant improvement through its isol
 
 
 ##  Comparison: JustLend SBM V1 vs V2
-To provide a clearer understanding of the improvements and optimizations introduced in JustLend DAO SBM V2, the following table presents a detailed comparison with V1. This comparison highlights the key differences in design, functionality, and performance, allowing users to quickly grasp the core enhancements made in the latest version.
+To provide a clearer understanding of the improvements and optimizations introduced in JustLend SBM V2, the following table presents a detailed comparison with V1. This comparison highlights the key differences in design, functionality, and performance, allowing users to quickly grasp the core enhancements made in the latest version.
 
 | Aspect | SBM V1 | SBM V2 |
 |:------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|-------|
@@ -83,7 +83,7 @@ To provide a clearer understanding of the improvements and optimizations introdu
 | **Borrower’s Collateral**     | Borrower’s collateral and user investments are mixed, and collateral can be borrowed as well.                                                    | User investments and borrower’s collateral are separated, and collateral cannot be borrowed again. |
 | **Collateral Interest**       | Collateral shares deposit interest, which dilutes deposit APY.                                                                                   | Borrower’s collateral does not earn interest, ensuring investor returns are not diluted. |
 
-According to the above comparison, we can see the JustLend DAO SBM V1 is ideal for users and institutions seeking simplified lending operations and shared liquidity. Its cross-collateralized market allows multiple assets to interact freely, enabling users to supply and borrow across a unified liquidity pool. This design offers high capital efficiency and ease of use, making it suitable for users with diversified portfolios who prefer flexibility and simplicity over strict risk isolation.
+According to the above comparison, we can see the JustLend SBM V1 is ideal for users and institutions seeking simplified lending operations and shared liquidity. Its cross-collateralized market allows multiple assets to interact freely, enabling users to supply and borrow across a unified liquidity pool. This design offers high capital efficiency and ease of use, making it suitable for users with diversified portfolios who prefer flexibility and simplicity over strict risk isolation.
 
-In contrast, JustLend DAO SBM V2 introduces a more advanced and modular structure featuring Vaults and Isolated Markets, designed for users who prioritize risk control, optimized yields, and strategic asset management. Each market operates independently, ensuring that the risks of one collateral asset do not affect others. Through Vault Managers, deposits are dynamically allocated to maximize returns across multiple markets. This makes SBM V2 particularly suitable for professional users, DeFi strategists, and institutions seeking higher yield efficiency, customizable risk exposure, and fine-grained control over investment strategies.
+In contrast, JustLend SBM V2 introduces a more advanced and modular structure featuring Vaults and Isolated Markets, designed for users who prioritize risk control, optimized yields, and strategic asset management. Each market operates independently, ensuring that the risks of one collateral asset do not affect others. Through Vault Managers, deposits are dynamically allocated to maximize returns across multiple markets. This makes SBM V2 particularly suitable for professional users, DeFi strategists, and institutions seeking higher yield efficiency, customizable risk exposure, and fine-grained control over investment strategies.
 
