@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="JustLend DAO is the largest lending protocol on TRON (Compound V2 architecture) — suppliers, borrowers, jTokens, liquidation, supply mining. Entry point for the full documentation set.">
+        <meta name="description" content="JustLend is the largest lending protocol on TRON (Compound V2 architecture) — suppliers, borrowers, jTokens, liquidation, supply mining. Entry point for the full documentation set.">
       
       
         <meta name="author" content="JustLend DAO">
@@ -24,7 +24,7 @@
     
     
       
-        <title>Overview of JustLend DAO - JustLend DAO Documentation</title>
+        <title>Overview of JustLend - JustLend DAO Documentation</title>
       
     
     
@@ -140,9 +140,9 @@
             "publisher": { "@id": "https://justlend.org/#org" }
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
-          "description": "JustLend DAO is the largest lending protocol on TRON (Compound V2 architecture) \u2014 suppliers, borrowers, jTokens, liquidation, supply mining. Entry point for the full documentation set.",
-          "dateModified": "2026-10-12",
-          "datePublished": "2026-10-12"
+          "description": "JustLend is the largest lending protocol on TRON (Compound V2 architecture) \u2014 suppliers, borrowers, jTokens, liquidation, supply mining. Entry point for the full documentation set.",
+          "dateModified": "2026-10-21",
+          "datePublished": "2026-10-21"
         }
       ]
     }
@@ -196,7 +196,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Overview of JustLend DAO
+              Overview of JustLend
             
           </span>
         </div>
@@ -388,9 +388,9 @@
 
 
 <li class="md-nav__item ">
-  <a href="#core-architecture-of-justlend-dao" class="md-nav__link">
+  <a href="#core-architecture-of-justlend" class="md-nav__link">
     <span class="md-ellipsis">
-      Core Architecture of JustLend DAO
+      Core Architecture of JustLend
     </span>
   </a>
   
@@ -2190,18 +2190,18 @@
 <h1 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h1>
 <div class="admonition info">
 <p class="admonition-title">Documentation freshness</p>
-<p><strong>Protocol:</strong> JustLend DAO
+<p><strong>Protocol:</strong> JustLend
 <strong>Network:</strong> TRON Mainnet
 <strong>Markets:</strong> 18 active + 6 legacy = 24 jToken markets (<a href="../../developers/apis/#2-jtoken-address-reference">authoritative list</a>). Per-page <code>last-updated</code> is rendered in the footer (sourced from git commit history). For changelog see <a href="https://github.com/justlend/justlend-docs/blob/main/CHANGELOG.md">CHANGELOG.md</a>; for the machine-readable snapshot see <a href="../../llms-full.txt"><code>/llms-full.txt</code></a> (header includes <code>last_generated</code> and <code>docs_commit</code>).</p>
 </div>
-<p>JustLend DAO is a cutting-edge money market protocol powered by TRON, designed to create fund pools with interest rates determined by an algorithm based on the supply and demand of TRON assets. The protocol involves two main roles: suppliers and borrowers, who engage directly with the platform to earn or pay floating interest rates.</p>
-<p>Each money market on JustLend DAO represents a specific TRON asset, including TRX, TRC20 stablecoins like USDT, and other TRC20-based tokens. The platform features an open and transparent ledger that records all transactions and historical interest rates, ensuring transparency and trust among users.
+<p>JustLend is a cutting-edge money market protocol powered by TRON, designed to create fund pools with interest rates determined by an algorithm based on the supply and demand of TRON assets. The protocol involves two main roles: suppliers and borrowers, who engage directly with the platform to earn or pay floating interest rates.</p>
+<p>Each money market on JustLend represents a specific TRON asset, including TRX, TRC20 stablecoins like USDT, and other TRC20-based tokens. The platform features an open and transparent ledger that records all transactions and historical interest rates, ensuring transparency and trust among users.
 <br></p>
-<h3 id="core-architecture-of-justlend-dao"><strong>Core Architecture of JustLend DAO</strong><a class="headerlink" href="#core-architecture-of-justlend-dao" title="Permanent link">&para;</a></h3>
+<h3 id="core-architecture-of-justlend"><strong>Core Architecture of JustLend</strong><a class="headerlink" href="#core-architecture-of-justlend" title="Permanent link">&para;</a></h3>
 <p><img alt="architecture" src="https://raw.githubusercontent.com/justlend/justlend-docs/main/images/architecture.png" /></p>
 <ul>
 <li>
-<p><strong>Suppliers:</strong> supply assets to the money markets of JustLend DAO smart contracts, and the assets supplied are the underlying assets.</p>
+<p><strong>Suppliers:</strong> supply assets to the money markets of JustLend smart contracts, and the assets supplied are the underlying assets.</p>
 <ul>
 <li>Smart contracts distribute jToken that corresponds to underlying assets to users' accounts at the exchange rate.</li>
 <li>Supplied assets earn interest paid by borrowers in the corresponding money market.</li>
@@ -2211,10 +2211,10 @@
 <p><strong>Redeem:</strong> Withdrawals are limited by the market's available liquidity and the collateral required to support the supplier's outstanding borrowings. A withdrawal must not create an account shortfall. See <a href="../concepts/withdraw/">Withdraw</a> for the full conditions and steps.</p>
 </li>
 <li>
-<p><strong>Borrowers:</strong> over-collateralize an asset can borrow from the corresponding market on JustLend DAO.</p>
+<p><strong>Borrowers:</strong> over-collateralize an asset can borrow from the corresponding market on JustLend.</p>
 <ul>
-<li>Unlike P2P lending, borrowers do not have to negotiate with suppliers: orders will be automatically matched by JustLend DAO smart contracts as long as the token market has sufficient liquidity.</li>
-<li>Borrowing interest rates are determined by JustLend DAO smart contracts in real-time based on market supply and demand. Within a block, borrowers of the same token share the same borrowing interest rate.</li>
+<li>Unlike P2P lending, borrowers do not have to negotiate with suppliers: orders will be automatically matched by JustLend smart contracts as long as the token market has sufficient liquidity.</li>
+<li>Borrowing interest rates are determined by JustLend smart contracts in real-time based on market supply and demand. Within a block, borrowers of the same token share the same borrowing interest rate.</li>
 </ul>
 </li>
 <li>
@@ -2252,7 +2252,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 12, 2026 09:32:17 UTC">2026-10-12</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 21, 2026 08:56:13 UTC">2026-10-21</span>
   </span>
 
     
