@@ -6,7 +6,9 @@ description: How to look up JustLend jToken and deployed-contract addresses from
 # Resolving Contract Addresses
 
 !!! info "About this page"
-    **Protocol:** JustLend DAO · **Network:** TRON (Mainnet + Nile) · **Scope:** map human-facing symbols (`jUSDT`, `USDT`, and other contract labels) to on-chain Base58 and hexadecimal addresses without hard-coding them in an integration.
+    **Protocol:** JustLend
+    **Network:** TRON (Mainnet + Nile)
+    **Scope:** map human-facing symbols (`jUSDT`, `USDT`, and other contract labels) to on-chain Base58 and hexadecimal addresses without hard-coding them in an integration.
 
 ## Machine-readable registry
 
