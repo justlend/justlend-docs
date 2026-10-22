@@ -1,6 +1,6 @@
 ---
 title: SBM — Supply & Borrow Market contracts
-description: JustLend DAO core lending contract reference — jToken (`CErc20Delegator`) function signatures for mint, borrow, repayBorrow, redeem, liquidateBorrow, with TronWeb examples and error codes.
+description: JustLend core lending contract reference — jToken (`CErc20Delegator`) function signatures for mint, borrow, repayBorrow, redeem, liquidateBorrow, with TronWeb examples and error codes.
 ---
 
 # SBM
@@ -31,9 +31,9 @@ description: JustLend DAO core lending contract reference — jToken (`CErc20Del
 
     Standard-compliant TRC20s (e.g. USDD, BTC, WBTC, sTRX) do not have this constraint, but using the safe pattern unconditionally costs only one extra `approve(0)` when an actual change is needed — cheap insurance.
 
-The JustLend DAO Supply and Borrow Market (SBM) is a decentralized  liquidity pool where users can participate as suppliers, borrowers or liquidators. Suppliers provide liquidity to a market and can earn interest on the assets provided, where borrowers are able to borrow in a collateralize assets way.
+The JustLend Supply and Borrow Market (SBM) is a decentralized  liquidity pool where users can participate as suppliers, borrowers or liquidators. Suppliers provide liquidity to a market and can earn interest on the assets provided, where borrowers are able to borrow in a collateralize assets way.
 
-The SBM contract is the main user-facing contract. Most user interactions with the JustLend DAO Protocol occur via the Ctoken contract. It exposes the liquidity management methods that can be invoked using either Solidity or Web3 libraries.
+The SBM contract is the main user-facing contract. Most user interactions with the JustLend Protocol occur via the Ctoken contract. It exposes the liquidity management methods that can be invoked using either Solidity or Web3 libraries.
 
 `Ctoken.sol:` allows users to:
 
@@ -169,7 +169,7 @@ function reserveFactorMantissa() returns (uint)
 <a id="borrow"></a>
 
 ### **Borrow**
-Calling this method borrows assets from JustLend DAO protocol to the sender's owner address.
+Calling this method borrows assets from JustLend protocol to the sender's owner address.
 ``` solidity
 function borrow(uint borrowAmount) external returns (uint)
 ```
@@ -337,7 +337,7 @@ To enable developers to determine if a user is eligible for liquidation and to f
     * **For jTRC20:** Call `liquidateBorrow(address borrower, uint repayAmount, address jTokenCollateral)` on the respective jTrc20 contract.
     * **For jTRX:** Call `liquidateBorrow(address borrower, address jTokenCollateral)` on the jTRX contract.
 
-In addition, JustLend DAO will continuously monitor relevant data and provide an interface for querying high-risk liquidation users. You can **Identify High-Risk Users** by navigating to the [APIs](https://docs.justlend.org/developers/apis/) page and calling the **/justlend/liquidate/highRiskAccountList** endpoint.
+In addition, JustLend will continuously monitor relevant data and provide an interface for querying high-risk liquidation users. You can **Identify High-Risk Users** by navigating to the [APIs](https://docs.justlend.org/developers/apis/) page and calling the **/justlend/liquidate/highRiskAccountList** endpoint.
 
 **Please note** that there may be a certain delay in the availability of backend data and is for reference only.
 
