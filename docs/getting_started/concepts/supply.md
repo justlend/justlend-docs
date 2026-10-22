@@ -1,12 +1,12 @@
 ---
-title: Supply on JustLend DAO
+title: Supply on JustLend
 description: How users supply TRX or TRC20 assets to JustLend money markets to earn interest, receive jTokens, and use the supplied assets as collateral.
 ---
 
 # Supply
 
 !!! info "About this page"
-    * **Protocol:** JustLend DAO
+    * **Protocol:** JustLend
     * **Network:** TRON Mainnet
     * **Scope:** user-facing supply flow — what supplying does, jToken receipts, how interest accrues, and which contract function backs it.
     * **Units:** supply / underlying amounts use each token's own decimals (TRX = 6, USDT = 6, USDD = 18, BTC = 8, ETH = 18); [jToken balances always use **8 decimals**]    (../../resources/glossary.md#jtoken-decimals); APY values are annualized decimals (multiply by 100 for %).
@@ -14,7 +14,7 @@ description: How users supply TRX or TRC20 assets to JustLend money markets to e
     * **For developers:** [Common Pitfalls #1 (USDT approve race) and #5 (decimals mismatch)](../../developers/common_pitfalls.md).
 
 
-Supplying tokens to the JustLend DAO allows users to earn interest on their digital assets while simultaneously using them as collateral for borrowing. When users supply tokens, these assets are deposited into the JustLend DAO liquidity pool, a system of smart contracts designed to facilitate secure, over-collateralized borrowing.
+Supplying tokens to the JustLend allows users to earn interest on their digital assets while simultaneously using them as collateral for borrowing. When users supply tokens, these assets are deposited into the JustLend liquidity pool, a system of smart contracts designed to facilitate secure, over-collateralized borrowing.
 
 In return, users receive jTokens, TRC-20 tokens representing their supplied assets. jTokens can be redeemed at any time for the underlying assets. As interest accrues, the exchange rate of jTokens relative to the underlying assets increases over time, reflecting the earned interest. This ensures that users benefit from a seamless and dynamic interest compounding mechanism while maintaining liquidity through redeemable jTokens.
 
@@ -44,7 +44,7 @@ Supplying can be done with a user interface [JustLend SBM V1](https://app.justle
 
 #### Supply Assets
 
-* Connect your Web3 wallet on TronLink or other supported wallet app to the JustLend DAO ([https://justlend.org](https://justlend.org)).
+* Connect your Web3 wallet on TronLink or other supported wallet app to the JustLend([https://justlend.org](https://justlend.org)).
 * To Supply Asset on SBM V1：
     * Navigate to **“SBM V1”**, choose the asset you wish to supply, then click **「Supply」** in the corresponding  market.
     * Enter the amount you want to supply and click **「Supply」**.
@@ -52,7 +52,7 @@ Supplying can be done with a user interface [JustLend SBM V1](https://app.justle
     * Navigate to **“SBM V2”**, select the asset under **All Supply Vaults**, then click **「Details」**.
     * Choose **Supply**, enter the supply amount, then click **「Supply」**.
 
-After the contract is successfully approved, the assets will be transferred from your wallet to the JustLend DAO protocol. Once they are borrowed by other users, they will begin generating interest. This interest will be automatically added to your Supply Balance.
+After the contract is successfully approved, the assets will be transferred from your wallet to the JustLend protocol. Once they are borrowed by other users, they will begin generating interest. This interest will be automatically added to your Supply Balance.
 
 
 ### Developer reference
