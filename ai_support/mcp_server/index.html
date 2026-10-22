@@ -143,8 +143,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "@justlend/mcp-server-justlend v1.1.3 \u2014 104 MCP tools with versioned output schemas across JustLend V1 and V2, secure energy direct purchase, historical records, general TRON utilities, and encrypted agent-wallet signing.",
-          "dateModified": "2026-10-14",
-          "datePublished": "2026-10-14"
+          "dateModified": "2026-10-21",
+          "datePublished": "2026-10-21"
         }
       ]
     }
@@ -2475,7 +2475,7 @@
 <p class="admonition-title">Before integrating</p>
 <p>Read <a href="../../developers/common_pitfalls/">Common Pitfalls</a> for the 10 most frequent JustLend-integration foot-guns (USDT <code>approve()</code> race condition, <code>enterMarkets()</code> requirement, <code>mint()</code> overload between jTRX and jTRC20, jToken vs underlying decimals, <code>liquidateBorrow</code> 50% close-factor cap, <code>uint256(-1)</code> repay sentinel, …). For precise term definitions used throughout the MCP tool descriptions (mantissa, kink, utilization, collateral / close / reserve factor, exchange rate, market <code>status</code>), see the <a href="../../resources/glossary/">Glossary</a>. The MCP server enforces several of these patterns internally (e.g. it runs TRC20 allowance checks before supply/repay), but understanding them helps you debug failed transactions and write callers that don't fight the server.</p>
 </div>
-<p>The JustLend MCP Server (<code>@justlend/mcp-server-justlend</code>) is a <a href="https://modelcontextprotocol.io/">Model Context Protocol</a> server that enables AI agents to interact with the <strong>JustLend DAO</strong> protocol on TRON. Supply assets, borrow against collateral, manage positions, rent energy, stake TRX for sTRX, and analyze DeFi portfolios — all through a unified AI interface.</p>
+<p>The JustLend MCP Server (<code>@justlend/mcp-server-justlend</code>) is a <a href="https://modelcontextprotocol.io/">Model Context Protocol</a> server that enables AI agents to interact with the <strong>JustLend</strong> protocol on TRON. Supply assets, borrow against collateral, manage positions, rent energy, stake TRX for sTRX, and analyze DeFi portfolios — all through a unified AI interface.</p>
 <p>Beyond JustLend-specific operations, the server also exposes a full set of <strong>general-purpose TRON chain utilities</strong> — balance queries, block/transaction data, token metadata, TRX transfers, smart contract reads/writes, staking (Stake 2.0), multicall, and more.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -2486,7 +2486,7 @@
 <p><strong>v1.1.3</strong> makes every one of the <strong>104 tools</strong> declare an MCP <code>outputSchema</code>. Successful calls preserve legacy text content and also expose <code>{ schemaVersion: "1.0.0", tool, result }</code> in <code>structuredContent</code>, so agents no longer need to infer output shape from prose. It also adds six fail-closed energy direct-purchase tools for configuration, quote, public payer history, order recovery, configured-wallet payment-risk inspection, and explicitly confirmed purchase; reconciles the V1 inventory to <strong>24 markets (18 active + 6 legacy)</strong>; and restores active <code>jU</code> to the product table. The legacy unauthenticated browser-wallet bridge is disabled, so writes use encrypted agent-wallet signing. <strong>v1.1.2</strong> added native <strong>TRX ↔ WTRX</strong> wrap/unwrap (<code>wrap_trx</code> / <code>unwrap_trx</code>), hardened TRC20 approvals, and added <code>retryable</code> error classification. <strong>v1.1.0</strong> introduced the V2 tool and prompt surface.</p>
 </div>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
-<p><a href="https://justlend.org">JustLend DAO</a> is the largest lending protocol on TRON, based on the Compound V2 architecture. This MCP server wraps the full protocol functionality into tools and guided prompts that local MCP clients such as Claude Desktop, Codex, Claude Code, and Cursor can use.</p>
+<p><a href="https://justlend.org">JustLend</a> is the largest lending protocol on TRON, based on the Compound V2 architecture. This MCP server wraps the full protocol functionality into tools and guided prompts that local MCP clients such as Claude Desktop, Codex, Claude Code, and Cursor can use.</p>
 <h3 id="key-capabilities">Key Capabilities<a class="headerlink" href="#key-capabilities" title="Permanent link">&para;</a></h3>
 <p><strong>JustLend Protocol</strong></p>
 <ul>
@@ -3698,7 +3698,7 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 <tr>
 <td><code>insufficient_allowance</code></td>
 <td style="text-align: center;">❌ false</td>
-<td>Approve the spender first (<code>approve_underlying</code> / <code>approve_for_votes</code> / <code>approve_moolah_*</code>), then retry.</td>
+<td>Separately confirm the exact approval (<code>approve_underlying</code>, <code>approve_jst_for_voting</code>, <code>approve_moolah_vault</code>, or <code>approve_moolah_proxy</code>, as appropriate), recheck allowance, then separately confirm the intended write; do not retry automatically.</td>
 </tr>
 <tr>
 <td><code>insufficient_balance</code></td>
@@ -3772,7 +3772,7 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
 <p><strong>"Stake 1000 TRX to earn sTRX rewards"</strong>
 → AI uses <code>stake_trx</code> prompt: checks balance → checks exchange rate &amp; APY → stakes TRX → verifies sTRX received</p>
 <p><strong>"Do I have any sTRX rewards to claim?"</strong>
-→ AI calls <code>get_strx_account</code> to check claimable rewards → calls <code>claim_strx_rewards</code> if available</p>
+→ AI reads <code>get_strx_account</code> and <code>check_strx_withdrawal_eligibility</code>, then reports the result only. Unknown/null data is not zero and must not trigger a claim. A query alone never authorizes a transaction. If the user later requests a claim, refresh eligibility; for a known positive amount, show the current claimable amount, network and signer, obtain separate explicit confirmation, then call <code>claim_strx_rewards</code> and verify the receipt and post-state.</p>
 <p><strong>"Can I withdraw my unstaked TRX?"</strong>
 → AI calls <code>check_strx_withdrawal_eligibility</code> to check unbonding status and completed withdrawal rounds</p>
 <p><strong>"Connect my TronLink wallet"</strong>
@@ -3799,7 +3799,7 @@ npm<span class="w"> </span>run<span class="w"> </span>dev
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 14, 2026 09:04:41 UTC">2026-10-14</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 21, 2026 10:26:37 UTC">2026-10-21</span>
   </span>
 
     

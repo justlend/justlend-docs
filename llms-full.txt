@@ -1,13 +1,13 @@
-# JustLend DAO Documentation — Full Text Snapshot for LLMs
+# JustLend Documentation — Full Text Snapshot for LLMs
 
-> A condensed, single-document snapshot of the JustLend DAO documentation, intended for LLMs that prefer one-shot ingestion over per-page crawling. Authoritative source is the live site at <https://docs.justlend.org>; the OpenAPI spec at <https://docs.justlend.org/developers/apis/justlend_apis.yaml> is the machine-readable contract.
+> A condensed, single-document snapshot of the JustLend documentation, intended for LLMs that prefer one-shot ingestion over per-page crawling. Authoritative source is the live site at <https://docs.justlend.org>; the OpenAPI spec at <https://docs.justlend.org/developers/apis/justlend_apis.yaml> is the machine-readable contract.
 
 ## 0. Snapshot metadata
 
 | Field | Value |
 |-------|-------|
-| `last_generated` | **2026-10-14** (ISO 8601, UTC date — substituted at build time) |
-| `docs_commit` | [`b9b40ce`](https://github.com/justlend/justlend-docs/commit/b9b40ce8179f0d0344196708ad2ee891794d6196) (the commit SHA this snapshot was built from — substituted at build time) |
+| `last_generated` | **2026-10-22** (ISO 8601, UTC date — substituted at build time) |
+| `docs_commit` | [`8b4bade`](https://github.com/justlend/justlend-docs/commit/8b4badea1babf5b73dd76a0f4b8e573904d5ae46) (the commit SHA this snapshot was built from — substituted at build time) |
 | `contracts_json_source` | [`/developers/contracts.json`](https://docs.justlend.org/developers/contracts.json) — see its `_meta.last_generated` for the address-data snapshot date |
 | `mcp_server_version` | `@justlend/mcp-server-justlend` **v1.1.3** (sync date 2026-08-19) |
 | `skills_version` | `@justlend/justlend-skills` **v1.1.1** (GitHub distribution; not on npm) |
@@ -23,7 +23,7 @@ This document covers: protocol overview, core concepts (supply / borrow / withdr
 
 ## 1. Protocol Overview
 
-JustLend DAO is the largest lending protocol on TRON, based on the Compound V2 architecture. It is a money market: suppliers deposit TRX or TRC20 assets into per-market liquidity pools and earn interest; borrowers over-collateralize an asset to borrow another asset from the pool. Interest rates float in real time as a function of utilization.
+JustLend is the largest lending protocol on TRON, based on the Compound V2 architecture. It is a money market: suppliers deposit TRX or TRC20 assets into per-market liquidity pools and earn interest; borrowers over-collateralize an asset to borrow another asset from the pool. Interest rates float in real time as a function of utilization.
 
 ### Roles
 
@@ -531,7 +531,7 @@ Source-installable utility library, version **v1.0.0**. Repo: <https://github.co
 
 - **jToken balances**: scaled by `1e8` (8 decimals).
 - **Underlying TRC20 amounts**: each token's own decimals — TRX = 6, USDT = 6, USDC = 6, USDD = 18, BTC/WBTC = 8, ETH = 18, etc. Always call `decimals()` on the underlying before constructing a `mint` / `borrow` / `repayBorrow` amount.
-- **Rates** (`borrowRatePerBlock`, `supplyRatePerBlock`): scaled by `1e18`, per-block. To convert to APY, multiply by blocks-per-year and compound; on TRON at the current ~3 s/block this is approximately **10,512,000** (`365 × 86400 / 3`) for a 365-day year or **10,517,760** (`365.25 × 86400 / 3`) when accounting for the leap-year average. Both are approximations — the on-chain block cadence drifts. **Prefer the API's pre-computed `apy` / `supplyRate` / `borrowRate` fields** when you need precision; only do the conversion yourself when the API is unreachable.
+- **Rates** (`borrowRatePerBlock`, `supplyRatePerBlock`): scaled by `1e18`, per-block. To convert to APY, multiply by blocks-per-year and compound; on TRON at the current ~3 s/block this is approximately **10,512,000** (`365 × 86400 / 3`) for a 365-day year or **10,519,200** (`365.25 × 86400 / 3`) when accounting for the leap-year average. Both are approximations — the on-chain block cadence drifts. **Prefer the API's pre-computed `apy` / `supplyRate` / `borrowRate` fields** when you need precision; only do the conversion yourself when the API is unreachable.
 - **Prices** from the oracle: in sun (10⁻⁶ TRX), scaled by `10^(tokenDecimal − 6)`.
 - **Collateral factor, reserve factor, exchange rate, liquidation incentive**: all mantissa-scaled by `1e18`.
 

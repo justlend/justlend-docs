@@ -42,7 +42,7 @@ Use this page to decide which JustLend documentation or runtime source an AI age
    - Best for: Mainnet/Nile contract addresses, Base58/EVM/TRON-hex formats, active vs. legacy market status.
 
 6. **JSON ABI files** — use for contract calls and event decoding.
-   - Directory: [`/developers/abis/`](../../developers/abis/jtoken.json)
+   - Directory: [`/developers/abis/`](../../developers/abis/index.md)
    - Best for: function signatures, event topics, jToken calls, Comptroller, PriceOracle, governance, sTRX, and Energy Rental contracts.
 
 7. **Human documentation** — use for explanations and risk context.
@@ -55,6 +55,29 @@ Use this page to decide which JustLend documentation or runtime source an AI age
 - Do not infer token decimals from symbols. Use the token metadata from OpenAPI, contracts JSON, ABIs, or MCP tool output.
 - Do not assume Mainnet when the user is testing. Ask for or default to `nile` only when the workflow is explicitly a testnet workflow.
 - Do not use rendered HTML tables as the primary source for programmatic integrations; prefer YAML/JSON/tool output.
+
+## Version and output-contract boundaries
+
+- For reproducible integration checks, record the repository commit **and** any
+  working-tree changes, installed package version/lockfile, network and transport,
+  and the connected MCP `tools/list` input/output schemas. A package version in
+  source or a catalog is not evidence that a running server has deployed it.
+- Tool names in the generated catalog are exact identifiers, not promised aliases.
+  Use `approve_moolah_vault`, `moolah_supply_collateral`, etc. as declared by the
+  connected server; fail with a capability/version mismatch rather than guessing
+  shortened names when a tool is absent.
+- MCP's common `schemaVersion` covers the `schemaVersion` / `tool` / `result`
+  envelope. Most nested results remain open-ended; the generated catalog separately
+  describes the sTRX eligibility field schema. Do not infer a contract for every
+  nested field from the presence of a generic `outputSchema`.
+- CLI JSON is for terminal/CI consumption: check exit code, then `success` and
+  `code`, against its [`output-v1.schema.json`](https://github.com/justlend/justlend-cli/blob/main/schemas/output-v1.schema.json).
+  Its envelope does not define every command's `data` payload. The bundled Skills
+  server and full MCP server also have different error envelopes; use each
+  server's own contract rather than treating them as interchangeable.
+- For unknown error codes, absent retryability, or an uncertain write result,
+  inspect state and stop automatic writes. A returned hash is not confirmation;
+  see [MCP Safety Policy](mcp_safety.md).
 
 ## Units and amounts — where to get self-describing values
 
@@ -96,4 +119,4 @@ When answering an integration question, include:
 - “存款 / 借款 / 还款 / 赎回” → MCP write tools plus [MCP Safety Policy](mcp_safety.md).
 - “命令行 / CI 自动化” → [JustLend CLI](../../ai_support/cli_and_sdk.md#cli-deterministic-terminal-automation) with `--json`, exit-code checks, and dry-run first.
 - “前端 / Node.js 集成 V2” → [JustLend V2 Utils](../../ai_support/cli_and_sdk.md#v2-utils-embedded-application-integration) with an explicitly injected `TronWeb` instance.
-- “合约地址 / ABI / 事件解析” → [`contracts.json`](../../developers/contracts.json) and [`developers/abis/`](../../developers/abis/jtoken.json).
+- “合约地址 / ABI / 事件解析” → [`contracts.json`](../../developers/contracts.json) and [`developers/abis/`](../../developers/abis/index.md).

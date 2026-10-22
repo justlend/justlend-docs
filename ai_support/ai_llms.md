@@ -5,7 +5,7 @@ description: Machine-readable documentation endpoints for AI agents — /llms.tx
 
 # AI / LLMs
 
-JustLend DAO provides machine-readable documentation endpoints optimized for LLMs and AI coding tools. Use these resources to give your AI assistant accurate, up-to-date context about the JustLend protocol.
+JustLend provides machine-readable documentation endpoints optimized for LLMs and AI coding tools. Use these resources to give your AI assistant accurate, up-to-date context about the JustLend protocol.
 
 ## Available endpoints
 
@@ -16,7 +16,7 @@ JustLend DAO provides machine-readable documentation endpoints optimized for LLM
 | [`documents/aidocs`](../documents/aidocs/index.md) | Compact AI/RAG-oriented pages with source-of-truth rules, tool mappings, safety policy, Chinese/English FAQs, and MCP tool catalog. |
 
 !!! tip "Machine-readable sources"
-    For API and contract integrations, also prefer the [OpenAPI spec](../developers/apis/justlend_apis.yaml), [contract directory](../developers/contracts.json), [contract directory JSON Schema](../developers/contracts.schema.json), and JSON ABI files under [`/developers/abis/`](../developers/abis/jtoken.json).
+    For API and contract integrations, also prefer the [OpenAPI spec](../developers/apis/justlend_apis.yaml), [contract directory](../developers/contracts.json), [contract directory JSON Schema](../developers/contracts.schema.json), and JSON ABI files under [`/developers/abis/`](../developers/abis/index.md).
 
 ## Which file should I use?
 
@@ -28,7 +28,7 @@ JustLend DAO provides machine-readable documentation endpoints optimized for LLM
 | Public HTTP API calls and response schemas | [`justlend_apis.yaml`](../developers/apis/justlend_apis.yaml) |
 | Contract addresses in Base58 / EVM hex / TRON hex | [`contracts.json`](../developers/contracts.json) |
 | Validating a copy of `contracts.json` (schema check) | [`contracts.schema.json`](../developers/contracts.schema.json) (JSON Schema 2020-12) |
-| Contract calls, event decoding, and agent tooling | [`developers/abis/`](../developers/abis/jtoken.json) |
+| Contract calls, event decoding, and agent tooling | [`developers/abis/`](../developers/abis/index.md) |
 | MCP tool routing and safety annotations | [`MCP Tool Catalog`](../documents/aidocs/mcp_tools.md) |
 | Deterministic shell and CI automation | [JustLend CLI](cli_and_sdk.md#cli-deterministic-terminal-automation) |
 | Embedded V2 browser or Node.js integration | [JustLend V2 Utils](cli_and_sdk.md#v2-utils-embedded-application-integration) |

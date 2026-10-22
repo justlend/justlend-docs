@@ -441,7 +441,7 @@ The following is a read-only Mainnet observation from **2026-10-12**, not a liqu
 
 ### 3.3 `GET /justlend/liquidate/highRiskAccountList` — High‑risk accounts
 
-Returns accounts that are currently liquidatable or close to it. Use this to drive liquidation bots.
+Returns a high-risk account snapshot for candidate discovery, not proof of current liquidation eligibility. Refresh the snapshot and verify V1 `Comptroller.getAccountLiquidity(account)` on-chain: require `error == 0` and `shortfall > 0`. Unknown or failed reads must stop execution; other contract guards still apply.
 
 **Parameters:** none.
 
@@ -502,7 +502,7 @@ Returns accounts that are currently liquidatable or close to it. Use this to dri
 | `updateTime`                          | integer | Yes      | epoch ms            | When the snapshot was computed.                                                            |
 | `jtokens`                             | object  | Yes      | symbol → address    | jToken symbol‑to‑address lookup map. Same data as §2.                                      |
 | `accounts[].borrower`                 | string  | Yes      | TRON address        | Borrower wallet.                                                                           |
-| `accounts[].risk`                     | string  | Yes      | ratio               | **Higher = riskier.** `> 1` means the account is liquidatable now.                          |
+| `accounts[].risk`                     | string  | Yes      | ratio               | **Higher = riskier.** `> 1` indicates debt above the reported limit in this snapshot, not current execution eligibility. Verify an error-free on-chain liquidity read with `shortfall > 0`; rounded values are not an execution predicate.                          |
 | `accounts[].totalCollateralUsd`       | string  | Yes      | USD                 | Total collateral value.                                                                    |
 | `accounts[].totalBorrowUsd`           | string  | Yes      | USD                 | Total borrow value.                                                                        |
 | `accounts[].liquidateStatusStartTime` | integer | Yes      | epoch ms            | When the account first became liquidatable. `0` = not yet in liquidatable status.          |

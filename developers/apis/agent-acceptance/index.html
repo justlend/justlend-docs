@@ -139,8 +139,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "End-to-end evidence that an anonymous agent can call the JustLend public API \u2014 real recorded responses, contract assertions, and the runnable acceptance script.",
-          "dateModified": "2026-08-19",
-          "datePublished": "2026-08-19"
+          "dateModified": "2026-10-21",
+          "datePublished": "2026-10-21"
         }
       ]
     }
@@ -2117,7 +2117,7 @@
 
 
 <h1 id="api-agent-acceptance-run">API Agent Acceptance Run<a class="headerlink" href="#api-agent-acceptance-run" title="Permanent link">&para;</a></h1>
-<p>This page is the <strong>end-to-end acceptance artifact</strong> for the <a href="../">JustLend DAO API</a>: proof that an agent with nothing but the docs and an HTTP client can call the API and get responses matching the documented contract (<a href="../justlend_apis.yaml"><code>justlend_apis.yaml</code></a>).</p>
+<p>This page is the <strong>end-to-end acceptance artifact</strong> for the <a href="../">JustLend API</a>: proof that an agent with nothing but the docs and an HTTP client can call the API and get responses matching the documented contract (<a href="../justlend_apis.yaml"><code>justlend_apis.yaml</code></a>).</p>
 <ul>
 <li><strong>What it exercises:</strong> representative anonymous GET read paths (no wallet, key, or auth), the canonical market inventory, <code>/lend/account</code> default pagination, and the V1/V2 error contracts.</li>
 <li><strong>How to reproduce:</strong> from the repo root, run <code>node scripts/api-acceptance.mjs</code> (Node ≥ 18, read-only, 9 GET requests). Use <code>--json</code> for a versioned machine-readable report; exit code <code>0</code> means every assertion holds.</li>
@@ -2292,7 +2292,7 @@ PASS  V2 error contract (missing params)         HTTP 200  /v2/vault/position
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="August 19, 2026 09:32:01 UTC">2026-08-19</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 21, 2026 10:26:37 UTC">2026-10-21</span>
   </span>
 
     

@@ -1,6 +1,6 @@
-# JustLend DAO Documentation
+# JustLend Documentation
 
-> JustLend DAO is the largest lending protocol on TRON, based on the Compound V2 architecture. Users supply TRX and TRC20 assets as collateral to earn interest, borrow against that collateral, stake TRX for sTRX (liquid staking), or rent TRON Energy at a discount. This site documents the protocol for users, integrators, and AI agents.
+> JustLend is the largest lending protocol on TRON, based on the Compound V2 architecture. Users supply TRX and TRC20 assets as collateral to earn interest, borrow against that collateral, stake TRX for sTRX (liquid staking), or rent TRON Energy at a discount. This site documents the protocol for users, integrators, and AI agents.
 
 > Site `Last-Modified` and per-page commit dates are published via HTTP headers and the page footer. For documentation change history see [CHANGELOG.md](https://github.com/justlend/justlend-docs/blob/main/CHANGELOG.md).
 

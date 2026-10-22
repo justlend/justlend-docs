@@ -143,8 +143,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "How agents should choose between JustLend OpenAPI, MCP tools, CLI, V2 Utils, contracts.json, ABI JSON files, llms.txt, and human documentation.",
-          "dateModified": "2026-08-19",
-          "datePublished": "2026-08-19"
+          "dateModified": "2026-10-19",
+          "datePublished": "2026-10-19"
         }
       ]
     }
@@ -1574,6 +1574,19 @@
 
 
 <li class="md-nav__item ">
+  <a href="#version-and-output-contract-boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      Version and output-contract boundaries
+    </span>
+  </a>
+  
+</li>
+      
+        
+
+
+
+<li class="md-nav__item ">
   <a href="#units-and-amounts-where-to-get-self-describing-values" class="md-nav__link">
     <span class="md-ellipsis">
       Units and amounts
@@ -2288,7 +2301,7 @@
 <li>
 <p><strong>JSON ABI files</strong> — use for contract calls and event decoding.</p>
 </li>
-<li>Directory: <a href="../../../developers/abis/jtoken.json"><code>/developers/abis/</code></a></li>
+<li>Directory: <a href="../../../developers/abis/"><code>/developers/abis/</code></a></li>
 <li>
 <p>Best for: function signatures, event topics, jToken calls, Comptroller, PriceOracle, governance, sTRX, and Energy Rental contracts.</p>
 </li>
@@ -2304,6 +2317,29 @@
 <li>Do not infer token decimals from symbols. Use the token metadata from OpenAPI, contracts JSON, ABIs, or MCP tool output.</li>
 <li>Do not assume Mainnet when the user is testing. Ask for or default to <code>nile</code> only when the workflow is explicitly a testnet workflow.</li>
 <li>Do not use rendered HTML tables as the primary source for programmatic integrations; prefer YAML/JSON/tool output.</li>
+</ul>
+<h2 id="version-and-output-contract-boundaries">Version and output-contract boundaries<a class="headerlink" href="#version-and-output-contract-boundaries" title="Permanent link">&para;</a></h2>
+<ul>
+<li>For reproducible integration checks, record the repository commit <strong>and</strong> any
+  working-tree changes, installed package version/lockfile, network and transport,
+  and the connected MCP <code>tools/list</code> input/output schemas. A package version in
+  source or a catalog is not evidence that a running server has deployed it.</li>
+<li>Tool names in the generated catalog are exact identifiers, not promised aliases.
+  Use <code>approve_moolah_vault</code>, <code>moolah_supply_collateral</code>, etc. as declared by the
+  connected server; fail with a capability/version mismatch rather than guessing
+  shortened names when a tool is absent.</li>
+<li>MCP's common <code>schemaVersion</code> covers the <code>schemaVersion</code> / <code>tool</code> / <code>result</code>
+  envelope. Most nested results remain open-ended; the generated catalog separately
+  describes the sTRX eligibility field schema. Do not infer a contract for every
+  nested field from the presence of a generic <code>outputSchema</code>.</li>
+<li>CLI JSON is for terminal/CI consumption: check exit code, then <code>success</code> and
+  <code>code</code>, against its <a href="https://github.com/justlend/justlend-cli/blob/main/schemas/output-v1.schema.json"><code>output-v1.schema.json</code></a>.
+  Its envelope does not define every command's <code>data</code> payload. The bundled Skills
+  server and full MCP server also have different error envelopes; use each
+  server's own contract rather than treating them as interchangeable.</li>
+<li>For unknown error codes, absent retryability, or an uncertain write result,
+  inspect state and stop automatic writes. A returned hash is not confirmation;
+  see <a href="../mcp_safety/">MCP Safety Policy</a>.</li>
 </ul>
 <h2 id="units-and-amounts-where-to-get-self-describing-values">Units and amounts — where to get self-describing values<a class="headerlink" href="#units-and-amounts-where-to-get-self-describing-values" title="Permanent link">&para;</a></h2>
 <p>The public HTTP API returns decimal quantities as <strong>JSON strings</strong> (mostly de-scaled human units; <code>borrowIndex</code> and the V2 share amounts are raw integer strings) <strong>without</strong> an inline <code>_unit</code>/<code>decimals</code> envelope, by design. Parse them with big-decimal/BigInt tooling — several values exceed IEEE-754 double precision. To interpret amounts correctly:</p>
@@ -2385,7 +2421,7 @@
 <li>“存款 / 借款 / 还款 / 赎回” → MCP write tools plus <a href="../mcp_safety/">MCP Safety Policy</a>.</li>
 <li>“命令行 / CI 自动化” → <a href="../../../ai_support/cli_and_sdk/#cli-deterministic-terminal-automation">JustLend CLI</a> with <code>--json</code>, exit-code checks, and dry-run first.</li>
 <li>“前端 / Node.js 集成 V2” → <a href="../../../ai_support/cli_and_sdk/#v2-utils-embedded-application-integration">JustLend V2 Utils</a> with an explicitly injected <code>TronWeb</code> instance.</li>
-<li>“合约地址 / ABI / 事件解析” → <a href="../../../developers/contracts.json"><code>contracts.json</code></a> and <a href="../../../developers/abis/jtoken.json"><code>developers/abis/</code></a>.</li>
+<li>“合约地址 / ABI / 事件解析” → <a href="../../../developers/contracts.json"><code>contracts.json</code></a> and <a href="../../../developers/abis/"><code>developers/abis/</code></a>.</li>
 </ul>
 
 
@@ -2407,7 +2443,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="August 19, 2026 09:32:01 UTC">2026-08-19</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 19, 2026 09:59:32 UTC">2026-10-19</span>
   </span>
 
     

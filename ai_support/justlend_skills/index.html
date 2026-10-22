@@ -143,8 +143,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "GitHub-distributed JustLend Skills \u2014 6 workflow modules plus a bundled 9-tool read-only MCP server for AI agents. CLI also available.",
-          "dateModified": "2026-08-27",
-          "datePublished": "2026-08-27"
+          "dateModified": "2026-10-21",
+          "datePublished": "2026-10-21"
         }
       ]
     }
@@ -2526,7 +2526,7 @@
 
 <h1 id="justlend-skills">JustLend Skills<a class="headerlink" href="#justlend-skills" title="Permanent link">&para;</a></h1>
 <p><strong>GitHub</strong>: <a href="https://github.com/justlend/justlend-skills">https://github.com/justlend/justlend-skills</a></p>
-<p>JustLend Skills is a GitHub-distributed AI Agent skills project for the <strong>JustLend DAO</strong> protocol on TRON. Its local package identifier is <code>@justlend/justlend-skills</code>. It provides structured skill instructions and a lightweight <strong>read-only</strong> <a href="https://modelcontextprotocol.io/">MCP server</a> (9 query tools) that enables AI agents (Claude Code, Claude Desktop, Cursor, Codex, etc.) to query market data, monitor account positions, and analyze DeFi lending information.</p>
+<p>JustLend Skills is a GitHub-distributed AI Agent skills project for the <strong>JustLend</strong> protocol on TRON. Its local package identifier is <code>@justlend/justlend-skills</code>. It provides structured skill instructions and a lightweight <strong>read-only</strong> <a href="https://modelcontextprotocol.io/">MCP server</a> (9 query tools) that enables AI agents (Claude Code, Claude Desktop, Cursor, Codex, etc.) to query market data, monitor account positions, and analyze DeFi lending information.</p>
 <p><strong>Current version:</strong> <code>1.1.1</code> · bundled MCP output schema: <code>1.0.0</code></p>
 <div class="admonition important">
 <p class="admonition-title">Install from GitHub, not the npm registry</p>
@@ -2546,7 +2546,7 @@
 <p>The tool outputs use protocol-specific terminology — <code>mantissa</code>, <code>borrowIndex</code>, <code>exchangeRate</code>, <code>collateralFactor</code>, <code>closeFactor</code>, <code>liquidationIncentive</code>, <code>status: active|legacy</code>. Each is defined in the <a href="../../resources/glossary/">Glossary</a> with units and on-chain encoding. When asking the agent to <em>act</em> on a market (e.g. supply, repay), point it at <a href="../../developers/common_pitfalls/">Common Pitfalls</a> first — the same gotchas (USDT <code>approve()</code> race, decimals mismatch, etc.) apply whether the agent uses Skills, the full MCP server, or raw TronWeb.</p>
 </div>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
-<p><a href="https://justlend.org">JustLend DAO</a> is the largest lending protocol on TRON, based on the Compound V2 architecture. JustLend Skills wraps the core query functionality into MCP tools and structured skill instructions that AI agents can use.</p>
+<p><a href="https://justlend.org">JustLend</a> is the largest lending protocol on TRON, based on the Compound V2 architecture. JustLend Skills wraps the core query functionality into MCP tools and structured skill instructions that AI agents can use.</p>
 <h3 id="key-capabilities">Key Capabilities<a class="headerlink" href="#key-capabilities" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>Market Data</strong>: Real-time APYs (including mining rewards), TVL, utilization rates for all markets</li>
@@ -2602,7 +2602,7 @@
 <h2 id="bundled-market-shortcuts">Bundled Market Shortcuts<a class="headerlink" href="#bundled-market-shortcuts" title="Permanent link">&para;</a></h2>
 <div class="admonition warning">
 <p class="admonition-title">Not an exhaustive market list</p>
-<p>The table below lists the <strong>8 static shortcuts</strong> used by the bundled <code>get_token_balance</code> and <code>check_allowance</code> implementations. It is <strong>not</strong> the protocol's full market roster. The JustLend DAO protocol exposes <strong>18 active + 6 legacy = 24 markets total</strong>, including active <code>jU</code>. <code>get_all_markets</code> queries the visible live inventory; <code>get_supported_markets</code> returns only these 8 shortcuts. Use the full MCP server or <code>contracts.json</code> for the complete static address catalog.</p>
+<p>The table below lists the <strong>8 static shortcuts</strong> used by the bundled <code>get_token_balance</code> and <code>check_allowance</code> implementations. It is <strong>not</strong> the protocol's full market roster. The JustLend protocol exposes <strong>18 active + 6 legacy = 24 markets total</strong>, including active <code>jU</code>. <code>get_all_markets</code> queries the visible live inventory; <code>get_supported_markets</code> returns only these 8 shortcuts. Use the full MCP server or <code>contracts.json</code> for the complete static address catalog.</p>
 </div>
 <p><strong>Single source of truth for the live market list (in order of preference):</strong></p>
 <ol>
@@ -2806,7 +2806,7 @@ node<span class="w"> </span>scripts/justlend_api.mjs<span class="w"> </span>allo
 <p>This skill requires the <a href="../mcp_server/">full MCP server</a> and a signing wallet. Mainnet uses the official <code>https://tegrow.ablesdxd.link</code> endpoint by default; a custom/test or non-mainnet service must be configured explicitly. Never expose a private key or signed transaction in tool output. The full server may retain the exact signed request in a local mode-<code>0600</code> recovery file after an ambiguous submission. The no-argument risk check is read-only and never replays it; never retry with a second payment while payment risk is unresolved.</p>
 </div>
 <h3 id="dao-governance-justlend-governance-v1">DAO Governance (justlend-governance-v1)<a class="headerlink" href="#dao-governance-justlend-governance-v1" title="Permanent link">&para;</a></h3>
-<p>Participate in JustLend DAO governance proposals. Deposit JST for voting power (1 JST = 1 Vote), cast votes, and reclaim votes after proposals end.</p>
+<p>Participate in JUST DAO governance proposals. Deposit JST for voting power (1 JST = 1 Vote), cast votes, and reclaim votes after proposals end.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This skill requires the <a href="../mcp_server/">full MCP server</a> for tool execution.</p>
@@ -2985,7 +2985,7 @@ node<span class="w"> </span>scripts/justlend_api.mjs<span class="w"> </span>allo
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="August 27, 2026 08:24:25 UTC">2026-08-27</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 21, 2026 10:26:37 UTC">2026-10-21</span>
   </span>
 
     

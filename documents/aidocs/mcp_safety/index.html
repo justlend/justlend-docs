@@ -143,8 +143,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "Safety rules for JustLend MCP tools, including read-only vs write tools, destructive operations, wallet modes, private-key handling, and human-in-the-loop confirmation.",
-          "dateModified": "2026-10-12",
-          "datePublished": "2026-10-12"
+          "dateModified": "2026-10-19",
+          "datePublished": "2026-10-19"
         }
       ]
     }
@@ -2306,7 +2306,17 @@
 <li>whether it will sign and broadcast a transaction</li>
 </ul>
 <p>Then ask for explicit confirmation.</p>
-<p>For <code>buy_energy_direct</code>, the confirmation must be tied to the authoritative quote: show payer, every receiver, duration, and exact TRX amount. The configured backend validates and may broadcast the signed payment. If the result is ambiguous, query public payer history and call <code>get_energy_payment_risk</code> with no arguments. That configured-wallet check is read-only and never replays a stored payment. Do not sign a second payment while the first remains unresolved; any recovery replay must happen only inside a separately confirmed <code>buy_energy_direct</code> call.</p>
+<p>For <code>buy_energy_direct</code>, the confirmation must be tied to the authoritative quote: show network, payer, quoted <code>payment_address</code>, every receiver, duration, and exact TRX amount. Pass the confirmed payee as <code>expectedPayAddress</code> and <code>total_sun</code> as <code>expectedAmountSun</code>; set <code>confirmPayment=true</code> only after confirmation. The server already checks the payee, and the configured backend validates and may broadcast the signed payment. If the result is ambiguous, query public payer history and call <code>get_energy_payment_risk</code> with no arguments. That configured-wallet check is read-only and never replays a stored payment. Do not sign a second payment while the first remains unresolved; any recovery replay must happen only inside a separately confirmed <code>buy_energy_direct</code> call.</p>
+<p>Refusal or cancellation stops the workflow. Changes to wallet, network, payee,
+amount or other confirmed parameters require a new preview and confirmation.
+Unknown errors or missing <code>retryable</code> are not permission to replay a write; inspect
+the original transaction receipt and relevant post-state first. Leave unresolved
+outcomes pending rather than treating a tx hash or cached balance as success.</p>
+<p>For sTRX, <code>unstake_strx</code> starts unbonding. After the waiting period, query
+<code>check_strx_withdrawal_eligibility</code> and <code>get_strx_account</code>. Preserve <code>null</code> and
+degradation notes as unknown, not zero; only a known positive claimable amount
+supports a separately confirmed <code>claim_strx_rewards</code> (<code>claimAll</code>) call. Verify
+its receipt and updated state rather than starting another unstake.</p>
 <h2 id="private-key-rule">Private key rule<a class="headerlink" href="#private-key-rule" title="Permanent link">&para;</a></h2>
 <p>Never ask the user to paste a private key or seed phrase into chat or MCP tool arguments.</p>
 <p>Supported wallet mode:</p>
@@ -2362,7 +2372,7 @@
 </tr>
 <tr>
 <td>Account risk lookup</td>
-<td><code>get_wallet_address</code>, <code>get_account_summary</code>, <code>get_balances</code></td>
+<td><code>get_wallet_address</code>, <code>get_account_summary</code>, <code>get_wallet_balances</code></td>
 <td>Read-only; never infer health from stale data.</td>
 </tr>
 <tr>
@@ -2382,7 +2392,7 @@
 </tr>
 <tr>
 <td>Governance writes</td>
-<td><code>vote_for_proposal</code>, <code>cast_vote</code>, <code>withdraw_votes_to_jst</code></td>
+<td><code>cast_vote</code>, <code>withdraw_votes_from_proposal</code>, <code>withdraw_votes_to_jst</code></td>
 <td>Confirm proposal id, vote direction, lock/withdraw effect.</td>
 </tr>
 <tr>
@@ -2427,7 +2437,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 12, 2026 09:32:17 UTC">2026-10-12</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 19, 2026 09:59:32 UTC">2026-10-19</span>
   </span>
 
     

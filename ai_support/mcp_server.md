@@ -25,7 +25,7 @@ This page is the human-readable reference for the full MCP server. For agent use
 !!! tip "Before integrating"
     Read [Common Pitfalls](../developers/common_pitfalls.md) for the 10 most frequent JustLend-integration foot-guns (USDT `approve()` race condition, `enterMarkets()` requirement, `mint()` overload between jTRX and jTRC20, jToken vs underlying decimals, `liquidateBorrow` 50% close-factor cap, `uint256(-1)` repay sentinel, …). For precise term definitions used throughout the MCP tool descriptions (mantissa, kink, utilization, collateral / close / reserve factor, exchange rate, market `status`), see the [Glossary](../resources/glossary.md). The MCP server enforces several of these patterns internally (e.g. it runs TRC20 allowance checks before supply/repay), but understanding them helps you debug failed transactions and write callers that don't fight the server.
 
-The JustLend MCP Server (`@justlend/mcp-server-justlend`) is a [Model Context Protocol](https://modelcontextprotocol.io/) server that enables AI agents to interact with the **JustLend DAO** protocol on TRON. Supply assets, borrow against collateral, manage positions, rent energy, stake TRX for sTRX, and analyze DeFi portfolios — all through a unified AI interface.
+The JustLend MCP Server (`@justlend/mcp-server-justlend`) is a [Model Context Protocol](https://modelcontextprotocol.io/) server that enables AI agents to interact with the **JustLend** protocol on TRON. Supply assets, borrow against collateral, manage positions, rent energy, stake TRX for sTRX, and analyze DeFi portfolios — all through a unified AI interface.
 
 Beyond JustLend-specific operations, the server also exposes a full set of **general-purpose TRON chain utilities** — balance queries, block/transaction data, token metadata, TRX transfers, smart contract reads/writes, staking (Stake 2.0), multicall, and more.
 
@@ -37,7 +37,7 @@ Beyond JustLend-specific operations, the server also exposes a full set of **gen
 
 ## Overview
 
-[JustLend DAO](https://justlend.org) is the largest lending protocol on TRON, based on the Compound V2 architecture. This MCP server wraps the full protocol functionality into tools and guided prompts that local MCP clients such as Claude Desktop, Codex, Claude Code, and Cursor can use.
+[JustLend](https://justlend.org) is the largest lending protocol on TRON, based on the Compound V2 architecture. This MCP server wraps the full protocol functionality into tools and guided prompts that local MCP clients such as Claude Desktop, Codex, Claude Code, and Cursor can use.
 
 ### Key Capabilities
 
@@ -614,7 +614,7 @@ Every tool returns errors as structured JSON with `isError: true`, so an agent c
 | errorCode | retryable | Meaning / agent action |
 |-----------|:---------:|------------------------|
 | `transient` | ✅ true | Network/RPC timeout, `SERVER_BUSY`, 429/5xx — retry read-only calls after a short backoff; **never** blindly re-broadcast a write (re-query state first). |
-| `insufficient_allowance` | ❌ false | Approve the spender first (`approve_underlying` / `approve_for_votes` / `approve_moolah_*`), then retry. |
+| `insufficient_allowance` | ❌ false | Separately confirm the exact approval (`approve_underlying`, `approve_jst_for_voting`, `approve_moolah_vault`, or `approve_moolah_proxy`, as appropriate), recheck allowance, then separately confirm the intended write; do not retry automatically. |
 | `insufficient_balance` | ❌ false | Lower the amount or fund the wallet; verify with `get_trx_balance` / `get_token_balance`. |
 | `wallet_not_configured` | ❌ false | Run `npx agent-wallet start` (or import/generate via CLI), set `AGENT_WALLET_PASSWORD`, select `agent` mode, and activate the wallet. |
 | `execution_reverted` | ❌ false | Contract precondition failed (allowance / health / paused market) — simulate before broadcasting. |
@@ -682,7 +682,7 @@ Only `transient` is safe to auto-retry; every other code requires a corrective a
 → AI uses `stake_trx` prompt: checks balance → checks exchange rate & APY → stakes TRX → verifies sTRX received
 
 **"Do I have any sTRX rewards to claim?"**
-→ AI calls `get_strx_account` to check claimable rewards → calls `claim_strx_rewards` if available
+→ AI reads `get_strx_account` and `check_strx_withdrawal_eligibility`, then reports the result only. Unknown/null data is not zero and must not trigger a claim. A query alone never authorizes a transaction. If the user later requests a claim, refresh eligibility; for a known positive amount, show the current claimable amount, network and signer, obtain separate explicit confirmation, then call `claim_strx_rewards` and verify the receipt and post-state.
 
 **"Can I withdraw my unstaked TRX?"**
 → AI calls `check_strx_withdrawal_eligibility` to check unbonding status and completed withdrawal rounds
