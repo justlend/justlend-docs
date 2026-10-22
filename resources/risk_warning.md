@@ -6,7 +6,11 @@ description: Legal disclaimer for the JustLend SBM Liquidation Tool — on-chain
 # Liquidation Tool Disclaimer
 
 !!! warning "Legal disclaimer — read before using the liquidation tool"
-    **Protocol:** JustLend DAO · **Network:** TRON Mainnet · **Scope:** legal terms for use of the SBM Liquidation Tool. · **Version:** 1.0 (last updated 2025-02-19). · **Related:** [Liquidations concept page](../getting_started/concepts/liquidations.md) for the protocol mechanics; this page covers the **disclaimer for the tooling**.
+    **Protocol:** JustLend
+    **Network:** TRON Mainnet
+    **Scope:** legal terms for use of the SBM Liquidation Tool.
+    **Version:** 1.0 (last updated 2025-02-19).
+    **Related:** [Liquidations concept page](../getting_started/concepts/liquidations.md) for the protocol mechanics; this page covers the **disclaimer for the tooling**.
 
 **Important Disclaimer: Version 1.0 (Last update: 19 February 2025)**
 
