@@ -1,14 +1,19 @@
 ---
-title: Staked TRX (sTRX) on JustLend DAO
+title: Staked TRX (sTRX) on JustLend
 description: Liquid staking for TRX under TRON Stake 2.0 — deposit TRX, receive sTRX (TRC20), earn voting + energy-rental yield, exit via the 14-day unbonding queue or an instant DEX swap.
 ---
 
 # Staked TRX
 
 !!! info "About this page"
-    **Protocol:** JustLend DAO sTRX (one-click liquid staking on TRON Stake 2.0) · **Network:** TRON Mainnet · **sTRX contract:** `TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5` (see [Deployed Contracts](../../developers/deployed_contracts.md#staked-trx)) · **Yield sources:** Super Representative voting rewards + Energy Rental revenue · **Units:** TRX amounts that cross a contract boundary are in **sun** (1 TRX = 10⁶ sun; see [Glossary → sun](../../resources/glossary.md#sun)). The exchange rate `sTRX → TRX` is scaled by `1e18`, always ≥ 1, grows over time as rewards accrue. TRX uses 6 decimals; sTRX is a standard TRC20 (also displayed with 18-decimal math by some clients — check the live exchange rate). · **Exit:** 14-day unbonding queue on JustLend.
+    **Protocol:** JustLend sTRX (one-click liquid staking on TRON Stake 2.0) 
+    **Network:** TRON Mainnet 
+    **sTRX contract:** `TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5` (see [Deployed Contracts](../../developers/deployed_contracts.md#staked-trx)) 
+    **Yield sources:** Super Representative voting rewards + Energy Rental revenue 
+    **Units:** TRX amounts that cross a contract boundary are in **sun** (1 TRX = 10⁶ sun; see [Glossary → sun](../../resources/glossary.md#sun)). The exchange rate `sTRX → TRX` is scaled by `1e18`, always ≥ 1, grows over time as rewards accrue. TRX uses 6 decimals; sTRX is a standard TRC20 (also displayed with 18-decimal math by some clients — check the live exchange rate). 
+    **Exit:** 14-day unbonding queue on JustLend.
 
-Staked TRX is a feature launched by JustLend DAO that enables one-click TRX staking in accordance with Stake 2.0 rules. Once you have staked your TRX, JustLend DAO will take care of the cumbersome procedures, such as Super Representative (SR) voting and reward claiming, and rent out the Energy obtained from TRX staking automatically to generate more yields for you.
+Staked TRX is a feature launched by JustLend that enables one-click TRX staking in accordance with Stake 2.0 rules. Once you have staked your TRX, JustLend will take care of the cumbersome procedures, such as Super Representative (SR) voting and reward claiming, and rent out the Energy obtained from TRX staking automatically to generate more yields for you.
 
 The SRs receiving your TRON Power obtained from staking TRX will be decided via voting by sTRX Governance. The whole process will be open, transparent, and fully decentralized.
 
@@ -32,12 +37,12 @@ The SRs receiving your TRON Power obtained from staking TRX will be decided via 
 The sources of yields form staking TRX is mainly composed of two parts:
 
 * **Voting rewards:** the rewards for voting TRON Power obtained from TRX staking to SRs;
-* **Energy rental rewards:** the revenue from Energy Rental on JustLend DAO, distributed to stakers according to the amount and percentage of TRX they have staked.
+* **Energy rental rewards:** the revenue from Energy Rental on JustLend, distributed to stakers according to the amount and percentage of TRX they have staked.
 
 The staking APY fluctuates with the changes in voting rewards and the Energy rental market. You can check the latest APY anytime in [Staked TRX](https://app.justlend.org/strx?lang=en-US) page.
 
 ### **Stake and Unstake TRX**
-* Connect your Web3 wallet on TronLink or other supported wallet app to the JustLend DAO (https://justlend.org).
+* Connect your Web3 wallet on TronLink or other supported wallet app to the JustLend(https://justlend.org).
 
 * **Stake TRX:**
     * Navigate to the "Staked TRX" page, you will see the latest Staked APY;
@@ -45,9 +50,9 @@ The staking APY fluctuates with the changes in voting rewards and the Energy ren
     * Cofirm the transaction, then you will receive a proportionate amount of sTRX as the receipt.
 
 * **Unstake TRX:**
-    * Unstake on JustLend DAO: Click the 「unstake」 tab, enter the amount of sTRX you want to unstake, and then confirm the transaction;
+    * Unstake on JustLend: Click the 「unstake」 tab, enter the amount of sTRX you want to unstake, and then confirm the transaction;
 
-If you unstake your sTRX on JustLend DAO, you need to wait for 14 days before withdrawing the unstaked TRX by clicking 「Withdraw」 on the same page.
+If you unstake your sTRX on JustLend, you need to wait for 14 days before withdrawing the unstaked TRX by clicking 「Withdraw」 on the same page.
 
 ### Developer reference
 
