@@ -1,19 +1,19 @@
 ---
-title: Repay on JustLend DAO
+title: Repay on JustLend
 description: How borrowers pay back debt on JustLend — `repayBorrow`, `repayBorrowBehalf`, full-balance repay via `uint256(-1)`, and TRC20 `approve()` pre-flight.
 ---
 
 # Repay
 
 !!! info "About this page"
-    * **Protocol:** JustLend DAO
+    * **Protocol:** JustLend
     * **Network:** TRON Mainnet 
     * **Scope:** user-facing repay flow — `repayBorrow` and `repayBorrowBehalf`, full-balance shortcut via `uint256(-1)`, jTRX payable variant. 
     * **Units:** repay amounts use the underlying token's own decimals. 
     * **Related contracts:** [SBM `repayBorrow` / `repayBorrowBehalf`](../../developers/supply_and_borrow_market/sbm.md).
     
 
-Repaying borrowed tokens is a critical aspect of managing borrow positions on the JustLend DAO Protocol. With flexible repayment options and user-friendly tools, JustLend DAO makes it easy for borrowers to maintain healthy collateralisation ratios and prevent liquidation risks.
+Repaying borrowed tokens is a critical aspect of managing borrow positions on the JustLend Protocol. With flexible repayment options and user-friendly tools, JustLend makes it easy for borrowers to maintain healthy collateralisation ratios and prevent liquidation risks.
 
 Borrowers can repay their loans using the same tokens they borrowed or through jTokens (collateral tokens) of the same underlying asset. Here are some benefits of repayment:
 
@@ -24,7 +24,7 @@ Borrowers can repay their loans using the same tokens they borrowed or through j
 
 ### **How Do I Repay Assets**
 
-* Connect your Web3 wallet on TronLink or other supported wallet app to the JustLend DAO ([https://justlend.org](https://justlend.org)).
+* Connect your Web3 wallet on TronLink or other supported wallet app to the JustLend ([https://justlend.org](https://justlend.org)).
 * To Repay Asset on SBM V1:
     * Navigate to **“SBM V1”**, choose the asset you wish to repay, then click **「Repay」** under borrowed assets;
     * Enter the amount you want to repay, then click **「Repay」** and confirm the transaction.
