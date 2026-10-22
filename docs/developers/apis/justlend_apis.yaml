@@ -764,9 +764,11 @@ paths:
         - Supply and Borrow Market V1
       summary: Get High-Risk (Liquidatable) Accounts on V1
       description: >-
-        Query to get accounts that are currently liquidatable or close to it (risk above the
-        observation threshold), together with each account's collateral and borrow positions.
-        Useful for liquidation bots. No parameters.
+        Query the high-risk account snapshot for candidate discovery, together with each
+        account's collateral and borrow positions. Inclusion is not proof of current
+        liquidation eligibility. Verify V1 Comptroller.getAccountLiquidity(account)
+        on-chain: require error == 0 and shortfall > 0; unknown or failed reads must
+        stop execution. Other contract guards still apply. No parameters.
       operationId: getHighRiskAccountList
       responses:
         '200':
@@ -1584,7 +1586,7 @@ components:
             - TB2e78zyzMnaNG2GRazazmbVVv3J564YHg
         risk:
           type: string
-          description: 'Risk ratio. Decimal string. Higher = riskier; `> 1` means the account is liquidatable now.'
+          description: 'Risk ratio. Decimal string. Higher = riskier; `> 1` indicates debt above the reported limit in this snapshot, not current execution eligibility. Require an error-free on-chain liquidity read with `shortfall > 0`; rounded values are not an execution predicate.'
           x-unit: ratio
           examples:
             - '0.999994'

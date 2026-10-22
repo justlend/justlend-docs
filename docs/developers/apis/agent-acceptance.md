@@ -5,7 +5,7 @@ description: End-to-end evidence that an anonymous agent can call the JustLend p
 
 # API Agent Acceptance Run
 
-This page is the **end-to-end acceptance artifact** for the [JustLend DAO API](../apis.md): proof that an agent with nothing but the docs and an HTTP client can call the API and get responses matching the documented contract ([`justlend_apis.yaml`](justlend_apis.yaml)).
+This page is the **end-to-end acceptance artifact** for the [JustLend API](../apis.md): proof that an agent with nothing but the docs and an HTTP client can call the API and get responses matching the documented contract ([`justlend_apis.yaml`](justlend_apis.yaml)).
 
 - **What it exercises:** representative anonymous GET read paths (no wallet, key, or auth), the canonical market inventory, `/lend/account` default pagination, and the V1/V2 error contracts.
 - **How to reproduce:** from the repo root, run `node scripts/api-acceptance.mjs` (Node ≥ 18, read-only, 9 GET requests). Use `--json` for a versioned machine-readable report; exit code `0` means every assertion holds.

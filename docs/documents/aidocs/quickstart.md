@@ -1,6 +1,6 @@
 ---
 title: JustLend AI Quickstart
-description: Compact introduction to JustLend DAO for AI agents, including protocol scope, major workflows, and preferred integration surfaces.
+description: Compact introduction to JustLend for AI agents, including protocol scope, major workflows, and preferred integration surfaces.
 tags:
   - justlend
   - quickstart
@@ -13,7 +13,7 @@ tags:
 
 Use this page when the user needs a short protocol overview, feature routing, or a first answer about which JustLend document, OpenAPI endpoint, or MCP tool should be used.
 
-JustLend DAO is a decentralized lending protocol on TRON based on the Compound V2 architecture. Users supply TRX or TRC20 assets to earn interest, borrow against collateral, stake TRX for sTRX, rent TRON Energy, and participate in governance.
+JustLend is a decentralized lending protocol on TRON based on the Compound V2 architecture. Users supply TRX or TRC20 assets to earn interest, borrow against collateral, stake TRX for sTRX, rent TRON Energy, and participate in governance.
 
 ## What JustLend includes
 
@@ -29,7 +29,7 @@ JustLend DAO is a decentralized lending protocol on TRON based on the Compound V
 - For one-shot context ingestion: [`/llms-full.txt`](../../llms-full.txt)
 - For public HTTP API integration: [`justlend_apis.yaml`](../../developers/apis/justlend_apis.yaml)
 - For contract addresses: [`contracts.json`](../../developers/contracts.json)
-- For contract calls: [`developers/abis/`](../../developers/abis/jtoken.json)
+- For contract calls: [`developers/abis/`](../../developers/abis/index.md)
 - For wallet-aware agent operations: [`mcp_tools.md`](mcp_tools.md)
 
 ## Minimal decision tree

@@ -57,7 +57,7 @@ The per-block interest rate the market currently charges borrowers (and pays sup
 
 ```text
 APY ≈ borrowRatePerBlock / 1e18 × blocksPerYear
-blocksPerYear ≈ 10,517,760 on TRON at ~3 s/block (365.25 × 86400 / 3)
+blocksPerYear ≈ 10,519,200 on TRON at ~3 s/block (365.25 × 86400 / 3)
 ```
 
 For precision, **prefer the API's pre-computed `apy` / `supplyRate` / `borrowRate` fields** — they already account for compounding and the current block cadence. See [APIs §1.4](../developers/apis.md#14-rate-apy-semantics).

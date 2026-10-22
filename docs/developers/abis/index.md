@@ -45,17 +45,17 @@ This cross-check does not replace the downloads with full deployment artifacts o
 | [`jtoken.json`](jtoken.json) | jTRC20 (Supply & Borrow Market) | Selected token/lending functions only; no events. Use the native-TRX variants below where applicable. |
 | [`jtrx-mint.json`](jtrx-mint.json) | jTRX `mint` (TRX-specific) | Payable `mint` entry point for the native-TRX market (TRX is sent as `callValue`, no `approve`). |
 | [`jtrx-repay.json`](jtrx-repay.json) | Mainnet jTRX repayment | Payable `repayBorrow(uint256)` and `repayBorrowBehalf(address)`; payment uses `callValue`. |
-| [`comptroller.json`](comptroller.json) | Comptroller | `checkMembership`, `enterMarkets`, `collateralFactorMantissa`, `closeFactorMantissa`, `claimReward`, guardian pause flags. |
+| [`comptroller.json`](comptroller.json) | Comptroller | `checkMembership`, `enterMarkets`, `markets` (includes the collateral-factor output), `closeFactorMantissa`, `claimReward`, guardian pause flags. |
 | [`interest-rate-model.json`](interest-rate-model.json) | Interest Rate Model | `getBorrowRate`, `getSupplyRate`, `baseRatePerBlock`, `multiplierPerBlock`, `jumpMultiplierPerBlock`. |
 | [`price-oracle.json`](price-oracle.json) | Price Oracle | `getUnderlyingPrice(jToken)` for collateral and borrow valuation. |
 | [`price-oracle-impl.json`](price-oracle-impl.json) | Mainnet Oracle backend | `assetPrices`, `anchors`, `poster`, `getPrice`, restricted `setPrice`, and `PricePosted`. Not the proxy interface. |
 | [`governor-alpha.json`](governor-alpha.json) | Mainnet GovernorBravo (legacy filename) | Selected proposal lifecycle and voting methods, `castVoteBySig`, tuple `getReceipt`, and selected proposal/vote events. |
-| [`poly.json`](poly.json) | JST voting | `castVote`, `getVoteInfo`, `totalVote`, `surplusVotes`, `jstBalance` (JST-weighted voting helper). |
+| [`poly.json`](poly.json) | JST voting helper | `getVoteInfo` only. This download does not provide voting writes or other getters; use the matching deployed-contract interface for those operations. |
 | [`strx.json`](strx.json) | sTRX (Staked TRX) | Selected staking/balance functions plus all 27 current STRXG2 event declarations, including `Deposit`, `Withdraw`, and `Claim`. |
 | [`wjst.json`](wjst.json) | Mainnet WJST | Wrapping, available/locked votes, `withdrawVotes`, and selected wrap/vote-lock events. |
 | [`trc20.json`](trc20.json) | TRC20 (generic) | `approve`, `allowance`, `balanceOf`, `decimals`, `transfer` for any underlying TRC20 asset. |
 | [`energy-market.json`](energy-market.json) | Energy Rental market | Compiler-aligned rental/order reads, tuple `rentals`, three-value `getRentInfo`, bool `rentPaused`, refund returns, settlement reads/writes, and `RentResource` / `ReturnResource` / `Liquidate` / `RentClaimed`. |
-| [`energy-rate-model.json`](energy-rate-model.json) | Energy Rental rate model | `getRentalRate`, `totalDelegated`, `totalFrozen`. |
+| [`energy-rate-model.json`](energy-rate-model.json) | Energy Rental rate model | `getRentalRate` only. Delegated/frozen totals are not supplied by this file; see the Energy Rental market interface for its available total getters. |
 
 ## Decoding events
 

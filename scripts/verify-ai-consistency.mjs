@@ -90,8 +90,8 @@ check(
 
 const mcpCatalog = await read('docs/documents/aidocs/mcp_tools.md');
 check(
-  mcpCatalog.includes('`@justlend/mcp-server-justlend` v1.1.3'),
-  'MCP catalog must identify upstream version 1.1.3',
+  mcpCatalog.includes('`@justlend/mcp-server-justlend` v1.1.4') && mcpCatalog.includes('Source snapshot:'),
+  'MCP catalog must identify source version 1.1.4 without claiming deployed verification',
 );
 check(
   (mcpCatalog.match(/^### `[^`]+`$/gm) ?? []).length === 104,

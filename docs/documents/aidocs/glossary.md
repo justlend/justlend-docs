@@ -93,7 +93,7 @@ A JustLend sub-protocol for renting TRON Energy for a period instead of burning 
 |---------------------|----------------|-----|
 | APY / TVL / utilization | MCP `get_market_data` or `get_all_markets`; OpenAPI [`justlend_apis.yaml`](../../developers/apis/justlend_apis.yaml) | Values change continuously and must be queried live. |
 | Wallet health factor / risk value | MCP `get_account_summary`; [Account Positions](account_position.md) | Requires wallet-specific collateral and borrow data. |
-| jToken address / decimals | [`contracts.json`](../../developers/contracts.json), [`developers/abis/`](../../developers/abis/jtoken.json), or MCP `get_supported_markets` | Prevents symbol-only assumptions. |
+| jToken address / decimals | [`contracts.json`](../../developers/contracts.json), [`developers/abis/`](../../developers/abis/index.md), or MCP `get_supported_markets` | Prevents symbol-only assumptions. |
 | Supply / borrow / repay / withdraw | [Lending Workflows](supply_borrow_repay_withdraw.md) and MCP `supply`, `borrow`, `repay`, `withdraw` | Write tools require pre-flight checks and confirmation. |
 | sTRX exchange rate / staking APY | [sTRX Staking](strx_staking.md), MCP `get_strx_dashboard` | sTRX is exchange-rate based, not fixed 1:1. |
 | Energy rental price | [Energy Rental](energy_rental.md), MCP `calculate_energy_rental_price` | Rental price and availability are live values. |
