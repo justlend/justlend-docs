@@ -26,7 +26,7 @@
     
     
       
-        <title>Risks on JustLend DAO - JustLend DAO Documentation</title>
+        <title>Risks on JustLend - JustLend DAO Documentation</title>
       
     
     
@@ -143,8 +143,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "Smart-contract, oracle, and collateral risks for JustLend users, plus the protocol\u0027s mitigations \u2014 audits, Chainlink oracles, governance-controlled risk parameters, and the risk-alert email service.",
-          "dateModified": "2026-10-10",
-          "datePublished": "2026-10-10"
+          "dateModified": "2026-10-21",
+          "datePublished": "2026-10-21"
         }
       ]
     }
@@ -198,7 +198,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Risks on JustLend DAO
+              Risks on JustLend
             
           </span>
         </div>
@@ -2233,31 +2233,35 @@
 <h1 id="risks">Risks<a class="headerlink" href="#risks" title="Permanent link">&para;</a></h1>
 <div class="admonition info">
 <p class="admonition-title">About this page</p>
-<p><strong>Protocol:</strong> JustLend DAO (Compound V2 fork on TRON) · <strong>Network:</strong> TRON Mainnet · <strong>Scope:</strong> non-exhaustive enumeration of the three primary user-relevant risk categories (smart-contract, oracle, collateral) and how the protocol mitigates each. · <strong>Audits referenced:</strong> Supply &amp; Borrow (<a href="https://justlend.org/docs/justlend_audit_en.pdf">PDF</a>) and Staked TRX (<a href="https://justlend.org/docs/justlend_strx_audit_en.pdf">PDF</a>). · <strong>Oracle provider:</strong> Chainlink (see <a href="../../../developers/supply_and_borrow_market/price_oracle/">Price Oracle</a>).</p>
+<p><strong>Protocol:</strong> JustLend
+<strong>Network:</strong> TRON Mainnet
+<strong>Scope:</strong> non-exhaustive enumeration of the three primary user-relevant risk categories (smart-contract, oracle, collateral) and how the protocol mitigates each.
+<strong>Audits referenced:</strong> Supply &amp; Borrow (<a href="https://justlend.org/docs/justlend_audit_en.pdf">PDF</a>) and Staked TRX (<a href="https://justlend.org/docs/justlend_strx_audit_en.pdf">PDF</a>).
+<strong>Oracle provider:</strong> Chainlink (see <a href="../../../developers/supply_and_borrow_market/price_oracle/">Price Oracle</a>).</p>
 </div>
-<p>The JustLend  DAO Protocol provides decentralized and efficient access to liquidity, empowering users across the TRON ecosystem. However, as with any decentralized finance (DeFi) protocol, there are inherent risks involved. To address these, JustLend has implemented robust risk management measures, ensuring user confidence and protocol resilience. Below, we outline the key risks and the steps taken to mitigate them.</p>
+<p>The JustLend Protocol provides decentralized and efficient access to liquidity, empowering users across the TRON ecosystem. However, as with any decentralized finance (DeFi) protocol, there are inherent risks involved. To address these, JustLend has implemented robust risk management measures, ensuring user confidence and protocol resilience. Below, we outline the key risks and the steps taken to mitigate them.</p>
 <h3 id="smart-contract-risk"><strong>Smart Contract Risk</strong><a class="headerlink" href="#smart-contract-risk" title="Permanent link">&para;</a></h3>
-<p>Smart contracts are critical to the functioning of the JustLend DAO Protocol, but they can sometimes contain bugs or vulnerabilities in their code, which may compromise the protocol’s security or its reserve tokens. These vulnerabilities could potentially be exploited by malicious actors, affecting the integrity of transactions and liquidity.</p>
+<p>Smart contracts are critical to the functioning of the JustLend Protocol, but they can sometimes contain bugs or vulnerabilities in their code, which may compromise the protocol’s security or its reserve tokens. These vulnerabilities could potentially be exploited by malicious actors, affecting the integrity of transactions and liquidity.</p>
 <h4 id="mitigation-measures">Mitigation Measures:<a class="headerlink" href="#mitigation-measures" title="Permanent link">&para;</a></h4>
 <ul>
-<li><strong>Public Code Audits:</strong> JustLend DAO's smart contract code is publicly available for external audits. It has undergone multiple professional third-party audits by recognized experts to identify and address any vulnerabilities;</li>
-<li><strong>Community Review:</strong> Any proposed changes to the protocol are thoroughly reviewed and approved by the JustLend DAO community before implementation, ensuring collective oversight;</li>
-<li><strong>Bug Bounty Program:</strong> To further reduce the risk of undiscovered vulnerabilities, JustLend DAO runs an ongoing bug bounty program. This incentivizes external developers to identify and report potential issues, allowing them to be fixed before they can cause harm.</li>
+<li><strong>Public Code Audits:</strong> JustLend's smart contract code is publicly available for external audits. It has undergone multiple professional third-party audits by recognized experts to identify and address any vulnerabilities;</li>
+<li><strong>Community Review:</strong> Any proposed changes to the protocol are thoroughly reviewed and approved by the JUST DAO community before implementation, ensuring collective oversight;</li>
+<li><strong>Bug Bounty Program:</strong> To further reduce the risk of undiscovered vulnerabilities, JustLend runs an ongoing bug bounty program. This incentivizes external developers to identify and report potential issues, allowing them to be fixed before they can cause harm.</li>
 </ul>
 <h3 id="oracle-risk"><strong>Oracle Risk</strong><a class="headerlink" href="#oracle-risk" title="Permanent link">&para;</a></h3>
-<p>JustLend DAO relies on third-party oracles to provide essential data, such as price feeds and redemption ratios for liquid staking tokens. While oracles are vital to the protocol, their reliance introduces the risk of incorrect data being provided if an oracle fails or is compromised. This could lead to inaccurate valuations and potentially harmful actions within the protocol, such as incorrect collateral liquidation or improper lending terms.</p>
+<p>JustLend relies on third-party oracles to provide essential data, such as price feeds and redemption ratios for liquid staking tokens. While oracles are vital to the protocol, their reliance introduces the risk of incorrect data being provided if an oracle fails or is compromised. This could lead to inaccurate valuations and potentially harmful actions within the protocol, such as incorrect collateral liquidation or improper lending terms.</p>
 <h4 id="mitigation-measures_1">Mitigation Measures:<a class="headerlink" href="#mitigation-measures_1" title="Permanent link">&para;</a></h4>
 <ul>
-<li><strong>Decentralized Oracles:</strong> To minimize the risks associated with centralization, JustLend DAO utilizes decentralized oracles like Chainlink, which provide tamper-resistant data feeds. This ensures greater reliability and security, as the data is less susceptible to manipulation or errors from a single source;</li>
+<li><strong>Decentralized Oracles:</strong> To minimize the risks associated with centralization, JustLend utilizes decentralized oracles like Chainlink, which provide tamper-resistant data feeds. This ensures greater reliability and security, as the data is less susceptible to manipulation or errors from a single source;</li>
 <li><strong>Community Review:</strong> These decentralized oracles are also equipped with additional security measures that further protect the integrity of the data, reducing the likelihood of inaccurate or malicious inputs.</li>
 </ul>
 <h3 id="collateral-risk"><strong>Collateral Risk</strong><a class="headerlink" href="#collateral-risk" title="Permanent link">&para;</a></h3>
-<p>The assets used as collateral within the JustLend DAO Protocol are subject to market fluctuations. A sharp decline in the value or liquidity of collateral could lead to under-collateralization or even bad debt, which poses a risk to both lenders and the platform as a whole. Without proper safeguards, this could lead to liquidations that do not cover the full value of outstanding loans, resulting in losses for stakeholders.</p>
+<p>The assets used as collateral within the JustLend Protocol are subject to market fluctuations. A sharp decline in the value or liquidity of collateral could lead to under-collateralization or even bad debt, which poses a risk to both lenders and the platform as a whole. Without proper safeguards, this could lead to liquidations that do not cover the full value of outstanding loans, resulting in losses for stakeholders.</p>
 <h4 id="mitigation-measures_2">Mitigation Measures:<a class="headerlink" href="#mitigation-measures_2" title="Permanent link">&para;</a></h4>
 <ul>
-<li><strong>Risk Service Providers:</strong> JustLend DAO partners with reputable risk service providers that continuously monitor the performance of collateral and assess the stability of the market. These services help detect potential risks early and ensure that the collateral remains adequate to cover outstanding loans;</li>
-<li><strong>Risk Parameters:</strong> JustLend DAO has set key risk parameters, such as, which are borrow limit, designed to protect the protocol from sudden market changes. These parameters help ensure that collateral remains sufficient to secure the borrows, reducing the likelihood of under-collateralization;</li>
-<li><strong>Governance Oversight:</strong> The JustLend DAO community and governance framework play a crucial role in adjusting these risk parameters based on market conditions. This allows the protocol to remain adaptable and respond to fluctuations in the market, ensuring a balanced and secure lending environment.</li>
+<li><strong>Risk Service Providers:</strong> JustLend partners with reputable risk service providers that continuously monitor the performance of collateral and assess the stability of the market. These services help detect potential risks early and ensure that the collateral remains adequate to cover outstanding loans;</li>
+<li><strong>Risk Parameters:</strong> JustLend has set key risk parameters, such as, which are borrow limit, designed to protect the protocol from sudden market changes. These parameters help ensure that collateral remains sufficient to secure the borrows, reducing the likelihood of under-collateralization;</li>
+<li><strong>Governance Oversight:</strong> The JUST DAO community and governance framework play a crucial role in adjusting these risk parameters based on market conditions. This allows the protocol to remain adaptable and respond to fluctuations in the market, ensuring a balanced and secure lending environment.</li>
 </ul>
 <h3 id="where-to-monitor-your-positions"><strong>Where to monitor your positions</strong><a class="headerlink" href="#where-to-monitor-your-positions" title="Permanent link">&para;</a></h3>
 <p>The JustLend dApp surfaces every account-level risk metric in one place:</p>
@@ -2291,7 +2295,7 @@
 <li>
 <p><strong>User Information</strong></p>
 </li>
-<li>Incorrect email address: Make sure you have provided a correct email address in the “Risk Alert” service on JustLend DAO and have verified that your address functions well.</li>
+<li>Incorrect email address: Make sure you have provided a correct email address in the “Risk Alert” service on JustLend and have verified that your address functions well.</li>
 </ol>
 
 
@@ -2313,7 +2317,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 10, 2026 08:43:11 UTC">2026-10-10</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 21, 2026 09:10:38 UTC">2026-10-21</span>
   </span>
 
     
