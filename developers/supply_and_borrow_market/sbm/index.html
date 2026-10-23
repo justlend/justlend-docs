@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="JustLend DAO core lending contract reference — jToken (`CErc20Delegator`) function signatures for mint, borrow, repayBorrow, redeem, liquidateBorrow, with TronWeb examples and error codes.">
+        <meta name="description" content="JustLend core lending contract reference — jToken (`CErc20Delegator`) function signatures for mint, borrow, repayBorrow, redeem, liquidateBorrow, with TronWeb examples and error codes.">
       
       
         <meta name="author" content="JustLend DAO">
@@ -142,9 +142,9 @@
             "publisher": { "@id": "https://justlend.org/#org" }
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
-          "description": "JustLend DAO core lending contract reference \u2014 jToken (`CErc20Delegator`) function signatures for mint, borrow, repayBorrow, redeem, liquidateBorrow, with TronWeb examples and error codes.",
-          "dateModified": "2026-10-14",
-          "datePublished": "2026-10-14"
+          "description": "JustLend core lending contract reference \u2014 jToken (`CErc20Delegator`) function signatures for mint, borrow, repayBorrow, redeem, liquidateBorrow, with TronWeb examples and error codes.",
+          "dateModified": "2026-10-22",
+          "datePublished": "2026-10-22"
         }
       ]
     }
@@ -2690,8 +2690,8 @@
 </code></pre></div>
 <p>Standard-compliant TRC20s (e.g. USDD, BTC, WBTC, sTRX) do not have this constraint, but using the safe pattern unconditionally costs only one extra <code>approve(0)</code> when an actual change is needed — cheap insurance.</p>
 </div>
-<p>The JustLend DAO Supply and Borrow Market (SBM) is a decentralized  liquidity pool where users can participate as suppliers, borrowers or liquidators. Suppliers provide liquidity to a market and can earn interest on the assets provided, where borrowers are able to borrow in a collateralize assets way.</p>
-<p>The SBM contract is the main user-facing contract. Most user interactions with the JustLend DAO Protocol occur via the Ctoken contract. It exposes the liquidity management methods that can be invoked using either Solidity or Web3 libraries.</p>
+<p>The JustLend Supply and Borrow Market (SBM) is a decentralized  liquidity pool where users can participate as suppliers, borrowers or liquidators. Suppliers provide liquidity to a market and can earn interest on the assets provided, where borrowers are able to borrow in a collateralize assets way.</p>
+<p>The SBM contract is the main user-facing contract. Most user interactions with the JustLend Protocol occur via the Ctoken contract. It exposes the liquidity management methods that can be invoked using either Solidity or Web3 libraries.</p>
 <p><code>Ctoken.sol:</code> allows users to:</p>
 <ul>
 <li>Supply</li>
@@ -2799,7 +2799,7 @@
 <h2 id="write-interface"><strong>Write Interface</strong><a class="headerlink" href="#write-interface" title="Permanent link">&para;</a></h2>
 <p><a id="borrow"></a></p>
 <h3 id="borrow"><strong>Borrow</strong><a class="headerlink" href="#borrow" title="Permanent link">&para;</a></h3>
-<p>Calling this method borrows assets from JustLend DAO protocol to the sender's owner address.
+<p>Calling this method borrows assets from JustLend protocol to the sender's owner address.
 <div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">borrow</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">borrowAmount</span><span class="p">)</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span>
 </code></pre></div></p>
 <ul>
@@ -2975,7 +2975,7 @@
 </ul>
 </li>
 </ol>
-<p>In addition, JustLend DAO will continuously monitor relevant data and provide an interface for querying high-risk liquidation users. You can <strong>Identify High-Risk Users</strong> by navigating to the <a href="https://docs.justlend.org/developers/apis/">APIs</a> page and calling the <strong>/justlend/liquidate/highRiskAccountList</strong> endpoint.</p>
+<p>In addition, JustLend will continuously monitor relevant data and provide an interface for querying high-risk liquidation users. You can <strong>Identify High-Risk Users</strong> by navigating to the <a href="https://docs.justlend.org/developers/apis/">APIs</a> page and calling the <strong>/justlend/liquidate/highRiskAccountList</strong> endpoint.</p>
 <p><strong>Please note</strong> that there may be a certain delay in the availability of backend data and is for reference only.</p>
 <p>&emsp;</p>
 <p><a id="liquidation-incentive"></a></p>
@@ -3629,7 +3629,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 14, 2026 08:34:59 UTC">2026-10-14</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 22, 2026 03:42:14 UTC">2026-10-22</span>
   </span>
 
     
