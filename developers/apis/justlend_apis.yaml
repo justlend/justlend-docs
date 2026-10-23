@@ -1,8 +1,8 @@
 openapi: 3.1.2
 info:
-  title: JustLend DAO
+  title: JustLend
   description: >-
-    Public read-only REST API for JustLend DAO (markets, account positions, liquidation
+    Public read-only REST API for JustLend (markets, account positions, liquidation
     risk, USDD supply-mining rewards, sTRX staking, Energy Rental — V1 and V2/Moolah).
 
     Conventions: success and business/validation errors are BOTH returned with HTTP 200
