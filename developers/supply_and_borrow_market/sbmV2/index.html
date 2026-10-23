@@ -143,8 +143,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "Official documentation for JustLend DAO \u2014 the largest lending protocol on TRON. Compound V2 architecture. Covers supply / borrow / liquidation, sTRX liquid staking, Energy Rental, governance, deployed contracts (Mainnet + Nile), public OpenAPI, and AI agent integration (llms.txt, contracts.json, JSON ABIs, MCP).",
-          "dateModified": "2026-06-17",
-          "datePublished": "2026-06-17"
+          "dateModified": "2026-10-22",
+          "datePublished": "2026-10-22"
         }
       ]
     }
@@ -2360,7 +2360,7 @@
 
 
 <h1 id="sbm-v2">SBM V2<a class="headerlink" href="#sbm-v2" title="Permanent link">&para;</a></h1>
-<p>JustLend DAO SBM V2 is a fully upgraded decentralized lending protocol built on the TRON network. It introduces a dual-layer <strong>isolated-collateral lending protocol</strong> composed of Vaults and Markets, along with an Adaptive Curve Interest Rate Model (IRM) for dynamic rate adjustment. The SBM V2 system primarily consists of several core smart contracts — <strong>Moolah Market</strong>, <strong>Moolah Vault</strong>, <strong>TRX Provider</strong>, <strong>Resilient Oracle</strong>, and <strong>Interest Rate Model</strong> — each serving a distinct purpose within the ecosystem:</p>
+<p>JustLend SBM V2 is a fully upgraded decentralized lending protocol built on the TRON network. It introduces a dual-layer <strong>isolated-collateral lending protocol</strong> composed of Vaults and Markets, along with an Adaptive Curve Interest Rate Model (IRM) for dynamic rate adjustment. The SBM V2 system primarily consists of several core smart contracts — <strong>Moolah Market</strong>, <strong>Moolah Vault</strong>, <strong>TRX Provider</strong>, <strong>Resilient Oracle</strong>, and <strong>Interest Rate Model</strong> — each serving a distinct purpose within the ecosystem:</p>
 <ul>
 <li><strong>Moolah Market</strong> handles core lending and borrowing operations, including supply, withdrawal, collateral management, and liquidation. <strong>MoolahMarket.sol</strong> allows users to:<ul>
 <li>Supply</li>
@@ -2507,7 +2507,7 @@
 <p><br></p>
 <h2 id="contracts-abi"><strong>Contracts ABI</strong><a class="headerlink" href="#contracts-abi" title="Permanent link">&para;</a></h2>
 <h3 id="moolah-market"><strong>Moolah Market</strong><a class="headerlink" href="#moolah-market" title="Permanent link">&para;</a></h3>
-<p>The JustLend DAO V2 market adopts an isolated-collateral lending protocol, where each market consists of a single collateral asset paired with a single borrowable asset. All markets are managed within the Moolah contract. Each market is uniquely identified by a Market ID, which is composed of the borrowable asset, collateral asset, oracle, interest rate model, and liquidation factor.</p>
+<p>The JustLend V2 market adopts an isolated-collateral lending protocol, where each market consists of a single collateral asset paired with a single borrowable asset. All markets are managed within the Moolah contract. Each market is uniquely identified by a Market ID, which is composed of the borrowable asset, collateral asset, oracle, interest rate model, and liquidation factor.</p>
 <h4 id="1-supply"><strong>1. Supply</strong><a class="headerlink" href="#1-supply" title="Permanent link">&para;</a></h4>
 <p>The supply function allows users to provide liquidity to the market for lending.
 <div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">supply</span><span class="p">(</span>MarketParams<span class="w"> </span><span class="kt">memory</span><span class="w"> </span>marketParams<span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">assets</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">shares</span><span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">onBehalf</span><span class="p">,</span><span class="w"> </span><span class="kt">bytes</span><span class="w"> </span><span class="nv">calldata</span><span class="w"> </span>data<span class="p">)</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint256</span><span class="w"> </span><span class="nv">assetsSupplied</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">sharesSupplied</span><span class="p">)</span>
@@ -3458,7 +3458,7 @@
 </ul>
 <p><br> </p>
 <h3 id="interest-rate-model"><strong>Interest Rate Model</strong><a class="headerlink" href="#interest-rate-model" title="Permanent link">&para;</a></h3>
-<p>JustLend DAO SBM V2 adopts the Adaptive Curve Interest Rate Model, an enhanced version of the Jump Curve model from JustLend DAO SBM V1. This upgraded model introduces dynamic adjustments, enabling interest rates to automatically adapt in real time to maintain market utilization around the optimal target level.</p>
+<p>JustLend SBM V2 adopts the Adaptive Curve Interest Rate Model, an enhanced version of the Jump Curve model from JustLend SBM V1. This upgraded model introduces dynamic adjustments, enabling interest rates to automatically adapt in real time to maintain market utilization around the optimal target level.</p>
 <h4 id="1-default-targetutilization"><strong>1. Default TargetUtilization</strong><a class="headerlink" href="#1-default-targetutilization" title="Permanent link">&para;</a></h4>
 <p>This value defines the optimal utilization level that the interest rate model aims to maintain. Under normal circumstances, it remains constant and only changes when the underlying interest rate model implementation is replaced.
 <div class="highlight"><pre><span></span><code><span class="kt">function</span><span class="w"> </span><span class="nv">defaultTargetUtilization</span><span class="p">()</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span>view<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">int256</span><span class="p">)</span>
@@ -3506,7 +3506,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 17, 2026 12:06:36 UTC">2026-06-17</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 22, 2026 03:44:25 UTC">2026-10-22</span>
   </span>
 
     
