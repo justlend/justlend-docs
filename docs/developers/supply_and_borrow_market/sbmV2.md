@@ -1,6 +1,6 @@
 # SBM V2
 
-JustLend DAO SBM V2 is a fully upgraded decentralized lending protocol built on the TRON network. It introduces a dual-layer **isolated-collateral lending protocol** composed of Vaults and Markets, along with an Adaptive Curve Interest Rate Model (IRM) for dynamic rate adjustment. The SBM V2 system primarily consists of several core smart contracts — **Moolah Market**, **Moolah Vault**, **TRX Provider**, **Resilient Oracle**, and **Interest Rate Model** — each serving a distinct purpose within the ecosystem:
+JustLend SBM V2 is a fully upgraded decentralized lending protocol built on the TRON network. It introduces a dual-layer **isolated-collateral lending protocol** composed of Vaults and Markets, along with an Adaptive Curve Interest Rate Model (IRM) for dynamic rate adjustment. The SBM V2 system primarily consists of several core smart contracts — **Moolah Market**, **Moolah Vault**, **TRX Provider**, **Resilient Oracle**, and **Interest Rate Model** — each serving a distinct purpose within the ecosystem:
 
 * **Moolah Market** handles core lending and borrowing operations, including supply, withdrawal, collateral management, and liquidation. **MoolahMarket.sol** allows users to:
     * Supply
@@ -159,7 +159,7 @@ struct Signature {
 ## **Contracts ABI**
 
 ### **Moolah Market**
-The JustLend DAO V2 market adopts an isolated-collateral lending protocol, where each market consists of a single collateral asset paired with a single borrowable asset. All markets are managed within the Moolah contract. Each market is uniquely identified by a Market ID, which is composed of the borrowable asset, collateral asset, oracle, interest rate model, and liquidation factor.
+The JustLend V2 market adopts an isolated-collateral lending protocol, where each market consists of a single collateral asset paired with a single borrowable asset. All markets are managed within the Moolah contract. Each market is uniquely identified by a Market ID, which is composed of the borrowable asset, collateral asset, oracle, interest rate model, and liquidation factor.
 
 
 #### **1. Supply**
@@ -950,7 +950,7 @@ function peek(address asset) external view override returns (uint256)
 <br> 
 
 ### **Interest Rate Model**
-JustLend DAO SBM V2 adopts the Adaptive Curve Interest Rate Model, an enhanced version of the Jump Curve model from JustLend DAO SBM V1. This upgraded model introduces dynamic adjustments, enabling interest rates to automatically adapt in real time to maintain market utilization around the optimal target level.
+JustLend SBM V2 adopts the Adaptive Curve Interest Rate Model, an enhanced version of the Jump Curve model from JustLend SBM V1. This upgraded model introduces dynamic adjustments, enabling interest rates to automatically adapt in real time to maintain market utilization around the optimal target level.
 
 
 #### **1. Default TargetUtilization**
