@@ -1,12 +1,12 @@
 ---
 title: Energy Rental — contract reference
-description: JustLend DAO EnergyRental contract reference — rentResource, returnResource, returnResourceByReceiver, liquidate, getRentInfo, plus TronWeb examples. Powers the one-to-many TRON Energy marketplace.
+description: JustLend EnergyRental contract reference — rentResource, returnResource, returnResourceByReceiver, liquidate, getRentInfo, plus TronWeb examples. Powers the one-to-many TRON Energy marketplace.
 ---
 
 # Energy Rental
 
 !!! info "About this page"
-    * **Protocol:** JustLend DAO Energy Rental (one-to-many TRON Energy marketplace)
+    * **Protocol:** JustLend Energy Rental (one-to-many TRON Energy marketplace)
     * **Network:** TRON Mainnet
     * **Contract:** [`TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd`](https://tronscan.org/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd)
     * **Units:** contract `amount` parameters refer to **delegated TRX in sun** (1 TRX = 10^6 sun), **not** energy units. Divide target energy by `energyStakePerTrx` to obtain whole TRX, then convert to sun before a contract call.
@@ -16,7 +16,7 @@ description: JustLend DAO EnergyRental contract reference — rentResource, retu
     * **ABI:** [`abis/energy-market.json`](abis/energy-market.json), rate model in [`abis/energy-rate-model.json`](abis/energy-rate-model.json).
 
 
-All transactions on JustLend DAO require Energy, which can only be acquired through staking or burning TRX. This process involves high costs and lengthy procedures. In response, JustLend DAO introduces the Energy Rental service, allowing users to rent Energy at a significantly reduced price compared to staking or burning TRX.
+All transactions on JustLend require Energy, which can only be acquired through staking or burning TRX. This process involves high costs and lengthy procedures. In response, JustLend introduces the Energy Rental service, allowing users to rent Energy at a significantly reduced price compared to staking or burning TRX.
 The contract [EnergyRental](https://tronscan.org/#/contract/TU2MJ5Veik1LRAgjeSzEdvmDYx7mefJZvd) used to set up the Energy Rental service.
 
 
