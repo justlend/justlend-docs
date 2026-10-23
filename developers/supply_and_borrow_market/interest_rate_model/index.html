@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="JustLend DAO interest-rate model reference — WhitePaperInterestRateModel (linear) and JumpRateModelV2 (kinked). One model contract instance per market, immutable; parameter changes deploy a new contract and call `_setInterestRateModel`.">
+        <meta name="description" content="JustLend interest-rate model reference — WhitePaperInterestRateModel (linear) and JumpRateModelV2 (kinked). One model contract instance per market, immutable; parameter changes deploy a new contract and call `_setInterestRateModel`.">
       
       
         <meta name="author" content="JustLend DAO">
@@ -142,9 +142,9 @@
             "publisher": { "@id": "https://justlend.org/#org" }
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
-          "description": "JustLend DAO interest-rate model reference \u2014 WhitePaperInterestRateModel (linear) and JumpRateModelV2 (kinked). One model contract instance per market, immutable; parameter changes deploy a new contract and call `_setInterestRateModel`.",
-          "dateModified": "2026-10-09",
-          "datePublished": "2026-10-09"
+          "description": "JustLend interest-rate model reference \u2014 WhitePaperInterestRateModel (linear) and JumpRateModelV2 (kinked). One model contract instance per market, immutable; parameter changes deploy a new contract and call `_setInterestRateModel`.",
+          "dateModified": "2026-10-22",
+          "datePublished": "2026-10-22"
         }
       ]
     }
@@ -2259,7 +2259,7 @@
 <div class="admonition info">
 <p class="admonition-title">About this page</p>
 <ul>
-<li><strong>Protocol:</strong> JustLend DAO</li>
+<li><strong>Protocol:</strong> JustLend</li>
 <li><strong>Network:</strong> TRON Mainnet</li>
 <li><strong>Models in use:</strong> <code>WhitePaperInterestRateModel</code> (linear: <code>borrowRate(u) = a × u + b</code>) and <code>JumpRateModelV2</code> (kinked: linear below <code>kink</code>, steeper above).</li>
 <li><strong>Immutability:</strong> each market's rate model is its own deployed contract; parameter changes require deploying a fresh contract and routing <code>_setInterestRateModel(newModel)</code> through Governance. Past instances remain on chain but unused.</li>
@@ -2268,12 +2268,12 @@
 <li><strong>ABI:</strong> <a href="../../abis/interest-rate-model.json"><code>abis/interest-rate-model.json</code></a>.</li>
 </ul>
 </div>
-<p>JustLend DAO's interest rate model aims to maximize the utilization of assets while effectively managing liquidity risks. Therefore, the parameter utilization rate U of each market is particularly important, as it reflects the true situation of the available assets in each market. As the utilization rate approaches 100%, assets become scarce, making borrowing impossible.  Meanwhile, suppliers may be unable to withdraw their liquidity due to the lack of available assets. The formula of the utilization U is defined as:</p>
+<p>JustLend's interest rate model aims to maximize the utilization of assets while effectively managing liquidity risks. Therefore, the parameter utilization rate U of each market is particularly important, as it reflects the true situation of the available assets in each market. As the utilization rate approaches 100%, assets become scarce, making borrowing impossible.  Meanwhile, suppliers may be unable to withdraw their liquidity due to the lack of available assets. The formula of the utilization U is defined as:</p>
 <div style="text-align: center; font-size: 20px;">
     U = Total Borrows / Total Supply
 </div>
 
-<p>To calibrate the interest rate model around an optimal utilization rate which reflects the real conditions, JustLend DAO provides variable interest rates for markets through two distinct interest models:</p>
+<p>To calibrate the interest rate model around an optimal utilization rate which reflects the real conditions, JustLend provides variable interest rates for markets through two distinct interest models:</p>
 <ul>
 <li><code>WhitePaperInterestRateModel:</code> a simple interest rate model where the borrowing rate is directly tied to the utilization rate;</li>
 <li><code>JumpRateModelV2::</code> operates differently, as the interest rate jumps to a higher tier when the utilization rate surpasses a certain threshold.</li>
@@ -2363,7 +2363,7 @@ The interest rate is defined as below.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 9, 2026 07:46:53 UTC">2026-10-09</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 22, 2026 03:46:02 UTC">2026-10-22</span>
   </span>
 
     

@@ -1,12 +1,12 @@
 ---
 title: Interest Rate Model
-description: JustLend DAO interest-rate model reference — WhitePaperInterestRateModel (linear) and JumpRateModelV2 (kinked). One model contract instance per market, immutable; parameter changes deploy a new contract and call `_setInterestRateModel`.
+description: JustLend interest-rate model reference — WhitePaperInterestRateModel (linear) and JumpRateModelV2 (kinked). One model contract instance per market, immutable; parameter changes deploy a new contract and call `_setInterestRateModel`.
 ---
 
 # Interest Rate Model
 
 !!! info "About this page"
-    * **Protocol:** JustLend DAO
+    * **Protocol:** JustLend
     * **Network:** TRON Mainnet
     * **Models in use:** `WhitePaperInterestRateModel` (linear: `borrowRate(u) = a × u + b`) and `JumpRateModelV2` (kinked: linear below `kink`, steeper above).
     * **Immutability:** each market's rate model is its own deployed contract; parameter changes require deploying a fresh contract and routing `_setInterestRateModel(newModel)` through Governance. Past instances remain on chain but unused.
@@ -15,13 +15,13 @@ description: JustLend DAO interest-rate model reference — WhitePaperInterestRa
     * **ABI:** [`abis/interest-rate-model.json`](../abis/interest-rate-model.json).
 
 
-JustLend DAO's interest rate model aims to maximize the utilization of assets while effectively managing liquidity risks. Therefore, the parameter utilization rate U of each market is particularly important, as it reflects the true situation of the available assets in each market. As the utilization rate approaches 100%, assets become scarce, making borrowing impossible.  Meanwhile, suppliers may be unable to withdraw their liquidity due to the lack of available assets. The formula of the utilization U is defined as:
+JustLend's interest rate model aims to maximize the utilization of assets while effectively managing liquidity risks. Therefore, the parameter utilization rate U of each market is particularly important, as it reflects the true situation of the available assets in each market. As the utilization rate approaches 100%, assets become scarce, making borrowing impossible.  Meanwhile, suppliers may be unable to withdraw their liquidity due to the lack of available assets. The formula of the utilization U is defined as:
 
 <div style="text-align: center; font-size: 20px;">
     U = Total Borrows / Total Supply
 </div>
 
-To calibrate the interest rate model around an optimal utilization rate which reflects the real conditions, JustLend DAO provides variable interest rates for markets through two distinct interest models:
+To calibrate the interest rate model around an optimal utilization rate which reflects the real conditions, JustLend provides variable interest rates for markets through two distinct interest models:
 
 * `WhitePaperInterestRateModel:` a simple interest rate model where the borrowing rate is directly tied to the utilization rate;
 * `JumpRateModelV2::` operates differently, as the interest rate jumps to a higher tier when the utilization rate surpasses a certain threshold.
