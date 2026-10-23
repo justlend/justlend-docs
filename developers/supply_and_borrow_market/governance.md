@@ -1,12 +1,12 @@
 ---
 title: Governance — GovernorBravo + WJST + Timelock
-description: JustLend DAO governance contract reference — propose, vote, queue, execute through GovernorBravo. JST → WJST 1:1 wrapping gives voting power; a 48-hour Timelock executes successful proposals.
+description: JustLend governance contract reference — propose, vote, queue, execute through GovernorBravo. JST → WJST 1:1 wrapping gives voting power; a 48-hour Timelock executes successful proposals.
 ---
 
 # Governance
 
 !!! info "About this page"
-    * **Protocol:** JustLend DAO
+    * **Protocol:** JustLend
     * **Network:** TRON Mainnet
     * **Components:** `JST` (TRC20, `TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9`) → `WJST` (voting wrapper, deposit JST → receive WJST 1:1) → `GovernorBravoDelegator` (entrypoint, `TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD`) → `GovernorBravoDelegate` (impl, `TUeNh9BsYK44XePmFAuKZWg2rJuU7bSt5u`) → `Timelock` (executor, `TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x`, **`delay() = 172,800 sec = 48 hours`** verified on-chain). **Always call the Delegator**, not the Delegate.
     * **Voting power:** 1 JST wrapped as WJST = 1 whole vote. Approval requires For votes > Against votes AND For votes >= 600,000,000 (`quorumVotes()`). Non-whitelisted proposers need available WJST strictly greater than 200,000,000 (`proposalThreshold()`), not merely that many JST in a wallet.
@@ -16,8 +16,8 @@ description: JustLend DAO governance contract reference — propose, vote, queue
     * **Implementation check:** `implementation()` on the Governor proxy returned the implementation above on **2026-10-14**, agreeing with the 2026-10-12 read. This corrects a documentation pointer; it does not deploy or upgrade a contract, and the entrypoint remains the proxy. See [address verification](../deployed_contracts.md#address-verification) and [ABI provenance](../abis/index.md#scope-and-provenance). Re-read it after an upgrade.
     * **Discussion forum** (off-chain, pre-proposal): <https://forum.justlend.org>.
 
-JustLend DAO protocol is governed and upgraded by JST holders. There are three components included in the governance system: [JST](https://tronscan.org/#/token20/TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9)([WJST](https://tronscan.org/#/contract/TXk9LnTnLN7oH96H3sKxJayMxLxR9M4ZD6/code)) token,
-governance module([GovernorBravo](https://tronscan.org/#/contract/TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD/code)) and [Timelock](https://tronscan.org/#/contract/TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x). The governance of the JustLend DAO protocol is through proposals, whose process can be summarized as proposal posting-voting-taking effect.
+JustLend protocol is governed and upgraded by JST holders. There are three components included in the governance system: [JST](https://tronscan.org/#/token20/TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9)([WJST](https://tronscan.org/#/contract/TXk9LnTnLN7oH96H3sKxJayMxLxR9M4ZD6/code)) token,
+governance module([GovernorBravo](https://tronscan.org/#/contract/TEqiF5JbhDPD77yjEfnEMncGRZNDt2uogD/code)) and [Timelock](https://tronscan.org/#/contract/TRWNvb15NmfNKNLhQpxefFz7cNjrYjEw7x). The governance of the JustLend protocol is through proposals, whose process can be summarized as proposal posting-voting-taking effect.
 
 `GovernorBravoDelegate.sol:` allows users to:
 
@@ -46,7 +46,7 @@ Re-read the parameters and implementation after upgrades. Approval is not execut
 ## **Proposals**
 
 ### **Propose**
-Calling this method creates a proposal to change & update the JustLend DAO protocol.
+Calling this method creates a proposal to change & update the JustLend protocol.
 ``` solidity
 function propose(address[] memory targets, uint[] memory values, string[] memory signatures, bytes[] memory calldatas, string memory description) public returns (uint)
 ```
