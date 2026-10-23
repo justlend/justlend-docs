@@ -1,12 +1,12 @@
 ---
 title: Contracts Overview
-description: Architecture summary of every JustLend DAO contract on TRON — SBM jTokens, Comptroller, interest rate models, price oracle, governance, sTRX, Energy Rental — with proxy mode, ABI links, and key functions in one table.
+description: Architecture summary of every JustLend contract on TRON — SBM jTokens, Comptroller, interest rate models, price oracle, governance, sTRX, Energy Rental — with proxy mode, ABI links, and key functions in one table.
 ---
 
 # Contracts Overview
 
 !!! info "About this page"
-    * **Protocol:** JustLend DAO
+    * **Protocol:** JustLend
     * **Network:** TRON Mainnet (Base58 addresses; see [`/developers/contracts.json`](contracts.json) for Mainnet + Nile addresses in Base58, EVM `0x` hex, and TRON-internal `41` hex) 
     * **Architecture:** Compound V2 fork
     * **Markets:** 18 active + 6 legacy = 24 jToken markets (authoritative list: [APIs §2](apis.md#2-jtoken-address-reference))
@@ -15,9 +15,9 @@ description: Architecture summary of every JustLend DAO contract on TRON — SBM
 
 ## Architecture summary
 
-JustLend DAO Protocol contracts are divided in these repositories:
+JustLend Protocol contracts are divided in these repositories:
 
-* **Supply and Borrow Market:** contains core contracts for JustLend DAO, including logic for supply and borrow market (SBM), supply and borrow market V2 (SBM V2), interest rate model, governance, price oracle and comptroller.
+* **Supply and Borrow Market:** contains core contracts for JustLend, including logic for supply and borrow market (SBM), supply and borrow market V2 (SBM V2), interest rate model, governance, price oracle and comptroller.
   * **SBM:** enables supplying of crypto assets as collateral in order to borrow the base asset. Accounts can also earn interest by supplying the base asset to the protocol.
   * **SBM V2:** an isolated-collateral lending protocol with a dual-layer structure of Vaults and Markets, along with an Adaptive Curve Interest Rate Model (IRM) for dynamic rate adjustment.
   * **Interest Rate Model:** users with a positive balance of the base asset earn interest, denominated in the base asset, based on a supply rate model.
@@ -39,7 +39,7 @@ JustLend DAO Protocol contracts are divided in these repositories:
 * Comptroller Contract
 
 #### JTokens Contract
-`JToken:` the contract used to support all assets by JustLend DAO, such as the jTRX, jUSDT, jSUN and jBTC you receive after supplying the corresponding assets.
+`JToken:` the contract used to support all assets by JustLend, such as the jTRX, jUSDT, jSUN and jBTC you receive after supplying the corresponding assets.
 
 For the selected Mainnet pointers, see [address verification methods](deployed_contracts.md#address-verification). The [ABI scope and provenance](abis/index.md#scope-and-provenance) describe which interfaces use node ABI, compiler output or pinned source and which deployments remain outside their scope.
 
@@ -85,7 +85,7 @@ For the selected Mainnet pointers, see [address verification methods](deployed_c
 `Resilient Oracle:` an aggregated price feed contract that supports up to three price sources for each token. It provides reliable on-chain price data with 18-decimal precision and allows users or protocols to query the latest price of any supported token. 
 
 #### Interest Rate Model
-`IRM:` the Adaptive Curve Interest Rate Model. It builds upon the Jump Curve model used in JustLend DAO V1, but adds dynamic adaptability, allowing real-time rate adjustments to keep market utilization near an optimal level.
+`IRM:` the Adaptive Curve Interest Rate Model. It builds upon the Jump Curve model used in JustLend V1, but adds dynamic adaptability, allowing real-time rate adjustments to keep market utilization near an optimal level.
 
 
 ## **Staked TRX Contracts**
