@@ -1,12 +1,12 @@
 ---
 title: Comptroller — risk management module
-description: JustLend DAO Comptroller contract reference — enterMarkets, exitMarket, getAccountLiquidity, markets, closeFactor, liquidationIncentive. The Unitroller proxy is the entrypoint; the Comptroller impl is rotated by governance.
+description: JustLend Comptroller contract reference — enterMarkets, exitMarket, getAccountLiquidity, markets, closeFactor, liquidationIncentive. The Unitroller proxy is the entrypoint; the Comptroller impl is rotated by governance.
 ---
 
 # Comptroller
 
 !!! info "About this page"
-    * **Protocol:** JustLend DAO
+    * **Protocol:** JustLend
     * **Network:** TRON Mainnet
     * **Pattern:** `Unitroller` (proxy, `TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7`) → `Comptroller` (impl, `TETm1bMHUm9135d5NmUgfkvqZQ4bk6DgWs`). Implementation pointer is rotated via Governance proposals (`_setPendingImplementation` + `_acceptImplementation`)
     * **Always call `Unitroller`** — calling the impl address directly does not route through governance state.
@@ -16,7 +16,7 @@ description: JustLend DAO Comptroller contract reference — enterMarkets, exitM
     * **Before integrating:** [Common Pitfalls — `enterMarkets` requirement, decimals mismatch, close-factor cap](../common_pitfalls.md). Term definitions: [Glossary](../../resources/glossary.md).
 
 
-The Comptroller is the risk management module of the JustLend DAO protocol. It determines how much collateral should users keep to avoid liquidation.
+The Comptroller is the risk management module of the JustLend protocol. It determines how much collateral should users keep to avoid liquidation.
 The Comptroller is implemented as an upgradable contract. The entrance is [Unitroller](https://tronscan.org/#/contract/TGjYzgCyPobsNS9n6WcbdLVR9dH7mWqFx7/code); the implementation is [Comptroller](https://tronscan.org/#/contract/TJZi9eWzCLGBi9tuwvPxnaZTGa2iUpRc8v/code).
 
 `Comptroller.sol:` allows users to:
