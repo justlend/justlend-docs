@@ -1,12 +1,12 @@
 ---
 title: Staked TRX (sTRX) — contract reference
-description: JustLend DAO sTRX liquid-staking contract reference — exchangeRate, deposit, withdraw, withdrawExact, claim, claimAll, plus TronWeb examples. Backs the user-facing sTRX feature on TRON.
+description: JustLend sTRX liquid-staking contract reference — exchangeRate, deposit, withdraw, withdrawExact, claim, claimAll, plus TronWeb examples. Backs the user-facing sTRX feature on TRON.
 ---
 
 # Staked TRX
 
 !!! info "About this page"
-    * **Protocol:** JustLend DAO sTRX (one-click liquid staking under TRON Stake 2.0)
+    * **Protocol:** JustLend sTRX (one-click liquid staking under TRON Stake 2.0)
     * **Network:** TRON Mainnet
     * **Contract:** [`TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5`](https://tronscan.org/#/token20/TU3kjFuhtEo42tsCBtfYUAZxoqQ4yuSLQ5)
     * **Units:** Prices are denominated in **TRX** , scaled by `1e^(33 - tokenDecimal)`; sTRX is an 18-decimal TRC20; `exchangeRate()` is scaled by `1e18`, always ≥ 1, grows monotonically as rewards accrue.
