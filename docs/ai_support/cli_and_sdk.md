@@ -12,6 +12,8 @@ tags:
 
 # JustLend CLI and V2 SDK
 
+Recommended Node.js version for the CLI and server-side SDK integrations: **24.22.1**.
+
 JustLend provides two source-distributed integration surfaces in addition to the HTTP API, MCP server, and Skills package:
 
 | Surface | Repository | Current version | Best for | Side effects |
