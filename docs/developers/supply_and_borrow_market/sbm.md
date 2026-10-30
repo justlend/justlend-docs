@@ -186,8 +186,8 @@ Borrow(address borrower, uint borrowAmount, uint accountBorrows, uint totalBorro
 * Emits when user successfully borrow.
     * `borrower:` address of borrow assets account;
     * `borrowAmount:` the amount of borrowed assets;
-    * `accountBorrows:` the account borrow the assets;
-    * `totalBorrows:` total borrow assets form the account;
+    * `accountBorrows:` the borrower's debt balance;
+    * `totalBorrows:` the total debt balance of all borrowers in the market;
     * `borrowIndex:` the index of this borrow order.
 
 
@@ -219,8 +219,8 @@ RepayBorrow(address payer, address borrower, uint repayAmount, uint accountBorro
     * `payer:` operate repay borrow;
     * `borrower:` address of borrow assets account;
     * `repayAmount:` the amount of repaid assets;
-    * `accountBorrows:` the account borrow the assets;
-    * `totalBorrows:` total borrow assets form the account;
+    * `accountBorrows:` the borrower's debt balance;
+    * `totalBorrows:` the total debt balance of all borrowers in the market;
     * `borrowIndex:` the index of this borrow order.
 
 
