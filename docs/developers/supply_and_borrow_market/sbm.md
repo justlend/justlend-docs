@@ -176,7 +176,7 @@ function borrow(uint borrowAmount) external returns (uint)
 
 * **Parameter description:**
     * `borrowAmount:` the amount of the underlying asset to borrow.
-* **Returns:** None, reverts on error.
+* **Returns:** 0 for success。Partial failures return a non-zero error code and a Failure event, with rollbacks triggered only for specific exceptions.
 
 #### **Event**
 ``` solidity
@@ -278,7 +278,7 @@ function redeem(uint redeemTokens) external returns (uint)
 
 * **Parameter description:**
     * `redeemTokens:`  the number of jTokens to redeem into underlying.
-* **Returns:** 0 for success, reverts on error.
+* **Returns:** 0 for success。Partial failures return a non-zero error code and a Failure event, with rollbacks triggered only for specific exceptions.
 
 #### **Event**
 ``` solidity
@@ -301,7 +301,7 @@ function redeemUnderlying(uint redeemAmount) external returns (uint)
 
 * **Parameter description:**
     * `redeemAmount:` the amount of underlying to redeem.
-* **Returns:** 0 for success, reverts on error.
+* **Returns:** 0 for success。Partial failures return a non-zero error code and a Failure event, with rollbacks triggered only for specific exceptions.
 
 
 ### **Transfer**
