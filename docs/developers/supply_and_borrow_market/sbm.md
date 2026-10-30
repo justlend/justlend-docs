@@ -384,7 +384,7 @@ function liquidateBorrow(address borrower, uint repayAmount, address jTokenColla
 * **Parameter description:**
     * `borrower:` address of a liquidated account.
     * `repayAmount:` amount of token to be repaid in the event of liquidation (measured in the borrowed asset).
-    * `jTokenCollateral:` address of the jTOKEN contract to set aside the collateralized asset of a borrower.
+    * `jTokenCollateral:` address of the jToken contract to set aside the collateralized asset of a borrower.
 * **Returns:** 0 on success, otherwise an Error code.
 
 
@@ -398,7 +398,7 @@ function liquidateBorrow(address borrower, address jTokenCollateral) payable
 
 * **Parameter description:**
     * `borrower:` address of a liquidated account.
-    * `jTokenCollateral:` address of the jTRX contract to set aside the collateralized asset of a borrower.
+    * `jTokenCollateral:` address of the jToken contract to set aside the collateralized asset of a borrower.
     * `msg.value:` amount of TRX to be repaid in the event of liquidation.
 * **Returns:** No return. If any error occurs, the transaction will be reverted.
 
@@ -411,7 +411,7 @@ LiquidateBorrow(address liquidator, address borrower, uint repayAmount, address 
     * `liquidator:` operate liquidation;
     * `borrower:` address of a liquidated account;
     * `repayAmount:` the amount of repaid assets;
-    * `cTokenCollateral:` address of the jTRX contract to set aside the collateralized asset of a borrower；
+    * `cTokenCollateral:` address of the jToken contract to set aside the collateralized asset of a borrower；
     * `seizeTokens:` the tokens need to be liquidated.
 
 &emsp;
