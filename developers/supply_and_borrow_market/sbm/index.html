@@ -143,8 +143,8 @@
           },
           "about": { "@id": "https://docs.justlend.org/#protocol" },
           "description": "JustLend core lending contract reference \u2014 jToken (`CErc20Delegator`) function signatures for mint, borrow, repayBorrow, redeem, liquidateBorrow, with TronWeb examples and error codes.",
-          "dateModified": "2026-10-22",
-          "datePublished": "2026-10-22"
+          "dateModified": "2026-10-30",
+          "datePublished": "2026-10-30"
         }
       ]
     }
@@ -2807,7 +2807,7 @@
 <li><code>borrowAmount:</code> the amount of the underlying asset to borrow.</li>
 </ul>
 </li>
-<li><strong>Returns:</strong> None, reverts on error.</li>
+<li><strong>Returns:</strong> 0 for success。Partial failures return a non-zero error code and a Failure event, with rollbacks triggered only for specific exceptions.</li>
 </ul>
 <h4 id="event"><strong>Event</strong><a class="headerlink" href="#event" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code>Borrow<span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">borrower</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">borrowAmount</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">accountBorrows</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">totalBorrows</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">borrowIndex</span><span class="p">)</span>
@@ -2816,8 +2816,8 @@
 <li>Emits when user successfully borrow.<ul>
 <li><code>borrower:</code> address of borrow assets account;</li>
 <li><code>borrowAmount:</code> the amount of borrowed assets;</li>
-<li><code>accountBorrows:</code> the account borrow the assets;</li>
-<li><code>totalBorrows:</code> total borrow assets form the account;</li>
+<li><code>accountBorrows:</code> the borrower's debt balance;</li>
+<li><code>totalBorrows:</code> the total debt balance of all borrowers in the market;</li>
 <li><code>borrowIndex:</code> the index of this borrow order.</li>
 </ul>
 </li>
@@ -2848,8 +2848,8 @@
 <li><code>payer:</code> operate repay borrow;</li>
 <li><code>borrower:</code> address of borrow assets account;</li>
 <li><code>repayAmount:</code> the amount of repaid assets;</li>
-<li><code>accountBorrows:</code> the account borrow the assets;</li>
-<li><code>totalBorrows:</code> total borrow assets form the account;</li>
+<li><code>accountBorrows:</code> the borrower's debt balance;</li>
+<li><code>totalBorrows:</code> the total debt balance of all borrowers in the market;</li>
 <li><code>borrowIndex:</code> the index of this borrow order.</li>
 </ul>
 </li>
@@ -2907,7 +2907,7 @@
 <li><code>redeemTokens:</code>  the number of jTokens to redeem into underlying.</li>
 </ul>
 </li>
-<li><strong>Returns:</strong> 0 for success, reverts on error.</li>
+<li><strong>Returns:</strong> 0 for success。Partial failures return a non-zero error code and a Failure event, with rollbacks triggered only for specific exceptions.</li>
 </ul>
 <h4 id="event_3"><strong>Event</strong><a class="headerlink" href="#event_3" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code>Redeem<span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">redeemer</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">redeemAmount</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">redeemTokens</span><span class="p">)</span>
@@ -2930,7 +2930,7 @@
 <li><code>redeemAmount:</code> the amount of underlying to redeem.</li>
 </ul>
 </li>
-<li><strong>Returns:</strong> 0 for success, reverts on error.</li>
+<li><strong>Returns:</strong> 0 for success。Partial failures return a non-zero error code and a Failure event, with rollbacks triggered only for specific exceptions.</li>
 </ul>
 <h3 id="transfer"><strong>Transfer</strong><a class="headerlink" href="#transfer" title="Permanent link">&para;</a></h3>
 <p>Calling this method transfers a specified amount of jtokens to the destination. This action will fail if the account's liquidity become negative due to the transfer.
@@ -3014,7 +3014,7 @@
 <li><strong>Parameter description:</strong><ul>
 <li><code>borrower:</code> address of a liquidated account.</li>
 <li><code>repayAmount:</code> amount of token to be repaid in the event of liquidation (measured in the borrowed asset).</li>
-<li><code>jTokenCollateral:</code> address of the jTOKEN contract to set aside the collateralized asset of a borrower.</li>
+<li><code>jTokenCollateral:</code> address of the jToken contract to set aside the collateralized asset of a borrower.</li>
 </ul>
 </li>
 <li><strong>Returns:</strong> 0 on success, otherwise an Error code.</li>
@@ -3027,7 +3027,7 @@
 <ul>
 <li><strong>Parameter description:</strong><ul>
 <li><code>borrower:</code> address of a liquidated account.</li>
-<li><code>jTokenCollateral:</code> address of the jTRX contract to set aside the collateralized asset of a borrower.</li>
+<li><code>jTokenCollateral:</code> address of the jToken contract to set aside the collateralized asset of a borrower.</li>
 <li><code>msg.value:</code> amount of TRX to be repaid in the event of liquidation.</li>
 </ul>
 </li>
@@ -3041,7 +3041,7 @@
 <li><code>liquidator:</code> operate liquidation;</li>
 <li><code>borrower:</code> address of a liquidated account;</li>
 <li><code>repayAmount:</code> the amount of repaid assets;</li>
-<li><code>cTokenCollateral:</code> address of the jTRX contract to set aside the collateralized asset of a borrower；</li>
+<li><code>cTokenCollateral:</code> address of the jToken contract to set aside the collateralized asset of a borrower；</li>
 <li><code>seizeTokens:</code> the tokens need to be liquidated.</li>
 </ul>
 </li>
@@ -3629,7 +3629,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 22, 2026 03:42:14 UTC">2026-10-22</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 30, 2026 07:39:58 UTC">2026-10-30</span>
   </span>
 
     

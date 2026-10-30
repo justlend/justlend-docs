@@ -176,7 +176,7 @@ function borrow(uint borrowAmount) external returns (uint)
 
 * **Parameter description:**
     * `borrowAmount:` the amount of the underlying asset to borrow.
-* **Returns:** None, reverts on error.
+* **Returns:** 0 for success。Partial failures return a non-zero error code and a Failure event, with rollbacks triggered only for specific exceptions.
 
 #### **Event**
 ``` solidity
@@ -186,8 +186,8 @@ Borrow(address borrower, uint borrowAmount, uint accountBorrows, uint totalBorro
 * Emits when user successfully borrow.
     * `borrower:` address of borrow assets account;
     * `borrowAmount:` the amount of borrowed assets;
-    * `accountBorrows:` the account borrow the assets;
-    * `totalBorrows:` total borrow assets form the account;
+    * `accountBorrows:` the borrower's debt balance;
+    * `totalBorrows:` the total debt balance of all borrowers in the market;
     * `borrowIndex:` the index of this borrow order.
 
 
@@ -219,8 +219,8 @@ RepayBorrow(address payer, address borrower, uint repayAmount, uint accountBorro
     * `payer:` operate repay borrow;
     * `borrower:` address of borrow assets account;
     * `repayAmount:` the amount of repaid assets;
-    * `accountBorrows:` the account borrow the assets;
-    * `totalBorrows:` total borrow assets form the account;
+    * `accountBorrows:` the borrower's debt balance;
+    * `totalBorrows:` the total debt balance of all borrowers in the market;
     * `borrowIndex:` the index of this borrow order.
 
 
@@ -278,7 +278,7 @@ function redeem(uint redeemTokens) external returns (uint)
 
 * **Parameter description:**
     * `redeemTokens:`  the number of jTokens to redeem into underlying.
-* **Returns:** 0 for success, reverts on error.
+* **Returns:** 0 for success。Partial failures return a non-zero error code and a Failure event, with rollbacks triggered only for specific exceptions.
 
 #### **Event**
 ``` solidity
@@ -301,7 +301,7 @@ function redeemUnderlying(uint redeemAmount) external returns (uint)
 
 * **Parameter description:**
     * `redeemAmount:` the amount of underlying to redeem.
-* **Returns:** 0 for success, reverts on error.
+* **Returns:** 0 for success。Partial failures return a non-zero error code and a Failure event, with rollbacks triggered only for specific exceptions.
 
 
 ### **Transfer**
@@ -384,7 +384,7 @@ function liquidateBorrow(address borrower, uint repayAmount, address jTokenColla
 * **Parameter description:**
     * `borrower:` address of a liquidated account.
     * `repayAmount:` amount of token to be repaid in the event of liquidation (measured in the borrowed asset).
-    * `jTokenCollateral:` address of the jTOKEN contract to set aside the collateralized asset of a borrower.
+    * `jTokenCollateral:` address of the jToken contract to set aside the collateralized asset of a borrower.
 * **Returns:** 0 on success, otherwise an Error code.
 
 
@@ -398,7 +398,7 @@ function liquidateBorrow(address borrower, address jTokenCollateral) payable
 
 * **Parameter description:**
     * `borrower:` address of a liquidated account.
-    * `jTokenCollateral:` address of the jTRX contract to set aside the collateralized asset of a borrower.
+    * `jTokenCollateral:` address of the jToken contract to set aside the collateralized asset of a borrower.
     * `msg.value:` amount of TRX to be repaid in the event of liquidation.
 * **Returns:** No return. If any error occurs, the transaction will be reverted.
 
@@ -411,7 +411,7 @@ LiquidateBorrow(address liquidator, address borrower, uint repayAmount, address 
     * `liquidator:` operate liquidation;
     * `borrower:` address of a liquidated account;
     * `repayAmount:` the amount of repaid assets;
-    * `cTokenCollateral:` address of the jTRX contract to set aside the collateralized asset of a borrower；
+    * `cTokenCollateral:` address of the jToken contract to set aside the collateralized asset of a borrower；
     * `seizeTokens:` the tokens need to be liquidated.
 
 &emsp;
