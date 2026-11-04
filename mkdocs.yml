@@ -34,6 +34,10 @@ not_in_nav: |
     /developers/apis/agent-acceptance-latest.json
     /developers/abis/*.json
 
+# Templates are loaded by Jinja, not published as raw HTML assets.
+exclude_docs: |
+    /overrides/
+
 nav:
     - GETTING STARTED:
         - Overview: getting_started/overview.md
@@ -126,6 +130,7 @@ extra_css:
 # skips dotfile directories, which would otherwise 404 /.well-known/security.txt.
 hooks:
       - hooks/copy_dotfiles.py
+      - hooks/secure_swagger.py
 
 plugins:
       - search
