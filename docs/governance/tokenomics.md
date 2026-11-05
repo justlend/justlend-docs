@@ -76,4 +76,6 @@ The officially disclosed JST buyback and burn data is detailed below:
 | **Round 4** | 248,357,799 JST |
 | **Round 5** | 170,723,144 JST |
 
+For more details about the JST Buyback & Burn Mechanism, please refer to [Upgrade to the JST Buyback & Burn Mechanism](https://support.just.network/hc/en-us/articles/63549329069593-Announcement-Upgrade-to-the-JST-Buyback-Burn-Mechanism).
+
 ![revenue distribution](https://raw.githubusercontent.com/justlend/justlend-docs/main/images/JST_buyback_and_burn_data.png)
