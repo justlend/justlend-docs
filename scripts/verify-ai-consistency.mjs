@@ -116,7 +116,7 @@ check(
 );
 
 const hook = await read('hooks/copy_dotfiles.py');
-const template = await read('docs/overrides/base.html');
+const template = await read('docs/overrides/main.html');
 check(hook.includes('_copy_markdown_sources'), 'MkDocs hook must publish raw Markdown');
 check(
   template.includes('type="text/markdown"') && template.includes('View raw Markdown'),

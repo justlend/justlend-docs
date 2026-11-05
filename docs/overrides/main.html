@@ -1,0 +1,105 @@
+{# Keep upstream theme assets tied to the installed, patched Material release. #}
+{% extends "base.html" %}
+{% block extrahead %}
+  {{ super() }}
+    {# AI / LLM discoverability hints — non-standard rel values per llmstxt.org. #}
+    {# Crawlers that don't recognize them ignore them; the ones that do (and    #}
+    {# tools that look for them, e.g. agent indexers) can locate the AI-only   #}
+    {# entry files without guessing paths.                                     #}
+    <link rel="llms" href="{{ '/llms.txt' | url }}" type="text/plain">
+    <link rel="llms-full" href="{{ '/llms-full.txt' | url }}" type="text/plain">
+    <link rel="alternate" type="text/plain" title="llms.txt — site index for LLMs" href="{{ '/llms.txt' | url }}">
+    <link rel="alternate" type="text/plain" title="llms-full.txt — full-text snapshot for LLMs" href="{{ '/llms-full.txt' | url }}">
+    {% if page.file and page.file.src_uri and page.file.src_uri.endswith('.md') %}
+      <link rel="alternate" type="text/markdown" title="Raw Markdown source" href="{{ config.site_url }}{{ page.file.src_uri }}">
+    {% endif %}
+    <meta name="ai-content-declaration" content="llms.txt,llms-full.txt,raw-markdown">
+    {# Schema.org JSON-LD. Gives AI crawlers and search engines a structured #}
+    {# entity for JustLend DAO: what it is, what runs it, where its machine- #}
+    {# readable surfaces live. Emitted on every page so that any RAG chunk   #}
+    {# fetched in isolation carries protocol identity.                      #}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://justlend.org/#org",
+          "name": "JustLend DAO",
+          "url": "https://justlend.org",
+          "sameAs": [
+            "https://app.justlend.org",
+            "https://forum.justlend.org",
+            "https://github.com/justlend",
+            "https://t.me/officialjustlend"
+          ]
+        },
+        {
+          "@type": ["SoftwareApplication", "FinancialProduct"],
+          "@id": "https://docs.justlend.org/#protocol",
+          "name": "JustLend DAO Protocol",
+          "alternateName": ["JustLend", "JustLend DAO"],
+          "applicationCategory": "DecentralizedFinance",
+          "applicationSubCategory": "Lending",
+          "operatingSystem": "TRON",
+          "softwareVersion": "compound-v2-fork",
+          "url": "https://docs.justlend.org/",
+          "sameAs": [
+            "https://github.com/justlend/justlend-protocol",
+            "https://github.com/justlend/mcp-server-justlend",
+            "https://github.com/justlend/justlend-skills",
+            "https://github.com/justlend/justlend-cli",
+            "https://github.com/justlend/justlend-utils-v2"
+          ],
+          "provider": { "@id": "https://justlend.org/#org" },
+          "documentation": "https://docs.justlend.org/llms.txt",
+          "potentialAction": [
+            {
+              "@type": "ConsumeAction",
+              "name": "Read full-text snapshot for LLMs",
+              "target": "https://docs.justlend.org/llms-full.txt"
+            },
+            {
+              "@type": "ConsumeAction",
+              "name": "Fetch machine-readable contract directory",
+              "target": "https://docs.justlend.org/developers/contracts.json"
+            },
+            {
+              "@type": "ConsumeAction",
+              "name": "Fetch OpenAPI 3.1 specification",
+              "target": "https://docs.justlend.org/developers/apis/justlend_apis.yaml"
+            }
+          ]
+        },
+        {
+          "@type": "TechArticle",
+          "@id": "{{ page.canonical_url or (config.site_url + (page.url | default(''))) }}#article",
+          "headline": "{% if page.title %}{{ page.title | striptags }}{% else %}{{ config.site_name }}{% endif %}",
+          "url": "{{ page.canonical_url or config.site_url }}",
+          "inLanguage": "en",
+          "isPartOf": {
+            "@type": "WebSite",
+            "@id": "https://docs.justlend.org/#site",
+            "name": "{{ config.site_name }}",
+            "url": "{{ config.site_url }}",
+            "publisher": { "@id": "https://justlend.org/#org" }
+          },
+          "about": { "@id": "https://docs.justlend.org/#protocol" },
+          "description": {% if page.meta and page.meta.description %}{{ page.meta.description | tojson }}{% elif config.site_description %}{{ config.site_description | tojson }}{% else %}"JustLend DAO documentation."{% endif %}{% if page.meta and page.meta.git_revision_date_localized_raw_iso_date %},
+          "dateModified": "{{ page.meta.git_revision_date_localized_raw_iso_date }}",
+          "datePublished": "{{ page.meta.git_revision_date_localized_raw_iso_date }}"{% endif %}
+        }
+      ]
+    }
+    </script>
+{% endblock %}
+{% block content %}
+  {{ super() }}
+  {% if page.file and page.file.src_uri and page.file.src_uri.endswith('.md') %}
+    <p class="md-source-file"><a href="{{ config.site_url }}{{ page.file.src_uri }}" rel="alternate" type="text/markdown">View raw Markdown</a></p>
+  {% endif %}
+  <hr class="content-footer-divider">
+  {% include "partials/footer.html" %}
+{% endblock %}
+{# The project places this footer inside the article, not a second time below. #}
+{% block footer %}{% endblock %}
