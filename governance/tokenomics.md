@@ -56,9 +56,15 @@ As the JUST ecosystem expands its revenue streams, multi-chain revenue from USDD
 
 ### Transparency and Buyback & Burn Records
 
-The JST buyback and burn program is executed by the **JustLend Grants DAO**. Operating as a community-driven incentive within the JustLend ecosystem, the Grants DAO focuses on accelerating ecosystem growth, expanding token utility, and ensuring healthy market dynamics.
+The JST buyback and burn program is executed by the [JUST DAO](https://just.network/). JUST is an open finance network for the global on-chain economy, rooted in TRON and connected to global markets. It continuously repurchases JST using real business revenue. The ecosystem mainly focuses on the following three core product lines:  
 
-All buyback and burn records are disclosed through official channels and on-chain logs. Users can track progress in real time via the [Transparency](https://justlend.org/transparency?lang=en-US) dashboard.
+- **JustLend:** Put TRON assets to work through lending, sTRX, and Energy services for higher efficiency.
+- **GasFree:** Pay transfer fees directly in USDT or USDD to make on-chain transactions frictionless for everyone.
+- **USDD:** Access stablecoin liquidity and yield opportunities through overcollateralized minting, PSM swap, and structured products.
+
+Alongside these three products, several other ecosystem businesses make up the full JUST suite.
+
+All buyback and burn records are disclosed through official channels and on-chain logs. Users can track progress in real time via the [Transparency](https://www.just.network/transparency?lang=en-US) dashboard.
 
 The officially disclosed JST buyback and burn data is detailed below:
 
@@ -67,5 +73,9 @@ The officially disclosed JST buyback and burn data is detailed below:
 | **Round 1** | 559,890,753 JST |
 | **Round 2** | 525,000,000 JST |
 | **Round 3** | 271,337,579 JST |
+| **Round 4** | 248,357,799 JST |
+| **Round 5** | 170,723,144 JST |
+
+For more details about the JST Buyback & Burn Mechanism, please refer to [Upgrade to the JST Buyback & Burn Mechanism](https://support.just.network/hc/en-us/articles/63549329069593-Announcement-Upgrade-to-the-JST-Buyback-Burn-Mechanism).
 
 ![revenue distribution](https://raw.githubusercontent.com/justlend/justlend-docs/main/images/JST_buyback_and_burn_data.png)
