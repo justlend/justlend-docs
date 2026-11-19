@@ -1,0 +1,12 @@
+# Static metadata for the hash-reviewed legacy source distributions below.
+# This avoids executing setup.py while regenerating the requirements locks.
+# Re-review setup.py metadata when changing either exact version.
+[[tool.uv.dependency-metadata]]
+name = "jieba"
+version = "0.42.1"
+requires-dist = []
+
+[[tool.uv.dependency-metadata]]
+name = "mkdocs-exclude"
+version = "1.0.2"
+requires-dist = ["mkdocs"]

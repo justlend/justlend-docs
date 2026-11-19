@@ -1,0 +1,20 @@
+{
+  "packages": {
+    "swagger-ui-dist": "5.34.1",
+    "dompurify": "3.4.17"
+  },
+  "source": "https://registry.npmjs.org/swagger-ui-dist/-/swagger-ui-dist-5.34.1.tgz",
+  "integrity": "sha512-VSr8fXfI93obYaQicLJbLUKGRxDojj/SfRJDDLCioGTUBj4BK/Nj4eE9jCeCAnJxVLi7iS+08PbiZLyrQKBkJQ==",
+  "assets": {
+    "swagger-ui-bundle.js": "36eeb4d5640b9c036b1d0f854499af1cceebbdb260b790a03a18be5e8488fbf5",
+    "swagger-ui-bundle.js.map": "5c0d0705c0079e3c1b24ae88062dfc25968f4f9754de8fa14cbb548af8996954",
+    "swagger-ui-bundle.js.LICENSE.txt": "37eb6e7e59aed57b2c1acf076574b818ea07b74265717e0bd67b59e0baf9abbb",
+    "swagger-ui-standalone-preset.js": "5243d492e14505e0cab87ac8b0195d0e615943e651743b2b698450a46eb470be",
+    "swagger-ui-standalone-preset.js.map": "636241e41c2be5a7f2c2f5e6c3f97221119b79f47acefc61b209568a8585bfd4",
+    "swagger-ui-standalone-preset.js.LICENSE.txt": "000580e4e2255ea6ccde0c47f6d75e2f703a1931298fde58756793b67c0daed9",
+    "swagger-ui.css": "c3cfe8248c4b0b89673600fb829924eafbac6de4bc4b2b06f5f5243483074d0a",
+    "swagger-ui.css.map": "a949ef0196ea26a3dd01fcc8bf0552374cbd43623e096f453ace3d431c313b61",
+    "oauth2-redirect.html": "f3546c5b74b44eac7de5b4193a641b4f23365470c109b490c566bac0de446745",
+    "oauth2-redirect.js": "a5c8a34e09e49737382cc5019446eec7c3db3461963fc5bfe448361d3c5549e9"
+  }
+}
