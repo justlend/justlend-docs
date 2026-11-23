@@ -15,7 +15,7 @@ description: JustLend core lending contract reference — jToken (`CErc20Delegat
 !!! warning "TRC20 `approve()` race condition (USDT-style underlyings)"
     Several TRC20s used as JustLend underlyings — notably **TRON USDT** (`TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t`) — are non-standard implementations that **reject `approve(spender, newAmount)` if the current allowance is non-zero**. If a previous `approve()` left a residual allowance, the next call will revert with `SafeERC20: approve from non-zero to non-zero allowance` (or its TRC20 equivalent), and the subsequent `mint`/`repayBorrow` will fail to pull funds.
 
-    **Safe pattern** before every `mint(uint)` / `repayBorrow(uint)` / `liquidateBorrow(...)` on jUSDT / jUSDCOLD / jTUSD / jUSDDOLD / jBUSDOLD-style markets (TronWeb 5.x; the sender is taken from `tronWeb.defaultAddress`):
+    **Safe pattern** before every `mint(uint)` / `repayBorrow(uint)` / `liquidateBorrow(...)` on jUSDT / jUSDCOLD / jTUSD / jUSDDOLD / jBUSDOLD-style markets (TronWeb 6.x; the sender is taken from `tronWeb.defaultAddress`):
 
     ```javascript
     // 1. Read the current allowance
@@ -420,12 +420,12 @@ LiquidateBorrow(address liquidator, address borrower, uint repayAmount, address 
 
 ## **Examples (TronWeb)**
 
-The snippets below use [TronWeb](https://developers.tron.network/reference/tronweb-object). Replace the `// PRIVATE_KEY=…` literal with your own loading mechanism — **never commit a key**. All addresses below are TRON Mainnet.
+Install TronWeb 6.x with `npm install tronweb@6`; see the [TronWeb Quickstart](https://tronweb.network/docu/docs/quickstart/) for connection options. The setup below reads credentials from environment variables; **never commit a private key**. All addresses below are on TRON Mainnet.
 
 ### Setup
 
 ```javascript
-const TronWeb = require('tronweb');
+const { TronWeb } = require('tronweb');
 
 const tronWeb = new TronWeb({
   fullHost: 'https://api.trongrid.io',

@@ -309,8 +309,10 @@ event Liquidate(address indexed liquidator, address indexed renter, address inde
 
 ## **Examples (TronWeb)**
 
+Use the [TronWeb 6.x setup](supply_and_borrow_market/sbm.md#examples-tronweb) for these examples.
+
 ```javascript
-const TronWeb = require('tronweb');
+const { TronWeb } = require('tronweb');
 const tronWeb = new TronWeb({
   fullHost: 'https://api.trongrid.io',
   headers: { 'TRON-PRO-API-KEY': process.env.TRONGRID_API_KEY },
