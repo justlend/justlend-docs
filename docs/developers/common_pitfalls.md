@@ -9,7 +9,7 @@ description: The 10 most common foot-guns when integrating with JustLend on TRON
     **Protocol:** JustLend
     **Network:** TRON Mainnet (same patterns apply on Nile testnet)
     **Scope:** the gotchas that bite even when the [contract reference](supply_and_borrow_market/sbm.md), [APIs](apis.md), and [glossary](../resources/glossary.md) are all open. Each entry is a one-liner symptom → root cause → safe pattern.
-    **TronWeb convention:** examples use TronWeb 5.x direct style — `contract.method(args).call()` for reads, `contract.method(args).send()` for writes. Set the sender once with `tronWeb.setAddress(address)` or by constructing TronWeb with `privateKey` / `headers`; do not pass `{ from: ... }` to `.send()`. Solidity / Web3.js patterns translate directly with the obvious renames. 
+    **TronWeb convention:** These examples use TronWeb 6.x: `contract.method(args).call()` for reads and `contract.method(args).send()` for writes. For reads without a signer, set the caller with `tronWeb.setAddress(address)`. For writes, use a signing wallet or configure `privateKey` on a server-side instance; passing `from` to `.send()` is not a substitute for a signer. TronGrid API headers authenticate requests to the node, not the account.
     **Companion pages:** [Glossary](../resources/glossary.md), [SBM reference](supply_and_borrow_market/sbm.md), [Comptroller reference](supply_and_borrow_market/comptroller.md), [Deployed Contracts](deployed_contracts.md).
 
 ## TL;DR for AI agents
