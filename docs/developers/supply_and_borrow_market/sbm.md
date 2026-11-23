@@ -420,12 +420,12 @@ LiquidateBorrow(address liquidator, address borrower, uint repayAmount, address 
 
 ## **Examples (TronWeb)**
 
-The snippets below use [TronWeb](https://developers.tron.network/reference/tronweb-object). Replace the `// PRIVATE_KEY=…` literal with your own loading mechanism — **never commit a key**. All addresses below are TRON Mainnet.
+Install TronWeb as shown in the [TronWeb Quickstart](https://tronweb.network/docu/docs/quickstart/). The setup below reads credentials from environment variables; **never commit a private key**. All addresses below are on TRON Mainnet.
 
 ### Setup
 
 ```javascript
-const TronWeb = require('tronweb');
+const { TronWeb } = require('tronweb');
 
 const tronWeb = new TronWeb({
   fullHost: 'https://api.trongrid.io',

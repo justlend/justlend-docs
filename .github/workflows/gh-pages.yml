@@ -47,7 +47,7 @@ jobs:
     - name: Build the document
       run: mkdocs build --strict
 
-    - name: Verify security metadata output
+    - name: Verify published documentation and assets
       run: |
         test -f site/.nojekyll
         test -f site/.well-known/security.txt
@@ -56,6 +56,7 @@ jobs:
         cmp docs/ai_support/cli_and_sdk.md site/ai_support/cli_and_sdk.md
         grep -q 'type="text/markdown"' site/ai_support/cli_and_sdk/index.html
         test -f site/developers/apis/agent-acceptance-latest.json
+        test -z "$(find site/assets -type f \( -name '*.js.map' -o -name '*.css.map' \) -print -quit)"
 
     - name: Add CNAME file
       run: echo 'docs.justlend.org' > site/CNAME
