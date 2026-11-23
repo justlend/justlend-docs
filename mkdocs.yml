@@ -126,6 +126,7 @@ extra_css:
 # skips dotfile directories, which would otherwise 404 /.well-known/security.txt.
 hooks:
       - hooks/copy_dotfiles.py
+      - hooks/swagger_ui_assets.py
       - hooks/omit_source_maps.py
 
 plugins:
