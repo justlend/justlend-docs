@@ -35,10 +35,20 @@ mkdocs build --strict
 python scripts/verify-swagger-ui.py site
 ```
 
-MkDocs builds offline after installation. The separate Swagger UI verification step uses the
-bundle's embedded build revision, the upstream lock and the npm advisory registry: ordinary `npm audit` does not inspect
-dependencies compiled into the two browser bundles. The Python plugin generates the iframe;
-the JS, CSS, OAuth redirect and license notices come from the pinned `swagger-ui-dist` package.
+After installation, the Pages build and its asset checks run without contacting advisory services.
+The Python plugin generates the iframe; the JS, CSS, OAuth redirect and license notices come
+from the pinned `swagger-ui-dist` package. The check compares the two scripts the iframe loads with
+the locked assets, allowing only removal of a terminal local source-map directive.
+
+The independent **Audit documentation dependencies** workflow runs on dependency-related PRs,
+weekly, and on manual dispatch. It audits the build and test locks separately (including the pip
+bootstrap in both), the npm installation tree, and the components named in Swagger UI's bundle
+inventory. Ordinary `npm audit` cannot see modules compiled into those bundles. To run the bundle
+scan locally, use `python scripts/verify-swagger-ui.py --audit`. It queries the lock at the
+embedded build revision and the npm advisory registry. If the lock lists several versions of a
+named component, the scan checks all of them. High or critical advisories for these candidates
+fail this audit; upstream-only package names are excluded. An unavailable feed fails the audit,
+not the Pages deployment.
 
 For the documentation verification regressions (offline; no wallet signing or broadcasts):
 
@@ -47,6 +57,7 @@ python -m pip install -r requirements-test.txt
 node scripts/verify-ai-consistency.mjs
 node scripts/normalize-mcp-catalog.mjs --check
 node --test scripts/api-acceptance.test.mjs
+python scripts/test-published-assets.py
 python scripts/test-docs-regressions.py
 mkdocs build --strict
 DOCS_SITE_DIR=site python scripts/test-docs-regressions.py

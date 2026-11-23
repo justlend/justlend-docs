@@ -1,0 +1,68 @@
+name: Audit documentation dependencies
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/dependency-audit.yml'
+      - '.github/workflows/gh-pages.yml'
+      - '.npmrc'
+      - 'package*.json'
+      - 'requirements*.in'
+      - 'requirements*.txt'
+      - 'hooks/swagger_ui_assets.py'
+      - 'hooks/omit_source_maps.py'
+      - 'scripts/verify-swagger-ui.py'
+  schedule:
+    - cron: '17 5 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        lock: [requirements.txt, requirements-test.txt]
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Audit installer and locked Python environment
+        env:
+          LOCK: ${{ matrix.lock }}
+        run: |
+          python -m venv "$RUNNER_TEMP/audit"
+          "$RUNNER_TEMP/audit/bin/python" -m pip install -r requirements-bootstrap.txt
+          "$RUNNER_TEMP/audit/bin/python" -m pip install pip-audit==2.10.1
+          "$RUNNER_TEMP/audit/bin/pip-audit" --no-deps --disable-pip -r requirements-bootstrap.txt -r "$LOCK"
+
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: '.nvmrc'
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install locked browser distribution
+        id: install
+        run: npm ci --ignore-scripts --no-audit
+      - name: Audit npm installation tree
+        run: npm audit --omit=dev --audit-level=high
+      - name: Audit components in the Swagger UI bundle inventory
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: |
+          python -m venv "$RUNNER_TEMP/bundle-audit"
+          "$RUNNER_TEMP/bundle-audit/bin/python" -m pip install -r requirements-bootstrap.txt
+          "$RUNNER_TEMP/bundle-audit/bin/python" -m pip install -c requirements.txt requests
+          "$RUNNER_TEMP/bundle-audit/bin/python" scripts/verify-swagger-ui.py --audit

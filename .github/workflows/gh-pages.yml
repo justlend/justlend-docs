@@ -23,9 +23,7 @@ jobs:
         node-version: '24.22.3'
 
     - name: Install locked Swagger UI assets without lifecycle scripts
-      run: |
-        npm ci --ignore-scripts --no-audit
-        npm audit --omit=dev --audit-level=high
+      run: npm ci --ignore-scripts --no-audit
 
     - name: Verify AI-readable source consistency
       run: node scripts/verify-ai-consistency.mjs
@@ -46,18 +44,13 @@ jobs:
         "$RUNNER_TEMP/docs-venv/bin/python" -m pip check
         echo "$RUNNER_TEMP/docs-venv/bin" >> "$GITHUB_PATH"
 
-    - name: Audit the locked Python build and test dependencies
-      run: |
-        python -m venv "$RUNNER_TEMP/docs-audit"
-        "$RUNNER_TEMP/docs-audit/bin/python" -m pip install -r requirements-bootstrap.txt
-        "$RUNNER_TEMP/docs-audit/bin/python" -m pip install pip-audit==2.10.1
-        "$RUNNER_TEMP/docs-audit/bin/pip-audit" --no-deps --disable-pip -r requirements-bootstrap.txt -r requirements-test.txt
-
     - name: Build the document
       run: mkdocs build --strict
 
-    - name: Verify and audit the published Swagger UI bundles
-      run: python scripts/verify-swagger-ui.py site
+    - name: Verify the published assets offline
+      run: |
+        python scripts/test-published-assets.py
+        python scripts/verify-swagger-ui.py site
 
     - name: Verify published documentation and assets
       run: |

@@ -127,7 +127,6 @@ extra_css:
 hooks:
       - hooks/copy_dotfiles.py
       - hooks/swagger_ui_assets.py
-      - hooks/omit_source_maps.py
 
 plugins:
       - search

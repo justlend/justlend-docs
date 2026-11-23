@@ -1,26 +1,28 @@
-"""Keep vendor debug maps out of the published site without removing the runtime assets."""
+"""Publication policy: remove debug sidecars and only their terminal local directives."""
 
-from pathlib import Path
-
-from mkdocs.plugins import event_priority
+import re
 
 
-@event_priority(-100)  # Swagger UI copies its assets in its own on_post_build hook.
-def on_post_build(*, config) -> None:
-    for source_map in (Path(config.site_dir) / "assets").rglob("*.map"):
-        bundle = source_map.with_suffix("")
-        if bundle.suffix not in {".js", ".css"} or not source_map.is_file():
+def without_source_map(content: bytes, filename: str) -> bytes:
+    """Return the vendor bytes unchanged except for a terminal reference to this asset's map."""
+    reference = rb"sourceMappingURL[ \t]*=[ \t]*(?:\./)?" + re.escape((filename + ".map").encode())
+    if filename.endswith(".js"):
+        trailer = rb"//#[ \t]*" + reference
+    elif filename.endswith(".css"):
+        trailer = rb"/\*#[ \t]*" + reference + rb"[ \t]*\*/"
+    else:
+        return content
+    return re.sub(trailer + rb"[ \t\r\n]*\Z", b"", content)
+
+
+def omit_source_maps(assets):
+    for path in assets.rglob("*"):
+        if not path.is_file():
             continue
-
-        if bundle.is_file():
-            # Remove only the terminal DevTools comment for this exact sibling.
-            name = source_map.name.encode()
-            trailer = (
-                b"//# sourceMappingURL=" + name
-                if bundle.suffix == ".js"
-                else b"/*# sourceMappingURL=" + name + b"*/"
-            )
-            content = bundle.read_bytes().rstrip(b"\r\n")
-            if content.endswith(trailer):
-                bundle.write_bytes(content[:-len(trailer)])
-        source_map.unlink()
+        if path.name.endswith((".js.map", ".css.map")):
+            path.unlink()
+        elif path.suffix in {".js", ".css"}:
+            original = path.read_bytes()
+            published = without_source_map(original, path.name)
+            if published != original:
+                path.write_bytes(published)

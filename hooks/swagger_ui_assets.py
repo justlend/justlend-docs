@@ -6,6 +6,7 @@ from shutil import copyfile
 
 from mkdocs.exceptions import ConfigurationError
 from mkdocs.plugins import event_priority
+from omit_source_maps import omit_source_maps
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -15,8 +16,7 @@ ASSETS = {
         "swagger-ui-bundle.js", "swagger-ui-bundle.js.LICENSE.txt",
         "swagger-ui-standalone-preset.js", "swagger-ui-standalone-preset.js.LICENSE.txt",
     ),
-    # omit_source_maps strips this map and its CSS trailer after the copy.
-    "stylesheets": ("swagger-ui.css", "swagger-ui.css.map"),
+    "stylesheets": ("swagger-ui.css",),
     "swagger-ui": ("oauth2-redirect.html", "oauth2-redirect.js", "LICENSE", "NOTICE"),
 }
 
@@ -34,10 +34,12 @@ def on_config(config) -> None:
         raise ConfigurationError(f"Swagger UI {expected} is required: run npm ci --ignore-scripts before MkDocs.")
 
 
-@event_priority(-50)  # After swagger-ui-tag generates its iframe and before omit_source_maps (-100).
+@event_priority(-100)  # Finalize assets after swagger-ui-tag copies its iframe and vendor files.
 def on_post_build(*, config) -> None:
+    assets = Path(config.site_dir) / "assets"
     for directory, names in ASSETS.items():
-        target = Path(config.site_dir) / "assets" / directory
+        target = assets / directory
         target.mkdir(parents=True, exist_ok=True)
         for name in names:
             copyfile(DIST / name, target / name)
+    omit_source_maps(assets)
