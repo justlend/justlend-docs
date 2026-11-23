@@ -1,0 +1,2 @@
+# Upgrade the venv's bundled installer before it processes other packages.
+pip==26.3

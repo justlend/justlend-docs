@@ -1,0 +1,7 @@
+{
+  "name": "justlend-docs",
+  "private": true,
+  "dependencies": {
+    "swagger-ui-dist": "5.35.1"
+  }
+}

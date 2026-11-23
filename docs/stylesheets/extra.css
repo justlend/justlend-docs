@@ -19,3 +19,19 @@
 .md-sidebar {
     padding-top: 0;
 }
+
+/* Material's muted tokens fall below 4.5:1 on the light code background. */
+:root,
+[data-md-color-scheme="default"] {
+    --jl-code-muted: #616161;
+    --md-code-hl-comment-color: var(--jl-code-muted);
+    --md-code-hl-generic-color: var(--jl-code-muted);
+    --md-code-hl-operator-color: var(--jl-code-muted);
+    --md-code-hl-punctuation-color: var(--jl-code-muted);
+    --md-code-hl-variable-color: var(--jl-code-muted);
+}
+
+/* Keep the theme's normal code size, but don't shrink it again inside tables and callouts. */
+.md-typeset code {
+    font-size: max(0.85em, 0.64rem);
+}
